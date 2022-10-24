@@ -1,9 +1,5 @@
 const Proposals = () => {
-  return (
-    <div>
-      Test Proposals!
-    </div>
-  )
-}
+  return <div>Test Proposals!</div>;
+};
 
-export default Proposals
+export default Proposals;

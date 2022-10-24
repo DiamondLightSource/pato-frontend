@@ -1,46 +1,36 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { Provider } from 'react-redux';
-import { store } from './store/store';
-import { ChakraProvider, extendTheme } from '@chakra-ui/react'
-import Login from './routes/Login';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import Root from './routes/Root';
-import Proposals from './routes/Proposals';
-import Collection from './routes/Collection';
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import Login from "./routes/Login";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Root from "./routes/Root";
+import Proposals from "./routes/Proposals";
+import Collection from "./routes/Collection";
+import { defaults } from "./styles/components";
 
-const container = document.getElementById('root')!;
+const container = document.getElementById("root")!;
 const root = createRoot(container);
 
-if (process.env.NODE_ENV === 'development') {
-  const { worker } = require('./mocks/browser')
-  worker.start()
+if (process.env.NODE_ENV === "development") {
+  const { worker } = require("./mocks/browser");
+  worker.start();
 }
 
 const theme = extendTheme({
   colors: {
     diamond: {
-      100: '#E7ECEF',
-      400: '#A3CEF1',
-      500: '#6096BA',
-      600: '#034078',
-      700: '#274C77',
-      800: '#0a1128'
-    }
+      100: "#E7ECEF",
+      400: "#A3CEF1",
+      500: "#6096BA",
+      600: "#034078",
+      700: "#274C77",
+      800: "#0a1128",
+    },
   },
-  components: {
-    Accordion: {
-      baseStyle: {
-        container: {
-          border: "1px solid var(--chakra-colors-diamond-100)"
-        }
-      }
-    }
-  }
-})
+  components: defaults,
+});
 
 const router = createBrowserRouter([
   {
@@ -67,7 +57,7 @@ const router = createBrowserRouter([
         path: "/proposals/:propId/visits/:visitId/collections/:collectionId",
         element: <Collection />,
       },
-    ]
+    ],
   },
 ]);
 

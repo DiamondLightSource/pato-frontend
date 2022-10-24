@@ -25,7 +25,7 @@ export const handlers = [
     }
   }),
 
-  rest.post('/logout', (req, res, ctx) => {
+  rest.post('http://127.0.0.1:8000/logout', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
