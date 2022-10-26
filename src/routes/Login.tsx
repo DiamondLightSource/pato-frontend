@@ -8,8 +8,10 @@ import {
   InputRightElement,
   Button,
   useToast,
+  InputLeftElement,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { MdLock, MdPerson } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../features/auth/authSlice";
 import { useAppDispatch } from "../store/hooks";
@@ -32,14 +34,13 @@ const Login = (): JSX.Element => {
     await dispatch(loginUser({ username: user, password: pass }))
       .unwrap()
       .then(() => {
-        toast({ ...baseToast, title: "Success!", description: `Logged in as ${user}` });
+        toast({ ...baseToast, title: `Success! Logged in as ${user}` });
         navigate("/proposals");
       })
       .catch(() => {
         toast({
           ...baseToast,
-          title: "Login failed",
-          description: "Check your credentials and try again",
+          title: "Login failed. Check your credentials and try again.",
           status: "error",
         });
       })
@@ -62,9 +63,11 @@ const Login = (): JSX.Element => {
           alignItems='center'
         >
           <InputGroup size='md'>
+            <InputLeftElement pointerEvents='none' children={<MdPerson color='#CBD5E0' />} />
             <Input pr='4.5rem' placeholder='FedID' onChange={(event) => setUser(event.target.value)} />
           </InputGroup>
           <InputGroup size='md'>
+            <InputLeftElement pointerEvents='none' children={<MdLock color='#CBD5E0' />} />
             <Input
               pr='4.5rem'
               type={show ? "text" : "password"}
@@ -78,7 +81,7 @@ const Login = (): JSX.Element => {
             </InputRightElement>
           </InputGroup>
           {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-          <Button isLoading={loading} onClick={() => login()} bg='diamond.500' color='gray.100' width='full'>
+          <Button isLoading={loading} onClick={() => login()} width='full'>
             Login
           </Button>
         </Stack>

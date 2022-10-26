@@ -15,7 +15,6 @@ const InfoGroup: FunctionComponent<InfoProp> = ({ info }): JSX.Element => (
   <Box>
     <Grid templateColumns='repeat(2, minmax(0, 1fr))' gap={1}>
       {info.map((box: Info) => {
-        console.log("BOX", box, info);
         return (
           <GridItem key={box.title} colSpan={box.wide ? 2 : 1}>
             <Box h='100%' p={1} borderRadius={3} bg='diamond.100'>

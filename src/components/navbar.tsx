@@ -1,4 +1,4 @@
-import { FunctionComponent, ReactNode } from "react";
+import { FunctionComponent, ReactElement } from "react";
 import {
   Box,
   Flex,
@@ -20,22 +20,41 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { logoutUser } from "../features/auth/authSlice";
 import { Link as LinkRouter } from "react-router-dom";
 
-const Links = ["Proposals", "Placeholder 2", "Placeholder 3"];
+const links = [
+  { label: "Proposals", route: "proposals" },
+  { label: "Calendar", route: "calendar" },
+];
 
-const NavLink = ({ children }: { children: ReactNode }): JSX.Element => (
+interface NavLinkProps {
+  children?: ReactElement | string;
+  link: string;
+}
+
+const NavLink = ({ children, link }: NavLinkProps): JSX.Element => (
   <Link
     px={2}
     py={1}
+    as={LinkRouter}
     rounded={"md"}
     color={"gray.200"}
     _hover={{
       textDecoration: "none",
       bg: "diamond.700",
     }}
-    href={"#"}
+    to={link}
   >
     {children}
   </Link>
+);
+
+const NavLinks = (): JSX.Element => (
+  <div>
+    {links.map((link) => (
+      <NavLink link={link.route} key={link.label}>
+        {link.label}
+      </NavLink>
+    ))}
+  </div>
 );
 
 const Navbar: FunctionComponent = (): JSX.Element => {
@@ -60,9 +79,7 @@ const Navbar: FunctionComponent = (): JSX.Element => {
             </Box>
           </LinkRouter>
           <HStack as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
-            {Links.map((link) => (
-              <NavLink key={link}>{link}</NavLink>
-            ))}
+            <NavLinks />
           </HStack>
         </HStack>
         <Flex alignItems={"center"}>
@@ -89,9 +106,7 @@ const Navbar: FunctionComponent = (): JSX.Element => {
       {isOpen ? (
         <Box pb={4} display={{ md: "none" }}>
           <Stack as={"nav"} spacing={4}>
-            {Links.map((link) => (
-              <NavLink key={link}>{link}</NavLink>
-            ))}
+            <NavLinks />
           </Stack>
         </Box>
       ) : null}

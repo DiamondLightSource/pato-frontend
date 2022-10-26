@@ -8,7 +8,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./routes/Root";
 import Proposals from "./routes/Proposals";
 import Collection from "./routes/Collection";
-import { defaults } from "./styles/components";
+import { Accordion, Button, Text } from "./styles/components";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
@@ -29,7 +29,7 @@ const theme = extendTheme({
       800: "#0a1128",
     },
   },
-  components: defaults,
+  components: { Accordion, Button, Text },
 });
 
 const router = createBrowserRouter([

@@ -86,12 +86,12 @@ const Collection = () => {
 
   return (
     <Box>
+      {isLoading ? <Progress size='xs' isIndeterminate /> : <></>}
       <Heading>
         Data Collection {params.collectionId} for {params.propId}-{params.visitId}
       </Heading>
-      {isLoading ? <Progress size='xs' isIndeterminate /> : <></>}
       <Divider />
-      <Accordion allowMultiple>
+      <Accordion defaultIndex={[0]} allowMultiple>
         <AccordionItem>
           <h2>
             <AccordionButton bg='diamond.100'>
