@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { MdLock, MdPerson } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { loginUser } from "../features/auth/authSlice";
 import { useAppDispatch } from "../store/hooks";
 import { baseToast } from "../styles/components";
@@ -27,6 +27,7 @@ const Login = (): JSX.Element => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { state } = useLocation();
   const toast = useToast();
 
   const login = async () => {
@@ -35,7 +36,11 @@ const Login = (): JSX.Element => {
       .unwrap()
       .then(() => {
         toast({ ...baseToast, title: `Success! Logged in as ${user}` });
-        navigate("/proposals");
+        if (state.redirect) {
+          navigate(-1);
+        } else {
+          navigate("/proposals");
+        }
       })
       .catch(() => {
         toast({

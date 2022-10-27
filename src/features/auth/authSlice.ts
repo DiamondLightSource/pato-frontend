@@ -21,7 +21,7 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (creds: { user
 export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
   const response = await client.post('logout', {})
   if (response.status === 200) {
-    return response.data.token
+    return "OK"
   }
 })
 
@@ -41,6 +41,7 @@ export const authSlice = createSlice({
     })
 
     builder.addCase(logoutUser.fulfilled, (state, action) => {
+      window.sessionStorage.removeItem("token")
       state.token = undefined
     })
   }

@@ -8,7 +8,7 @@ interface RequestConfig {
 export async function client(
   endpoint: string,
   customConfig: Record<any, any> = {},
-  body?: Record<any,any> | FormData
+  body?: Record<any, any> | FormData
 ): Promise<never | Record<string, any>> {
   const config: RequestConfig = {
     method: body != null ? "POST" : "GET",
@@ -23,9 +23,8 @@ export async function client(
     if (!(body instanceof FormData)) {
       config.body = JSON.stringify(body);
     } else {
-      config.body = body
+      config.body = body;
     }
-    
   }
 
   let data;
@@ -48,7 +47,7 @@ export async function client(
   }
 }
 
-client.get = async function (endpoint: string, customConfig = {}) {
+client.get = async function (endpoint: string, customConfig = {}, privateEndpoint = false) {
   const resp = await client(
     endpoint,
     (customConfig = {
@@ -57,6 +56,7 @@ client.get = async function (endpoint: string, customConfig = {}) {
       method: "GET",
     })
   );
+  
   return resp;
 };
 

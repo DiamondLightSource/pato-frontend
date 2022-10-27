@@ -31,7 +31,17 @@ const GenericListing = ({ headers, endpoint, heading, routeKey }: TableProps) =>
     client
       .get(`${endpoint}?limit=${itemsPerPage}&page=${page}`)
       .then((response) => setData(response.data))
-      .catch(() => {
+      .catch((response) => {
+        if (response.detail === "Could not validate token") {
+          navigate("/login", { state: { redirect: true } });
+          toast({
+            ...baseToast,
+            title: "Error!",
+            description: "Your session is invalid, please log in to access this page.",
+            status: "error",
+          });
+          return;
+        }
         toast({
           ...baseToast,
           title: "Error!",
@@ -40,7 +50,7 @@ const GenericListing = ({ headers, endpoint, heading, routeKey }: TableProps) =>
         });
       });
     //.finally(() => setLoading(false));
-  }, [page, itemsPerPage, toast, endpoint]);
+  }, [page, itemsPerPage, toast, endpoint, navigate]);
 
   return (
     <div>
