@@ -31,14 +31,12 @@ interface ApiData {
 }
 
 const getData = async (collectionId: string) => {
-  //const driftResponse = await client.get(`drift/${collectionId}`)
-  const driftResponse = { data: [{ deltaX: 1, deltaY: 2 }] };
-  const ctfResponse = await client.get(`ctf/${collectionId}`);
+  const response = await client.get(`motion/${collectionId}`);
   return {
-    drift: driftResponse.data.map((drift: Record<string, any>) => {
+    drift: response.data.map((drift: Record<string, any>) => {
       return { x: drift.deltaX, y: drift.deltaY };
     }),
-    ctf: ctfResponse.data,
+    ctf: response.data,
   };
 };
 
