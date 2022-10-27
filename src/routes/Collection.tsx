@@ -138,6 +138,12 @@ const Collection = () => {
                 </GridItem>
               </Grid>
             </Box>
+            <Heading size='md'>Shift Plot</Heading>
+            <Divider />
+            <Box>TODO</Box>
+            <Heading size='md'>Cross Section</Heading>
+            <Divider />
+            <Box>TODO</Box>
           </AccordionPanel>
         </AccordionItem>
       </Accordion>

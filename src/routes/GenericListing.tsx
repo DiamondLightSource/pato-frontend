@@ -1,30 +1,36 @@
 import { Divider, Heading, HStack, Input, Spacer, Table, Tbody, Td, Th, Thead, Tr, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Pagination from "../components/pagination";
 import { baseToast } from "../styles/components";
 import { client } from "../utils/api/client";
+import { buildEndpoint } from "../utils/api/endpoint";
 
-interface ProposalData {
-  proposalId: string;
-  title: string;
-  proposalCode: string;
+interface TableProps {
+  headers: {
+    key: string;
+    label: string;
+  }[];
+  endpoint: string;
+  heading: string;
+  routeKey: string;
 }
 
-const getData = async (page: number, itemsPerPage: number) => {
-  const response = await client.get(`proposals?limit=${itemsPerPage}`);
-  return response.data;
-};
-
-const Proposals = () => {
-  const [data, setData] = useState<Array<ProposalData>>([]);
+const GenericListing = ({ headers, endpoint, heading, routeKey }: TableProps) => {
+  const [data, setData] = useState<Array<Record<string, any>>>([]);
   const [page, setPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   const toast = useToast();
+  const navigate = useNavigate();
+  const params = useParams();
+
+  endpoint = buildEndpoint(endpoint, params);
 
   useEffect(() => {
-    getData(page, itemsPerPage)
-      .then((apiData) => setData(apiData))
+    client
+      .get(`${endpoint}?limit=${itemsPerPage}&page=${page}`)
+      .then((response) => setData(response.data))
       .catch(() => {
         toast({
           ...baseToast,
@@ -34,12 +40,12 @@ const Proposals = () => {
         });
       });
     //.finally(() => setLoading(false));
-  }, [page, itemsPerPage, toast]);
+  }, [page, itemsPerPage, toast, endpoint]);
 
   return (
     <div>
       <HStack>
-        <Heading>Proposals</Heading>
+        <Heading>{heading}</Heading>
         <Spacer />
         <Input w='20%' size='sm' placeholder='Search'></Input>
       </HStack>
@@ -47,19 +53,17 @@ const Proposals = () => {
       <Table size='sm' variant='striped'>
         <Thead>
           <Tr>
-            <Th>Code</Th>
-            <Th>Number</Th>
-            <Th>Visits</Th>
-            <Th>Title</Th>
+            {headers.map((header) => (
+              <Th key={header.label}>{header.label}</Th>
+            ))}
           </Tr>
         </Thead>
         <Tbody>
-          {data.map((proposal) => (
-            <Tr key={[proposal.proposalId, proposal.proposalCode].join("")}>
-              <Td>{proposal.proposalCode}</Td>
-              <Td>{proposal.proposalId}</Td>
-              <Td></Td>
-              <Td>{proposal.title}</Td>
+          {data.map((item, i) => (
+            <Tr key={i} onClick={() => navigate(item[routeKey].toString())}>
+              {headers.map((header) => (
+                <Td key={header.key}>{item[header.key]}</Td>
+              ))}
             </Tr>
           ))}
         </Tbody>
@@ -75,4 +79,4 @@ const Proposals = () => {
   );
 };
 
-export default Proposals;
+export default GenericListing;

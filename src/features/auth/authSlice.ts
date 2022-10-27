@@ -6,7 +6,11 @@ interface authState {
 }
 
 export const loginUser = createAsyncThunk('auth/loginUser', async (creds: { username: string, password: string }, {rejectWithValue}) => {
-  const response = await client.post('ispyb/api/v1/auth/login', {...creds, plugin: "dummy"})
+  let body = new FormData()
+  body.append("username", creds.username)
+  body.append("password", creds.password)
+
+  const response = await client.post('login', body)
   if (response.status === 200) {
     return response.data.token
   } else if (response.status === 401) {
@@ -32,6 +36,7 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(loginUser.fulfilled, (state, action) => {
+      window.sessionStorage.setItem("token", action.payload)
       state.token = action.payload
     })
 

@@ -1,4 +1,4 @@
-import { Box, HStack, Select, Button } from "@chakra-ui/react";
+import { Box, HStack, Select, Button, Text, Spacer } from "@chakra-ui/react";
 import { ChangeEvent, FunctionComponent, useEffect, useState } from "react";
 
 type ChangeCallback = (page: number, itemsPerPage: number) => void;
@@ -45,13 +45,15 @@ const Pagination: FunctionComponent<PaginationProp> = ({
   return (
     <Box py={2}>
       <HStack>
-        <Select w='max-content' size='sm' onChange={updateItemsPerPage} flexShrink='1'>
+        <Select
+          w='max-content'
+          size='sm'
+          defaultValue={possibleItemsPerPage[preselected]}
+          onChange={updateItemsPerPage}
+          flexShrink='1'
+        >
           {possibleItemsPerPage.map((perPage, i) => {
-            return (
-              <option selected={i === preselected} key={`option${perPage}`}>
-                {perPage}
-              </option>
-            );
+            return <option key={`option${perPage}`}>{perPage}</option>;
           })}
         </Select>
         <Button size='sm' variant='pgNotSelected' onClick={() => updatePage(1)}>
@@ -88,6 +90,10 @@ const Pagination: FunctionComponent<PaginationProp> = ({
         <Button size='sm' variant='pgNotSelected' onClick={() => updatePage(pageAmount)}>
           &gt;&gt;
         </Button>
+        <Spacer />
+        <Text color='gray.600'>
+          Page {page} out of {pageAmount}
+        </Text>
       </HStack>
     </Box>
   );
