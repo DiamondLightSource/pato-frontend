@@ -26,8 +26,8 @@ export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
 })
 
 export const checkUser = createAsyncThunk('auth/checkUser', async () => {
-  const response = await client.get("user")
-  return response
+  await client.get("user")
+  return "OK"
 })
 
 const initialState: authState = {

@@ -20,6 +20,7 @@ import InfoGroup, { Info } from "../components/infogroup";
 import { baseToast } from "../styles/components";
 import { useAppDispatch } from "../store/hooks";
 import { setLoading } from "../features/uiSlice";
+import MotionPagination from "../components/motionPagination";
 
 interface WindowDimensions {
   width: number;
@@ -42,8 +43,11 @@ const getData = async (collectionId: string) => {
     }
   }
   return {
-    drift: [{ x: 1, y: 1 }],
-    motion: motion,
+    data: {
+      drift: [{ x: 1, y: 1 }],
+      motion: motion,
+    },
+    total: response.data.total,
   };
 };
 
@@ -71,6 +75,7 @@ const useGridSize = (gridSize: number) => {
 const Collection = () => {
   const params = useParams();
   const [data, setData] = useState<ApiData>({ motion: [], drift: [] });
+  const [totalMotion, setTotalMotion] = useState(1);
   const size = useGridSize(6);
   const dispatch = useAppDispatch();
   const toast = useToast();
@@ -79,7 +84,8 @@ const Collection = () => {
     dispatch(setLoading(true));
     getData(params.collectionId || "")
       .then((apiData) => {
-        return setData(apiData);
+        setData(apiData.data);
+        setTotalMotion(apiData.total);
       })
       .catch(() => {
         toast({
@@ -125,6 +131,7 @@ const Collection = () => {
             <Heading size='md'>Motion Correction/CTF</Heading>
             <Divider />
             <Box>
+              <MotionPagination total={totalMotion} />
               <Grid p={2} templateColumns='repeat(4, 1fr)' gap={2}>
                 <GridItem>
                   <InfoGroup info={data.motion}></InfoGroup>
