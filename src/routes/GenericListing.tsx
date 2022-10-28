@@ -2,6 +2,8 @@ import { Divider, Heading, HStack, Input, Spacer, Table, Tbody, Td, Th, Thead, T
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Pagination from "../components/pagination";
+import { setLoading } from "../features/uiSlice";
+import { useAppDispatch } from "../store/hooks";
 import { baseToast } from "../styles/components";
 import { client } from "../utils/api/client";
 import { buildEndpoint } from "../utils/api/endpoint";
@@ -19,27 +21,33 @@ interface TableProps {
 const GenericListing = ({ headers, endpoint, heading, routeKey }: TableProps) => {
   const [data, setData] = useState<Array<Record<string, any>>>([]);
   const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(10);
   const [itemsPerPage, setItemsPerPage] = useState(20);
 
   const toast = useToast();
   const navigate = useNavigate();
   const params = useParams();
+  const dispatch = useAppDispatch();
 
   endpoint = buildEndpoint(endpoint, params);
 
   useEffect(() => {
+    dispatch(setLoading(true));
     client
       .get(`${endpoint}?limit=${itemsPerPage}&page=${page}`)
-      .then((response) => setData(response.data))
+      .then((response) => {
+        setTotal(response.data.total);
+        setData(response.data.data);
+      })
       .catch((response) => {
         if (response.detail === "Could not validate token") {
-          navigate("/login", { state: { redirect: true } });
           toast({
             ...baseToast,
             title: "Error!",
             description: "Your session is invalid, please log in to access this page.",
             status: "error",
           });
+          navigate("/login", { state: { redirect: true } });
           return;
         }
         toast({
@@ -48,9 +56,9 @@ const GenericListing = ({ headers, endpoint, heading, routeKey }: TableProps) =>
           description: "An error occurred and data could not be retrieved. Please try again.",
           status: "error",
         });
-      });
-    //.finally(() => setLoading(false));
-  }, [page, itemsPerPage, toast, endpoint, navigate]);
+      })
+      .finally(() => dispatch(setLoading(false)));
+  }, [page, itemsPerPage, toast, endpoint, navigate, dispatch]);
 
   return (
     <div>
@@ -83,7 +91,7 @@ const GenericListing = ({ headers, endpoint, heading, routeKey }: TableProps) =>
           setItemsPerPage(itemAmount);
           setPage(page);
         }}
-        total={35}
+        total={total}
       />
     </div>
   );

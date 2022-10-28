@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../../utils/api/client'
 
 interface authState {
-  token?: string
+  loggedIn: boolean
 }
 
 export const loginUser = createAsyncThunk('auth/loginUser', async (creds: { username: string, password: string }, {rejectWithValue}) => {
@@ -25,8 +25,13 @@ export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
   }
 })
 
+export const checkUser = createAsyncThunk('auth/checkUser', async () => {
+  const response = await client.get("user")
+  return response
+})
+
 const initialState: authState = {
-  token: undefined
+  loggedIn: false
 }
 
 export const authSlice = createSlice({
@@ -36,13 +41,22 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(loginUser.fulfilled, (state, action) => {
-      window.sessionStorage.setItem("token", action.payload)
-      state.token = action.payload
+      sessionStorage.setItem("token", action.payload)
+      state.loggedIn = true
     })
 
-    builder.addCase(logoutUser.fulfilled, (state, action) => {
-      window.sessionStorage.removeItem("token")
-      state.token = undefined
+    builder.addCase(logoutUser.fulfilled, (state) => {
+      sessionStorage.removeItem("token")
+      state.loggedIn = false
+    })
+
+    builder.addCase(checkUser.fulfilled, (state) => {
+      state.loggedIn = true
+    })
+
+    builder.addCase(checkUser.rejected, (state) => {
+      sessionStorage.removeItem("token")
+      state.loggedIn = false
     })
   }
 })

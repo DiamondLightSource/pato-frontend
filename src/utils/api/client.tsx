@@ -40,7 +40,6 @@ export async function client(
         url: response.url,
       };
     }
-    console.error(`Error while fetching response for ${target}:`, config, body, response);
     return await Promise.reject(data);
   } catch (err: any) {
     return await Promise.reject(data);
@@ -56,7 +55,7 @@ client.get = async function (endpoint: string, customConfig = {}, privateEndpoin
       method: "GET",
     })
   );
-  
+
   return resp;
 };
 

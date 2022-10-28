@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 import Breadcrumbs from "../components/breadcrumbs";
 import Footer from "../components/footer";
@@ -8,10 +9,10 @@ const Root = (): JSX.Element => {
   return (
     <div className='rootContainer'>
       <Navbar />
-      <div className='main'>
+      <Box marginTop={12} className='main'>
         <Breadcrumbs />
         <Outlet />
-      </div>
+      </Box>
       <Footer />
     </div>
   );

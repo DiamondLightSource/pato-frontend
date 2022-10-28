@@ -9,7 +9,6 @@ import {
   Grid,
   GridItem,
   Heading,
-  Progress,
   useToast,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -19,6 +18,8 @@ import Image from "../components/image";
 import { client } from "../utils/api/client";
 import InfoGroup, { Info } from "../components/infogroup";
 import { baseToast } from "../styles/components";
+import { useAppDispatch } from "../store/hooks";
+import { setLoading } from "../features/uiSlice";
 
 interface WindowDimensions {
   width: number;
@@ -26,17 +27,23 @@ interface WindowDimensions {
 }
 
 interface ApiData {
-  ctf: Info[];
+  motion: Info[];
   drift: { x: number; y: number }[];
 }
 
 const getData = async (collectionId: string) => {
   const response = await client.get(`motion/${collectionId}`);
+  const summary = response.data.data[0];
+  let motion: Info[] = [];
+
+  if (response.data.data.length > 0) {
+    for (let key in response.data.data[0]) {
+      motion.push({ label: key, value: summary[key] });
+    }
+  }
   return {
-    drift: response.data.map((drift: Record<string, any>) => {
-      return { x: drift.deltaX, y: drift.deltaY };
-    }),
-    ctf: response.data,
+    drift: [{ x: 1, y: 1 }],
+    motion: motion,
   };
 };
 
@@ -63,14 +70,17 @@ const useGridSize = (gridSize: number) => {
 
 const Collection = () => {
   const params = useParams();
-  const [data, setData] = useState<ApiData>({ ctf: [], drift: [] });
+  const [data, setData] = useState<ApiData>({ motion: [], drift: [] });
   const size = useGridSize(6);
-  const [isLoading, setLoading] = useState(true);
+  const dispatch = useAppDispatch();
   const toast = useToast();
 
   useEffect(() => {
+    dispatch(setLoading(true));
     getData(params.collectionId || "")
-      .then((apiData) => setData(apiData))
+      .then((apiData) => {
+        return setData(apiData);
+      })
       .catch(() => {
         toast({
           ...baseToast,
@@ -79,12 +89,11 @@ const Collection = () => {
           status: "error",
         });
       })
-      .finally(() => setLoading(false));
-  }, [params.collectionId, toast]);
+      .finally(() => dispatch(setLoading(false)));
+  }, [params.collectionId, toast, dispatch]);
 
   return (
     <Box>
-      {isLoading ? <Progress size='xs' isIndeterminate /> : <></>}
       <Heading>
         Data Collection {params.collectionId} for {params.propId}-{params.visitId}
       </Heading>
@@ -118,7 +127,7 @@ const Collection = () => {
             <Box>
               <Grid p={2} templateColumns='repeat(4, 1fr)' gap={2}>
                 <GridItem>
-                  <InfoGroup info={data.ctf}></InfoGroup>
+                  <InfoGroup info={data.motion}></InfoGroup>
                 </GridItem>
                 <GridItem>
                   <Image src='http://INVALID.com/image' title='Micrograph Snapshot' height={`${size.width}px`} />

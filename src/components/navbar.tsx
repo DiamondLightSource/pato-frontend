@@ -1,4 +1,4 @@
-import { FunctionComponent, ReactElement } from "react";
+import { FunctionComponent, ReactElement, useEffect } from "react";
 import {
   Box,
   Flex,
@@ -14,10 +14,11 @@ import {
   useDisclosure,
   Image,
   Stack,
+  Progress,
 } from "@chakra-ui/react";
 import { MdLogin, MdMenu, MdClose } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { logoutUser } from "../features/auth/authSlice";
+import { checkUser, logoutUser } from "../features/auth/authSlice";
 import { Link as LinkRouter } from "react-router-dom";
 
 const links = [
@@ -28,6 +29,10 @@ const links = [
 interface NavLinkProps {
   children?: ReactElement | string;
   link: string;
+}
+
+interface NavLinksProps {
+  loggedIn: boolean;
 }
 
 const NavLink = ({ children, link }: NavLinkProps): JSX.Element => (
@@ -47,24 +52,32 @@ const NavLink = ({ children, link }: NavLinkProps): JSX.Element => (
   </Link>
 );
 
-const NavLinks = (): JSX.Element => (
+const NavLinks = ({ loggedIn }: NavLinksProps): JSX.Element => (
   <div>
-    {links.map((link) => (
-      <NavLink link={link.route} key={link.label}>
-        {link.label}
-      </NavLink>
-    ))}
+    {loggedIn &&
+      links.map((link) => (
+        <NavLink link={link.route} key={link.label}>
+          {link.label}
+        </NavLink>
+      ))}
   </div>
 );
 
 const Navbar: FunctionComponent = (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useAppDispatch();
-  const token = useAppSelector((state) => state.auth.token);
+  const loggedIn = useAppSelector((state) => state.auth.loggedIn);
+  const loading = useAppSelector((state) => state.ui.loading);
+
+  useEffect(() => {
+    if (!loggedIn && sessionStorage.getItem("token") !== undefined) {
+      dispatch(checkUser());
+    }
+  }, [loggedIn, dispatch]);
 
   return (
-    <Box bg='diamond.800' px={{ base: 4, md: 48 }}>
-      <Flex h={12} alignItems={"center"} justifyContent={"space-between"}>
+    <Box zIndex={1} position='fixed' w='100%' bg='diamond.800'>
+      <Flex px={{ base: 4, md: 48 }} h={12} alignItems={"center"} justifyContent={"space-between"}>
         <IconButton
           size={"sm"}
           icon={isOpen ? <MdClose /> : <MdMenu />}
@@ -79,11 +92,11 @@ const Navbar: FunctionComponent = (): JSX.Element => {
             </Box>
           </LinkRouter>
           <HStack as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
-            <NavLinks />
+            <NavLinks loggedIn={loggedIn} />
           </HStack>
         </HStack>
         <Flex alignItems={"center"}>
-          {token !== undefined && token !== "" ? (
+          {loggedIn ? (
             <Menu>
               <MenuButton as={Button} rounded={"full"} variant={"link"} cursor={"pointer"} minW={0}>
                 <Avatar size='xs' />
@@ -102,14 +115,15 @@ const Navbar: FunctionComponent = (): JSX.Element => {
           )}
         </Flex>
       </Flex>
+      {!isOpen && loading && <Progress isIndeterminate size='xs' />}
 
-      {isOpen ? (
+      {isOpen && (
         <Box pb={4} display={{ md: "none" }}>
           <Stack as={"nav"} spacing={4}>
-            <NavLinks />
+            <NavLinks loggedIn={loggedIn} />
           </Stack>
         </Box>
-      ) : null}
+      )}
     </Box>
   );
 };
