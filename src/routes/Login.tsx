@@ -36,7 +36,7 @@ const Login = (): JSX.Element => {
       .unwrap()
       .then(() => {
         toast({ ...baseToast, title: `Success! Logged in as ${user}` });
-        if (state.redirect) {
+        if (state && state.redirect) {
           navigate(-1);
         } else {
           navigate("/proposals");
