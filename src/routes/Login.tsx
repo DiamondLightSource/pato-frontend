@@ -16,6 +16,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { loginUser } from "../features/auth/authSlice";
 import { useAppDispatch } from "../store/hooks";
 import { baseToast } from "../styles/components";
+import { useForm } from "react-hook-form";
 
 const Login = (): JSX.Element => {
   const [show, setShow] = useState(false);
@@ -25,6 +26,11 @@ const Login = (): JSX.Element => {
 
   const handlePasswordShow = (): void => setShow(!show);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -85,7 +91,6 @@ const Login = (): JSX.Element => {
               </Button>
             </InputRightElement>
           </InputGroup>
-          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
           <Button isLoading={loading} onClick={() => login()} width='full'>
             Login
           </Button>

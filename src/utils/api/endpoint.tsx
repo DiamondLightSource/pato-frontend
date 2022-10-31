@@ -1,13 +1,14 @@
 import { Params } from "react-router-dom";
 
-const buildEndpoint = (endpoint: string, params: Params): string => {
+const buildEndpoint = (endpoint: string, params: Params, itemsPerPage: number, page: number): string => {
+  let builtEndpoint = `${endpoint}?limit=${itemsPerPage}&page=${page}`
   switch (endpoint) {
     case "visits":
-      return `${endpoint}/${params.propId}`;
+      return `${builtEndpoint}&prop=${params.propId}`;
     case "collections":
-      return `${endpoint}/${params.visitId}`;
+      return `${builtEndpoint}&visit=${params.visitId}`;
     default:
-      return endpoint;
+      return builtEndpoint;
   }
 };
 

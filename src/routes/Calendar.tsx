@@ -1,10 +1,36 @@
 import { Box, Divider, Heading } from "@chakra-ui/react";
-import FullCalendar from "@fullcalendar/react";
+import FullCalendar, { EventClickArg, EventSourceInput } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timegridPlugin from "@fullcalendar/timegrid";
 import "../styles/main.css";
+import { useEffect, useState } from "react";
+import { client } from "../utils/api/client";
+import { useNavigate } from "react-router-dom";
 
 const Calendar = (): JSX.Element => {
+  const [events, setEvents] = useState<EventSourceInput>({});
+  const navigate = useNavigate();
+
+  const eventClick = (e: EventClickArg) => {
+    navigate(`/proposals/${e.event.extendedProps.proposalId}/visits/${e.event.id}`);
+  };
+
+  useEffect(() => {
+    client.get("visits?minDate=2022-10-01&maxDate=2022-10-31").then((response) => {
+      const events = response.data.data.map((event: Record<string, any>) => ({
+        id: event.sessionId,
+        start: event.startDate,
+        end: event.endDate,
+        title: event.beamLineName,
+        extendedProps: {
+          proposalId: event.proposalId,
+        },
+      }));
+
+      setEvents(events);
+    });
+  }, []);
+
   return (
     <div>
       <Heading>Calendar</Heading>
@@ -18,6 +44,15 @@ const Calendar = (): JSX.Element => {
             right: "dayGridMonth,timeGridWeek,timeGridDay",
           }}
           plugins={[dayGridPlugin, timegridPlugin]}
+          events={events}
+          eventTimeFormat={{
+            hour: "2-digit",
+            minute: "2-digit",
+            meridiem: false,
+          }}
+          dayMaxEventRows={true}
+          dayMaxEvents={true}
+          eventClick={(e) => eventClick(e)}
         />
       </Box>
     </div>

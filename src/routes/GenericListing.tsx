@@ -30,11 +30,9 @@ const GenericListing = ({ headers, endpoint, heading, routeKey }: TableProps) =>
   const params = useParams();
   const dispatch = useAppDispatch();
 
-  endpoint = buildEndpoint(endpoint, params);
-
   useEffect(() => {
     dispatch(setLoading(true));
-    let builtEndpoint = `${endpoint}?limit=${itemsPerPage}&page=${page}`;
+    let builtEndpoint = buildEndpoint(`${endpoint}`, params, itemsPerPage, page);
 
     if (search) {
       builtEndpoint += `&s=${search}`;
@@ -65,7 +63,7 @@ const GenericListing = ({ headers, endpoint, heading, routeKey }: TableProps) =>
         });
       })
       .finally(() => dispatch(setLoading(false)));
-  }, [page, itemsPerPage, toast, endpoint, navigate, dispatch, search]);
+  }, [page, itemsPerPage, toast, endpoint, navigate, dispatch, search, params]);
 
   return (
     <div>
