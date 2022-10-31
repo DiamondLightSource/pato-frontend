@@ -1,4 +1,4 @@
-import { Box, Text, Grid, GridItem } from "@chakra-ui/react";
+import { Box, Text, Grid, GridItem, Skeleton } from "@chakra-ui/react";
 import { FunctionComponent } from "react";
 
 export interface Info {
@@ -9,10 +9,12 @@ export interface Info {
 
 interface InfoProp {
   info: Info[];
+  height?: number | string;
 }
 
-const InfoGroup: FunctionComponent<InfoProp> = ({ info }): JSX.Element => (
-  <Box>
+const InfoGroup: FunctionComponent<InfoProp> = ({ info, height = "100%" }): JSX.Element => (
+  <Box h={height} overflow='scroll'>
+    {info.length < 1 && <Skeleton height='100%' />}
     <Grid templateColumns='repeat(2, minmax(0, 1fr))' gap={1}>
       {info.map((box: Info) => {
         return (

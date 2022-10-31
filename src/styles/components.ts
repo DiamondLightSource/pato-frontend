@@ -19,7 +19,7 @@ const Text = defineStyleConfig({
       infoGroupText: {
         wordBreak: "break-all",
         display: "inline",
-        fontSize: "sm",
+        fontSize: "xs",
       },
     },
   })
