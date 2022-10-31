@@ -168,7 +168,7 @@ const Collection = () => {
               />
               <Grid p={2} templateColumns='repeat(4, 1fr)' gap={2}>
                 <GridItem>
-                  <InfoGroup height={size.height + 78} info={data.motion}></InfoGroup>
+                  <InfoGroup height='33vh' info={data.motion}></InfoGroup>
                 </GridItem>
                 <GridItem>
                   <Image src='http://INVALID.com/image' title='Micrograph Snapshot' height={`${size.width}px`} />

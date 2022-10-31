@@ -12,7 +12,7 @@ import {
   ModalOverlay,
   useDisclosure,
 } from "@chakra-ui/react";
-import { FunctionComponent } from "react";
+import { FunctionComponent, MouseEvent, useState } from "react";
 
 interface ImageProp {
   title: string;
@@ -23,6 +23,14 @@ interface ImageProp {
 
 const ImageWrapper: FunctionComponent<ImageProp> = ({ title, src, width = "100%", height = "100%" }): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isZoomed, onToggle: onZoomToggle } = useDisclosure();
+  const [zoomCords, setZoomCords] = useState("translate(-50%, -50%)");
+
+  const zoom = (event: MouseEvent<HTMLImageElement, globalThis.MouseEvent>) => {
+    const { x, y, height, width } = event.currentTarget.getBoundingClientRect();
+    setZoomCords(`translate(${(-(event.clientX - x) / width) * 50}%, ${(-(event.clientY - y) / height) * 50}%)`);
+    onZoomToggle();
+  };
 
   return (
     <Box onClick={onOpen} p={3} borderWidth='1px' borderRadius='lg' w={width} h={height}>
@@ -30,11 +38,25 @@ const ImageWrapper: FunctionComponent<ImageProp> = ({ title, src, width = "100%"
       <Image src={src} fallbackSrc='/images/no-image.png' />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent w='fit-content' maxW='90vw'>
           <ModalHeader>{title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Image src={src} fallbackSrc='/images/no-image.png' />
+            <Box overflow='hidden' w='600px' h='550px'>
+              {isZoomed ? (
+                <Image
+                  position='relative'
+                  style={{ transform: zoomCords }}
+                  maxW='180%'
+                  w='180%'
+                  onClick={() => onZoomToggle()}
+                  src={src}
+                  fallbackSrc='/images/no-image.png'
+                />
+              ) : (
+                <Image w='100%' onClick={(e) => zoom(e)} src={src} fallbackSrc='/images/no-image.png' />
+              )}
+            </Box>
           </ModalBody>
           <ModalFooter>
             <Button colorScheme='diamond' onClick={onClose}>
