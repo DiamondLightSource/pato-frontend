@@ -43,8 +43,13 @@ const ScatterWrapper: FunctionComponent<ScatterProp> = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const options = {
-    maintainAspectRatio: !(width !== "100%" || height !== "100%"),
+    maintainAspectRatio: width === "100%" && height === "100%",
     plugins: { legend: { display: false } },
+  };
+
+  const modalOptions = {
+    ...options,
+    maintainAspectRatio: true,
   };
 
   useEffect(() => {
@@ -77,7 +82,7 @@ const ScatterWrapper: FunctionComponent<ScatterProp> = ({
           <ModalHeader>{title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Scatter data={data} options={options} />
+            <Scatter data={data} options={modalOptions} />
           </ModalBody>
           <ModalFooter></ModalFooter>
         </ModalContent>

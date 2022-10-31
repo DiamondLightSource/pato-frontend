@@ -1,16 +1,4 @@
-import {
-  Box,
-  Button,
-  Editable,
-  EditableInput,
-  EditablePreview,
-  HStack,
-  Input,
-  NumberInputField,
-  NumberInput,
-  Text,
-  useNumberInput,
-} from "@chakra-ui/react";
+import { Button, HStack, NumberInputField, NumberInput } from "@chakra-ui/react";
 import { FunctionComponent, useEffect, useState, FocusEvent as ReactFocusEvent } from "react";
 
 type ChangeCallback = (page: number) => void;
@@ -27,7 +15,7 @@ const MotionPagination: FunctionComponent<MotionPaginationProp> = ({ total, onCh
     setValue(total.toString());
   }, [total]);
 
-  const updatePage = (event: ReactFocusEvent<HTMLInputElement>) => {
+  const editPage = (event: ReactFocusEvent<HTMLInputElement>) => {
     let newPage = parseInt(event.target.value);
 
     if (newPage > total) {
@@ -37,32 +25,32 @@ const MotionPagination: FunctionComponent<MotionPaginationProp> = ({ total, onCh
       newPage = 1;
     }
 
-    setValue(newPage.toString());
+    setPage(newPage);
+  };
 
-    if (!isNaN(newPage) && onChange !== undefined) {
-      onChange(newPage);
+  const setPage = (page: number) => {
+    setValue(page.toString());
+
+    if (!isNaN(page) && onChange !== undefined) {
+      onChange(page);
     }
   };
 
   return (
     <HStack paddingTop={2} maxW='190px'>
-      <Button size='xs' onClick={() => setValue("1")}>
+      <Button size='xs' onClick={() => setPage(1)}>
         &lt;&lt;
       </Button>
-      <Button size='xs' isDisabled={parseInt(value) === 1} onClick={() => setValue((parseInt(value) - 1).toString())}>
+      <Button size='xs' isDisabled={parseInt(value) === 1} onClick={() => setPage(parseInt(value) - 1)}>
         &lt;
       </Button>
       <NumberInput size='xs' min={1} max={total} value={value} onChange={(text) => setValue(text)}>
-        <NumberInputField onBlur={(event) => updatePage(event)}></NumberInputField>
+        <NumberInputField onBlur={(event) => editPage(event)}></NumberInputField>
       </NumberInput>
-      <Button
-        size='xs'
-        isDisabled={parseInt(value) === total}
-        onClick={() => setValue((parseInt(value) + 1).toString())}
-      >
+      <Button size='xs' isDisabled={parseInt(value) === total} onClick={() => setPage(parseInt(value) + 1)}>
         &gt;
       </Button>
-      <Button size='xs' onClick={() => setValue(total.toString())}>
+      <Button size='xs' onClick={() => setPage(total)}>
         &gt;&gt;
       </Button>
     </HStack>

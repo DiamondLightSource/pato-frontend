@@ -1,4 +1,4 @@
-import { defineStyleConfig, ToastProps } from "@chakra-ui/react";
+import { defineStyleConfig, ToastProps, defineStyle } from "@chakra-ui/react";
 
 const baseToast: ToastProps = {
   status: "success",
@@ -42,4 +42,17 @@ const Button = defineStyleConfig({
     },
   })
 
-export { Accordion, Button, Text, baseToast };
+const collection = defineStyle({
+    fontSize: 20,
+    paddingTop: 4,
+
+})
+
+const Heading = defineStyleConfig({
+  variants:
+  {
+    collection
+  }
+})
+
+export { Accordion, Button, Text, Heading, baseToast };

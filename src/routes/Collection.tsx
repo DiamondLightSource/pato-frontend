@@ -11,8 +11,8 @@ import {
   Heading,
   useToast,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Scatter from "../components/scatter";
 import Image from "../components/image";
 import { client } from "../utils/api/client";
@@ -31,25 +31,6 @@ interface ApiData {
   motion: Info[];
   drift: { x: number; y: number }[];
 }
-
-const getData = async (collectionId: string) => {
-  const response = await client.get(`motion/${collectionId}`);
-  const summary = response.data.data[0];
-  let motion: Info[] = [];
-
-  if (response.data.data.length > 0) {
-    for (let key in response.data.data[0]) {
-      motion.push({ label: key, value: summary[key] });
-    }
-  }
-  return {
-    data: {
-      drift: [{ x: 1, y: 1 }],
-      motion: motion,
-    },
-    total: response.data.total,
-  };
-};
 
 const useGridSize = (gridSize: number) => {
   const [windowSize, setWindowSize] = useState<WindowDimensions>({
@@ -79,24 +60,53 @@ const Collection = () => {
   const size = useGridSize(6);
   const dispatch = useAppDispatch();
   const toast = useToast();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    dispatch(setLoading(true));
-    getData(params.collectionId || "")
-      .then((apiData) => {
-        setData(apiData.data);
-        setTotalMotion(apiData.total);
-      })
-      .catch(() => {
-        toast({
-          ...baseToast,
-          title: "Error!",
-          description: "An error occurred and data could not be retrieved. Please try again.",
-          status: "error",
-        });
-      })
-      .finally(() => dispatch(setLoading(false)));
-  }, [params.collectionId, toast, dispatch]);
+  const getData = useCallback(
+    (endpoint: string) => {
+      dispatch(setLoading(true));
+      client
+        .get(endpoint)
+        .then((response) => {
+          const summary = response.data.data[0];
+          let motion: Info[] = [];
+
+          if (response.data.data.length > 0) {
+            for (let key in response.data.data[0]) {
+              motion.push({ label: key, value: summary[key] });
+            }
+          }
+
+          const data = {
+            drift: [{ x: 1, y: 1 }],
+            motion: motion,
+          };
+
+          setData(data);
+          setTotalMotion(response.data.total);
+        })
+        .catch((response) => {
+          if (response.detail === "Could not validate token") {
+            toast({
+              ...baseToast,
+              title: "Your session is invalid, please log in to access this page.",
+              status: "error",
+            });
+            navigate("/login", { state: { redirect: true } });
+            return;
+          }
+          toast({
+            ...baseToast,
+            title: "An error occurred and data could not be retrieved. Please try again.",
+            status: "error",
+          });
+        })
+        .finally(() => dispatch(setLoading(false)));
+    },
+    [dispatch, navigate, toast]
+  );
+
+  useEffect(() => getData(`motion/${params.collectionId}`), [params.collectionId, getData]);
 
   return (
     <Box>
@@ -115,7 +125,7 @@ const Collection = () => {
             </AccordionButton>
           </h2>
           <AccordionPanel>
-            <Heading size='md'>Summary</Heading>
+            <Heading variant='collection'>Summary</Heading>
             <Divider />
             <Grid p={2} templateColumns='repeat(3, 1fr)' gap={2}>
               <GridItem>
@@ -128,10 +138,13 @@ const Collection = () => {
                 <Scatter title='Estimated Resolution' scatterData={data.drift} />
               </GridItem>
             </Grid>
-            <Heading size='md'>Motion Correction/CTF</Heading>
+            <Heading variant='collection'>Motion Correction/CTF</Heading>
             <Divider />
             <Box>
-              <MotionPagination total={totalMotion} />
+              <MotionPagination
+                total={totalMotion}
+                onChange={(page) => getData(`motion/${params.collectionId}?motionId=${page}`)}
+              />
               <Grid p={2} templateColumns='repeat(4, 1fr)' gap={2}>
                 <GridItem>
                   <InfoGroup info={data.motion}></InfoGroup>
@@ -152,10 +165,10 @@ const Collection = () => {
                 </GridItem>
               </Grid>
             </Box>
-            <Heading size='md'>Shift Plot</Heading>
+            <Heading variant='collection'>Shift Plot</Heading>
             <Divider />
             <Box>TODO</Box>
-            <Heading size='md'>Cross Section</Heading>
+            <Heading variant='collection'>Cross Section</Heading>
             <Divider />
             <Box>TODO</Box>
           </AccordionPanel>

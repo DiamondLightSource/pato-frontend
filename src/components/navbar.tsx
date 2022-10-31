@@ -115,7 +115,7 @@ const Navbar: FunctionComponent = (): JSX.Element => {
           )}
         </Flex>
       </Flex>
-      {!isOpen && loading && <Progress isIndeterminate size='xs' />}
+      {!isOpen && loading && <Progress isIndeterminate size='sm' />}
 
       {isOpen && (
         <Box pb={4} display={{ md: "none" }}>

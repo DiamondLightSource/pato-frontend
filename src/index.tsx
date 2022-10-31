@@ -8,7 +8,7 @@ import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom"
 import Root from "./routes/Root";
 import GenericListing from "./routes/GenericListing";
 import Collection from "./routes/Collection";
-import { Accordion, Button, Text } from "./styles/components";
+import { Accordion, Button, Text, Heading } from "./styles/components";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
@@ -29,7 +29,7 @@ const theme = extendTheme({
       800: "#0a1128",
     },
   },
-  components: { Accordion, Button, Text },
+  components: { Accordion, Button, Text, Heading },
 });
 
 const proposalHeaders = [
