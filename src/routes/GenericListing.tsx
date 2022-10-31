@@ -23,6 +23,7 @@ const GenericListing = ({ headers, endpoint, heading, routeKey }: TableProps) =>
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(10);
   const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [search, setSearch] = useState("");
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -33,8 +34,14 @@ const GenericListing = ({ headers, endpoint, heading, routeKey }: TableProps) =>
 
   useEffect(() => {
     dispatch(setLoading(true));
+    let builtEndpoint = `${endpoint}?limit=${itemsPerPage}&page=${page}`;
+
+    if (search) {
+      builtEndpoint += `&s=${search}`;
+    }
+
     client
-      .get(`${endpoint}?limit=${itemsPerPage}&page=${page}`)
+      .get(builtEndpoint)
       .then((response) => {
         setTotal(response.data.total);
         setData(response.data.data);
@@ -58,14 +65,14 @@ const GenericListing = ({ headers, endpoint, heading, routeKey }: TableProps) =>
         });
       })
       .finally(() => dispatch(setLoading(false)));
-  }, [page, itemsPerPage, toast, endpoint, navigate, dispatch]);
+  }, [page, itemsPerPage, toast, endpoint, navigate, dispatch, search]);
 
   return (
     <div>
       <HStack>
         <Heading>{heading}</Heading>
         <Spacer />
-        <Input w='20%' size='sm' placeholder='Search'></Input>
+        <Input onBlur={(e) => setSearch(e.currentTarget.value)} w='20%' size='sm' placeholder='Search'></Input>
       </HStack>
       <Divider />
       <Table size='sm' variant='striped'>

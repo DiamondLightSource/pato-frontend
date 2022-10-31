@@ -9,6 +9,7 @@ import Root from "./routes/Root";
 import GenericListing from "./routes/GenericListing";
 import Collection from "./routes/Collection";
 import { Accordion, Button, Text, Heading } from "./styles/components";
+import Calendar from "./routes/Calendar";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
         element: (
           <GenericListing headers={proposalHeaders} endpoint='proposals' heading='Proposals' routeKey='proposalId' />
         ),
+      },
+      {
+        path: "/calendar",
+        element: <Calendar />,
       },
       {
         path: "/proposals/:propid",
