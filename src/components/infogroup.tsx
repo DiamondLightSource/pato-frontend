@@ -10,15 +10,17 @@ export interface Info {
 interface InfoProp {
   info: Info[];
   height?: number | string;
+  cols?: number;
+  py?: number;
 }
 
-const InfoGroup: FunctionComponent<InfoProp> = ({ info, height = "100%" }): JSX.Element => (
-  <Box h={height} overflow='scroll'>
+const InfoGroup: FunctionComponent<InfoProp> = ({ info, height = "100%", cols = 2, py = 0 }): JSX.Element => (
+  <Box py={py} h={height} overflow='scroll'>
     {info.length < 1 && <Skeleton height='100%' />}
-    <Grid templateColumns='repeat(2, minmax(0, 1fr))' gap={1}>
+    <Grid templateColumns={`repeat(${cols}, minmax(0, 1fr))`} gap={1}>
       {info.map((box: Info) => {
         return (
-          <GridItem key={box.label} colSpan={box.wide ? 2 : 1}>
+          <GridItem key={box.label} colSpan={box.wide ? cols : 1}>
             <Box h='100%' p={1} borderRadius={3} bg='diamond.100'>
               <Text variant='infoGroupText' as='b'>{`${box.label}: `}</Text>
               <Text variant='infoGroupText'>{`${box.value || "?"}`}</Text>

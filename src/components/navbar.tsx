@@ -15,6 +15,7 @@ import {
   Image,
   Stack,
   Progress,
+  Text,
 } from "@chakra-ui/react";
 import { MdLogin, MdMenu, MdClose } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
@@ -98,8 +99,19 @@ const Navbar: FunctionComponent = (): JSX.Element => {
         <Flex alignItems={"center"}>
           {loggedIn ? (
             <Menu>
-              <MenuButton as={Button} rounded={"full"} variant={"link"} cursor={"pointer"} minW={0}>
+              <MenuButton
+                borderRadius={12}
+                bg='diamond.500'
+                as={Button}
+                rounded={"full"}
+                variant={"link"}
+                cursor={"pointer"}
+                minW={0}
+              >
                 <Avatar size='xs' />
+                <Text verticalAlign='bottom' px={3} color='diamond.100' display='inline-block'>
+                  User
+                </Text>
               </MenuButton>
               <MenuList>
                 {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}

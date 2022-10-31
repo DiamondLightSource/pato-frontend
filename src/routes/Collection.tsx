@@ -5,10 +5,13 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  Button,
   Divider,
   Grid,
   GridItem,
   Heading,
+  HStack,
+  Spacer,
   useToast,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
@@ -21,6 +24,7 @@ import { baseToast } from "../styles/components";
 import { useAppDispatch } from "../store/hooks";
 import { setLoading } from "../features/uiSlice";
 import MotionPagination from "../components/motionPagination";
+import { MdSettings } from "react-icons/md";
 
 interface WindowDimensions {
   width: number;
@@ -135,16 +139,19 @@ const Collection = () => {
         Data Collection {params.collectionId} for {params.propId}-{params.visitId}
       </Heading>
       <Divider />
+      <InfoGroup py={4} info={data.motion} cols={4} />
       <Accordion defaultIndex={[0]} allowMultiple>
         <AccordionItem>
-          <h2>
-            <AccordionButton bg='diamond.100'>
-              <Box flex='1' textAlign='left'>
-                Processing Job
-              </Box>
+          <HStack py={1.5} px={3} bg='diamond.100'>
+            <h2>Processing Job</h2>
+            <Spacer />
+            <Button>
+              <MdSettings />
+            </Button>
+            <AccordionButton flex='0 1'>
               <AccordionIcon />
             </AccordionButton>
-          </h2>
+          </HStack>
           <AccordionPanel>
             <Heading variant='collection'>Summary</Heading>
             <Divider />
