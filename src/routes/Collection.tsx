@@ -32,6 +32,25 @@ interface ApiData {
   drift: { x: number; y: number }[];
 }
 
+const driftPlotOptions = {
+  maintainAspectRatio: false,
+  plugins: { legend: { display: false } },
+  scales: {
+    x: {
+      min: -20,
+      max: 20,
+      title: { display: true, text: "δx Å" },
+    },
+    y: {
+      min: -20,
+      max: 20,
+      title: { display: true, text: "δy Å" },
+    },
+  },
+  spanGaps: true,
+  showLine: false,
+};
+
 const useGridSize = (gridSize: number) => {
   const [windowSize, setWindowSize] = useState<WindowDimensions>({
     width: 0,
@@ -73,12 +92,14 @@ const Collection = () => {
 
           if (response.data.data.length > 0) {
             for (let key in response.data.data[0]) {
-              motion.push({ label: key, value: summary[key] });
+              if (typeof summary[key] === "string" || typeof summary[key] === "number") {
+                motion.push({ label: key, value: summary[key] });
+              }
             }
           }
 
           const data = {
-            drift: [{ x: 1, y: 1 }],
+            drift: summary.drift.map((frame: Record<string, any>) => ({ x: frame.deltaX, y: frame.deltaY })),
             motion: motion,
           };
 
@@ -158,6 +179,7 @@ const Collection = () => {
                 <GridItem>
                   <Scatter
                     title='Drift'
+                    options={driftPlotOptions}
                     scatterData={data.drift}
                     height={`${size.width}px`}
                     width={`${size.width}px`}

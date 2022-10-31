@@ -10,7 +10,15 @@ import {
   ModalOverlay,
   useDisclosure,
 } from "@chakra-ui/react";
-import { Chart as ChartJS, LinearScale, PointElement, LineElement, Tooltip, Legend } from "chart.js";
+import {
+  Chart as ChartJS,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Legend,
+  ScatterControllerChartOptions,
+} from "chart.js";
 import { Scatter } from "react-chartjs-2";
 
 import { FunctionComponent, useEffect, useState } from "react";
@@ -20,6 +28,7 @@ ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 interface ScatterProp {
   title: string;
   scatterData: { x: number; y: number }[];
+  options?: ScatterControllerChartOptions;
   width?: string;
   height?: string;
 }
@@ -33,24 +42,20 @@ const preloadedData = {
   ],
 };
 
+const defaultOptions = {
+  maintainAspectRatio: true,
+  plugins: { legend: { display: false } },
+};
+
 const ScatterWrapper: FunctionComponent<ScatterProp> = ({
   title,
   scatterData,
+  options = defaultOptions,
   width = "100%",
   height = "100%",
 }): JSX.Element => {
   const [data, setData] = useState(preloadedData);
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const options = {
-    maintainAspectRatio: width === "100%" && height === "100%",
-    plugins: { legend: { display: false } },
-  };
-
-  const modalOptions = {
-    ...options,
-    maintainAspectRatio: true,
-  };
 
   useEffect(() => {
     setData({
@@ -82,7 +87,7 @@ const ScatterWrapper: FunctionComponent<ScatterProp> = ({
           <ModalHeader>{title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Scatter data={data} options={modalOptions} />
+            <Scatter data={data} options={{ ...options, maintainAspectRatio: true }} />
           </ModalBody>
           <ModalFooter></ModalFooter>
         </ModalContent>
