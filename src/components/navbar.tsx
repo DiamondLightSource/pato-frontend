@@ -20,7 +20,7 @@ import {
 import { MdLogin, MdMenu, MdClose } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { checkUser, logoutUser } from "../features/auth/authSlice";
-import { Link as LinkRouter } from "react-router-dom";
+import { Link as LinkRouter, useNavigate } from "react-router-dom";
 
 const links = [
   { label: "Proposals", route: "proposals" },
@@ -69,6 +69,11 @@ const Navbar: FunctionComponent = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const loggedIn = useAppSelector((state) => state.auth.loggedIn);
   const loading = useAppSelector((state) => state.ui.loading);
+  const navigate = useNavigate();
+
+  const logout = () => {
+    dispatch(logoutUser()).then(() => navigate("/"));
+  };
 
   useEffect(() => {
     if (!loggedIn && sessionStorage.getItem("token") !== undefined) {
@@ -115,7 +120,7 @@ const Navbar: FunctionComponent = (): JSX.Element => {
               </MenuButton>
               <MenuList>
                 {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-                <MenuItem onClick={() => dispatch(logoutUser())}>Logout</MenuItem>
+                <MenuItem onClick={() => logout()}>Logout</MenuItem>
               </MenuList>
             </Menu>
           ) : (
