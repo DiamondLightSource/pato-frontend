@@ -131,7 +131,10 @@ const Collection = () => {
     [dispatch, navigate, toast]
   );
 
-  useEffect(() => getData(`motion/${params.collectionId}`), [params.collectionId, getData]);
+  useEffect(() => {
+    document.title = `eBIC » Collections » ${params.collectionId}`;
+    getData(`motion/${params.collectionId}`);
+  }, [params.collectionId, getData]);
 
   return (
     <Box>

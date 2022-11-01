@@ -31,6 +31,7 @@ const GenericListing = ({ headers, endpoint, heading, routeKey }: TableProps) =>
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    document.title = `eBIC » ${heading}`;
     dispatch(setLoading(true));
     let builtEndpoint = buildEndpoint(`${endpoint}`, params, itemsPerPage, page);
 

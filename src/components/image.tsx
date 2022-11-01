@@ -45,6 +45,7 @@ const ImageWrapper: FunctionComponent<ImageProp> = ({ title, src, width = "100%"
             <Box overflow='hidden' w='600px' h='550px'>
               {isZoomed ? (
                 <Image
+                  cursor='zoom-out'
                   position='relative'
                   style={{ transform: zoomCords }}
                   maxW='180%'
@@ -54,7 +55,13 @@ const ImageWrapper: FunctionComponent<ImageProp> = ({ title, src, width = "100%"
                   fallbackSrc='/images/no-image.png'
                 />
               ) : (
-                <Image w='100%' onClick={(e) => zoom(e)} src={src} fallbackSrc='/images/no-image.png' />
+                <Image
+                  cursor='zoom-in'
+                  w='100%'
+                  onClick={(e) => zoom(e)}
+                  src={src}
+                  fallbackSrc='/images/no-image.png'
+                />
               )}
             </Box>
           </ModalBody>

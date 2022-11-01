@@ -16,6 +16,7 @@ const Calendar = (): JSX.Element => {
   };
 
   useEffect(() => {
+    document.title = "eBIC » Calendar";
     client.get("visits?minDate=2022-10-01&maxDate=2022-10-31").then((response) => {
       const events = response.data.data.map((event: Record<string, any>) => ({
         id: event.sessionId,
