@@ -8,7 +8,6 @@ import {
   Button,
   Divider,
   Grid,
-  GridItem,
   Heading,
   HStack,
   Spacer,
@@ -25,11 +24,6 @@ import { useAppDispatch } from "../store/hooks";
 import { setLoading } from "../features/uiSlice";
 import MotionPagination from "../components/motionPagination";
 import { MdSettings } from "react-icons/md";
-
-interface WindowDimensions {
-  width: number;
-  height: number;
-}
 
 interface ApiData {
   motion: Info[];
@@ -55,32 +49,10 @@ const driftPlotOptions = {
   showLine: false,
 };
 
-const useGridSize = (gridSize: number) => {
-  const [windowSize, setWindowSize] = useState<WindowDimensions>({
-    width: 0,
-    height: 0,
-  });
-
-  useEffect(() => {
-    function handleResize() {
-      setWindowSize({
-        width: window.innerWidth / gridSize + 30,
-        height: window.innerHeight / gridSize + 30,
-      });
-    }
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
-  }, [gridSize]);
-
-  return windowSize;
-};
-
 const Collection = () => {
   const params = useParams();
   const [data, setData] = useState<ApiData>({ motion: [], drift: [] });
   const [totalMotion, setTotalMotion] = useState(1);
-  const size = useGridSize(6);
   const dispatch = useAppDispatch();
   const toast = useToast();
   const navigate = useNavigate();
@@ -91,14 +63,12 @@ const Collection = () => {
       client
         .get(endpoint)
         .then((response) => {
-          const summary = response.data.data[0];
+          const summary = response.data;
           let motion: Info[] = [];
 
-          if (response.data.data.length > 0) {
-            for (let key in response.data.data[0]) {
-              if (typeof summary[key] === "string" || typeof summary[key] === "number") {
-                motion.push({ label: key, value: summary[key] });
-              }
+          for (let key in summary) {
+            if (typeof summary[key] === "string" || typeof summary[key] === "number") {
+              motion.push({ label: key, value: summary[key] });
             }
           }
 
@@ -142,11 +112,10 @@ const Collection = () => {
         Data Collection {params.collectionId} for {params.propId}-{params.visitId}
       </Heading>
       <Divider />
-      <InfoGroup py={4} info={data.motion} cols={4} />
       <Accordion defaultIndex={[0]} allowMultiple>
         <AccordionItem>
           <HStack py={1.5} px={3} bg='diamond.100'>
-            <h2>Processing Job</h2>
+            <h2>Tomogram #1</h2>
             <Spacer />
             <Button>
               <MdSettings />
@@ -155,54 +124,29 @@ const Collection = () => {
               <AccordionIcon />
             </AccordionButton>
           </HStack>
-          <AccordionPanel>
-            <Heading variant='collection'>Summary</Heading>
+          <AccordionPanel p={4}>
+            <Heading variant='collection'>Alignment</Heading>
             <Divider />
-            <Grid p={2} templateColumns='repeat(3, 1fr)' gap={2}>
-              <GridItem>
-                <Scatter title='Astigmatism' scatterData={data.drift} />
-              </GridItem>
-              <GridItem>
-                <Scatter title='Estimated Defocus' scatterData={data.drift} />
-              </GridItem>
-              <GridItem>
-                <Scatter title='Estimated Resolution' scatterData={data.drift} />
-              </GridItem>
+            <Grid py={2} templateColumns='repeat(3, 1fr)' h='33vh' gap={2}>
+              <InfoGroup info={data.motion} />
+              <Image title='Central Slice' src='http://INVALID.com/image' height='100%' />
+              <Scatter title='Shift Plot' scatterData={data.drift} height='100%' />
             </Grid>
-            <Heading variant='collection'>Motion Correction/CTF</Heading>
-            <Divider />
-            <Box>
+            <HStack>
+              <Heading variant='collection'>Motion Correction/CTF</Heading>
+              <Spacer />
               <MotionPagination
                 total={totalMotion}
                 onChange={(page) => getData(`motion/${params.collectionId}?motionId=${page}`)}
               />
-              <Grid p={2} templateColumns='repeat(4, 1fr)' gap={2}>
-                <GridItem>
-                  <InfoGroup height='33vh' info={data.motion}></InfoGroup>
-                </GridItem>
-                <GridItem>
-                  <Image src='http://INVALID.com/image' title='Micrograph Snapshot' height={`${size.width}px`} />
-                </GridItem>
-                <GridItem>
-                  <Image src='http://INVALID.com/image' title='FFT Theoretical' height={`${size.width}px`} />
-                </GridItem>
-                <GridItem>
-                  <Scatter
-                    title='Drift'
-                    options={driftPlotOptions}
-                    scatterData={data.drift}
-                    height={`${size.width}px`}
-                    width={`${size.width}px`}
-                  />
-                </GridItem>
-              </Grid>
-            </Box>
-            <Heading variant='collection'>Shift Plot</Heading>
+            </HStack>
             <Divider />
-            <Box>TODO</Box>
-            <Heading variant='collection'>Cross Section</Heading>
-            <Divider />
-            <Box>TODO</Box>
+            <Grid py={2} templateColumns='repeat(4, 1fr)' h='25vh' gap={2}>
+              <InfoGroup info={data.motion} />
+              <Image src='http://INVALID.com/image' title='Micrograph Snapshot' height='100%' />
+              <Image src='http://INVALID.com/image' title='FFT Theoretical' height='100%' />
+              <Scatter title='Drift' options={driftPlotOptions} scatterData={data.drift} height='25vh' />
+            </Grid>
           </AccordionPanel>
         </AccordionItem>
       </Accordion>

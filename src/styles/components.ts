@@ -44,7 +44,6 @@ const Button = defineStyleConfig({
 
 const collection = defineStyle({
     fontSize: 20,
-    paddingTop: 4,
 
 })
 

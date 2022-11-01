@@ -37,7 +37,7 @@ const MotionPagination: FunctionComponent<MotionPaginationProp> = ({ total, onCh
   };
 
   return (
-    <HStack paddingTop={2} maxW='190px'>
+    <HStack py={1} maxW='190px'>
       <Button size='xs' onClick={() => setPage(1)}>
         &lt;&lt;
       </Button>
