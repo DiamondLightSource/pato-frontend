@@ -1,4 +1,4 @@
-import { Accordion, Divider, Heading, Box } from "@chakra-ui/react";
+import { Accordion, Divider, Heading, Box, Skeleton, SkeletonText, VStack } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { client } from "../utils/api/client";
@@ -10,6 +10,7 @@ import { parseData } from "../utils/generic";
 const Collection = () => {
   const params = useParams();
   const [tomograms, setTomograms] = useState<Record<string, any>>([]);
+  const [placeholderMessage, setPlaceholderMessage] = useState("");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -35,6 +36,10 @@ const Collection = () => {
   useEffect(() => {
     document.title = `eBIC » Collections » ${params.collectionId}`;
     getData(`tomograms/${params.collectionId}`).then((response) => {
+      if (response.items === undefined) {
+        setPlaceholderMessage("No tomogram found in this data collection");
+        return;
+      }
       setTomograms(response.items.map((info: Record<string, any>) => parseData(info, ["tomogramId"])));
     });
   }, [params.collectionId, getData]);
@@ -45,6 +50,20 @@ const Collection = () => {
         Data Collection {params.collectionId} for {params.propId}-{params.visitId}
       </Heading>
       <Divider />
+      {tomograms.length === 0 && !placeholderMessage && (
+        <VStack py={3} spacing={2} h='70vh'>
+          <Skeleton h='3vh' w='100%' />
+          <Skeleton h='33vh' w='100%' />
+          <Skeleton h='25vh' w='100%' />
+        </VStack>
+      )}
+
+      {placeholderMessage && (
+        <Heading textAlign='center' py={10} color='diamond.200'>
+          {placeholderMessage}
+        </Heading>
+      )}
+
       <Accordion defaultIndex={0} onChange={(e) => console.log(e)}>
         {tomograms.map((tomogram: Record<string, any>) => (
           <Tomogram tomogram={tomogram} key={tomogram.tomogramId} />

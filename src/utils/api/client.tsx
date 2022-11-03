@@ -52,10 +52,10 @@ export async function client(
           title: data.detail,
           status: "error",
         });
+      }
 
-        if (response.status === 403) {
-          data.redirect = "/login";
-        }
+      if (response.status === 403) {
+        data.redirect = "/login";
       }
     }
     return await Promise.reject({ ...data });
@@ -74,11 +74,12 @@ export async function client(
 }
 
 client.get = async function (endpoint: string, customConfig = {}, privateEndpoint = false) {
+  console.log(sessionStorage.getItem("token"));
   const resp = await client(
     endpoint,
     (customConfig = {
       ...customConfig,
-      headers: { Authorization: `Bearer ${window.sessionStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
       method: "GET",
     })
   );

@@ -25,8 +25,8 @@ export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
   }
 })
 
-export const checkUser = createAsyncThunk('auth/checkUser', async ({}, {rejectWithValue}) => {
-  client.get("user").catch(() => rejectWithValue("Unauthorized"))
+export const checkUser = createAsyncThunk('auth/checkUser', async () => {
+  await client.get("user")
   return "OK"
 })
 
