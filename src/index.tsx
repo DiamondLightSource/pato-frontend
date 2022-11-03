@@ -16,7 +16,7 @@ const { ToastContainer } = createStandaloneToast();
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
-if (process.env.NODE_ENV === "developmenst") {
+if (process.env.NODE_ENV === "developments") {
   const { worker } = require("./mocks/browser");
   worker.start();
 }

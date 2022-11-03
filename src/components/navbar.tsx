@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { MdLogin, MdMenu, MdClose } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { checkUser, logoutUser } from "../features/auth/authSlice";
+import { checkUser, logoutUser } from "../features/authSlice";
 import { Link as LinkRouter, useNavigate } from "react-router-dom";
 
 const links = [

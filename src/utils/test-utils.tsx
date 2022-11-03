@@ -6,7 +6,7 @@ import type { PreloadedState } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 
 import type { AppStore, RootState } from "../store/store";
-import authReducer from "../features/auth/authSlice";
+import authReducer from "../features/authSlice";
 import uiReducer from "../features/uiSlice";
 import { BrowserRouter } from "react-router-dom";
 

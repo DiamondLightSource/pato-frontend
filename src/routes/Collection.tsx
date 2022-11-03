@@ -34,8 +34,8 @@ const Collection = () => {
 
   useEffect(() => {
     document.title = `eBIC » Collections » ${params.collectionId}`;
-    getData(`tomograms/?collection=${params.collectionId}`).then((response) => {
-      setTomograms(response.tomograms.map((info: Record<string, any>) => parseData(info, ["tomogramId"])));
+    getData(`tomograms/${params.collectionId}`).then((response) => {
+      setTomograms(response.items.map((info: Record<string, any>) => parseData(info, ["tomogramId"])));
     });
   }, [params.collectionId, getData]);
 

@@ -17,7 +17,7 @@ interface InfoProp {
 const InfoGroup: FunctionComponent<InfoProp> = ({ info, height = "100%", cols = 2, py = 0 }): JSX.Element => (
   <Box py={py} h={height} overflow='scroll'>
     {info.length < 1 && <Skeleton h='100%' />}
-    <Grid templateColumns={`repeat(${cols}, minmax(0, 1fr))`} h='100%' gap={1}>
+    <Grid templateColumns={`repeat(${cols}, minmax(0, 1fr))`} maxH='100%' gap={1}>
       {info.map((box: Info) => {
         return (
           <GridItem key={box.label} colSpan={box.wide ? cols : 1}>

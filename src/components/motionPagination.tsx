@@ -1,4 +1,4 @@
-import { Button, HStack, NumberInputField, NumberInput, Text } from "@chakra-ui/react";
+import { Button, HStack, NumberInputField, NumberInput, InputRightAddon, InputGroup, Input } from "@chakra-ui/react";
 import { FunctionComponent, useEffect, useState, FocusEvent as ReactFocusEvent } from "react";
 
 type ChangeCallback = (page: number) => void;
@@ -37,23 +37,23 @@ const MotionPagination: FunctionComponent<MotionPaginationProp> = ({ total, onCh
   };
 
   return (
-    <HStack py={1} maxW='190px'>
+    <HStack py={1} maxW='210px'>
       <Button size='xs' onClick={() => setPage(1)}>
         &lt;&lt;
       </Button>
       <Button size='xs' isDisabled={parseInt(value) === 1} onClick={() => setPage(parseInt(value) - 1)}>
         &lt;
       </Button>
-      <NumberInput size='xs' min={1} max={total} value={value} onChange={(text) => setValue(text)}>
-        <NumberInputField onBlur={(event) => editPage(event)}></NumberInputField>
-      </NumberInput>
+      <InputGroup size='xs'>
+        <Input onChange={(event) => setValue(event.target.value)} value={value} onBlur={(event) => editPage(event)} />
+        <InputRightAddon children={total} />
+      </InputGroup>
       <Button size='xs' isDisabled={parseInt(value) === total} onClick={() => setPage(parseInt(value) + 1)}>
         &gt;
       </Button>
       <Button size='xs' onClick={() => setPage(total)}>
         &gt;&gt;
       </Button>
-      <Text>out of {total}</Text>
     </HStack>
   );
 };

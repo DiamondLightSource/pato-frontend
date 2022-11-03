@@ -47,7 +47,7 @@ const driftPlotOptions = {
 };
 
 const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element => {
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(-1);
   const [motion, setMotion] = useState<Record<string, any>>({ drift: [], total: 0, info: [] });
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -72,7 +72,9 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
   );
 
   useEffect(() => {
-    setMotion(parseData(getData(`motion/${tomogram.tomogramId}`), ["tomogramId", "movieId", "total", "darkTotal"]));
+    getData(`motion/${tomogram.tomogramId}${page === -1 ? " " : `?nth=${page}`}`).then((response) => {
+      setMotion(parseData(response, ["tomogramId", "movieId", "total", "rawTotal"]));
+    });
   }, [page, tomogram, getData]);
 
   return (
@@ -97,15 +99,15 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
         </Grid>
         <HStack marginTop={2}>
           <Heading variant='collection'>Motion Correction/CTF</Heading>
-          <Heading size='sm' color='diamond.100'>
-            (dark images: {motion.darkTotal})
+          <Heading size='sm' color='diamond.200'>
+            (Dark images: {isNaN(motion.rawTotal - motion.total) ? "?" : motion.rawTotal - motion.total})
           </Heading>
           <Spacer />
-          <MotionPagination total={motion.total} onChange={(page) => setPage(page)} />
+          <MotionPagination total={motion.total ?? 0} onChange={(page) => setPage(page)} />
         </HStack>
         <Divider />
         <Grid py={2} templateColumns='repeat(4, 1fr)' h='25vh' gap={2}>
-          <InfoGroup info={motion.drift} />
+          <InfoGroup info={motion.info} />
           <Image src='http://INVALID.com/image' title='Micrograph Snapshot' height='100%' />
           <Image src='http://INVALID.com/image' title='FFT Theoretical' height='100%' />
           <Scatter title='Drift' options={driftPlotOptions} scatterData={motion.drift} height='25vh' />

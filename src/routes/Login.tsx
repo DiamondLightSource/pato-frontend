@@ -14,7 +14,7 @@ import {
 import { useState } from "react";
 import { MdLock, MdPerson } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
-import { loginUser } from "../features/auth/authSlice";
+import { loginUser } from "../features/authSlice";
 import { useAppDispatch } from "../store/hooks";
 import { baseToast } from "../styles/components";
 import { useForm, FieldValues } from "react-hook-form";

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { client } from '../../utils/api/client'
+import { client } from '../utils/api/client'
 
 interface authState {
   loggedIn: boolean
