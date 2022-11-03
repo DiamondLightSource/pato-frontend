@@ -1,0 +1,21 @@
+image: node
+
+stages:
+  - build
+  - test
+
+install-job:
+  stage: build
+  tags:
+    - argus
+  script:
+    - npm install
+
+unit-test-job:
+  stage: test
+  tags: 
+    - argus
+  before_script:
+    - npm install
+  script:
+    - npm run test
