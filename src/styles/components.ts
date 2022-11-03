@@ -1,6 +1,7 @@
 import { defineStyleConfig, ToastProps, defineStyle } from "@chakra-ui/react";
 
 const baseToast: ToastProps = {
+  id: "main-toast",
   status: "success",
   duration: 4000,
   isClosable: true,

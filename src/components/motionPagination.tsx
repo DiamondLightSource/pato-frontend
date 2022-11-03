@@ -1,4 +1,4 @@
-import { Button, HStack, NumberInputField, NumberInput } from "@chakra-ui/react";
+import { Button, HStack, NumberInputField, NumberInput, Text } from "@chakra-ui/react";
 import { FunctionComponent, useEffect, useState, FocusEvent as ReactFocusEvent } from "react";
 
 type ChangeCallback = (page: number) => void;
@@ -53,6 +53,7 @@ const MotionPagination: FunctionComponent<MotionPaginationProp> = ({ total, onCh
       <Button size='xs' onClick={() => setPage(total)}>
         &gt;&gt;
       </Button>
+      <Text>out of {total}</Text>
     </HStack>
   );
 };

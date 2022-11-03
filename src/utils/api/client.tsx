@@ -1,3 +1,7 @@
+import { createStandaloneToast } from "@chakra-ui/toast";
+import { baseToast } from "../../styles/components";
+const { toast } = createStandaloneToast();
+
 interface RequestConfig {
   method: string;
   headers: Record<string, any>;
@@ -40,9 +44,32 @@ export async function client(
         url: response.url,
       };
     }
-    return await Promise.reject(data);
+
+    if (response.status !== 500) {
+      if (!toast.isActive("main-toast")) {
+        toast({
+          ...baseToast,
+          title: data.detail,
+          status: "error",
+        });
+
+        if (response.status === 403) {
+          data.redirect = "/login";
+        }
+      }
+    }
+    return await Promise.reject({ ...data });
   } catch (err: any) {
-    return await Promise.reject(data);
+    if (!toast.isActive("main-toast")) {
+      toast({
+        ...baseToast,
+        title: "An error has occurred while fetching data, please try again later.",
+        status: "error",
+      });
+    }
+
+    console.error(target, config, data);
+    return await Promise.reject({ ...data });
   }
 }
 

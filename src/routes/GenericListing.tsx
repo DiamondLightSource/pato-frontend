@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import Pagination from "../components/pagination";
 import { setLoading } from "../features/uiSlice";
 import { useAppDispatch } from "../store/hooks";
-import { baseToast } from "../styles/components";
 import { client } from "../utils/api/client";
 import { buildEndpoint } from "../utils/api/endpoint";
 
@@ -46,25 +45,12 @@ const GenericListing = ({ headers, endpoint, heading, routeKey }: TableProps) =>
       .get(builtEndpoint)
       .then((response) => {
         setTotal(response.data.total);
-        setData(response.data.data);
+        setData(response.data.items);
       })
       .catch((response) => {
-        if (response.detail === "Could not validate token") {
-          toast({
-            ...baseToast,
-            title: "Error!",
-            description: "Your session is invalid, please log in to access this page.",
-            status: "error",
-          });
-          navigate("/login", { state: { redirect: true } });
-          return;
+        if (response.redirect) {
+          navigate(response.redirect, { state: { redirect: true } });
         }
-        toast({
-          ...baseToast,
-          title: "Error!",
-          description: "An error occurred and data could not be retrieved. Please try again.",
-          status: "error",
-        });
       })
       .finally(() => dispatch(setLoading(false)));
   }, [page, itemsPerPage, toast, endpoint, navigate, dispatch, search, params]);

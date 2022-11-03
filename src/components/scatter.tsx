@@ -43,7 +43,7 @@ const preloadedData = {
 };
 
 const defaultOptions = {
-  maintainAspectRatio: true,
+  maintainAspectRatio: false,
   plugins: { legend: { display: false } },
 };
 
