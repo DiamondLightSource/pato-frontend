@@ -1,0 +1,23 @@
+image: node
+
+stages:
+  - build
+  - test
+
+install-job:
+  stage: build
+  tags:
+    - argus
+  script:
+    - npm install yarn
+    - yarn install
+
+unit-test-job:
+  stage: test
+  tags: 
+    - argus
+  before_script:
+    - npm install yarn
+    - yarn install
+  script:
+    - yarn run test --verbose
