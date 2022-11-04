@@ -9,13 +9,15 @@ install-job:
   tags:
     - argus
   script:
-    - npm install
+    - npm install yarn
+    - yarn install
 
 unit-test-job:
   stage: test
   tags: 
     - argus
   before_script:
-    - npm install
+    - npm install yarn
+    - yarn install
   script:
-    - npm run test --verbose
+    - yarn run test --verbose
