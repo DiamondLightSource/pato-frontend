@@ -7,7 +7,7 @@ interface LoginRequestBody {
 }
 
 export const handlers = [
-  rest.post<LoginRequestBody, {token: string}>('http://127.0.0.1:8000/mock/login', async (req, res, ctx) => {
+  rest.post<LoginRequestBody, {token: string}>('http://127.0.0.1:8000/login', async (req, res, ctx) => {
     sessionStorage.setItem('is-authenticated', 'true')
     const {username} = await req.json()
     if(username === "test"){
@@ -25,7 +25,7 @@ export const handlers = [
     }
   }),
 
-  rest.post('http://127.0.0.1:8000/mock/logout', (req, res, ctx) => {
+  rest.post('http://127.0.0.1:8000/logout', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -34,17 +34,13 @@ export const handlers = [
     )
   }),
 
-  rest.get('http://127.0.0.1:8000/tomograms?collection=collectionId', (req, res, ctx) => {
+  rest.get('http://127.0.0.1:8000/motion/:movie', (req, res, ctx) => {
     return res(
       ctx.status(200),
-      ctx.json({items: [{
-        volumeFile: "/dls/m06/test",
-        pixelSpacing: 0.1,
-        stackFile: "/dls/m06/test",
-        zShift: 0.1,
-        tiltAngleOffset: 0.1,
-        tomogramId: 1,
-      }]})
+      ctx.json({
+        total: 10,
+        rawTotal: 20
+      })
     )
   })
 ]

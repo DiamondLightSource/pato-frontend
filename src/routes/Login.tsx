@@ -46,13 +46,7 @@ const Login = (): JSX.Element => {
           navigate("/proposals");
         }
       })
-      .catch(() => {
-        toast({
-          ...baseToast,
-          title: "Login failed. Check your credentials and try again.",
-          status: "error",
-        });
-      });
+      .catch(() => {});
     return;
   };
 

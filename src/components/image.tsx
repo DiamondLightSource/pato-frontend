@@ -34,8 +34,10 @@ const ImageWrapper: FunctionComponent<ImageProp> = ({ title, src, width = "100%"
 
   return (
     <Box onClick={onOpen} p={3} borderWidth='1px' borderRadius='lg' w={width} h={height} overflow='hidden'>
-      <Heading size='sm'>{title}</Heading>
-      <Image src={src} fallbackSrc='/images/no-image.png' />
+      <Heading size='sm' paddingBottom={1}>
+        {title}
+      </Heading>
+      <Image src={src} margin='auto' h='100%' paddingBottom={5} fallbackSrc='/images/no-image.png' />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent w='fit-content' maxW='90vw'>

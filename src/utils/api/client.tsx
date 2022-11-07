@@ -35,7 +35,11 @@ export async function client(
   const target = "http://127.0.0.1:8000/" + endpoint;
   try {
     const response = await fetch(target, config);
-    data = await response.json();
+    if (response.headers.get("content-type") === "image/png") {
+      data = await response.blob();
+    } else {
+      data = await response.json();
+    }
     if (response.ok) {
       return {
         status: response.status,
@@ -54,7 +58,7 @@ export async function client(
         });
       }
 
-      if (response.status === 403) {
+      if (response.status === 401) {
         data.redirect = "/login";
       }
     }
@@ -73,8 +77,7 @@ export async function client(
   }
 }
 
-client.get = async function (endpoint: string, customConfig = {}, privateEndpoint = false) {
-  console.log(sessionStorage.getItem("token"));
+client.get = async (endpoint: string, customConfig = {}, privateEndpoint = false) => {
   const resp = await client(
     endpoint,
     (customConfig = {
@@ -87,12 +90,12 @@ client.get = async function (endpoint: string, customConfig = {}, privateEndpoin
   return resp;
 };
 
-client.post = async function (endpoint: string, body: Record<any, any> | FormData, customConfig = {}) {
+client.post = async (endpoint: string, body: Record<any, any> | FormData, customConfig = {}) => {
   const resp = await client(endpoint, customConfig, body);
   return resp;
 };
 
-client.delete = async function (endpoint: string, customConfig = {}) {
+client.delete = async (endpoint: string, customConfig = {}) => {
   const resp = await client(endpoint, (customConfig = { ...customConfig, method: "DELETE" }));
   return resp;
 };

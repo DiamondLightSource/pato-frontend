@@ -49,33 +49,37 @@ const driftPlotOptions = {
 const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element => {
   const [page, setPage] = useState(-1);
   const [motion, setMotion] = useState<Record<string, any>>({ drift: [], total: 0, info: [] });
+  const [mgImage, setMgImage] = useState("");
+  const [fftImage, setFftImage] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const getData = useCallback(
-    async (endpoint: string): Promise<Record<string, any>> => {
-      let data = {};
-      dispatch(setLoading(true));
-      try {
-        const response = await client.get(endpoint);
-        data = response.data;
-      } catch (response: any) {
+  useEffect(() => {
+    if (motion.movieId !== undefined) {
+      client.get(`thumbnail/micrograph/${motion.movieId}`).then((response) => {
+        setMgImage(URL.createObjectURL(response.data));
+      });
+
+      client.get(`thumbnail/fft/${motion.movieId}`).then((response) => {
+        setFftImage(URL.createObjectURL(response.data));
+      });
+    }
+    dispatch(setLoading(false));
+  }, [motion, dispatch]);
+
+  useEffect(() => {
+    dispatch(setLoading(true));
+    client
+      .get(`motion/${tomogram.tomogramId}${page === -1 ? " " : `?nth=${page}`}`)
+      .then((response) => {
+        setMotion(parseData(response.data, ["tomogramId", "movieId", "total", "rawTotal"]));
+      })
+      .catch((response) => {
         if (response.redirect) {
           navigate(response.redirect, { state: { redirect: true } });
         }
-      }
-
-      dispatch(setLoading(false));
-      return data;
-    },
-    [dispatch, navigate]
-  );
-
-  useEffect(() => {
-    getData(`motion/${tomogram.tomogramId}${page === -1 ? " " : `?nth=${page}`}`).then((response) => {
-      setMotion(parseData(response, ["tomogramId", "movieId", "total", "rawTotal"]));
-    });
-  }, [page, tomogram, getData]);
+      });
+  }, [page, tomogram, dispatch, navigate]);
 
   return (
     <AccordionItem>
@@ -108,8 +112,8 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
         <Divider />
         <Grid py={2} templateColumns='repeat(4, 1fr)' h='25vh' gap={2}>
           <InfoGroup info={motion.info} />
-          <Image src='http://INVALID.com/image' title='Micrograph Snapshot' height='100%' />
-          <Image src='http://INVALID.com/image' title='FFT Theoretical' height='100%' />
+          <Image src={mgImage} title='Micrograph Snapshot' height='100%' />
+          <Image src={fftImage} title='FFT Theoretical' height='100%' />
           <Scatter title='Drift' options={driftPlotOptions} scatterData={motion.drift} height='25vh' />
         </Grid>
       </AccordionPanel>

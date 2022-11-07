@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { store } from "./store/store";
 import { ChakraProvider, createStandaloneToast, extendTheme } from "@chakra-ui/react";
 import Login from "./routes/Login";
-import { createBrowserRouter, Navigate, RouterProvider, useNavigate } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import Root from "./routes/Root";
 import GenericListing from "./routes/GenericListing";
 import Collection from "./routes/Collection";
@@ -16,10 +16,12 @@ const { ToastContainer } = createStandaloneToast();
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
-if (process.env.NODE_ENV === "developments") {
+/*
+if (process.env.NODE_ENV === "development") {
   const { worker } = require("./mocks/browser");
   worker.start();
 }
+*/
 
 const theme = extendTheme({
   colors: colours,

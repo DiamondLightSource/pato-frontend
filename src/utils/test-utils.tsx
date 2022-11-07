@@ -4,6 +4,8 @@ import type { RenderOptions } from "@testing-library/react";
 import { configureStore } from "@reduxjs/toolkit";
 import type { PreloadedState } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
+import { setupServer } from "msw/node";
+import { handlers } from "../mocks/handlers";
 
 import type { AppStore, RootState } from "../store/store";
 import authReducer from "../features/authSlice";
@@ -16,7 +18,7 @@ interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
   store?: AppStore;
 }
 
-export function renderWithProviders(
+const renderWithProviders = (
   ui: React.ReactElement,
   {
     preloadedState = { auth: { loggedIn: false }, ui: { loading: false } },
@@ -24,7 +26,7 @@ export function renderWithProviders(
     store = configureStore({ reducer: { auth: authReducer, ui: uiReducer }, preloadedState }),
     ...renderOptions
   }: ExtendedRenderOptions = {}
-): any {
+): any => {
   function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
     window.history.pushState({}, "Test page", route);
 
@@ -36,4 +38,8 @@ export function renderWithProviders(
   }
 
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
-}
+};
+
+const server = setupServer(...handlers);
+
+export { server, renderWithProviders };
