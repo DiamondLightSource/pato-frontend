@@ -14,10 +14,10 @@ interface TableProps {
   }[];
   endpoint: string;
   heading: string;
-  routeKey: string;
+  routeKeys: string[];
 }
 
-const GenericListing = ({ headers, endpoint, heading, routeKey }: TableProps) => {
+const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) => {
   const [data, setData] = useState<Array<Record<string, any>>>([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(10);
@@ -28,6 +28,10 @@ const GenericListing = ({ headers, endpoint, heading, routeKey }: TableProps) =>
   const navigate = useNavigate();
   const params = useParams();
   const dispatch = useAppDispatch();
+
+  const getRouteKey = (item: Record<string, any>) => {
+    return routeKeys.map((key) => item[key]).join("");
+  };
 
   useEffect(() => {
     document.title = `eBIC » ${heading}`;
@@ -60,7 +64,17 @@ const GenericListing = ({ headers, endpoint, heading, routeKey }: TableProps) =>
       <HStack>
         <Heading>{heading}</Heading>
         <Spacer />
-        <Input onBlur={(e) => setSearch(e.currentTarget.value)} w='20%' size='sm' placeholder='Search'></Input>
+        <Input
+          onKeyUp={(e) => {
+            if (e.key === "Enter") {
+              setSearch(e.currentTarget.value);
+            }
+          }}
+          onBlur={(e) => setSearch(e.currentTarget.value)}
+          w='20%'
+          size='sm'
+          placeholder='Search'
+        ></Input>
       </HStack>
       <Divider />
       <Table size='sm' variant='striped'>
@@ -73,7 +87,7 @@ const GenericListing = ({ headers, endpoint, heading, routeKey }: TableProps) =>
         </Thead>
         <Tbody>
           {data.map((item, i) => (
-            <Tr key={i} onClick={() => navigate(item[routeKey].toString())}>
+            <Tr key={i} onClick={() => navigate(getRouteKey(item))}>
               {headers.map((header) => (
                 <Td key={header.key}>{item[header.key]}</Td>
               ))}

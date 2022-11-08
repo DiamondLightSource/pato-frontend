@@ -60,7 +60,7 @@ const router = createBrowserRouter([
       {
         path: "/proposals",
         element: (
-          <GenericListing headers={proposalHeaders} endpoint='proposals' heading='Proposals' routeKey='proposalId' />
+          <GenericListing headers={proposalHeaders} endpoint='proposals' heading='Proposals' routeKeys={["proposalCode", "proposalNumber"]} />
         ),
       },
       {
@@ -73,7 +73,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/proposals/:propId/visits",
-        element: <GenericListing headers={visitHeaders} endpoint='visits' heading='Visits' routeKey='sessionId' />,
+        element: <GenericListing headers={visitHeaders} endpoint='visits' heading='Visits' routeKeys={['sessionId']} />,
       },
       {
         path: "/proposals/:propid/visits/:visitId",
@@ -86,7 +86,7 @@ const router = createBrowserRouter([
             headers={collectionHeaders}
             endpoint='collections'
             heading='Data Collections'
-            routeKey='dataCollectionId'
+            routeKeys={['dataCollectionId']}
           />
         ),
       },
