@@ -77,7 +77,7 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
         ></Input>
       </HStack>
       <Divider />
-      <Table size='sm' variant='striped'>
+      <Table size='sm' variant='diamondStriped'>
         <Thead>
           <Tr>
             {headers.map((header) => (
@@ -85,7 +85,7 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
             ))}
           </Tr>
         </Thead>
-        <Tbody>
+        <Tbody cursor='pointer'>
           {data.map((item, i) => (
             <Tr key={i} onClick={() => navigate(getRouteKey(item))}>
               {headers.map((header) => (

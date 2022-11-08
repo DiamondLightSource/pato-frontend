@@ -25,6 +25,22 @@ const Text = defineStyleConfig({
     },
   })
 
+  const Table = defineStyleConfig({
+    variants: {
+      diamondStriped: {
+        tbody: {
+          tr: {
+            _odd: {
+              bg: "diamond.100"
+            },
+            _hover: {
+              bg: "diamond.300"
+            }
+          }
+        }
+      }
+    }
+  })
 
 const Button = defineStyleConfig({
     defaultProps: {
@@ -34,11 +50,15 @@ const Button = defineStyleConfig({
       pgSelected: {
         bg: "diamond.500",
         color: "#FFF",
+        cursor: "default"
       },
       pgNotSelected: {
         bg: "gray.200",
         color: "charcoal",
         fontSize: "sm",
+        _hover: {
+          bg: "diamond.300"
+        }
       },
     },
   })
@@ -55,4 +75,4 @@ const Heading = defineStyleConfig({
   }
 })
 
-export { Accordion, Button, Text, Heading, baseToast };
+export { Accordion, Button, Table, Text, Heading, baseToast };

@@ -94,7 +94,12 @@ const Navbar: FunctionComponent = (): JSX.Element => {
         <HStack spacing={8} alignItems={"center"}>
           <LinkRouter to={"/"}>
             <Box maxW='5rem'>
-              <Image fit='cover' paddingBottom={{ md: "6px", base: 0 }} src='/images/diamondgs.png' />
+              <Image
+                _hover={{ filter: "brightness(70%)" }}
+                fit='cover'
+                paddingBottom={{ md: "6px", base: 0 }}
+                src='/images/diamondgs.png'
+              />
             </Box>
           </LinkRouter>
           <HStack as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
@@ -112,6 +117,7 @@ const Navbar: FunctionComponent = (): JSX.Element => {
                 variant={"link"}
                 cursor={"pointer"}
                 minW={0}
+                _hover={{ bg: "diamond.600" }}
               >
                 <Avatar size='xs' />
                 <Text verticalAlign='bottom' px={3} color='diamond.100' display='inline-block'>
