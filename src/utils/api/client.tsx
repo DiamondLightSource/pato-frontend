@@ -33,7 +33,6 @@ export async function client(
 
   let data;
   let target = process.env.REACT_APP_API_ENDPOINT + endpoint;
-  console.log(target);
   let response: Response;
 
   try {

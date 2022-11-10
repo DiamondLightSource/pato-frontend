@@ -115,7 +115,8 @@ const Navbar: FunctionComponent = (): JSX.Element => {
                 {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                 <MenuItem
                   onClick={() => {
-                    console.log("logout");
+                    sessionStorage.removeItem("token");
+                    window.location.href = `${process.env.REACT_APP_API_ENDPOINT}logout?redirect_uri=${window.location.href}`;
                   }}
                 >
                   Logout
