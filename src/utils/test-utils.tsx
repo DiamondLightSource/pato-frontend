@@ -6,6 +6,7 @@ import type { PreloadedState } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { setupServer } from "msw/node";
 import { handlers } from "../mocks/handlers";
+import "whatwg-fetch";
 
 import type { AppStore, RootState } from "../store/store";
 import authReducer from "../features/authSlice";
@@ -17,6 +18,8 @@ interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
   route?: string;
   store?: AppStore;
 }
+
+process.env.REACT_APP_API_ENDPOINT = "http://localhost/";
 
 const renderWithProviders = (
   ui: React.ReactElement,

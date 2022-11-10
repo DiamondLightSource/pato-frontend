@@ -125,7 +125,7 @@ const Navbar: FunctionComponent = (): JSX.Element => {
             </Menu>
           ) : (
             <Link
-              href={`${process.env.REACT_APP_API_ENDPOINT}/authorise?redirect_uri=${encodeURIComponent(
+              href={`${process.env.REACT_APP_API_ENDPOINT}authorise?redirect_uri=${encodeURIComponent(
                 window.location.href
               )}`}
             >

@@ -9,11 +9,18 @@ interface RequestConfig {
   [k: string]: any;
 }
 
+interface Response {
+  status: number;
+  data: any;
+  headers: Record<string, any>;
+  url: string;
+}
+
 export async function client(
   endpoint: string,
   customConfig: Record<any, any> = {},
   body?: Record<any, any> | FormData
-): Promise<never | Record<string, any>> {
+): Promise<never | Response> {
   const config: RequestConfig = {
     method: body != null ? "POST" : "GET",
     ...customConfig,
@@ -33,31 +40,19 @@ export async function client(
 
   let data;
   let target = process.env.REACT_APP_API_ENDPOINT + endpoint;
-  let response: Response;
 
-  try {
-    response = await fetch(target, config);
-  } catch {
-    if (!toast.isActive("main-toast")) {
-      toast({
-        ...baseToast,
-        title: "An error has occurred while fetching data, please try again later.",
-        status: "error",
-      });
-    }
+  const response = await fetch(target, config);
 
-    console.error(target, config);
-    return await Promise.reject();
-  }
-
-  if (!response.ok) {
-    return await Promise.reject(response.status);
-  }
-
-  if (response.headers.get("content-type") === "image/png") {
-    data = await response.blob();
-  } else {
-    data = await response.json();
+  switch (response.headers.get("content-type")) {
+    case "image/png":
+      data = await response.blob();
+      break;
+    case "application/json":
+      data = await response.json();
+      break;
+    default:
+      data = null;
+      break;
   }
 
   return {
@@ -69,8 +64,21 @@ export async function client(
 }
 
 client.safe_get = async (endpoint: string, customConfig = {}) => {
+  const resp = await client.get(endpoint, customConfig);
+
+  if (resp.status === 401) {
+    window.location.href = `${process.env.REACT_APP_API_ENDPOINT}authorise?redirect_uri=${encodeURIComponent(
+      window.location.href
+    )}`;
+  }
+
+  return resp;
+};
+
+client.get = async (endpoint: string, customConfig = {}) => {
+  let resp: Response = { status: 0, data: {}, headers: {}, url: "" };
   try {
-    const resp = await client(
+    resp = await client(
       endpoint,
       (customConfig = {
         ...customConfig,
@@ -78,29 +86,17 @@ client.safe_get = async (endpoint: string, customConfig = {}) => {
         method: "GET",
       })
     );
-
-    return resp;
-  } catch (status) {
-    if (status === 401) {
-      window.location.href = `${process.env.REACT_APP_API_ENDPOINT}authorise?redirect_uri=${encodeURIComponent(
-        window.location.href
-      )}`;
+  } catch (err) {
+    if (!toast.isActive("main-toast")) {
+      toast({
+        ...baseToast,
+        title: "An error has occurred while fetching data, please try again later.",
+        status: "error",
+      });
     }
 
-    return await Promise.reject({ detail: "Auth failure" });
+    console.error(endpoint, customConfig, err);
   }
-};
-
-client.get = async (endpoint: string, customConfig = {}) => {
-  const resp = await client(
-    endpoint,
-    (customConfig = {
-      ...customConfig,
-      headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
-      method: "GET",
-    })
-  );
-
   return resp;
 };
 

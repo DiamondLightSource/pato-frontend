@@ -1,12 +1,14 @@
 import Tomogram from "../src/components/tomogram";
 import React from "react";
 import { server, renderWithProviders } from "../src/utils/test-utils";
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import { Accordion } from "@chakra-ui/react";
 
 beforeAll(() => server.listen());
 
-describe("Collection", () => {
+describe("Tomogram", () => {
+  window.URL.createObjectURL = jest.fn();
+
   it("should display tomogram ID correctly", () => {
     renderWithProviders(
       <Accordion>
@@ -17,14 +19,17 @@ describe("Collection", () => {
     expect(screen.getByText("Tomogram 1")).toBeInTheDocument();
   });
 
-  it("should display tomogram info", () => {
+  it("should display tomogram info", async () => {
     renderWithProviders(
       <Accordion>
         <Tomogram tomogram={{ tomogramId: 1, info: [{ label: "testLabel", value: "testValue" }] }} />
       </Accordion>
     );
 
-    expect(screen.getByText("testLabel:")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("testLabel:")).toBeInTheDocument();
+    });
+
     expect(screen.getByText("testValue")).toBeInTheDocument();
   });
 });

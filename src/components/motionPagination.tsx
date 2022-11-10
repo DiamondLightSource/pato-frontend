@@ -1,4 +1,4 @@
-import { Button, HStack, NumberInputField, NumberInput, InputRightAddon, InputGroup, Input } from "@chakra-ui/react";
+import { Button, HStack, InputRightAddon, InputGroup, Input } from "@chakra-ui/react";
 import { FunctionComponent, useEffect, useState, FocusEvent as ReactFocusEvent } from "react";
 
 type ChangeCallback = (page: number) => void;

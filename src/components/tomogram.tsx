@@ -9,6 +9,7 @@ import {
   Grid,
   Button,
   Heading,
+  Skeleton,
 } from "@chakra-ui/react";
 import Image from "./image";
 import InfoGroup from "./infogroup";
@@ -21,9 +22,16 @@ import { useNavigate } from "react-router-dom";
 import { setLoading } from "../features/uiSlice";
 import { client } from "../utils/api/client";
 import { parseData } from "../utils/generic";
+import { ScatterDataPoint } from "chart.js";
 
 interface TomogramProp {
   tomogram: Record<string, any>;
+}
+
+interface CtfData {
+  resolution: ScatterDataPoint[];
+  astigmatism: ScatterDataPoint[];
+  defocus: ScatterDataPoint[];
 }
 
 const driftPlotOptions = {
@@ -45,21 +53,38 @@ const driftPlotOptions = {
   showLine: false,
 };
 
+const astigmatismPlotOptions = {
+  ...driftPlotOptions,
+  scales: { y: { title: { display: true, text: "nm" } } },
+};
+
+const defocusPlotOptions = {
+  ...driftPlotOptions,
+  scales: { y: { title: { display: true, text: "μm" } } },
+};
+
+const resolutionPlotOptions = {
+  ...driftPlotOptions,
+  scales: { y: { title: { display: true, text: "Å" } } },
+};
+
 const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element => {
   const [page, setPage] = useState(-1);
   const [motion, setMotion] = useState<Record<string, any>>({ drift: [], total: 0, info: [] });
   const [mgImage, setMgImage] = useState("");
   const [fftImage, setFftImage] = useState("");
+  const [sliceImage, setSliceImage] = useState("");
+  const [ctfData, setCtfData] = useState<CtfData>();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (motion.movieId !== undefined) {
-      client.safe_get(`thumbnail/micrograph/${motion.movieId}`).then((response) => {
+      client.safe_get(`image/micrograph/${motion.movieId}`).then((response) => {
         setMgImage(URL.createObjectURL(response.data));
       });
 
-      client.safe_get(`thumbnail/fft/${motion.movieId}`).then((response) => {
+      client.safe_get(`image/fft/${motion.movieId}`).then((response) => {
         setFftImage(URL.createObjectURL(response.data));
       });
     }
@@ -72,6 +97,24 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
       setMotion(parseData(response.data, ["tomogramId", "movieId", "total", "rawTotal"]));
     });
   }, [page, tomogram, dispatch, navigate]);
+
+  useEffect(() => {
+    client.safe_get(`image/slice/${tomogram.tomogramId}`).then((response) => {
+      setSliceImage(URL.createObjectURL(response.data));
+    });
+
+    const ctfData: CtfData = { resolution: [], astigmatism: [], defocus: [] };
+    client.safe_get(`ctf/${tomogram.tomogramId}`).then((response) => {
+      if (Array.isArray(response.data.items)) {
+        for (const ctf of response.data.items) {
+          ctfData.resolution.push({ x: ctf.refinedTiltAngle, y: ctf.estimatedResolution });
+          ctfData.astigmatism.push({ x: ctf.refinedTiltAngle, y: ctf.astigmatism });
+          ctfData.defocus.push({ x: ctf.refinedTiltAngle, y: ctf.estimatedDefocus });
+        }
+        setCtfData(ctfData);
+      }
+    });
+  }, [tomogram]);
 
   return (
     <AccordionItem>
@@ -86,11 +129,32 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
         </AccordionButton>
       </HStack>
       <AccordionPanel p={4}>
+        <Heading variant='collection'>Summary</Heading>
+        <Divider />
+        {ctfData === undefined ? (
+          <Skeleton h='20vh' />
+        ) : (
+          <Grid py={2} marginBottom={6} templateColumns='repeat(3, 1fr)' h='20vh' gap={2}>
+            <Scatter
+              height='20vh'
+              title='Astigmatism'
+              scatterData={ctfData.astigmatism}
+              options={astigmatismPlotOptions}
+            />
+            <Scatter height='20vh' title='Defocus' scatterData={ctfData.defocus} options={defocusPlotOptions} />
+            <Scatter
+              height='20vh'
+              title='Resolution'
+              scatterData={ctfData.resolution}
+              options={resolutionPlotOptions}
+            />
+          </Grid>
+        )}
         <Heading variant='collection'>Alignment</Heading>
         <Divider />
         <Grid py={2} templateColumns='repeat(3, 1fr)' h='33vh' gap={2}>
           <InfoGroup info={tomogram.info} />
-          <Image title='Central Slice' src='http://INVALID.com/image' height='100%' />
+          <Image title='Central Slice' src={sliceImage} height='100%' />
           <Scatter title='Shift Plot' scatterData={[]} height='32vh' />
         </Grid>
         <HStack marginTop={2}>
