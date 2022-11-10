@@ -9,13 +9,12 @@ import {
   Grid,
   Button,
   Heading,
-  Text,
 } from "@chakra-ui/react";
 import Image from "./image";
 import InfoGroup from "./infogroup";
 import Scatter from "./scatter";
 import MotionPagination from "./motionPagination";
-import { FunctionComponent, useCallback, useEffect, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { MdSettings } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -56,11 +55,11 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
 
   useEffect(() => {
     if (motion.movieId !== undefined) {
-      client.get(`thumbnail/micrograph/${motion.movieId}`).then((response) => {
+      client.safe_get(`thumbnail/micrograph/${motion.movieId}`).then((response) => {
         setMgImage(URL.createObjectURL(response.data));
       });
 
-      client.get(`thumbnail/fft/${motion.movieId}`).then((response) => {
+      client.safe_get(`thumbnail/fft/${motion.movieId}`).then((response) => {
         setFftImage(URL.createObjectURL(response.data));
       });
     }
@@ -69,16 +68,9 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
 
   useEffect(() => {
     dispatch(setLoading(true));
-    client
-      .get(`motion/${tomogram.tomogramId}${page === -1 ? " " : `?nth=${page}`}`)
-      .then((response) => {
-        setMotion(parseData(response.data, ["tomogramId", "movieId", "total", "rawTotal"]));
-      })
-      .catch((response) => {
-        if (response.redirect) {
-          navigate(response.redirect, { state: { redirect: true } });
-        }
-      });
+    client.safe_get(`motion/${tomogram.tomogramId}${page === -1 ? " " : `?nth=${page}`}`).then((response) => {
+      setMotion(parseData(response.data, ["tomogramId", "movieId", "total", "rawTotal"]));
+    });
   }, [page, tomogram, dispatch, navigate]);
 
   return (

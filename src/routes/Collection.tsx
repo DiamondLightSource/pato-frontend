@@ -1,6 +1,6 @@
-import { Accordion, Divider, Heading, Box, Skeleton, SkeletonText, VStack } from "@chakra-ui/react";
+import { Accordion, Divider, Heading, Box, Skeleton, VStack } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { client } from "../utils/api/client";
 import { useAppDispatch } from "../store/hooks";
 import { setLoading } from "../features/uiSlice";
@@ -12,25 +12,19 @@ const Collection = () => {
   const [tomograms, setTomograms] = useState<Record<string, any>>([]);
   const [placeholderMessage, setPlaceholderMessage] = useState("");
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const getData = useCallback(
     async (endpoint: string): Promise<Record<string, any>> => {
       let data = {};
       dispatch(setLoading(true));
-      try {
-        const response = await client.get(endpoint);
-        data = response.data;
-      } catch (response: any) {
-        if (response.redirect) {
-          navigate(response.redirect, { state: { redirect: true } });
-        }
-      }
+
+      const response = await client.safe_get(endpoint);
+      data = response.data;
 
       dispatch(setLoading(false));
       return data;
     },
-    [dispatch, navigate]
+    [dispatch]
   );
 
   useEffect(() => {

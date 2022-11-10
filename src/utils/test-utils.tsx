@@ -21,7 +21,7 @@ interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
 const renderWithProviders = (
   ui: React.ReactElement,
   {
-    preloadedState = { auth: { loggedIn: false }, ui: { loading: false } },
+    preloadedState = { auth: { user: null }, ui: { loading: false } },
     route = "/",
     store = configureStore({ reducer: { auth: authReducer, ui: uiReducer }, preloadedState }),
     ...renderOptions

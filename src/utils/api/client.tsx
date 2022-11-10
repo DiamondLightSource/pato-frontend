@@ -32,38 +32,13 @@ export async function client(
   }
 
   let data;
-  const target = "http://127.0.0.1:8000/" + endpoint;
+  let target = process.env.REACT_APP_API_ENDPOINT + endpoint;
+  console.log(target);
+  let response: Response;
+
   try {
-    const response = await fetch(target, config);
-    if (response.headers.get("content-type") === "image/png") {
-      data = await response.blob();
-    } else {
-      data = await response.json();
-    }
-    if (response.ok) {
-      return {
-        status: response.status,
-        data,
-        headers: response.headers,
-        url: response.url,
-      };
-    }
-
-    if (response.status !== 500) {
-      if (!toast.isActive("main-toast")) {
-        toast({
-          ...baseToast,
-          title: data.detail,
-          status: "error",
-        });
-      }
-
-      if (response.status === 401) {
-        data.redirect = "/login";
-      }
-    }
-    return await Promise.reject({ ...data });
-  } catch (err: any) {
+    response = await fetch(target, config);
+  } catch {
     if (!toast.isActive("main-toast")) {
       toast({
         ...baseToast,
@@ -72,12 +47,52 @@ export async function client(
       });
     }
 
-    console.error(target, config, data);
-    return await Promise.reject({ ...data });
+    console.error(target, config);
+    return await Promise.reject();
   }
+
+  if (!response.ok) {
+    return await Promise.reject(response.status);
+  }
+
+  if (response.headers.get("content-type") === "image/png") {
+    data = await response.blob();
+  } else {
+    data = await response.json();
+  }
+
+  return {
+    status: response.status,
+    data,
+    headers: response.headers,
+    url: response.url,
+  };
 }
 
-client.get = async (endpoint: string, customConfig = {}, privateEndpoint = false) => {
+client.safe_get = async (endpoint: string, customConfig = {}) => {
+  try {
+    const resp = await client(
+      endpoint,
+      (customConfig = {
+        ...customConfig,
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
+        method: "GET",
+      })
+    );
+
+    return resp;
+  } catch (status) {
+    if (status === 401) {
+      window.location.href = `${process.env.REACT_APP_API_ENDPOINT}authorise?redirect_uri=${encodeURIComponent(
+        window.location.href
+      )}`;
+    }
+
+    return await Promise.reject({ detail: "Auth failure" });
+  }
+};
+
+client.get = async (endpoint: string, customConfig = {}) => {
   const resp = await client(
     endpoint,
     (customConfig = {

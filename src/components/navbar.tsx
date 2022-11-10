@@ -1,4 +1,4 @@
-import { FunctionComponent, ReactElement, useEffect } from "react";
+import { FunctionComponent, ReactElement } from "react";
 import {
   Box,
   Flex,
@@ -18,9 +18,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { MdLogin, MdMenu, MdClose } from "react-icons/md";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { checkUser, logoutUser } from "../features/authSlice";
-import { Link as LinkRouter, useNavigate } from "react-router-dom";
+import { useAppSelector } from "../store/hooks";
+import { Link as LinkRouter } from "react-router-dom";
 
 const links = [
   { label: "Proposals", route: "proposals" },
@@ -66,20 +65,8 @@ const NavLinks = ({ loggedIn }: NavLinksProps): JSX.Element => (
 
 const Navbar: FunctionComponent = (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const dispatch = useAppDispatch();
-  const loggedIn = useAppSelector((state) => state.auth.loggedIn);
+  const user = useAppSelector((state) => state.auth.user);
   const loading = useAppSelector((state) => state.ui.loading);
-  const navigate = useNavigate();
-
-  const logout = () => {
-    dispatch(logoutUser()).then(() => navigate("/"));
-  };
-
-  useEffect(() => {
-    if (!loggedIn && sessionStorage.getItem("token") !== undefined) {
-      dispatch(checkUser());
-    }
-  }, [loggedIn, dispatch]);
 
   return (
     <Box zIndex={1} position='fixed' w='100%' bg='diamond.800'>
@@ -103,11 +90,11 @@ const Navbar: FunctionComponent = (): JSX.Element => {
             </Box>
           </LinkRouter>
           <HStack as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
-            <NavLinks loggedIn={loggedIn} />
+            <NavLinks loggedIn={user !== null} />
           </HStack>
         </HStack>
         <Flex alignItems={"center"}>
-          {loggedIn ? (
+          {user !== null ? (
             <Menu>
               <MenuButton
                 borderRadius={12}
@@ -121,20 +108,30 @@ const Navbar: FunctionComponent = (): JSX.Element => {
               >
                 <Avatar size='xs' />
                 <Text verticalAlign='bottom' px={3} color='diamond.100' display='inline-block'>
-                  User
+                  {user}
                 </Text>
               </MenuButton>
               <MenuList>
                 {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-                <MenuItem onClick={() => logout()}>Logout</MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    console.log("logout");
+                  }}
+                >
+                  Logout
+                </MenuItem>
               </MenuList>
             </Menu>
           ) : (
-            <LinkRouter to={"/login"}>
+            <Link
+              href={`${process.env.REACT_APP_API_ENDPOINT}/authorise?redirect_uri=${encodeURIComponent(
+                window.location.href
+              )}`}
+            >
               <Button bg='diamond.500' color='gray.100' size='sm' leftIcon={<MdLogin />}>
                 Login
               </Button>
-            </LinkRouter>
+            </Link>
           )}
         </Flex>
       </Flex>
@@ -143,7 +140,7 @@ const Navbar: FunctionComponent = (): JSX.Element => {
       {isOpen && (
         <Box pb={4} display={{ md: "none" }}>
           <Stack as={"nav"} spacing={4}>
-            <NavLinks loggedIn={loggedIn} />
+            <NavLinks loggedIn={user !== null} />
           </Stack>
         </Box>
       )}

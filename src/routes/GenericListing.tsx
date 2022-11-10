@@ -46,7 +46,7 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
     }
 
     client
-      .get(builtEndpoint)
+      .safe_get(builtEndpoint)
       .then((response) => {
         setTotal(response.data.total);
         setData(response.data.items);

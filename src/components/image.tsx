@@ -1,13 +1,11 @@
 import {
   Box,
-  Button,
   Heading,
   Image,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
   useDisclosure,
@@ -60,6 +58,8 @@ const ImageWrapper: FunctionComponent<ImageProp> = ({ title, src, width = "100%"
                 <Image
                   cursor='zoom-in'
                   w='100%'
+                  h='100%'
+                  paddingBottom={2}
                   onClick={(e) => zoom(e)}
                   src={src}
                   fallbackSrc='/images/no-image.png'
@@ -67,11 +67,6 @@ const ImageWrapper: FunctionComponent<ImageProp> = ({ title, src, width = "100%"
               )}
             </Box>
           </ModalBody>
-          <ModalFooter>
-            <Button colorScheme='diamond' onClick={onClose}>
-              Download
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </Box>

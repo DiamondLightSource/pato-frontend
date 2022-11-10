@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 import { ChakraProvider, createStandaloneToast, extendTheme } from "@chakra-ui/react";
-import Login from "./routes/Login";
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import Root from "./routes/Root";
 import GenericListing from "./routes/GenericListing";
@@ -11,6 +10,7 @@ import Collection from "./routes/Collection";
 import { Accordion, Button, Text, Heading, Table } from "./styles/components";
 import Calendar from "./routes/Calendar";
 import { colours } from "./styles/colours";
+import { checkUser } from "./features/authSlice";
 const { ToastContainer } = createStandaloneToast();
 
 const container = document.getElementById("root")!;
@@ -53,10 +53,6 @@ const router = createBrowserRouter([
     path: "/",
     element: <Root />,
     children: [
-      {
-        path: "/login",
-        element: <Login />,
-      },
       {
         path: "/proposals",
         element: (
@@ -103,13 +99,21 @@ const router = createBrowserRouter([
   },
 ]);
 
-root.render(
-  <React.StrictMode>
-    <ChakraProvider theme={theme}>
-      <Provider store={store}>
-        <RouterProvider router={router} />
-        <ToastContainer />
-      </Provider>
-    </ChakraProvider>
-  </React.StrictMode>
+const initializeUser = async () => {
+  if (sessionStorage.getItem("token") !== null) {
+    await store.dispatch(checkUser());
+  }
+};
+
+initializeUser().then(() =>
+  root.render(
+    <React.StrictMode>
+      <ChakraProvider theme={theme}>
+        <Provider store={store}>
+          <RouterProvider router={router} />
+          <ToastContainer />
+        </Provider>
+      </ChakraProvider>
+    </React.StrictMode>
+  )
 );
