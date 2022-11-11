@@ -10,13 +10,16 @@ import {
   Button,
   Heading,
   Skeleton,
+  IconButton,
+  Text,
+  Circle,
 } from "@chakra-ui/react";
 import Image from "./image";
 import InfoGroup from "./infogroup";
 import Scatter from "./scatter";
 import MotionPagination from "./motionPagination";
 import { FunctionComponent, useEffect, useState } from "react";
-import { MdSettings } from "react-icons/md";
+import { MdChatBubble, MdComment, MdOutlineComment, MdSettings } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setLoading } from "../features/uiSlice";
@@ -196,6 +199,10 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
             (Dark images: {isNaN(motion.rawTotal - motion.total) ? "?" : motion.rawTotal - motion.total})
           </Heading>
           <Spacer />
+          <Button size='xs' aria-label={"Comments"}>
+            <MdComment />
+            <Circle size='3' position='absolute' top='-1' left='-1' bg='red'></Circle>
+          </Button>
           <MotionPagination total={motion.total ?? 0} onChange={(page) => setPage(page)} />
         </HStack>
         <Divider />
