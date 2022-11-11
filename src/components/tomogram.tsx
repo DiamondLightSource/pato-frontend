@@ -68,12 +68,41 @@ const resolutionPlotOptions = {
   scales: { y: { title: { display: true, text: "Å" } } },
 };
 
+const motionConfig = {
+  include: [
+    { name: "imageNumber" },
+    { name: "createdTimeStamp", label: "movieTimeStamp" },
+    { name: "firstFrame" },
+    { name: "lastFrame" },
+    { name: "refinedTiltAxis" },
+    { name: "refinedMagnification" },
+    { name: "refinedTiltAngle" },
+    { name: "dosePerFrame", unit: "e⁻/Å²" },
+    { name: "doseWeight" },
+    { name: "totalMotion", unit: "Å" },
+    { name: "averageMotionPerFrame", label: "Average Motion/Frame", unit: "Å" },
+    { name: ["patchesUsedX", "patchesUsedY"], label: "patchesUsed" },
+    { name: ["boxSizeX", "boxSizeY"], label: "boxSize", unit: "μm" },
+    { name: ["minResolution", "maxResolution"], label: "Resolution", unit: "Å" },
+    { name: ["minDefocus", "maxDefocus"], label: "Defocus", unit: "Å" },
+    { name: "amplitudeContrast" },
+    { name: "defocusStepSize", unit: "Å" },
+    { name: "astigmatism", unit: "nm" },
+    { name: "astigmatismAngle", unit: "°" },
+    { name: "estimatedResolution", unit: "Å" },
+    { name: "estimatedDefocus", unit: "μm" },
+    { name: "ccValue", label: "CC Value" },
+  ],
+  root: ["tomogramId", "movieId", "total", "rawTotal"],
+};
+
 const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element => {
   const [page, setPage] = useState(-1);
   const [motion, setMotion] = useState<Record<string, any>>({ drift: [], total: 0, info: [] });
   const [mgImage, setMgImage] = useState("");
   const [fftImage, setFftImage] = useState("");
   const [sliceImage, setSliceImage] = useState("");
+  const [shiftData, setShiftData] = useState<ScatterDataPoint[]>([]);
   const [ctfData, setCtfData] = useState<CtfData>();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -94,7 +123,7 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
   useEffect(() => {
     dispatch(setLoading(true));
     client.safe_get(`motion/${tomogram.tomogramId}${page === -1 ? " " : `?nth=${page}`}`).then((response) => {
-      setMotion(parseData(response.data, ["tomogramId", "movieId", "total", "rawTotal"]));
+      setMotion(parseData(response.data, motionConfig));
     });
   }, [page, tomogram, dispatch, navigate]);
 
@@ -113,6 +142,10 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
         }
         setCtfData(ctfData);
       }
+    });
+
+    client.safe_get(`shiftPlot/${tomogram.tomogramId}`).then((response) => {
+      setShiftData(response.data.items);
     });
   }, [tomogram]);
 
@@ -155,7 +188,7 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
         <Grid py={2} templateColumns='repeat(3, 1fr)' h='33vh' gap={2}>
           <InfoGroup info={tomogram.info} />
           <Image title='Central Slice' src={sliceImage} height='100%' />
-          <Scatter title='Shift Plot' scatterData={[]} height='32vh' />
+          <Scatter title='Shift Plot' scatterData={shiftData} height='32vh' />
         </Grid>
         <HStack marginTop={2}>
           <Heading variant='collection'>Motion Correction/CTF</Heading>

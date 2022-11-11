@@ -7,6 +7,17 @@ import { setLoading } from "../features/uiSlice";
 import Tomogram from "../components/tomogram";
 import { parseData } from "../utils/generic";
 
+const tomogramConfig = {
+  include: [
+    { name: "stackFile" },
+    { name: "tiltAngleOffset" },
+    { name: "zShift" },
+    { name: "volumeFile" },
+    { name: "pixelSpacing" },
+  ],
+  root: ["tomogramId"],
+};
+
 const Collection = () => {
   const params = useParams();
   const [tomograms, setTomograms] = useState<Record<string, any>>([]);
@@ -34,7 +45,7 @@ const Collection = () => {
         setPlaceholderMessage("No tomogram found in this data collection");
         return;
       }
-      setTomograms(response.items.map((info: Record<string, any>) => parseData(info, ["tomogramId"])));
+      setTomograms(response.items.map((info: Record<string, any>) => parseData(info, tomogramConfig)));
     });
   }, [params.collectionId, getData]);
 

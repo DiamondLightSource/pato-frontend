@@ -1,16 +1,30 @@
-const parseData = (rawData: Record<string, any>, ignore: string[]) => {
+interface DataConfig {
+  include: { name: string | string[]; unit?: string; label?: string }[];
+  root?: string[];
+}
+
+const parseData = (rawData: Record<string, any>, config: DataConfig) => {
   const data: Record<string, any> = { info: [] };
-  for (const [key, value] of Object.entries(rawData)) {
-    if ((typeof value === "string" || typeof value === "number") && !ignore.includes(key)) {
-      data.info.push({ label: pascalToSpace(key), value: value.toString() });
-    } else if (value === undefined || value === null) {
-      data.info.push({ label: pascalToSpace(key), value: "?" });
+  for (const item of config.include) {
+    const unit = item.unit ?? "";
+    if (Array.isArray(item.name)) {
+      const values = item.name.map((key) => prettifyValue(rawData[key], unit)).join(" - ");
+      data.info.push({ label: item.label ?? pascalToSpace(item.name[0]), value: values });
     } else {
-      data[key] = value;
+      data.info.push({ label: item.label ?? pascalToSpace(item.name), value: prettifyValue(rawData[item.name], unit) });
     }
   }
+
+  if (config.root !== undefined) {
+    for (const item of config.root) {
+      data[item] = rawData[item];
+    }
+  }
+
   return data;
 };
+
+const prettifyValue = (value: number | string, unit: string) => (value ? `${value} ${unit}` : "?");
 
 const pascalToSpace = (input: string) => {
   return input.replace(/([A-Z])/g, " $1").replace(/^./, function (str) {
