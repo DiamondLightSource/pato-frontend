@@ -45,6 +45,7 @@ export async function client(
 
   switch (response.headers.get("content-type")) {
     case "image/png":
+    case "image/jpeg":
       data = await response.blob();
       break;
     case "application/json":

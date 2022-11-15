@@ -48,8 +48,10 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
     client
       .safe_get(builtEndpoint)
       .then((response) => {
-        setTotal(response.data.total);
-        setData(response.data.items);
+        if (response.data.items !== undefined) {
+          setTotal(response.data.total);
+          setData(response.data.items);
+        }
       })
       .catch((response) => {
         if (response.redirect) {

@@ -13,6 +13,14 @@ import {
   IconButton,
   Text,
   Circle,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  DrawerHeader,
+  DrawerBody,
+  useDisclosure,
+  Code,
 } from "@chakra-ui/react";
 import Image from "./image";
 import InfoGroup from "./infogroup";
@@ -96,7 +104,7 @@ const motionConfig = {
     { name: "estimatedDefocus", unit: "μm" },
     { name: "ccValue", label: "CC Value" },
   ],
-  root: ["tomogramId", "movieId", "total", "rawTotal"],
+  root: ["tomogramId", "movieId", "total", "rawTotal", "comments_MotionCorrection", "comments_CTF"],
 };
 
 const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element => {
@@ -107,6 +115,8 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
   const [sliceImage, setSliceImage] = useState("");
   const [shiftData, setShiftData] = useState<ScatterDataPoint[]>([]);
   const [ctfData, setCtfData] = useState<CtfData>();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -199,9 +209,11 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
             (Dark images: {isNaN(motion.rawTotal - motion.total) ? "?" : motion.rawTotal - motion.total})
           </Heading>
           <Spacer />
-          <Button size='xs' aria-label={"Comments"}>
+          <Button disabled={!(motion.comments_CTF || motion.comments_MotionCorrection)} size='xs' onClick={onOpen}>
             <MdComment />
-            <Circle size='3' position='absolute' top='-1' left='-1' bg='red'></Circle>
+            {(motion.comments_CTF || motion.comments_MotionCorrection) && (
+              <Circle size='3' position='absolute' top='-1' left='-1' bg='red'></Circle>
+            )}
           </Button>
           <MotionPagination total={motion.total ?? 0} onChange={(page) => setPage(page)} />
         </HStack>
@@ -213,6 +225,20 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
           <Scatter title='Drift' options={driftPlotOptions} scatterData={motion.drift} height='25vh' />
         </Grid>
       </AccordionPanel>
+      <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Comments</DrawerHeader>
+          <DrawerBody>
+            <Heading size='sm'>CTF</Heading>
+            <Code>{motion.comments_CTF}</Code>
+            <Divider marginY={3} />
+            <Heading size='sm'>Motion Correction</Heading>
+            <Code>{motion.comments_MotionCorrection}</Code>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
     </AccordionItem>
   );
 };
