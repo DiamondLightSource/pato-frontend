@@ -10,8 +10,6 @@ import {
   Button,
   Heading,
   Skeleton,
-  IconButton,
-  Text,
   Circle,
   Drawer,
   DrawerOverlay,
@@ -26,7 +24,7 @@ import Image from "./image";
 import InfoGroup from "./infogroup";
 import Scatter from "./scatter";
 import MotionPagination from "./motionPagination";
-import { FunctionComponent, useEffect, useState } from "react";
+import React, { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from "react";
 import { MdChatBubble, MdComment, MdOutlineComment, MdSettings } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -120,15 +118,18 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const setImage = (endpoint: string, setState: Dispatch<SetStateAction<string>>) => {
+    client.safe_get(endpoint).then((response) => {
+      if (response.status === 200) {
+        setState(URL.createObjectURL(response.data));
+      }
+    });
+  };
+
   useEffect(() => {
     if (motion.movieId !== undefined) {
-      client.safe_get(`image/micrograph/${motion.movieId}`).then((response) => {
-        setMgImage(URL.createObjectURL(response.data));
-      });
-
-      client.safe_get(`image/fft/${motion.movieId}`).then((response) => {
-        setFftImage(URL.createObjectURL(response.data));
-      });
+      setImage(`image/micrograph/${motion.movieId}`, setMgImage);
+      setImage(`image/fft/${motion.movieId}`, setFftImage);
     }
     dispatch(setLoading(false));
   }, [motion, dispatch]);
@@ -141,9 +142,7 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
   }, [page, tomogram, dispatch, navigate]);
 
   useEffect(() => {
-    client.safe_get(`image/slice/${tomogram.tomogramId}`).then((response) => {
-      setSliceImage(URL.createObjectURL(response.data));
-    });
+    setImage(`image/slice/${tomogram.tomogramId}`, setSliceImage);
 
     const ctfData: CtfData = { resolution: [], astigmatism: [], defocus: [] };
     client.safe_get(`ctf/${tomogram.tomogramId}`).then((response) => {
@@ -158,7 +157,9 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
     });
 
     client.safe_get(`shiftPlot/${tomogram.tomogramId}`).then((response) => {
-      setShiftData(response.data.items);
+      if (response.status === 200) {
+        setShiftData(response.data.items);
+      }
     });
   }, [tomogram]);
 
