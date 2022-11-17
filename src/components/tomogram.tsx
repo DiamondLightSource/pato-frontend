@@ -25,7 +25,7 @@ import InfoGroup from "./infogroup";
 import Scatter from "./scatter";
 import MotionPagination from "./motionPagination";
 import React, { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from "react";
-import { MdChatBubble, MdComment, MdOutlineComment, MdSettings } from "react-icons/md";
+import { MdComment, MdSettings } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setLoading } from "../features/uiSlice";

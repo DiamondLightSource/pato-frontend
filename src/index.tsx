@@ -7,6 +7,7 @@ import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom"
 import Root from "./routes/Root";
 import GenericListing from "./routes/GenericListing";
 import Collection from "./routes/Collection";
+import Error from "./routes/Error";
 import { Accordion, Button, Text, Heading, Table } from "./styles/components";
 import Calendar from "./routes/Calendar";
 import { colours } from "./styles/colours";
@@ -52,6 +53,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
+    errorElement: <Error/>,
     children: [
       {
         path: "/proposals",

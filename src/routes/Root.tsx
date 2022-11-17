@@ -4,6 +4,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Breadcrumbs from "../components/breadcrumbs";
 import Footer from "../components/footer";
 import Navbar from "../components/navbar";
+import { checkUser } from "../features/authSlice";
 import { useAppDispatch } from "../store/hooks";
 import "../styles/main.css";
 
@@ -17,6 +18,7 @@ const Root = (): JSX.Element => {
     if (splitUrl.length === 2) {
       sessionStorage.setItem("token", splitUrl[1].split("&token_type")[0].toString());
       const url = new URL(splitUrl[0]).pathname;
+      dispatch(checkUser());
       navigate(url);
     }
   }, [navigate, dispatch]);

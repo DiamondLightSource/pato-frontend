@@ -34,7 +34,7 @@ const Text = defineStyleConfig({
               bg: "diamond.100"
             },
             _hover: {
-              bg: "diamond.300"
+              bg: "diamond.200"
             }
           }
         }
@@ -57,7 +57,7 @@ const Button = defineStyleConfig({
         color: "charcoal",
         fontSize: "sm",
         _hover: {
-          bg: "diamond.300"
+          bg: "diamond.200"
         }
       },
     },
