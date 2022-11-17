@@ -23,10 +23,8 @@ const Error = () => {
       setMessage("This page does not exist.");
     } else {
       setHeading("An error has occurred");
-      if (error.data) {
-        setMessage("An unexpected error has occurred. If this persists, please contact the developers. Details:");
-        setDetails(error.data);
-      }
+      setMessage("An unexpected error has occurred. If this persists, please contact the developers. Details:");
+      setDetails(error.toString());
     }
   }, [error]);
 

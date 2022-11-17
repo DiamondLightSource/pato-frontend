@@ -12,7 +12,9 @@ const MotionPagination: FunctionComponent<MotionPaginationProp> = ({ total, onCh
   const [value, setValue] = useState("1");
 
   useEffect(() => {
-    setValue(total.toString());
+    if (total !== undefined) {
+      setValue(total.toString());
+    }
   }, [total]);
 
   const editPage = (event: ReactFocusEvent<HTMLInputElement>) => {
@@ -45,8 +47,13 @@ const MotionPagination: FunctionComponent<MotionPaginationProp> = ({ total, onCh
         &lt;
       </Button>
       <InputGroup size='xs'>
-        <Input onChange={(event) => setValue(event.target.value)} value={value} onBlur={(event) => editPage(event)} />
-        <InputRightAddon children={total} />
+        <Input
+          aria-label='Current Page'
+          onChange={(event) => setValue(event.target.value)}
+          value={value}
+          onBlur={(event) => editPage(event)}
+        />
+        <InputRightAddon aria-label='Total Pages' children={total} />
       </InputGroup>
       <Button size='xs' isDisabled={parseInt(value) === total} onClick={() => setPage(parseInt(value) + 1)}>
         &gt;

@@ -105,6 +105,18 @@ const motionConfig = {
   root: ["tomogramId", "movieId", "total", "rawTotal", "comments_MotionCorrection", "comments_CTF"],
 };
 
+const calcDarkImages = (total: number, rawTotal: number) => {
+  if (isNaN(rawTotal - total)) {
+    return "?";
+  }
+
+  if (total === 0 && rawTotal > 0) {
+    return "No tilt alignment data available";
+  }
+
+  return `Dark Images: ${rawTotal - total}`;
+};
+
 const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element => {
   const [page, setPage] = useState(-1);
   const [motion, setMotion] = useState<Record<string, any>>({ drift: [], total: 0, info: [] });
@@ -207,16 +219,21 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
         <HStack marginTop={2}>
           <Heading variant='collection'>Motion Correction/CTF</Heading>
           <Heading size='sm' color='diamond.200'>
-            (Dark images: {isNaN(motion.rawTotal - motion.total) ? "?" : motion.rawTotal - motion.total})
+            {calcDarkImages(motion.total, motion.rawTotal)}
           </Heading>
           <Spacer />
-          <Button disabled={!(motion.comments_CTF || motion.comments_MotionCorrection)} size='xs' onClick={onOpen}>
+          <Button
+            name='comment'
+            disabled={!(motion.comments_CTF || motion.comments_MotionCorrection)}
+            size='xs'
+            onClick={onOpen}
+          >
             <MdComment />
             {(motion.comments_CTF || motion.comments_MotionCorrection) && (
               <Circle size='3' position='absolute' top='-1' left='-1' bg='red'></Circle>
             )}
           </Button>
-          <MotionPagination total={motion.total ?? 0} onChange={(page) => setPage(page)} />
+          <MotionPagination total={motion.total || motion.rawTotal} onChange={(page) => setPage(page)} />
         </HStack>
         <Divider />
         <Grid py={2} templateColumns='repeat(4, 1fr)' h='25vh' gap={2}>
