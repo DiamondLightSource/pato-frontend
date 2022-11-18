@@ -22,6 +22,10 @@ if (process.env.DEPLOY_TYPE === "demo") {
   worker.start();
 }
 
+if (process.env.REACT_APP_AUTH_TYPE === "dummy") {
+  sessionStorage.setItem("token", "dummyToken");
+}
+
 const theme = extendTheme({
   colors: colours,
   components: { Accordion, Button, Text, Heading, Table },
