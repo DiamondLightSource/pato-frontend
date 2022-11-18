@@ -8,7 +8,7 @@ RUN yarn install --immutable --immutable-cache --check-cache
 COPY . ./
 RUN yarn build
 
-FROM nginx:1.23.2-alpine
+FROM nginxinc/nginx-unprivileged:latest
 COPY --from=build /usr/src/app/build /usr/share/nginx/html
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]docker pull 
