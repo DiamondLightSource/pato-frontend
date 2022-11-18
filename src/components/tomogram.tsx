@@ -218,7 +218,7 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
         </Grid>
         <HStack marginTop={2}>
           <Heading variant='collection'>Motion Correction/CTF</Heading>
-          <Heading size='sm' color='diamond.200'>
+          <Heading size='sm' color='diamond.300'>
             {calcDarkImages(motion.total, motion.rawTotal)}
           </Heading>
           <Spacer />

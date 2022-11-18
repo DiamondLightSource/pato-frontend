@@ -79,31 +79,39 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
         ></Input>
       </HStack>
       <Divider />
-      <Table size='sm' variant='diamondStriped'>
-        <Thead>
-          <Tr>
-            {headers.map((header) => (
-              <Th key={header.label}>{header.label}</Th>
-            ))}
-          </Tr>
-        </Thead>
-        <Tbody cursor='pointer'>
-          {data.map((item, i) => (
-            <Tr key={i} onClick={() => navigate(getRouteKey(item))}>
-              {headers.map((header) => (
-                <Td key={header.key}>{item[header.key]}</Td>
+      {data === undefined || data.length === 0 ? (
+        <Heading py={4} w='100%' textAlign='center' color='diamond.200'>
+          No {heading}
+        </Heading>
+      ) : (
+        <div>
+          <Table size='sm' variant='diamondStriped'>
+            <Thead>
+              <Tr>
+                {headers.map((header) => (
+                  <Th key={header.label}>{header.label}</Th>
+                ))}
+              </Tr>
+            </Thead>
+            <Tbody cursor='pointer'>
+              {data.map((item, i) => (
+                <Tr key={i} onClick={() => navigate(getRouteKey(item))}>
+                  {headers.map((header) => (
+                    <Td key={header.key}>{item[header.key]}</Td>
+                  ))}
+                </Tr>
               ))}
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-      <Pagination
-        onChange={(page, itemAmount) => {
-          setItemsPerPage(itemAmount);
-          setPage(page);
-        }}
-        total={total}
-      />
+            </Tbody>
+          </Table>
+          <Pagination
+            onChange={(page, itemAmount) => {
+              setItemsPerPage(itemAmount);
+              setPage(page);
+            }}
+            total={total}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 interface DataConfig {
   include: { name: string | string[]; unit?: string; label?: string }[];
   root?: string[];
@@ -32,4 +34,15 @@ const pascalToSpace = (input: string) => {
   });
 };
 
-export { parseData };
+const useTitle = (title: string) => {
+  useEffect(() => {
+    const prevTitle = document.title
+    document.title = title
+    return () => {
+      document.title = prevTitle
+    }
+  })
+}
+
+export { parseData, useTitle };
+
