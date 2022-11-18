@@ -17,12 +17,10 @@ const { ToastContainer } = createStandaloneToast();
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
-/*
-if (process.env.NODE_ENV === "development") {
+if (process.env.DEPLOY_TYPE === "demo") {
   const { worker } = require("./mocks/browser");
   worker.start();
 }
-*/
 
 const theme = extendTheme({
   colors: colours,
@@ -53,7 +51,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
-    errorElement: <Error/>,
+    errorElement: <Error />,
     children: [
       {
         path: "/proposals",

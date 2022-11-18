@@ -4,7 +4,7 @@ import { useRouteError } from "react-router-dom";
 import Footer from "../components/footer";
 import Navbar from "../components/navbar";
 
-interface Error {
+interface ErrorType {
   status: number;
   statusText: string;
   data?: string;
@@ -14,7 +14,7 @@ const Error = () => {
   const [heading, setHeading] = useState("");
   const [message, setMessage] = useState("");
   const [details, setDetails] = useState("");
-  const error = useRouteError() as Error;
+  const error = useRouteError() as ErrorType;
 
   useEffect(() => {
     console.error(error);
