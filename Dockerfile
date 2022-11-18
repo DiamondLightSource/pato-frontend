@@ -11,4 +11,4 @@ RUN yarn build
 FROM nginxinc/nginx-unprivileged:latest
 COPY --from=build /usr/src/app/build /usr/share/nginx/html
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]docker pull 
+CMD ["nginx", "-g", "daemon off;"]
