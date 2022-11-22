@@ -10,5 +10,7 @@ RUN yarn build
 
 FROM docker.io/nginxinc/nginx-unprivileged:latest
 COPY --from=build /usr/src/app/build /usr/share/nginx/html
-EXPOSE 80
+COPY nginx/conf.d /etc/nginx/nginx.conf
+
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
