@@ -122,7 +122,7 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
           <Image title='Central Slice' src={sliceImage} height='100%' />
           <Scatter title='Shift Plot' scatterData={shiftData} height='32vh' />
         </Grid>
-        <Motion parentId={tomogram.id} />
+        <Motion parentId={tomogram.tomogramId} />
       </AccordionPanel>
     </AccordionItem>
   );

@@ -54,10 +54,16 @@ export const handlers = [
   }),
 
   rest.get('http://localhost/ctf/:id', (req, res, ctx) => {
+    let data: Record<string, number>[] = []
+
+    if (req.params.id === "3") {
+      data = [{refinedTiltAngle: 1, estimatedResolution: 1, estimatedDefocus: 1, astigmatism: 1}]
+    }
+    
     return res(
       ctx.status(200),
       ctx.json({
-        items: []
+        items: data
       })
     )
   })
