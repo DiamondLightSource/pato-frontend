@@ -18,16 +18,14 @@ const InfoGroup: FunctionComponent<InfoProp> = ({ info, height = "100%", cols = 
   <Box py={py} h={height} overflow='scroll'>
     {info.length < 1 && <Skeleton h='100%' />}
     <Grid templateColumns={`repeat(${cols}, minmax(0, 1fr))`} maxH='100%' gap={1}>
-      {info.map((box: Info) => {
-        return (
-          <GridItem key={box.label} colSpan={box.wide ? cols : 1}>
-            <Box h='100%' p={1} borderRadius={3} bg='diamond.100'>
-              <Text variant='infoGroupText' as='b'>{`${box.label}: `}</Text>
-              <Text variant='infoGroupText'>{`${box.value || "?"}`}</Text>
-            </Box>
-          </GridItem>
-        );
-      })}
+      {info.map((box: Info) => (
+        <GridItem key={box.label} colSpan={box.wide ? cols : 1}>
+          <Box h='100%' p={1} borderRadius={3} bg='diamond.100'>
+            <Text variant='infoGroupText' as='b'>{`${box.label}: `}</Text>
+            <Text variant='infoGroupText'>{`${box.value || "?"}`}</Text>
+          </Box>
+        </GridItem>
+      ))}
     </Grid>
   </Box>
 );

@@ -12,10 +12,10 @@ import {
   Skeleton,
 } from "@chakra-ui/react";
 import Image from "./image";
-import InfoGroup from "./infogroup";
+import InfoGroup, { Info } from "./infogroup";
 import Scatter from "./scatter";
 import Motion from "./motion/motion";
-import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, FunctionComponent, SetStateAction, useCallback, useEffect, useState } from "react";
 import { MdSettings } from "react-icons/md";
 import { client } from "../utils/api/client";
 import { ScatterDataPoint } from "chart.js";
@@ -50,6 +50,17 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
   const [sliceImage, setSliceImage] = useState("");
   const [shiftData, setShiftData] = useState<ScatterDataPoint[]>([]);
   const [ctfData, setCtfData] = useState<CtfData>();
+  const [tomogramInfo, setTomogramInfo] = useState<Info[]>(tomogram.info);
+
+  const handleMotionChange = useCallback((data: Record<string, any>) => {
+    if (data.refinedTiltAxis) {
+      setTomogramInfo((oldInfo) =>
+        oldInfo.map((t) => {
+          return { label: t.label, value: t.label === "Refined Tilt Axis" ? data.refinedTiltAxis : t.value };
+        })
+      );
+    }
+  }, []);
 
   const setImage = (endpoint: string, setState: Dispatch<SetStateAction<string>>) => {
     client.safe_get(endpoint).then((response) => {
@@ -94,13 +105,13 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
         </AccordionButton>
       </HStack>
       <AccordionPanel p={4}>
-        <Motion parentId={tomogram.tomogramId} />
+        <Motion onMotionChanged={handleMotionChange} parentId={tomogram.tomogramId} />
         <Heading marginTop={6} variant='collection'>
           Alignment
         </Heading>
         <Divider />
         <Grid py={2} templateColumns='repeat(3, 1fr)' h='33vh' gap={2}>
-          <InfoGroup info={tomogram.info} />
+          <InfoGroup info={tomogramInfo} />
           <Image title='Central Slice' src={sliceImage} height='100%' />
           <Scatter title='Shift Plot' scatterData={shiftData} height='32vh' />
         </Grid>

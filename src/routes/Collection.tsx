@@ -14,6 +14,7 @@ const tomogramConfig = {
     { name: "zShift" },
     { name: "volumeFile" },
     { name: "pixelSpacing" },
+    { name: "refinedTiltAxis" },
   ],
   root: ["tomogramId"],
 };

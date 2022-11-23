@@ -32,6 +32,15 @@ describe("Motion", () => {
 
     await expect(screen.findByTestId("comment")).resolves.toBeEnabled();
   });
+
+  it("should call callback when first motion changes", async () => {
+    const motionChanged = jest.fn();
+    renderWithProviders(<Motion onMotionChanged={motionChanged} parentId={3} />);
+
+    await waitFor(() => {
+      expect(motionChanged).toBeCalled();
+    });
+  });
 });
 
 afterEach(() => server.resetHandlers());

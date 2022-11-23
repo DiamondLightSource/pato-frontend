@@ -19,7 +19,7 @@ import Image from "../image";
 import InfoGroup from "../infogroup";
 import Scatter from "../scatter";
 import MotionPagination from "./pagination";
-import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, FunctionComponent, SetStateAction, useCallback, useEffect, useState } from "react";
 import { MdComment } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -30,6 +30,7 @@ import { driftPlotOptions } from "../../utils/plot";
 
 interface MotionProp {
   parentId: number;
+  onMotionChanged?: (motion: Record<string, any>) => void;
 }
 
 const motionConfig = {
@@ -38,7 +39,6 @@ const motionConfig = {
     { name: "createdTimeStamp", label: "movieTimeStamp" },
     { name: "firstFrame" },
     { name: "lastFrame" },
-    { name: "refinedTiltAxis" },
     { name: "refinedMagnification" },
     { name: "refinedTiltAngle" },
     { name: "dosePerFrame", unit: "e⁻/Å²" },
@@ -57,7 +57,7 @@ const motionConfig = {
     { name: "estimatedDefocus", unit: "μm" },
     { name: "ccValue", label: "CC Value" },
   ],
-  root: ["tomogramId", "movieId", "total", "rawTotal", "comments_MotionCorrection", "comments_CTF"],
+  root: ["tomogramId", "movieId", "total", "rawTotal", "comments_MotionCorrection", "comments_CTF", "refinedTiltAxis"],
 };
 
 const calcDarkImages = (total: number, rawTotal: number) => {
@@ -72,7 +72,7 @@ const calcDarkImages = (total: number, rawTotal: number) => {
   return `Dark Images: ${rawTotal - total}`;
 };
 
-const Tomogram: FunctionComponent<MotionProp> = ({ parentId }): JSX.Element => {
+const Tomogram: FunctionComponent<MotionProp> = ({ parentId, onMotionChanged }): JSX.Element => {
   const [page, setPage] = useState(-1);
   const [motion, setMotion] = useState<Record<string, any>>({ drift: [], total: 0, info: [] });
   const [mgImage, setMgImage] = useState("");
@@ -92,20 +92,21 @@ const Tomogram: FunctionComponent<MotionProp> = ({ parentId }): JSX.Element => {
 
   useEffect(() => {
     dispatch(setLoading(true));
-    if (motion.movieId !== undefined) {
-      setImage(`image/micrograph/${motion.movieId}`, setMgImage);
-      setImage(`image/fft/${motion.movieId}`, setFftImage);
-    }
-    dispatch(setLoading(false));
-  }, [motion, dispatch]);
 
-  useEffect(() => {
-    dispatch(setLoading(true));
     client.safe_get(`motion/${parentId}${page === -1 ? " " : `?nth=${page}`}`).then((response) => {
       setMotion(parseData(response.data, motionConfig));
+      if (response.data.movieId !== undefined) {
+        setImage(`image/micrograph/${response.data.movieId}`, setMgImage);
+        setImage(`image/fft/${response.data.movieId}`, setFftImage);
+      }
+
+      if (onMotionChanged !== undefined) {
+        onMotionChanged(response.data);
+      }
     });
+
     dispatch(setLoading(false));
-  }, [page, parentId, dispatch, navigate]);
+  }, [page, parentId, dispatch, navigate, onMotionChanged]);
 
   return (
     <div>
