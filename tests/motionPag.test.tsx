@@ -59,7 +59,7 @@ describe("MotionPagination", () => {
     const input = screen.getByRole("button", { name: "<" });
     fireEvent.click(input);
 
-    expect(mockCallback).toBeCalled();
+    expect(mockCallback).toBeCalledWith(111);
   });
 });
 
