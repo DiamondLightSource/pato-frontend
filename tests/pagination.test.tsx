@@ -80,4 +80,23 @@ describe("Breadcrumbs", () => {
 
     expect(screen.getByText("Page 2 out of 16")).toBeInTheDocument();
   });
+
+  it("should call callback when page changes", async () => {
+    const mockCallback = jest.fn();
+    renderWithProviders(<Pagination total={160} onChange={mockCallback} />);
+
+    const input = screen.getByRole("button", { name: ">" });
+    fireEvent.click(input);
+
+    expect(mockCallback).toBeCalledWith(2, 20);
+  });
+
+  it("should call items per page changes", async () => {
+    const mockCallback = jest.fn();
+    renderWithProviders(<Pagination total={160} onChange={mockCallback} />);
+
+    fireEvent.change(screen.getByRole("combobox"), { target: { value: 5 } });
+
+    expect(mockCallback).toBeCalledWith(1, 5);
+  });
 });

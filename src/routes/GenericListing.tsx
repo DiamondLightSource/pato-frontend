@@ -81,7 +81,7 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
       <Divider />
       {data === undefined || data.length === 0 ? (
         <Heading py={4} w='100%' textAlign='center' color='diamond.200'>
-          No {heading}
+          No {heading.toLowerCase()} found
         </Heading>
       ) : (
         <div>
