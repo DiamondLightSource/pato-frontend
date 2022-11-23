@@ -94,6 +94,16 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
         </AccordionButton>
       </HStack>
       <AccordionPanel p={4}>
+        <Motion parentId={tomogram.tomogramId} />
+        <Heading marginTop={6} variant='collection'>
+          Alignment
+        </Heading>
+        <Divider />
+        <Grid py={2} templateColumns='repeat(3, 1fr)' h='33vh' gap={2}>
+          <InfoGroup info={tomogram.info} />
+          <Image title='Central Slice' src={sliceImage} height='100%' />
+          <Scatter title='Shift Plot' scatterData={shiftData} height='32vh' />
+        </Grid>
         <Heading variant='collection'>Summary</Heading>
         <Divider />
         {ctfData === undefined ? (
@@ -115,14 +125,6 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
             />
           </Grid>
         )}
-        <Heading variant='collection'>Alignment</Heading>
-        <Divider />
-        <Grid py={2} templateColumns='repeat(3, 1fr)' h='33vh' gap={2}>
-          <InfoGroup info={tomogram.info} />
-          <Image title='Central Slice' src={sliceImage} height='100%' />
-          <Scatter title='Shift Plot' scatterData={shiftData} height='32vh' />
-        </Grid>
-        <Motion parentId={tomogram.tomogramId} />
       </AccordionPanel>
     </AccordionItem>
   );
