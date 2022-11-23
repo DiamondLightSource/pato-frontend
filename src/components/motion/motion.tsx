@@ -19,7 +19,7 @@ import Image from "../image";
 import InfoGroup from "../infogroup";
 import Scatter from "../scatter";
 import MotionPagination from "./pagination";
-import { Dispatch, FunctionComponent, SetStateAction, useCallback, useEffect, useState } from "react";
+import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from "react";
 import { MdComment } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";

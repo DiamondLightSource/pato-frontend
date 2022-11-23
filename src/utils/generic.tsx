@@ -1,9 +1,5 @@
 import { useEffect } from "react";
-
-interface DataConfig {
-  include: { name: string | string[]; unit?: string; label?: string }[];
-  root?: string[];
-}
+import { DataConfig } from "./interfaces";
 
 const parseData = (rawData: Record<string, any>, config: DataConfig) => {
   const data: Record<string, any> = { info: [] };
@@ -36,13 +32,12 @@ const pascalToSpace = (input: string) => {
 
 const useTitle = (title: string) => {
   useEffect(() => {
-    const prevTitle = document.title
-    document.title = title
+    const prevTitle = document.title;
+    document.title = title;
     return () => {
-      document.title = prevTitle
-    }
-  })
-}
+      document.title = prevTitle;
+    };
+  });
+};
 
 export { parseData, useTitle };
-

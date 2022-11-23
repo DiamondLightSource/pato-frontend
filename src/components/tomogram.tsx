@@ -20,15 +20,14 @@ import { MdSettings } from "react-icons/md";
 import { client } from "../utils/api/client";
 import { ScatterDataPoint } from "chart.js";
 import { driftPlotOptions } from "../utils/plot";
+import { CtfData } from "../utils/interfaces";
 
 interface TomogramProp {
   tomogram: Record<string, any>;
-}
-
-interface CtfData {
-  resolution: ScatterDataPoint[];
-  astigmatism: ScatterDataPoint[];
-  defocus: ScatterDataPoint[];
+  collectionData: {
+    info: Info[];
+    comments: string;
+  };
 }
 
 const astigmatismPlotOptions = {
@@ -46,7 +45,7 @@ const resolutionPlotOptions = {
   scales: { y: { title: { display: true, text: "Å" } } },
 };
 
-const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element => {
+const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram, collectionData }): JSX.Element => {
   const [sliceImage, setSliceImage] = useState("");
   const [shiftData, setShiftData] = useState<ScatterDataPoint[]>([]);
   const [ctfData, setCtfData] = useState<CtfData>();
@@ -95,7 +94,7 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
   return (
     <AccordionItem>
       <HStack py={1.5} px={3} bg='diamond.100'>
-        <h2>Tomogram {tomogram.tomogramId}</h2>
+        <h2>{collectionData.comments ?? "No Title Provided"}</h2>
         <Spacer />
         <Button>
           <MdSettings />
@@ -105,6 +104,11 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram }): JSX.Element =>
         </AccordionButton>
       </HStack>
       <AccordionPanel p={4}>
+        <Heading variant='collection'>Collection Data</Heading>
+        <Divider />
+        <Grid py={2} templateColumns='repeat(3, 1fr)' h='10vh' gap={2}>
+          <InfoGroup info={collectionData.info}></InfoGroup>
+        </Grid>
         <Motion onMotionChanged={handleMotionChange} parentId={tomogram.tomogramId} />
         <Heading marginTop={6} variant='collection'>
           Alignment
