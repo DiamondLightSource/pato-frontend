@@ -1,7 +1,7 @@
 import MotionPagination from "../src/components/motion/pagination";
 import React from "react";
 import { server, renderWithProviders } from "../src/utils/test-utils";
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 
 beforeAll(() => server.listen());
 

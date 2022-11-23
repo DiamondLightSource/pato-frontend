@@ -66,5 +66,28 @@ export const handlers = [
         items: data
       })
     )
+  }),
+
+  rest.get('http://localhost/proposals', (req, res, ctx) => {
+    if (req.url.searchParams.get("s")) {
+      const search = req.url.searchParams.get("s")
+      return res(
+        ctx.status(200),
+        ctx.json({items: [
+          {key1: "1" + search},
+          {key2: "2" + search},
+          {key3: "3" + search}
+        ]})
+      )
+    }
+
+    return res(
+      ctx.status(200),
+      ctx.json({items: [
+        {key1: "value1"},
+        {key2: "value2"},
+        {key3: "value3"}
+      ]})
+    )
   })
 ]
