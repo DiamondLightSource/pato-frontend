@@ -35,16 +35,16 @@ interface MotionProp {
 
 const motionConfig = {
   include: [
-    { name: "imageNumber" },
+    { name: "refinedTiltAngle" },
     { name: "createdTimeStamp", label: "movieTimeStamp" },
     { name: "firstFrame" },
     { name: "lastFrame" },
     { name: "refinedMagnification" },
-    { name: "refinedTiltAngle" },
     { name: "dosePerFrame", unit: "e⁻/Å²" },
     { name: "doseWeight" },
     { name: "totalMotion", unit: "Å" },
     { name: "averageMotionPerFrame", label: "Average Motion/Frame", unit: "Å" },
+    { name: "imageNumber" },
     { name: ["patchesUsedX", "patchesUsedY"], label: "patchesUsed" },
     { name: ["boxSizeX", "boxSizeY"], label: "boxSize", unit: "μm" },
     { name: ["minResolution", "maxResolution"], label: "Resolution", unit: "Å" },
