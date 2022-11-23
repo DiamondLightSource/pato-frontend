@@ -45,10 +45,10 @@ const visitHeaders = [
   { key: "visit_number", label: "Visit" },
 ];
 
-const collectionHeaders = [
-  { key: "dataCollectionId", label: "ID" },
-  { key: "startTime", label: "Start Time" },
+const groupsHeaders = [
+  { key: "dataCollectionGroupId", label: "ID" },
   { key: "comments", label: "Comments" },
+  { key: "collections", label: "Collections" },
 ];
 
 const router = createBrowserRouter([
@@ -82,21 +82,29 @@ const router = createBrowserRouter([
       },
       {
         path: "/proposals/:propid/visits/:visitId",
-        element: <Navigate to='collections' replace />,
+        element: <Navigate to='groups' replace />,
       },
       {
-        path: "/proposals/:propId/visits/:visitId/collections",
+        path: "/proposals/:propId/visits/:visitId/groups",
         element: (
           <GenericListing
-            headers={collectionHeaders}
-            endpoint='collections'
-            heading='Data Collections'
-            routeKeys={["dataCollectionId"]}
+            headers={groupsHeaders}
+            endpoint='dataCollectionGroups'
+            heading='Data Collection Groups'
+            routeKeys={["dataCollectionGroupId"]}
           />
         ),
       },
       {
-        path: "/proposals/:propId/visits/:visitId/collections/:collectionId",
+        path: "/proposals/:propId/visits/:visitId/groups/:groupId/",
+        element: <Navigate to='collections' replace />,
+      },
+      {
+        path: "/proposals/:propId/visits/:visitId/groups/:groupId/collections/",
+        element: <Navigate to='1' replace />,
+      },
+      {
+        path: "/proposals/:propId/visits/:visitId/groups/:groupId/collections/:collectionIndex",
         element: <Collection />,
       },
     ],

@@ -40,20 +40,22 @@ const Collection = () => {
   );
 
   useEffect(() => {
-    document.title = `eBIC » Collections » ${params.collectionId}`;
-    getData(`tomograms/${params.collectionId}`).then((response) => {
-      if (response.items === undefined) {
-        setPlaceholderMessage("No tomogram found in this data collection");
-        return;
-      }
-      setTomograms(response.items.map((info: Record<string, any>) => parseData(info, tomogramConfig)));
+    document.title = `eBIC » Collections » ${params.collectionIndex}`;
+    getData(`dataCollections?group=${params.groupId}&limit=1&page=${params.collectionIndex}`).then((response) => {
+      getData(`tomograms/${response.items[0].dataCollectionId}`).then((response) => {
+        if (response.items === undefined) {
+          setPlaceholderMessage("No tomogram found in this data collection");
+          return;
+        }
+        setTomograms(response.items.map((info: Record<string, any>) => parseData(info, tomogramConfig)));
+      });
     });
-  }, [params.collectionId, getData]);
+  }, [params.collectionIndex, params.groupId, getData]);
 
   return (
     <Box>
       <Heading>
-        Data Collection {params.collectionId} for {params.propId}-{params.visitId}
+        Data Collection {params.collectionIndex} for {params.propId}-{params.visitId}-{params.groupId}
       </Heading>
       <Divider />
       {tomograms.length === 0 && !placeholderMessage && (
