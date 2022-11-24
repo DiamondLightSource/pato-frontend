@@ -11,4 +11,15 @@ describe("Collection", () => {
       screen.getByRole("heading", { name: "Proposal cm-31111 , visit 5000 , data collection group 2000" })
     ).toBeInTheDocument();
   });
+
+  it("should display collection data", async () => {
+    renderWithProviders(<Collection />);
+    await expect(screen.findByText("1 kV")).resolves.toBeInTheDocument();
+    expect(screen.getByText("50 μm")).toBeInTheDocument();
+  });
+
+  it("should placeholder message if no tomogram is found", async () => {
+    renderWithProviders(<Collection />);
+    await expect(screen.findByText("No tomogram found in this data collection")).resolves.toBeInTheDocument();
+  });
 });

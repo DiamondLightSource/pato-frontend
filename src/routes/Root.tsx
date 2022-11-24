@@ -1,5 +1,5 @@
-import { Box } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { Box, Heading, Progress } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Breadcrumbs from "../components/breadcrumbs";
 import Footer from "../components/footer";
@@ -11,6 +11,7 @@ import "../styles/main.css";
 const Root = (): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const splitUrl = window.location.href.split("access_token=");
@@ -18,12 +19,13 @@ const Root = (): JSX.Element => {
     if (splitUrl.length === 2) {
       sessionStorage.setItem("token", splitUrl[1].split("&token_type")[0].toString());
       const url = new URL(splitUrl[0]).pathname;
-      dispatch(checkUser());
       navigate(url);
     }
+
+    dispatch(checkUser()).finally(() => setLoading(false));
   }, [navigate, dispatch]);
 
-  return (
+  return !loading ? (
     <div className='rootContainer'>
       <Navbar />
       <Box marginTop={12} className='main'>
@@ -32,6 +34,13 @@ const Root = (): JSX.Element => {
       </Box>
       <Footer />
     </div>
+  ) : (
+    <Box margin='30% auto' w='20%' h='100%'>
+      <Heading p={4} textAlign='center'>
+        Fetching Data...
+      </Heading>
+      <Progress isIndeterminate />
+    </Box>
   );
 };
 

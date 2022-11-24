@@ -16,19 +16,25 @@ describe("Navbar", () => {
   it("should display logout button when authenticated", () => {
     const textToFind = "Logout";
 
-    renderWithProviders(<Navbar />, { preloadedState: { auth: { user: "user" }, ui: { loading: false } } });
+    renderWithProviders(<Navbar />, {
+      preloadedState: { auth: { user: { name: "Someone", fedid: "aaa" } }, ui: { loading: false } },
+    });
     const logoutButton = screen.getByText(textToFind);
 
     expect(logoutButton).toBeInTheDocument();
   });
 
   it("should display loading bar when loading", () => {
-    renderWithProviders(<Navbar />, { preloadedState: { auth: { user: "user" }, ui: { loading: true } } });
+    renderWithProviders(<Navbar />, {
+      preloadedState: { auth: { user: { name: "Someone", fedid: "aaa" } }, ui: { loading: true } },
+    });
     expect(screen.getByRole("progressbar")).toBeInTheDocument();
   });
 
   it("should not display loading bar when not loading", () => {
-    renderWithProviders(<Navbar />, { preloadedState: { auth: { user: "user" }, ui: { loading: false } } });
+    renderWithProviders(<Navbar />, {
+      preloadedState: { auth: { user: { name: "Someone", fedid: "aaa" } }, ui: { loading: false } },
+    });
     expect(screen.queryByRole("progressbar")).toBeNull();
   });
 });

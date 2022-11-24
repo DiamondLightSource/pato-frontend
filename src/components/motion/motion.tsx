@@ -119,7 +119,7 @@ const Tomogram: FunctionComponent<MotionProp> = ({ parentId, onMotionChanged }):
 
   return (
     <div>
-      <HStack marginTop={2}>
+      <HStack>
         <Heading variant='collection'>Motion Correction/CTF</Heading>
         <Heading size='sm' color='diamond.300'>
           {calcDarkImages(motion.total, motion.rawTotal)}

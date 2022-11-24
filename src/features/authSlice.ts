@@ -2,12 +2,17 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../utils/api/client'
 
 interface authState {
-  user: string | null
+  user: {name: string, fedid: string} | null
 }
 
-export const checkUser = createAsyncThunk('auth/checkUser', async () => {
+export const checkUser = createAsyncThunk('auth/checkUser', async (_, {rejectWithValue}) => {
   const user = await client.get("user")
-  return user.data.id
+
+  if (user.data.given_name === undefined) {
+    return rejectWithValue("No response")
+  }
+  
+  return user.data
 })
 
 const initialState: authState = {
@@ -21,7 +26,7 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(checkUser.fulfilled, (state, action) => {
-      state.user = action.payload
+      state.user = {name: action.payload.given_name, fedid: action.payload.fedid}
     })
 
     builder.addCase(checkUser.rejected, (state) => {

@@ -8,6 +8,7 @@ import Tomogram from "../components/tomogram";
 import { parseData } from "../utils/generic";
 import { CollectionData, DataConfig } from "../utils/interfaces";
 import MotionPagination from "../components/motion/pagination";
+import InfoGroup from "../components/infogroup";
 
 const collectionConfig: DataConfig = {
   include: [
@@ -64,7 +65,7 @@ const Collection = () => {
         setPageCount(response.total);
         setCollectionData(parseData(response.items[0], collectionConfig) as CollectionData);
         getData(`tomograms/${response.items[0].dataCollectionId}`).then((response) => {
-          if (response.items === undefined) {
+          if (!response || response.items === undefined) {
             setPlaceholderMessage("No tomogram found in this data collection");
             return;
           }
@@ -76,7 +77,7 @@ const Collection = () => {
 
   return (
     <Box>
-      <HStack h='8vh'>
+      <HStack marginBottom={2}>
         <VStack>
           <HStack w='100%'>
             <Heading>Data Collection #{params.collectionIndex}</Heading>
@@ -89,6 +90,7 @@ const Collection = () => {
         <Spacer />
         <MotionPagination size='md' onChange={updateCollection} total={pageCount} />
       </HStack>
+      <InfoGroup py={2} cols={3} info={collectionData.info}></InfoGroup>
       <Divider />
       {tomograms.length === 0 && !placeholderMessage && (
         <VStack py={3} spacing={2} h='70vh'>
@@ -106,7 +108,11 @@ const Collection = () => {
 
       <Accordion defaultIndex={0} onChange={(e) => console.log(e)}>
         {tomograms.map((tomogram: Record<string, any>) => (
-          <Tomogram collection={collectionData} tomogram={tomogram} key={tomogram.tomogramId} />
+          <Tomogram
+            title={collectionData.comments ?? "No Title Provided"}
+            tomogram={tomogram}
+            key={tomogram.tomogramId}
+          />
         ))}
       </Accordion>
     </Box>

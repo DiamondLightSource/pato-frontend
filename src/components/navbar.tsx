@@ -108,7 +108,7 @@ const Navbar: FunctionComponent = (): JSX.Element => {
               >
                 <Avatar size='xs' />
                 <Text verticalAlign='bottom' px={3} color='diamond.100' display='inline-block'>
-                  {user}
+                  {user.name} ({user.fedid})
                 </Text>
               </MenuButton>
               <MenuList>

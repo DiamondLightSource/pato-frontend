@@ -12,7 +12,7 @@ describe("Tomogram", () => {
   it("should display tomogram title (comment) correctly", () => {
     renderWithProviders(
       <Accordion>
-        <Tomogram collection={{ info: [], comments: "Tomogram 1" }} tomogram={{ tomogramId: 1, info: [] }} />
+        <Tomogram title={"Tomogram 1"} tomogram={{ tomogramId: 1, info: [] }} />
       </Accordion>
     );
 
@@ -22,7 +22,7 @@ describe("Tomogram", () => {
   it("should display placeholder title when no title is provided", () => {
     renderWithProviders(
       <Accordion>
-        <Tomogram collection={{ info: [], comments: null }} tomogram={{ tomogramId: 1, info: [] }} />
+        <Tomogram title={null} tomogram={{ tomogramId: 1, info: [] }} />
       </Accordion>
     );
 
@@ -33,7 +33,7 @@ describe("Tomogram", () => {
     renderWithProviders(
       <Accordion>
         <Tomogram
-          collection={{ info: [], comments: "" }}
+          title={"Tomogram 1"}
           tomogram={{ tomogramId: 1, info: [{ label: "testLabel", value: "testValue" }] }}
         />
       </Accordion>
@@ -46,28 +46,11 @@ describe("Tomogram", () => {
     expect(screen.getByText("testValue")).toBeInTheDocument();
   });
 
-  it("should display collection info", async () => {
-    renderWithProviders(
-      <Accordion>
-        <Tomogram
-          collection={{ info: [{ label: "collectionLabel", value: "collectionValue" }], comments: "" }}
-          tomogram={{ tomogramId: 1, info: [] }}
-        />
-      </Accordion>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText("collectionLabel:")).toBeInTheDocument();
-    });
-
-    expect(screen.getByText("collectionValue")).toBeInTheDocument();
-  });
-
   it("should display astigmatism/defocus/resolution data when done loading", async () => {
     renderWithProviders(
       <Accordion>
         <Tomogram
-          collection={{ info: [], comments: "" }}
+          title={"Tomogram 1"}
           tomogram={{ tomogramId: 3, info: [{ label: "testLabel", value: "testValue" }] }}
         />
       </Accordion>

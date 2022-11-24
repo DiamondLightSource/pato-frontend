@@ -2,6 +2,9 @@ import { createStandaloneToast } from "@chakra-ui/toast";
 import { baseToast } from "../../styles/components";
 const { toast } = createStandaloneToast();
 
+const controller = new AbortController();
+const timeoutFetch = setTimeout(() => controller.abort(), 3000);
+
 interface RequestConfig {
   method: string;
   headers: Record<string, any>;
@@ -27,6 +30,7 @@ export async function client(
     headers: {
       ...customConfig.headers,
     },
+    signal: controller.signal,
     body: undefined,
   };
 
@@ -42,6 +46,7 @@ export async function client(
   let target = process.env.REACT_APP_API_ENDPOINT + endpoint;
 
   const response = await fetch(target, config);
+  clearTimeout(timeoutFetch);
 
   switch (response.headers.get("content-type")) {
     case "image/png":

@@ -11,7 +11,6 @@ import Error from "./routes/Error";
 import { Accordion, Button, Text, Heading, Table } from "./styles/components";
 import Calendar from "./routes/Calendar";
 import { colours } from "./styles/colours";
-import { checkUser } from "./features/authSlice";
 const { ToastContainer } = createStandaloneToast();
 
 const container = document.getElementById("root")!;
@@ -111,21 +110,13 @@ const router = createBrowserRouter([
   },
 ]);
 
-const initializeUser = async () => {
-  if (sessionStorage.getItem("token") !== null) {
-    await store.dispatch(checkUser());
-  }
-};
-
-initializeUser().then(() =>
-  root.render(
-    <React.StrictMode>
-      <ChakraProvider theme={theme}>
-        <Provider store={store}>
-          <RouterProvider router={router} />
-          <ToastContainer />
-        </Provider>
-      </ChakraProvider>
-    </React.StrictMode>
-  )
-);
+root.render(
+  <React.StrictMode>
+    <ChakraProvider theme={theme}>
+      <Provider store={store}>
+        <RouterProvider router={router} />
+        <ToastContainer />
+      </Provider>
+    </ChakraProvider>
+  </React.StrictMode>
+)
