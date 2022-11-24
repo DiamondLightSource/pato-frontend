@@ -8,7 +8,7 @@ export interface DataConfig {
 
 export interface CollectionData {
   info: Info[];
-  comments: string;
+  comments: string | null;
 }
 
 export interface CtfData {

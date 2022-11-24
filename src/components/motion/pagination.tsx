@@ -5,10 +5,11 @@ type ChangeCallback = (page: number) => void;
 
 interface MotionPaginationProp {
   total: number;
+  size?: "xs" | "md";
   onChange?: ChangeCallback;
 }
 
-const MotionPagination: FunctionComponent<MotionPaginationProp> = ({ total, onChange }): JSX.Element => {
+const MotionPagination: FunctionComponent<MotionPaginationProp> = ({ total, onChange, size = "xs" }): JSX.Element => {
   const [value, setValue] = useState("1");
 
   useEffect(() => {
@@ -39,14 +40,14 @@ const MotionPagination: FunctionComponent<MotionPaginationProp> = ({ total, onCh
   };
 
   return (
-    <HStack py={1} maxW='210px'>
-      <Button size='xs' onClick={() => setPage(1)}>
+    <HStack py={1} maxW={size === "xs" ? "210px" : "330px"}>
+      <Button size={size} onClick={() => setPage(1)}>
         &lt;&lt;
       </Button>
-      <Button size='xs' isDisabled={parseInt(value) === 1} onClick={() => setPage(parseInt(value) - 1)}>
+      <Button size={size} isDisabled={parseInt(value) === 1} onClick={() => setPage(parseInt(value) - 1)}>
         &lt;
       </Button>
-      <InputGroup size='xs'>
+      <InputGroup size={size}>
         <Input
           aria-label='Current Page'
           onChange={(event) => setValue(event.target.value)}
@@ -55,10 +56,10 @@ const MotionPagination: FunctionComponent<MotionPaginationProp> = ({ total, onCh
         />
         <InputRightAddon aria-label='Total Pages' children={total} />
       </InputGroup>
-      <Button size='xs' isDisabled={parseInt(value) === total} onClick={() => setPage(parseInt(value) + 1)}>
+      <Button size={size} isDisabled={parseInt(value) === total} onClick={() => setPage(parseInt(value) + 1)}>
         &gt;
       </Button>
-      <Button size='xs' onClick={() => setPage(total)}>
+      <Button size={size} onClick={() => setPage(total)}>
         &gt;&gt;
       </Button>
     </HStack>

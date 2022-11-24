@@ -7,6 +7,7 @@ import { setLoading } from "../features/uiSlice";
 import Tomogram from "../components/tomogram";
 import { parseData } from "../utils/generic";
 import { CollectionData, DataConfig } from "../utils/interfaces";
+import MotionPagination from "../components/motion/pagination";
 
 const collectionConfig: DataConfig = {
   include: [
@@ -38,8 +39,8 @@ const Collection = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const changePage = (next: boolean) => {
-    navigate(`../${parseInt(params.collectionIndex ?? "1") + (next ? 1 : -1)}`, { relative: "path" });
+  const updateCollection = (page: number) => {
+    navigate(`../${page}`, { relative: "path" });
   };
 
   const getData = useCallback(
@@ -75,11 +76,10 @@ const Collection = () => {
 
   return (
     <Box>
-      <HStack>
+      <HStack h='8vh'>
         <VStack>
           <HStack w='100%'>
             <Heading>Data Collection #{params.collectionIndex}</Heading>
-            <Heading color='diamond.300'>out of {pageCount}</Heading>
           </HStack>
           <Heading color='diamond.300' size='sm'>
             Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data collection group{" "}
@@ -87,12 +87,7 @@ const Collection = () => {
           </Heading>
         </VStack>
         <Spacer />
-        <Button disabled={params.collectionIndex === "1"} onClick={() => changePage(false)}>
-          &lt;
-        </Button>
-        <Button disabled={params.collectionIndex === pageCount.toString()} onClick={() => changePage(true)}>
-          &gt;
-        </Button>
+        <MotionPagination size='md' onChange={updateCollection} total={pageCount} />
       </HStack>
       <Divider />
       {tomograms.length === 0 && !placeholderMessage && (
@@ -111,7 +106,7 @@ const Collection = () => {
 
       <Accordion defaultIndex={0} onChange={(e) => console.log(e)}>
         {tomograms.map((tomogram: Record<string, any>) => (
-          <Tomogram collectionData={collectionData} tomogram={tomogram} key={tomogram.tomogramId} />
+          <Tomogram collection={collectionData} tomogram={tomogram} key={tomogram.tomogramId} />
         ))}
       </Accordion>
     </Box>
