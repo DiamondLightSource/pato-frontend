@@ -57,7 +57,16 @@ const motionConfig = {
     { name: "estimatedDefocus", unit: "μm" },
     { name: "ccValue", label: "CC Value" },
   ],
-  root: ["tomogramId", "movieId", "total", "rawTotal", "comments_MotionCorrection", "comments_CTF", "refinedTiltAxis"],
+  root: [
+    "tomogramId",
+    "movieId",
+    "drift",
+    "total",
+    "rawTotal",
+    "comments_MotionCorrection",
+    "comments_CTF",
+    "refinedTiltAxis",
+  ],
 };
 
 const calcDarkImages = (total: number, rawTotal: number) => {

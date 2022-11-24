@@ -30,7 +30,6 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
   const dispatch = useAppDispatch();
 
   const getRouteKey = (item: Record<string, any>) => {
-    console.log(item);
     return routeKeys.map((key) => item[key]).join("");
   };
 
