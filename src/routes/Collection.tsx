@@ -1,4 +1,4 @@
-import { Accordion, Divider, Heading, Box, Skeleton, VStack, Code, HStack, Spacer, Button } from "@chakra-ui/react";
+import { Accordion, Divider, Heading, Box, Skeleton, VStack, Code, HStack, Spacer } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { client } from "../utils/api/client";
