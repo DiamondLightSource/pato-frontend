@@ -1,7 +1,5 @@
 import { rest } from 'msw'
 
-const image = "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"
-
 export const handlers = [
   rest.get('http://localhost/motion/:movieId', (req, res, ctx) => {
     let data = {}
