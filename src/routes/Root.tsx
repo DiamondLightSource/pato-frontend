@@ -28,7 +28,7 @@ const Root = (): JSX.Element => {
   return !loading ? (
     <div className='rootContainer'>
       <Navbar />
-      <Box marginTop={12} className='main'>
+      <Box bg='diamond.75' marginTop={12} className='main'>
         <Breadcrumbs />
         <Outlet />
       </Box>

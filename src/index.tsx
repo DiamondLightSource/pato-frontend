@@ -11,6 +11,7 @@ import Error from "./routes/Error";
 import { Accordion, Button, Text, Heading, Table } from "./styles/components";
 import Calendar from "./routes/Calendar";
 import { colours } from "./styles/colours";
+import Home from "./routes/Home";
 const { ToastContainer } = createStandaloneToast();
 
 const container = document.getElementById("root")!;
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <Error />,
     children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
       {
         path: "/proposals",
         element: (
@@ -119,4 +124,4 @@ root.render(
       </Provider>
     </ChakraProvider>
   </React.StrictMode>
-)
+);

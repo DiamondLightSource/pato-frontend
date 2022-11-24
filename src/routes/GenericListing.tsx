@@ -1,4 +1,18 @@
-import { Divider, Heading, HStack, Input, Spacer, Table, Tbody, Td, Th, Thead, Tr, useToast } from "@chakra-ui/react";
+import {
+  Divider,
+  Heading,
+  HStack,
+  Input,
+  Spacer,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  useToast,
+  Box,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Pagination from "../components/pagination";
@@ -67,6 +81,7 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
         <Heading>{heading}</Heading>
         <Spacer />
         <Input
+          bg='white'
           onKeyUp={(e) => {
             if (e.key === "Enter") {
               setSearch(e.currentTarget.value);
@@ -84,7 +99,7 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
           No {heading.toLowerCase()} found
         </Heading>
       ) : (
-        <div>
+        <Box h='70vh' overflow='scroll'>
           <Table size='sm' variant='diamondStriped'>
             <Thead>
               <Tr>
@@ -95,7 +110,7 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
             </Thead>
             <Tbody cursor='pointer'>
               {data.map((item, i) => (
-                <Tr key={i} onClick={() => navigate(getRouteKey(item))}>
+                <Tr h='2vh' key={i} onClick={() => navigate(getRouteKey(item))}>
                   {headers.map((header) => (
                     <Td key={header.key}>{item[header.key]}</Td>
                   ))}
@@ -103,15 +118,16 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
               ))}
             </Tbody>
           </Table>
-          <Pagination
-            onChange={(page, itemAmount) => {
-              setItemsPerPage(itemAmount);
-              setPage(page);
-            }}
-            total={total}
-          />
-        </div>
+        </Box>
       )}
+      <Divider />
+      <Pagination
+        onChange={(page, itemAmount) => {
+          setItemsPerPage(itemAmount);
+          setPage(page);
+        }}
+        total={total}
+      />
     </div>
   );
 };

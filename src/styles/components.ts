@@ -33,6 +33,9 @@ const Text = defineStyleConfig({
             _odd: {
               bg: "diamond.100"
             },
+            _even: {
+              bg: "diamond.50"
+            },
             _hover: {
               bg: "diamond.200"
             }

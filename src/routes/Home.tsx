@@ -1,7 +1,9 @@
+import { Heading } from "@chakra-ui/react";
+
 const Home = () => (
   <div>
     <title>eBIC</title>
-    Test!
+    <Heading textAlign='center'>eBIC Experiment Data Display</Heading>
   </div>
 );
 
