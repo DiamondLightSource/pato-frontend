@@ -100,7 +100,7 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram, title }): JSX.Ele
           <AccordionIcon />
         </AccordionButton>
       </HStack>
-      <AccordionPanel p={4}>
+      <AccordionPanel bg='diamond.50' p={4}>
         <Motion onMotionChanged={handleMotionChange} parentId={tomogram.tomogramId} />
         <Heading marginTop={6} variant='collection'>
           Alignment

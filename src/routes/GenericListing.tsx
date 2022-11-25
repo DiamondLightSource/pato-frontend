@@ -81,7 +81,7 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
         <Heading>{heading}</Heading>
         <Spacer />
         <Input
-          bg='white'
+          bg='diamond.50'
           onKeyUp={(e) => {
             if (e.key === "Enter") {
               setSearch(e.currentTarget.value);

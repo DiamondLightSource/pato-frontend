@@ -28,7 +28,9 @@ const MotionPagination: FunctionComponent<MotionPaginationProp> = ({ total, onCh
       newPage = 1;
     }
 
-    setPage(newPage);
+    if (!isNaN(newPage)) {
+      setPage(newPage);
+    }
   };
 
   const setPage = (page: number) => {
@@ -40,7 +42,7 @@ const MotionPagination: FunctionComponent<MotionPaginationProp> = ({ total, onCh
   };
 
   return (
-    <HStack py={1} maxW={size === "xs" ? "210px" : "330px"}>
+    <HStack py={1} maxW={size === "xs" ? "210px" : "295px"}>
       <Button size={size} onClick={() => setPage(1)}>
         &lt;&lt;
       </Button>
@@ -49,6 +51,7 @@ const MotionPagination: FunctionComponent<MotionPaginationProp> = ({ total, onCh
       </Button>
       <InputGroup size={size}>
         <Input
+          bg='diamond.50'
           aria-label='Current Page'
           onChange={(event) => setValue(event.target.value)}
           value={value}

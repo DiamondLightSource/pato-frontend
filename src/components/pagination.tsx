@@ -46,6 +46,7 @@ const Pagination: FunctionComponent<PaginationProp> = ({
     <Box py={2}>
       <HStack>
         <Select
+          bg='diamond.50'
           w='max-content'
           size='sm'
           defaultValue={possibleItemsPerPage[preselected]}

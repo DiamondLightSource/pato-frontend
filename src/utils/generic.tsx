@@ -1,6 +1,13 @@
 import { useEffect } from "react";
 import { DataConfig } from "./interfaces";
-
+/**
+ * Parses incoming raw data and processes it into labels and values for `InfoGroup` components, also returning raw values in the root of the returned object
+ *
+ * @param rawData Raw data to be processed
+ * @param config Configuration for the processing, according to `DataConfig`
+ *
+ * @returns An object containing an array of `InfoGroup` labels and values, alongside raw values (when passed in the configuration)
+ */
 const parseData = (rawData: Record<string, any>, config: DataConfig) => {
   const data: Record<string, any> = { info: [] };
   for (const item of config.include) {
