@@ -16,7 +16,7 @@ import {
   Code,
 } from "@chakra-ui/react";
 import Image from "../image";
-import InfoGroup from "../infogroup";
+import InfoGroup, { Info } from "../infogroup";
 import Scatter from "../scatter";
 import MotionPagination from "./pagination";
 import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from "react";
@@ -27,15 +27,34 @@ import { setLoading } from "../../features/uiSlice";
 import { client } from "../../utils/api/client";
 import { parseData } from "../../utils/generic";
 import { driftPlotOptions } from "../../utils/plot";
+import { ScatterDataPoint } from "chart.js";
+
+interface MotionData {
+  /** Datapoints for the drift plot */
+  drift: ScatterDataPoint[];
+  /** Total number of tilt alignment images available */
+  total: number;
+  /** Total number of motion correction images available (including tilt alignment) */
+  rawTotal: number;
+  /** Motion correction comments */
+  comments_MotionCorrection?: string;
+  /** CTF comments */
+  comments_CTF?: string;
+  /** Refined tilt axis */
+  refinedTiltAxis?: number;
+  info: Info[];
+}
 
 interface MotionProp {
+  /** ID for the parent of the motion correction. Could be a tomogram or something else in the future. */
   parentId: number;
+  /** Callback for when a new motion correction item is requested and received */
   onMotionChanged?: (motion: Record<string, any>) => void;
 }
 
 const motionConfig = {
   include: [
-    { name: "refinedTiltAngle" },
+    { name: "refinedTiltAngle", unit: "°" },
     { name: "createdTimeStamp", label: "movieTimeStamp" },
     { name: "firstFrame" },
     { name: "lastFrame" },
@@ -83,7 +102,7 @@ const calcDarkImages = (total: number, rawTotal: number) => {
 
 const Tomogram: FunctionComponent<MotionProp> = ({ parentId, onMotionChanged }): JSX.Element => {
   const [page, setPage] = useState(-1);
-  const [motion, setMotion] = useState<Record<string, any>>({ drift: [], total: 0, info: [] });
+  const [motion, setMotion] = useState<MotionData>({ drift: [], total: 0, rawTotal: 0, info: [] });
   const [mgImage, setMgImage] = useState("");
   const [fftImage, setFftImage] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -103,7 +122,7 @@ const Tomogram: FunctionComponent<MotionProp> = ({ parentId, onMotionChanged }):
     dispatch(setLoading(true));
 
     client.safe_get(`motion/${parentId}${page === -1 ? " " : `?nth=${page}`}`).then((response) => {
-      setMotion(parseData(response.data, motionConfig));
+      setMotion(parseData(response.data, motionConfig) as MotionData);
       if (response.data.movieId !== undefined) {
         setImage(`image/micrograph/${response.data.movieId}`, setMgImage);
         setImage(`image/fft/${response.data.movieId}`, setFftImage);

@@ -16,3 +16,8 @@ export interface CtfData {
   astigmatism: ScatterDataPoint[];
   defocus: ScatterDataPoint[];
 }
+
+export interface TomogramData {
+  info: Info[],
+  tomogramId: number
+}

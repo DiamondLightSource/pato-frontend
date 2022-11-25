@@ -18,6 +18,7 @@ import {
   Tooltip,
   Legend,
   ScatterControllerChartOptions,
+  ScatterDataPoint,
 } from "chart.js";
 import { Scatter } from "react-chartjs-2";
 
@@ -26,10 +27,15 @@ import { FunctionComponent, useEffect, useState } from "react";
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
 interface ScatterProp {
+  /** Title for the scatter plot */
   title: string;
-  scatterData: { x: number; y: number }[];
+  /** Datapoints */
+  scatterData: ScatterDataPoint[];
+  /** Chart options */
   options?: ScatterControllerChartOptions;
+  /** Chart width */
   width?: string;
+  /** Chart height */
   height?: string;
 }
 

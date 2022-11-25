@@ -4,9 +4,13 @@ import { ChangeEvent, FunctionComponent, useEffect, useState } from "react";
 type ChangeCallback = (page: number, itemsPerPage: number) => void;
 
 interface PaginationProp {
+  /** Total number of items to paginate */
   total: number;
+  /** Array with all available "items per page" amounts */
   possibleItemsPerPage?: Array<number>;
+  /** Preselected item index */
   preselected?: number;
+  /** Callback for page change events */
   onChange?: ChangeCallback;
 }
 

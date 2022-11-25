@@ -20,10 +20,12 @@ import { MdSettings } from "react-icons/md";
 import { client } from "../utils/api/client";
 import { ScatterDataPoint } from "chart.js";
 import { driftPlotOptions } from "../utils/plot";
-import { CtfData } from "../utils/interfaces";
+import { CtfData, TomogramData } from "../utils/interfaces";
 
 interface TomogramProp {
-  tomogram: Record<string, any>;
+  /* Tomogram data */
+  tomogram: TomogramData;
+  /* Tomogram title (generally the data collection comment) */
   title: string | null;
 }
 

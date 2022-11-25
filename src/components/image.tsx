@@ -13,9 +13,13 @@ import {
 import { FunctionComponent, MouseEvent, useState } from "react";
 
 interface ImageProp {
+  /** Title for the image */
   title: string;
+  /** Source path for the image */
   src: string;
+  /** Image width */
   width?: string;
+  /** Image height */
   height?: string;
 }
 

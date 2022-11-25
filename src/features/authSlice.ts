@@ -2,7 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../utils/api/client'
 
 interface authState {
-  user: {name: string, fedid: string} | null
+  user: {
+    /** Display name for the user */
+    name: string,
+    /** Federation ID (or unique identification) */ 
+    fedid: string} | null
 }
 
 export const checkUser = createAsyncThunk('auth/checkUser', async (_, {rejectWithValue}) => {

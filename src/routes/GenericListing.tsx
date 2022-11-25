@@ -32,7 +32,7 @@ interface TableProps {
 }
 
 const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) => {
-  const [data, setData] = useState<Array<Record<string, any>>>([]);
+  const [data, setData] = useState<Array<Record<string, string | number>>>([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(10);
   const [itemsPerPage, setItemsPerPage] = useState(20);

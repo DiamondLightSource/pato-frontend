@@ -2,15 +2,21 @@ import { Box, Text, Grid, GridItem, Skeleton } from "@chakra-ui/react";
 import { FunctionComponent } from "react";
 
 export interface Info {
+  /** Label/description (title) for a display value */
   label: string;
+  /** Value to accompany label */
   value?: string;
+  /** Whether or not the given information element should span all columns */
   wide?: boolean;
 }
 
 interface InfoProp {
   info: Info[];
+  /** Height of the information group component */
   height?: number | string;
+  /** Number of columns to divide the information in */
   cols?: number;
+  /** Vertical padding */
   py?: number;
 }
 

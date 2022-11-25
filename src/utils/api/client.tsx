@@ -7,7 +7,7 @@ const timeoutFetch = setTimeout(() => controller.abort(), 3000);
 
 interface RequestConfig {
   method: string;
-  headers: Record<string, any>;
+  headers: Record<string, string>;
   body?: string | FormData;
   [k: string]: any;
 }

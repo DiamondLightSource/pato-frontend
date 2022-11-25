@@ -6,7 +6,7 @@ import { useAppDispatch } from "../store/hooks";
 import { setLoading } from "../features/uiSlice";
 import Tomogram from "../components/tomogram";
 import { parseData } from "../utils/generic";
-import { CollectionData, DataConfig } from "../utils/interfaces";
+import { CollectionData, DataConfig, TomogramData } from "../utils/interfaces";
 import MotionPagination from "../components/motion/pagination";
 import InfoGroup from "../components/infogroup";
 
@@ -36,7 +36,7 @@ const tomogramConfig: DataConfig = {
 
 const Collection = () => {
   const params = useParams();
-  const [tomograms, setTomograms] = useState<Record<string, any>>([]);
+  const [tomograms, setTomograms] = useState<TomogramData[]>([]);
   const [collectionData, setCollectionData] = useState<CollectionData>({ info: [], comments: "" });
   const [pageCount, setPageCount] = useState(1);
   const [placeholderMessage, setPlaceholderMessage] = useState<{ title?: string; subtitle?: string }>();
@@ -120,7 +120,7 @@ const Collection = () => {
       )}
 
       <Accordion defaultIndex={0} onChange={(e) => console.log(e)}>
-        {tomograms.map((tomogram: Record<string, any>) => (
+        {tomograms.map((tomogram: TomogramData) => (
           <Tomogram
             title={collectionData.comments ?? "No Title Provided"}
             tomogram={tomogram}
