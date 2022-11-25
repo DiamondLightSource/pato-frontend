@@ -39,7 +39,7 @@ const Collection = () => {
   const [tomograms, setTomograms] = useState<TomogramData[]>([]);
   const [collectionData, setCollectionData] = useState<CollectionData>({ info: [], comments: "" });
   const [pageCount, setPageCount] = useState(1);
-  const [placeholderMessage, setPlaceholderMessage] = useState<{ title?: string; subtitle?: string }>();
+  const [placeholderMessage, setPlaceholderMessage] = useState<{ title?: string; subtitle?: string } | null>(null);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -63,6 +63,8 @@ const Collection = () => {
 
   useEffect(() => {
     document.title = `eBIC » Collections » ${params.collectionIndex}`;
+    setTomograms([]);
+    setPlaceholderMessage(null);
     getData(`dataCollections?group=${params.groupId}&limit=1&page=${params.collectionIndex}`).then((response) => {
       if (response.total && response.items) {
         setPageCount(response.total);
@@ -96,7 +98,7 @@ const Collection = () => {
           </Heading>
         </VStack>
         <Spacer />
-        <MotionPagination size='md' onChange={updateCollection} total={pageCount} />
+        <MotionPagination size='md' onChange={updateCollection} lastAsDefault={false} total={pageCount} />
       </HStack>
       <InfoGroup py={2} cols={3} info={collectionData.info}></InfoGroup>
       <Divider />
