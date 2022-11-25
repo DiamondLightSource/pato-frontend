@@ -10,6 +10,8 @@ import { CollectionData, DataConfig } from "../utils/interfaces";
 import MotionPagination from "../components/motion/pagination";
 import InfoGroup from "../components/infogroup";
 
+const unauthorisedSubtitle = "...or you may not have permission to view it. If someone has sent you a direct link to this page, ask them to check whether or not you're part of the parent session."
+
 const collectionConfig: DataConfig = {
   include: [
     { name: "pixelSizeOnImage", unit: "μm" },
@@ -36,7 +38,7 @@ const Collection = () => {
   const [tomograms, setTomograms] = useState<Record<string, any>>([]);
   const [collectionData, setCollectionData] = useState<CollectionData>({ info: [], comments: "" });
   const [pageCount, setPageCount] = useState(1);
-  const [placeholderMessage, setPlaceholderMessage] = useState("");
+  const [placeholderMessage, setPlaceholderMessage] = useState<{title?: string, subtitle?: string}>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -66,13 +68,15 @@ const Collection = () => {
         setCollectionData(parseData(response.items[0], collectionConfig) as CollectionData);
         getData(`tomograms/${response.items[0].dataCollectionId}`).then((response) => {
           if (!response || response.items === undefined) {
-            setPlaceholderMessage("No tomogram found in this data collection");
+            setPlaceholderMessage({title: "Tomogram not found in this data collection", subtitle: unauthorisedSubtitle});
             return;
           }
           setTomograms(response.items.map((info: Record<string, any>) => parseData(info, tomogramConfig)));
         });
+      } else {
+        setPlaceholderMessage({title: "Data collection could not be found", subtitle: unauthorisedSubtitle})
       }
-    });
+    })
   }, [params.collectionIndex, params.groupId, getData, navigate]);
 
   return (
@@ -101,9 +105,14 @@ const Collection = () => {
       )}
 
       {placeholderMessage && (
-        <Heading textAlign='center' py={10} color='diamond.200'>
-          {placeholderMessage}
+        <span style={{margin: "auto", width: "60%", display: "block"}}>
+        <Heading textAlign='center' paddingTop={10} color='diamond.300'>
+          {placeholderMessage.title}
         </Heading>
+        <Heading fontWeight={200} size="md" textAlign="center" color="diamond.300">
+          {placeholderMessage.subtitle}
+        </Heading>
+        </span>
       )}
 
       <Accordion defaultIndex={0} onChange={(e) => console.log(e)}>

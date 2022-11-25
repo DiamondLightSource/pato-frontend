@@ -76,7 +76,7 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
   }, [page, itemsPerPage, toast, endpoint, navigate, dispatch, search, params]);
 
   return (
-    <div>
+    <Box h="100%">
       <HStack>
         <Heading>{heading}</Heading>
         <Spacer />
@@ -94,12 +94,12 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
         ></Input>
       </HStack>
       <Divider />
-      {data === undefined || data.length === 0 ? (
-        <Heading py={4} w='100%' textAlign='center' color='diamond.200'>
-          No {heading.toLowerCase()} found
-        </Heading>
-      ) : (
-        <Box h='70vh' overflow='scroll'>
+      <Box h="70vh" p={4} overflow='scroll'>
+        {data === undefined || data.length === 0 ? (
+          <Heading w='100%' textAlign='center' color='diamond.300'>
+            No {heading.toLowerCase()} found
+          </Heading>
+        ) : (
           <Table size='sm' variant='diamondStriped'>
             <Thead>
               <Tr>
@@ -118,8 +118,8 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
               ))}
             </Tbody>
           </Table>
-        </Box>
-      )}
+        )}
+      </Box>
       <Divider />
       <Pagination
         onChange={(page, itemAmount) => {
@@ -128,7 +128,7 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
         }}
         total={total}
       />
-    </div>
+    </Box>
   );
 };
 
