@@ -23,7 +23,7 @@ Running development server on your machine:
 
 There is also a production Docker container. Nevertheless, you can compile a production-optimised build with :code:`yarn build` instead.
 
-For production deployment using Kubernetes, visit the `backend's repository <https://gitlab.diamond.ac.uk/yrh59256/ebic-frontend>_`
+For production deployment using Kubernetes, visit the `backend's repository <https://gitlab.diamond.ac.uk/yrh59256/ebic-frontend>`_
 
 ============
 Testing
