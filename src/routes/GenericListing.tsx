@@ -76,7 +76,7 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
   }, [page, itemsPerPage, toast, endpoint, navigate, dispatch, search, params]);
 
   return (
-    <Box h="100%">
+    <Box h='100%'>
       <HStack>
         <Heading>{heading}</Heading>
         <Spacer />
@@ -94,9 +94,9 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
         ></Input>
       </HStack>
       <Divider />
-      <Box h="70vh" p={4} overflow='scroll'>
+      <Box overflow='scroll'>
         {data === undefined || data.length === 0 ? (
-          <Heading w='100%' textAlign='center' color='diamond.300'>
+          <Heading py={2} w='100%' textAlign='center' color='diamond.300'>
             No {heading.toLowerCase()} found
           </Heading>
         ) : (

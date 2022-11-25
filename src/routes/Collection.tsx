@@ -10,7 +10,8 @@ import { CollectionData, DataConfig } from "../utils/interfaces";
 import MotionPagination from "../components/motion/pagination";
 import InfoGroup from "../components/infogroup";
 
-const unauthorisedSubtitle = "...or you may not have permission to view it. If someone has sent you a direct link to this page, ask them to check whether or not you're part of the parent session."
+const unauthorisedSubtitle =
+  "...or you may not have permission to view it. If someone has sent you a direct link to this page, ask them to check whether or not you're part of the parent session.";
 
 const collectionConfig: DataConfig = {
   include: [
@@ -38,7 +39,7 @@ const Collection = () => {
   const [tomograms, setTomograms] = useState<Record<string, any>>([]);
   const [collectionData, setCollectionData] = useState<CollectionData>({ info: [], comments: "" });
   const [pageCount, setPageCount] = useState(1);
-  const [placeholderMessage, setPlaceholderMessage] = useState<{title?: string, subtitle?: string}>();
+  const [placeholderMessage, setPlaceholderMessage] = useState<{ title?: string; subtitle?: string }>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -68,15 +69,18 @@ const Collection = () => {
         setCollectionData(parseData(response.items[0], collectionConfig) as CollectionData);
         getData(`tomograms/${response.items[0].dataCollectionId}`).then((response) => {
           if (!response || response.items === undefined) {
-            setPlaceholderMessage({title: "Tomogram not found in this data collection", subtitle: unauthorisedSubtitle});
+            setPlaceholderMessage({
+              title: "Tomogram not found in this data collection",
+              subtitle: unauthorisedSubtitle,
+            });
             return;
           }
           setTomograms(response.items.map((info: Record<string, any>) => parseData(info, tomogramConfig)));
         });
       } else {
-        setPlaceholderMessage({title: "Data collection could not be found", subtitle: unauthorisedSubtitle})
+        setPlaceholderMessage({ title: "Data collection could not be found", subtitle: unauthorisedSubtitle });
       }
-    })
+    });
   }, [params.collectionIndex, params.groupId, getData, navigate]);
 
   return (
@@ -105,13 +109,13 @@ const Collection = () => {
       )}
 
       {placeholderMessage && (
-        <span style={{margin: "auto", width: "60%", display: "block"}}>
-        <Heading textAlign='center' paddingTop={10} color='diamond.300'>
-          {placeholderMessage.title}
-        </Heading>
-        <Heading fontWeight={200} size="md" textAlign="center" color="diamond.300">
-          {placeholderMessage.subtitle}
-        </Heading>
+        <span style={{ margin: "auto", width: "60%", display: "block" }}>
+          <Heading textAlign='center' paddingTop={10} color='diamond.300'>
+            {placeholderMessage.title}
+          </Heading>
+          <Heading fontWeight={200} size='md' textAlign='center' color='diamond.300'>
+            {placeholderMessage.subtitle}
+          </Heading>
         </span>
       )}
 
