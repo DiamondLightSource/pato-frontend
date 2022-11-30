@@ -9,7 +9,6 @@ install-job:
   tags:
     - argus
   script:
-    - npm install yarn
     - yarn install
 
 unit-test-job:
@@ -17,7 +16,6 @@ unit-test-job:
   tags: 
     - argus
   before_script:
-    - npm install yarn
     - yarn install
   script:
     - yarn run test --verbose
