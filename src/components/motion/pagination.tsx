@@ -6,7 +6,7 @@ type ChangeCallback = (page: number) => void;
 interface MotionPaginationProp {
   total: number;
   size?: "xs" | "md";
-  lastAsDefault?: boolean;
+  displayDefault?: string;
   onChange?: ChangeCallback;
 }
 
@@ -14,15 +14,17 @@ const MotionPagination: FunctionComponent<MotionPaginationProp> = ({
   total,
   onChange,
   size = "xs",
-  lastAsDefault = true,
+  displayDefault,
 }): JSX.Element => {
   const [value, setValue] = useState("1");
 
   useEffect(() => {
-    if (total !== undefined && lastAsDefault) {
+    if (total !== undefined && displayDefault === undefined) {
       setValue(total.toString());
+    } else {
+      setValue(displayDefault ?? "1");
     }
-  }, [total, lastAsDefault]);
+  }, [total, displayDefault]);
 
   const editPage = (event: ReactFocusEvent<HTMLInputElement>) => {
     let newPage = parseInt(event.target.value);

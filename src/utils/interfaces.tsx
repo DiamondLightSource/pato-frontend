@@ -9,6 +9,7 @@ export interface DataConfig {
 export interface CollectionData {
   info: Info[];
   comments: string | null;
+  dataCollectionId?: number;
 }
 
 export interface CtfData {
@@ -18,6 +19,6 @@ export interface CtfData {
 }
 
 export interface TomogramData {
-  info: Info[],
-  tomogramId: number
+  info: Info[];
+  tomogramId: number;
 }

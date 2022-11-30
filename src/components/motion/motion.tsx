@@ -48,6 +48,8 @@ interface MotionData {
 interface MotionProp {
   /** ID for the parent of the motion correction. Could be a tomogram or something else in the future. */
   parentId: number;
+  /** Whether parent is a tomogram or data collection */
+  parentType: "tomograms" | "dataCollections";
   /** Callback for when a new motion correction item is requested and received */
   onMotionChanged?: (motion: Record<string, any>) => void;
 }
@@ -55,7 +57,7 @@ interface MotionProp {
 const motionConfig = {
   include: [
     { name: "refinedTiltAngle", unit: "°" },
-    { name: "createdTimeStamp", label: "movieTimeStamp" },
+    { name: "createdTimeStamp", label: "Movie Time Stamp" },
     { name: "firstFrame" },
     { name: "lastFrame" },
     { name: "refinedMagnification" },
@@ -64,8 +66,8 @@ const motionConfig = {
     { name: "totalMotion", unit: "Å" },
     { name: "averageMotionPerFrame", label: "Average Motion/Frame", unit: "Å" },
     { name: "imageNumber" },
-    { name: ["patchesUsedX", "patchesUsedY"], label: "patchesUsed" },
-    { name: ["boxSizeX", "boxSizeY"], label: "boxSize", unit: "μm" },
+    { name: ["patchesUsedX", "patchesUsedY"], label: "Patches Used" },
+    { name: ["boxSizeX", "boxSizeY"], label: "Box Size", unit: "μm" },
     { name: ["minResolution", "maxResolution"], label: "Resolution", unit: "Å" },
     { name: ["minDefocus", "maxDefocus"], label: "Defocus", unit: "Å" },
     { name: "amplitudeContrast" },
@@ -89,18 +91,18 @@ const motionConfig = {
 };
 
 const calcDarkImages = (total: number, rawTotal: number) => {
-  if (isNaN(rawTotal - total)) {
-    return "?";
+  if (rawTotal === undefined) {
+    return "No tilt alignment data available";
   }
 
-  if (total === 0 && rawTotal > 0) {
-    return "No tilt alignment data available";
+  if (isNaN(rawTotal - total)) {
+    return "?";
   }
 
   return `Dark Images: ${rawTotal - total}`;
 };
 
-const Tomogram: FunctionComponent<MotionProp> = ({ parentId, onMotionChanged }): JSX.Element => {
+const Tomogram: FunctionComponent<MotionProp> = ({ parentId, onMotionChanged, parentType }): JSX.Element => {
   const [page, setPage] = useState(-1);
   const [motion, setMotion] = useState<MotionData>({ drift: [], total: 0, rawTotal: 0, info: [] });
   const [mgImage, setMgImage] = useState("");
@@ -121,7 +123,7 @@ const Tomogram: FunctionComponent<MotionProp> = ({ parentId, onMotionChanged }):
   useEffect(() => {
     dispatch(setLoading(true));
 
-    client.safe_get(`motion/${parentId}${page === -1 ? " " : `?nth=${page}`}`).then((response) => {
+    client.safe_get(`${parentType}/${parentId}/motion${page === -1 ? " " : `?nth=${page}`}`).then((response) => {
       setMotion(parseData(response.data, motionConfig) as MotionData);
       if (response.data.movieId !== undefined) {
         setImage(`image/micrograph/${response.data.movieId}`, setMgImage);
@@ -134,7 +136,7 @@ const Tomogram: FunctionComponent<MotionProp> = ({ parentId, onMotionChanged }):
     });
 
     dispatch(setLoading(false));
-  }, [page, parentId, dispatch, navigate, onMotionChanged]);
+  }, [page, parentId, parentType, dispatch, navigate, onMotionChanged]);
 
   return (
     <div>
