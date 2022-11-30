@@ -1,7 +1,7 @@
 import Tomogram from "../src/components/tomogram";
 import React from "react";
 import { server, renderWithProviders } from "../src/utils/test-utils";
-import { screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { Accordion } from "@chakra-ui/react";
 
 beforeAll(() => server.listen());
@@ -12,21 +12,52 @@ describe("Tomogram", () => {
   it("should display tomogram title (comment) correctly", () => {
     renderWithProviders(
       <Accordion>
-        <Tomogram title={"Tomogram 1"} tomogram={{ tomogramId: 1, info: [] }} />
+        <Tomogram collection={1} title={"Tomogram 1"} tomogram={{ tomogramId: 1, info: [] }} />
       </Accordion>
     );
 
     expect(screen.getByText("Tomogram 1")).toBeInTheDocument();
   });
 
+  it("should only display motion correction if no tomogram exists", async () => {
+    renderWithProviders(
+      <Accordion>
+        <Tomogram collection={1} title={"Tomogram 1"} tomogram={null} />
+      </Accordion>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Tomogram 1")).toBeInTheDocument();
+    });
+
+    expect(screen.queryByText("Defocus")).toBeNull();
+  });
+
   it("should display placeholder title when no title is provided", () => {
     renderWithProviders(
       <Accordion>
-        <Tomogram title={null} tomogram={{ tomogramId: 1, info: [] }} />
+        <Tomogram collection={1} title={null} tomogram={{ tomogramId: 1, info: [] }} />
       </Accordion>
     );
 
     expect(screen.getByText("No Title Provided")).toBeInTheDocument();
+  });
+
+  it("should update refined tilt axis from motion data", async () => {
+    renderWithProviders(
+      <Accordion>
+        <Tomogram
+          collection={1}
+          title={null}
+          tomogram={{ tomogramId: 3, info: [{ label: "Refined Tilt Axis", value: "?" }] }}
+        />
+      </Accordion>
+    );
+
+    const nextButton = screen.getByRole("button", { name: "<" });
+    fireEvent.click(nextButton);
+
+    await expect(screen.findByText("958")).resolves.toBeInTheDocument();
   });
 
   it("should display tomogram info", async () => {
@@ -34,6 +65,7 @@ describe("Tomogram", () => {
       <Accordion>
         <Tomogram
           title={"Tomogram 1"}
+          collection={1}
           tomogram={{ tomogramId: 1, info: [{ label: "testLabel", value: "testValue" }] }}
         />
       </Accordion>
@@ -50,6 +82,7 @@ describe("Tomogram", () => {
     renderWithProviders(
       <Accordion>
         <Tomogram
+          collection={1}
           title={"Tomogram 1"}
           tomogram={{ tomogramId: 3, info: [{ label: "testLabel", value: "testValue" }] }}
         />

@@ -3,6 +3,18 @@ Changelog
 ==========
 
 ++++++++++
+v0.0.1-rc3 (30/11/2022)
+++++++++++
+
+**Added**
+
+- Motion correction can now be viewed for tomograms that are still being processed
+
+**Changed**
+
+- Pagination for data collections accompanies the URL parameter properly
+
+++++++++++
 v0.0.1-rc2 (25/11/2022)
 ++++++++++
 

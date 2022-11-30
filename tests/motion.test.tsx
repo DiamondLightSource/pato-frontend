@@ -8,7 +8,7 @@ beforeAll(() => server.listen());
 describe("Motion", () => {
   window.URL.createObjectURL = jest.fn();
   it("should display message when no tilt alignment data is present", async () => {
-    renderWithProviders(<Motion parentId={2} />);
+    renderWithProviders(<Motion parentType='dataCollections' parentId={2} />);
 
     await waitFor(() => {
       expect(screen.getByText("No tilt alignment data available")).toBeInTheDocument();
@@ -16,15 +16,15 @@ describe("Motion", () => {
   });
 
   it("should display raw image count when no tilt. align. is present", async () => {
-    renderWithProviders(<Motion parentId={2} />);
+    renderWithProviders(<Motion parentType='dataCollections' parentId={2} />);
 
     await waitFor(() => {
-      expect(screen.getByText("20")).toBeInTheDocument();
+      expect(screen.getByText("10")).toBeInTheDocument();
     });
   });
 
   it("should display comments button when comments are present", async () => {
-    renderWithProviders(<Motion parentId={3} />);
+    renderWithProviders(<Motion parentType='tomograms' parentId={3} />);
 
     await waitFor(() => {
       expect(screen.getByText("20")).toBeInTheDocument();
@@ -35,7 +35,7 @@ describe("Motion", () => {
 
   it("should call callback when first motion changes", async () => {
     const motionChanged = jest.fn();
-    renderWithProviders(<Motion onMotionChanged={motionChanged} parentId={3} />);
+    renderWithProviders(<Motion parentType='tomograms' onMotionChanged={motionChanged} parentId={3} />);
 
     await waitFor(() => {
       expect(motionChanged).toBeCalled();

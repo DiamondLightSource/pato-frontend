@@ -97,7 +97,7 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram, title, collection
       </HStack>
       <Box border='1px solid' p={4} borderColor='diamond.100'>
         {tomogram === null ? (
-          <Motion onMotionChanged={handleMotionChange} parentType={"dataCollections"} parentId={collection} />
+          <Motion parentType={"dataCollections"} parentId={collection} />
         ) : (
           <Box>
             <Motion onMotionChanged={handleMotionChange} parentType='tomograms' parentId={tomogram.tomogramId} />

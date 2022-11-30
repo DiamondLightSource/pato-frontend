@@ -1,10 +1,10 @@
 import { rest } from 'msw'
 
 export const handlers = [
-  rest.get('http://localhost/motion/:movieId', (req, res, ctx) => {
+  rest.get('http://localhost/tomograms/:id/motion', (req, res, ctx) => {
     let data = {}
 
-    switch(req.params.movieId) {
+    switch(req.params.id) {
       case "1":
         data = {
           total: 10,
@@ -21,7 +21,25 @@ export const handlers = [
         data = {
           total: 0,
           rawTotal: 20,
-          comments_CTF: "comment!"
+          comments_CTF: "comment!",
+          refinedTiltAxis: 958
+        }
+        break;
+    }
+
+    return res(
+      ctx.status(200),
+      ctx.json(data)
+    )
+  }),
+
+  rest.get('http://localhost/dataCollections/:id/motion', (req, res, ctx) => {
+    let data = {}
+
+    switch(req.params.id) {
+      case "2":
+        data = {
+          total: 10,
         }
         break;
     }
@@ -46,14 +64,14 @@ export const handlers = [
     )
   }),
 
-  rest.get('http://localhost/image/slice/:id', (req, res, ctx) => {
+  rest.get('http://localhost/tomograms/:id/centralSlice', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.body("")
     )
   }),
 
-  rest.get('http://localhost/ctf/:id', (req, res, ctx) => {
+  rest.get('http://localhost/tomograms/:id/ctf', (req, res, ctx) => {
     let data: Record<string, number>[] = []
 
     if (req.params.id === "3") {
@@ -68,7 +86,7 @@ export const handlers = [
     )
   }),
 
-  rest.get("http://localhost/shiftPlot/:tomogramId", async (req, res, ctx) => {
+  rest.get("http://localhost/tomograms/:tomogramId/shiftPlot", async (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.delay(0),
@@ -78,7 +96,7 @@ export const handlers = [
     )
   }),
 
-  rest.get("http://localhost/tomograms/:tomogram", async (req, res, ctx) => {
+  rest.get("http://localhost/dataCollections/:collection/tomogram", async (req, res, ctx) => {
     return res(
       ctx.status(404)
     )

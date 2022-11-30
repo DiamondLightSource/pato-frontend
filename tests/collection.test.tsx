@@ -18,8 +18,8 @@ describe("Collection", () => {
     expect(screen.getByText("50 μm")).toBeInTheDocument();
   });
 
-  it("should placeholder message if no tomogram is found", async () => {
+  it("should display placeholder message if not data collection is found", async () => {
     renderWithProviders(<Collection />);
-    await expect(screen.findByText("No tomogram found in this data collection")).resolves.toBeInTheDocument();
+    await expect(screen.findByText("Data collection group has no data collections")).resolves.toBeInTheDocument();
   });
 });
