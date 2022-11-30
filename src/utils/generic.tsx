@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { DataConfig } from "./interfaces";
 /**
  * Parses incoming raw data and processes it into labels and values for `InfoGroup` components, also returning raw values in the root of the returned object
@@ -37,14 +36,4 @@ const pascalToSpace = (input: string) => {
   });
 };
 
-const useTitle = (title: string) => {
-  useEffect(() => {
-    const prevTitle = document.title;
-    document.title = title;
-    return () => {
-      document.title = prevTitle;
-    };
-  });
-};
-
-export { parseData, useTitle };
+export { parseData };

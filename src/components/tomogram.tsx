@@ -31,7 +31,7 @@ const defocusPlotOptions = {
 
 const resolutionPlotOptions = {
   ...driftPlotOptions,
-  scales: { y: { title: { display: true, text: "Å" } } },
+  scales: { y: { max: 50, title: { display: true, text: "Å" } } },
 };
 
 const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram, title, collection }): JSX.Element => {
@@ -91,7 +91,7 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram, title, collection
       <HStack py={1.5} px={3} bg='diamond.100'>
         <h2>{title ?? "No Title Provided"}</h2>
         <Spacer />
-        <Button>
+        <Button disabled>
           <MdSettings />
         </Button>
       </HStack>
@@ -110,7 +110,7 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram, title, collection
               <Image title='Central Slice' src={sliceImage} height='100%' />
               <Scatter title='Shift Plot' scatterData={shiftData} height='32vh' />
             </Grid>
-            <Heading variant='collection'>Summary</Heading>
+            d<Heading variant='collection'>Summary</Heading>
             <Divider />
             {ctfData === undefined ? (
               <Skeleton h='20vh' />

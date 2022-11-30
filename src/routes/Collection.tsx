@@ -23,11 +23,11 @@ const collectionConfig: DataConfig = {
 const tomogramConfig: DataConfig = {
   include: [
     { name: "stackFile" },
-    { name: "tiltAngleOffset" },
+    { name: "tiltAngleOffset", unit: "°" },
     { name: "zShift" },
     { name: "volumeFile" },
     { name: "pixelSpacing" },
-    { name: "refinedTiltAxis" },
+    { name: "refinedTiltAxis", unit: "°" },
   ],
   root: ["tomogramId"],
 };
