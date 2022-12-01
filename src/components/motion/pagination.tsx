@@ -1,5 +1,5 @@
-import { Button, HStack, InputRightAddon, InputGroup, Input } from "@chakra-ui/react";
-import { FunctionComponent, useEffect, useState, FocusEvent as ReactFocusEvent } from "react";
+import { Button, HStack, InputRightAddon, InputGroup, Input, Skeleton } from "@chakra-ui/react";
+import { FunctionComponent, useEffect, useState, FocusEvent as ReactFocusEvent, useCallback } from "react";
 
 type ChangeCallback = (page: number) => void;
 
@@ -8,6 +8,7 @@ interface MotionPaginationProp {
   size?: "xs" | "md";
   displayDefault?: string;
   onChange?: ChangeCallback;
+  startFrom?: "start" | "middle" | "end";
 }
 
 const MotionPagination: FunctionComponent<MotionPaginationProp> = ({
@@ -15,16 +16,43 @@ const MotionPagination: FunctionComponent<MotionPaginationProp> = ({
   onChange,
   size = "xs",
   displayDefault,
+  startFrom = "end",
 }): JSX.Element => {
-  const [value, setValue] = useState("1");
+  const [value, setValue] = useState<string|undefined>();
+
+  const setPage = useCallback(
+    (page: number) => {
+      setValue(page.toString());
+      if (!isNaN(page) && onChange !== undefined) {
+        onChange(page);
+      }
+    },
+    [onChange]
+  );
 
   useEffect(() => {
+    if (value !== undefined || total === 0) {
+      return;
+    }
+
     if (total !== undefined && displayDefault === undefined) {
-      setValue(total.toString());
+      switch (startFrom) {
+        case "end":
+          setValue(total.toString());
+          break;
+        case "middle":
+          if (total !== 0) {
+            setPage(Math.round(total / 2));
+          }
+          break;
+        case "start":
+          setValue("1");
+          break;
+      }
     } else {
       setValue(displayDefault ?? "1");
     }
-  }, [total, displayDefault]);
+  }, [total, displayDefault, startFrom, setPage, value]);
 
   const editPage = (event: ReactFocusEvent<HTMLInputElement>) => {
     let newPage = parseInt(event.target.value);
@@ -41,16 +69,12 @@ const MotionPagination: FunctionComponent<MotionPaginationProp> = ({
     }
   };
 
-  const setPage = (page: number) => {
-    setValue(page.toString());
-
-    if (!isNaN(page) && onChange !== undefined) {
-      onChange(page);
-    }
-  };
+  if (value === undefined) {
+    return <Skeleton h="20px" w={size === "xs" ? "210px" : "295px"}/>
+  }
 
   return (
-    <HStack py={1} maxW={size === "xs" ? "210px" : "295px"}>
+      <HStack py={1} maxW={size === "xs" ? "210px" : "295px"}>
       <Button size={size} onClick={() => setPage(1)}>
         &lt;&lt;
       </Button>

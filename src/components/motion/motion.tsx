@@ -53,6 +53,8 @@ interface MotionProp {
   parentType: "tomograms" | "dataCollections";
   /** Callback for when a new motion correction item is requested and received */
   onMotionChanged?: (motion: Record<string, any>) => void;
+  /** Whether or not the default should be the middle, start or end */
+  startFrom?: "start" | "middle" | "end";
 }
 
 const motionConfig = {
@@ -104,7 +106,7 @@ const calcDarkImages = (total: number, rawTotal: number) => {
 };
 
 const Tomogram: FunctionComponent<MotionProp> = ({ parentId, onMotionChanged, parentType }): JSX.Element => {
-  const [page, setPage] = useState(-1);
+  const [page, setPage] = useState<number | undefined>();
   const [motion, setMotion] = useState<MotionData>({ drift: [], total: 0, rawTotal: 0, info: [] });
   const [mgImage, setMgImage] = useState("");
   const [fftImage, setFftImage] = useState("");
@@ -124,19 +126,29 @@ const Tomogram: FunctionComponent<MotionProp> = ({ parentId, onMotionChanged, pa
   useEffect(() => {
     dispatch(setLoading(true));
 
-    client.safe_get(`${parentType}/${parentId}/motion${page === -1 ? " " : `?nth=${page}`}`).then((response) => {
-      setMotion(parseData(response.data, motionConfig) as MotionData);
-      if (response.data.movieId !== undefined) {
-        setImage(`image/micrograph/${response.data.movieId}`, setMgImage);
-        setImage(`image/fft/${response.data.movieId}`, setFftImage);
-      }
+    if (page === undefined && parentType === "tomograms") {
+      client
+        .safe_get(`${parentType}/${parentId}/motion`)
+        .then((response) => {
+          setMotion(parseData(response.data, motionConfig) as MotionData);
+        })
+        .finally(() => dispatch(setLoading(false)));
+    } else {
+      client
+        .safe_get(`${parentType}/${parentId}/motion${page === undefined ? " " : `?nth=${page}`}`)
+        .then((response) => {
+          setMotion(parseData(response.data, motionConfig) as MotionData);
+          if (response.data.movieId !== undefined) {
+            setImage(`image/micrograph/${response.data.movieId}`, setMgImage);
+            setImage(`image/fft/${response.data.movieId}`, setFftImage);
+          }
 
-      if (onMotionChanged !== undefined) {
-        onMotionChanged(response.data);
-      }
-    });
-
-    dispatch(setLoading(false));
+          if (onMotionChanged !== undefined) {
+            onMotionChanged(response.data);
+          }
+        })
+        .finally(() => dispatch(setLoading(false)));
+    }
   }, [page, parentId, parentType, dispatch, navigate, onMotionChanged]);
 
   return (
@@ -158,7 +170,11 @@ const Tomogram: FunctionComponent<MotionProp> = ({ parentId, onMotionChanged, pa
             <Circle size='3' position='absolute' top='-1' left='-1' bg='red'></Circle>
           )}
         </Button>
-        <MotionPagination total={motion.total || motion.rawTotal} onChange={(page) => setPage(page)} />
+        <MotionPagination
+          startFrom={parentType === "tomograms" ? "middle" : "end"}
+          total={motion.total || motion.rawTotal}
+          onChange={(page) => setPage(page)}
+        />
       </HStack>
       <Divider />
       <Grid py={2} templateColumns='repeat(4, 1fr)' gap={2}>
