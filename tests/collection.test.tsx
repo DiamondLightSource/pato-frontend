@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { renderWithProviders } from "../src/utils/test-utils";
 import Collection from "../src/routes/Collection";
 import React from "react";
@@ -21,5 +21,19 @@ describe("Collection", () => {
   it("should display placeholder message if not data collection is found", async () => {
     renderWithProviders(<Collection />);
     await expect(screen.findByText("Data collection group has no data collections")).resolves.toBeInTheDocument();
+  });
+
+  it("should set default page to URL collection index parameter", () => {
+    renderWithProviders(<Collection />);
+    expect(screen.getByDisplayValue("5")).toBeInTheDocument();
+  });
+
+  it("should set URL collection index parameter when changing collection", async () => {
+    renderWithProviders(<Collection />);
+
+    const previousButton = screen.getByText("<");
+    fireEvent.click(previousButton);
+
+    expect(global.window.location.href).toContain("/4");
   });
 });

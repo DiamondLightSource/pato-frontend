@@ -46,7 +46,7 @@ const ImageWrapper: FunctionComponent<ImageProp> = ({ title, src, width = "100%"
             {title}
           </ModalHeader>
           <ModalCloseButton color='diamond.200' m='-10px' />
-          <Box overflow='hidden' w='600px' h='550px'>
+          <Box overflow='hidden' w='40vw' h='80vh'>
             {isZoomed ? (
               <Image
                 data-testid='zoomed-in-image'
@@ -64,7 +64,8 @@ const ImageWrapper: FunctionComponent<ImageProp> = ({ title, src, width = "100%"
                 data-testid='zoomed-out-image'
                 cursor='zoom-in'
                 w='100%'
-                h='auto'
+                h='100%'
+                objectFit='contain'
                 onClick={(e) => zoom(e)}
                 src={src}
                 fallbackSrc='/images/no-image.png'

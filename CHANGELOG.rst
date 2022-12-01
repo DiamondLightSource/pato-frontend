@@ -3,7 +3,7 @@ Changelog
 ==========
 
 ++++++++++
-v0.0.1-rc4 (?/12/2022)
+v0.0.1-rc4 (2/12/2022)
 ++++++++++
 
 **Added**
@@ -13,6 +13,8 @@ v0.0.1-rc4 (?/12/2022)
 **Changed**
 
 - Fixes scatter plot width on page resize
+- Astigmatism and defocus are now displayed with the correct units
+- Fixed cropping images on modal
 
 ++++++++++
 v0.0.1-rc3 (30/11/2022)

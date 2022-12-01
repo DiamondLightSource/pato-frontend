@@ -69,9 +69,10 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram, title, collection
     client.safe_get(`tomograms/${tomogram.tomogramId}/ctf`).then((response) => {
       if (Array.isArray(response.data.items)) {
         for (const ctf of response.data.items) {
+          // Converting astigmatism and defocus from Angstrom
           ctfData.resolution.push({ x: ctf.refinedTiltAngle, y: ctf.estimatedResolution });
-          ctfData.astigmatism.push({ x: ctf.refinedTiltAngle, y: ctf.astigmatism });
-          ctfData.defocus.push({ x: ctf.refinedTiltAngle, y: ctf.estimatedDefocus });
+          ctfData.astigmatism.push({ x: ctf.refinedTiltAngle, y: ctf.astigmatism / 10 });
+          ctfData.defocus.push({ x: ctf.refinedTiltAngle, y: ctf.estimatedDefocus / 10000 });
         }
         setCtfData(ctfData);
       }

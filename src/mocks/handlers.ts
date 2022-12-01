@@ -119,6 +119,12 @@ export const handlers = [
     )
   }),
 
+  rest.get("http://localhost/unauthorisedEndpoint", async (req, res, ctx) => {
+    return res(
+      ctx.status(401),
+    )
+  }),
+
   rest.get('http://localhost/proposals', (req, res, ctx) => {
     const valueAppend = req.url.searchParams.get("s") ?? ""
 
