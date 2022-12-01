@@ -82,6 +82,7 @@ const ScatterWrapper: FunctionComponent<ScatterProp> = ({
       borderWidth='1px'
       borderRadius='lg'
       w={width}
+      minW='100%'
       h={height}
       onClick={onOpen}
     >
