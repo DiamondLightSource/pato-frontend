@@ -38,7 +38,7 @@ const ImageWrapper: FunctionComponent<ImageProp> = ({ title, src, width = "100%"
       <Heading size='sm' paddingBottom={1}>
         {title}
       </Heading>
-      <Image src={src} margin='auto' h='100%' paddingBottom={5} fallbackSrc='/images/no-image.png' />
+      <Image src={src} margin='auto' maxH='100%' paddingBottom={5} fallbackSrc='/images/no-image.png' />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay bg='rgba(0,0,0,0.8)' opacity='0.5' />
         <ModalContent bg='none' w='fit-content' maxW='90vw'>

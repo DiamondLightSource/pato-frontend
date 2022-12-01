@@ -8,6 +8,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  ResponsiveValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import {
@@ -34,9 +35,9 @@ interface ScatterProp {
   /** Chart options */
   options?: ScatterControllerChartOptions;
   /** Chart width */
-  width?: string;
+  width?: ResponsiveValue<string | number | "auto">;
   /** Chart height */
-  height?: string;
+  height?: ResponsiveValue<string | number | "auto">;
 }
 
 const preloadedData = {
@@ -78,16 +79,14 @@ const ScatterWrapper: FunctionComponent<ScatterProp> = ({
     <Box
       p={3}
       paddingBottom={height === "100%" ? 3 : 8}
-      height='100%'
       borderWidth='1px'
       borderRadius='lg'
       w={width}
-      minW='100%'
       h={height}
       onClick={onOpen}
     >
       <Heading size='sm'>{title}</Heading>
-      <Scatter data={data} options={options} />
+      <Scatter style={{ paddingBottom: "10px" }} data={data} options={options} />
       <Modal size='xl' isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent maxW='90vw'>

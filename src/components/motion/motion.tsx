@@ -14,6 +14,7 @@ import {
   DrawerBody,
   useDisclosure,
   Code,
+  GridItem,
 } from "@chakra-ui/react";
 import Image from "../image";
 import InfoGroup, { Info } from "../infogroup";
@@ -160,11 +161,19 @@ const Tomogram: FunctionComponent<MotionProp> = ({ parentId, onMotionChanged, pa
         <MotionPagination total={motion.total || motion.rawTotal} onChange={(page) => setPage(page)} />
       </HStack>
       <Divider />
-      <Grid py={2} templateColumns='repeat(4, 1fr)' h='25vh' gap={2}>
-        <InfoGroup info={motion.info} />
-        <Image src={mgImage} title='Micrograph Snapshot' height='100%' />
-        <Image src={fftImage} title='FFT Theoretical' height='100%' />
-        <Scatter title='Drift' options={driftPlotOptions} scatterData={motion.drift} height='25vh' />
+      <Grid py={2} templateColumns='repeat(4, 1fr)' gap={2}>
+        <GridItem h='25vh' colSpan={{ base: 2, md: 1 }}>
+          <InfoGroup info={motion.info} />
+        </GridItem>
+        <GridItem h='25vh' colSpan={{ base: 2, md: 1 }}>
+          <Image src={mgImage} title='Micrograph Snapshot' height='100%' />
+        </GridItem>
+        <GridItem h='25vh' colSpan={{ base: 2, md: 1 }}>
+          <Image src={fftImage} title='FFT Theoretical' height='100%' />
+        </GridItem>
+        <GridItem h='25vh' minW='100%' colSpan={{ base: 2, md: 1 }}>
+          <Scatter title='Drift' options={driftPlotOptions} scatterData={motion.drift} />
+        </GridItem>
       </Grid>
       <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
         <DrawerOverlay />

@@ -3,6 +3,18 @@ Changelog
 ==========
 
 ++++++++++
+v0.0.1-rc4 (?/12/2022)
+++++++++++
+
+**Added**
+
+- Data collection page works better on smaller screens
+
+**Changed**
+
+- Fixes scatter plot width on page resize
+
+++++++++++
 v0.0.1-rc3 (30/11/2022)
 ++++++++++
 

@@ -1,4 +1,4 @@
-import { Spacer, HStack, Divider, Grid, Button, Heading, Skeleton, Box } from "@chakra-ui/react";
+import { Spacer, HStack, Divider, Grid, Button, Heading, Skeleton, Box, GridItem } from "@chakra-ui/react";
 import Image from "./image";
 import InfoGroup, { Info } from "./infogroup";
 import Scatter from "./scatter";
@@ -105,10 +105,16 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram, title, collection
               Alignment
             </Heading>
             <Divider />
-            <Grid py={2} templateColumns='repeat(3, 1fr)' h='33vh' gap={2}>
-              <InfoGroup info={tomogramInfo} />
-              <Image title='Central Slice' src={sliceImage} height='100%' />
-              <Scatter title='Shift Plot' scatterData={shiftData} height='32vh' />
+            <Grid py={2} templateColumns='repeat(3, 1fr)' gap={2}>
+              <GridItem height={{ base: "20vh", md: "32vh" }}>
+                <InfoGroup info={tomogramInfo} />
+              </GridItem>
+              <GridItem colSpan={{ base: 2, md: 1 }} height={{ base: "20vh", md: "32vh" }}>
+                <Image title='Central Slice' src={sliceImage} height='100%' />
+              </GridItem>
+              <GridItem colSpan={{ base: 3, md: 1 }} minW='100%' height={{ base: "20vh", md: "32vh" }}>
+                <Scatter title='Shift Plot' scatterData={shiftData} />
+              </GridItem>
             </Grid>
             <Heading variant='collection'>Summary</Heading>
             <Divider />
@@ -116,19 +122,25 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram, title, collection
               <Skeleton h='20vh' />
             ) : (
               <Grid py={2} marginBottom={6} templateColumns='repeat(3, 1fr)' h='20vh' gap={2}>
-                <Scatter
-                  height='20vh'
-                  title='Astigmatism'
-                  scatterData={ctfData.astigmatism}
-                  options={astigmatismPlotOptions}
-                />
-                <Scatter height='20vh' title='Defocus' scatterData={ctfData.defocus} options={defocusPlotOptions} />
-                <Scatter
-                  height='20vh'
-                  title='Resolution'
-                  scatterData={ctfData.resolution}
-                  options={resolutionPlotOptions}
-                />
+                <GridItem minW='100%'>
+                  <Scatter
+                    height='20vh'
+                    title='Astigmatism'
+                    scatterData={ctfData.astigmatism}
+                    options={astigmatismPlotOptions}
+                  />
+                </GridItem>
+                <GridItem minW='100%'>
+                  <Scatter height='20vh' title='Defocus' scatterData={ctfData.defocus} options={defocusPlotOptions} />
+                </GridItem>
+                <GridItem minW='100%'>
+                  <Scatter
+                    height='20vh'
+                    title='Resolution'
+                    scatterData={ctfData.resolution}
+                    options={resolutionPlotOptions}
+                  />
+                </GridItem>
               </Grid>
             )}
           </Box>
