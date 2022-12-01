@@ -110,7 +110,7 @@ const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram, title, collection
               <Image title='Central Slice' src={sliceImage} height='100%' />
               <Scatter title='Shift Plot' scatterData={shiftData} height='32vh' />
             </Grid>
-            d<Heading variant='collection'>Summary</Heading>
+            <Heading variant='collection'>Summary</Heading>
             <Divider />
             {ctfData === undefined ? (
               <Skeleton h='20vh' />

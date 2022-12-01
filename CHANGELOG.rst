@@ -13,6 +13,7 @@ v0.0.1-rc3 (30/11/2022)
 **Changed**
 
 - Pagination for data collections accompanies the URL parameter properly
+- Fixes image sizing on pop-up modal
 
 ++++++++++
 v0.0.1-rc2 (25/11/2022)

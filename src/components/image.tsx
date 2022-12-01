@@ -3,7 +3,6 @@ import {
   Heading,
   Image,
   Modal,
-  ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
@@ -41,39 +40,37 @@ const ImageWrapper: FunctionComponent<ImageProp> = ({ title, src, width = "100%"
       </Heading>
       <Image src={src} margin='auto' h='100%' paddingBottom={5} fallbackSrc='/images/no-image.png' />
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>{title}</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Box overflow='hidden'>
-              {isZoomed ? (
-                <Image
-                  data-testid='zoomed-in-image'
-                  cursor='zoom-out'
-                  position='relative'
-                  style={{ transform: zoomCords }}
-                  maxW='180%'
-                  w='180%'
-                  onClick={() => onZoomToggle()}
-                  src={src}
-                  fallbackSrc='/images/no-image.png'
-                />
-              ) : (
-                <Image
-                  data-testid='zoomed-out-image'
-                  cursor='zoom-in'
-                  w='auto'
-                  h='auto'
-                  maxW='90vw'
-                  paddingBottom={2}
-                  onClick={(e) => zoom(e)}
-                  src={src}
-                  fallbackSrc='/images/no-image.png'
-                />
-              )}
-            </Box>
-          </ModalBody>
+        <ModalOverlay bg='rgba(0,0,0,0.8)' opacity='0.5' />
+        <ModalContent bg='none' w='fit-content' maxW='90vw'>
+          <ModalHeader w='80%' color='diamond.200' p={0}>
+            {title}
+          </ModalHeader>
+          <ModalCloseButton color='diamond.200' m='-10px' />
+          <Box overflow='hidden' w='600px' h='550px'>
+            {isZoomed ? (
+              <Image
+                data-testid='zoomed-in-image'
+                cursor='zoom-out'
+                position='relative'
+                style={{ transform: zoomCords }}
+                maxW='180%'
+                w='180%'
+                onClick={() => onZoomToggle()}
+                src={src}
+                fallbackSrc='/images/no-image.png'
+              />
+            ) : (
+              <Image
+                data-testid='zoomed-out-image'
+                cursor='zoom-in'
+                w='100%'
+                h='auto'
+                onClick={(e) => zoom(e)}
+                src={src}
+                fallbackSrc='/images/no-image.png'
+              />
+            )}
+          </Box>
         </ModalContent>
       </Modal>
     </Box>
