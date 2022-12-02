@@ -54,7 +54,7 @@ describe("Tomogram", () => {
       </Accordion>
     );
 
-    const nextButton = screen.getByRole("button", { name: "<" });
+    const nextButton = await screen.findByRole("button", { name: "<" });
     fireEvent.click(nextButton);
 
     await expect(screen.findByText("958")).resolves.toBeInTheDocument();

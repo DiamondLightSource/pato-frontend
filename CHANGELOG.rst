@@ -15,6 +15,7 @@ v0.0.1-rc4 (2/12/2022)
 - Fixes scatter plot width on page resize
 - Astigmatism and defocus are now displayed with the correct units
 - Fixed cropping images on modal
+- Motion correction for tomograms starts near the smallest tilt alignment angle (roughly the middle)
 
 ++++++++++
 v0.0.1-rc3 (30/11/2022)

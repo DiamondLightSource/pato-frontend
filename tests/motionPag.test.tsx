@@ -1,7 +1,7 @@
 import MotionPagination from "../src/components/motion/pagination";
 import React from "react";
 import { server, renderWithProviders } from "../src/utils/test-utils";
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 
 beforeAll(() => server.listen());
 
@@ -17,6 +17,18 @@ describe("MotionPagination", () => {
     renderWithProviders(<MotionPagination total={112} />);
 
     expect(screen.getByDisplayValue("112")).toBeInTheDocument();
+  });
+
+  it("should set middle item as default if startFrom is middle", async () => {
+    renderWithProviders(<MotionPagination startFrom='middle' total={90} />);
+
+    expect(screen.getByDisplayValue("45")).toBeInTheDocument();
+  });
+
+  it("should set first item as default if startFrom is start", async () => {
+    renderWithProviders(<MotionPagination startFrom='start' total={90} />);
+
+    expect(screen.getByDisplayValue("1")).toBeInTheDocument();
   });
 
   it("should not allow item greater than the item count to be set", async () => {
