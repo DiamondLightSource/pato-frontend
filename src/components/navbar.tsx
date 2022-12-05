@@ -116,7 +116,7 @@ const Navbar: FunctionComponent = (): JSX.Element => {
                 <MenuItem
                   onClick={() => {
                     sessionStorage.removeItem("token");
-                    window.location.href = `${process.env.REACT_APP_API_ENDPOINT}logout?redirect_uri=${window.location.href}`;
+                    window.location.href = `${process.env.REACT_APP_AUTH_ENDPOINT}logout?redirect_uri=${window.location.href}`;
                   }}
                 >
                   Logout
@@ -125,7 +125,7 @@ const Navbar: FunctionComponent = (): JSX.Element => {
             </Menu>
           ) : (
             <Link
-              href={`${process.env.REACT_APP_API_ENDPOINT}authorise?redirect_uri=${encodeURIComponent(
+              href={`${process.env.REACT_APP_AUTH_ENDPOINT}authorise?redirect_uri=${encodeURIComponent(
                 window.location.href
               )}`}
             >
