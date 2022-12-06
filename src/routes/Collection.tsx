@@ -52,7 +52,7 @@ const Collection = () => {
     /* and undefined tomogram (waiting for information client-side) and a valid tomogram */
     setTomogram(undefined);
     client
-      .safe_get(`dataCollections?group=${params.groupId}&limit=1&page=${params.collectionIndex}`)
+      .safe_get(`dataGroups/${params.groupId}/collections?limit=1&page=${params.collectionIndex}`)
       .then((response) => {
         if (response.data.total && response.data.items) {
           setPageCount(response.data.total);

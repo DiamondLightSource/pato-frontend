@@ -93,7 +93,7 @@ const router = createBrowserRouter([
         element: (
           <GenericListing
             headers={groupsHeaders}
-            endpoint='dataCollectionGroups'
+            endpoint='dataGroups'
             heading='Data Collection Groups'
             routeKeys={["dataCollectionGroupId"]}
           />

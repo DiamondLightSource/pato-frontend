@@ -102,7 +102,7 @@ export const handlers = [
     )
   }),
 
-  rest.get("http://localhost/dataCollections", async (req, res, ctx) => {
+  rest.get("http://localhost/dataGroups/:id/collections", async (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.delay(0),
