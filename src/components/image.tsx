@@ -41,7 +41,7 @@ const ImageWrapper: FunctionComponent<ImageProp> = ({ title, src, width = "100%"
       <Image src={src} margin='auto' maxH='100%' paddingBottom={5} fallbackSrc='/images/no-image.png' />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay bg='rgba(0,0,0,0.8)' opacity='0.5' />
-        <ModalContent bg='none' w='fit-content' maxW='90vw'>
+        <ModalContent dropShadow='none' bg='none' w='fit-content' maxW='90vw'>
           <ModalHeader w='80%' color='diamond.200' p={0}>
             {title}
           </ModalHeader>
@@ -69,6 +69,7 @@ const ImageWrapper: FunctionComponent<ImageProp> = ({ title, src, width = "100%"
                 onClick={(e) => zoom(e)}
                 src={src}
                 fallbackSrc='/images/no-image.png'
+                objectPosition='top'
               />
             )}
           </Box>
