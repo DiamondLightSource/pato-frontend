@@ -1,5 +1,4 @@
 import { Box, Text, Grid, GridItem, Skeleton } from "@chakra-ui/react";
-import { FunctionComponent } from "react";
 
 export interface Info {
   /** Label/description (title) for a display value */
@@ -10,7 +9,7 @@ export interface Info {
   wide?: boolean;
 }
 
-interface InfoProp {
+interface InfoProps {
   info: Info[];
   /** Height of the information group component */
   height?: number | string;
@@ -20,7 +19,7 @@ interface InfoProp {
   py?: number;
 }
 
-const InfoGroup: FunctionComponent<InfoProp> = ({ info, height = "100%", cols = 2, py = 0 }): JSX.Element => (
+const InfoGroup = ({ info, height = "100%", cols = 2, py = 0 }: InfoProps) => (
   <Box py={py} h={height} overflow='scroll'>
     {info.length < 1 && <Skeleton h='100%' />}
     <Grid templateColumns={`repeat(${cols}, minmax(0, 1fr))`} maxH='100%' gap={1}>

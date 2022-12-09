@@ -1,10 +1,9 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react";
 
-import { FunctionComponent } from "react";
 import { MdHome } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 
-const Breadcrumbs: FunctionComponent = (): JSX.Element => {
+const Breadcrumbs = () => {
   const location = useLocation();
 
   const pathCrumbs = location.pathname.split("/").filter((name) => {

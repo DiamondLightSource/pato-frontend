@@ -20,7 +20,7 @@ import Image from "../image";
 import InfoGroup, { Info } from "../infogroup";
 import Scatter from "../scatter";
 import MotionPagination from "./pagination";
-import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { MdComment } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -46,7 +46,7 @@ interface MotionData {
   info: Info[];
 }
 
-interface MotionProp {
+interface MotionProps {
   /** ID for the parent of the motion correction. Could be a tomogram or something else in the future. */
   parentId: number;
   /** Whether parent is a tomogram or data collection */
@@ -105,7 +105,7 @@ const calcDarkImages = (total: number, rawTotal: number) => {
   return `Dark Images: ${rawTotal - total}`;
 };
 
-const Tomogram: FunctionComponent<MotionProp> = ({ parentId, onMotionChanged, parentType }): JSX.Element => {
+const Tomogram = ({ parentId, onMotionChanged, parentType }: MotionProps) => {
   const [page, setPage] = useState<number | undefined>();
   const [motion, setMotion] = useState<MotionData>({ drift: [], total: 0, rawTotal: 0, info: [] });
   const [mgImage, setMgImage] = useState("");

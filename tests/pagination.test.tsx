@@ -3,7 +3,7 @@ import { renderWithProviders } from "../src/utils/test-utils";
 import Pagination from "../src/components/pagination";
 import React from "react";
 
-describe("Breadcrumbs", () => {
+describe("Pagination", () => {
   it("should display first 5 pages when there are more than 5 pages", () => {
     renderWithProviders(<Pagination total={90} />);
     for (let i = 1; i < 6; i++) {

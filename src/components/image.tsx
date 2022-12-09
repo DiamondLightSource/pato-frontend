@@ -9,9 +9,9 @@ import {
   ModalOverlay,
   useDisclosure,
 } from "@chakra-ui/react";
-import { FunctionComponent, MouseEvent, useState } from "react";
+import { MouseEvent, useState } from "react";
 
-interface ImageProp {
+interface ImageProps {
   /** Title for the image */
   title: string;
   /** Source path for the image */
@@ -22,7 +22,7 @@ interface ImageProp {
   height?: string;
 }
 
-const ImageWrapper: FunctionComponent<ImageProp> = ({ title, src, width = "100%", height = "100%" }): JSX.Element => {
+const ImageWrapper = ({ title, src, width = "100%", height = "100%" }: ImageProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: isZoomed, onToggle: onZoomToggle } = useDisclosure();
   const [zoomCords, setZoomCords] = useState("translate(-50%, -50%)");

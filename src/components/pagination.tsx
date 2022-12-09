@@ -1,9 +1,9 @@
 import { Box, HStack, Select, Button, Text, Spacer } from "@chakra-ui/react";
-import { ChangeEvent, FunctionComponent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 type ChangeCallback = (page: number, itemsPerPage: number) => void;
 
-interface PaginationProp {
+interface PaginationProps {
   /** Total number of items to paginate */
   total: number;
   /** Array with all available "items per page" amounts */
@@ -14,12 +14,12 @@ interface PaginationProp {
   onChange?: ChangeCallback;
 }
 
-const Pagination: FunctionComponent<PaginationProp> = ({
+const Pagination = ({
   total,
   possibleItemsPerPage = [5, 10, 15, 20, 30, 50, 100],
   preselected = 3,
   onChange,
-}): JSX.Element => {
+}: PaginationProps) => {
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(possibleItemsPerPage[preselected]);
   const [pageAmount, setPageAmount] = useState(1);

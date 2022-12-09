@@ -1,9 +1,7 @@
 import Motion from "../src/components/motion/motion";
 import React from "react";
-import { server, renderWithProviders } from "../src/utils/test-utils";
+import { renderWithProviders } from "../src/utils/test-utils";
 import { screen, waitFor } from "@testing-library/react";
-
-beforeAll(() => server.listen());
 
 describe("Motion", () => {
   window.URL.createObjectURL = jest.fn();
@@ -42,6 +40,3 @@ describe("Motion", () => {
     });
   });
 });
-
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());

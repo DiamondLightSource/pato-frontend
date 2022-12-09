@@ -3,14 +3,14 @@ import Image from "./image";
 import InfoGroup, { Info } from "./infogroup";
 import Scatter from "./scatter";
 import Motion from "./motion/motion";
-import { Dispatch, FunctionComponent, SetStateAction, useCallback, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 import { MdSettings } from "react-icons/md";
 import { client } from "../utils/api/client";
 import { ScatterDataPoint } from "chart.js";
 import { driftPlotOptions } from "../utils/plot";
 import { CtfData, TomogramData } from "../utils/interfaces";
 
-interface TomogramProp {
+interface TomogramProps {
   /* Tomogram data */
   tomogram: TomogramData | null;
   /* Tomogram title (generally the data collection comment) */
@@ -34,7 +34,7 @@ const resolutionPlotOptions = {
   scales: { y: { max: 50, title: { display: true, text: "Å" } } },
 };
 
-const Tomogram: FunctionComponent<TomogramProp> = ({ tomogram, title, collection }): JSX.Element => {
+const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
   const [sliceImage, setSliceImage] = useState("");
   const [shiftData, setShiftData] = useState<ScatterDataPoint[]>([]);
   const [ctfData, setCtfData] = useState<CtfData>();

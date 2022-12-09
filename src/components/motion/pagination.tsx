@@ -1,9 +1,9 @@
 import { Button, HStack, InputRightAddon, InputGroup, Input, Skeleton } from "@chakra-ui/react";
-import { FunctionComponent, useEffect, useState, FocusEvent as ReactFocusEvent, useCallback } from "react";
+import { useEffect, useState, FocusEvent as ReactFocusEvent, useCallback } from "react";
 
 type ChangeCallback = (page: number) => void;
 
-interface MotionPaginationProp {
+interface MotionPaginationProps {
   total: number;
   size?: "xs" | "md";
   displayDefault?: string;
@@ -11,14 +11,14 @@ interface MotionPaginationProp {
   startFrom?: "start" | "middle" | "end";
 }
 
-const MotionPagination: FunctionComponent<MotionPaginationProp> = ({
+const MotionPagination = ({
   total,
   onChange,
   size = "xs",
   displayDefault,
   startFrom = "end",
-}): JSX.Element => {
-  const [value, setValue] = useState<string|undefined>();
+}: MotionPaginationProps) => {
+  const [value, setValue] = useState<string | undefined>();
 
   const setPage = useCallback(
     (page: number) => {
@@ -70,11 +70,11 @@ const MotionPagination: FunctionComponent<MotionPaginationProp> = ({
   };
 
   if (value === undefined) {
-    return <Skeleton h="20px" w={size === "xs" ? "210px" : "295px"}/>
+    return <Skeleton h='20px' w={size === "xs" ? "210px" : "295px"} />;
   }
 
   return (
-      <HStack py={1} maxW={size === "xs" ? "210px" : "295px"}>
+    <HStack py={1} maxW={size === "xs" ? "210px" : "295px"}>
       <Button size={size} onClick={() => setPage(1)}>
         &lt;&lt;
       </Button>
