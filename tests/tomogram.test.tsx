@@ -1,10 +1,8 @@
 import Tomogram from "../src/components/tomogram";
 import React from "react";
-import { server, renderWithProviders } from "../src/utils/test-utils";
+import { renderWithProviders } from "../src/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { Accordion } from "@chakra-ui/react";
-
-beforeAll(() => server.listen());
 
 describe("Tomogram", () => {
   window.URL.createObjectURL = jest.fn();
@@ -94,6 +92,3 @@ describe("Tomogram", () => {
     });
   });
 });
-
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());

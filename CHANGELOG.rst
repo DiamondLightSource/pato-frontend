@@ -3,6 +3,15 @@ Changelog
 ==========
 
 ++++++++++
+v0.0.1 (14/12/2022)
+++++++++++
+
+**Changed**
+
+- Images now stick to title on modals, instead of floating to middle
+- First "actual release"
+
+++++++++++
 v0.0.1-rc4 (2/12/2022)
 ++++++++++
 

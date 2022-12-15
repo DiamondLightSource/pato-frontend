@@ -1,4 +1,4 @@
-import { FunctionComponent, ReactElement } from "react";
+import { ReactElement } from "react";
 import {
   Box,
   Flex,
@@ -35,7 +35,7 @@ interface NavLinksProps {
   loggedIn: boolean;
 }
 
-const NavLink = ({ children, link }: NavLinkProps): JSX.Element => (
+const NavLink = ({ children, link }: NavLinkProps) => (
   <Link
     px={2}
     py={1}
@@ -52,7 +52,7 @@ const NavLink = ({ children, link }: NavLinkProps): JSX.Element => (
   </Link>
 );
 
-const NavLinks = ({ loggedIn }: NavLinksProps): JSX.Element => (
+const NavLinks = ({ loggedIn }: NavLinksProps) => (
   <div>
     {loggedIn &&
       links.map((link) => (
@@ -63,7 +63,7 @@ const NavLinks = ({ loggedIn }: NavLinksProps): JSX.Element => (
   </div>
 );
 
-const Navbar: FunctionComponent = (): JSX.Element => {
+const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const user = useAppSelector((state) => state.auth.user);
   const loading = useAppSelector((state) => state.ui.loading);

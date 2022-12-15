@@ -1,8 +1,7 @@
 import { VStack, Skeleton, Heading } from "@chakra-ui/react";
-import { FunctionComponent } from "react";
 import { useAppSelector } from "../store/hooks";
 
-const CollectionLoader: FunctionComponent = (): JSX.Element => {
+const CollectionLoader = () => {
   const loading = useAppSelector((state) => state.ui.loading);
 
   if (loading) {

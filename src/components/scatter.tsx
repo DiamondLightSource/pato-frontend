@@ -23,11 +23,11 @@ import {
 } from "chart.js";
 import { Scatter } from "react-chartjs-2";
 
-import { FunctionComponent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
-interface ScatterProp {
+interface ScatterProps {
   /** Title for the scatter plot */
   title: string;
   /** Datapoints */
@@ -52,15 +52,17 @@ const preloadedData = {
 const defaultOptions = {
   maintainAspectRatio: false,
   plugins: { legend: { display: false } },
+  spanGaps: true,
+  showLine: false,
 };
 
-const ScatterWrapper: FunctionComponent<ScatterProp> = ({
+const ScatterWrapper = ({
   title,
   scatterData,
   options = defaultOptions,
   width = "100%",
   height = "100%",
-}): JSX.Element => {
+}: ScatterProps) => {
   const [data, setData] = useState(preloadedData);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
