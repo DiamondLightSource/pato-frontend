@@ -126,7 +126,7 @@ export const handlers = [
   }),
 
   rest.get('http://localhost/proposals', (req, res, ctx) => {
-    const valueAppend = req.url.searchParams.get("s") ?? ""
+    const valueAppend = req.url.searchParams.get("search") ?? ""
 
     return res(
       ctx.status(200),
