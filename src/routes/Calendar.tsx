@@ -12,12 +12,12 @@ const Calendar = (): JSX.Element => {
   const navigate = useNavigate();
 
   const eventClick = (e: EventClickArg) => {
-    navigate(`/proposals/${e.event.extendedProps.proposalId}/visits/${e.event.id}`);
+    navigate(`/proposals/${e.event.extendedProps.proposalId}/sessions/${e.event.id}`);
   };
 
   useEffect(() => {
     document.title = "eBIC » Calendar";
-    client.safe_get("visits?minDate=2022-10-01&maxDate=2022-10-31").then((response) => {
+    client.safe_get("sessions?minDate=2022-10-01&maxDate=2022-10-31").then((response) => {
       const events = response.data.map((event: Record<string, any>) => ({
         id: event.sessionId,
         start: event.startDate,

@@ -56,7 +56,7 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
     let builtEndpoint = buildEndpoint(`${endpoint}`, params, itemsPerPage, page);
 
     if (search) {
-      builtEndpoint += `&s=${search}`;
+      builtEndpoint += `&search=${search}`;
     }
 
     client

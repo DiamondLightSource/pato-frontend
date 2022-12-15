@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../utils/api/client'
 
-interface authState {
+interface AuthState {
   user: {
     /** Display name for the user */
     name: string,
@@ -19,7 +19,7 @@ export const checkUser = createAsyncThunk('auth/checkUser', async (_, {rejectWit
   return user.data
 })
 
-const initialState: authState = {
+const initialState: AuthState = {
   user: null
 }
 

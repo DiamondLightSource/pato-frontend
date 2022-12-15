@@ -34,7 +34,7 @@ const theme = extendTheme({
 const proposalHeaders = [
   { key: "proposalCode", label: "Code" },
   { key: "proposalNumber", label: "Number" },
-  { key: "visits", label: "Visits" },
+  { key: "sessions", label: "sessions" },
   { key: "title", label: "Title" },
 ];
 
@@ -78,18 +78,18 @@ const router = createBrowserRouter([
       },
       {
         path: "/proposals/:propid",
-        element: <Navigate to='visits' replace />,
+        element: <Navigate to='sessions' replace />,
       },
       {
-        path: "/proposals/:propId/visits",
-        element: <GenericListing headers={visitHeaders} endpoint='visits' heading='Visits' routeKeys={["sessionId"]} />,
+        path: "/proposals/:propId/sessions",
+        element: <GenericListing headers={visitHeaders} endpoint='sessions' heading='sessions' routeKeys={["sessionId"]} />,
       },
       {
-        path: "/proposals/:propid/visits/:visitId",
+        path: "/proposals/:propid/sessions/:visitId",
         element: <Navigate to='groups' replace />,
       },
       {
-        path: "/proposals/:propId/visits/:visitId/groups",
+        path: "/proposals/:propId/sessions/:visitId/groups",
         element: (
           <GenericListing
             headers={groupsHeaders}
@@ -100,15 +100,15 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/proposals/:propId/visits/:visitId/groups/:groupId/",
+        path: "/proposals/:propId/sessions/:visitId/groups/:groupId/",
         element: <Navigate to='collections' replace />,
       },
       {
-        path: "/proposals/:propId/visits/:visitId/groups/:groupId/collections/",
+        path: "/proposals/:propId/sessions/:visitId/groups/:groupId/collections/",
         element: <Navigate to='1' replace />,
       },
       {
-        path: "/proposals/:propId/visits/:visitId/groups/:groupId/collections/:collectionIndex",
+        path: "/proposals/:propId/sessions/:visitId/groups/:groupId/collections/:collectionIndex",
         element: <Collection />,
       },
     ],
