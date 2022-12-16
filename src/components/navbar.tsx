@@ -40,11 +40,10 @@ const NavLink = ({ children, link }: NavLinkProps) => (
     px={2}
     py={1}
     as={LinkRouter}
-    rounded={"md"}
-    color={"gray.200"}
+    color='diamond.100'
     _hover={{
-      textDecoration: "none",
-      bg: "diamond.700",
+      textDecoration: "underline",
+      color: "diamond.400",
     }}
     to={link}
   >
@@ -78,7 +77,7 @@ const Navbar = () => {
           display={{ md: "none" }}
           onClick={isOpen ? onClose : onOpen}
         />
-        <HStack spacing={8} alignItems={"center"}>
+        <HStack h='100%' spacing={8} alignItems={"center"}>
           <LinkRouter to={"/"}>
             <Box maxW='5rem'>
               <Image
@@ -89,7 +88,7 @@ const Navbar = () => {
               />
             </Box>
           </LinkRouter>
-          <HStack as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
+          <HStack h='100%' as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
             <NavLinks loggedIn={user !== null} />
           </HStack>
         </HStack>

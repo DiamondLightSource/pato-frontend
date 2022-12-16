@@ -31,6 +31,12 @@ const MotionPagination = ({
   );
 
   useEffect(() => {
+    if (displayDefault) {
+      setValue(displayDefault);
+    }
+  }, [displayDefault]);
+
+  useEffect(() => {
     if (value !== undefined || total === 0) {
       return;
     }
@@ -49,10 +55,8 @@ const MotionPagination = ({
           setValue("1");
           break;
       }
-    } else {
-      setValue(displayDefault ?? "1");
     }
-  }, [total, displayDefault, startFrom, setPage, value]);
+  }, [total, startFrom, displayDefault, setPage, value]);
 
   const editPage = (event: ReactFocusEvent<HTMLInputElement>) => {
     let newPage = parseInt(event.target.value);

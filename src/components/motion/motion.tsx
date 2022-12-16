@@ -29,10 +29,9 @@ import { client } from "../../utils/api/client";
 import { parseData } from "../../utils/generic";
 import { driftPlotOptions } from "../../utils/plot";
 import { ScatterDataPoint } from "chart.js";
+import { buildEndpoint } from "../../utils/api/endpoint";
 
 interface MotionData {
-  /** Datapoints for the drift plot */
-  drift: ScatterDataPoint[];
   /** Total number of tilt alignment images available */
   total: number;
   /** Total number of motion correction images available (including tilt alignment) */
@@ -53,8 +52,6 @@ interface MotionProps {
   parentType: "tomograms" | "dataCollections";
   /** Callback for when a new motion correction item is requested and received */
   onMotionChanged?: (motion: Record<string, any>) => void;
-  /** Whether or not the default should be the middle, start or end */
-  startFrom?: "start" | "middle" | "end";
 }
 
 const motionConfig = {
@@ -107,7 +104,8 @@ const calcDarkImages = (total: number, rawTotal: number) => {
 
 const Tomogram = ({ parentId, onMotionChanged, parentType }: MotionProps) => {
   const [page, setPage] = useState<number | undefined>();
-  const [motion, setMotion] = useState<MotionData>({ drift: [], total: 0, rawTotal: 0, info: [] });
+  const [motion, setMotion] = useState<MotionData>({ total: 0, rawTotal: 0, info: [] });
+  const [drift, setDrift] = useState<ScatterDataPoint[]>([]);
   const [mgImage, setMgImage] = useState("");
   const [fftImage, setFftImage] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -123,32 +121,40 @@ const Tomogram = ({ parentId, onMotionChanged, parentType }: MotionProps) => {
     });
   };
 
+  const flattenMovieData = (rawData: Record<string, any>) => {
+    let flattenedData = { rawTotal: rawData.rawTotal, total: rawData.total };
+    const items = rawData.items[0];
+
+    for (let key in items) {
+      Object.assign(flattenedData, items[key]);
+    }
+
+    return flattenedData;
+  };
+
   useEffect(() => {
     dispatch(setLoading(true));
 
-    if (page === undefined && parentType === "tomograms") {
-      client
-        .safe_get(`${parentType}/${parentId}/motion`)
-        .then((response) => {
-          setMotion(parseData(response.data, motionConfig) as MotionData);
-        })
-        .finally(() => dispatch(setLoading(false)));
-    } else {
-      client
-        .safe_get(`${parentType}/${parentId}/motion${page === undefined ? " " : `?nth=${page}`}`)
-        .then((response) => {
-          setMotion(parseData(response.data, motionConfig) as MotionData);
-          if (response.data.movieId !== undefined) {
-            setImage(`image/micrograph/${response.data.movieId}`, setMgImage);
-            setImage(`image/fft/${response.data.movieId}`, setFftImage);
+    client
+      .safe_get(buildEndpoint(`${parentType}/${parentId}/motion`, {}, 1, page ?? 0))
+      .then((response) => {
+        setMotion(parseData(flattenMovieData(response.data), motionConfig) as MotionData);
+        if (page !== undefined || parentType === "dataCollections") {
+          const movie = response.data.items[0].Movie;
+          if (movie !== undefined) {
+            setImage(`movies/${movie.movieId}/micrograph`, setMgImage);
+            setImage(`movies/${movie.movieId}/fft`, setFftImage);
+            client.safe_get(`movies/${movie.movieId}/drift`).then((response) => {
+              setDrift(response.data.items);
+            });
           }
 
           if (onMotionChanged !== undefined) {
             onMotionChanged(response.data);
           }
-        })
-        .finally(() => dispatch(setLoading(false)));
-    }
+        }
+      })
+      .finally(() => dispatch(setLoading(false)));
   }, [page, parentId, parentType, dispatch, navigate, onMotionChanged]);
 
   return (
@@ -188,7 +194,7 @@ const Tomogram = ({ parentId, onMotionChanged, parentType }: MotionProps) => {
           <Image src={fftImage} title='FFT Theoretical' height='100%' />
         </GridItem>
         <GridItem h='25vh' minW='100%' colSpan={{ base: 2, md: 1 }}>
-          <Scatter title='Drift' options={driftPlotOptions} scatterData={motion.drift} />
+          <Scatter title='Drift' options={driftPlotOptions} scatterData={drift} />
         </GridItem>
       </Grid>
       <Drawer isOpen={isOpen} placement='right' onClose={onClose}>

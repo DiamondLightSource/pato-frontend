@@ -3,22 +3,26 @@ import { rest } from 'msw'
 export const handlers = [
   rest.get('http://localhost/tomograms/:id/motion', (req, res, ctx) => {
     let data = {}
+    const items = [{Movie: {}, CTF: {}, MotionCorrection: {}, TiltImageAlignment: {}}]
 
     switch(req.params.id) {
       case "1":
         data = {
+          items,
           total: 10,
           rawTotal: 20
         }
         break;
       case "2":
         data = {
+          items,
           total: 0,
           rawTotal: 20
         }
         break;
       case "3":
         data = {
+          items,
           total: 0,
           rawTotal: 20,
           comments_CTF: "comment!",
@@ -34,15 +38,7 @@ export const handlers = [
   }),
 
   rest.get('http://localhost/dataCollections/:id/motion', (req, res, ctx) => {
-    let data = {}
-
-    switch(req.params.id) {
-      case "2":
-        data = {
-          total: 10,
-        }
-        break;
-    }
+    let data = {items: [{Movie: {}, CTF: {}, MotionCorrection: {}}], total: 10}
 
     return res(
       ctx.status(200),
@@ -50,14 +46,14 @@ export const handlers = [
     )
   }),
 
-  rest.get('http://localhost/image/fft/:id', (req, res, ctx) => {
+  rest.get('http://localhost/movies/fft/:id', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.body("")
     )
   }),
 
-  rest.get('http://localhost/image/micrograph/:id', (req, res, ctx) => {
+  rest.get('http://localhost/movies/micrograph/:id', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.body("")
@@ -126,7 +122,7 @@ export const handlers = [
   }),
 
   rest.get('http://localhost/proposals', (req, res, ctx) => {
-    const valueAppend = req.url.searchParams.get("s") ?? ""
+    const valueAppend = req.url.searchParams.get("search") ?? ""
 
     return res(
       ctx.status(200),

@@ -82,7 +82,9 @@ const router = createBrowserRouter([
       },
       {
         path: "/proposals/:propId/sessions",
-        element: <GenericListing headers={visitHeaders} endpoint='sessions' heading='sessions' routeKeys={["sessionId"]} />,
+        element: (
+          <GenericListing headers={visitHeaders} endpoint='sessions' heading='Sessions' routeKeys={["sessionId"]} />
+        ),
       },
       {
         path: "/proposals/:propid/sessions/:visitId",

@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v0.0.2 (15/12/2022)
+++++++++++
+
+**Added**
+
+- User can now pick between displaying all data collections, or only ones with valid tomograms
+
+++++++++++
 v0.0.1 (14/12/2022)
 ++++++++++
 
