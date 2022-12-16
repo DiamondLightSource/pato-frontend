@@ -22,10 +22,9 @@ export const handlers = [
         break;
       case "3":
         data = {
-          items,
+          items: [{CTF: {comments: "comment!"}, Movie: {}}],
           total: 0,
           rawTotal: 20,
-          comments_CTF: "comment!",
           refinedTiltAxis: 958
         }
         break;
@@ -46,14 +45,14 @@ export const handlers = [
     )
   }),
 
-  rest.get('http://localhost/movies/fft/:id', (req, res, ctx) => {
+  rest.get('http://localhost/movies/:id/fft', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.body("")
     )
   }),
 
-  rest.get('http://localhost/movies/micrograph/:id', (req, res, ctx) => {
+  rest.get('http://localhost/movies/:id/micrograph', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.body("")
@@ -64,6 +63,13 @@ export const handlers = [
     return res(
       ctx.status(200),
       ctx.body("")
+    )
+  }),
+
+  rest.get('http://localhost/movies/:id/drift', (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({items: [{x: 1, y:1}]})
     )
   }),
 
@@ -103,7 +109,7 @@ export const handlers = [
       ctx.status(200),
       ctx.delay(0),
       ctx.json(
-        {total: 5,
+        {total: req.url.searchParams.get("onlyTomograms") ? 3 : 5,
         items: [{pixelSizeOnImage: 50, voltage: 1, imageSize: 1}]
         , page: req.url.searchParams.get("page") ?? 1})
     )

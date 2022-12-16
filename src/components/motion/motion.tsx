@@ -84,9 +84,9 @@ const motionConfig = {
     "drift",
     "total",
     "rawTotal",
-    "comments_MotionCorrection",
-    "comments_CTF",
     "refinedTiltAxis",
+    "comments_CTF",
+    "comments_MotionCorrection",
   ],
 };
 
@@ -122,11 +122,17 @@ const Tomogram = ({ parentId, onMotionChanged, parentType }: MotionProps) => {
   };
 
   const flattenMovieData = (rawData: Record<string, any>) => {
-    let flattenedData = { rawTotal: rawData.rawTotal, total: rawData.total };
+    let flattenedData: Record<string, string> = { rawTotal: rawData.rawTotal, total: rawData.total };
     const items = rawData.items[0];
 
-    for (let key in items) {
-      Object.assign(flattenedData, items[key]);
+    for (let type in items) {
+      for (let [key, value] of Object.entries(items[type])) {
+        if (key !== "comments") {
+          flattenedData[key] = value as string;
+        } else {
+          flattenedData[`${key}_${type}`] = value as string;
+        }
+      }
     }
 
     return flattenedData;
