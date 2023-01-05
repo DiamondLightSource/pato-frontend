@@ -4,11 +4,11 @@ const buildEndpoint = (endpoint: string, params: Params, itemsPerPage: number, p
   let builtEndpoint = `${endpoint}?limit=${itemsPerPage}&page=${page - 1}`;
   switch (endpoint) {
     case "sessions":
-      return `proposals/${params.propId}/${builtEndpoint}`;
+      return `${builtEndpoint}&proposal=${params.propId}`;
     case "dataGroups":
-      return `sessions/${params.visitId}/${builtEndpoint}`;
-    case "collections":
-      return `dataGroups/${params.groupId}/${builtEndpoint}`;
+      return `${builtEndpoint}&proposal=${params.propId}&session=${params.visitId}`;
+    case "dataCollections":
+      return `${builtEndpoint}&groupId=${params.groupId}`;
     default:
       return builtEndpoint;
   }

@@ -126,11 +126,13 @@ const Tomogram = ({ parentId, onMotionChanged, parentType }: MotionProps) => {
     const items = rawData.items[0];
 
     for (let type in items) {
-      for (let [key, value] of Object.entries(items[type])) {
-        if (key !== "comments") {
-          flattenedData[key] = value as string;
-        } else {
-          flattenedData[`${key}_${type}`] = value as string;
+      if (items[type] !== null) {
+        for (let [key, value] of Object.entries(items[type])) {
+          if (key !== "comments") {
+            flattenedData[key] = value as string;
+          } else {
+            flattenedData[`${key}_${type}`] = value as string;
+          }
         }
       }
     }

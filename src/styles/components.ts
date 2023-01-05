@@ -47,12 +47,22 @@ const Text = defineStyleConfig({
 
 const Button = defineStyleConfig({
     defaultProps: {
-      colorScheme: "diamond",
+      variant: "default"
     },
     variants: {
+      default: {
+        color: "diamond.50",
+        bg: "diamond.600",
+        _hover: {
+          bg: "diamond.500",
+          _disabled: {
+            bg: "diamond.600"
+          }
+        }
+      },
       pgSelected: {
         bg: "diamond.500",
-        color: "#FFF",
+        color: "diamond.50",
         cursor: "default"
       },
       pgNotSelected: {

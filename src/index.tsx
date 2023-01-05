@@ -42,6 +42,7 @@ const visitHeaders = [
   { key: "startDate", label: "Start Date" },
   { key: "endDate", label: "End Date" },
   { key: "beamLineName", label: "Beamline" },
+  { key: "collectionGroups", label: "Collection Groups" },
   { key: "visit_number", label: "Visit" },
 ];
 
@@ -49,6 +50,7 @@ const groupsHeaders = [
   { key: "dataCollectionGroupId", label: "ID" },
   { key: "comments", label: "Comments" },
   { key: "collections", label: "Collections" },
+  { key: "experimentTypeName", label: "Experiment Type" },
 ];
 
 const router = createBrowserRouter([
@@ -83,7 +85,7 @@ const router = createBrowserRouter([
       {
         path: "/proposals/:propId/sessions",
         element: (
-          <GenericListing headers={visitHeaders} endpoint='sessions' heading='Sessions' routeKeys={["sessionId"]} />
+          <GenericListing headers={visitHeaders} endpoint='sessions' heading='Sessions' routeKeys={["visit_number"]} />
         ),
       },
       {

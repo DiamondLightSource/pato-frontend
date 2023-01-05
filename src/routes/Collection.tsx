@@ -59,7 +59,7 @@ const Collection = () => {
     client
       .safe_get(
         `${buildEndpoint(
-          "collections",
+          "dataCollections",
           params,
           1,
           parseInt(params.collectionIndex ?? "1")
