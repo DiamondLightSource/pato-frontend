@@ -6,9 +6,10 @@ import { ChakraProvider, createStandaloneToast, extendTheme } from "@chakra-ui/r
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import Root from "./routes/Root";
 import GenericListing from "./routes/GenericListing";
-import Collection from "./routes/Collection";
+import Tomogram from "./routes/Tomogram";
+import SingleParticle from "./routes/SPA"
 import Error from "./routes/Error";
-import { Accordion, Button, Text, Heading, Table } from "./styles/components";
+import { Accordion, Button, Text, Heading, Table, Card} from "./styles/components";
 import Calendar from "./routes/Calendar";
 import { colours } from "./styles/colours";
 import Home from "./routes/Home";
@@ -28,7 +29,7 @@ if (process.env.REACT_APP_AUTH_TYPE === "dummy") {
 
 const theme = extendTheme({
   colors: colours,
-  components: { Accordion, Button, Text, Heading, Table },
+  components: { Accordion, Button, Text, Heading, Table, Card },
 });
 
 const proposalHeaders = [
@@ -53,6 +54,15 @@ const groupsHeaders = [
   { key: "experimentTypeName", label: "Experiment Type" },
 ];
 
+const handleGroupClicked = (item: Record<string, string | number>) => {
+  switch (item.experimentTypeName) {
+    case "Single Particle":
+      return `${item.dataCollectionGroupId}/spa`
+    default:
+      return `${item.dataCollectionGroupId}/tomograms`
+  }
+}
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -70,7 +80,7 @@ const router = createBrowserRouter([
             headers={proposalHeaders}
             endpoint='proposals'
             heading='Proposals'
-            routeKeys={["proposalCode", "proposalNumber"]}
+            makePathCallback={(item) => [item.proposalCode, item.proposalNumber].join("")}
           />
         ),
       },
@@ -85,7 +95,7 @@ const router = createBrowserRouter([
       {
         path: "/proposals/:propId/sessions",
         element: (
-          <GenericListing headers={visitHeaders} endpoint='sessions' heading='Sessions' routeKeys={["visit_number"]} />
+          <GenericListing headers={visitHeaders} endpoint='sessions' heading='Sessions' makePathCallback={(item) => item.visit_number.toString()} />
         ),
       },
       {
@@ -99,21 +109,21 @@ const router = createBrowserRouter([
             headers={groupsHeaders}
             endpoint='dataGroups'
             heading='Data Collection Groups'
-            routeKeys={["dataCollectionGroupId"]}
+            makePathCallback={(item) => handleGroupClicked(item)}
           />
         ),
       },
       {
-        path: "/proposals/:propId/sessions/:visitId/groups/:groupId/",
-        element: <Navigate to='collections' replace />,
-      },
-      {
-        path: "/proposals/:propId/sessions/:visitId/groups/:groupId/collections/",
+        path: "/proposals/:propId/sessions/:visitId/groups/:groupId/tomograms/",
         element: <Navigate to='1' replace />,
       },
       {
-        path: "/proposals/:propId/sessions/:visitId/groups/:groupId/collections/:collectionIndex",
-        element: <Collection />,
+        path: "/proposals/:propId/sessions/:visitId/groups/:groupId/tomograms/:collectionIndex",
+        element: <Tomogram />,
+      },
+      {
+        path: "/proposals/:propId/sessions/:visitId/groups/:groupId/spa/",
+        element: <SingleParticle />,
       },
     ],
   },

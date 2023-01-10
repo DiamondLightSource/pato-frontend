@@ -28,10 +28,10 @@ interface TableProps {
   }[];
   endpoint: string;
   heading: string;
-  routeKeys: string[];
+  makePathCallback?: (item: Record<string, string | number>) => string;
 }
 
-const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) => {
+const GenericListing = ({ headers, endpoint, heading, makePathCallback}: TableProps) => {
   const [data, setData] = useState<Array<Record<string, string | number>>>([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(10);
@@ -42,10 +42,6 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
   const navigate = useNavigate();
   const params = useParams();
   const dispatch = useAppDispatch();
-
-  const getRouteKey = (item: Record<string, any>) => {
-    return routeKeys.map((key) => item[key]).join("");
-  };
 
   useEffect(() => {
     document.title = `eBIC » ${heading}`;
@@ -105,7 +101,15 @@ const GenericListing = ({ headers, endpoint, heading, routeKeys }: TableProps) =
             </Thead>
             <Tbody cursor='pointer'>
               {data.map((item, i) => (
-                <Tr h='2vh' key={i} onClick={() => navigate(getRouteKey(item))}>
+                <Tr
+                  h='2vh'
+                  key={i}
+                  onClick={() => {
+                    if (makePathCallback) {
+                      navigate(makePathCallback(item));
+                    }
+                  }}
+                >
                   {headers.map((header) => (
                     <Td key={header.key}>{item[header.key]}</Td>
                   ))}

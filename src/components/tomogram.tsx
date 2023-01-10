@@ -10,6 +10,10 @@ import { ScatterDataPoint } from "chart.js";
 import { driftPlotOptions } from "../utils/plot";
 import { CtfData, TomogramData } from "../utils/interfaces";
 
+/* The reason why this is a separate component is that in the future, tomograms might no longer have a 1:1
+** relationship with data collections. Should that happen, just reuse this component. 
+*/
+
 interface TomogramProps {
   /* Tomogram data */
   tomogram: TomogramData | null;

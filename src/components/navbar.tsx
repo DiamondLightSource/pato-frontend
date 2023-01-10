@@ -95,23 +95,20 @@ const Navbar = () => {
         <Flex alignItems={"center"}>
           {user !== null ? (
             <Menu>
-              <MenuButton
-                borderRadius={12}
-                bg='diamond.500'
-                as={Button}
-                rounded={"full"}
-                variant={"link"}
-                cursor={"pointer"}
-                minW={0}
-                _hover={{ bg: "diamond.600" }}
-              >
-                <Avatar size='xs' />
-                <Text verticalAlign='bottom' px={3} color='diamond.100' display='inline-block'>
-                  {user.name} ({user.fedid})
-                </Text>
+              <MenuButton borderRadius={12} as={Button} variant={"link"} cursor={"pointer"} minW={0}>
+                <HStack>
+                  <div style={{ padding: 10 }}>
+                    <Text color='diamond.100' display='inline-block'>
+                      {user.name}
+                    </Text>
+                    <Text textAlign='left' fontSize='xs'>
+                      {user.fedid}
+                    </Text>
+                  </div>
+                  <Avatar size='xs' />
+                </HStack>
               </MenuButton>
               <MenuList>
-                {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                 <MenuItem
                   onClick={() => {
                     sessionStorage.removeItem("token");

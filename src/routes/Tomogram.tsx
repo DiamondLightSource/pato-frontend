@@ -11,15 +11,7 @@ import MotionPagination from "../components/motion/pagination";
 import InfoGroup from "../components/infogroup";
 import CollectionLoader from "../components/collectionLoading";
 import { buildEndpoint } from "../utils/api/endpoint";
-
-const collectionConfig: DataConfig = {
-  include: [
-    { name: "pixelSizeOnImage", unit: "μm" },
-    { name: "voltage", unit: "kV" },
-    { name: ["imageSizeX", "imageSizeY"], unit: "pixels", label: "Image Size" },
-  ],
-  root: ["comments", "dataCollectionId"],
-};
+import { collectionConfig } from "../utils/parseConfig";
 
 const tomogramConfig: DataConfig = {
   include: [
@@ -33,7 +25,7 @@ const tomogramConfig: DataConfig = {
   root: ["tomogramId"],
 };
 
-const Collection = () => {
+const TomogramPage = () => {
   const params = useParams();
   const [tomogram, setTomogram] = useState<TomogramData | null | undefined>();
   const [collectionData, setCollectionData] = useState<CollectionData>({ info: [], comments: "" });
@@ -50,7 +42,7 @@ const Collection = () => {
   );
 
   useEffect(() => {
-    document.title = `eBIC » Collections » ${params.collectionIndex}`;
+    document.title = `eBIC » Tomograms » ${params.collectionIndex}`;
     dispatch(setLoading(true));
 
     /** There should be 3 possible states: a null tomogram (for when it is still being processed),
@@ -127,4 +119,4 @@ const Collection = () => {
   );
 };
 
-export default Collection;
+export default TomogramPage;

@@ -9,6 +9,8 @@ const buildEndpoint = (endpoint: string, params: Params, itemsPerPage: number, p
       return `${builtEndpoint}&proposal=${params.propId}&session=${params.visitId}`;
     case "dataCollections":
       return `${builtEndpoint}&groupId=${params.groupId}`;
+    case "processingJobs":
+      return `dataCollections/${params.collectionId}/${builtEndpoint}`;
     default:
       return builtEndpoint;
   }

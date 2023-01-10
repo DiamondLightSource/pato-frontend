@@ -49,7 +49,7 @@ interface MotionProps {
   /** ID for the parent of the motion correction. Could be a tomogram or something else in the future. */
   parentId: number;
   /** Whether parent is a tomogram or data collection */
-  parentType: "tomograms" | "dataCollections";
+  parentType: "tomograms" | "dataCollections" | "autoProc";
   /** Callback for when a new motion correction item is requested and received */
   onMotionChanged?: (motion: Record<string, any>) => void;
 }
@@ -102,7 +102,7 @@ const calcDarkImages = (total: number, rawTotal: number) => {
   return `Dark Images: ${rawTotal - total}`;
 };
 
-const Tomogram = ({ parentId, onMotionChanged, parentType }: MotionProps) => {
+const Motion = ({ parentId, onMotionChanged, parentType }: MotionProps) => {
   const [page, setPage] = useState<number | undefined>();
   const [motion, setMotion] = useState<MotionData>({ total: 0, rawTotal: 0, info: [] });
   const [drift, setDrift] = useState<ScatterDataPoint[]>([]);
@@ -169,9 +169,9 @@ const Tomogram = ({ parentId, onMotionChanged, parentType }: MotionProps) => {
     <div>
       <HStack>
         <Heading variant='collection'>Motion Correction/CTF</Heading>
-        <Heading size='sm' color='diamond.300'>
+        { parentType !== "autoProc" && <Heading size='sm' color='diamond.300'>
           {calcDarkImages(motion.total, motion.rawTotal)}
-        </Heading>
+        </Heading>}
         <Spacer />
         <Button
           data-testid='comment'
@@ -223,4 +223,4 @@ const Tomogram = ({ parentId, onMotionChanged, parentType }: MotionProps) => {
   );
 };
 
-export default Tomogram;
+export default Motion;

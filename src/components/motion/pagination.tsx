@@ -78,7 +78,7 @@ const MotionPagination = ({
   }
 
   return (
-    <HStack py={1} maxW={size === "xs" ? "210px" : "295px"}>
+    <HStack py={1} maxW={size === "xs" ? "230px" : "295px"}>
       <Button size={size} onClick={() => setPage(1)}>
         &lt;&lt;
       </Button>
