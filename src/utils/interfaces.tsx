@@ -24,6 +24,11 @@ export interface TomogramData {
   tomogramId: number;
 }
 
+export interface SpaProps {
+  /* Parent autoprocessing program ID*/
+  autoProcId: number;
+}
+
 export interface BaseCardProp {
   /** Image width */
   width?: ResponsiveValue<string | number | "auto">;

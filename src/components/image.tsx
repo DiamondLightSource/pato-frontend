@@ -35,10 +35,10 @@ const ImageWrapper = ({
 
   const onClickContainer = () => {
     onOpen();
-    if(onClick) {
+    if (onClick) {
       onClick();
     }
-  }
+  };
 
   const zoom = (event: MouseEvent<HTMLImageElement, globalThis.MouseEvent>) => {
     const { x, y, height, width } = event.currentTarget.getBoundingClientRect();
@@ -52,7 +52,7 @@ const ImageWrapper = ({
         <Heading size='sm'>{title}</Heading>
       </CardHeader>
       <CardBody>
-        <Image src={src} margin='auto' maxH='100%' h="100%" fallbackSrc='/images/no-image.png' />
+        <Image w='100%' objectFit='contain' src={src} margin='auto' maxH='100%' fallbackSrc='/images/no-image.png' />
         <Modal isOpen={isOpen && showModal} onClose={onClose}>
           <ModalOverlay bg='rgba(0,0,0,0.8)' opacity='0.5' />
           <ModalContent dropShadow='none' bg='none' w='fit-content' maxW='90vw'>

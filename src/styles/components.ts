@@ -1,4 +1,4 @@
-import { defineStyleConfig, ToastProps, defineStyle, createMultiStyleConfigHelpers, Center } from "@chakra-ui/react";
+import { defineStyleConfig, ToastProps, defineStyle, createMultiStyleConfigHelpers } from "@chakra-ui/react";
 import { cardAnatomy } from '@chakra-ui/anatomy'
 
 const baseToast: ToastProps = {
@@ -122,14 +122,26 @@ const Button = defineStyleConfig({
   })
 
 const collection = defineStyle({
-    fontSize: 20,
-
+  fontSize: 20,
 })
 
+const notFound = defineStyle({
+  textAlign: "center",
+  color: 'diamond.300'
+})
+
+const notFoundSubtitle = defineStyle({
+  ...notFound,
+  fontWeight: 200,
+  size: 'md',
+  paddingBottom: 10
+})
 const Heading = defineStyleConfig({
   variants:
   {
-    collection
+    collection,
+    notFound,
+    notFoundSubtitle
   }
 })
 

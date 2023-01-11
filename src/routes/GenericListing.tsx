@@ -31,7 +31,7 @@ interface TableProps {
   makePathCallback?: (item: Record<string, string | number>) => string;
 }
 
-const GenericListing = ({ headers, endpoint, heading, makePathCallback}: TableProps) => {
+const GenericListing = ({ headers, endpoint, heading, makePathCallback }: TableProps) => {
   const [data, setData] = useState<Array<Record<string, string | number>>>([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(10);
@@ -87,7 +87,7 @@ const GenericListing = ({ headers, endpoint, heading, makePathCallback}: TablePr
       <Divider />
       <Box overflow='scroll'>
         {data === undefined || data.length === 0 ? (
-          <Heading py={2} w='100%' textAlign='center' color='diamond.300'>
+          <Heading py={10} w='100%' variant='notFound'>
             No {heading.toLowerCase()} found
           </Heading>
         ) : (

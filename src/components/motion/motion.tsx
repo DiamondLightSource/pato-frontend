@@ -51,13 +51,15 @@ interface MotionProps {
   /** Whether parent is a tomogram or data collection */
   parentType: "tomograms" | "dataCollections" | "autoProc";
   /** Callback for when a new motion correction item is requested and received */
-  onMotionChanged?: (motion: Record<string, any>) => void;
+  onMotionChanged?: (motion: MotionData, page: number) => void;
+  /** Callback for when the number of available items changes */
+  onTotalChanged?: (newTotal: number) => void;
 }
 
 const motionConfig = {
   include: [
     { name: "refinedTiltAngle", unit: "°" },
-    { name: "createdTimeStamp", label: "Movie Time Stamp" },
+    { name: "createdTimeStamp", label: "Movie Timestamp" },
     { name: "firstFrame" },
     { name: "lastFrame" },
     { name: "refinedMagnification" },
@@ -102,7 +104,7 @@ const calcDarkImages = (total: number, rawTotal: number) => {
   return `Dark Images: ${rawTotal - total}`;
 };
 
-const Motion = ({ parentId, onMotionChanged, parentType }: MotionProps) => {
+const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: MotionProps) => {
   const [page, setPage] = useState<number | undefined>();
   const [motion, setMotion] = useState<MotionData>({ total: 0, rawTotal: 0, info: [] });
   const [drift, setDrift] = useState<ScatterDataPoint[]>([]);
@@ -147,7 +149,12 @@ const Motion = ({ parentId, onMotionChanged, parentType }: MotionProps) => {
       .safe_get(buildEndpoint(`${parentType}/${parentId}/motion`, {}, 1, page ?? 0))
       .then((response) => {
         setMotion(parseData(flattenMovieData(response.data), motionConfig) as MotionData);
-        if (page !== undefined || parentType === "dataCollections") {
+
+        if (onTotalChanged) {
+          onTotalChanged(response.data.total);
+        }
+
+        if (page !== undefined || parentType !== "tomograms") {
           const movie = response.data.items[0].Movie;
           if (movie !== undefined) {
             setImage(`movies/${movie.movieId}/micrograph`, setMgImage);
@@ -158,20 +165,22 @@ const Motion = ({ parentId, onMotionChanged, parentType }: MotionProps) => {
           }
 
           if (onMotionChanged !== undefined) {
-            onMotionChanged(response.data);
+            onMotionChanged(response.data, page ?? -1);
           }
         }
       })
       .finally(() => dispatch(setLoading(false)));
-  }, [page, parentId, parentType, dispatch, navigate, onMotionChanged]);
+  }, [page, parentId, parentType, dispatch, navigate, onMotionChanged, onTotalChanged]);
 
   return (
     <div>
       <HStack>
         <Heading variant='collection'>Motion Correction/CTF</Heading>
-        { parentType !== "autoProc" && <Heading size='sm' color='diamond.300'>
-          {calcDarkImages(motion.total, motion.rawTotal)}
-        </Heading>}
+        {parentType !== "autoProc" && (
+          <Heading size='sm' color='diamond.300'>
+            {calcDarkImages(motion.total, motion.rawTotal)}
+          </Heading>
+        )}
         <Spacer />
         <Button
           data-testid='comment'

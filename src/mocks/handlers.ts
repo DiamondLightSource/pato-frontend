@@ -121,6 +121,54 @@ export const handlers = [
     )
   }),
 
+  rest.get("http://localhost/autoProc/:procId/particlePicker", async (req, res, ctx) => {
+    switch (req.params.procId) {
+      case "1":
+        return res(
+          ctx.status(200),
+          ctx.json({items: [{particlePickerId: null}], total: 1, limit: 1})
+        )
+      case "2":
+        return res(
+          ctx.status(200),
+          ctx.delay(0),
+          ctx.json({items: [{particlePickerId: 1, imageNumber: 9999, particleDiameter: 1, numberOfParticles: 1, createdTimestamp: "1"}], total: 1, limit: 1})
+        )
+    }
+    
+  }),
+
+  rest.get("http://localhost/autoProc/:procId/particlePicker/:pickerId/image", async (req, res, ctx) => {
+    return res(
+      ctx.status(404),
+    )
+  }),
+
+  rest.get("http://localhost/autoProc/:procId/classification", async (req, res, ctx) => {
+    if (req.url.searchParams.get("sortBy") === "class") {
+      return res(
+        ctx.status(200),
+        ctx.delay(0),
+        ctx.json({items: [{particleClassificationId: 1, classDistribution: 999, classNumber: 1, particlesPerClass: 1, batchNumber: 155, symmetry: "C1", type: "2D"}, 
+        {particleClassificationId: 2, batchNumber: 355, classNumber: 1, particlesPerClass: 1, symmetry: "C1", type: "2D"}], total: 2, limit: 8})
+      )
+    }
+
+    return res(
+      ctx.status(200),
+      ctx.delay(0),
+      ctx.json({items: [{particleClassificationId: 1, classNumber: 1, particlesPerClass: 1, batchNumber: 155, symmetry: "C1", type: "2D"}, 
+      {particleClassificationId: 2, batchNumber: 355, classNumber: 1, particlesPerClass: 1, symmetry: "C1", type: "2D"}], total: 2, limit: 8})
+    )
+  }),
+
+  rest.get("http://localhost/autoProc/:procId/classification/:classId/image", async (req, res, ctx) => {
+    return res(
+      ctx.status(404),
+    )
+  }),
+
+
   rest.get("http://localhost/unauthorisedEndpoint", async (req, res, ctx) => {
     return res(
       ctx.status(401),

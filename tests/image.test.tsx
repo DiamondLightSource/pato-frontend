@@ -1,4 +1,4 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { renderWithProviders } from "../src/utils/test-utils";
 import Image from "../src/components/image";
 import React from "react";
@@ -27,5 +27,17 @@ describe("Image", () => {
     fireEvent.click(dialogImage);
 
     expect(screen.getByTestId("zoomed-in-image")).toBeInTheDocument();
+  });
+
+  it("should fire callback when clicked", async () => {
+    const onClick = jest.fn();
+    renderWithProviders(<Image title='Image Title' src='' showModal={false} onClick={onClick} />);
+
+    const title = screen.getByRole("heading", { name: "Image Title" });
+    fireEvent.click(title);
+
+    await waitFor(() => {
+      expect(onClick).toBeCalled();
+    });
   });
 });

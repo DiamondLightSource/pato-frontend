@@ -26,8 +26,8 @@ const InfoGroup = ({ info, height = "100%", cols = 2, py = 0 }: InfoProps) => (
       {info.map((box: Info) => (
         <GridItem key={box.label} colSpan={box.wide ? cols : 1}>
           <Box h='100%' p={1} borderRadius={3} bg='diamond.100'>
-            <Text variant='infoGroupText' as='b'>{`${box.label}: `}</Text>
-            <Text variant='infoGroupText'>{`${box.value || "?"}`}</Text>
+            <Text aria-label={`${box.label}`} variant='infoGroupText' as='b'>{`${box.label}: `}</Text>
+            <Text aria-label={`${box.label} Value`} variant='infoGroupText'>{`${box.value || "?"}`}</Text>
           </Box>
         </GridItem>
       ))}

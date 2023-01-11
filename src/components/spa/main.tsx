@@ -1,11 +1,12 @@
 import { Divider, Grid, Heading, Skeleton, Box, GridItem } from "@chakra-ui/react";
-import Scatter from "./scatter";
-import Motion from "./motion/motion";
+import Scatter from "../scatter";
+import Motion from "../motion/motion";
 import { useEffect, useState } from "react";
-import { client } from "../utils/api/client";
-import { driftPlotOptions } from "../utils/plot";
-import { CtfData } from "../utils/interfaces";
+import { client } from "../../utils/api/client";
+import { driftPlotOptions } from "../../utils/plot";
+import { CtfData } from "../../utils/interfaces";
 import Class2d from "./class2d";
+import ParticlePicking from "./particlePicking";
 
 /* The reason why this is a separate component is that in the future, tomograms might no longer have a 1:1
  ** relationship with data collections. Should that happen, just reuse this component.
@@ -35,6 +36,8 @@ const resolutionPlotOptions = {
 
 const SPA = ({ processingJobId, autoProcId }: SpaProps) => {
   const [ctfData, setCtfData] = useState<CtfData>();
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState<number | undefined>();
 
   useEffect(() => {
     const ctfData: CtfData = { resolution: [], astigmatism: [], defocus: [] };
@@ -80,7 +83,13 @@ const SPA = ({ processingJobId, autoProcId }: SpaProps) => {
           </GridItem>
         </Grid>
       )}
-      <Motion parentType='autoProc' parentId={autoProcId} />
+      <Motion
+        onMotionChanged={(_, newPage) => setPage(newPage)}
+        onTotalChanged={(e) => setTotal(e)}
+        parentType='autoProc'
+        parentId={autoProcId}
+      />
+      <ParticlePicking autoProcId={autoProcId} page={page} total={total} />
       <Class2d autoProcId={autoProcId} />
     </Box>
   );

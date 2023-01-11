@@ -13,6 +13,9 @@ import {
   Spacer,
   AccordionIcon,
   Divider,
+  Icon,
+  Skeleton,
+  Grid,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -21,11 +24,11 @@ import { useAppDispatch } from "../store/hooks";
 import { setLoading } from "../features/uiSlice";
 import { parseData } from "../utils/generic";
 import { CollectionData } from "../utils/interfaces";
-import InfoGroup from "../components/infogroup";
 import { components } from "../schema/main";
 import { buildEndpoint } from "../utils/api/endpoint";
-import SPA from "../components/spa";
+import SPA from "../components/spa/main";
 import { collectionConfig } from "../utils/parseConfig";
+import { MdSettings } from "react-icons/md";
 
 type ProcessingJob = components["schemas"]["ProcessingJobOut"];
 
@@ -44,7 +47,7 @@ const SPAPage = () => {
   );
 
   useEffect(() => {
-    document.title = `eBIC » SPA » ${params.collectionIndex}`;
+    document.title = `eBIC » SPA » ${params.groupId}`;
     dispatch(setLoading(true));
     client.safe_get(buildEndpoint("dataCollections", params, 1, 1)).then((response) => {
       setCollectionData(parseData(response.data.items[0], collectionConfig) as CollectionData);
@@ -75,9 +78,9 @@ const SPAPage = () => {
           </Heading>
         </VStack>
       </HStack>
-      <InfoGroup py={2} cols={3} info={collectionData.info}></InfoGroup>
+      <Divider marginY={2} />
       <Accordion defaultIndex={[0]} allowToggle>
-        {processingJobs &&
+        {processingJobs.length ? (
           processingJobs.map((job, i) => (
             <AccordionItem key={i}>
               <h2>
@@ -88,8 +91,16 @@ const SPAPage = () => {
                   <Text size='md' px={7}>
                     <b>AutoProc. Program:</b> {job.AutoProcProgram.autoProcProgramId}
                   </Text>
+                  <Text size='md' px={7}>
+                    <b>Processing Start:</b> {job.AutoProcProgram.processingStartTime}
+                  </Text>
+                  <Text size='md' px={7}>
+                    <b>Processing End:</b> {job.AutoProcProgram.processingEndTime}
+                  </Text>
                   <Spacer />
-                  <Button disabled></Button>
+                  <Button disabled>
+                    <Icon as={MdSettings} />
+                  </Button>
                   <AccordionButton width='auto'>
                     <AccordionIcon />
                   </AccordionButton>
@@ -102,7 +113,15 @@ const SPAPage = () => {
                 />
               </AccordionPanel>
             </AccordionItem>
-          ))}
+          ))
+        ) : (
+          <Grid gap={3}>
+            <Skeleton h='4vh' />
+            <Skeleton h='25vh' />
+            <Skeleton h='25vh' />
+            <Skeleton h='20vh' />
+          </Grid>
+        )}
       </Accordion>
     </Box>
   );
