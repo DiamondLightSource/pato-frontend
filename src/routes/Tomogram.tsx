@@ -1,6 +1,6 @@
-import { Divider, Heading, Box, VStack, Code, HStack, Spacer } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Divider, Heading, Box, VStack, Code, HStack, Spacer, Checkbox, Tag } from "@chakra-ui/react";
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { client } from "../utils/api/client";
 import { useAppDispatch } from "../store/hooks";
 import { setLoading } from "../features/uiSlice";
@@ -10,15 +10,8 @@ import { CollectionData, DataConfig, TomogramData } from "../utils/interfaces";
 import MotionPagination from "../components/motion/pagination";
 import InfoGroup from "../components/infogroup";
 import CollectionLoader from "../components/collectionLoading";
-
-const collectionConfig: DataConfig = {
-  include: [
-    { name: "pixelSizeOnImage", unit: "μm" },
-    { name: "voltage", unit: "kV" },
-    { name: ["imageSizeX", "imageSizeY"], unit: "pixels", label: "Image Size" },
-  ],
-  root: ["comments", "dataCollectionId"],
-};
+import { buildEndpoint } from "../utils/api/endpoint";
+import { collectionConfig } from "../utils/config/parse";
 
 const tomogramConfig: DataConfig = {
   include: [
@@ -32,30 +25,51 @@ const tomogramConfig: DataConfig = {
   root: ["tomogramId"],
 };
 
-const Collection = () => {
+const TomogramPage = () => {
   const params = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [tomogram, setTomogram] = useState<TomogramData | null | undefined>();
   const [collectionData, setCollectionData] = useState<CollectionData>({ info: [], comments: "" });
   const [pageCount, setPageCount] = useState(1);
+  const [onlyProcessed, setOnlyProcessed] = useState(searchParams.get("onlyProcessed") === "true");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const updateCollection = (page: number) => {
-    navigate(`../${page}`, { relative: "path" });
-  };
+  const updateCollection = useCallback(
+    (page: number) => {
+      navigate(`../${page}`, { relative: "path" });
+    },
+    [navigate]
+  );
+
+  const updateTomogramFilter = useCallback(() => {
+    setOnlyProcessed(!onlyProcessed)
+    setSearchParams({onlyProcessed: (!onlyProcessed).toString()})
+  },[onlyProcessed, setSearchParams]
+  )
 
   useEffect(() => {
-    document.title = `eBIC » Collections » ${params.collectionIndex}`;
+    document.title = `eBIC » Tomograms » ${params.collectionIndex}`;
     dispatch(setLoading(true));
 
-    /** There should be 3 possible states: a null tomogram (for when it is still being processed server-side),
+    /** There should be 3 possible states: a null tomogram (for when it is still being processed),
     /* and undefined tomogram (waiting for information client-side) and a valid tomogram */
     setTomogram(undefined);
     client
-      .safe_get(`dataCollections?group=${params.groupId}&limit=1&page=${params.collectionIndex}`)
+      .safe_get(
+        `${buildEndpoint(
+          "dataCollections",
+          params,
+          1,
+          parseInt(params.collectionIndex ?? "1")
+        )}&onlyTomograms=${onlyProcessed}`
+      )
       .then((response) => {
         if (response.data.total && response.data.items) {
           setPageCount(response.data.total);
+          if (params.collectionIndex && params.collectionIndex > response.data.total) {
+            updateCollection(1);
+          }
           setCollectionData(parseData(response.data.items[0], collectionConfig) as CollectionData);
 
           client.safe_get(`dataCollections/${response.data.items[0].dataCollectionId}/tomogram`).then((response) => {
@@ -68,7 +82,7 @@ const Collection = () => {
         }
       })
       .finally(() => dispatch(setLoading(false)));
-  }, [params.collectionIndex, params.groupId, dispatch, navigate]);
+  }, [params, dispatch, navigate, updateCollection, onlyProcessed]);
 
   return (
     <Box>
@@ -76,6 +90,7 @@ const Collection = () => {
         <VStack>
           <HStack w='100%'>
             <Heading>Data Collection #{params.collectionIndex}</Heading>
+            <Tag colorScheme="teal">Tomogram</Tag>
           </HStack>
           <Heading color='diamond.300' size='sm'>
             Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data collection group{" "}
@@ -83,12 +98,17 @@ const Collection = () => {
           </Heading>
         </VStack>
         <Spacer />
-        <MotionPagination
-          size='md'
-          onChange={updateCollection}
-          displayDefault={params.collectionIndex}
-          total={pageCount}
-        />
+        <VStack>
+          <MotionPagination
+            size='md'
+            onChange={updateCollection}
+            displayDefault={params.collectionIndex}
+            total={pageCount}
+          />
+          <Checkbox defaultChecked={onlyProcessed} onChange={updateTomogramFilter} alignSelf='end'>
+            Only show processed tomograms
+          </Checkbox>
+        </VStack>
       </HStack>
       <InfoGroup py={2} cols={3} info={collectionData.info}></InfoGroup>
       <Divider />
@@ -107,4 +127,4 @@ const Collection = () => {
   );
 };
 
-export default Collection;
+export default TomogramPage;

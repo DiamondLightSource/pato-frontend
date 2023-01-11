@@ -16,10 +16,10 @@ const CollectionLoader = () => {
 
   return (
     <span style={{ margin: "auto", width: "60%", display: "block" }}>
-      <Heading textAlign='center' paddingTop={10} color='diamond.300'>
+      <Heading paddingTop={10} variant="notFound">
         Data collection group has no data collections
       </Heading>
-      <Heading fontWeight={200} size='md' textAlign='center' color='diamond.300'>
+      <Heading variant="notFoundSubtitle">
         ...or you could not have permission to view the contents of this collection group. If this page was sent to you
         through a link, ask the person who sent it if you're included in the parent session.
       </Heading>

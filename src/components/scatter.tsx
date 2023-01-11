@@ -1,5 +1,7 @@
 import {
-  Box,
+  Card,
+  CardBody,
+  CardHeader,
   Heading,
   Modal,
   ModalBody,
@@ -8,7 +10,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  ResponsiveValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import {
@@ -24,20 +25,16 @@ import {
 import { Scatter } from "react-chartjs-2";
 
 import { useEffect, useState } from "react";
+import { BaseCardProp } from "../utils/interfaces";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
-interface ScatterProps {
-  /** Title for the scatter plot */
-  title: string;
+interface ScatterProps extends BaseCardProp {
   /** Datapoints */
   scatterData: ScatterDataPoint[];
   /** Chart options */
   options?: ScatterControllerChartOptions;
   /** Chart width */
-  width?: ResponsiveValue<string | number | "auto">;
-  /** Chart height */
-  height?: ResponsiveValue<string | number | "auto">;
 }
 
 const preloadedData = {
@@ -62,6 +59,8 @@ const ScatterWrapper = ({
   options = defaultOptions,
   width = "100%",
   height = "100%",
+  active = false,
+  onClick
 }: ScatterProps) => {
   const [data, setData] = useState(preloadedData);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -78,16 +77,11 @@ const ScatterWrapper = ({
   }, [scatterData]);
 
   return (
-    <Box
-      p={3}
-      paddingBottom={height === "100%" ? 3 : 8}
-      borderWidth='1px'
-      borderRadius='lg'
-      w={width}
-      h={height}
-      onClick={onOpen}
-    >
+    <Card aria-selected={active} w={width} h={height} onClick={onOpen}>
+      <CardHeader>
       <Heading size='sm'>{title}</Heading>
+      </CardHeader>
+      <CardBody px={2} py="0">
       <Scatter style={{ paddingBottom: "10px" }} data={data} options={options} />
       <Modal size='xl' isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -100,7 +94,8 @@ const ScatterWrapper = ({
           <ModalFooter></ModalFooter>
         </ModalContent>
       </Modal>
-    </Box>
+      </CardBody>
+    </Card>
   );
 };
 

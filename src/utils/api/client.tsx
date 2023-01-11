@@ -43,7 +43,7 @@ export async function client(
   }
 
   let data;
-  let target = process.env.REACT_APP_API_ENDPOINT + endpoint;
+  let target = (endpoint === "user" ? process.env.REACT_APP_AUTH_ENDPOINT : process.env.REACT_APP_API_ENDPOINT) + endpoint;
 
   const response = await fetch(target, config);
   clearTimeout(timeoutFetch);
@@ -73,7 +73,7 @@ client.safe_get = async (endpoint: string, customConfig = {}) => {
   const resp = await client.get(endpoint, customConfig);
 
   if (resp.status === 401) {
-    window.location.href = `${process.env.REACT_APP_API_ENDPOINT}authorise?redirect_uri=${encodeURIComponent(
+    window.location.href = `${process.env.REACT_APP_AUTH_ENDPOINT}authorise?redirect_uri=${encodeURIComponent(
       window.location.href
     )}`;
   }

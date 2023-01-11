@@ -39,4 +39,13 @@ describe("Motion", () => {
       expect(motionChanged).toBeCalled();
     });
   });
+
+  it("should call callback when total number of items changes", async () => {
+    const totalChanged = jest.fn();
+    renderWithProviders(<Motion parentType='tomograms' onTotalChanged={totalChanged} parentId={3} />);
+
+    await waitFor(() => {
+      expect(totalChanged).toBeCalled();
+    });
+  });
 });

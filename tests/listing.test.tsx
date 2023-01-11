@@ -9,7 +9,7 @@ describe("GenericListing", () => {
       <GenericListing
         heading='Proposals'
         endpoint='invalidEndpoint'
-        routeKeys={["test"]}
+        makePathCallback={(item) => item.test.toString()}
         headers={[{ key: "key1", label: "label1" }]}
       />
     );
@@ -21,7 +21,7 @@ describe("GenericListing", () => {
       <GenericListing
         heading='Test'
         endpoint='proposals'
-        routeKeys={["test"]}
+        makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
           { key: "key2", label: "label2" },
@@ -41,7 +41,7 @@ describe("GenericListing", () => {
       <GenericListing
         heading='Test'
         endpoint='proposals'
-        routeKeys={["test"]}
+        makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
           { key: "key2", label: "label2" },
@@ -62,7 +62,7 @@ describe("GenericListing", () => {
       <GenericListing
         heading='Test'
         endpoint='proposals'
-        routeKeys={["test"]}
+        makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
           { key: "key2", label: "label2" },
@@ -83,7 +83,7 @@ describe("GenericListing", () => {
       <GenericListing
         heading='Test'
         endpoint='proposals'
-        routeKeys={["test"]}
+        makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
           { key: "key2", label: "label2" },
@@ -102,7 +102,7 @@ describe("GenericListing", () => {
       <GenericListing
         heading='Test'
         endpoint='proposals'
-        routeKeys={["test"]}
+        makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
           { key: "key2", label: "label2" },

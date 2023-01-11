@@ -7,8 +7,12 @@ import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "reac
 import { MdSettings } from "react-icons/md";
 import { client } from "../utils/api/client";
 import { ScatterDataPoint } from "chart.js";
-import { driftPlotOptions } from "../utils/plot";
+import { astigmatismPlotOptions, defocusPlotOptions, resolutionPlotOptions } from "../utils/config/plot";
 import { CtfData, TomogramData } from "../utils/interfaces";
+
+/* The reason why this is a separate component is that in the future, tomograms might no longer have a 1:1
+ ** relationship with data collections. Should that happen, just reuse this component.
+ */
 
 interface TomogramProps {
   /* Tomogram data */
@@ -18,21 +22,6 @@ interface TomogramProps {
   /* Parent data collection ID*/
   collection: number;
 }
-
-const astigmatismPlotOptions = {
-  ...driftPlotOptions,
-  scales: { y: { title: { display: true, text: "nm" } } },
-};
-
-const defocusPlotOptions = {
-  ...driftPlotOptions,
-  scales: { y: { title: { display: true, text: "μm" } } },
-};
-
-const resolutionPlotOptions = {
-  ...driftPlotOptions,
-  scales: { y: { max: 50, title: { display: true, text: "Å" } } },
-};
 
 const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
   const [sliceImage, setSliceImage] = useState("");

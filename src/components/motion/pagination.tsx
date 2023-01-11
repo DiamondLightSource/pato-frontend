@@ -9,6 +9,7 @@ interface MotionPaginationProps {
   displayDefault?: string;
   onChange?: ChangeCallback;
   startFrom?: "start" | "middle" | "end";
+  disabled?: boolean;
 }
 
 const MotionPagination = ({
@@ -17,6 +18,7 @@ const MotionPagination = ({
   size = "xs",
   displayDefault,
   startFrom = "end",
+  disabled = false,
 }: MotionPaginationProps) => {
   const [value, setValue] = useState<string | undefined>();
 
@@ -29,6 +31,12 @@ const MotionPagination = ({
     },
     [onChange]
   );
+
+  useEffect(() => {
+    if (displayDefault) {
+      setValue(displayDefault);
+    }
+  }, [displayDefault]);
 
   useEffect(() => {
     if (value !== undefined || total === 0) {
@@ -49,10 +57,8 @@ const MotionPagination = ({
           setValue("1");
           break;
       }
-    } else {
-      setValue(displayDefault ?? "1");
     }
-  }, [total, displayDefault, startFrom, setPage, value]);
+  }, [total, startFrom, displayDefault, setPage, value]);
 
   const editPage = (event: ReactFocusEvent<HTMLInputElement>) => {
     let newPage = parseInt(event.target.value);
@@ -74,15 +80,16 @@ const MotionPagination = ({
   }
 
   return (
-    <HStack py={1} maxW={size === "xs" ? "210px" : "295px"}>
-      <Button size={size} onClick={() => setPage(1)}>
+    <HStack py={1} maxW={size === "xs" ? "230px" : "295px"}>
+      <Button isDisabled={disabled} size={size} onClick={() => setPage(1)}>
         &lt;&lt;
       </Button>
-      <Button size={size} isDisabled={parseInt(value) === 1} onClick={() => setPage(parseInt(value) - 1)}>
+      <Button size={size} isDisabled={parseInt(value) === 1 || disabled} onClick={() => setPage(parseInt(value) - 1)}>
         &lt;
       </Button>
       <InputGroup size={size}>
         <Input
+          isDisabled={disabled}
           bg='diamond.50'
           aria-label='Current Page'
           onChange={(event) => setValue(event.target.value)}
@@ -91,10 +98,14 @@ const MotionPagination = ({
         />
         <InputRightAddon aria-label='Total Pages' children={total} />
       </InputGroup>
-      <Button size={size} isDisabled={parseInt(value) === total} onClick={() => setPage(parseInt(value) + 1)}>
+      <Button
+        size={size}
+        isDisabled={parseInt(value) === total || disabled}
+        onClick={() => setPage(parseInt(value) + 1)}
+      >
         &gt;
       </Button>
-      <Button size={size} onClick={() => setPage(total)}>
+      <Button size={size} isDisabled={disabled} onClick={() => setPage(total)}>
         &gt;&gt;
       </Button>
     </HStack>

@@ -5,13 +5,14 @@ import Breadcrumbs from "../components/breadcrumbs";
 import Footer from "../components/footer";
 import Navbar from "../components/navbar";
 import { checkUser } from "../features/authSlice";
-import { useAppDispatch } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import "../styles/main.css";
 
 const Root = (): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
+  const user = useAppSelector((state) => state.auth.user);
 
   useEffect(() => {
     const splitUrl = window.location.href.split("access_token=");
@@ -22,8 +23,12 @@ const Root = (): JSX.Element => {
       navigate(url);
     }
 
-    dispatch(checkUser()).finally(() => setLoading(false));
-  }, [navigate, dispatch]);
+    if (!user) {
+      dispatch(checkUser());
+    }
+
+    setLoading(false);
+  }, [navigate, dispatch, user]);
 
   return !loading ? (
     <div className='rootContainer'>

@@ -40,11 +40,10 @@ const NavLink = ({ children, link }: NavLinkProps) => (
     px={2}
     py={1}
     as={LinkRouter}
-    rounded={"md"}
-    color={"gray.200"}
+    color='diamond.100'
     _hover={{
-      textDecoration: "none",
-      bg: "diamond.700",
+      textDecoration: "underline",
+      color: "diamond.400",
     }}
     to={link}
   >
@@ -78,7 +77,7 @@ const Navbar = () => {
           display={{ md: "none" }}
           onClick={isOpen ? onClose : onOpen}
         />
-        <HStack spacing={8} alignItems={"center"}>
+        <HStack h='100%' spacing={8} alignItems={"center"}>
           <LinkRouter to={"/"}>
             <Box maxW='5rem'>
               <Image
@@ -89,34 +88,31 @@ const Navbar = () => {
               />
             </Box>
           </LinkRouter>
-          <HStack as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
+          <HStack h='100%' as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
             <NavLinks loggedIn={user !== null} />
           </HStack>
         </HStack>
         <Flex alignItems={"center"}>
           {user !== null ? (
             <Menu>
-              <MenuButton
-                borderRadius={12}
-                bg='diamond.500'
-                as={Button}
-                rounded={"full"}
-                variant={"link"}
-                cursor={"pointer"}
-                minW={0}
-                _hover={{ bg: "diamond.600" }}
-              >
-                <Avatar size='xs' />
-                <Text verticalAlign='bottom' px={3} color='diamond.100' display='inline-block'>
-                  {user.name} ({user.fedid})
-                </Text>
+              <MenuButton borderRadius={12} as={Button} variant={"link"} cursor={"pointer"} minW={0}>
+                <HStack>
+                  <div style={{ padding: 10 }}>
+                    <Text color='diamond.100' display='inline-block'>
+                      {user.name}
+                    </Text>
+                    <Text textAlign='left' fontSize='xs'>
+                      {user.fedid}
+                    </Text>
+                  </div>
+                  <Avatar size='xs' />
+                </HStack>
               </MenuButton>
               <MenuList>
-                {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                 <MenuItem
                   onClick={() => {
                     sessionStorage.removeItem("token");
-                    window.location.href = `${process.env.REACT_APP_API_ENDPOINT}logout?redirect_uri=${window.location.href}`;
+                    window.location.href = `${process.env.REACT_APP_AUTH_ENDPOINT}logout?redirect_uri=${window.location.href}`;
                   }}
                 >
                   Logout
@@ -125,7 +121,7 @@ const Navbar = () => {
             </Menu>
           ) : (
             <Link
-              href={`${process.env.REACT_APP_API_ENDPOINT}authorise?redirect_uri=${encodeURIComponent(
+              href={`${process.env.REACT_APP_AUTH_ENDPOINT}authorise?redirect_uri=${encodeURIComponent(
                 window.location.href
               )}`}
             >

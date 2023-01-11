@@ -27,12 +27,11 @@ import { useNavigate } from "react-router-dom";
 import { setLoading } from "../../features/uiSlice";
 import { client } from "../../utils/api/client";
 import { parseData } from "../../utils/generic";
-import { driftPlotOptions } from "../../utils/plot";
+import { driftPlotOptions } from "../../utils/config/plot";
 import { ScatterDataPoint } from "chart.js";
+import { buildEndpoint } from "../../utils/api/endpoint";
 
 interface MotionData {
-  /** Datapoints for the drift plot */
-  drift: ScatterDataPoint[];
   /** Total number of tilt alignment images available */
   total: number;
   /** Total number of motion correction images available (including tilt alignment) */
@@ -50,17 +49,17 @@ interface MotionProps {
   /** ID for the parent of the motion correction. Could be a tomogram or something else in the future. */
   parentId: number;
   /** Whether parent is a tomogram or data collection */
-  parentType: "tomograms" | "dataCollections";
+  parentType: "tomograms" | "dataCollections" | "autoProc";
   /** Callback for when a new motion correction item is requested and received */
-  onMotionChanged?: (motion: Record<string, any>) => void;
-  /** Whether or not the default should be the middle, start or end */
-  startFrom?: "start" | "middle" | "end";
+  onMotionChanged?: (motion: MotionData, page: number) => void;
+  /** Callback for when the number of available items changes */
+  onTotalChanged?: (newTotal: number) => void;
 }
 
 const motionConfig = {
   include: [
     { name: "refinedTiltAngle", unit: "°" },
-    { name: "createdTimeStamp", label: "Movie Time Stamp" },
+    { name: "createdTimeStamp", label: "Movie Timestamp" },
     { name: "firstFrame" },
     { name: "lastFrame" },
     { name: "refinedMagnification" },
@@ -87,9 +86,9 @@ const motionConfig = {
     "drift",
     "total",
     "rawTotal",
-    "comments_MotionCorrection",
-    "comments_CTF",
     "refinedTiltAxis",
+    "comments_CTF",
+    "comments_MotionCorrection",
   ],
 };
 
@@ -105,9 +104,10 @@ const calcDarkImages = (total: number, rawTotal: number) => {
   return `Dark Images: ${rawTotal - total}`;
 };
 
-const Tomogram = ({ parentId, onMotionChanged, parentType }: MotionProps) => {
+const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: MotionProps) => {
   const [page, setPage] = useState<number | undefined>();
-  const [motion, setMotion] = useState<MotionData>({ drift: [], total: 0, rawTotal: 0, info: [] });
+  const [motion, setMotion] = useState<MotionData>({ total: 0, rawTotal: 0, info: [] });
+  const [drift, setDrift] = useState<ScatterDataPoint[]>([]);
   const [mgImage, setMgImage] = useState("");
   const [fftImage, setFftImage] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -123,41 +123,66 @@ const Tomogram = ({ parentId, onMotionChanged, parentType }: MotionProps) => {
     });
   };
 
+  const flattenMovieData = (rawData: Record<string, any>) => {
+    let flattenedData: Record<string, string> = { rawTotal: rawData.rawTotal, total: rawData.total };
+    const items = rawData.items[0];
+
+    for (let type in items) {
+      if (items[type] !== null) {
+        for (let [key, value] of Object.entries(items[type])) {
+          if (key !== "comments") {
+            flattenedData[key] = value as string;
+          } else {
+            flattenedData[`${key}_${type}`] = value as string;
+          }
+        }
+      }
+    }
+
+    return flattenedData;
+  };
+
   useEffect(() => {
     dispatch(setLoading(true));
 
-    if (page === undefined && parentType === "tomograms") {
-      client
-        .safe_get(`${parentType}/${parentId}/motion`)
-        .then((response) => {
-          setMotion(parseData(response.data, motionConfig) as MotionData);
-        })
-        .finally(() => dispatch(setLoading(false)));
-    } else {
-      client
-        .safe_get(`${parentType}/${parentId}/motion${page === undefined ? " " : `?nth=${page}`}`)
-        .then((response) => {
-          setMotion(parseData(response.data, motionConfig) as MotionData);
-          if (response.data.movieId !== undefined) {
-            setImage(`image/micrograph/${response.data.movieId}`, setMgImage);
-            setImage(`image/fft/${response.data.movieId}`, setFftImage);
+    client
+      .safe_get(buildEndpoint(`${parentType}/${parentId}/motion`, {}, 1, page ?? 0))
+      .then((response) => {
+        setMotion(parseData(flattenMovieData(response.data), motionConfig) as MotionData);
+
+        if (onTotalChanged) {
+          onTotalChanged(response.data.total);
+        }
+
+        if (page !== undefined || parentType !== "tomograms") {
+          const movie = response.data.items[0].Movie;
+          if (movie !== undefined) {
+            setImage(`movies/${movie.movieId}/micrograph`, setMgImage);
+            setImage(`movies/${movie.movieId}/fft`, setFftImage);
+            const driftUrl = `movies/${movie.movieId}/drift?fromDb=${parentType === "autoProc"}`;
+
+            client.safe_get(driftUrl).then((response) => {
+              setDrift(response.data.items);
+            });
           }
 
           if (onMotionChanged !== undefined) {
-            onMotionChanged(response.data);
+            onMotionChanged(response.data, page ?? -1);
           }
-        })
-        .finally(() => dispatch(setLoading(false)));
-    }
-  }, [page, parentId, parentType, dispatch, navigate, onMotionChanged]);
+        }
+      })
+      .finally(() => dispatch(setLoading(false)));
+  }, [page, parentId, parentType, dispatch, navigate, onMotionChanged, onTotalChanged]);
 
   return (
     <div>
       <HStack>
         <Heading variant='collection'>Motion Correction/CTF</Heading>
-        <Heading size='sm' color='diamond.300'>
-          {calcDarkImages(motion.total, motion.rawTotal)}
-        </Heading>
+        {parentType !== "autoProc" && (
+          <Heading size='sm' color='diamond.300'>
+            {calcDarkImages(motion.total, motion.rawTotal)}
+          </Heading>
+        )}
         <Spacer />
         <Button
           data-testid='comment'
@@ -188,7 +213,7 @@ const Tomogram = ({ parentId, onMotionChanged, parentType }: MotionProps) => {
           <Image src={fftImage} title='FFT Theoretical' height='100%' />
         </GridItem>
         <GridItem h='25vh' minW='100%' colSpan={{ base: 2, md: 1 }}>
-          <Scatter title='Drift' options={driftPlotOptions} scatterData={motion.drift} />
+          <Scatter title='Drift' options={driftPlotOptions} scatterData={drift} />
         </GridItem>
       </Grid>
       <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
@@ -209,4 +234,4 @@ const Tomogram = ({ parentId, onMotionChanged, parentType }: MotionProps) => {
   );
 };
 
-export default Tomogram;
+export default Motion;
