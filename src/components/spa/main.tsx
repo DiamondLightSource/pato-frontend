@@ -3,38 +3,17 @@ import Scatter from "../scatter";
 import Motion from "../motion/motion";
 import { useEffect, useState } from "react";
 import { client } from "../../utils/api/client";
-import { driftPlotOptions } from "../../utils/plot";
+import { astigmatismPlotOptions, defocusPlotOptions, resolutionSpaPlotOptions } from "../../utils/config/plot";
 import { CtfData } from "../../utils/interfaces";
 import Class2d from "./class2d";
 import ParticlePicking from "./particlePicking";
 
-/* The reason why this is a separate component is that in the future, tomograms might no longer have a 1:1
- ** relationship with data collections. Should that happen, just reuse this component.
- */
-
 interface SpaProps {
-  /* Parent processing ID*/
-  processingJobId: number;
   /* Parent autoprocessing program ID*/
   autoProcId: number;
 }
 
-const astigmatismPlotOptions = {
-  ...driftPlotOptions,
-  scales: { y: { title: { display: true, text: "nm" } } },
-};
-
-const defocusPlotOptions = {
-  ...driftPlotOptions,
-  scales: { y: { title: { display: true, text: "μm" } } },
-};
-
-const resolutionPlotOptions = {
-  ...driftPlotOptions,
-  scales: { y: { max: 10, title: { display: true, text: "Å" } } },
-};
-
-const SPA = ({ processingJobId, autoProcId }: SpaProps) => {
+const SPA = ({ autoProcId }: SpaProps) => {
   const [ctfData, setCtfData] = useState<CtfData>();
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState<number | undefined>();
@@ -78,7 +57,7 @@ const SPA = ({ processingJobId, autoProcId }: SpaProps) => {
               height='20vh'
               title='Resolution'
               scatterData={ctfData.resolution}
-              options={resolutionPlotOptions}
+              options={resolutionSpaPlotOptions}
             />
           </GridItem>
         </Grid>

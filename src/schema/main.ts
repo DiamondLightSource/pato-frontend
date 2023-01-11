@@ -122,18 +122,30 @@ export interface paths {
   "/autoProc/{autoProcId}/particlePicker": {
     /**
      * Get Particle Picker 
-     * @description Get astigmatism, resolution and defocus as a function of motion correction
-     * image numbers
+     * @description Get particle picking data
      */
     get: operations["get_particle_picker_autoProc__autoProcId__particlePicker_get"];
   };
-  "/autoProc/{autoProcId}/classification/2d": {
+  "/autoProc/{autoProcId}/classification": {
     /**
      * Get 2D Classification 
-     * @description Get astigmatism, resolution and defocus as a function of motion correction
-     * image numbers
+     * @description Get 2d classification data
      */
-    get: operations["get_2d_classification_autoProc__autoProcId__classification_2d_get"];
+    get: operations["get_2d_classification_autoProc__autoProcId__classification_get"];
+  };
+  "/autoProc/{autoProcId}/classification/{classificationId}/image": {
+    /**
+     * Get 2D Classification Image 
+     * @description Get class image
+     */
+    get: operations["get_2d_classification_image_autoProc__autoProcId__classification__classificationId__image_get"];
+  };
+  "/autoProc/{autoProcId}/particlePicker/{particlePickerId}/image": {
+    /**
+     * Get Particle Picker Image 
+     * @description Get class image
+     */
+    get: operations["get_particle_picker_image_autoProc__autoProcId__particlePicker__particlePickerId__image_get"];
   };
 }
 
@@ -231,7 +243,7 @@ export interface components {
       /** Classimagefullpath */
       classImageFullPath: string;
       /** Particlesperclass */
-      particlesPerClass: number;
+      particlesPerClass?: number;
       /** Rotationaccuracy */
       rotationAccuracy: number;
       /** Translationaccuracy */
@@ -241,7 +253,7 @@ export interface components {
       /** Overallfouriercompleteness */
       overallFourierCompleteness: number;
       /** Classdistribution */
-      classDistribution: number;
+      classDistribution?: number;
     };
     /** CtfImageNumber */
     CtfImageNumber: {
@@ -320,9 +332,10 @@ export interface components {
       comments?: string;
       /**
        * Starttime 
-       * Format: date-time
+       * Format: date-time 
+       * @description Start time of the dataCollection
        */
-      startTime?: string;
+      startTime: string;
       /** Pixelsizeonimage */
       pixelSizeOnImage: number;
       /** Voltage */
@@ -331,6 +344,204 @@ export interface components {
       imageSizeX: number;
       /** Imagesizey */
       imageSizeY: number;
+      /** Experimenttype */
+      experimenttype: string;
+      /** Datacollectionnumber */
+      dataCollectionNumber?: number;
+      /**
+       * Endtime 
+       * Format: date-time 
+       * @description End time of the dataCollection
+       */
+      endTime: string;
+      /** Runstatus */
+      runStatus: string;
+      /** Axisstart */
+      axisStart?: number;
+      /** Axisend */
+      axisEnd?: number;
+      /** Axisrange */
+      axisRange?: number;
+      /** Overlap */
+      overlap?: number;
+      /** Numberofimages */
+      numberOfImages?: number;
+      /** Startimagenumber */
+      startImageNumber?: number;
+      /** Numberofpasses */
+      numberOfPasses?: number;
+      /** Exposuretime */
+      exposureTime?: number;
+      /**
+       * Imagedirectory 
+       * @description The directory where files reside - should end with a slash
+       */
+      imageDirectory: string;
+      /** Imageprefix */
+      imagePrefix: string;
+      /** Imagesuffix */
+      imageSuffix: string;
+      /**
+       * Imagecontainersubpath 
+       * @description Internal path of a HDF5 file pointing to the data
+       *         for this data collection
+       */
+      imageContainerSubPath: string;
+      /** Filetemplate */
+      fileTemplate: string;
+      /** Wavelength */
+      wavelength?: number;
+      /** Resolution */
+      resolution?: number;
+      /** Detectordistance */
+      detectorDistance?: number;
+      /** Xbeam */
+      xBeam?: number;
+      /** Ybeam */
+      yBeam?: number;
+      /** Printableforreport */
+      printableForReport?: number;
+      /** Crystalclass */
+      CRYSTALCLASS: string;
+      /** Slitgapvertical */
+      slitGapVertical?: number;
+      /** Slitgaphorizontal */
+      slitGapHorizontal?: number;
+      /** Transmission */
+      transmission?: number;
+      /** Synchrotronmode */
+      synchrotronMode: string;
+      /** Xtalsnapshotfullpath1 */
+      xtalSnapshotFullPath1: string;
+      /** Xtalsnapshotfullpath2 */
+      xtalSnapshotFullPath2: string;
+      /** Xtalsnapshotfullpath3 */
+      xtalSnapshotFullPath3: string;
+      /** Xtalsnapshotfullpath4 */
+      xtalSnapshotFullPath4: string;
+      rotationAxis?: components["schemas"]["RotationAxisEnum"];
+      /** Phistart */
+      phiStart?: number;
+      /** Kappastart */
+      kappaStart?: number;
+      /** Omegastart */
+      omegaStart?: number;
+      /** Chistart */
+      chiStart?: number;
+      /** Resolutionatcorner */
+      resolutionAtCorner?: number;
+      /** Detector2Theta */
+      detector2Theta?: number;
+      /** Detectormode */
+      DETECTORMODE: string;
+      /** Undulatorgap1 */
+      undulatorGap1?: number;
+      /** Undulatorgap2 */
+      undulatorGap2?: number;
+      /** Undulatorgap3 */
+      undulatorGap3?: number;
+      /** Beamsizeatsamplex */
+      beamSizeAtSampleX?: number;
+      /** Beamsizeatsampley */
+      beamSizeAtSampleY?: number;
+      /** Centeringmethod */
+      centeringMethod: string;
+      /** Averagetemperature */
+      averageTemperature?: number;
+      /** Actualsamplebarcode */
+      ACTUALSAMPLEBARCODE: string;
+      /** Actualsampleslotincontainer */
+      ACTUALSAMPLESLOTINCONTAINER?: number;
+      /** Actualcontainerbarcode */
+      ACTUALCONTAINERBARCODE: string;
+      /** Actualcontainerslotinsc */
+      ACTUALCONTAINERSLOTINSC?: number;
+      /** Actualcenteringposition */
+      actualCenteringPosition: string;
+      /** Beamshape */
+      beamShape: string;
+      /** Datacollectiongroupid */
+      dataCollectionGroupId: number;
+      /** Positionid */
+      POSITIONID?: number;
+      /** Detectorid */
+      detectorId?: number;
+      /** Focalspotsizeatsamplex */
+      FOCALSPOTSIZEATSAMPLEX?: number;
+      /** Polarisation */
+      POLARISATION?: number;
+      /** Focalspotsizeatsampley */
+      FOCALSPOTSIZEATSAMPLEY?: number;
+      /** Apertureid */
+      APERTUREID?: number;
+      /** Screeningorigid */
+      screeningOrigId?: number;
+      /** Startpositionid */
+      startPositionId?: number;
+      /** Endpositionid */
+      endPositionId?: number;
+      /** Flux */
+      flux?: number;
+      /** Strategysubwedgeorigid */
+      strategySubWedgeOrigId?: number;
+      /** Blsubsampleid */
+      blSubSampleId?: number;
+      /** Flux End */
+      flux_end?: number;
+      /** Bestwilsonplotpath */
+      bestWilsonPlotPath: string;
+      /** Processeddatafile */
+      processedDataFile: string;
+      /** Datfullpath */
+      datFullPath: string;
+      /** Magnification */
+      magnification?: number;
+      /** Totalabsorbeddose */
+      totalAbsorbedDose?: number;
+      /** Binning */
+      binning: number;
+      /** Particlediameter */
+      particleDiameter?: number;
+      /** Boxsize Ctf */
+      boxSize_CTF?: number;
+      /** Minresolution */
+      minResolution?: number;
+      /** Mindefocus */
+      minDefocus?: number;
+      /** Maxdefocus */
+      maxDefocus?: number;
+      /** Defocusstepsize */
+      defocusStepSize?: number;
+      /** Amountastigmatism */
+      amountAstigmatism?: number;
+      /** Extractsize */
+      extractSize?: number;
+      /** Bgradius */
+      bgRadius?: number;
+      /** Objaperture */
+      objAperture?: number;
+      /** C1Aperture */
+      c1aperture?: number;
+      /** C2Aperture */
+      c2aperture?: number;
+      /** C3Aperture */
+      c3aperture?: number;
+      /** C1Lens */
+      c1lens?: number;
+      /** C2Lens */
+      c2lens?: number;
+      /** C3Lens */
+      c3lens?: number;
+      /** Totalexposeddose */
+      totalExposedDose?: number;
+      /** Nominalmagnification */
+      nominalMagnification?: number;
+      /** Nominaldefocus */
+      nominalDefocus?: number;
+      /** Phaseplate */
+      phasePlate?: number;
+      /** Datacollectionplanid */
+      dataCollectionPlanId?: number;
       /** Tomograms */
       tomograms: number;
     };
@@ -527,13 +738,20 @@ export interface components {
     /** ParticlePicker */
     ParticlePicker: {
       /** Particlediameter */
-      particleDiameter: number;
+      particleDiameter?: number;
       /** Numberofparticles */
-      numberOfParticles: number;
+      numberOfParticles?: number;
       /** Particlepickerid */
-      particlePickerId: number;
+      particlePickerId?: number;
       /** Summaryfullimagepath */
       summaryFullImagePath?: string;
+      /** Imagenumber */
+      imageNumber: number;
+      /**
+       * Createdtimestamp 
+       * Format: date-time
+       */
+      createdTimeStamp?: string;
     };
     /** ProcessingJob */
     ProcessingJob: {
@@ -587,6 +805,12 @@ export interface components {
       /** @default Open */
       state?: components["schemas"]["StateEnum"];
     };
+    /**
+     * RotationAxisEnum 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    RotationAxisEnum: "Omega" | "Kappa" | "Phi";
     /**
      * StateEnum 
      * @description An enumeration. 
@@ -1198,13 +1422,13 @@ export interface operations {
   get_particle_picker_autoProc__autoProcId__particlePicker_get: {
     /**
      * Get Particle Picker 
-     * @description Get astigmatism, resolution and defocus as a function of motion correction
-     * image numbers
+     * @description Get particle picking data
      */
     parameters: {
         /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
         /** @description Number of results to show */
       query?: {
+        filterNull?: boolean;
         page?: number;
         limit?: number;
       };
@@ -1227,11 +1451,10 @@ export interface operations {
       };
     };
   };
-  get_2d_classification_autoProc__autoProcId__classification_2d_get: {
+  get_2d_classification_autoProc__autoProcId__classification_get: {
     /**
      * Get 2D Classification 
-     * @description Get astigmatism, resolution and defocus as a function of motion correction
-     * image numbers
+     * @description Get 2d classification data
      */
     parameters: {
         /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
@@ -1252,6 +1475,50 @@ export interface operations {
           "application/json": components["schemas"]["Paged_Classification2D_"];
         };
       };
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_2d_classification_image_autoProc__autoProcId__classification__classificationId__image_get: {
+    /**
+     * Get 2D Classification Image 
+     * @description Get class image
+     */
+    parameters: {
+      path: {
+        classificationId: number;
+        autoProcId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: never;
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_particle_picker_image_autoProc__autoProcId__particlePicker__particlePickerId__image_get: {
+    /**
+     * Get Particle Picker Image 
+     * @description Get class image
+     */
+    parameters: {
+      path: {
+        particlePickerId: number;
+        autoProcId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: never;
       /** @description Validation Error */
       422: {
         content: {

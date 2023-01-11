@@ -27,7 +27,7 @@ import { useNavigate } from "react-router-dom";
 import { setLoading } from "../../features/uiSlice";
 import { client } from "../../utils/api/client";
 import { parseData } from "../../utils/generic";
-import { driftPlotOptions } from "../../utils/plot";
+import { driftPlotOptions } from "../../utils/config/plot";
 import { ScatterDataPoint } from "chart.js";
 import { buildEndpoint } from "../../utils/api/endpoint";
 
@@ -159,7 +159,9 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
           if (movie !== undefined) {
             setImage(`movies/${movie.movieId}/micrograph`, setMgImage);
             setImage(`movies/${movie.movieId}/fft`, setFftImage);
-            client.safe_get(`movies/${movie.movieId}/drift`).then((response) => {
+            const driftUrl = `movies/${movie.movieId}/drift?fromDb=${parentType === "autoProc"}`;
+
+            client.safe_get(driftUrl).then((response) => {
               setDrift(response.data.items);
             });
           }

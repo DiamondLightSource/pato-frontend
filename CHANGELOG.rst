@@ -3,12 +3,19 @@ Changelog
 ==========
 
 ++++++++++
-v0.0.2 (15/12/2022)
+v0.1.0 (11/01/2023)
 ++++++++++
 
 **Added**
 
+- Experiment type is displayed on the "data collection group" table
+- Dedicated single particle analysis page (new particle picking and 2d classification components)
 - User can now pick between displaying all data collections, or only ones with valid tomograms
+
+**Changed**
+
+- Visit number is displayed instead of session ID in data collection page
+- Visual tweaks and improvements
 
 ++++++++++
 v0.0.1 (14/12/2022)

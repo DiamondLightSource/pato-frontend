@@ -6,7 +6,7 @@ import { client } from "../../utils/api/client";
 import MotionPagination from "../motion/pagination";
 import { components } from "../../schema/main";
 import { parseData } from "../../utils/generic";
-import { classificationConfig } from "../../utils/parseConfig";
+import { classificationConfig } from "../../utils/config/parse";
 import { setLoading } from "../../features/uiSlice";
 import { useAppDispatch } from "../../store/hooks";
 import { SpaProps } from "../../utils/interfaces";

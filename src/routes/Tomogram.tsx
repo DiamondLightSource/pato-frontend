@@ -1,6 +1,6 @@
-import { Divider, Heading, Box, VStack, Code, HStack, Spacer, Checkbox } from "@chakra-ui/react";
+import { Divider, Heading, Box, VStack, Code, HStack, Spacer, Checkbox, Tag } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { client } from "../utils/api/client";
 import { useAppDispatch } from "../store/hooks";
 import { setLoading } from "../features/uiSlice";
@@ -11,7 +11,7 @@ import MotionPagination from "../components/motion/pagination";
 import InfoGroup from "../components/infogroup";
 import CollectionLoader from "../components/collectionLoading";
 import { buildEndpoint } from "../utils/api/endpoint";
-import { collectionConfig } from "../utils/parseConfig";
+import { collectionConfig } from "../utils/config/parse";
 
 const tomogramConfig: DataConfig = {
   include: [
@@ -27,10 +27,11 @@ const tomogramConfig: DataConfig = {
 
 const TomogramPage = () => {
   const params = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [tomogram, setTomogram] = useState<TomogramData | null | undefined>();
   const [collectionData, setCollectionData] = useState<CollectionData>({ info: [], comments: "" });
   const [pageCount, setPageCount] = useState(1);
-  const [onlyProcessed, setOnlyProcessed] = useState(false);
+  const [onlyProcessed, setOnlyProcessed] = useState(searchParams.get("onlyProcessed") === "true");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -40,6 +41,12 @@ const TomogramPage = () => {
     },
     [navigate]
   );
+
+  const updateTomogramFilter = useCallback(() => {
+    setOnlyProcessed(!onlyProcessed)
+    setSearchParams({onlyProcessed: (!onlyProcessed).toString()})
+  },[onlyProcessed, setSearchParams]
+  )
 
   useEffect(() => {
     document.title = `eBIC » Tomograms » ${params.collectionIndex}`;
@@ -83,6 +90,7 @@ const TomogramPage = () => {
         <VStack>
           <HStack w='100%'>
             <Heading>Data Collection #{params.collectionIndex}</Heading>
+            <Tag colorScheme="teal">Tomogram</Tag>
           </HStack>
           <Heading color='diamond.300' size='sm'>
             Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data collection group{" "}
@@ -97,7 +105,7 @@ const TomogramPage = () => {
             displayDefault={params.collectionIndex}
             total={pageCount}
           />
-          <Checkbox onChange={() => setOnlyProcessed(!onlyProcessed)} alignSelf='end'>
+          <Checkbox defaultChecked={onlyProcessed} onChange={updateTomogramFilter} alignSelf='end'>
             Only show processed tomograms
           </Checkbox>
         </VStack>

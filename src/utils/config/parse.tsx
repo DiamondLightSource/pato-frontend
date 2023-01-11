@@ -1,4 +1,4 @@
-import { DataConfig } from "./interfaces";
+import { DataConfig } from "../interfaces";
 
 const collectionConfig: DataConfig = {
   include: [

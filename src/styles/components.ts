@@ -133,7 +133,7 @@ const notFound = defineStyle({
 const notFoundSubtitle = defineStyle({
   ...notFound,
   fontWeight: 200,
-  size: 'md',
+  fontSize: 20,
   paddingBottom: 10
 })
 const Heading = defineStyleConfig({
