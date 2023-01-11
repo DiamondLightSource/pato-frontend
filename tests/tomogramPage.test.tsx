@@ -3,6 +3,16 @@ import { renderWithProviders } from "../src/utils/test-utils";
 import Tomogram from "../src/routes/Tomogram";
 import React from "react";
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'), // use actual for all non-hook parts
+  useParams: () => ({
+    collectionIndex: '5',
+    groupId: '2000',
+    propId: "cm-31111",
+    visitId: "5000"
+  }),
+}));
+
 describe("Tomogram", () => {
   it("should display title with proposals, collection, group and visit", () => {
     renderWithProviders(<Tomogram />);
