@@ -17,6 +17,13 @@ import {
   Skeleton,
   Grid,
   Tag,
+  useDisclosure,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalOverlay,
+  ModalContent,
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -31,6 +38,7 @@ import SPA from "../components/spa/main";
 import { collectionConfig } from "../utils/config/parse";
 import { MdFolder, MdPlayArrow } from "react-icons/md";
 import InfoGroup from "../components/infogroup";
+import RelionReprocessing from "../components/spa/relion";
 
 type ProcessingJob = components["schemas"]["ProcessingJobOut"];
 type DataCollection = components["schemas"]["DataCollectionSummaryOut"];
@@ -101,14 +109,26 @@ const SPAPage = () => {
     imageDirectory: "",
   });
   const [processingJobs, setProcessingJobs] = useState<ProcessingJob[]>([]);
+  const [processingJobToEdit, setProcessingJobToEdit] = useState<number | null>(null);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const updateCollection = useCallback(
     (page: number) => {
       navigate(`../${page}`, { relative: "path" });
     },
     [navigate]
+  );
+
+  const handleProcessingClicked = useCallback(
+    (procJobId: number) => {
+      console.log(procJobId);
+      setProcessingJobToEdit(procJobId);
+      console.log(processingJobToEdit);
+      onOpen();
+    },
+    [onOpen]
   );
 
   useEffect(() => {
@@ -143,9 +163,6 @@ const SPAPage = () => {
             <Heading>Data Collection</Heading>
             <Tag colorScheme='orange'>SPA</Tag>
             <Spacer />
-            <Button disabled>
-              <Icon as={MdPlayArrow} />
-            </Button>
           </HStack>
           <HStack w='100%'>
             <Heading color='diamond.300' size='sm'>
@@ -176,6 +193,9 @@ const SPAPage = () => {
                   <Tag colorScheme={job.AutoProcProgram.processingStatus === 1 ? "green" : "red"}>
                     {job.AutoProcProgram.processingStatus === 1 ? "Success" : "Fail"}
                   </Tag>
+                  <Button onClick={() => handleProcessingClicked(job.ProcessingJob.processingJobId)}>
+                    <Icon as={MdPlayArrow} />
+                  </Button>
                   <AccordionButton width='auto'>
                     <AccordionIcon />
                   </AccordionButton>
@@ -195,6 +215,21 @@ const SPAPage = () => {
           </Grid>
         )}
       </Accordion>
+      {processingJobToEdit && (
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>
+              <Heading size='md'>Relion Processing</Heading>
+              <ModalCloseButton />
+            </ModalHeader>
+            <Divider />
+            <ModalBody p={0}>
+              <RelionReprocessing procJobId={processingJobToEdit} />
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
     </Box>
   );
 };

@@ -55,11 +55,16 @@ const groupsHeaders = [
 ];
 
 const handleGroupClicked = (item: Record<string, string | number>) => {
+  // Temporary workaround
+  if (item.experimentType === "tomo") {
+    return `${item.dataCollectionGroupId}/tomograms`
+  }
+
   switch (item.experimentTypeName) {
     case "Single Particle":
       return `${item.dataCollectionGroupId}/spa`
     default:
-      return `${item.dataCollectionGroupId}/tomograms`
+      return `${item.dataCollectionGroupId}/spa`
   }
 }
 
