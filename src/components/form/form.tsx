@@ -7,22 +7,25 @@ interface FormProps {
 }
 
 const Form = ({ onSubmit, children }: FormProps) => {
-  const handleSubmit = useCallback((form: FormEvent<HTMLFormElement>) => {
-    form.preventDefault();
-    const formData = (form.target as HTMLFormElement).elements as HTMLFormControlsCollection;
-    let parsedData: Record<string,any> = {};
+  const handleSubmit = useCallback(
+    (form: FormEvent<HTMLFormElement>) => {
+      form.preventDefault();
+      const formData = (form.target as HTMLFormElement).elements as HTMLFormControlsCollection;
+      let parsedData: Record<string, any> = {};
 
-    for(let i = 0; i < formData.length; i++) {
-      const element = formData[i] as HTMLInputElement;
-      if (element.name) {
-        parsedData[element.name ?? i.toString()] = element.value
+      for (let i = 0; i < formData.length; i++) {
+        const element = formData[i] as HTMLInputElement;
+        if (element.name) {
+          parsedData[element.name ?? i.toString()] = element.value;
+        }
       }
-    }
 
-    if (parsedData && onSubmit) {
-      onSubmit(parsedData)
-    }
-  }, [onSubmit]);
+      if (Object.keys(parsedData).length > 0 && onSubmit) {
+        onSubmit(parsedData);
+      }
+    },
+    [onSubmit]
+  );
 
   return (
     <Box>
@@ -41,4 +44,4 @@ const Form = ({ onSubmit, children }: FormProps) => {
   );
 };
 
-export default Form;
+export { Form };

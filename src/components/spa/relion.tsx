@@ -1,8 +1,8 @@
 import { Text, Checkbox, VStack, Grid, GridItem } from "@chakra-ui/react";
 import { useCallback, useState } from "react";
 import { FieldSet } from "../form/fieldset";
-import Form from "../form/form";
-import { Dropdown, FormItem, FormNumberInput } from "../form/input";
+import { Form } from "../form/form";
+import { Dropdown, FormItem, NumericInput } from "../form/input";
 
 interface RelionProps {
   procJobId: number;
@@ -23,7 +23,7 @@ const motionCorrectionBinningValues = [
 const RelionReprocessing = ({ procJobId }: RelionProps) => {
   const [calculateAuto, setCalculateAuto] = useState(false);
 
-  const handleSubmit = useCallback((formData: Record<string,any>) => {
+  const handleSubmit = useCallback((formData: Record<string, any>) => {
     console.log(formData);
   }, []);
 
@@ -34,9 +34,7 @@ const RelionReprocessing = ({ procJobId }: RelionProps) => {
           <FieldSet title='Experiment'>
             <VStack spacing={4}>
               <Grid w='100%' py={2} templateColumns='repeat(2, 1fr)' gap={4}>
-                <Checkbox name='gainRef'>
-                  Gain Reference File
-                </Checkbox>
+                <Checkbox name='gainRef'>Gain Reference File</Checkbox>
                 <Checkbox name='phasePlate'>Phase Plate Used</Checkbox>
               </Grid>
               <FormItem label='Voltage' unit='kV'>
@@ -49,10 +47,10 @@ const RelionReprocessing = ({ procJobId }: RelionProps) => {
                 <Dropdown name='motionCorBinning' values={motionCorrectionBinningValues} />
               </FormItem>
               <FormItem label='Pixel Size' unit='Å/pixel'>
-                <FormNumberInput name='pixelSize' precision={3} defaultValue={0.831} />
+                <NumericInput name='pixelSize' precision={3} defaultValue={0.831} />
               </FormItem>
               <FormItem label='Dose per Frame' unit='e⁻/Å²'>
-                <FormNumberInput name='pixelSize' precision={3} defaultValue={1} />
+                <NumericInput name='pixelSize' precision={3} defaultValue={1} />
               </FormItem>
             </VStack>
           </FieldSet>
@@ -79,19 +77,19 @@ const RelionReprocessing = ({ procJobId }: RelionProps) => {
                 </VStack>
               </Grid>
               <FormItem label='Minimum Diameter' unit='Å'>
-                <FormNumberInput name='minimumDiameter' precision={0} defaultValue={100} />
+                <NumericInput name='minimumDiameter' defaultValue={100} />
               </FormItem>
               <FormItem label='Maximum Diameter' unit='Å'>
-                <FormNumberInput name='maximumDiameter' precision={0} defaultValue={140} />
+                <NumericInput name='maximumDiameter' defaultValue={140} />
               </FormItem>
               <FormItem label='Mask Diameter' unit='Å'>
-                <FormNumberInput disabled={calculateAuto} name='maskDiameter' precision={0} defaultValue={154} />
+                <NumericInput disabled={calculateAuto} name='maskDiameter' defaultValue={154} />
               </FormItem>
               <FormItem label='Box Size' helperText='Box size before binning' unit='Pixels'>
-                <FormNumberInput disabled={calculateAuto} name='boxSize' precision={0} defaultValue={204} />
+                <NumericInput disabled={calculateAuto} name='boxSize' defaultValue={204} />
               </FormItem>
               <FormItem label='Downsample Box Size' helperText='Box size after binning' unit='Pixels'>
-                <FormNumberInput disabled={calculateAuto} name='downBoxSize' precision={0} defaultValue={48} />
+                <NumericInput disabled={calculateAuto} name='downBoxSize' defaultValue={48} />
               </FormItem>
             </VStack>
           </FieldSet>

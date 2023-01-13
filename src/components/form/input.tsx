@@ -32,7 +32,7 @@ interface DropDownProps {
 
 interface NumberInputProps {
   name: string;
-  precision: number;
+  precision?: number;
   defaultValue: number;
   disabled?: boolean;
 }
@@ -62,7 +62,7 @@ const Dropdown = ({ values, name }: DropDownProps) => (
   </Select>
 );
 
-const FormNumberInput = ({ name, precision, disabled = false, defaultValue }: NumberInputProps) => (
+const NumericInput = ({ name, precision = 0, disabled = false, defaultValue }: NumberInputProps) => (
   <NumberInput isDisabled={disabled} size='sm' precision={precision} defaultValue={defaultValue}>
     <NumberInputField bg='white' name={name} />
     <NumberInputStepper>
@@ -72,4 +72,4 @@ const FormNumberInput = ({ name, precision, disabled = false, defaultValue }: Nu
   </NumberInput>
 );
 
-export { FormItem, FormNumberInput, Dropdown };
+export { FormItem, NumericInput, Dropdown };
