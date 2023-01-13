@@ -16,4 +16,4 @@ const Footer: FunctionComponent = (): JSX.Element => (
   </Box>
 );
 
-export default Footer;
+export { Footer };

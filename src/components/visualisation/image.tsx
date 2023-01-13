@@ -13,14 +13,14 @@ import {
   CardBody,
 } from "@chakra-ui/react";
 import { MouseEvent, useState } from "react";
-import { BaseCardProp } from "../utils/interfaces";
+import { BaseCardProp } from "../../utils/interfaces";
 
 interface ImageProps extends BaseCardProp {
   /** Source path for the image */
   src: string;
 }
 
-const ImageWrapper = ({
+const ImageCard = ({
   title,
   src,
   width = "100%",
@@ -94,4 +94,4 @@ const ImageWrapper = ({
   );
 };
 
-export default ImageWrapper;
+export { ImageCard };

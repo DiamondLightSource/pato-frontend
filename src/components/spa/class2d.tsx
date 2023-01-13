@@ -1,15 +1,15 @@
 import { Spacer, HStack, Divider, Grid, Heading, Skeleton, Box, Select } from "@chakra-ui/react";
-import Image from "../image";
-import InfoGroup, { Info } from "../infogroup";
+import { ImageCard } from "../visualisation/image";
+import { InfoGroup } from "../visualisation/infogroup";
 import { useCallback, useEffect, useState } from "react";
 import { client } from "../../utils/api/client";
-import MotionPagination from "../motion/pagination";
+import { MotionPagination } from "../motion/pagination";
 import { components } from "../../schema/main";
 import { parseData } from "../../utils/generic";
 import { classificationConfig } from "../../utils/config/parse";
 import { setLoading } from "../../features/uiSlice";
 import { useAppDispatch } from "../../store/hooks";
-import { SpaProps } from "../../utils/interfaces";
+import { SpaProps, Info } from "../../utils/interfaces";
 
 type Classification2D = components["schemas"]["Classification2D"];
 interface FullClassification extends Classification2D {
@@ -97,7 +97,7 @@ const Class2d = ({ autoProcId }: SpaProps) => {
       {classificationData.length ? (
         <Grid py={2} marginBottom={6} templateColumns='repeat(8, 1fr)' h='14vh' gap={2}>
           {classificationData.map((item, i) => (
-            <Image
+            <ImageCard
               height='14vh'
               showModal={false}
               key={item.particleClassificationId}
@@ -105,7 +105,7 @@ const Class2d = ({ autoProcId }: SpaProps) => {
               title={`${item.batchNumber}-${item.classNumber} (${item.particlesPerClass})`}
               active={selectedClass === i}
               onClick={() => setSelectedClass(i)}
-            ></Image>
+            />
           ))}
         </Grid>
       ) : (
@@ -116,4 +116,4 @@ const Class2d = ({ autoProcId }: SpaProps) => {
   );
 };
 
-export default Class2d;
+export { Class2d };

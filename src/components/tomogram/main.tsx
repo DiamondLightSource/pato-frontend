@@ -1,14 +1,14 @@
 import { Spacer, HStack, Divider, Grid, Button, Heading, Skeleton, Box, GridItem } from "@chakra-ui/react";
-import Image from "./image";
-import InfoGroup, { Info } from "./infogroup";
-import Scatter from "./scatter";
-import Motion from "./motion/motion";
+import { ImageCard } from "../visualisation/image";
+import { InfoGroup } from "../visualisation/infogroup";
+import { ScatterPlot } from "../visualisation/scatter";
+import { Motion } from "../motion/motion";
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 import { MdSettings } from "react-icons/md";
-import { client } from "../utils/api/client";
+import { client } from "../../utils/api/client";
 import { ScatterDataPoint } from "chart.js";
-import { astigmatismPlotOptions, defocusPlotOptions, resolutionPlotOptions } from "../utils/config/plot";
-import { CtfData, TomogramData } from "../utils/interfaces";
+import { astigmatismPlotOptions, defocusPlotOptions, resolutionPlotOptions } from "../../utils/config/plot";
+import { CtfData, TomogramData, Info } from "../../utils/interfaces";
 
 /* The reason why this is a separate component is that in the future, tomograms might no longer have a 1:1
  ** relationship with data collections. Should that happen, just reuse this component.
@@ -100,10 +100,10 @@ const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
                 <InfoGroup info={tomogramInfo} />
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }} height={{ base: "20vh", md: "32vh" }}>
-                <Image title='Central Slice' src={sliceImage} height='100%' />
+                <ImageCard title='Central Slice' src={sliceImage} height='100%' />
               </GridItem>
               <GridItem colSpan={{ base: 3, md: 1 }} minW='100%' height={{ base: "20vh", md: "32vh" }}>
-                <Scatter title='Shift Plot' scatterData={shiftData} />
+                <ScatterPlot title='Shift Plot' scatterData={shiftData} />
               </GridItem>
             </Grid>
             <Heading variant='collection'>Summary</Heading>
@@ -113,7 +113,7 @@ const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
             ) : (
               <Grid py={2} marginBottom={6} templateColumns='repeat(3, 1fr)' h='20vh' gap={2}>
                 <GridItem minW='100%'>
-                  <Scatter
+                  <ScatterPlot
                     height='20vh'
                     title='Astigmatism'
                     scatterData={ctfData.astigmatism}
@@ -121,10 +121,15 @@ const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
                   />
                 </GridItem>
                 <GridItem minW='100%'>
-                  <Scatter height='20vh' title='Defocus' scatterData={ctfData.defocus} options={defocusPlotOptions} />
+                  <ScatterPlot
+                    height='20vh'
+                    title='Defocus'
+                    scatterData={ctfData.defocus}
+                    options={defocusPlotOptions}
+                  />
                 </GridItem>
                 <GridItem minW='100%'>
-                  <Scatter
+                  <ScatterPlot
                     height='20vh'
                     title='Resolution'
                     scatterData={ctfData.resolution}
@@ -140,4 +145,4 @@ const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
   );
 };
 
-export default Tomogram;
+export { Tomogram };

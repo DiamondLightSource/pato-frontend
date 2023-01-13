@@ -25,7 +25,7 @@ import {
 import { Scatter } from "react-chartjs-2";
 
 import { useEffect, useState } from "react";
-import { BaseCardProp } from "../utils/interfaces";
+import { BaseCardProp } from "../../utils/interfaces";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
@@ -53,14 +53,14 @@ const defaultOptions = {
   showLine: false,
 };
 
-const ScatterWrapper = ({
+const ScatterPlot = ({
   title,
   scatterData,
   options = defaultOptions,
   width = "100%",
   height = "100%",
   active = false,
-  onClick
+  onClick,
 }: ScatterProps) => {
   const [data, setData] = useState(preloadedData);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -79,24 +79,24 @@ const ScatterWrapper = ({
   return (
     <Card aria-selected={active} w={width} h={height} onClick={onOpen}>
       <CardHeader>
-      <Heading size='sm'>{title}</Heading>
+        <Heading size='sm'>{title}</Heading>
       </CardHeader>
-      <CardBody px={2} py="0">
-      <Scatter style={{ paddingBottom: "10px" }} data={data} options={options} />
-      <Modal size='xl' isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent maxW='90vw'>
-          <ModalHeader>{title}</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Scatter data={data} options={{ ...options, maintainAspectRatio: true }} />
-          </ModalBody>
-          <ModalFooter></ModalFooter>
-        </ModalContent>
-      </Modal>
+      <CardBody px={2} py='0'>
+        <Scatter style={{ paddingBottom: "10px" }} data={data} options={options} />
+        <Modal size='xl' isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent maxW='90vw'>
+            <ModalHeader>{title}</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Scatter data={data} options={{ ...options, maintainAspectRatio: true }} />
+            </ModalBody>
+            <ModalFooter></ModalFooter>
+          </ModalContent>
+        </Modal>
       </CardBody>
     </Card>
   );
 };
 
-export default ScatterWrapper;
+export { ScatterPlot };

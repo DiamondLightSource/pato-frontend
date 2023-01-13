@@ -37,8 +37,8 @@ import { buildEndpoint } from "../utils/api/endpoint";
 import SPA from "../components/spa/main";
 import { collectionConfig } from "../utils/config/parse";
 import { MdFolder, MdPlayArrow } from "react-icons/md";
-import InfoGroup from "../components/infogroup";
-import RelionReprocessing from "../components/spa/relion";
+import { InfoGroup } from "../components/visualisation/infogroup";
+import { RelionReprocessing } from "../components/spa/relion";
 
 type ProcessingJob = components["schemas"]["ProcessingJobOut"];
 type DataCollection = components["schemas"]["DataCollectionSummaryOut"];
@@ -100,7 +100,7 @@ const ProcTitleInfo = ({ title, value }: ProcTitleInfoProps) => (
   </>
 );
 
-const SPAPage = () => {
+const SpaPage = () => {
   const params = useParams();
   const [collectionData, setCollectionData] = useState<SpaCollectionData>({
     info: [],
@@ -123,12 +123,10 @@ const SPAPage = () => {
 
   const handleProcessingClicked = useCallback(
     (procJobId: number) => {
-      console.log(procJobId);
       setProcessingJobToEdit(procJobId);
-      console.log(processingJobToEdit);
       onOpen();
     },
-    [onOpen]
+    [onOpen, setProcessingJobToEdit]
   );
 
   useEffect(() => {
@@ -193,7 +191,7 @@ const SPAPage = () => {
                   <Tag colorScheme={job.AutoProcProgram.processingStatus === 1 ? "green" : "red"}>
                     {job.AutoProcProgram.processingStatus === 1 ? "Success" : "Fail"}
                   </Tag>
-                  <Button onClick={() => handleProcessingClicked(job.ProcessingJob.processingJobId)}>
+                  <Button isDisabled onClick={() => handleProcessingClicked(job.ProcessingJob.processingJobId)}>
                     <Icon as={MdPlayArrow} />
                   </Button>
                   <AccordionButton width='auto'>
@@ -216,7 +214,7 @@ const SPAPage = () => {
         )}
       </Accordion>
       {processingJobToEdit && (
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal size='6xl' isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>
@@ -234,4 +232,4 @@ const SPAPage = () => {
   );
 };
 
-export default SPAPage;
+export { SpaPage };

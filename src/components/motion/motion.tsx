@@ -16,10 +16,10 @@ import {
   Code,
   GridItem,
 } from "@chakra-ui/react";
-import Image from "../image";
-import InfoGroup, { Info } from "../infogroup";
-import Scatter from "../scatter";
-import MotionPagination from "./pagination";
+import { ImageCard } from "../visualisation/image";
+import { InfoGroup } from "../visualisation/infogroup";
+import { ScatterPlot } from "../visualisation/scatter";
+import { MotionPagination } from "./pagination";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { MdComment } from "react-icons/md";
 import { useDispatch } from "react-redux";
@@ -30,6 +30,7 @@ import { parseData } from "../../utils/generic";
 import { driftPlotOptions } from "../../utils/config/plot";
 import { ScatterDataPoint } from "chart.js";
 import { buildEndpoint } from "../../utils/api/endpoint";
+import { Info } from "../../utils/interfaces";
 
 interface MotionData {
   /** Total number of tilt alignment images available */
@@ -207,13 +208,13 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
           <InfoGroup info={motion.info} />
         </GridItem>
         <GridItem h='25vh' colSpan={{ base: 2, md: 1 }}>
-          <Image src={mgImage} title='Micrograph Snapshot' height='100%' />
+          <ImageCard src={mgImage} title='Micrograph Snapshot' height='100%' />
         </GridItem>
         <GridItem h='25vh' colSpan={{ base: 2, md: 1 }}>
-          <Image src={fftImage} title='FFT Theoretical' height='100%' />
+          <ImageCard src={fftImage} title='FFT Theoretical' height='100%' />
         </GridItem>
         <GridItem h='25vh' minW='100%' colSpan={{ base: 2, md: 1 }}>
-          <Scatter title='Drift' options={driftPlotOptions} scatterData={drift} />
+          <ScatterPlot title='Drift' options={driftPlotOptions} scatterData={drift} />
         </GridItem>
       </Grid>
       <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
@@ -234,4 +235,4 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
   );
 };
 
-export default Motion;
+export { Motion };

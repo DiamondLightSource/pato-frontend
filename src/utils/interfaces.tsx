@@ -1,6 +1,5 @@
 import { ResponsiveValue } from "@chakra-ui/react";
 import { ScatterDataPoint } from "chart.js";
-import { Info } from "../components/infogroup";
 
 export interface DataConfig {
   include: { name: string | string[]; unit?: string; label?: string }[];
@@ -27,6 +26,15 @@ export interface TomogramData {
 export interface SpaProps {
   /* Parent autoprocessing program ID*/
   autoProcId: number;
+}
+
+export interface Info {
+  /** Label/description (title) for a display value */
+  label: string;
+  /** Value to accompany label */
+  value?: string;
+  /** Whether or not the given information element should span all columns */
+  wide?: boolean;
 }
 
 export interface BaseCardProp {

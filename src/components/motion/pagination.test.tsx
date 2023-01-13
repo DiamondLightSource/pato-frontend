@@ -1,6 +1,6 @@
-import MotionPagination from "../src/components/motion/pagination";
+import { MotionPagination } from "./pagination";
 import React from "react";
-import { renderWithProviders } from "../src/utils/test-utils";
+import { renderWithProviders } from "../../utils/test-utils";
 import { fireEvent, screen } from "@testing-library/react";
 
 describe("MotionPagination", () => {

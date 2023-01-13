@@ -27,4 +27,4 @@ const CollectionLoader = () => {
   );
 };
 
-export default CollectionLoader;
+export { CollectionLoader };

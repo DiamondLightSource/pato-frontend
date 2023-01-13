@@ -1,7 +1,6 @@
 import { fireEvent, screen } from "@testing-library/react";
-import { renderWithProviders } from "../src/utils/test-utils";
-import GenericListing from "../src/routes/GenericListing";
-import React from "react";
+import { renderWithProviders } from "../utils/test-utils";
+import { GenericListing } from "./GenericListing";
 
 describe("GenericListing", () => {
   it("should display message when no data is received", () => {

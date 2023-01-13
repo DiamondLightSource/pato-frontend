@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Pagination from "../components/pagination";
+import { Pagination } from "../components/navigation/pagination";
 import { setLoading } from "../features/uiSlice";
 import { useAppDispatch } from "../store/hooks";
 import { client } from "../utils/api/client";
@@ -61,6 +61,9 @@ const GenericListing = ({ headers, endpoint, heading, makePathCallback }: TableP
         if (response.data && response.data.items !== undefined) {
           setTotal(response.data.total);
           setData(response.data.items);
+        } else {
+          setTotal(0);
+          setData([]);
         }
       })
       .finally(() => dispatch(setLoading(false)));
@@ -131,4 +134,4 @@ const GenericListing = ({ headers, endpoint, heading, makePathCallback }: TableP
   );
 };
 
-export default GenericListing;
+export { GenericListing };

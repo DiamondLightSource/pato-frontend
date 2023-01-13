@@ -1,12 +1,12 @@
 import { Divider, Grid, Heading, Skeleton, Box, GridItem } from "@chakra-ui/react";
-import Scatter from "../scatter";
-import Motion from "../motion/motion";
+import { ScatterPlot } from "../visualisation/scatter";
+import { Motion } from "../motion/motion";
 import { useEffect, useState } from "react";
 import { client } from "../../utils/api/client";
 import { astigmatismPlotOptions, defocusPlotOptions, resolutionSpaPlotOptions } from "../../utils/config/plot";
 import { CtfData } from "../../utils/interfaces";
-import Class2d from "./class2d";
-import ParticlePicking from "./particlePicking";
+import { Class2d } from "./class2d";
+import { ParticlePicking } from "./particlePicking";
 
 interface SpaProps {
   /* Parent autoprocessing program ID*/
@@ -42,7 +42,7 @@ const SPA = ({ autoProcId }: SpaProps) => {
       ) : (
         <Grid py={2} marginBottom={6} templateColumns='repeat(3, 1fr)' h='20vh' gap={2}>
           <GridItem minW='100%'>
-            <Scatter
+            <ScatterPlot
               height='20vh'
               title='Astigmatism'
               scatterData={ctfData.astigmatism}
@@ -50,10 +50,10 @@ const SPA = ({ autoProcId }: SpaProps) => {
             />
           </GridItem>
           <GridItem minW='100%'>
-            <Scatter height='20vh' title='Defocus' scatterData={ctfData.defocus} options={defocusPlotOptions} />
+            <ScatterPlot height='20vh' title='Defocus' scatterData={ctfData.defocus} options={defocusPlotOptions} />
           </GridItem>
           <GridItem minW='100%'>
-            <Scatter
+            <ScatterPlot
               height='20vh'
               title='Resolution'
               scatterData={ctfData.resolution}

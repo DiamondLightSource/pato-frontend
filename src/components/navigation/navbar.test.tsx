@@ -1,6 +1,6 @@
 import { fireEvent, screen } from "@testing-library/react";
-import { renderWithProviders } from "../src/utils/test-utils";
-import Navbar from "../src/components/navbar";
+import { renderWithProviders } from "../../utils/test-utils";
+import { Navbar } from "../navigation/navbar";
 import React from "react";
 
 describe("Navbar", () => {
@@ -43,7 +43,7 @@ describe("Navbar", () => {
     renderWithProviders(<Navbar />, {
       preloadedState: { auth: { user: { name: "Someone", fedid: "aaa" } }, ui: { loading: false } },
     });
-    expect(screen.getByRole('button', { name: /open menu/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /open menu/i })).toBeInTheDocument();
   });
 
   it("should display menu items when hamburger menu is clicked", () => {
@@ -51,8 +51,8 @@ describe("Navbar", () => {
     renderWithProviders(<Navbar />, {
       preloadedState: { auth: { user: { name: "Someone", fedid: "aaa" } }, ui: { loading: false } },
     });
-    const menu = screen.getByRole('button', { name: /open menu/i })
-    fireEvent.click(menu)
+    const menu = screen.getByRole("button", { name: /open menu/i });
+    fireEvent.click(menu);
 
     expect(screen.getAllByText("Proposals").length).toBe(2);
   });

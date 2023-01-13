@@ -1,6 +1,5 @@
-import Tomogram from "../src/components/tomogram";
-import React from "react";
-import { renderWithProviders } from "../src/utils/test-utils";
+import { Tomogram } from "./main";
+import { renderWithProviders } from "../../utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { Accordion } from "@chakra-ui/react";
 

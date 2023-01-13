@@ -112,4 +112,4 @@ const MotionPagination = ({
   );
 };
 
-export default MotionPagination;
+export { MotionPagination };

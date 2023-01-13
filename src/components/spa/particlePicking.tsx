@@ -1,13 +1,13 @@
 import { Spacer, HStack, Divider, Heading, Text, Checkbox, VStack } from "@chakra-ui/react";
-import Image from "../image";
-import InfoGroup, { Info } from "../infogroup";
-import MotionPagination from "../motion/pagination";
+import { ImageCard } from "../visualisation/image";
+import { InfoGroup } from "../visualisation/infogroup";
+import { MotionPagination } from "../motion/pagination";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../features/uiSlice";
 import { client } from "../../utils/api/client";
 import { parseData } from "../../utils/generic";
-import { DataConfig, SpaProps } from "../../utils/interfaces";
+import { DataConfig, SpaProps, Info } from "../../utils/interfaces";
 
 interface ParticleProps extends SpaProps {
   /* Total number of available items */
@@ -90,7 +90,7 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
         <HStack marginY={2}>
           <InfoGroup cols={1} info={particleInfo} />
           <Spacer />
-          <Image src={summaryImage} title='Summary' width='30%' height='20vh' />
+          <ImageCard src={summaryImage} title='Summary' width='30%' height='20vh' />
         </HStack>
       ) : (
         <VStack>
@@ -104,4 +104,4 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
   );
 };
 
-export default ParticlePicking;
+export { ParticlePicking };
