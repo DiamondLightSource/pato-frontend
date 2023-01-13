@@ -1,7 +1,7 @@
 import { Divider, Grid, Heading, Skeleton, Box, GridItem } from "@chakra-ui/react";
 import { ScatterPlot } from "../visualisation/scatter";
 import { Motion } from "../motion/motion";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { client } from "../../utils/api/client";
 import { astigmatismPlotOptions, defocusPlotOptions, resolutionSpaPlotOptions } from "../../utils/config/plot";
 import { CtfData } from "../../utils/interfaces";
@@ -33,6 +33,10 @@ const SPA = ({ autoProcId }: SpaProps) => {
     });
   }, [autoProcId]);
 
+  const handlePageChanged = useCallback((_: any, newPage: number) => {
+    setPage(newPage);
+  }, []);
+
   return (
     <Box p={4}>
       <Heading variant='collection'>Summary</Heading>
@@ -63,8 +67,8 @@ const SPA = ({ autoProcId }: SpaProps) => {
         </Grid>
       )}
       <Motion
-        onMotionChanged={(_, newPage) => setPage(newPage)}
-        onTotalChanged={(e) => setTotal(e)}
+        onMotionChanged={handlePageChanged}
+        onTotalChanged={setTotal}
         parentType='autoProc'
         parentId={autoProcId}
       />

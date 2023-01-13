@@ -114,7 +114,6 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const setImage = (endpoint: string, setState: Dispatch<SetStateAction<string>>) => {
     client.safe_get(endpoint).then((response) => {
@@ -145,7 +144,6 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
 
   useEffect(() => {
     dispatch(setLoading(true));
-
     client
       .safe_get(buildEndpoint(`${parentType}/${parentId}/motion`, {}, 1, page ?? 0))
       .then((response) => {
@@ -173,7 +171,7 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
         }
       })
       .finally(() => dispatch(setLoading(false)));
-  }, [page, parentId, parentType, dispatch, navigate, onMotionChanged, onTotalChanged]);
+  }, [page, parentId, parentType, dispatch, onMotionChanged, onTotalChanged]);
 
   return (
     <div>

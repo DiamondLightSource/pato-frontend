@@ -1,4 +1,4 @@
-import { Spacer, HStack, Divider, Grid, Heading, Skeleton, Box, Select } from "@chakra-ui/react";
+import { Spacer, HStack, Divider, Grid, Heading, Skeleton, Box, Select, VStack } from "@chakra-ui/react";
 import { ImageCard } from "../visualisation/image";
 import { InfoGroup } from "../visualisation/infogroup";
 import { useCallback, useEffect, useState } from "react";
@@ -23,7 +23,7 @@ const sortValues = [
 ];
 
 const Class2d = ({ autoProcId }: SpaProps) => {
-  const [classificationData, setClassificationData] = useState<FullClassification[]>([]);
+  const [classificationData, setClassificationData] = useState<FullClassification[] | undefined | null>(undefined);
   const [pageAmount, setPageAmount] = useState(0);
   const [sortType, setSortType] = useState("particles");
   const [selectedClass, setSelectedClass] = useState(0);
@@ -53,13 +53,17 @@ const Class2d = ({ autoProcId }: SpaProps) => {
       client
         .safe_get(`autoProc/${autoProcId}/classification?limit=8&page=${page - 1}&sortBy=${sortType}`)
         .then(async (response) => {
-          setPageAmount(Math.ceil(response.data.total / 8));
-          const classes = await Promise.all(
-            response.data.items.map(async (item: FullClassification) => {
-              return await getClassImage(item);
-            })
-          );
-          setClassificationData(classes);
+          if (response.data.items) {
+            setPageAmount(Math.ceil(response.data.total / 8));
+            const classes = await Promise.all(
+              response.data.items.map(async (item: FullClassification) => {
+                return await getClassImage(item);
+              })
+            );
+            setClassificationData(classes);
+          } else {
+            setClassificationData(null);
+          }
         })
         .finally(() => dispatch(setLoading(false)));
     },
@@ -71,7 +75,7 @@ const Class2d = ({ autoProcId }: SpaProps) => {
   }, [handle2dClassificationChange]);
 
   useEffect(() => {
-    if (classificationData[selectedClass]) {
+    if (classificationData && classificationData[selectedClass]) {
       setSelectedClassInfo(parseData(classificationData[selectedClass], classificationConfig));
     }
   }, [selectedClass, classificationData]);
@@ -94,7 +98,7 @@ const Class2d = ({ autoProcId }: SpaProps) => {
         <MotionPagination startFrom='start' onChange={handle2dClassificationChange} total={pageAmount} />
       </HStack>
       <Divider />
-      {classificationData.length ? (
+      {classificationData ? (
         <Grid py={2} marginBottom={6} templateColumns='repeat(8, 1fr)' h='14vh' gap={2}>
           {classificationData.map((item, i) => (
             <ImageCard
@@ -109,9 +113,20 @@ const Class2d = ({ autoProcId }: SpaProps) => {
           ))}
         </Grid>
       ) : (
-        <Skeleton h='14vh' marginBottom={1} />
+        <>
+          {classificationData === undefined ? (
+            <Skeleton h='23vh' marginBottom={1} />
+          ) : (
+            <VStack>
+              <Heading paddingTop={10} variant='notFound'>
+                No Particle Picking Data Found
+              </Heading>
+              <Heading variant='notFoundSubtitle'>This page does not contain any particle picking information.</Heading>
+            </VStack>
+          )}
+        </>
       )}
-      {selectedClassInfo.info ? <InfoGroup cols={5} info={selectedClassInfo.info as Info[]} /> : <Skeleton h='9vh' />}
+      {selectedClassInfo.info && <InfoGroup cols={5} info={selectedClassInfo.info as Info[]} />}
     </Box>
   );
 };

@@ -58,9 +58,16 @@ export interface paths {
   "/movies/{movieId}/drift": {
     /**
      * Get Drift 
-     * @description Get drift
+     * @description Get drift from a JSON file or from the drift table
      */
     get: operations["get_drift_movies__movieId__drift_get"];
+  };
+  "/movies/{movieId}/iceThickness": {
+    /**
+     * Get Relative Ice Thickness 
+     * @description Get values for relative ice thickness for a given movie
+     */
+    get: operations["get_relative_ice_thickness_movies__movieId__iceThickness_get"];
   };
   "/dataCollections": {
     /**
@@ -86,7 +93,7 @@ export interface paths {
   "/dataCollections/{collectionId}/motion": {
     /**
      * Get Motion Correction 
-     * @description Get motion correction and tilt alignment data (including drift plot)
+     * @description Get motion correction and tilt alignment data
      */
     get: operations["get_motion_correction_dataCollections__collectionId__motion_get"];
   };
@@ -162,7 +169,7 @@ export interface components {
       /** Processingprograms */
       processingPrograms?: string;
       /** Processingstatus */
-      processingStatus: number;
+      processingStatus?: number;
       /** Processingmessage */
       processingMessage?: string;
       /**
@@ -499,7 +506,7 @@ export interface components {
       /** Totalabsorbeddose */
       totalAbsorbedDose?: number;
       /** Binning */
-      binning: number;
+      binning?: number;
       /** Particlediameter */
       particleDiameter?: number;
       /** Boxsize Ctf */
@@ -777,6 +784,8 @@ export interface components {
     ProcessingJobOut: {
       AutoProcProgram: components["schemas"]["AutoProcProgram"];
       ProcessingJob: components["schemas"]["ProcessingJob"];
+      /** Status */
+      status: string;
     };
     /** ProposalOut */
     ProposalOut: {
@@ -1161,9 +1170,40 @@ export interface operations {
   get_drift_movies__movieId__drift_get: {
     /**
      * Get Drift 
-     * @description Get drift
+     * @description Get drift from a JSON file or from the drift table
      */
     parameters: {
+      query?: {
+        fromDb?: boolean;
+      };
+      path: {
+        movieId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GenericPlot"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_relative_ice_thickness_movies__movieId__iceThickness_get: {
+    /**
+     * Get Relative Ice Thickness 
+     * @description Get values for relative ice thickness for a given movie
+     */
+    parameters: {
+      query?: {
+        fromDb?: boolean;
+      };
       path: {
         movieId: number;
       };
@@ -1274,7 +1314,7 @@ export interface operations {
   get_motion_correction_dataCollections__collectionId__motion_get: {
     /**
      * Get Motion Correction 
-     * @description Get motion correction and tilt alignment data (including drift plot)
+     * @description Get motion correction and tilt alignment data
      */
     parameters: {
         /** @description Page number/Results to skip. Negative numbers count backwards from the last page */

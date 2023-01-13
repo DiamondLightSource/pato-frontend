@@ -100,6 +100,13 @@ const ProcTitleInfo = ({ title, value }: ProcTitleInfoProps) => (
   </>
 );
 
+const jobStatusColour: Record<string, string> = {
+  Success: "green",
+  Queued: "purple",
+  Fail: "red",
+  Running: "orange",
+};
+
 const SpaPage = () => {
   const params = useParams();
   const [collectionData, setCollectionData] = useState<SpaCollectionData>({
@@ -110,6 +117,8 @@ const SpaPage = () => {
   });
   const [processingJobs, setProcessingJobs] = useState<ProcessingJob[]>([]);
   const [processingJobToEdit, setProcessingJobToEdit] = useState<number | null>(null);
+  const [accordionIndex, setAccordionIndex] = useState<number | number[]>(0);
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -133,12 +142,14 @@ const SpaPage = () => {
     document.title = `eBIC » SPA » ${params.groupId}`;
     dispatch(setLoading(true));
     client.safe_get(buildEndpoint("dataCollections", params, 1, 1)).then((response) => {
-      const data = response.data.items[0] as DataCollection;
-      const parsedData = parseData(data, spaCollectionConfig) as SpaCollectionData;
+      if (response.data.items) {
+        const data = response.data.items[0] as DataCollection;
+        const parsedData = parseData(data, spaCollectionConfig) as SpaCollectionData;
 
-      parsedData.info.unshift({ label: "Acquisition Software", value: getAcquisitionSoftware(data.fileTemplate) });
-      parsedData.info.push({ label: "Comments", value: getAcquisitionSoftware(data.comments ?? ""), wide: true });
-      setCollectionData(parsedData);
+        parsedData.info.unshift({ label: "Acquisition Software", value: getAcquisitionSoftware(data.fileTemplate) });
+        parsedData.info.push({ label: "Comments", value: getAcquisitionSoftware(data.comments ?? ""), wide: true });
+        setCollectionData(parsedData);
+      }
     });
   }, [params, dispatch, navigate, updateCollection]);
 
@@ -148,7 +159,9 @@ const SpaPage = () => {
       client
         .safe_get(buildEndpoint("processingJobs", { collectionId: collectionId.toString() }, 25, 1))
         .then((response) => {
-          setProcessingJobs(response.data.items);
+          if (response.data.items) {
+            setProcessingJobs(response.data.items);
+          }
         });
     }
   }, [collectionData, params]);
@@ -178,9 +191,9 @@ const SpaPage = () => {
       <Divider marginY={2} />
       <InfoGroup cols={5} info={collectionData.info} />
       <Divider marginY={2} />
-      <Accordion defaultIndex={[0]} allowToggle>
-        {processingJobs.length ? (
-          processingJobs.map((job, i) => (
+      {processingJobs.length ? (
+        <Accordion onChange={setAccordionIndex} index={accordionIndex} allowToggle>
+          {processingJobs.map((job, i) => (
             <AccordionItem key={i}>
               <h2>
                 <HStack py={1.5} px={3} w='100%' bg='diamond.100'>
@@ -188,9 +201,7 @@ const SpaPage = () => {
                   <ProcTitleInfo title='AutoProc. Program' value={job.AutoProcProgram.autoProcProgramId} />
                   <ProcTitleInfo title='Processing Start' value={job.AutoProcProgram.processingStartTime ?? "?"} />
                   <ProcTitleInfo title='Processing End' value={job.AutoProcProgram.processingEndTime ?? "?"} />
-                  <Tag colorScheme={job.AutoProcProgram.processingStatus === 1 ? "green" : "red"}>
-                    {job.AutoProcProgram.processingStatus === 1 ? "Success" : "Fail"}
-                  </Tag>
+                  <Tag colorScheme={jobStatusColour[job.status]}>{job.status}</Tag>
                   <Button isDisabled onClick={() => handleProcessingClicked(job.ProcessingJob.processingJobId)}>
                     <Icon as={MdPlayArrow} />
                   </Button>
@@ -200,19 +211,23 @@ const SpaPage = () => {
                 </HStack>
               </h2>
               <AccordionPanel p={0}>
-                <SPA autoProcId={job.AutoProcProgram.autoProcProgramId} />
+                {
+                  accordionIndex === i && (
+                    <SPA autoProcId={job.AutoProcProgram.autoProcProgramId} />
+                  ) /* isExpanded is not to be trusted */
+                }
               </AccordionPanel>
             </AccordionItem>
-          ))
-        ) : (
-          <Grid gap={3}>
-            <Skeleton h='4vh' />
-            <Skeleton h='25vh' />
-            <Skeleton h='25vh' />
-            <Skeleton h='20vh' />
-          </Grid>
-        )}
-      </Accordion>
+          ))}
+        </Accordion>
+      ) : (
+        <Grid gap={3}>
+          <Skeleton h='4vh' />
+          <Skeleton h='25vh' />
+          <Skeleton h='25vh' />
+          <Skeleton h='20vh' />
+        </Grid>
+      )}
       {processingJobToEdit && (
         <Modal size='6xl' isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
