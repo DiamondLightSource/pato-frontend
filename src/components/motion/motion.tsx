@@ -23,7 +23,6 @@ import { MotionPagination } from "./pagination";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { MdComment } from "react-icons/md";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { setLoading } from "../../features/uiSlice";
 import { client } from "../../utils/api/client";
 import { parseData } from "../../utils/generic";

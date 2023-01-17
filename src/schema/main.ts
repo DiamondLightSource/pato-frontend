@@ -814,6 +814,29 @@ export interface components {
       /** @default Open */
       state?: components["schemas"]["StateEnum"];
     };
+    /** RelativeIceThickness */
+    RelativeIceThickness: {
+      /** Minimum */
+      minimum: number;
+      /** Q1 */
+      q1: number;
+      /** Median */
+      median: number;
+      /** Q3 */
+      q3: number;
+      /** Maximum */
+      maximum: number;
+      /** Minavg */
+      minAvg?: number;
+      /** Maxavg */
+      maxAvg?: number;
+      /** Q1Avg */
+      q1Avg?: number;
+      /** Q3Avg */
+      q3Avg?: number;
+      /** Medianavg */
+      medianAvg?: number;
+    };
     /**
      * RotationAxisEnum 
      * @description An enumeration. 
@@ -1212,7 +1235,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["GenericPlot"];
+          "application/json": components["schemas"]["RelativeIceThickness"];
         };
       };
       /** @description Validation Error */
