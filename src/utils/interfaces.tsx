@@ -64,6 +64,18 @@ export interface BasePoint {
   y: number;
 }
 
+export interface BoxPlotStats {
+  /** Name for the box */
+  label: string,
+  min: number,
+  max: number,
+  /** First quartile */
+  q1: number,
+  /** Third quartile */
+  q3: number,
+  median: number
+}
+
 interface PlotAxisOptions {
   /** Domain (lower and upper bounds) of the axis */
   domain: { min?: number; max?: number };
@@ -71,13 +83,9 @@ interface PlotAxisOptions {
   label: string;
 }
 
-interface PlotOptions {
-  x: PlotAxisOptions;
-  y: PlotAxisOptions;
-  tooltip: { display: boolean };
-}
-
-export interface CompleteScatterPlotOptions extends DeepRequired<PlotOptions> {
+export interface CompleteScatterPlotOptions {
+  x: DeepRequired<PlotAxisOptions>;
+  y: DeepRequired<PlotAxisOptions>;
   points: {
     /** Radius to use when rendering datapoints */
     dotRadius: number;
@@ -85,3 +93,10 @@ export interface CompleteScatterPlotOptions extends DeepRequired<PlotOptions> {
 }
 
 export interface ScatterPlotOptions extends DeepPartial<CompleteScatterPlotOptions> {}
+
+
+export interface CompleteBoxOptions {
+  y: PlotAxisOptions
+}
+
+export interface BoxPlotOptions extends DeepPartial<CompleteBoxOptions> {}

@@ -14,8 +14,8 @@ const x = (d: BasePoint) => d.x;
 const y = (d: BasePoint) => d.y;
 
 export type DotsProps = {
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   options?: ScatterPlotOptions;
   data: BasePoint[];
 };
@@ -30,8 +30,8 @@ const defaultPlotOptions: ScatterPlotOptions = {
 
 const Scatter = withTooltip<DotsProps, BasePoint>(
   ({
-    width,
-    height,
+    width = 100,
+    height = 100,
     hideTooltip,
     showTooltip,
     tooltipOpen,
@@ -136,7 +136,7 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
             rx={14}
             x={defaultMargin.left}
             y={defaultMargin.top}
-            fill='url(#dots-pink)'
+            fill="var(--card-bg)"
             aria-label='graph'
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}

@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { ImageCard } from "../visualisation/image";
 import { InfoGroup } from "../visualisation/infogroup";
-import { ScatterPlot } from "../visualisation/scatter";
+import { PlotContainer } from "../visualisation/plotContainer";
 import { MotionPagination } from "./pagination";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { MdComment } from "react-icons/md";
@@ -29,6 +29,7 @@ import { parseData } from "../../utils/generic";
 import { driftPlotOptions } from "../../utils/config/plot";
 import { buildEndpoint } from "../../utils/api/endpoint";
 import { BasePoint, Info } from "../../utils/interfaces";
+import { Scatter } from "../plots/scatter";
 
 interface MotionData {
   /** Total number of tilt alignment images available */
@@ -212,7 +213,9 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
           <ImageCard src={fftImage} title='FFT Theoretical' height='100%' />
         </GridItem>
         <GridItem h='25vh' minW='100%' colSpan={{ base: 2, md: 1 }}>
-          <ScatterPlot title='Drift' options={driftPlotOptions} data={drift} />
+          <PlotContainer title='Drift'>
+            <Scatter options={driftPlotOptions} data={drift} />
+          </PlotContainer>
         </GridItem>
       </Grid>
       <Drawer isOpen={isOpen} placement='right' onClose={onClose}>

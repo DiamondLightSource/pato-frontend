@@ -5,10 +5,11 @@ import {
   resolutionPlotOptions,
   resolutionSpaPlotOptions,
 } from "../../utils/config/plot";
-import { ScatterPlot } from "../visualisation/scatter";
+import { PlotContainer } from "../visualisation/plotContainer";
 import { useEffect, useState } from "react";
 import { client } from "../../utils/api/client";
 import { CtfData } from "../../utils/interfaces";
+import { Scatter } from "../plots/scatter";
 
 interface CTFProps {
   parentType: "autoProc" | "tomograms";
@@ -44,18 +45,19 @@ const CTF = ({ parentId, parentType }: CTFProps) => {
       ) : (
         <Grid py={2} marginBottom={6} templateColumns='repeat(3, 1fr)' h='20vh' gap={2}>
           <GridItem minW='100%'>
-            <ScatterPlot
-              height='20vh'
-              title='Astigmatism'
-              data={ctfData.astigmatism}
-              options={astigmatismPlotOptions}
-            />
+            <PlotContainer title='Astigmatism' height='20vh'>
+              <Scatter data={ctfData.astigmatism} options={astigmatismPlotOptions} />
+            </PlotContainer>
           </GridItem>
           <GridItem minW='100%'>
-            <ScatterPlot height='20vh' title='Defocus' data={ctfData.defocus} options={defocusPlotOptions} />
+            <PlotContainer height='20vh' title='Defocus'>
+              <Scatter data={ctfData.defocus} options={defocusPlotOptions} />
+            </PlotContainer>
           </GridItem>
           <GridItem minW='100%'>
-            <ScatterPlot height='20vh' title='Resolution' data={ctfData.resolution} options={resolutionOptions} />
+            <PlotContainer height='20vh' title='Resolution'>
+              <Scatter data={ctfData.resolution} options={resolutionOptions} />
+            </PlotContainer>
           </GridItem>
         </Grid>
       )}

@@ -1,13 +1,14 @@
 import { Spacer, HStack, Divider, Grid, Button, Heading, Box, GridItem } from "@chakra-ui/react";
 import { ImageCard } from "../visualisation/image";
 import { InfoGroup } from "../visualisation/infogroup";
-import { ScatterPlot } from "../visualisation/scatter";
+import { PlotContainer } from "../visualisation/plotContainer";
 import { Motion } from "../motion/motion";
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 import { MdSettings } from "react-icons/md";
 import { client } from "../../utils/api/client";
 import { TomogramData, Info, BasePoint } from "../../utils/interfaces";
 import { CTF } from "../ctf/ctf";
+import { Scatter } from "../plots/scatter";
 
 /* The reason why this is a separate component is that in the future, tomograms might no longer have a 1:1
  ** relationship with data collections. Should that happen, just reuse this component.
@@ -88,7 +89,9 @@ const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
                 <ImageCard title='Central Slice' src={sliceImage} height='100%' />
               </GridItem>
               <GridItem colSpan={{ base: 3, md: 1 }} minW='100%' height={{ base: "20vh", md: "32vh" }}>
-                <ScatterPlot title='Shift Plot' data={shiftData} />
+                <PlotContainer title='Shift Plot'>
+                  <Scatter data={shiftData} />
+                </PlotContainer>
               </GridItem>
             </Grid>
             <CTF parentId={tomogram.tomogramId} parentType='tomograms' />
