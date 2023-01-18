@@ -1,43 +1,33 @@
-export const driftPlotOptions = {
-  maintainAspectRatio: false,
-  plugins: { legend: { display: false } },
-  scales: {
-    x: {
-      min: -20,
-      max: 20,
-      title: { display: true, text: "δx Å" },
-    },
-    y: {
-      min: -20,
-      max: 20,
-      title: { display: true, text: "δy Å" },
-    },
+import { ScatterPlotOptions } from "../interfaces";
+
+export const driftPlotOptions: ScatterPlotOptions = {
+  x: {
+    domain: { min: -20, max: 20 },
+    label: "δx Å",
   },
-  elements: {
-    point: {
-      radius: 1.2,
-    },
+  y: {
+    domain: { min: -20, max: 20 },
+    label: "δy Å",
   },
-  spanGaps: true,
-  showLine: false,
+  points: { dotRadius: 2 },
 };
 
 export const astigmatismPlotOptions = {
-  ...driftPlotOptions,
-  scales: { y: { title: { display: true, text: "nm" } } },
+  points: { dotRadius: 2 },
+  y: { label: "nm" },
 };
 
 export const defocusPlotOptions = {
-  ...driftPlotOptions,
-  scales: { y: { title: { display: true, text: "μm" } } },
+  points: { dotRadius: 2 },
+  y: { label: "μm" },
 };
 
 export const resolutionPlotOptions = {
-  ...driftPlotOptions,
-  scales: { y: { max: 50, title: { display: true, text: "Å" } } },
+  points: { dotRadius: 2 },
+  y: { label: "Å", domain: { min: 0, max: 50 } },
 };
 
 export const resolutionSpaPlotOptions = {
-  ...driftPlotOptions,
-  scales: { y: { max: 10, title: { display: true, text: "Å" } } },
+  points: { dotRadius: 2 },
+  y: { label: "Å", domain: { min: 0, max: 10 } },
 };

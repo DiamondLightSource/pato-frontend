@@ -27,9 +27,8 @@ import { setLoading } from "../../features/uiSlice";
 import { client } from "../../utils/api/client";
 import { parseData } from "../../utils/generic";
 import { driftPlotOptions } from "../../utils/config/plot";
-import { ScatterDataPoint } from "chart.js";
 import { buildEndpoint } from "../../utils/api/endpoint";
-import { Info } from "../../utils/interfaces";
+import { BasePoint, Info } from "../../utils/interfaces";
 
 interface MotionData {
   /** Total number of tilt alignment images available */
@@ -107,7 +106,7 @@ const calcDarkImages = (total: number, rawTotal: number) => {
 const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: MotionProps) => {
   const [page, setPage] = useState<number | undefined>();
   const [motion, setMotion] = useState<MotionData>({ total: 0, rawTotal: 0, info: [] });
-  const [drift, setDrift] = useState<ScatterDataPoint[]>([]);
+  const [drift, setDrift] = useState<BasePoint[]>([]);
   const [mgImage, setMgImage] = useState("");
   const [fftImage, setFftImage] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -160,7 +159,9 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
             const driftUrl = `movies/${movie.movieId}/drift?fromDb=${parentType === "autoProc"}`;
 
             client.safe_get(driftUrl).then((response) => {
-              setDrift(response.data.items);
+              if (response.data.items) {
+                setDrift(response.data.items);
+              }
             });
           }
 
@@ -211,7 +212,7 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
           <ImageCard src={fftImage} title='FFT Theoretical' height='100%' />
         </GridItem>
         <GridItem h='25vh' minW='100%' colSpan={{ base: 2, md: 1 }}>
-          <ScatterPlot title='Drift' options={driftPlotOptions} scatterData={drift} />
+          <ScatterPlot title='Drift' options={driftPlotOptions} data={drift} />
         </GridItem>
       </Grid>
       <Drawer isOpen={isOpen} placement='right' onClose={onClose}>

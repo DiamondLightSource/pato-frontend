@@ -39,4 +39,12 @@ describe("2D Classification", () => {
       expect(screen.getByLabelText("Class Distribution Value")).toHaveTextContent("999");
     });
   });
+
+  it("should display message when no classification data is available", async () => {
+    renderWithProviders(<Class2d autoProcId={2} />);
+
+    await waitFor(() => {
+      expect(screen.getByText("No 2D Classification Data Found")).toBeInTheDocument();
+    });
+  });
 });

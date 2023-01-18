@@ -181,9 +181,9 @@ const SpaPage = () => {
               <Code>{params.groupId}</Code>, data collection <Code>{collectionData.dataCollectionId}</Code>
             </Heading>
             <Spacer />
-            <Tag bg='diamond.200'>
+            <Tag bg='diamond.100'>
               <Icon as={MdFolder} />
-              <Text px={3} fontSize={12}>{`${collectionData.imageDirectory}${collectionData.fileTemplate}`}</Text>
+              <Text px={3} fontSize={12}>{`.../${collectionData.fileTemplate}`}</Text>
             </Tag>
           </HStack>
         </VStack>

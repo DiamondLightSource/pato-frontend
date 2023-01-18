@@ -1,7 +1,7 @@
 import { Spacer, HStack, Divider, Grid, Heading, Skeleton, Box, Select, VStack } from "@chakra-ui/react";
 import { ImageCard } from "../visualisation/image";
 import { InfoGroup } from "../visualisation/infogroup";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { client } from "../../utils/api/client";
 import { MotionPagination } from "../motion/pagination";
 import { components } from "../../schema/main";
@@ -27,7 +27,6 @@ const Class2d = ({ autoProcId }: SpaProps) => {
   const [pageAmount, setPageAmount] = useState(0);
   const [sortType, setSortType] = useState("particles");
   const [selectedClass, setSelectedClass] = useState(0);
-  const [selectedClassInfo, setSelectedClassInfo] = useState<Record<string, any>>({});
 
   const dispatch = useAppDispatch();
 
@@ -53,7 +52,7 @@ const Class2d = ({ autoProcId }: SpaProps) => {
       client
         .safe_get(`autoProc/${autoProcId}/classification?limit=8&page=${page - 1}&sortBy=${sortType}`)
         .then(async (response) => {
-          if (response.data.items) {
+          if (response.status === 200 && response.data.items) {
             setPageAmount(Math.ceil(response.data.total / 8));
             const classes = await Promise.all(
               response.data.items.map(async (item: FullClassification) => {
@@ -74,10 +73,12 @@ const Class2d = ({ autoProcId }: SpaProps) => {
     handle2dClassificationChange(1);
   }, [handle2dClassificationChange]);
 
-  useEffect(() => {
+  const selectedClassInfo = useMemo(() => {
     if (classificationData && classificationData[selectedClass]) {
-      setSelectedClassInfo(parseData(classificationData[selectedClass], classificationConfig));
+      return parseData(classificationData[selectedClass], classificationConfig);
     }
+
+    return {};
   }, [selectedClass, classificationData]);
 
   return (
@@ -88,7 +89,7 @@ const Class2d = ({ autoProcId }: SpaProps) => {
         </Heading>
         <Spacer />
         <Heading size='xs'>Sort by</Heading>
-        <Select onChange={(e) => setSortType(e.target.value)} size='xs' w='180px'>
+        <Select bg='diamond.50' onChange={(e) => setSortType(e.target.value)} size='xs' w='180px'>
           {sortValues.map((item) => (
             <option key={item.key} value={item.key}>
               {item.label}
@@ -119,9 +120,11 @@ const Class2d = ({ autoProcId }: SpaProps) => {
           ) : (
             <VStack>
               <Heading paddingTop={10} variant='notFound'>
-                No Particle Picking Data Found
+                No 2D Classification Data Found
               </Heading>
-              <Heading variant='notFoundSubtitle'>This page does not contain any particle picking information.</Heading>
+              <Heading variant='notFoundSubtitle'>
+                This page does not contain any 2D classification information.
+              </Heading>
             </VStack>
           )}
         </>

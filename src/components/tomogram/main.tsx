@@ -1,4 +1,4 @@
-import { Spacer, HStack, Divider, Grid, Button, Heading, Skeleton, Box, GridItem } from "@chakra-ui/react";
+import { Spacer, HStack, Divider, Grid, Button, Heading, Box, GridItem } from "@chakra-ui/react";
 import { ImageCard } from "../visualisation/image";
 import { InfoGroup } from "../visualisation/infogroup";
 import { ScatterPlot } from "../visualisation/scatter";
@@ -6,9 +6,8 @@ import { Motion } from "../motion/motion";
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 import { MdSettings } from "react-icons/md";
 import { client } from "../../utils/api/client";
-import { ScatterDataPoint } from "chart.js";
-import { astigmatismPlotOptions, defocusPlotOptions, resolutionPlotOptions } from "../../utils/config/plot";
-import { CtfData, TomogramData, Info } from "../../utils/interfaces";
+import { TomogramData, Info, BasePoint } from "../../utils/interfaces";
+import { CTF } from "../ctf/ctf";
 
 /* The reason why this is a separate component is that in the future, tomograms might no longer have a 1:1
  ** relationship with data collections. Should that happen, just reuse this component.
@@ -25,8 +24,7 @@ interface TomogramProps {
 
 const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
   const [sliceImage, setSliceImage] = useState("");
-  const [shiftData, setShiftData] = useState<ScatterDataPoint[]>([]);
-  const [ctfData, setCtfData] = useState<CtfData>();
+  const [shiftData, setShiftData] = useState<BasePoint[]>([]);
   const [tomogramInfo, setTomogramInfo] = useState<Info[]>([]);
 
   const handleMotionChange = useCallback((data: Record<string, any>) => {
@@ -54,21 +52,8 @@ const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
 
     setImage(`tomograms/${tomogram.tomogramId}/centralSlice`, setSliceImage);
 
-    const ctfData: CtfData = { resolution: [], astigmatism: [], defocus: [] };
-    client.safe_get(`tomograms/${tomogram.tomogramId}/ctf`).then((response) => {
-      if (Array.isArray(response.data.items)) {
-        for (const ctf of response.data.items) {
-          // Converting astigmatism and defocus from Angstrom
-          ctfData.resolution.push({ x: ctf.refinedTiltAngle, y: ctf.estimatedResolution });
-          ctfData.astigmatism.push({ x: ctf.refinedTiltAngle, y: ctf.astigmatism / 10 });
-          ctfData.defocus.push({ x: ctf.refinedTiltAngle, y: ctf.estimatedDefocus / 10000 });
-        }
-        setCtfData(ctfData);
-      }
-    });
-
     client.safe_get(`tomograms/${tomogram.tomogramId}/shiftPlot`).then((response) => {
-      if (response.status === 200) {
+      if (response.status === 200 && response.data.items) {
         setShiftData(response.data.items);
       }
     });
@@ -103,41 +88,10 @@ const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
                 <ImageCard title='Central Slice' src={sliceImage} height='100%' />
               </GridItem>
               <GridItem colSpan={{ base: 3, md: 1 }} minW='100%' height={{ base: "20vh", md: "32vh" }}>
-                <ScatterPlot title='Shift Plot' scatterData={shiftData} />
+                <ScatterPlot title='Shift Plot' data={shiftData} />
               </GridItem>
             </Grid>
-            <Heading variant='collection'>Summary</Heading>
-            <Divider />
-            {ctfData === undefined ? (
-              <Skeleton h='20vh' />
-            ) : (
-              <Grid py={2} marginBottom={6} templateColumns='repeat(3, 1fr)' h='20vh' gap={2}>
-                <GridItem minW='100%'>
-                  <ScatterPlot
-                    height='20vh'
-                    title='Astigmatism'
-                    scatterData={ctfData.astigmatism}
-                    options={astigmatismPlotOptions}
-                  />
-                </GridItem>
-                <GridItem minW='100%'>
-                  <ScatterPlot
-                    height='20vh'
-                    title='Defocus'
-                    scatterData={ctfData.defocus}
-                    options={defocusPlotOptions}
-                  />
-                </GridItem>
-                <GridItem minW='100%'>
-                  <ScatterPlot
-                    height='20vh'
-                    title='Resolution'
-                    scatterData={ctfData.resolution}
-                    options={resolutionPlotOptions}
-                  />
-                </GridItem>
-              </Grid>
-            )}
+            <CTF parentId={tomogram.tomogramId} parentType='tomograms' />
           </Box>
         )}
       </Box>

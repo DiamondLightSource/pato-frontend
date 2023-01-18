@@ -1,5 +1,12 @@
 import { ResponsiveValue } from "@chakra-ui/react";
-import { ScatterDataPoint } from "chart.js";
+
+type DeepPartial<T> = T extends object
+  ? {
+      [P in keyof T]?: DeepPartial<T[P]>;
+    }
+  : T;
+
+type DeepRequired<T> = { [K in keyof T]: DeepRequired<T[K]> } & Required<T>;
 
 export interface DataConfig {
   include: { name: string | string[]; unit?: string; label?: string }[];
@@ -13,9 +20,9 @@ export interface CollectionData {
 }
 
 export interface CtfData {
-  resolution: ScatterDataPoint[];
-  astigmatism: ScatterDataPoint[];
-  defocus: ScatterDataPoint[];
+  resolution: BasePoint[];
+  astigmatism: BasePoint[];
+  defocus: BasePoint[];
 }
 
 export interface TomogramData {
@@ -47,7 +54,34 @@ export interface BaseCardProp {
   /** Title for the card */
   title: string;
   /** Event fired when container is clicked. Does not fire if showModal is set */
-  onClick?: () => void
+  onClick?: () => void;
   /** Whether or not current item is active */
-  active?: boolean
+  active?: boolean;
 }
+
+export interface BasePoint {
+  x: number;
+  y: number;
+}
+
+interface PlotAxisOptions {
+  /** Domain (lower and upper bounds) of the axis */
+  domain: { min?: number; max?: number };
+  /** Label for the axis */
+  label: string;
+}
+
+interface PlotOptions {
+  x: PlotAxisOptions;
+  y: PlotAxisOptions;
+  tooltip: { display: boolean };
+}
+
+export interface CompleteScatterPlotOptions extends DeepRequired<PlotOptions> {
+  points: {
+    /** Radius to use when rendering datapoints */
+    dotRadius: number;
+  };
+}
+
+export interface ScatterPlotOptions extends DeepPartial<CompleteScatterPlotOptions> {}

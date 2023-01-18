@@ -10,91 +10,60 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Skeleton,
   useDisclosure,
 } from "@chakra-ui/react";
-import {
-  Chart as ChartJS,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Tooltip,
-  Legend,
-  ScatterControllerChartOptions,
-  ScatterDataPoint,
-} from "chart.js";
-import { Scatter } from "react-chartjs-2";
 
-import { useEffect, useState } from "react";
+import { ScatterPlotOptions, BasePoint } from "../../utils/interfaces";
+import { ParentSize } from "@visx/responsive";
+import { Scatter } from "../plots/scatter";
 import { BaseCardProp } from "../../utils/interfaces";
-
-ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
 interface ScatterProps extends BaseCardProp {
   /** Datapoints */
-  scatterData: ScatterDataPoint[];
-  /** Chart options */
-  options?: ScatterControllerChartOptions;
-  /** Chart width */
+  data: BasePoint[];
+  /** Plot configuration*/
+  options?: ScatterPlotOptions;
 }
-
-const preloadedData = {
-  datasets: [
-    {
-      data: [{ x: 1, y: 1 }],
-      backgroundColor: "rgba(255, 99, 132, 1)",
-    },
-  ],
-};
-
-const defaultOptions = {
-  maintainAspectRatio: false,
-  plugins: { legend: { display: false } },
-  spanGaps: true,
-  showLine: false,
-};
 
 const ScatterPlot = ({
   title,
-  scatterData,
-  options = defaultOptions,
+  data,
   width = "100%",
   height = "100%",
   active = false,
+  options,
   onClick,
 }: ScatterProps) => {
-  const [data, setData] = useState(preloadedData);
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  useEffect(() => {
-    setData({
-      datasets: [
-        {
-          data: scatterData,
-          backgroundColor: "rgba(255, 99, 132, 1)",
-        },
-      ],
-    });
-  }, [scatterData]);
 
   return (
     <Card aria-selected={active} w={width} h={height} onClick={onOpen}>
       <CardHeader>
         <Heading size='sm'>{title}</Heading>
       </CardHeader>
-      <CardBody px={2} py='0'>
-        <Scatter style={{ paddingBottom: "10px" }} data={data} options={options} />
-        <Modal size='xl' isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent maxW='90vw'>
-            <ModalHeader>{title}</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <Scatter data={data} options={{ ...options, maintainAspectRatio: true }} />
-            </ModalBody>
-            <ModalFooter></ModalFooter>
-          </ModalContent>
-        </Modal>
-      </CardBody>
+      {data && data.length > 0 ? (
+        <CardBody px={2} py='0'>
+          <ParentSize>
+            {({ width, height }) => <Scatter width={width} height={height} data={data} options={options} />}
+          </ParentSize>
+          <Modal size='xl' isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent w='80vw' maxW='80vw' h={{ base: "90vh", md: "60vh" }}>
+              <ModalHeader>{title}</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <ParentSize>
+                  {({ width, height }) => <Scatter width={width} height={height} data={data} options={options} />}
+                </ParentSize>
+              </ModalBody>
+              <ModalFooter></ModalFooter>
+            </ModalContent>
+          </Modal>
+        </CardBody>
+      ) : (
+        <Skeleton w={width} h={height}></Skeleton>
+      )}
     </Card>
   );
 };
