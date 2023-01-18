@@ -4,7 +4,7 @@ import { scaleBand, scaleLinear } from "@visx/scale";
 import { withTooltip, Tooltip } from "@visx/tooltip";
 import { WithTooltipProvidedProps } from "@visx/tooltip/lib/enhancers/withTooltip";
 import { GridRows } from "@visx/grid";
-import { AxisLeft } from "@visx/axis";
+import { AxisBottom, AxisLeft } from "@visx/axis";
 import { BoxPlotStats, CompleteScatterPlotOptions, ScatterPlotOptions } from "../../utils/interfaces";
 import { mergeDeep } from "../../utils/generic";
 import { BoxPlot } from "@visx/stats";
@@ -16,7 +16,7 @@ const q1 = (d: BoxPlotStats) => d.q1;
 const q3 = (d: BoxPlotStats) => d.q3;
 const median = (d: BoxPlotStats) => d.median;
 
-export type DotsProps = {
+export type BoxPlotProps = {
   width?: number;
   height?: number;
   options?: ScatterPlotOptions;
@@ -31,7 +31,9 @@ const defaultPlotOptions: ScatterPlotOptions = {
   points: { dotRadius: 2 },
 };
 
-const Box = withTooltip<DotsProps, BoxPlotStats>(
+const fillColours = ["#ff5733", "#669bbc", "#c1121f"];
+
+const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
   ({
     width = 100,
     height = 100,
@@ -43,7 +45,7 @@ const Box = withTooltip<DotsProps, BoxPlotStats>(
     tooltipTop,
     options,
     data,
-  }: DotsProps & WithTooltipProvidedProps<BoxPlotStats>) => {
+  }: BoxPlotProps & WithTooltipProvidedProps<BoxPlotStats>) => {
     if (width < 10) return null;
     const svgRef = useRef<SVGSVGElement>(null);
 
@@ -51,8 +53,8 @@ const Box = withTooltip<DotsProps, BoxPlotStats>(
       const newConfig = mergeDeep(defaultPlotOptions, options ?? {});
 
       newConfig.y.domain = {
-        min: newConfig.y.domain.min ?? Math.min(...data.map(min)),
-        max: newConfig.y.domain.max ?? Math.max(...data.map(max)),
+        min: newConfig.y.domain.min ?? Math.min(...data.map(min)) - 1,
+        max: newConfig.y.domain.max ?? Math.max(...data.map(max)) + 1,
       };
 
       return newConfig as CompleteScatterPlotOptions;
@@ -98,47 +100,79 @@ const Box = withTooltip<DotsProps, BoxPlotStats>(
             fill='url(#dots-pink)'
             aria-label='graph'
           />
-          <Group pointerEvents='none' left={defaultMargin.left} top={defaultMargin.top}>
+          <Group left={defaultMargin.left} top={defaultMargin.top}>
             <GridRows scale={yScale} width={xMax} height={yMax} stroke='#e0e0e0' />
             <AxisLeft label={config.y.label} scale={yScale} numTicks={5} />
+            <AxisBottom top={yMax} scale={xScale} tickValues={data.map(label)} />
             {data.map((d: BoxPlotStats, i) => (
-              <BoxPlot
-                valueScale={yScale}
-                min={min(d)}
-                max={max(d)}
-                left={xScale(label(d))! + 0.3 * constrainedWidth}
-                firstQuartile={q1(d)}
-                thirdQuartile={q3(d)}
-                median={median(d)}
-                boxProps={{
-                  onMouseOver: () => {
-                    showTooltip({
-                      tooltipTop: yScale(median(d)) ?? 0 + 40,
-                      tooltipLeft: xScale(label(d))! + constrainedWidth + 5,
-                      tooltipData: {
-                        ...d,
-                      },
-                    });
-                  },
-                  onMouseLeave: () => {
-                    hideTooltip();
-                  },
-                }}
-              />
+              <g key={i} data-testid='box-item'>
+                <BoxPlot
+                  valueScale={yScale}
+                  min={min(d)}
+                  max={max(d)}
+                  left={xScale(label(d))! + boxWidth / 2 - constrainedWidth * 0.2}
+                  firstQuartile={q1(d)}
+                  thirdQuartile={q3(d)}
+                  boxWidth={constrainedWidth * 0.4}
+                  stroke='var(--chakra-colors-diamond-800)'
+                  fill={fillColours[i % fillColours.length]}
+                  median={median(d)}
+                  boxProps={{
+                    "aria-label": "box",
+                    "onMouseOver": () => {
+                      showTooltip({
+                        tooltipTop: yScale(median(d)),
+                        tooltipLeft: xScale(label(d))!,
+                        tooltipData: {
+                          ...d,
+                        },
+                      });
+                    },
+                    "onMouseLeave": () => {
+                      hideTooltip();
+                    },
+                  }}
+                  medianProps={{
+                    style: {
+                      stroke: "#FFF",
+                    },
+                  }}
+                />
+              </g>
             ))}
           </Group>
         </svg>
         {tooltipOpen && tooltipData && tooltipLeft != null && tooltipTop != null && (
-          <Tooltip left={tooltipLeft + 10} top={tooltipTop + 10}>
-            <div>
-              <strong>{tooltipData.label}</strong>
+          <Tooltip left={tooltipLeft} top={tooltipTop}>
+            <div aria-label='box title'>
+              <b style={{ color: "var(--chakra-colors-diamond-700)" }}>{tooltipData.label}</b>
             </div>
             <div style={{ marginTop: "5px", fontSize: "12px" }}>
-              {tooltipData.max && <div>max: {tooltipData.max}</div>}
-              {tooltipData.q3 && <div>third quartile: {tooltipData.q3}</div>}
-              {tooltipData.median && <div>median: {tooltipData.median}</div>}
-              {tooltipData.q1 && <div>first quartile: {tooltipData.q1}</div>}
-              {tooltipData.min && <div>min: {tooltipData.min}</div>}
+              {tooltipData.max && (
+                <div aria-label='box max'>
+                  <b>max:</b> {tooltipData.max}
+                </div>
+              )}
+              {tooltipData.q3 && (
+                <div aria-label='box q3'>
+                  <b>third quartile:</b> {tooltipData.q3}
+                </div>
+              )}
+              {tooltipData.median && (
+                <div aria-label='box median'>
+                  <b>median:</b> {tooltipData.median}
+                </div>
+              )}
+              {tooltipData.q1 && (
+                <div aria-label='box q1'>
+                  <b>first quartile:</b> {tooltipData.q1}
+                </div>
+              )}
+              {tooltipData.min && (
+                <div aria-label='box min'>
+                  <b>min:</b> {tooltipData.min}
+                </div>
+              )}
             </div>
           </Tooltip>
         )}

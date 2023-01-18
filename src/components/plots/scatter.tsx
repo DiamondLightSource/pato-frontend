@@ -136,7 +136,7 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
             rx={14}
             x={defaultMargin.left}
             y={defaultMargin.top}
-            fill="var(--card-bg)"
+            fill='var(--card-bg)'
             aria-label='graph'
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
@@ -155,7 +155,7 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
                 className='dot'
                 cx={xScale(x(point))}
                 cy={yScale(y(point))}
-                r={config.points?.dotRadius}
+                r={config.points.dotRadius}
                 fill={tooltipData === point ? "pink" : "#ff5733"}
               />
             ))}
@@ -164,10 +164,10 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
         {tooltipOpen && tooltipData && tooltipLeft != null && tooltipTop != null && (
           <Tooltip left={tooltipLeft + 10} top={tooltipTop + 10}>
             <div aria-label='tooltip x'>
-              <strong>x:</strong> {x(tooltipData)}
+              <b>x:</b> {x(tooltipData)}
             </div>
             <div aria-label='tooltip y'>
-              <strong>y:</strong> {y(tooltipData)}
+              <b>y:</b> {y(tooltipData)}
             </div>
           </Tooltip>
         )}

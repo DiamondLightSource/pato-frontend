@@ -1,4 +1,4 @@
-import { Spacer, HStack, Divider, Heading, Text, Checkbox, VStack } from "@chakra-ui/react";
+import { Spacer, HStack, Divider, Heading, Text, Checkbox, VStack, Grid } from "@chakra-ui/react";
 import { ImageCard } from "../visualisation/image";
 import { InfoGroup } from "../visualisation/infogroup";
 import { MotionPagination } from "../motion/pagination";
@@ -8,6 +8,8 @@ import { setLoading } from "../../features/uiSlice";
 import { client } from "../../utils/api/client";
 import { parseData } from "../../utils/generic";
 import { DataConfig, SpaProps, Info } from "../../utils/interfaces";
+import { PlotContainer } from "../visualisation/plotContainer";
+import { Box } from "../plots/box";
 
 interface ParticleProps extends SpaProps {
   /* Total number of available items */
@@ -87,11 +89,13 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
       </HStack>
       <Divider />
       {particleInfo !== null ? (
-        <HStack marginY={2}>
+        <Grid py={2} marginBottom={6} templateColumns='repeat(3, 1fr)' h='20vh' gap={2}>
           <InfoGroup cols={1} info={particleInfo} />
-          <Spacer />
-          <ImageCard src={summaryImage} title='Summary' width='30%' height='20vh' />
-        </HStack>
+          <PlotContainer title='Relative Ice Thickness' height='20vh'>
+            <Box data={[]} />
+          </PlotContainer>
+          <ImageCard src={summaryImage} title='Summary' />
+        </Grid>
       ) : (
         <VStack>
           <Heading paddingTop={10} variant='notFound'>

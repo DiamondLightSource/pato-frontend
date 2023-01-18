@@ -34,7 +34,7 @@ describe("Scatter Plot", () => {
         height={100}
       />
     );
-    expect(screen.getAllByText("test")[0]).toBeInTheDocument();
+    expect(screen.getAllByText("test").length).toBe(2);
   });
 
   it("should display tooltip when datapoint is hovered", async () => {
