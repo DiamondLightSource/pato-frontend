@@ -17,6 +17,14 @@ import {
   Skeleton,
   Grid,
   Tag,
+  useDisclosure,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalOverlay,
+  ModalContent,
+  ModalCloseButton,
+  Tooltip,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -29,8 +37,9 @@ import { components } from "../schema/main";
 import { buildEndpoint } from "../utils/api/endpoint";
 import SPA from "../components/spa/main";
 import { collectionConfig } from "../utils/config/parse";
-import { MdFolder, MdPlayArrow } from "react-icons/md";
-import InfoGroup from "../components/infogroup";
+import { MdFolder, MdRedo } from "react-icons/md";
+import { InfoGroup } from "../components/visualisation/infogroup";
+import { RelionReprocessing } from "../components/spa/relion";
 
 type ProcessingJob = components["schemas"]["ProcessingJobOut"];
 type DataCollection = components["schemas"]["DataCollectionSummaryOut"];
@@ -92,7 +101,14 @@ const ProcTitleInfo = ({ title, value }: ProcTitleInfoProps) => (
   </>
 );
 
-const SPAPage = () => {
+const jobStatusColour: Record<string, string> = {
+  Success: "green",
+  Queued: "purple",
+  Fail: "red",
+  Running: "orange",
+};
+
+const SpaPage = () => {
   const params = useParams();
   const [collectionData, setCollectionData] = useState<SpaCollectionData>({
     info: [],
@@ -101,8 +117,12 @@ const SPAPage = () => {
     imageDirectory: "",
   });
   const [processingJobs, setProcessingJobs] = useState<ProcessingJob[]>([]);
+  const [processingJobToEdit, setProcessingJobToEdit] = useState<number | null>(null);
+  const [accordionIndex, setAccordionIndex] = useState<number | number[]>(0);
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const updateCollection = useCallback(
     (page: number) => {
@@ -111,16 +131,26 @@ const SPAPage = () => {
     [navigate]
   );
 
+  const handleProcessingClicked = useCallback(
+    (procJobId: number) => {
+      setProcessingJobToEdit(procJobId);
+      onOpen();
+    },
+    [onOpen, setProcessingJobToEdit]
+  );
+
   useEffect(() => {
     document.title = `eBIC » SPA » ${params.groupId}`;
     dispatch(setLoading(true));
     client.safe_get(buildEndpoint("dataCollections", params, 1, 1)).then((response) => {
-      const data = response.data.items[0] as DataCollection;
-      const parsedData = parseData(data, spaCollectionConfig) as SpaCollectionData;
+      if (response.data.items) {
+        const data = response.data.items[0] as DataCollection;
+        const parsedData = parseData(data, spaCollectionConfig) as SpaCollectionData;
 
-      parsedData.info.unshift({ label: "Acquisition Software", value: getAcquisitionSoftware(data.fileTemplate) });
-      parsedData.info.push({ label: "Comments", value: getAcquisitionSoftware(data.comments ?? ""), wide: true });
-      setCollectionData(parsedData);
+        parsedData.info.unshift({ label: "Acquisition Software", value: getAcquisitionSoftware(data.fileTemplate) });
+        parsedData.info.push({ label: "Comments", value: getAcquisitionSoftware(data.comments ?? ""), wide: true });
+        setCollectionData(parsedData);
+      }
     });
   }, [params, dispatch, navigate, updateCollection]);
 
@@ -130,7 +160,9 @@ const SPAPage = () => {
       client
         .safe_get(buildEndpoint("processingJobs", { collectionId: collectionId.toString() }, 25, 1))
         .then((response) => {
-          setProcessingJobs(response.data.items);
+          if (response.data.items) {
+            setProcessingJobs(response.data.items);
+          }
         });
     }
   }, [collectionData, params]);
@@ -143,9 +175,6 @@ const SPAPage = () => {
             <Heading>Data Collection</Heading>
             <Tag colorScheme='orange'>SPA</Tag>
             <Spacer />
-            <Button disabled>
-              <Icon as={MdPlayArrow} />
-            </Button>
           </HStack>
           <HStack w='100%'>
             <Heading color='diamond.300' size='sm'>
@@ -153,9 +182,9 @@ const SPAPage = () => {
               <Code>{params.groupId}</Code>, data collection <Code>{collectionData.dataCollectionId}</Code>
             </Heading>
             <Spacer />
-            <Tag bg='diamond.200'>
+            <Tag bg='diamond.100'>
               <Icon as={MdFolder} />
-              <Text px={3} fontSize={12}>{`${collectionData.imageDirectory}${collectionData.fileTemplate}`}</Text>
+              <Text px={3} fontSize={12}>{`.../${collectionData.fileTemplate}`}</Text>
             </Tag>
           </HStack>
         </VStack>
@@ -163,9 +192,9 @@ const SPAPage = () => {
       <Divider marginY={2} />
       <InfoGroup cols={5} info={collectionData.info} />
       <Divider marginY={2} />
-      <Accordion defaultIndex={[0]} allowToggle>
-        {processingJobs.length ? (
-          processingJobs.map((job, i) => (
+      {processingJobs.length ? (
+        <Accordion onChange={setAccordionIndex} index={accordionIndex} allowToggle>
+          {processingJobs.map((job, i) => (
             <AccordionItem key={i}>
               <h2>
                 <HStack py={1.5} px={3} w='100%' bg='diamond.100'>
@@ -173,30 +202,52 @@ const SPAPage = () => {
                   <ProcTitleInfo title='AutoProc. Program' value={job.AutoProcProgram.autoProcProgramId} />
                   <ProcTitleInfo title='Processing Start' value={job.AutoProcProgram.processingStartTime ?? "?"} />
                   <ProcTitleInfo title='Processing End' value={job.AutoProcProgram.processingEndTime ?? "?"} />
-                  <Tag colorScheme={job.AutoProcProgram.processingStatus === 1 ? "green" : "red"}>
-                    {job.AutoProcProgram.processingStatus === 1 ? "Success" : "Fail"}
-                  </Tag>
+                  <Tag colorScheme={jobStatusColour[job.status]}>{job.status}</Tag>
+                  <Tooltip label='Run Reprocessing'>
+                    <Button isDisabled onClick={() => handleProcessingClicked(job.ProcessingJob.processingJobId)}>
+                      <Icon as={MdRedo} />
+                    </Button>
+                  </Tooltip>
                   <AccordionButton width='auto'>
                     <AccordionIcon />
                   </AccordionButton>
                 </HStack>
               </h2>
               <AccordionPanel p={0}>
-                <SPA autoProcId={job.AutoProcProgram.autoProcProgramId} />
+                {
+                  accordionIndex === i && (
+                    <SPA autoProcId={job.AutoProcProgram.autoProcProgramId} />
+                  ) /* isExpanded is not to be trusted */
+                }
               </AccordionPanel>
             </AccordionItem>
-          ))
-        ) : (
-          <Grid gap={3}>
-            <Skeleton h='4vh' />
-            <Skeleton h='25vh' />
-            <Skeleton h='25vh' />
-            <Skeleton h='20vh' />
-          </Grid>
-        )}
-      </Accordion>
+          ))}
+        </Accordion>
+      ) : (
+        <Grid gap={3}>
+          <Skeleton h='4vh' />
+          <Skeleton h='25vh' />
+          <Skeleton h='25vh' />
+          <Skeleton h='20vh' />
+        </Grid>
+      )}
+      {processingJobToEdit && (
+        <Modal size='6xl' isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>
+              <Heading size='md'>Relion Processing</Heading>
+              <ModalCloseButton />
+            </ModalHeader>
+            <Divider />
+            <ModalBody p={0}>
+              <RelionReprocessing procJobId={processingJobToEdit} />
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
     </Box>
   );
 };
 
-export default SPAPage;
+export { SpaPage };

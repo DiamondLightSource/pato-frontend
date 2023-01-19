@@ -1,8 +1,8 @@
 import { Heading, Link, VStack, Box, Text, Code } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouteError } from "react-router-dom";
-import Footer from "../components/footer";
-import Navbar from "../components/navbar";
+import { Footer } from "../components/navigation/footer";
+import { Navbar } from "../components/navigation/navbar";
 
 interface ErrorType {
   status: number;
@@ -50,4 +50,4 @@ const Error = () => {
   );
 };
 
-export default Error;
+export { Error };

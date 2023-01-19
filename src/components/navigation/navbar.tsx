@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useCallback } from "react";
 import {
   Box,
   Flex,
@@ -18,7 +18,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { MdLogin, MdMenu, MdClose } from "react-icons/md";
-import { useAppSelector } from "../store/hooks";
+import { useAppSelector } from "../../store/hooks";
 import { Link as LinkRouter } from "react-router-dom";
 
 const links = [
@@ -67,6 +67,11 @@ const Navbar = () => {
   const user = useAppSelector((state) => state.auth.user);
   const loading = useAppSelector((state) => state.ui.loading);
 
+  const logout = useCallback(() => {
+    sessionStorage.removeItem("token");
+    window.location.href = `${process.env.REACT_APP_AUTH_ENDPOINT}logout?redirect_uri=${window.location.href}`;
+  }, []);
+
   return (
     <Box zIndex={1} position='fixed' w='100%' bg='diamond.800'>
       <Flex px={{ base: 4, md: 48 }} h={12} alignItems={"center"} justifyContent={"space-between"}>
@@ -95,7 +100,14 @@ const Navbar = () => {
         <Flex alignItems={"center"}>
           {user !== null ? (
             <Menu>
-              <MenuButton borderRadius={12} as={Button} variant={"link"} cursor={"pointer"} minW={0}>
+              <MenuButton
+                aria-label='User Avatar'
+                borderRadius={12}
+                as={Button}
+                variant={"link"}
+                cursor={"pointer"}
+                minW={0}
+              >
                 <HStack>
                   <div style={{ padding: 10 }}>
                     <Text color='diamond.100' display='inline-block'>
@@ -109,12 +121,7 @@ const Navbar = () => {
                 </HStack>
               </MenuButton>
               <MenuList>
-                <MenuItem
-                  onClick={() => {
-                    sessionStorage.removeItem("token");
-                    window.location.href = `${process.env.REACT_APP_AUTH_ENDPOINT}logout?redirect_uri=${window.location.href}`;
-                  }}
-                >
+                <MenuItem aria-label='Logout' onClick={logout}>
                   Logout
                 </MenuItem>
               </MenuList>
@@ -145,4 +152,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export { Navbar };

@@ -32,6 +32,7 @@ export const handlers = [
 
     return res(
       ctx.status(200),
+      ctx.delay(0),
       ctx.json(data)
     )
   }),
@@ -41,6 +42,7 @@ export const handlers = [
 
     return res(
       ctx.status(200),
+      ctx.delay(0),
       ctx.json(data)
     )
   }),
@@ -48,6 +50,7 @@ export const handlers = [
   rest.get('http://localhost/movies/:id/fft', (req, res, ctx) => {
     return res(
       ctx.status(200),
+      ctx.delay(0),
       ctx.body("")
     )
   }),
@@ -55,6 +58,7 @@ export const handlers = [
   rest.get('http://localhost/movies/:id/micrograph', (req, res, ctx) => {
     return res(
       ctx.status(200),
+      ctx.delay(0),
       ctx.body("")
     )
   }),
@@ -62,12 +66,14 @@ export const handlers = [
   rest.get('http://localhost/tomograms/:id/centralSlice', (req, res, ctx) => {
     return res(
       ctx.status(200),
+      ctx.delay(0),
       ctx.body("")
     )
   }),
 
   rest.get('http://localhost/movies/:id/drift', (req, res, ctx) => {
     return res(
+      ctx.delay(0),
       ctx.status(200),
       ctx.json({items: [{x: 1, y:1}]})
     )
@@ -82,6 +88,7 @@ export const handlers = [
     
     return res(
       ctx.status(200),
+      ctx.delay(0),
       ctx.json({
         items: data
       })
@@ -126,6 +133,7 @@ export const handlers = [
       case "1":
         return res(
           ctx.status(200),
+          ctx.delay(0),
           ctx.json({items: [{particlePickerId: null}], total: 1, limit: 1})
         )
       case "2":
@@ -134,8 +142,22 @@ export const handlers = [
           ctx.delay(0),
           ctx.json({items: [{particlePickerId: 1, imageNumber: 9999, particleDiameter: 1, numberOfParticles: 1, createdTimestamp: "1"}], total: 1, limit: 1})
         )
+      case "3":
+        return res(
+          ctx.status(404),
+          ctx.delay(0)
+        )
     }
     
+  }),
+
+  rest.get("http://localhost/movies/:movieId/iceThickness", async (req, res, ctx) => {
+    const dummy = { minimum: 1, maximum: 10, median: 5, q1: 3, q3: 6 }
+    return res(
+      ctx.status(200),
+      ctx.delay(0),
+      ctx.json({current: dummy, avg: dummy})
+    )
   }),
 
   rest.get("http://localhost/autoProc/:procId/particlePicker/:pickerId/image", async (req, res, ctx) => {
@@ -145,6 +167,10 @@ export const handlers = [
   }),
 
   rest.get("http://localhost/autoProc/:procId/classification", async (req, res, ctx) => {
+    if (req.params.procId === "2") {
+      return res(ctx.status(404))
+    }
+
     if (req.url.searchParams.get("sortBy") === "class") {
       return res(
         ctx.status(200),

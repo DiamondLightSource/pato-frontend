@@ -78,7 +78,6 @@ const baseCardStyle = definePartsStyle({
   }, 
   header: {
     p: 2,
-    height: "10%" 
   },
   body: {
     px: 2,

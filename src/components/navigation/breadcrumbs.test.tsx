@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
-import { renderWithProviders } from "../src/utils/test-utils";
-import Breadcrumbs from "../src/components/breadcrumbs";
+import { renderWithProviders } from "../../utils/test-utils";
+import { Breadcrumbs } from "../navigation/breadcrumbs";
 import React from "react";
 
 describe("Breadcrumbs", () => {

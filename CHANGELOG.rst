@@ -3,6 +3,21 @@ Changelog
 ==========
 
 ++++++++++
+v0.2.0 (19/01/2023)
+++++++++++
+
+**Added**
+
+- Relion processing dialog (inactive)
+- Plot for relative ice thickness data in particle picking data
+
+**Changed**
+
+- Data for hidden processing jobs doesn't get downloaded until they are visible
+- "Running", "Queued" and "Submitted" job statuses are now supported
+- 2D classification component shows message when no data is available
+
+++++++++++
 v0.1.0 (11/01/2023)
 ++++++++++
 

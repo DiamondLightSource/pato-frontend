@@ -4,12 +4,12 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { client } from "../utils/api/client";
 import { useAppDispatch } from "../store/hooks";
 import { setLoading } from "../features/uiSlice";
-import Tomogram from "../components/tomogram";
+import { Tomogram } from "../components/tomogram/main";
 import { parseData } from "../utils/generic";
 import { CollectionData, DataConfig, TomogramData } from "../utils/interfaces";
-import MotionPagination from "../components/motion/pagination";
-import InfoGroup from "../components/infogroup";
-import CollectionLoader from "../components/collectionLoading";
+import { MotionPagination } from "../components/motion/pagination";
+import { InfoGroup } from "../components/visualisation/infogroup";
+import { CollectionLoader } from "../components/collectionLoading";
 import { buildEndpoint } from "../utils/api/endpoint";
 import { collectionConfig } from "../utils/config/parse";
 
@@ -127,4 +127,4 @@ const TomogramPage = () => {
   );
 };
 
-export default TomogramPage;
+export { TomogramPage };

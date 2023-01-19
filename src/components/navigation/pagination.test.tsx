@@ -1,6 +1,6 @@
 import { fireEvent, screen } from "@testing-library/react";
-import { renderWithProviders } from "../src/utils/test-utils";
-import Pagination from "../src/components/pagination";
+import { renderWithProviders } from "../../utils/test-utils";
+import { Pagination } from "./pagination";
 import React from "react";
 
 describe("Pagination", () => {

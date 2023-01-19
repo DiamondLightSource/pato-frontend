@@ -1,13 +1,19 @@
-import { Spacer, HStack, Divider, Heading, Text, Checkbox, VStack } from "@chakra-ui/react";
-import Image from "../image";
-import InfoGroup, { Info } from "../infogroup";
-import MotionPagination from "../motion/pagination";
+import { Spacer, HStack, Divider, Heading, Text, Checkbox, VStack, Grid, Skeleton } from "@chakra-ui/react";
+import { ImageCard } from "../visualisation/image";
+import { InfoGroup } from "../visualisation/infogroup";
+import { MotionPagination } from "../motion/pagination";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../features/uiSlice";
 import { client } from "../../utils/api/client";
 import { parseData } from "../../utils/generic";
-import { DataConfig, SpaProps } from "../../utils/interfaces";
+import { components } from "../../schema/main";
+import { DataConfig, SpaProps, Info, BoxPlotStats } from "../../utils/interfaces";
+import { PlotContainer } from "../visualisation/plotContainer";
+import { Box } from "../plots/box";
+
+type ParticlePickingSchema = components["schemas"]["ParticlePicker"];
+type IceThickness = components["schemas"]["IceThicknessWithAverage"];
 
 interface ParticleProps extends SpaProps {
   /* Total number of available items */
@@ -25,11 +31,16 @@ const particleConfig: DataConfig = {
   ],
 };
 
+const convertToBoxPlot = (data: components["schemas"]["RelativeIceThickness"], label: string): BoxPlotStats => {
+  return { min: data.minimum, max: data.maximum, median: data.median, q1: data.q1, q3: data.q3, label };
+};
+
 const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
   const [innerPage, setInnerPage] = useState<number | undefined>();
   const [lockPage, setLockpage] = useState<boolean>(true);
-  const [particleInfo, setParticleInfo] = useState<Info[] | null>(null);
+  const [particleInfo, setParticleInfo] = useState<Info[] | null | undefined>();
   const [summaryImage, setSummaryImage] = useState("");
+  const [iceThickness, setIceThickness] = useState<BoxPlotStats[]>();
 
   const dispatch = useDispatch();
 
@@ -49,14 +60,29 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
       client
         .safe_get(`autoProc/${autoProcId}/particlePicker?page=${innerPage - 1}&limit=1`)
         .then((response) => {
-          const data = response.data.items[0];
-          if (data.particlePickerId) {
-            setParticleInfo(parseData(data, particleConfig).info);
-            client.safe_get(`autoProc/${autoProcId}/particlePicker/${data.particlePickerId}/image`).then((response) => {
-              if (response.status === 200) {
-                setSummaryImage(URL.createObjectURL(response.data));
-              }
-            });
+          if (response.status === 200) {
+            const data = response.data.items[0] as ParticlePickingSchema;
+            if (data.particlePickerId) {
+              setParticleInfo(parseData(data, particleConfig).info);
+              client
+                .safe_get(`autoProc/${autoProcId}/particlePicker/${data.particlePickerId}/image`)
+                .then((response) => {
+                  if (response.status === 200) {
+                    setSummaryImage(URL.createObjectURL(response.data));
+                  }
+                });
+
+              client.safe_get(`movies/${data.movieId}/iceThickness?getAverages=true`).then((response) => {
+                if (response.status === 200) {
+                  const data = response.data as IceThickness;
+
+                  setIceThickness([
+                    convertToBoxPlot(data.current, "Current Image"),
+                    convertToBoxPlot(data.avg, "Average"),
+                  ]);
+                }
+              });
+            }
           } else {
             setParticleInfo(null);
           }
@@ -86,22 +112,34 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
         />
       </HStack>
       <Divider />
-      {particleInfo !== null ? (
-        <HStack marginY={2}>
+      {particleInfo ? (
+        <Grid py={2} marginBottom={6} templateColumns='repeat(3, 1fr)' h='25vh' gap={2}>
           <InfoGroup cols={1} info={particleInfo} />
-          <Spacer />
-          <Image src={summaryImage} title='Summary' width='30%' height='20vh' />
-        </HStack>
+          {iceThickness !== undefined ? (
+            <PlotContainer title='Relative Ice Thickness' height='25vh'>
+              <Box data={iceThickness} options={{ y: { domain: { min: 120000, max: 160000 } } }} />
+            </PlotContainer>
+          ) : (
+            <Skeleton h='25vh' />
+          )}
+          <ImageCard src={summaryImage} title='Summary' />
+        </Grid>
       ) : (
-        <VStack>
-          <Heading paddingTop={10} variant='notFound'>
-            No Particle Picking Data Found
-          </Heading>
-          <Heading variant='notFoundSubtitle'>This page does not contain any particle picking information.</Heading>
-        </VStack>
+        <>
+          {particleInfo === null ? (
+            <VStack>
+              <Heading paddingTop={10} variant='notFound'>
+                No Particle Picking Data Found
+              </Heading>
+              <Heading variant='notFoundSubtitle'>This page does not contain any particle picking information.</Heading>
+            </VStack>
+          ) : (
+            <Skeleton h='25vh' />
+          )}
+        </>
       )}
     </div>
   );
 };
 
-export default ParticlePicking;
+export { ParticlePicking };

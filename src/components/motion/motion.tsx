@@ -16,20 +16,20 @@ import {
   Code,
   GridItem,
 } from "@chakra-ui/react";
-import Image from "../image";
-import InfoGroup, { Info } from "../infogroup";
-import Scatter from "../scatter";
-import MotionPagination from "./pagination";
+import { ImageCard } from "../visualisation/image";
+import { InfoGroup } from "../visualisation/infogroup";
+import { PlotContainer } from "../visualisation/plotContainer";
+import { MotionPagination } from "./pagination";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { MdComment } from "react-icons/md";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { setLoading } from "../../features/uiSlice";
 import { client } from "../../utils/api/client";
 import { parseData } from "../../utils/generic";
 import { driftPlotOptions } from "../../utils/config/plot";
-import { ScatterDataPoint } from "chart.js";
 import { buildEndpoint } from "../../utils/api/endpoint";
+import { BasePoint, Info } from "../../utils/interfaces";
+import { Scatter } from "../plots/scatter";
 
 interface MotionData {
   /** Total number of tilt alignment images available */
@@ -107,13 +107,12 @@ const calcDarkImages = (total: number, rawTotal: number) => {
 const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: MotionProps) => {
   const [page, setPage] = useState<number | undefined>();
   const [motion, setMotion] = useState<MotionData>({ total: 0, rawTotal: 0, info: [] });
-  const [drift, setDrift] = useState<ScatterDataPoint[]>([]);
+  const [drift, setDrift] = useState<BasePoint[]>([]);
   const [mgImage, setMgImage] = useState("");
   const [fftImage, setFftImage] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const setImage = (endpoint: string, setState: Dispatch<SetStateAction<string>>) => {
     client.safe_get(endpoint).then((response) => {
@@ -144,7 +143,6 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
 
   useEffect(() => {
     dispatch(setLoading(true));
-
     client
       .safe_get(buildEndpoint(`${parentType}/${parentId}/motion`, {}, 1, page ?? 0))
       .then((response) => {
@@ -162,7 +160,9 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
             const driftUrl = `movies/${movie.movieId}/drift?fromDb=${parentType === "autoProc"}`;
 
             client.safe_get(driftUrl).then((response) => {
-              setDrift(response.data.items);
+              if (response.data.items) {
+                setDrift(response.data.items);
+              }
             });
           }
 
@@ -172,7 +172,7 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
         }
       })
       .finally(() => dispatch(setLoading(false)));
-  }, [page, parentId, parentType, dispatch, navigate, onMotionChanged, onTotalChanged]);
+  }, [page, parentId, parentType, dispatch, onMotionChanged, onTotalChanged]);
 
   return (
     <div>
@@ -207,13 +207,15 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
           <InfoGroup info={motion.info} />
         </GridItem>
         <GridItem h='25vh' colSpan={{ base: 2, md: 1 }}>
-          <Image src={mgImage} title='Micrograph Snapshot' height='100%' />
+          <ImageCard src={mgImage} title='Micrograph Snapshot' height='100%' />
         </GridItem>
         <GridItem h='25vh' colSpan={{ base: 2, md: 1 }}>
-          <Image src={fftImage} title='FFT Theoretical' height='100%' />
+          <ImageCard src={fftImage} title='FFT Theoretical' height='100%' />
         </GridItem>
         <GridItem h='25vh' minW='100%' colSpan={{ base: 2, md: 1 }}>
-          <Scatter title='Drift' options={driftPlotOptions} scatterData={drift} />
+          <PlotContainer title='Drift'>
+            <Scatter options={driftPlotOptions} data={drift} />
+          </PlotContainer>
         </GridItem>
       </Grid>
       <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
@@ -234,4 +236,4 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
   );
 };
 
-export default Motion;
+export { Motion };

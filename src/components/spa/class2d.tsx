@@ -1,15 +1,15 @@
-import { Spacer, HStack, Divider, Grid, Heading, Skeleton, Box, Select } from "@chakra-ui/react";
-import Image from "../image";
-import InfoGroup, { Info } from "../infogroup";
-import { useCallback, useEffect, useState } from "react";
+import { Spacer, HStack, Divider, Grid, Heading, Skeleton, Box, Select, VStack } from "@chakra-ui/react";
+import { ImageCard } from "../visualisation/image";
+import { InfoGroup } from "../visualisation/infogroup";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { client } from "../../utils/api/client";
-import MotionPagination from "../motion/pagination";
+import { MotionPagination } from "../motion/pagination";
 import { components } from "../../schema/main";
 import { parseData } from "../../utils/generic";
 import { classificationConfig } from "../../utils/config/parse";
 import { setLoading } from "../../features/uiSlice";
 import { useAppDispatch } from "../../store/hooks";
-import { SpaProps } from "../../utils/interfaces";
+import { SpaProps, Info } from "../../utils/interfaces";
 
 type Classification2D = components["schemas"]["Classification2D"];
 interface FullClassification extends Classification2D {
@@ -23,11 +23,10 @@ const sortValues = [
 ];
 
 const Class2d = ({ autoProcId }: SpaProps) => {
-  const [classificationData, setClassificationData] = useState<FullClassification[]>([]);
+  const [classificationData, setClassificationData] = useState<FullClassification[] | undefined | null>(undefined);
   const [pageAmount, setPageAmount] = useState(0);
   const [sortType, setSortType] = useState("particles");
   const [selectedClass, setSelectedClass] = useState(0);
-  const [selectedClassInfo, setSelectedClassInfo] = useState<Record<string, any>>({});
 
   const dispatch = useAppDispatch();
 
@@ -53,13 +52,17 @@ const Class2d = ({ autoProcId }: SpaProps) => {
       client
         .safe_get(`autoProc/${autoProcId}/classification?limit=8&page=${page - 1}&sortBy=${sortType}`)
         .then(async (response) => {
-          setPageAmount(Math.ceil(response.data.total / 8));
-          const classes = await Promise.all(
-            response.data.items.map(async (item: FullClassification) => {
-              return await getClassImage(item);
-            })
-          );
-          setClassificationData(classes);
+          if (response.status === 200 && response.data.items) {
+            setPageAmount(Math.ceil(response.data.total / 8));
+            const classes = await Promise.all(
+              response.data.items.map(async (item: FullClassification) => {
+                return await getClassImage(item);
+              })
+            );
+            setClassificationData(classes);
+          } else {
+            setClassificationData(null);
+          }
         })
         .finally(() => dispatch(setLoading(false)));
     },
@@ -70,10 +73,12 @@ const Class2d = ({ autoProcId }: SpaProps) => {
     handle2dClassificationChange(1);
   }, [handle2dClassificationChange]);
 
-  useEffect(() => {
-    if (classificationData[selectedClass]) {
-      setSelectedClassInfo(parseData(classificationData[selectedClass], classificationConfig));
+  const selectedClassInfo = useMemo(() => {
+    if (classificationData && classificationData[selectedClass]) {
+      return parseData(classificationData[selectedClass], classificationConfig);
     }
+
+    return {};
   }, [selectedClass, classificationData]);
 
   return (
@@ -84,7 +89,7 @@ const Class2d = ({ autoProcId }: SpaProps) => {
         </Heading>
         <Spacer />
         <Heading size='xs'>Sort by</Heading>
-        <Select onChange={(e) => setSortType(e.target.value)} size='xs' w='180px'>
+        <Select bg='white' onChange={(e) => setSortType(e.target.value)} size='xs' w='180px'>
           {sortValues.map((item) => (
             <option key={item.key} value={item.key}>
               {item.label}
@@ -94,10 +99,10 @@ const Class2d = ({ autoProcId }: SpaProps) => {
         <MotionPagination startFrom='start' onChange={handle2dClassificationChange} total={pageAmount} />
       </HStack>
       <Divider />
-      {classificationData.length ? (
+      {classificationData ? (
         <Grid py={2} marginBottom={6} templateColumns='repeat(8, 1fr)' h='14vh' gap={2}>
           {classificationData.map((item, i) => (
-            <Image
+            <ImageCard
               height='14vh'
               showModal={false}
               key={item.particleClassificationId}
@@ -105,15 +110,28 @@ const Class2d = ({ autoProcId }: SpaProps) => {
               title={`${item.batchNumber}-${item.classNumber} (${item.particlesPerClass})`}
               active={selectedClass === i}
               onClick={() => setSelectedClass(i)}
-            ></Image>
+            />
           ))}
         </Grid>
       ) : (
-        <Skeleton h='14vh' marginBottom={1} />
+        <>
+          {classificationData === undefined ? (
+            <Skeleton h='23vh' marginBottom={1} />
+          ) : (
+            <VStack>
+              <Heading paddingTop={10} variant='notFound'>
+                No 2D Classification Data Found
+              </Heading>
+              <Heading variant='notFoundSubtitle'>
+                This page does not contain any 2D classification information.
+              </Heading>
+            </VStack>
+          )}
+        </>
       )}
-      {selectedClassInfo.info ? <InfoGroup cols={5} info={selectedClassInfo.info as Info[]} /> : <Skeleton h='9vh' />}
+      {selectedClassInfo.info && <InfoGroup cols={5} info={selectedClassInfo.info as Info[]} />}
     </Box>
   );
 };
 
-export default Class2d;
+export { Class2d };

@@ -1,6 +1,5 @@
-import Motion from "../src/components/motion/motion";
-import React from "react";
-import { renderWithProviders } from "../src/utils/test-utils";
+import { Motion } from "./motion";
+import { renderWithProviders } from "../../utils/test-utils";
 import { screen, waitFor } from "@testing-library/react";
 
 describe("Motion", () => {
@@ -8,25 +7,19 @@ describe("Motion", () => {
   it("should display message when no tilt alignment data is present", async () => {
     renderWithProviders(<Motion parentType='dataCollections' parentId={2} />);
 
-    await waitFor(() => {
-      expect(screen.getByText("No tilt alignment data available")).toBeInTheDocument();
-    });
+    await screen.findByText("No tilt alignment data available");
   });
 
   it("should display raw image count when no tilt. align. is present", async () => {
     renderWithProviders(<Motion parentType='dataCollections' parentId={2} />);
 
-    await waitFor(() => {
-      expect(screen.getByText("10")).toBeInTheDocument();
-    });
+    await screen.findByText("10");
   });
 
   it("should display comments button when comments are present", async () => {
     renderWithProviders(<Motion parentType='tomograms' parentId={3} />);
 
-    await waitFor(() => {
-      expect(screen.getByText("20")).toBeInTheDocument();
-    });
+    await screen.findByText("20");
 
     await expect(screen.findByTestId("comment")).resolves.toBeEnabled();
   });
@@ -34,18 +27,13 @@ describe("Motion", () => {
   it("should call callback when first motion changes", async () => {
     const motionChanged = jest.fn();
     renderWithProviders(<Motion parentType='tomograms' onMotionChanged={motionChanged} parentId={3} />);
-
-    await waitFor(() => {
-      expect(motionChanged).toBeCalled();
-    });
+    await waitFor(() => expect(motionChanged).toBeCalled());
   });
 
   it("should call callback when total number of items changes", async () => {
     const totalChanged = jest.fn();
     renderWithProviders(<Motion parentType='tomograms' onTotalChanged={totalChanged} parentId={3} />);
 
-    await waitFor(() => {
-      expect(totalChanged).toBeCalled();
-    });
+    await waitFor(() => expect(totalChanged).toBeCalled());
   });
 });

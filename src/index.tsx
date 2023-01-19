@@ -4,15 +4,15 @@ import { Provider } from "react-redux";
 import { store } from "./store/store";
 import { ChakraProvider, createStandaloneToast, extendTheme } from "@chakra-ui/react";
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
-import Root from "./routes/Root";
-import GenericListing from "./routes/GenericListing";
-import Tomogram from "./routes/Tomogram";
-import SingleParticle from "./routes/SPA"
-import Error from "./routes/Error";
-import { Accordion, Button, Text, Heading, Table, Card} from "./styles/components";
-import Calendar from "./routes/Calendar";
+import { Root } from "./routes/Root";
+import { GenericListing } from "./routes/GenericListing";
+import { TomogramPage } from "./routes/Tomogram";
+import { SpaPage } from "./routes/SPA";
+import { Error } from "./routes/Error";
+import { Accordion, Button, Text, Heading, Table, Card } from "./styles/components";
+import { Calendar } from "./routes/Calendar";
 import { colours } from "./styles/colours";
-import Home from "./routes/Home";
+import { Home } from "./routes/Home";
 const { ToastContainer } = createStandaloneToast();
 
 const container = document.getElementById("root")!;
@@ -40,11 +40,11 @@ const proposalHeaders = [
 ];
 
 const visitHeaders = [
+  { key: "visit_number", label: "Visit" },
   { key: "startDate", label: "Start Date" },
   { key: "endDate", label: "End Date" },
   { key: "beamLineName", label: "Beamline" },
   { key: "collectionGroups", label: "Collection Groups" },
-  { key: "visit_number", label: "Visit" },
 ];
 
 const groupsHeaders = [
@@ -55,13 +55,18 @@ const groupsHeaders = [
 ];
 
 const handleGroupClicked = (item: Record<string, string | number>) => {
+  // Temporary workaround
+  if (item.experimentType === "tomo") {
+    return `${item.dataCollectionGroupId}/tomograms`;
+  }
+
   switch (item.experimentTypeName) {
     case "Single Particle":
-      return `${item.dataCollectionGroupId}/spa`
+      return `${item.dataCollectionGroupId}/spa`;
     default:
-      return `${item.dataCollectionGroupId}/tomograms`
+      return `${item.dataCollectionGroupId}/spa`;
   }
-}
+};
 
 const router = createBrowserRouter([
   {
@@ -95,7 +100,12 @@ const router = createBrowserRouter([
       {
         path: "/proposals/:propId/sessions",
         element: (
-          <GenericListing headers={visitHeaders} endpoint='sessions' heading='Sessions' makePathCallback={(item) => item.visit_number.toString()} />
+          <GenericListing
+            headers={visitHeaders}
+            endpoint='sessions'
+            heading='Sessions'
+            makePathCallback={(item) => item.visit_number.toString()}
+          />
         ),
       },
       {
@@ -119,11 +129,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/tomograms/:collectionIndex",
-        element: <Tomogram />,
+        element: <TomogramPage />,
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/spa/",
-        element: <SingleParticle />,
+        element: <SpaPage />,
       },
     ],
   },

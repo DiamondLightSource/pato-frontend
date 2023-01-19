@@ -1,25 +1,12 @@
-import {
-  Divider,
-  Heading,
-  HStack,
-  Input,
-  Spacer,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  useToast,
-  Box,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { Divider, Heading, HStack, Input, Spacer, useToast, Box } from "@chakra-ui/react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Pagination from "../components/pagination";
+import { Pagination } from "../components/navigation/pagination";
 import { setLoading } from "../features/uiSlice";
 import { useAppDispatch } from "../store/hooks";
 import { client } from "../utils/api/client";
 import { buildEndpoint } from "../utils/api/endpoint";
+import { Table } from "../components/visualisation/table";
 
 interface TableProps {
   headers: {
@@ -32,7 +19,7 @@ interface TableProps {
 }
 
 const GenericListing = ({ headers, endpoint, heading, makePathCallback }: TableProps) => {
-  const [data, setData] = useState<Array<Record<string, string | number>>>([]);
+  const [data, setData] = useState<Array<Record<string, string | number>> | null>([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(10);
   const [itemsPerPage, setItemsPerPage] = useState(20);
@@ -42,6 +29,15 @@ const GenericListing = ({ headers, endpoint, heading, makePathCallback }: TableP
   const navigate = useNavigate();
   const params = useParams();
   const dispatch = useAppDispatch();
+
+  const handleRowClicked = useCallback(
+    (item: Record<string, any>) => {
+      if (makePathCallback) {
+        navigate(makePathCallback(item));
+      }
+    },
+    [makePathCallback, navigate]
+  );
 
   useEffect(() => {
     document.title = `eBIC » ${heading}`;
@@ -61,6 +57,9 @@ const GenericListing = ({ headers, endpoint, heading, makePathCallback }: TableP
         if (response.data && response.data.items !== undefined) {
           setTotal(response.data.total);
           setData(response.data.items);
+        } else {
+          setTotal(0);
+          setData(null);
         }
       })
       .finally(() => dispatch(setLoading(false)));
@@ -85,40 +84,7 @@ const GenericListing = ({ headers, endpoint, heading, makePathCallback }: TableP
         ></Input>
       </HStack>
       <Divider />
-      <Box overflow='scroll'>
-        {data === undefined || data.length === 0 ? (
-          <Heading py={10} w='100%' variant='notFound'>
-            No {heading.toLowerCase()} found
-          </Heading>
-        ) : (
-          <Table size='sm' variant='diamondStriped'>
-            <Thead>
-              <Tr>
-                {headers.map((header) => (
-                  <Th key={header.label}>{header.label}</Th>
-                ))}
-              </Tr>
-            </Thead>
-            <Tbody cursor='pointer'>
-              {data.map((item, i) => (
-                <Tr
-                  h='2vh'
-                  key={i}
-                  onClick={() => {
-                    if (makePathCallback) {
-                      navigate(makePathCallback(item));
-                    }
-                  }}
-                >
-                  {headers.map((header) => (
-                    <Td key={header.key}>{item[header.key]}</Td>
-                  ))}
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        )}
-      </Box>
+      <Table data={data} headers={headers} label={heading} onClick={handleRowClicked} />
       <Divider />
       <Pagination
         onChange={(page, itemAmount) => {
@@ -131,4 +97,4 @@ const GenericListing = ({ headers, endpoint, heading, makePathCallback }: TableP
   );
 };
 
-export default GenericListing;
+export { GenericListing };

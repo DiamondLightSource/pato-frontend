@@ -1,9 +1,9 @@
 import { Box, Heading, Progress } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import Breadcrumbs from "../components/breadcrumbs";
-import Footer from "../components/footer";
-import Navbar from "../components/navbar";
+import { Breadcrumbs } from "../components/navigation/breadcrumbs";
+import { Footer } from "../components/navigation/footer";
+import { Navbar } from "../components/navigation/navbar";
 import { checkUser } from "../features/authSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import "../styles/main.css";
@@ -49,4 +49,4 @@ const Root = (): JSX.Element => {
   );
 };
 
-export default Root;
+export { Root };

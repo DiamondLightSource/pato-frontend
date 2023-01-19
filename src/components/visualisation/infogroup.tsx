@@ -1,13 +1,5 @@
 import { Box, Text, Grid, GridItem, Skeleton } from "@chakra-ui/react";
-
-export interface Info {
-  /** Label/description (title) for a display value */
-  label: string;
-  /** Value to accompany label */
-  value?: string;
-  /** Whether or not the given information element should span all columns */
-  wide?: boolean;
-}
+import { Info } from "../../utils/interfaces";
 
 interface InfoProps {
   info: Info[];
@@ -35,4 +27,4 @@ const InfoGroup = ({ info, height = "100%", cols = 2, py = 0 }: InfoProps) => (
   </Box>
 );
 
-export default InfoGroup;
+export { InfoGroup };
