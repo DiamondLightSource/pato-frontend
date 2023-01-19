@@ -105,7 +105,7 @@ const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
             x={defaultMargin.left}
             y={defaultMargin.top}
             fill='url(#dots-pink)'
-            aria-label='graph'
+            aria-label='Graph'
           />
           <Group left={defaultMargin.left} top={defaultMargin.top}>
             <GridRows scale={yScale} width={xMax} height={yMax} stroke='#e0e0e0' />
@@ -127,7 +127,7 @@ const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
                       fill={fillColours[i % fillColours.length]}
                       median={median(d)}
                       boxProps={{
-                        "aria-label": "box",
+                        "aria-label": "Box",
                         "onMouseOver": () => {
                           showTooltip({
                             tooltipTop: yScale(median(d)),
@@ -154,32 +154,32 @@ const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
         </svg>
         {tooltipOpen && tooltipData && tooltipLeft != null && tooltipTop != null && (
           <Tooltip left={tooltipLeft} top={tooltipTop}>
-            <div aria-label='box title'>
+            <div aria-label='Box Title'>
               <b style={{ color: "var(--chakra-colors-diamond-700)" }}>{tooltipData.label}</b>
             </div>
             <div style={{ marginTop: "5px", fontSize: "12px" }}>
               {tooltipData.max && (
-                <div aria-label='box max'>
+                <div aria-label='Maximum'>
                   <b>max:</b> {tooltipData.max}
                 </div>
               )}
               {tooltipData.q3 && (
-                <div aria-label='box q3'>
+                <div aria-label='Third Quartile'>
                   <b>third quartile:</b> {tooltipData.q3}
                 </div>
               )}
               {tooltipData.median && (
-                <div aria-label='box median'>
+                <div aria-label='Median'>
                   <b>median:</b> {tooltipData.median}
                 </div>
               )}
               {tooltipData.q1 && (
-                <div aria-label='box q1'>
+                <div aria-label='First Quartile'>
                   <b>first quartile:</b> {tooltipData.q1}
                 </div>
               )}
               {tooltipData.min && (
-                <div aria-label='box min'>
+                <div aria-label='Minimum'>
                   <b>min:</b> {tooltipData.min}
                 </div>
               )}

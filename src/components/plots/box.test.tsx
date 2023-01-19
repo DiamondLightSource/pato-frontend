@@ -40,23 +40,23 @@ describe("Box Plot", () => {
     renderWithProviders(
       <Box data={[{ min: 1, max: 10, median: 5, q1: 3, q3: 6, label: "test" }]} width={100} height={100} />
     );
-    const box = screen.getByLabelText("box");
+    const box = screen.getByLabelText("Box");
     fireEvent.mouseOver(box);
 
-    await waitFor(() => expect(screen.getByLabelText("box title")).toHaveTextContent("test"));
+    await waitFor(() => expect(screen.getByLabelText("Box Title")).toHaveTextContent("test"));
   });
 
   it("should hide tooltip when mouse leaves box", async () => {
     renderWithProviders(
       <Box data={[{ min: 1, max: 10, median: 5, q1: 3, q3: 6, label: "test" }]} width={100} height={100} />
     );
-    const box = screen.getByLabelText("box");
+    const box = screen.getByLabelText("Box");
     fireEvent.mouseOver(box);
 
-    await waitFor(() => expect(screen.getByLabelText("box title")).toHaveTextContent("test"));
+    await waitFor(() => expect(screen.getByLabelText("Box Title")).toHaveTextContent("test"));
 
     fireEvent.mouseLeave(box);
-    await waitFor(() => expect(screen.queryByLabelText("box title")).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByLabelText("Box Title")).not.toBeInTheDocument());
   });
 
   it("should calculate domain when no domain is given", () => {

@@ -1,7 +1,19 @@
 import { fireEvent, screen } from "@testing-library/react";
 import { renderWithProviders } from "../../utils/test-utils";
 import { Navbar } from "../navigation/navbar";
-import React from "react";
+
+const localStorageMock = (() => {
+  return {
+    getItem() {},
+    setItem() {},
+    removeItem() {},
+    clear() {},
+  };
+})();
+
+Object.defineProperty(window, "sessionStorage", {
+  value: localStorageMock,
+});
 
 describe("Navbar", () => {
   it("should display login button when not authenticated", () => {
@@ -55,5 +67,17 @@ describe("Navbar", () => {
     fireEvent.click(menu);
 
     expect(screen.getAllByText("Proposals").length).toBe(2);
+  });
+
+  it("should clear token in storage when logging out", () => {
+    const removeSpy = jest.spyOn(window.sessionStorage, "removeItem");
+    renderWithProviders(<Navbar />, {
+      preloadedState: { auth: { user: { name: "Someone", fedid: "aaa" } }, ui: { loading: false } },
+    });
+
+    fireEvent.click(screen.getByLabelText("User Avatar"));
+    fireEvent.click(screen.getByLabelText("Logout"));
+
+    expect(removeSpy).toHaveBeenCalledWith("token");
   });
 });

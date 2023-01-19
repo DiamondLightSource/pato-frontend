@@ -39,24 +39,24 @@ describe("Scatter Plot", () => {
 
   it("should display tooltip when datapoint is hovered", async () => {
     renderWithProviders(<Scatter data={[{ x: 522, y: 999 }]} width={100} height={100} />);
-    fireEvent.mouseMove(screen.getByLabelText("graph"), { clientX: 65, clientY: 35 });
+    fireEvent.mouseMove(screen.getByLabelText("Graph"), { clientX: 65, clientY: 35 });
 
-    await waitFor(() => expect(screen.getByLabelText("tooltip x")).toHaveTextContent("x: 522"));
+    await waitFor(() => expect(screen.getByLabelText("X")).toHaveTextContent("x: 522"));
   });
 
   it("should hide tooltip after mouse leaves the Voronoi bounds for point", async () => {
     renderWithProviders(<Scatter data={[{ x: 522, y: 999 }]} width={100} height={100} />);
-    const graph = screen.getByLabelText("graph");
+    const graph = screen.getByLabelText("Graph");
 
     fireEvent.mouseMove(graph, { clientX: 65, clientY: 35 });
 
     await waitFor(() => {
-      expect(screen.getByLabelText("tooltip x")).toBeInTheDocument();
+      expect(screen.getByLabelText("X")).toBeInTheDocument();
     });
 
     fireEvent.mouseLeave(graph);
 
-    await waitFor(() => expect(screen.queryByLabelText("tooltip x")).not.toBeInTheDocument(), { timeout: 3000 });
+    await waitFor(() => expect(screen.queryByLabelText("X")).not.toBeInTheDocument(), { timeout: 3000 });
   });
 
   it("should use X axis provided by the configuration", () => {

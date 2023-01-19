@@ -150,7 +150,7 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
             x={defaultMargin.left}
             y={defaultMargin.top}
             fill='var(--card-bg)'
-            aria-label='graph'
+            aria-label='Graph'
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             onTouchMove={handleMouseMove}
@@ -179,10 +179,10 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
         </svg>
         {tooltipOpen && tooltipData && tooltipLeft != null && tooltipTop != null && (
           <Tooltip left={tooltipLeft + 10} top={tooltipTop + 10}>
-            <div aria-label='tooltip x'>
+            <div aria-label='X'>
               <b>x:</b> {x(tooltipData)}
             </div>
-            <div aria-label='tooltip y'>
+            <div aria-label='Y'>
               <b>y:</b> {y(tooltipData)}
             </div>
           </Tooltip>
