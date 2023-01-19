@@ -24,6 +24,7 @@ import {
   ModalOverlay,
   ModalContent,
   ModalCloseButton,
+  Tooltip,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -36,7 +37,7 @@ import { components } from "../schema/main";
 import { buildEndpoint } from "../utils/api/endpoint";
 import SPA from "../components/spa/main";
 import { collectionConfig } from "../utils/config/parse";
-import { MdFolder, MdPlayArrow } from "react-icons/md";
+import { MdFolder, MdRedo } from "react-icons/md";
 import { InfoGroup } from "../components/visualisation/infogroup";
 import { RelionReprocessing } from "../components/spa/relion";
 
@@ -202,9 +203,11 @@ const SpaPage = () => {
                   <ProcTitleInfo title='Processing Start' value={job.AutoProcProgram.processingStartTime ?? "?"} />
                   <ProcTitleInfo title='Processing End' value={job.AutoProcProgram.processingEndTime ?? "?"} />
                   <Tag colorScheme={jobStatusColour[job.status]}>{job.status}</Tag>
-                  <Button isDisabled onClick={() => handleProcessingClicked(job.ProcessingJob.processingJobId)}>
-                    <Icon as={MdPlayArrow} />
-                  </Button>
+                  <Tooltip label='Run Reprocessing'>
+                    <Button isDisabled onClick={() => handleProcessingClicked(job.ProcessingJob.processingJobId)}>
+                      <Icon as={MdRedo} />
+                    </Button>
+                  </Tooltip>
                   <AccordionButton width='auto'>
                     <AccordionIcon />
                   </AccordionButton>

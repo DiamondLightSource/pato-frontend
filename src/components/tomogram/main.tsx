@@ -1,10 +1,10 @@
-import { Spacer, HStack, Divider, Grid, Button, Heading, Box, GridItem } from "@chakra-ui/react";
+import { Spacer, HStack, Divider, Icon, Grid, Button, Heading, Box, GridItem, Tooltip } from "@chakra-ui/react";
 import { ImageCard } from "../visualisation/image";
 import { InfoGroup } from "../visualisation/infogroup";
 import { PlotContainer } from "../visualisation/plotContainer";
 import { Motion } from "../motion/motion";
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
-import { MdSettings } from "react-icons/md";
+import { MdRedo } from "react-icons/md";
 import { client } from "../../utils/api/client";
 import { TomogramData, Info, BasePoint } from "../../utils/interfaces";
 import { CTF } from "../ctf/ctf";
@@ -67,9 +67,11 @@ const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
       <HStack py={1.5} px={3} bg='diamond.100'>
         <h2>{title ?? "No Title Provided"}</h2>
         <Spacer />
-        <Button disabled>
-          <MdSettings />
-        </Button>
+        <Tooltip label='Run Reprocessing'>
+          <Button isDisabled>
+            <Icon as={MdRedo} />
+          </Button>
+        </Tooltip>
       </HStack>
       <Box border='1px solid' p={4} borderColor='diamond.100'>
         {tomogram === null ? (
