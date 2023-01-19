@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import React, { useCallback, useMemo, useRef } from "react";
 import { Group } from "@visx/group";
 import { scaleBand, scaleLinear } from "@visx/scale";
 import { withTooltip, Tooltip } from "@visx/tooltip";
@@ -85,6 +85,13 @@ const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
       padding: 0.4,
     });
 
+    const checkBoundaries = useCallback(
+      (d: BoxPlotStats) => {
+        return config.y.domain.min < min(d) && config.y.domain.max > max(d);
+      },
+      [config]
+    );
+
     const boxWidth = xScale.bandwidth();
     const constrainedWidth = Math.min(40, boxWidth);
 
@@ -104,42 +111,45 @@ const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
             <GridRows scale={yScale} width={xMax} height={yMax} stroke='#e0e0e0' />
             <AxisLeft label={config.y.label} scale={yScale} numTicks={5} />
             <AxisBottom top={yMax} scale={xScale} tickValues={data.map(label)} />
-            {data.map((d: BoxPlotStats, i) => (
-              <g key={i} data-testid='box-item'>
-                <BoxPlot
-                  valueScale={yScale}
-                  min={min(d)}
-                  max={max(d)}
-                  left={xScale(label(d))! + boxWidth / 2 - constrainedWidth * 0.2}
-                  firstQuartile={q1(d)}
-                  thirdQuartile={q3(d)}
-                  boxWidth={constrainedWidth * 0.4}
-                  stroke='var(--chakra-colors-diamond-800)'
-                  fill={fillColours[i % fillColours.length]}
-                  median={median(d)}
-                  boxProps={{
-                    "aria-label": "box",
-                    "onMouseOver": () => {
-                      showTooltip({
-                        tooltipTop: yScale(median(d)),
-                        tooltipLeft: xScale(label(d))!,
-                        tooltipData: {
-                          ...d,
+            {data.map(
+              (d: BoxPlotStats, i) =>
+                checkBoundaries(d) && (
+                  <g key={i} data-testid='box-item'>
+                    <BoxPlot
+                      valueScale={yScale}
+                      min={min(d)}
+                      max={max(d)}
+                      left={xScale(label(d))! + boxWidth / 2 - constrainedWidth * 0.2}
+                      firstQuartile={q1(d)}
+                      thirdQuartile={q3(d)}
+                      boxWidth={constrainedWidth * 0.4}
+                      stroke='var(--chakra-colors-diamond-800)'
+                      fill={fillColours[i % fillColours.length]}
+                      median={median(d)}
+                      boxProps={{
+                        "aria-label": "box",
+                        "onMouseOver": () => {
+                          showTooltip({
+                            tooltipTop: yScale(median(d)),
+                            tooltipLeft: xScale(label(d))!,
+                            tooltipData: {
+                              ...d,
+                            },
+                          });
                         },
-                      });
-                    },
-                    "onMouseLeave": () => {
-                      hideTooltip();
-                    },
-                  }}
-                  medianProps={{
-                    style: {
-                      stroke: "#FFF",
-                    },
-                  }}
-                />
-              </g>
-            ))}
+                        "onMouseLeave": () => {
+                          hideTooltip();
+                        },
+                      }}
+                      medianProps={{
+                        style: {
+                          stroke: "#FFF",
+                        },
+                      }}
+                    />
+                  </g>
+                )
+            )}
           </Group>
         </svg>
         {tooltipOpen && tooltipData && tooltipLeft != null && tooltipTop != null && (

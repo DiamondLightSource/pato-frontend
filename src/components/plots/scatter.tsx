@@ -10,6 +10,7 @@ import { AxisBottom, AxisLeft } from "@visx/axis";
 import { localPoint } from "@visx/event";
 import { BasePoint, CompleteScatterPlotOptions, ScatterPlotOptions } from "../../utils/interfaces";
 import { mergeDeep } from "../../utils/generic";
+
 const x = (d: BasePoint) => d.x;
 const y = (d: BasePoint) => d.y;
 
@@ -64,6 +65,18 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
 
       return newConfig as CompleteScatterPlotOptions;
     }, [data, options]);
+
+    const checkBoundaries = useCallback(
+      (d: BasePoint) => {
+        return (
+          config.x.domain.min <= x(d) &&
+          config.x.domain.max >= x(d) &&
+          config.y.domain.min <= y(d) &&
+          config.y.domain.max >= y(d)
+        );
+      },
+      [config]
+    );
 
     const xMax = useMemo(() => {
       return width - defaultMargin.left - defaultMargin.right;
@@ -148,17 +161,20 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
             <GridColumns scale={xScale} width={xMax} height={yMax} stroke='#e0e0e0' />
             <AxisBottom label={config.x.label} top={yMax} scale={xScale} numTicks={5} />
             <AxisLeft label={config.y.label} scale={yScale} numTicks={5} />
-            {data.map((point, i) => (
-              <Circle
-                aria-label='dot'
-                key={`point-${data[0]}-${i}`}
-                className='dot'
-                cx={xScale(x(point))}
-                cy={yScale(y(point))}
-                r={config.points.dotRadius}
-                fill={tooltipData === point ? "pink" : "#ff5733"}
-              />
-            ))}
+            {data.map(
+              (point, i) =>
+                checkBoundaries(point) && (
+                  <Circle
+                    data-testid='dot'
+                    key={`point-${data[0]}-${i}`}
+                    className='dot'
+                    cx={xScale(x(point))}
+                    cy={yScale(y(point))}
+                    r={config.points.dotRadius}
+                    fill={tooltipData === point ? "pink" : "#ff5733"}
+                  />
+                )
+            )}
           </Group>
         </svg>
         {tooltipOpen && tooltipData && tooltipLeft != null && tooltipTop != null && (

@@ -5,7 +5,7 @@ import { Scatter } from "./scatter";
 describe("Scatter Plot", () => {
   it("should render graph", () => {
     renderWithProviders(<Scatter data={[{ x: 1, y: 1 }]} width={100} height={100} />);
-    expect(screen.getByLabelText("dot")).toBeInTheDocument();
+    expect(screen.getByTestId("dot")).toBeInTheDocument();
   });
 
   it("should render graph with multiple points", () => {
@@ -19,7 +19,7 @@ describe("Scatter Plot", () => {
         height={100}
       />
     );
-    expect(screen.getAllByLabelText("dot").length).toBe(2);
+    expect(screen.getAllByTestId("dot").length).toBe(2);
   });
 
   it("should render axis labels", () => {
@@ -59,7 +59,7 @@ describe("Scatter Plot", () => {
     await waitFor(() => expect(screen.queryByLabelText("tooltip x")).not.toBeInTheDocument(), { timeout: 3000 });
   });
 
-  it("should use X axis provided by the configuration", async () => {
+  it("should use X axis provided by the configuration", () => {
     renderWithProviders(
       <Scatter
         data={[{ x: 522, y: 999 }]}
@@ -73,7 +73,7 @@ describe("Scatter Plot", () => {
     expect(screen.getByText("0")).toBeInTheDocument();
   });
 
-  it("should use Y axis provided by the configuration", async () => {
+  it("should use Y axis provided by the configuration", () => {
     renderWithProviders(
       <Scatter
         data={[{ x: 522, y: 999 }]}
@@ -85,5 +85,18 @@ describe("Scatter Plot", () => {
 
     expect(screen.getAllByText("20").length).toBe(2);
     expect(screen.getByText("0")).toBeInTheDocument();
+  });
+
+  it("should not render outside domain boundaries", () => {
+    renderWithProviders(
+      <Scatter
+        data={[{ x: 522, y: 999 }]}
+        options={{ x: { domain: { min: 0, max: 20 } } }}
+        width={1000}
+        height={1000}
+      />
+    );
+
+    expect(screen.queryByTestId("dot")).not.toBeInTheDocument();
   });
 });

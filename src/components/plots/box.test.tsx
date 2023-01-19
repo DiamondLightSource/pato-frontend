@@ -91,4 +91,17 @@ describe("Box Plot", () => {
     expect(screen.getByText("0.0")).toBeInTheDocument();
     expect(screen.getAllByText("5.0").length).toBe(2);
   });
+
+  it("should not render outside domain boundaries", () => {
+    renderWithProviders(
+      <Box
+        data={[{ min: 60, max: 90, median: 65, q1: 61, q3: 70, label: "test" }]}
+        options={{ y: { domain: { min: 0, max: 5 } } }}
+        width={100}
+        height={100}
+      />
+    );
+
+    expect(screen.queryByTestId("box-item")).not.toBeInTheDocument();
+  });
 });

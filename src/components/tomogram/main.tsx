@@ -63,7 +63,7 @@ const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
   }, [tomogram]);
 
   return (
-    <Box>
+    <Box bg='diamond.50'>
       <HStack py={1.5} px={3} bg='diamond.100'>
         <h2>{title ?? "No Title Provided"}</h2>
         <Spacer />

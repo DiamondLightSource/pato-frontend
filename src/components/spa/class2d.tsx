@@ -89,7 +89,7 @@ const Class2d = ({ autoProcId }: SpaProps) => {
         </Heading>
         <Spacer />
         <Heading size='xs'>Sort by</Heading>
-        <Select bg='diamond.50' onChange={(e) => setSortType(e.target.value)} size='xs' w='180px'>
+        <Select bg='white' onChange={(e) => setSortType(e.target.value)} size='xs' w='180px'>
           {sortValues.map((item) => (
             <option key={item.key} value={item.key}>
               {item.label}

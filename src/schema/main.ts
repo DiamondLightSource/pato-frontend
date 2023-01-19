@@ -589,6 +589,13 @@ export interface components {
       /** Detail */
       detail?: (components["schemas"]["ValidationError"])[];
     };
+    /** IceThicknessWithAverage */
+    IceThicknessWithAverage: {
+      /** Current */
+      current: components["schemas"]["RelativeIceThickness"];
+      /** Avg */
+      avg: components["schemas"]["RelativeIceThickness"];
+    };
     /** MotionCorrection */
     MotionCorrection: {
       /** Motioncorrectionid */
@@ -754,6 +761,8 @@ export interface components {
       summaryFullImagePath?: string;
       /** Imagenumber */
       imageNumber: number;
+      /** Movieid */
+      movieId: number;
       /**
        * Createdtimestamp 
        * Format: date-time
@@ -826,16 +835,6 @@ export interface components {
       q3: number;
       /** Maximum */
       maximum: number;
-      /** Minavg */
-      minAvg?: number;
-      /** Maxavg */
-      maxAvg?: number;
-      /** Q1Avg */
-      q1Avg?: number;
-      /** Q3Avg */
-      q3Avg?: number;
-      /** Medianavg */
-      medianAvg?: number;
     };
     /**
      * RotationAxisEnum 
@@ -1225,7 +1224,7 @@ export interface operations {
      */
     parameters: {
       query?: {
-        fromDb?: boolean;
+        getAverages?: boolean;
       };
       path: {
         movieId: number;
@@ -1235,7 +1234,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["RelativeIceThickness"];
+          "application/json": components["schemas"]["IceThicknessWithAverage"];
         };
       };
       /** @description Validation Error */

@@ -19,7 +19,7 @@ const SPA = ({ autoProcId }: SpaProps) => {
   }, []);
 
   return (
-    <Box p={4}>
+    <Box bg='diamond.50' p={4}>
       <CTF parentId={autoProcId} parentType='autoProc' />
       <Motion
         onMotionChanged={handlePageChanged}

@@ -8,8 +8,8 @@ v0.2.0 (--/01/2023)
 
 **Added**
 
-- Relion processing dialog
-- Plot for relative ice thickness data
+- Relion processing dialog (inactive)
+- Plot for relative ice thickness data in particle picking data
 
 **Changed**
 

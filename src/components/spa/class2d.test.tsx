@@ -43,8 +43,6 @@ describe("2D Classification", () => {
   it("should display message when no classification data is available", async () => {
     renderWithProviders(<Class2d autoProcId={2} />);
 
-    await waitFor(() => {
-      expect(screen.getByText("No 2D Classification Data Found")).toBeInTheDocument();
-    });
+    await screen.findByText("No 2D Classification Data Found");
   });
 });

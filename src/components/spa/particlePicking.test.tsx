@@ -1,7 +1,6 @@
 import { ParticlePicking } from "./particlePicking";
-import React from "react";
 import { renderWithProviders } from "../../utils/test-utils";
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 
 describe("Particle Picking", () => {
   window.URL.createObjectURL = jest.fn();
@@ -26,17 +25,21 @@ describe("Particle Picking", () => {
     expect(screen.getByLabelText("Current Page")).toBeEnabled();
   });
 
-  it("should display message when no particle picking data exists", () => {
-    renderWithProviders(<ParticlePicking autoProcId={1} page={12} total={150} />);
+  it("should display message when no particle picking data exists", async () => {
+    renderWithProviders(<ParticlePicking autoProcId={3} page={12} total={150} />);
 
-    expect(screen.getByText("No Particle Picking Data Found")).toBeInTheDocument();
+    await screen.findByText("No Particle Picking Data Found");
   });
 
   it("should display information if valid data is returned", async () => {
     renderWithProviders(<ParticlePicking autoProcId={2} page={12} total={150} />);
 
-    await waitFor(() => {
-      expect(screen.getByText("9999")).toBeInTheDocument();
-    });
+    await screen.findByText("9999");
+  });
+
+  it("should render ice thickness data if available", async () => {
+    renderWithProviders(<ParticlePicking autoProcId={2} page={12} total={150} />);
+
+    await screen.findByText("Relative Ice Thickness");
   });
 });

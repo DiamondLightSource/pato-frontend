@@ -1,6 +1,6 @@
 import { Tomogram } from "./main";
 import { renderWithProviders } from "../../utils/test-utils";
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { Accordion } from "@chakra-ui/react";
 
 describe("Tomogram", () => {
@@ -23,9 +23,7 @@ describe("Tomogram", () => {
       </Accordion>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText("Tomogram 1")).toBeInTheDocument();
-    });
+    await screen.findByText("Tomogram 1");
 
     expect(screen.queryByText("Defocus")).toBeNull();
   });
@@ -68,9 +66,7 @@ describe("Tomogram", () => {
       </Accordion>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText("testLabel:")).toBeInTheDocument();
-    });
+    await screen.findByText("testLabel:");
 
     expect(screen.getByText("testValue")).toBeInTheDocument();
   });
@@ -86,8 +82,6 @@ describe("Tomogram", () => {
       </Accordion>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText("Defocus")).toBeInTheDocument();
-    });
+    await screen.findByText("Defocus");
   });
 });

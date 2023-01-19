@@ -90,7 +90,7 @@ const MotionPagination = ({
       <InputGroup size={size}>
         <Input
           isDisabled={disabled}
-          bg='diamond.50'
+          bg='white'
           aria-label='Current Page'
           onChange={(event) => setValue(event.target.value)}
           value={value}
