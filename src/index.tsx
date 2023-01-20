@@ -43,7 +43,7 @@ const visitHeaders = [
   { key: "visit_number", label: "Visit" },
   { key: "startDate", label: "Start Date" },
   { key: "endDate", label: "End Date" },
-  { key: "beamLineName", label: "Beamline" },
+  { key: "beamLineName", label: "Microscope" },
   { key: "collectionGroups", label: "Collection Groups" },
 ];
 

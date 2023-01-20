@@ -43,13 +43,16 @@ export async function client(
   }
 
   let data;
-  let target = (endpoint === "user" ? process.env.REACT_APP_AUTH_ENDPOINT : process.env.REACT_APP_API_ENDPOINT) + endpoint;
+  let target =
+    (endpoint === "user" ? process.env.REACT_APP_AUTH_ENDPOINT : process.env.REACT_APP_API_ENDPOINT) + endpoint;
 
   const response = await fetch(target, config);
   clearTimeout(timeoutFetch);
 
   switch (response.headers.get("content-type")) {
     case "image/png":
+      data = await response.arrayBuffer();
+      break;
     case "image/jpeg":
       data = await response.blob();
       break;

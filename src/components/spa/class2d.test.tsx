@@ -22,7 +22,7 @@ describe("2D Classification", () => {
       expect(screen.getByLabelText("Batch Number Value")).toHaveTextContent("155");
     });
 
-    const newClass = screen.getByRole("heading", { name: "355-1 (1)" });
+    const newClass = screen.getAllByLabelText("Image Title")[1];
     fireEvent.click(newClass);
 
     await waitFor(() => {

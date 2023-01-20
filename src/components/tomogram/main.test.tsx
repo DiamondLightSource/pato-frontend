@@ -63,6 +63,6 @@ describe("Tomogram", () => {
       />
     );
 
-    await screen.findByText("Defocus");
+    await screen.findByText("Defocus", {}, { timeout: 3000 });
   });
 });

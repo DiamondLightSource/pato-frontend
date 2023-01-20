@@ -47,16 +47,18 @@ const ImageCard = ({
   };
 
   return (
-    <Card aria-selected={active} onClick={onClickContainer} w={width} h={height} overflow='hidden'>
-      <CardHeader>
-        <Heading size='sm'>{title}</Heading>
+    <Card aria-selected={active} w={width} h={height} overflow='hidden'>
+      <CardHeader onClick={onClickContainer}>
+        <Heading aria-label='Image Title' size='sm'>
+          {title}
+        </Heading>
       </CardHeader>
       <CardBody>
         <Image w='100%' objectFit='contain' src={src} margin='auto' maxH='100%' fallbackSrc='/images/no-image.png' />
         <Modal isOpen={isOpen && showModal} onClose={onClose}>
           <ModalOverlay bg='rgba(0,0,0,0.8)' opacity='0.5' />
           <ModalContent dropShadow='none' bg='none' w='fit-content' maxW='90vw'>
-            <ModalHeader w='80%' color='diamond.200' p={0}>
+            <ModalHeader aria-label='Image Modal Title' w='80%' color='diamond.200' p={0}>
               {title}
             </ModalHeader>
             <ModalCloseButton color='diamond.200' m='-10px' />

@@ -1,4 +1,22 @@
-import { Spacer, HStack, Divider, Icon, Grid, Button, Heading, Box, GridItem, Tooltip } from "@chakra-ui/react";
+import {
+  Spacer,
+  HStack,
+  Divider,
+  Icon,
+  Grid,
+  Button,
+  Heading,
+  Box,
+  GridItem,
+  Tooltip,
+  useDisclosure,
+  ModalContent,
+  Modal,
+  ModalCloseButton,
+  ModalOverlay,
+  ModalHeader,
+  ModalBody,
+} from "@chakra-ui/react";
 import { ImageCard } from "../visualisation/image";
 import { InfoGroup } from "../visualisation/infogroup";
 import { PlotContainer } from "../visualisation/plotContainer";
@@ -9,6 +27,7 @@ import { client } from "../../utils/api/client";
 import { TomogramData, Info, BasePoint } from "../../utils/interfaces";
 import { CTF } from "../ctf/ctf";
 import { Scatter } from "../plots/scatter";
+import { APNGViewer } from "../visualisation/apng";
 
 /* The reason why this is a separate component is that in the future, tomograms might no longer have a 1:1
  ** relationship with data collections. Should that happen, just reuse this component.
@@ -24,6 +43,7 @@ interface TomogramProps {
 }
 
 const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
+  const { isOpen, onClose, onOpen } = useDisclosure();
   const [sliceImage, setSliceImage] = useState("");
   const [shiftData, setShiftData] = useState<BasePoint[]>([]);
   const [tomogramInfo, setTomogramInfo] = useState<Info[]>([]);
@@ -88,7 +108,20 @@ const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
                 <InfoGroup info={tomogramInfo} />
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }} height={{ base: "20vh", md: "32vh" }}>
-                <ImageCard title='Central Slice' src={sliceImage} height='100%' />
+                <ImageCard title='Central Slice' src={sliceImage} height='89%' />
+                <Button mt='1%' width='100%' onClick={onOpen}>
+                  View Movie
+                </Button>
+                <Modal size='xl' isOpen={isOpen} onClose={onClose}>
+                  <ModalOverlay />
+                  <ModalContent minW={{ base: "95vh", md: "65vh" }}>
+                    <ModalHeader paddingBottom={0}>{title}</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody h={{ base: "90vh", md: "60vh" }}>
+                      {isOpen && <APNGViewer src={`tomograms/${tomogram.tomogramId}/movie`} />}
+                    </ModalBody>
+                  </ModalContent>
+                </Modal>
               </GridItem>
               <GridItem colSpan={{ base: 3, md: 1 }} minW='100%' height={{ base: "20vh", md: "32vh" }}>
                 <PlotContainer title='Shift Plot'>

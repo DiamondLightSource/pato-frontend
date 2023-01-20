@@ -33,8 +33,8 @@ const PlotContainer = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Card aria-selected={active} w={width} h={height} onClick={onOpen}>
-      <CardHeader>
+    <Card aria-selected={active} w={width} h={height}>
+      <CardHeader onClick={onOpen}>
         <Heading size='sm'>{title}</Heading>
       </CardHeader>
       <CardBody px={2} py='0'>

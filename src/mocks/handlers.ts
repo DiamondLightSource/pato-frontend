@@ -1,5 +1,7 @@
 import { rest } from 'msw'
 
+const apng = "iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAMAAAC6sdbXAAAACGFjVEwAAAADAAAAAM7tusAAAAAMUExURQMDAwAAAJKSkv8AAGIb5p4AAAABdFJOUwBA5thmAAAAGmZjVEwAAAAAAAAABQAAAAUAAAAAAAAAAAAUAGQAANMipokAAAAOSURBVAjXY2AEAQYcJAABlQAaPUDJKQAAABpmY1RMAAAAAQAAAAUAAAAFAAAAAAAAAAAAFABkAABIUUxdAAAAEmZkQVQAAAACCNdjYAYBBhwkAASDAEy9AgcTAAAAGmZjVEwAAAADAAAABQAAAAUAAAAAAAAAAAAUAGQAAKXHn7QAAAASZmRBVAAAAAQI12NgAgEGHCQAAwwAMyEXezIAAAAbdEVYdFNvZnR3YXJlAEFQTkcgQXNzZW1ibGVyIDIuN8Hj04gAAAAASUVORK5CYII="
+
 export const handlers = [
   rest.get('http://localhost/tomograms/:id/motion', (req, res, ctx) => {
     let data = {}
@@ -148,6 +150,23 @@ export const handlers = [
           ctx.delay(0)
         )
     }
+    
+  }),
+
+  rest.get("http://localhost/tomograms/:tomogramId/movie", async (req, res, ctx) => {
+    const buffer = Buffer.from(apng, "base64");
+
+    if (req.params.tomogramId === "1") {
+      return res(
+        ctx.status(200),
+        ctx.set('Content-Type', 'image/png'),
+        ctx.body(buffer),
+        ctx.delay(0),
+        ctx.set('Content-Length', buffer.length.toString()),
+      )
+    }
+
+    return res(ctx.status(404));
     
   }),
 
