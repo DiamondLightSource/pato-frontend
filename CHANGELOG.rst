@@ -20,6 +20,7 @@ v0.2.0 (19/01/2023)
 - "Beamlines" in session table changed to "Microscopes"
 - Microscopes are now displayed as a human readable value instead of their beamline ID
 - In order to allow interactivity with plots, only clicking image/plot titles opens up the modal, instead of the whole card
+- Fixes year on footer
 
 ++++++++++
 v0.1.0 (11/01/2023)

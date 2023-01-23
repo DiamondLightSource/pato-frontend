@@ -43,7 +43,7 @@ const visitHeaders = [
   { key: "visit_number", label: "Visit" },
   { key: "startDate", label: "Start Date" },
   { key: "endDate", label: "End Date" },
-  { key: "beamLineName", label: "Microscope" },
+  { key: "microscopeName", label: "Microscope" },
   { key: "collectionGroups", label: "Collection Groups" },
 ];
 
@@ -66,6 +66,26 @@ const handleGroupClicked = (item: Record<string, string | number>) => {
     default:
       return `${item.dataCollectionGroupId}/spa`;
   }
+};
+
+const beamlineToMicroscope: Record<string, string> = {
+  m02: "Krios 1",
+  m03: "Krios 2",
+  m04: "Talos",
+  m06: "Krios 3",
+  m07: "Krios 4",
+  m08: "Krios 5",
+  m10: "Glacios 1",
+  m12: "Glacios 2",
+};
+
+const processSessionData = (data: Record<string, string | number>[]) => {
+  return data.map((item: Record<string, string | number>) => {
+    let newItem = Object.assign({}, item);
+    const beamLineName = item.beamLineName as string;
+    newItem["microscopeName"] = beamlineToMicroscope[beamLineName] ?? beamLineName;
+    return newItem;
+  });
 };
 
 const router = createBrowserRouter([
@@ -105,6 +125,7 @@ const router = createBrowserRouter([
             endpoint='sessions'
             heading='Sessions'
             makePathCallback={(item) => item.visit_number.toString()}
+            processData={processSessionData}
           />
         ),
       },
@@ -134,6 +155,10 @@ const router = createBrowserRouter([
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/spa/",
         element: <SpaPage />,
+      },
+      {
+        path: "/proposals/:propId/sessions/:visitId/groups/:groupId/",
+        element: <Navigate to='..' relative='path' replace />,
       },
     ],
   },

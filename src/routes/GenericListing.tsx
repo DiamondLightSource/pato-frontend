@@ -16,9 +16,10 @@ interface TableProps {
   endpoint: string;
   heading: string;
   makePathCallback?: (item: Record<string, string | number>) => string;
+  processData?: (data: Record<string, any>[]) => Record<string, any>[];
 }
 
-const GenericListing = ({ headers, endpoint, heading, makePathCallback }: TableProps) => {
+const GenericListing = ({ headers, endpoint, heading, makePathCallback, processData }: TableProps) => {
   const [data, setData] = useState<Array<Record<string, string | number>> | null>([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(10);
@@ -56,14 +57,19 @@ const GenericListing = ({ headers, endpoint, heading, makePathCallback }: TableP
       .then((response) => {
         if (response.data && response.data.items !== undefined) {
           setTotal(response.data.total);
-          setData(response.data.items);
+
+          if (processData) {
+            setData(processData(response.data.items));
+          } else {
+            setData(response.data.items);
+          }
         } else {
           setTotal(0);
           setData(null);
         }
       })
       .finally(() => dispatch(setLoading(false)));
-  }, [page, itemsPerPage, toast, endpoint, navigate, dispatch, search, params]);
+  }, [page, itemsPerPage, toast, endpoint, navigate, dispatch, processData, search, params]);
 
   return (
     <Box h='100%'>

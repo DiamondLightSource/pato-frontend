@@ -104,35 +104,41 @@ const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
             </Heading>
             <Divider />
             <Grid py={2} templateColumns='repeat(3, 1fr)' gap={2}>
-              <GridItem height={{ base: "20vh", md: "32vh" }}>
+              <GridItem height='20vh'>
                 <InfoGroup info={tomogramInfo} />
               </GridItem>
-              <GridItem colSpan={{ base: 2, md: 1 }} height={{ base: "20vh", md: "32vh" }}>
-                <ImageCard title='Central Slice' src={sliceImage} height='89%' />
-                <Button mt='1%' width='100%' onClick={onOpen}>
+              <GridItem height='20vh'>
+                <ImageCard height='85%' title='Central Slice' src={sliceImage} />
+                <Button w='100%' mt='1%' height='13%' alignSelf='end' size='sm' onClick={onOpen}>
                   View Movie
                 </Button>
-                <Modal size='xl' isOpen={isOpen} onClose={onClose}>
-                  <ModalOverlay />
-                  <ModalContent minW={{ base: "95vh", md: "65vh" }}>
-                    <ModalHeader paddingBottom={0}>{title}</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody h={{ base: "90vh", md: "60vh" }}>
-                      {isOpen && <APNGViewer src={`tomograms/${tomogram.tomogramId}/movie`} />}
-                    </ModalBody>
-                  </ModalContent>
-                </Modal>
               </GridItem>
-              <GridItem colSpan={{ base: 3, md: 1 }} minW='100%' height={{ base: "20vh", md: "32vh" }}>
+              <GridItem height='20vh'>
+                <ImageCard src='' title='XY Projection' />
+              </GridItem>
+              <GridItem colSpan={{ base: 3, md: 1 }} minW='100%' height='22vh'>
                 <PlotContainer title='Shift Plot'>
                   <Scatter data={shiftData} />
                 </PlotContainer>
+              </GridItem>
+              <GridItem colSpan={2} height='22vh'>
+                <ImageCard src='' title='XZ Projection' />
               </GridItem>
             </Grid>
             <CTF parentId={tomogram.tomogramId} parentType='tomograms' />
           </Box>
         )}
       </Box>
+      <Modal size='xl' isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent minW={{ base: "95vh", md: "65vh" }}>
+          <ModalHeader paddingBottom={0}>{title}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody h={{ base: "90vh", md: "60vh" }}>
+            {isOpen && tomogram && <APNGViewer src={`tomograms/${tomogram.tomogramId}/movie`} />}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };
