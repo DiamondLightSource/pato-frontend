@@ -170,7 +170,9 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
   return (
     <div>
       <HStack>
-        <Heading variant='collection'>Motion Correction/CTF</Heading>
+        <Heading variant='collection' mt='0'>
+          Motion Correction/CTF
+        </Heading>
         {parentType !== "autoProc" && (
           <Heading size='sm' color='diamond.300'>
             {calcDarkImages(motion.total, motion.rawTotal)}

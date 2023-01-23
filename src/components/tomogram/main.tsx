@@ -81,7 +81,7 @@ const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
 
   return (
     <Box bg='diamond.50'>
-      <HStack py={1.5} px={3} bg='diamond.100'>
+      <HStack w='100%' py={1.5} px={3} bg='diamond.100'>
         <h2>{title ?? "No Title Provided"}</h2>
         <Spacer />
         <Tooltip label='Run Reprocessing'>
@@ -94,36 +94,40 @@ const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
         {tomogram === null ? (
           <Motion parentType={"dataCollections"} parentId={collection} />
         ) : (
-          <Box>
-            <Motion onMotionChanged={handleMotionChange} parentType='tomograms' parentId={tomogram.tomogramId} />
-            <Heading marginTop={6} variant='collection'>
-              Alignment
-            </Heading>
-            <Divider />
-            <Grid py={2} templateColumns='repeat(3, 1fr)' gap={2}>
-              <GridItem height='20vh'>
-                <InfoGroup info={tomogramInfo} />
-              </GridItem>
-              <GridItem height='20vh'>
-                <ImageCard height='85%' title='Central Slice' src={sliceImage} />
-                <Button w='100%' mt='1%' height='13%' alignSelf='end' size='sm' onClick={onOpen}>
-                  View Movie
-                </Button>
-              </GridItem>
-              <GridItem height='20vh'>
-                <ImageCard src={xyProjImage} title='XY Projection' />
-              </GridItem>
-              <GridItem colSpan={{ base: 3, md: 1 }} minW='100%' height='22vh'>
-                <PlotContainer title='Shift Plot'>
-                  <Scatter data={shiftData} />
-                </PlotContainer>
-              </GridItem>
-              <GridItem colSpan={2} height='22vh'>
-                <ImageCard src={xzProjImage} title='XZ Projection' />
-              </GridItem>
-            </Grid>
-            <CTF parentId={tomogram.tomogramId} parentType='tomograms' />
-          </Box>
+          <Grid gap={3}>
+            <GridItem>
+              <Motion onMotionChanged={handleMotionChange} parentType='tomograms' parentId={tomogram.tomogramId} />
+            </GridItem>
+            <GridItem>
+              <Heading variant='collection'>Alignment</Heading>
+              <Divider />
+              <Grid py={2} templateColumns='repeat(3, 1fr)' gap={2}>
+                <GridItem height='20vh'>
+                  <InfoGroup info={tomogramInfo} />
+                </GridItem>
+                <GridItem height='20vh'>
+                  <ImageCard height='85%' title='Central Slice' src={sliceImage} />
+                  <Button w='100%' mt='1%' height='13%' alignSelf='end' size='sm' onClick={onOpen}>
+                    View Movie
+                  </Button>
+                </GridItem>
+                <GridItem height='20vh'>
+                  <ImageCard src={xyProjImage} title='XY Projection' />
+                </GridItem>
+                <GridItem colSpan={{ base: 3, md: 1 }} minW='100%' height='22vh'>
+                  <PlotContainer title='Shift Plot'>
+                    <Scatter data={shiftData} />
+                  </PlotContainer>
+                </GridItem>
+                <GridItem colSpan={2} height='22vh'>
+                  <ImageCard src={xzProjImage} title='XZ Projection' />
+                </GridItem>
+              </Grid>
+            </GridItem>
+            <GridItem>
+              <CTF parentId={tomogram.tomogramId} parentType='tomograms' />
+            </GridItem>
+          </Grid>
         )}
       </Box>
       <Modal size='xl' isOpen={isOpen} onClose={onClose}>

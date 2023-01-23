@@ -124,7 +124,7 @@ const Button = defineStyleConfig({
   })
 
 const collection = defineStyle({
-  fontSize: 20,
+  fontSize: 20
 })
 
 const notFound = defineStyle({
