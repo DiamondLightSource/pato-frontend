@@ -57,7 +57,7 @@ describe("Pagination", () => {
 
   it("should display last 5 pages when moving to last page", () => {
     renderWithProviders(<Pagination total={160} />);
-    fireEvent.click(screen.getByRole("button", { name: ">>" }));
+    fireEvent.click(screen.getByLabelText("Last Page"));
 
     for (let i = 4; i < 9; i++) {
       expect(screen.getByRole("button", { name: i.toString() })).toBeInTheDocument();
@@ -69,7 +69,7 @@ describe("Pagination", () => {
 
   it("should update page number when page changes", () => {
     renderWithProviders(<Pagination total={160} />);
-    fireEvent.click(screen.getByRole("button", { name: ">" }));
+    fireEvent.click(screen.getByLabelText("Next Page"));
 
     expect(screen.getByText("Page 2 out of 8")).toBeInTheDocument();
   });
@@ -85,7 +85,7 @@ describe("Pagination", () => {
     const mockCallback = jest.fn();
     renderWithProviders(<Pagination total={160} onChange={mockCallback} />);
 
-    const input = screen.getByRole("button", { name: ">" });
+    const input = screen.getByLabelText("Next Page");
     fireEvent.click(input);
 
     expect(mockCallback).toBeCalledWith(2, 20);

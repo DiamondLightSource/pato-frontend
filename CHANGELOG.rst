@@ -3,7 +3,7 @@ Changelog
 ==========
 
 ++++++++++
-v0.2.0 (19/01/2023)
+v0.2.0 (23/01/2023)
 ++++++++++
 
 **Added**
@@ -21,6 +21,7 @@ v0.2.0 (19/01/2023)
 - Microscopes are now displayed as a human readable value instead of their beamline ID
 - In order to allow interactivity with plots, only clicking image/plot titles opens up the modal, instead of the whole card
 - Fixes year on footer
+- Accessibility improvements to pagination
 
 ++++++++++
 v0.1.0 (11/01/2023)

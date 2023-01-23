@@ -34,7 +34,7 @@ describe("Tomogram", () => {
       />
     );
 
-    const nextButton = await screen.findByRole("button", { name: "<" }, { timeout: 3000 });
+    const nextButton = await screen.findByLabelText("Previous Page", {}, { timeout: 3000 });
     fireEvent.click(nextButton);
 
     await expect(screen.findByText("958")).resolves.toBeInTheDocument();

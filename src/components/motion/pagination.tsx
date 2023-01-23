@@ -81,10 +81,15 @@ const MotionPagination = ({
 
   return (
     <HStack py={1} maxW={size === "xs" ? "230px" : "295px"}>
-      <Button isDisabled={disabled} size={size} onClick={() => setPage(1)}>
+      <Button aria-label='First Page' isDisabled={disabled} size={size} onClick={() => setPage(1)}>
         &lt;&lt;
       </Button>
-      <Button size={size} isDisabled={parseInt(value) === 1 || disabled} onClick={() => setPage(parseInt(value) - 1)}>
+      <Button
+        aria-label='Previous Page'
+        size={size}
+        isDisabled={parseInt(value) === 1 || disabled}
+        onClick={() => setPage(parseInt(value) - 1)}
+      >
         &lt;
       </Button>
       <InputGroup size={size}>
@@ -102,10 +107,11 @@ const MotionPagination = ({
         size={size}
         isDisabled={parseInt(value) === total || disabled}
         onClick={() => setPage(parseInt(value) + 1)}
+        aria-label='Next Page'
       >
         &gt;
       </Button>
-      <Button size={size} isDisabled={disabled} onClick={() => setPage(total)}>
+      <Button aria-label='Last Page' size={size} isDisabled={disabled} onClick={() => setPage(total)}>
         &gt;&gt;
       </Button>
     </HStack>

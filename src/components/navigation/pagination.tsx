@@ -61,10 +61,16 @@ const Pagination = ({
             return <option key={`option${perPage}`}>{perPage}</option>;
           })}
         </Select>
-        <Button size='sm' variant='pgNotSelected' onClick={() => updatePage(1)}>
+        <Button aria-label='First Page' size='sm' variant='pgNotSelected' onClick={() => updatePage(1)}>
           &lt;&lt;
         </Button>
-        <Button size='sm' variant='pgNotSelected' isDisabled={page === 1} onClick={() => updatePage(page - 1)}>
+        <Button
+          aria-label='Previous Page'
+          size='sm'
+          variant='pgNotSelected'
+          isDisabled={page === 1}
+          onClick={() => updatePage(page - 1)}
+        >
           &lt;
         </Button>
         <div>
@@ -89,10 +95,16 @@ const Pagination = ({
             );
           })}
         </div>
-        <Button size='sm' variant='pgNotSelected' isDisabled={page === pageAmount} onClick={() => updatePage(page + 1)}>
+        <Button
+          aria-label='Next Page'
+          size='sm'
+          variant='pgNotSelected'
+          isDisabled={page === pageAmount}
+          onClick={() => updatePage(page + 1)}
+        >
           &gt;
         </Button>
-        <Button size='sm' variant='pgNotSelected' onClick={() => updatePage(pageAmount)}>
+        <Button aria-label='Last Page' size='sm' variant='pgNotSelected' onClick={() => updatePage(pageAmount)}>
           &gt;&gt;
         </Button>
         <Spacer />

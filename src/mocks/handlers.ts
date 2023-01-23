@@ -185,6 +185,12 @@ export const handlers = [
     )
   }),
 
+  rest.get("http://localhost/tomograms/:tomogramId/projection", async (req, res, ctx) => {
+    return res(
+      ctx.status(404),
+    )
+  }),
+
   rest.get("http://localhost/autoProc/:procId/classification", async (req, res, ctx) => {
     if (req.params.procId === "2") {
       return res(ctx.status(404))
