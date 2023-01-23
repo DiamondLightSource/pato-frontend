@@ -19,7 +19,7 @@ const SPA = ({ autoProcId }: SpaProps) => {
   }, []);
 
   return (
-    <Grid gap={3} bg='diamond.50' p={4}>
+    <Grid gap={3} bg='diamond.75' p={4}>
       <GridItem>
         <CTF parentId={autoProcId} parentType='autoProc' />
       </GridItem>

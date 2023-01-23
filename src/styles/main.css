@@ -18,3 +18,8 @@ body,
 #root {
   height: 100%;
 }
+
+.homeRoot > * {
+  padding: 4vh 10vw;
+  width: 100%;
+}

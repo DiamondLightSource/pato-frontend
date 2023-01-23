@@ -101,14 +101,14 @@ const Button = defineStyleConfig({
         color: "diamond.50",
         bg: "diamond.600",
         _hover: {
-          bg: "diamond.500",
+          bg: "diamond.700",
           _disabled: {
             bg: "diamond.600"
           }
         }
       },
       pgSelected: {
-        bg: "diamond.500",
+        bg: "diamond.600",
         color: "diamond.50",
         cursor: "default"
       },
@@ -120,6 +120,16 @@ const Button = defineStyleConfig({
           bg: "diamond.200"
         }
       },
+      onBlue: {
+        color: "diamond.500",
+        borderColor: "diamond.500",
+        border: "1px solid",
+        fontSize: "sm",
+        _hover: {
+          color: "diamond.300",
+          bg: "diamond.500",
+        }
+      }
     },
   })
 

@@ -33,7 +33,7 @@ const Root = (): JSX.Element => {
   return !loading ? (
     <div className='rootContainer'>
       <Navbar />
-      <Box bg='diamond.75' marginTop={12} className='main'>
+      <Box bg='diamond.50' marginTop={8} className='main'>
         <Breadcrumbs />
         <Outlet />
       </Box>

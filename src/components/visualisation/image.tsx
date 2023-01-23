@@ -22,7 +22,7 @@ interface ImageProps extends BaseCardProp {
 
 const ImageCard = ({
   title,
-  src = "",
+  src,
   width = "100%",
   height = "100%",
   showModal = true,

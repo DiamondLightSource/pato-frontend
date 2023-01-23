@@ -4,7 +4,7 @@ const Footer = () => (
   <Box bg='diamond.800' color='gray.200' py={2} className='footer'>
     <Text textAlign='center'>
       eBIC{" "}
-      <Link color='diamond.400' href='https://gitlab.diamond.ac.uk/yrh59256/ebic-frontend/'>
+      <Link color='diamond.400' href='https://gitlab.diamond.ac.uk/lims/ebic-frontend'>
         v{process.env.REACT_APP_VERSION}
       </Link>{" "}
       | © 2023{" "}
