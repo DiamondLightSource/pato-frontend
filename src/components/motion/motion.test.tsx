@@ -30,6 +30,11 @@ describe("Motion", () => {
     await waitFor(() => expect(motionChanged).toBeCalled());
   });
 
+  it("should display message when no data is available", async () => {
+    renderWithProviders(<Motion parentType='dataCollections' parentId={9} />);
+    await waitFor(() => screen.findByText("No Motion Correction Data Available"));
+  });
+
   it("should call callback when total number of items changes", async () => {
     const totalChanged = jest.fn();
     renderWithProviders(<Motion parentType='tomograms' onTotalChanged={totalChanged} parentId={3} />);

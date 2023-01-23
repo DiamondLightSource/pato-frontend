@@ -55,6 +55,8 @@ const ImageCard = ({
       </CardHeader>
       <CardBody>
         <Image
+          onClick={onClickContainer}
+          cursor="pointer"
           w='100%'
           objectFit='contain'
           src={src}

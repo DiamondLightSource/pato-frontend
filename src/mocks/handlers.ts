@@ -40,6 +40,10 @@ export const handlers = [
   }),
 
   rest.get('http://localhost/dataCollections/:id/motion', (req, res, ctx) => {
+    if (req.params.id === "9") {
+      return res(ctx.status(404));
+    }
+    
     let data = {items: [{Movie: {}, CTF: {}, MotionCorrection: {}}], total: 10}
 
     return res(
