@@ -20,7 +20,7 @@ import { ImageCard } from "../visualisation/image";
 import { InfoGroup } from "../visualisation/infogroup";
 import { PlotContainer } from "../visualisation/plotContainer";
 import { MotionPagination } from "./pagination";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MdComment } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../features/uiSlice";
@@ -30,6 +30,7 @@ import { driftPlotOptions } from "../../utils/config/plot";
 import { buildEndpoint } from "../../utils/api/endpoint";
 import { BasePoint, Info } from "../../utils/interfaces";
 import { Scatter } from "../plots/scatter";
+import { setImage } from "../../utils/api/response";
 
 interface MotionData {
   /** Total number of tilt alignment images available */
@@ -108,19 +109,11 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
   const [page, setPage] = useState<number | undefined>();
   const [motion, setMotion] = useState<MotionData>({ total: 0, rawTotal: 0, info: [] });
   const [drift, setDrift] = useState<BasePoint[]>([]);
-  const [mgImage, setMgImage] = useState("");
-  const [fftImage, setFftImage] = useState("");
+  const [mgImage, setMgImage] = useState<string>();
+  const [fftImage, setFftImage] = useState<string>();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const dispatch = useDispatch();
-
-  const setImage = (endpoint: string, setState: Dispatch<SetStateAction<string>>) => {
-    client.safe_get(endpoint).then((response) => {
-      if (response.status === 200) {
-        setState(URL.createObjectURL(response.data));
-      }
-    });
-  };
 
   const flattenMovieData = (rawData: Record<string, any>) => {
     let flattenedData: Record<string, string> = { rawTotal: rawData.rawTotal, total: rawData.total };

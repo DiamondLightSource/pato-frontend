@@ -21,13 +21,14 @@ import { ImageCard } from "../visualisation/image";
 import { InfoGroup } from "../visualisation/infogroup";
 import { PlotContainer } from "../visualisation/plotContainer";
 import { Motion } from "../motion/motion";
-import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { MdRedo } from "react-icons/md";
 import { client } from "../../utils/api/client";
 import { TomogramData, Info, BasePoint } from "../../utils/interfaces";
 import { CTF } from "../ctf/ctf";
 import { Scatter } from "../plots/scatter";
 import { APNGViewer } from "../visualisation/apng";
+import { setImage } from "../../utils/api/response";
 
 /* The reason why this is a separate component is that in the future, tomograms might no longer have a 1:1
  ** relationship with data collections. Should that happen, just reuse this component.
@@ -44,7 +45,9 @@ interface TomogramProps {
 
 const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const [sliceImage, setSliceImage] = useState("");
+  const [sliceImage, setSliceImage] = useState<string>();
+  const [xyProjImage, setXyProjImage] = useState<string>();
+  const [xzProjImage, setXzProjImage] = useState<string>();
   const [shiftData, setShiftData] = useState<BasePoint[]>([]);
   const [tomogramInfo, setTomogramInfo] = useState<Info[]>([]);
 
@@ -58,20 +61,14 @@ const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
     }
   }, []);
 
-  const setImage = (endpoint: string, setState: Dispatch<SetStateAction<string>>) => {
-    client.safe_get(endpoint).then((response) => {
-      if (response.status === 200) {
-        setState(URL.createObjectURL(response.data));
-      }
-    });
-  };
-
   useEffect(() => {
     if (tomogram === null) {
       return;
     }
 
     setImage(`tomograms/${tomogram.tomogramId}/centralSlice`, setSliceImage);
+    setImage(`tomograms/${tomogram.tomogramId}/projection?axis=xy`, setXyProjImage);
+    setImage(`tomograms/${tomogram.tomogramId}/projection?axis=xz`, setXzProjImage);
 
     client.safe_get(`tomograms/${tomogram.tomogramId}/shiftPlot`).then((response) => {
       if (response.status === 200 && response.data.items) {
@@ -114,7 +111,7 @@ const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
                 </Button>
               </GridItem>
               <GridItem height='20vh'>
-                <ImageCard src='' title='XY Projection' />
+                <ImageCard src={xyProjImage} title='XY Projection' />
               </GridItem>
               <GridItem colSpan={{ base: 3, md: 1 }} minW='100%' height='22vh'>
                 <PlotContainer title='Shift Plot'>
@@ -122,7 +119,7 @@ const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
                 </PlotContainer>
               </GridItem>
               <GridItem colSpan={2} height='22vh'>
-                <ImageCard src='' title='XZ Projection' />
+                <ImageCard src={xzProjImage} title='XZ Projection' />
               </GridItem>
             </Grid>
             <CTF parentId={tomogram.tomogramId} parentType='tomograms' />

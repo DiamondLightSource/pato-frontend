@@ -17,12 +17,12 @@ import { BaseCardProp } from "../../utils/interfaces";
 
 interface ImageProps extends BaseCardProp {
   /** Source path for the image */
-  src: string;
+  src?: string;
 }
 
 const ImageCard = ({
   title,
-  src,
+  src = "",
   width = "100%",
   height = "100%",
   showModal = true,
