@@ -46,7 +46,7 @@ const NavLink = ({ children, link }: NavLinkProps) => (
     borderBottom='4px solid transparent'
     color='diamond.50'
     _hover={{
-      color: "diamond.200",
+      color: "diamond.500",
       borderBottom: "solid 4px",
     }}
     to={link}
@@ -90,6 +90,7 @@ const Navbar = () => {
           <NavLink link='/'>
             <Box maxW='5rem'>
               <Image
+                alt='Home'
                 _hover={{ filter: "brightness(70%)" }}
                 fit='cover'
                 paddingBottom={{ md: "6px", base: 0 }}

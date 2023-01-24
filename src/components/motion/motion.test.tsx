@@ -16,7 +16,7 @@ describe("Motion", () => {
     await screen.findByText("10");
   });
 
-  it("should display comments button when comments are present", async () => {
+  it("should display enabled comments button when comments are present", async () => {
     renderWithProviders(<Motion parentType='tomograms' parentId={3} />);
 
     await screen.findByText("20");

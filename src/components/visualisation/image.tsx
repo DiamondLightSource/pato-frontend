@@ -47,16 +47,14 @@ const ImageCard = ({
   };
 
   return (
-    <Card aria-selected={active} w={width} h={height} overflow='hidden'>
-      <CardHeader onClick={onClickContainer}>
+    <Card cursor='pointer' onClick={onClickContainer} aria-selected={active} w={width} h={height} overflow='hidden'>
+      <CardHeader>
         <Heading aria-label='Image Title' size='sm'>
           {title}
         </Heading>
       </CardHeader>
       <CardBody>
         <Image
-          onClick={onClickContainer}
-          cursor="pointer"
           w='100%'
           objectFit='contain'
           src={src}

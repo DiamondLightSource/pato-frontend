@@ -4,8 +4,6 @@ import type { RenderOptions } from "@testing-library/react";
 import { configureStore } from "@reduxjs/toolkit";
 import type { PreloadedState } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import { setupServer } from "msw/node";
-import { handlers } from "../mocks/handlers";
 
 import type { AppStore, RootState } from "../store/store";
 import authReducer from "../features/authSlice";
@@ -40,6 +38,4 @@ const renderWithProviders = (
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 };
 
-const server = setupServer(...handlers);
-
-export { server, renderWithProviders };
+export { renderWithProviders };

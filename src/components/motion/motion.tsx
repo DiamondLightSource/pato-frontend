@@ -16,6 +16,7 @@ import {
   Code,
   GridItem,
   Skeleton,
+  Tooltip,
 } from "@chakra-ui/react";
 import { ImageCard } from "../visualisation/image";
 import { InfoGroup } from "../visualisation/infogroup";
@@ -142,7 +143,6 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
       .then((response) => {
         if (response.status === 200) {
           setMotion(parseData(flattenMovieData(response.data), motionConfig) as MotionData);
-
           if (onTotalChanged) {
             onTotalChanged(response.data.total);
           }
@@ -186,18 +186,19 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
               </Heading>
             )}
             <Spacer />
-
-            <Button
-              data-testid='comment'
-              disabled={!(motion.comments_CTF || motion.comments_MotionCorrection)}
-              size='xs'
-              onClick={onOpen}
-            >
-              <MdComment />
-              {(motion.comments_CTF || motion.comments_MotionCorrection) && (
-                <Circle size='3' position='absolute' top='-1' left='-1' bg='red'></Circle>
-              )}
-            </Button>
+            <Tooltip id="comment" label='View Comments'>
+              <Button
+                data-testid="comment"
+                isDisabled={!(motion.comments_CTF || motion.comments_MotionCorrection)}
+                size='xs'
+                onClick={onOpen}
+              >
+                <MdComment />
+                {(motion.comments_CTF || motion.comments_MotionCorrection) && (
+                  <Circle size='3' position='absolute' top='-1' left='-1' bg='red'></Circle>
+                )}
+              </Button>
+            </Tooltip>
             <MotionPagination
               startFrom={parentType === "tomograms" ? "middle" : "end"}
               total={motion.total || motion.rawTotal}
@@ -230,10 +231,14 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
               <DrawerHeader>Comments</DrawerHeader>
               <DrawerBody>
                 <Heading size='sm'>CTF</Heading>
-                <Code>{motion.comments_CTF}</Code>
+                <Code h='25vh' w='100%' overflowY='scroll'>
+                  {motion.comments_CTF}
+                </Code>
                 <Divider marginY={3} />
                 <Heading size='sm'>Motion Correction</Heading>
-                <Code>{motion.comments_MotionCorrection}</Code>
+                <Code h='25vh' w='100%' overflowY='scroll'>
+                  {motion.comments_MotionCorrection}
+                </Code>
               </DrawerBody>
             </DrawerContent>
           </Drawer>

@@ -33,6 +33,20 @@ export interface paths {
      */
     get: operations["get_slice_tomograms__tomogramId__centralSlice_get"];
   };
+  "/tomograms/{tomogramId}/movie": {
+    /**
+     * Get Movie 
+     * @description Get tomogram movie image
+     */
+    get: operations["get_movie_tomograms__tomogramId__movie_get"];
+  };
+  "/tomograms/{tomogramId}/projection": {
+    /**
+     * Get Projection 
+     * @description Get tomogram projection image
+     */
+    get: operations["get_projection_tomograms__tomogramId__projection_get"];
+  };
   "/tomograms/{tomogramId}/ctf": {
     /**
      * Get Ctf 
@@ -776,16 +790,16 @@ export interface components {
       /** Datacollectionid */
       dataCollectionId: number;
       /** Displayname */
-      displayName?: string;
+      displayName: string;
       /** Comments */
-      comments?: string;
+      comments: string;
       /**
        * Recordtimestamp 
        * Format: date-time
        */
       recordTimestamp?: string;
       /** Recipe */
-      recipe?: string;
+      recipe: string;
       /** Automatic */
       automatic: number;
     };
@@ -818,10 +832,9 @@ export interface components {
       bltimeStamp: string;
       /** Proposaltype */
       proposalType: string;
+      state: components["schemas"]["StateEnum"];
       /** Sessions */
       sessions: number;
-      /** @default Open */
-      state?: components["schemas"]["StateEnum"];
     };
     /** RelativeIceThickness */
     RelativeIceThickness: {
@@ -949,6 +962,13 @@ export interface components {
       comments: string;
       /** Beamlineoperator */
       beamLineOperator?: string;
+      /**
+       * Bltimestamp 
+       * Format: date-time
+       */
+      bltimeStamp: string;
+      /** Parentproposal */
+      parentProposal: string;
       /** Visit Number */
       visit_number: number;
       /**
@@ -1106,6 +1126,51 @@ export interface operations {
      * @description Get tomogram central slice image
      */
     parameters: {
+      path: {
+        tomogramId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: never;
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_movie_tomograms__tomogramId__movie_get: {
+    /**
+     * Get Movie 
+     * @description Get tomogram movie image
+     */
+    parameters: {
+      path: {
+        tomogramId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: never;
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_projection_tomograms__tomogramId__projection_get: {
+    /**
+     * Get Projection 
+     * @description Get tomogram projection image
+     */
+    parameters: {
+      query?: {
+        axis?: "xy" | "xz";
+      };
       path: {
         tomogramId: number;
       };

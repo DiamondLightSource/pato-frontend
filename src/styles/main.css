@@ -22,4 +22,6 @@ body,
 .homeRoot > * {
   padding: 4vh 10vw;
   width: 100%;
+  justify-content: start;
+  align-items: start;
 }

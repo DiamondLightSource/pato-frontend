@@ -69,10 +69,10 @@ const baseCardStyle = definePartsStyle({
     borderWidth:'1px',
     borderRadius:'lg',
     _hover: {
-      borderColor: "diamond.200",
+      borderColor: "diamond.400",
     },
     _selected: {
-      background: "diamond.200"
+      bg: "diamond.200"
     }
   }, 
   header: {
@@ -111,6 +111,7 @@ const Button = defineStyleConfig({
         bg: "diamond.600",
         color: "diamond.50",
         cursor: "default"
+        
       },
       pgNotSelected: {
         bg: "gray.200",

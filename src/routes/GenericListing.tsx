@@ -77,6 +77,7 @@ const GenericListing = ({ headers, endpoint, heading, makePathCallback, processD
         <Heading>{heading}</Heading>
         <Spacer />
         <Input
+          borderColor='gray.600'
           bg='diamond.50'
           onKeyUp={(e) => {
             if (e.key === "Enter") {
