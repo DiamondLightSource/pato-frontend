@@ -1,4 +1,4 @@
-import { Box, HStack, Select, Button, Text, Spacer } from "@chakra-ui/react";
+import { Box, HStack, Select, Button, Text, Spacer, Divider } from "@chakra-ui/react";
 import { ChangeEvent, useEffect, useState } from "react";
 
 type ChangeCallback = (page: number, itemsPerPage: number) => void;
@@ -49,22 +49,16 @@ const Pagination = ({
   return (
     <Box py={2}>
       <HStack>
-        <Select
-          bg='diamond.50'
-          w='max-content'
-          size='sm'
-          defaultValue={possibleItemsPerPage[preselected]}
-          onChange={updateItemsPerPage}
-          flexShrink='1'
-        >
-          {possibleItemsPerPage.map((perPage, i) => {
-            return <option key={`option${perPage}`}>{perPage}</option>;
-          })}
-        </Select>
-        <Button size='sm' variant='pgNotSelected' onClick={() => updatePage(1)}>
+        <Button aria-label='First Page' size='sm' variant='pgNotSelected' onClick={() => updatePage(1)}>
           &lt;&lt;
         </Button>
-        <Button size='sm' variant='pgNotSelected' isDisabled={page === 1} onClick={() => updatePage(page - 1)}>
+        <Button
+          aria-label='Previous Page'
+          size='sm'
+          variant='pgNotSelected'
+          isDisabled={page === 1}
+          onClick={() => updatePage(page - 1)}
+        >
           &lt;
         </Button>
         <div>
@@ -89,12 +83,35 @@ const Pagination = ({
             );
           })}
         </div>
-        <Button size='sm' variant='pgNotSelected' isDisabled={page === pageAmount} onClick={() => updatePage(page + 1)}>
+        <Button
+          aria-label='Next Page'
+          size='sm'
+          variant='pgNotSelected'
+          isDisabled={page === pageAmount}
+          onClick={() => updatePage(page + 1)}
+        >
           &gt;
         </Button>
-        <Button size='sm' variant='pgNotSelected' onClick={() => updatePage(pageAmount)}>
+        <Button aria-label='Last Page' size='sm' variant='pgNotSelected' onClick={() => updatePage(pageAmount)}>
           &gt;&gt;
         </Button>
+        <Divider orientation='vertical' h='30px' />
+        <Text id='item-count-label'>
+          <b>Items per Page:</b>
+        </Text>
+        <Select
+          aria-labelledby='item-count-label'
+          bg='diamond.50'
+          w='max-content'
+          size='sm'
+          defaultValue={possibleItemsPerPage[preselected]}
+          onChange={updateItemsPerPage}
+          flexShrink='1'
+        >
+          {possibleItemsPerPage.map((perPage, i) => {
+            return <option key={`option${perPage}`}>{perPage}</option>;
+          })}
+        </Select>
         <Spacer />
         <Text color='gray.600'>
           Page {page} out of {pageAmount}

@@ -16,7 +16,7 @@ describe("Motion", () => {
     await screen.findByText("10");
   });
 
-  it("should display comments button when comments are present", async () => {
+  it("should display enabled comments button when comments are present", async () => {
     renderWithProviders(<Motion parentType='tomograms' parentId={3} />);
 
     await screen.findByText("20");
@@ -28,6 +28,11 @@ describe("Motion", () => {
     const motionChanged = jest.fn();
     renderWithProviders(<Motion parentType='tomograms' onMotionChanged={motionChanged} parentId={3} />);
     await waitFor(() => expect(motionChanged).toBeCalled());
+  });
+
+  it("should display message when no data is available", async () => {
+    renderWithProviders(<Motion parentType='dataCollections' parentId={9} />);
+    await waitFor(() => screen.findByText("No Motion Correction Data Available"));
   });
 
   it("should call callback when total number of items changes", async () => {

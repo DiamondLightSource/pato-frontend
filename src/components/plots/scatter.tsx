@@ -10,6 +10,7 @@ import { AxisBottom, AxisLeft } from "@visx/axis";
 import { localPoint } from "@visx/event";
 import { BasePoint, CompleteScatterPlotOptions, ScatterPlotOptions } from "../../utils/interfaces";
 import { mergeDeep } from "../../utils/generic";
+import { Heading, VStack } from "@chakra-ui/react";
 
 const x = (d: BasePoint) => d.x;
 const y = (d: BasePoint) => d.y;
@@ -140,6 +141,16 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
       }, 300);
     }, [hideTooltip]);
 
+    if (data.length === 0) {
+      return (
+        <VStack alignItems='center' justifyContent='center' display='flex' width={width} height={height}>
+          <Heading lineHeight='100%' variant='notFound'>
+            No Data Available
+          </Heading>
+        </VStack>
+      );
+    }
+
     return (
       <div>
         <svg data-testid='graph-svg' width={width} height={height} ref={svgRef}>
@@ -149,7 +160,7 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
             rx={14}
             x={defaultMargin.left}
             y={defaultMargin.top}
-            fill='var(--card-bg)'
+            fill='white'
             aria-label='Graph'
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}

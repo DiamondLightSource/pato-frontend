@@ -15,9 +15,9 @@ const Breadcrumbs = () => {
   let partialPath: Array<string> = Array(pathCrumbs.length + 1).fill("..");
 
   return (
-    <Breadcrumb paddingBottom={4} id='breadcrumbs' separator='>'>
+    <Breadcrumb mb={4} id='breadcrumbs' separator='>'>
       <BreadcrumbItem>
-        <BreadcrumbLink as={Link} to='/'>
+        <BreadcrumbLink aria-label='Home' as={Link} to='/'>
           <MdHome />
         </BreadcrumbLink>
       </BreadcrumbItem>

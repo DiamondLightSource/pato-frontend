@@ -1,5 +1,7 @@
 import { rest } from 'msw'
 
+const apng = "iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAMAAAC6sdbXAAAACGFjVEwAAAADAAAAAM7tusAAAAAMUExURQMDAwAAAJKSkv8AAGIb5p4AAAABdFJOUwBA5thmAAAAGmZjVEwAAAAAAAAABQAAAAUAAAAAAAAAAAAUAGQAANMipokAAAAOSURBVAjXY2AEAQYcJAABlQAaPUDJKQAAABpmY1RMAAAAAQAAAAUAAAAFAAAAAAAAAAAAFABkAABIUUxdAAAAEmZkQVQAAAACCNdjYAYBBhwkAASDAEy9AgcTAAAAGmZjVEwAAAADAAAABQAAAAUAAAAAAAAAAAAUAGQAAKXHn7QAAAASZmRBVAAAAAQI12NgAgEGHCQAAwwAMyEXezIAAAAbdEVYdFNvZnR3YXJlAEFQTkcgQXNzZW1ibGVyIDIuN8Hj04gAAAAASUVORK5CYII="
+
 export const handlers = [
   rest.get('http://localhost/tomograms/:id/motion', (req, res, ctx) => {
     let data = {}
@@ -38,6 +40,10 @@ export const handlers = [
   }),
 
   rest.get('http://localhost/dataCollections/:id/motion', (req, res, ctx) => {
+    if (req.params.id === "9") {
+      return res(ctx.status(404));
+    }
+    
     let data = {items: [{Movie: {}, CTF: {}, MotionCorrection: {}}], total: 10}
 
     return res(
@@ -151,6 +157,23 @@ export const handlers = [
     
   }),
 
+  rest.get("http://localhost/tomograms/:tomogramId/movie", async (req, res, ctx) => {
+    const buffer = Buffer.from(apng, "base64");
+
+    if (req.params.tomogramId === "1") {
+      return res(
+        ctx.status(200),
+        ctx.set('Content-Type', 'image/png'),
+        ctx.body(buffer),
+        ctx.delay(0),
+        ctx.set('Content-Length', buffer.length.toString()),
+      )
+    }
+
+    return res(ctx.status(404));
+    
+  }),
+
   rest.get("http://localhost/movies/:movieId/iceThickness", async (req, res, ctx) => {
     const dummy = { minimum: 1, maximum: 10, median: 5, q1: 3, q3: 6 }
     return res(
@@ -161,6 +184,12 @@ export const handlers = [
   }),
 
   rest.get("http://localhost/autoProc/:procId/particlePicker/:pickerId/image", async (req, res, ctx) => {
+    return res(
+      ctx.status(404),
+    )
+  }),
+
+  rest.get("http://localhost/tomograms/:tomogramId/projection", async (req, res, ctx) => {
     return res(
       ctx.status(404),
     )

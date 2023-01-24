@@ -66,7 +66,7 @@ describe("MotionPagination", () => {
     const mockCallback = jest.fn();
     renderWithProviders(<MotionPagination total={112} onChange={mockCallback} />);
 
-    const input = screen.getByRole("button", { name: "<" });
+    const input = screen.getByLabelText("Previous Page");
     fireEvent.click(input);
 
     expect(mockCallback).toBeCalledWith(111);

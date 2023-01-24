@@ -69,15 +69,18 @@ const baseCardStyle = definePartsStyle({
     borderWidth:'1px',
     borderRadius:'lg',
     _hover: {
-      borderColor: "diamond.200",
-      cursor: "pointer"
+      borderColor: "diamond.400",
     },
     _selected: {
-      background: "diamond.200"
+      bg: "diamond.200"
     }
   }, 
   header: {
     p: 2,
+    cursor: "pointer",
+    _hover: {
+      color: "diamond.300"
+    }
   },
   body: {
     px: 2,
@@ -98,16 +101,17 @@ const Button = defineStyleConfig({
         color: "diamond.50",
         bg: "diamond.600",
         _hover: {
-          bg: "diamond.500",
+          bg: "diamond.700",
           _disabled: {
             bg: "diamond.600"
           }
         }
       },
       pgSelected: {
-        bg: "diamond.500",
+        bg: "diamond.600",
         color: "diamond.50",
         cursor: "default"
+        
       },
       pgNotSelected: {
         bg: "gray.200",
@@ -117,11 +121,21 @@ const Button = defineStyleConfig({
           bg: "diamond.200"
         }
       },
+      onBlue: {
+        color: "diamond.500",
+        borderColor: "diamond.500",
+        border: "1px solid",
+        fontSize: "sm",
+        _hover: {
+          color: "diamond.300",
+          bg: "diamond.500",
+        }
+      }
     },
   })
 
 const collection = defineStyle({
-  fontSize: 20,
+  fontSize: 20
 })
 
 const notFound = defineStyle({

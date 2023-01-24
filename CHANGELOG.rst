@@ -3,19 +3,25 @@ Changelog
 ==========
 
 ++++++++++
-v0.2.0 (19/01/2023)
+v0.2.0 (23/01/2023)
 ++++++++++
 
 **Added**
 
 - Relion processing dialog (inactive)
 - Plot for relative ice thickness data in particle picking data
+- 3D visualisation (page through movie frames, XY/XZ projections)
 
 **Changed**
 
 - Data for hidden processing jobs doesn't get downloaded until they are visible
 - "Running", "Queued" and "Submitted" job statuses are now supported
 - 2D classification component shows message when no data is available
+- "Beamlines" in session table changed to "Microscopes"
+- Microscopes are now displayed as a human readable value instead of their beamline ID
+- In order to allow interactivity with plots, only clicking image/plot titles opens up the modal, instead of the whole card
+- Fixes year on footer
+- Accessibility improvements to pagination
 
 ++++++++++
 v0.1.0 (11/01/2023)

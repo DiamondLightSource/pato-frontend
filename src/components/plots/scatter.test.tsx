@@ -99,4 +99,10 @@ describe("Scatter Plot", () => {
 
     expect(screen.queryByTestId("dot")).not.toBeInTheDocument();
   });
+
+  it("should display message when no data is available", () => {
+    renderWithProviders(<Scatter data={[]} width={1000} height={1000} />);
+
+    expect(screen.getByText("No Data Available")).toBeInTheDocument();
+  });
 });

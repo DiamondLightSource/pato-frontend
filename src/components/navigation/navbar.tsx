@@ -37,13 +37,17 @@ interface NavLinksProps {
 
 const NavLink = ({ children, link }: NavLinkProps) => (
   <Link
+    height='100%'
+    alignItems='center'
+    display='flex'
     px={2}
-    py={1}
     as={LinkRouter}
-    color='diamond.100'
+    borderTop='4px solid transparent'
+    borderBottom='4px solid transparent'
+    color='diamond.50'
     _hover={{
-      textDecoration: "underline",
-      color: "diamond.400",
+      color: "diamond.500",
+      borderBottom: "solid 4px",
     }}
     to={link}
   >
@@ -52,14 +56,14 @@ const NavLink = ({ children, link }: NavLinkProps) => (
 );
 
 const NavLinks = ({ loggedIn }: NavLinksProps) => (
-  <div>
+  <HStack height='100%'>
     {loggedIn &&
       links.map((link) => (
         <NavLink link={link.route} key={link.label}>
           {link.label}
         </NavLink>
       ))}
-  </div>
+  </HStack>
 );
 
 const Navbar = () => {
@@ -83,16 +87,17 @@ const Navbar = () => {
           onClick={isOpen ? onClose : onOpen}
         />
         <HStack h='100%' spacing={8} alignItems={"center"}>
-          <LinkRouter to={"/"}>
+          <NavLink link='/'>
             <Box maxW='5rem'>
               <Image
+                alt='Home'
                 _hover={{ filter: "brightness(70%)" }}
                 fit='cover'
                 paddingBottom={{ md: "6px", base: 0 }}
                 src='/images/diamondgs.png'
               />
             </Box>
-          </LinkRouter>
+          </NavLink>
           <HStack h='100%' as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
             <NavLinks loggedIn={user !== null} />
           </HStack>
@@ -107,6 +112,9 @@ const Navbar = () => {
                 variant={"link"}
                 cursor={"pointer"}
                 minW={0}
+                _hover={{
+                  opacity: 0.8,
+                }}
               >
                 <HStack>
                   <div style={{ padding: 10 }}>
@@ -132,7 +140,7 @@ const Navbar = () => {
                 window.location.href
               )}`}
             >
-              <Button bg='diamond.500' color='gray.100' size='sm' leftIcon={<MdLogin />}>
+              <Button variant='onBlue' leftIcon={<MdLogin />}>
                 Login
               </Button>
             </Link>

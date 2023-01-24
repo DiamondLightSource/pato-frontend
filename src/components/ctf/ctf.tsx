@@ -43,7 +43,7 @@ const CTF = ({ parentId, parentType }: CTFProps) => {
       {ctfData === undefined ? (
         <Skeleton h='20vh' />
       ) : (
-        <Grid py={2} marginBottom={6} templateColumns='repeat(3, 1fr)' h='20vh' gap={2}>
+        <Grid w='100%' py={2} marginBottom={6} templateColumns='repeat(3, 1fr)' h='20vh' gap={2}>
           <GridItem minW='100%'>
             <PlotContainer title='Astigmatism' height='20vh'>
               <Scatter data={ctfData.astigmatism} options={astigmatismPlotOptions} />

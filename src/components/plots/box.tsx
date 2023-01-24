@@ -104,7 +104,7 @@ const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
             rx={14}
             x={defaultMargin.left}
             y={defaultMargin.top}
-            fill='url(#dots-pink)'
+            fill='white'
             aria-label='Graph'
           />
           <Group left={defaultMargin.left} top={defaultMargin.top}>

@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Grid, GridItem } from "@chakra-ui/react";
 import { Motion } from "../motion/motion";
 import { useCallback, useState } from "react";
 import { Class2d } from "./class2d";
@@ -19,8 +19,10 @@ const SPA = ({ autoProcId }: SpaProps) => {
   }, []);
 
   return (
-    <Box bg='diamond.50' p={4}>
-      <CTF parentId={autoProcId} parentType='autoProc' />
+    <Grid gap={3} bg='diamond.75' p={4}>
+      <GridItem>
+        <CTF parentId={autoProcId} parentType='autoProc' />
+      </GridItem>
       <Motion
         onMotionChanged={handlePageChanged}
         onTotalChanged={setTotal}
@@ -29,7 +31,7 @@ const SPA = ({ autoProcId }: SpaProps) => {
       />
       <ParticlePicking autoProcId={autoProcId} page={page} total={total} />
       <Class2d autoProcId={autoProcId} />
-    </Box>
+    </Grid>
   );
 };
 
