@@ -26,6 +26,7 @@ describe("Home", () => {
           ctx.json({
             items: [
               {
+                sessionId: 1,
                 beamLineName: "m01",
                 visit_number: 1,
                 parentProposal: "cm31111",
@@ -53,6 +54,7 @@ describe("Home", () => {
           ctx.json({
             items: [
               {
+                sessionId: 1,
                 beamLineName: "m01",
                 beamLineOperator: "Dr. John Doe",
                 visit_number: 1,
@@ -81,6 +83,7 @@ describe("Home", () => {
           ctx.json({
             items: [
               {
+                sessionId: 1,
                 parentProposal: "cm31111",
                 startDate: "2023-07-21T09:00",
                 endDate: "2023-07-21T09:00",

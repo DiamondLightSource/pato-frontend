@@ -1,5 +1,5 @@
 import { defineStyleConfig, ToastProps, defineStyle, createMultiStyleConfigHelpers } from "@chakra-ui/react";
-import { cardAnatomy } from '@chakra-ui/anatomy'
+import { cardAnatomy, tabsAnatomy } from '@chakra-ui/anatomy'
 
 const baseToast: ToastProps = {
   id: "main-toast",
@@ -91,7 +91,6 @@ const baseCardStyle = definePartsStyle({
 
 const Card = defineMultiStyleConfig({baseStyle:baseCardStyle, defaultProps:{variant: "outline"}})
 
-
 const Button = defineStyleConfig({
     defaultProps: {
       variant: "default"
@@ -158,4 +157,35 @@ const Heading = defineStyleConfig({
   }
 })
 
-export { Accordion, Button, Table, Text, Heading, Card, CardHeader, CardBody, baseToast };
+const {definePartsStyle: defineTabsStyle, defineMultiStyleConfig: defineTabsConfig} = createMultiStyleConfigHelpers(tabsAnatomy.keys)
+
+const baseTabsStyle = defineTabsStyle({
+  tab: {
+    border: '1px solid',
+    borderColor: 'diamond.200',
+    bg: "diamond.75",
+    borderBottom: 'none',
+    _selected: {
+      bg: "diamond.50",
+      color: "diamond.700",
+      borderColor: 'inherit',
+      borderBottom: 'none',
+      borderTopColor: "diamond.700",
+      mb: '-2px',
+    },
+  },
+  tablist: {
+    borderBottom: 'none',
+  },
+  tabpanel: {
+    p: "2",
+    bg: "diamond.50",
+    border: '1px solid',
+    borderColor: 'inherit',
+  },
+}
+)
+
+const Tabs = defineTabsConfig({baseStyle: baseTabsStyle, defaultProps: {variant: "none"}})
+
+export { Accordion, Button, Table, Text, Heading, Card, CardHeader, CardBody, Tabs, baseToast };

@@ -9,7 +9,7 @@ import { GenericListing } from "./routes/GenericListing";
 import { TomogramPage } from "./routes/Tomogram";
 import { SpaPage } from "./routes/SPA";
 import { Error } from "./routes/Error";
-import { Accordion, Button, Text, Heading, Table, Card } from "./styles/components";
+import { Accordion, Button, Text, Heading, Table, Card, Tabs } from "./styles/components";
 import { Calendar } from "./routes/Calendar";
 import { colours } from "./styles/colours";
 import { Home } from "./routes/Home";
@@ -29,7 +29,7 @@ if (process.env.REACT_APP_AUTH_TYPE === "dummy") {
 
 const theme = extendTheme({
   colors: colours,
-  components: { Accordion, Button, Text, Heading, Table, Card },
+  components: { Accordion, Button, Text, Heading, Table, Card, Tabs },
 });
 
 const proposalHeaders = [

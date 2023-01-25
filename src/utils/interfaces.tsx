@@ -66,14 +66,21 @@ export interface BasePoint {
 
 export interface BoxPlotStats {
   /** Name for the box */
-  label: string,
-  min: number,
-  max: number,
+  label: string;
+  min: number;
+  max: number;
   /** First quartile */
-  q1: number,
+  q1: number;
   /** Third quartile */
-  q3: number,
-  median: number
+  q3: number;
+  median: number;
+}
+
+export interface BarStats {
+  /** Y Value */
+  y: number;
+  /** Label (X axis) */
+  label: string;
 }
 
 interface PlotAxisOptions {
@@ -94,9 +101,8 @@ export interface CompleteScatterPlotOptions {
 
 export interface ScatterPlotOptions extends DeepPartial<CompleteScatterPlotOptions> {}
 
-
 export interface CompleteBoxOptions {
-  y: PlotAxisOptions
+  y: PlotAxisOptions;
 }
 
 export interface BoxPlotOptions extends DeepPartial<CompleteBoxOptions> {}

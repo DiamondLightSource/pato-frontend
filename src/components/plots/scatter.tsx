@@ -43,7 +43,6 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
     options,
     data,
   }: DotsProps & WithTooltipProvidedProps<BasePoint>) => {
-    if (width < 10) return null;
     const svgRef = useRef<SVGSVGElement>(null);
 
     const neighborRadius = 4;

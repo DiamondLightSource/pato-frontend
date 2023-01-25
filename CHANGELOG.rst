@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v0.3.0 (23/01/2023)
+++++++++++
+
+**Added**
+
+- Data collection statistics page for single particle analysis
+
+++++++++++
 v0.2.0 (23/01/2023)
 ++++++++++
 
