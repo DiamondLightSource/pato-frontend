@@ -1,4 +1,4 @@
-import { ScatterPlotOptions } from "../interfaces";
+import { ScatterPlotOptions } from "../../schema/interfaces";
 
 export const driftPlotOptions: ScatterPlotOptions = {
   x: {
@@ -31,3 +31,5 @@ export const resolutionSpaPlotOptions = {
   points: { dotRadius: 2 },
   y: { label: "Å", domain: { min: 0, max: 10 } },
 };
+
+export const defaultMargin = { top: 10, right: 30, bottom: 40, left: 60 };

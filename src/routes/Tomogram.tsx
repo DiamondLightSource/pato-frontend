@@ -6,7 +6,7 @@ import { useAppDispatch } from "../store/hooks";
 import { setLoading } from "../features/uiSlice";
 import { Tomogram } from "../components/tomogram/main";
 import { parseData } from "../utils/generic";
-import { CollectionData, DataConfig, TomogramData } from "../utils/interfaces";
+import { CollectionData, DataConfig, TomogramData } from "../schema/interfaces";
 import { MotionPagination } from "../components/motion/pagination";
 import { InfoGroup } from "../components/visualisation/infogroup";
 import { CollectionLoader } from "../components/collectionLoading";

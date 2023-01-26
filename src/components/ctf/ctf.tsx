@@ -8,7 +8,7 @@ import {
 import { PlotContainer } from "../visualisation/plotContainer";
 import { useEffect, useState } from "react";
 import { client } from "../../utils/api/client";
-import { CtfData } from "../../utils/interfaces";
+import { CtfData } from "../../schema/interfaces";
 import { Scatter } from "../plots/scatter";
 
 interface CTFProps {

@@ -5,10 +5,11 @@ import { withTooltip, Tooltip } from "@visx/tooltip";
 import { WithTooltipProvidedProps } from "@visx/tooltip/lib/enhancers/withTooltip";
 import { GridRows } from "@visx/grid";
 import { AxisBottom, AxisLeft } from "@visx/axis";
-import { BoxPlotOptions, BoxPlotStats, CompleteScatterPlotOptions } from "../../utils/interfaces";
+import { BoxPlotOptions, BoxPlotStats, CompleteScatterPlotOptions } from "../../schema/interfaces";
 import { mergeDeep } from "../../utils/generic";
 import { BoxPlot } from "@visx/stats";
 import { getFillColour } from "../../styles/colours";
+import { defaultMargin } from "../../utils/config/plot";
 
 const label = (d: BoxPlotStats) => d.label;
 const min = (d: BoxPlotStats) => d.min;
@@ -24,10 +25,9 @@ export type BoxPlotProps = {
   data: BoxPlotStats[];
 };
 
-const defaultMargin = { top: 10, right: 30, bottom: 40, left: 60 };
-
 const defaultPlotOptions: BoxPlotOptions = {
   y: { domain: { min: undefined, max: undefined }, label: "" },
+  x: { label: "" },
 };
 
 const Box = withTooltip<BoxPlotProps, BoxPlotStats>(

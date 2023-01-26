@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 
 import { ParentSize } from "@visx/responsive";
-import { BaseCardProp } from "../../utils/interfaces";
+import { BaseCardProp } from "../../schema/interfaces";
 import { cloneElement, ReactElement } from "react";
 
 interface PlotContainerProps extends BaseCardProp {

@@ -9,7 +9,7 @@ import { parseData } from "../../utils/generic";
 import { classificationConfig } from "../../utils/config/parse";
 import { setLoading } from "../../features/uiSlice";
 import { useAppDispatch } from "../../store/hooks";
-import { SpaProps, Info } from "../../utils/interfaces";
+import { SpaProps, Info } from "../../schema/interfaces";
 
 type Classification2D = components["schemas"]["Classification2D"];
 interface FullClassification extends Classification2D {
@@ -84,9 +84,7 @@ const Class2d = ({ autoProcId }: SpaProps) => {
   return (
     <Box>
       <HStack>
-        <Heading marginTop={3} variant='collection'>
-          2D Classification
-        </Heading>
+        <Heading variant='collection'>2D Classification</Heading>
         <Spacer />
         <Heading size='xs'>Sort by</Heading>
         <Select bg='white' onChange={(e) => setSortType(e.target.value)} size='xs' w='180px'>

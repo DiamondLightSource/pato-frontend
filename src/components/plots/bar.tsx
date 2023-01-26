@@ -5,10 +5,11 @@ import { withTooltip, Tooltip } from "@visx/tooltip";
 import { WithTooltipProvidedProps } from "@visx/tooltip/lib/enhancers/withTooltip";
 import { GridRows } from "@visx/grid";
 import { AxisBottom, AxisLeft } from "@visx/axis";
-import { BarStats, BoxPlotOptions, CompleteScatterPlotOptions } from "../../utils/interfaces";
+import { BarStats, BoxPlotOptions, CompleteScatterPlotOptions } from "../../schema/interfaces";
 import { mergeDeep } from "../../utils/generic";
 import { Bar } from "@visx/shape";
 import { getFillColour } from "../../styles/colours";
+import { defaultMargin } from "../../utils/config/plot";
 
 const label = (d: BarStats) => d.label;
 const y = (d: BarStats) => d.y;
@@ -22,10 +23,9 @@ export type BarProps = {
   data: BarStats[][];
 };
 
-const defaultMargin = { top: 10, right: 30, bottom: 40, left: 60 };
-
 const defaultPlotOptions: BoxPlotOptions = {
   y: { domain: { min: undefined, max: undefined }, label: "" },
+  x: { label: "" },
 };
 
 const BarChart = withTooltip<BarProps, BarStats>(
@@ -114,7 +114,7 @@ const BarChart = withTooltip<BarProps, BarStats>(
               const leftPos = groupWidth * i + lateralPadding;
               return (
                 <Group left={leftPos} key={i}>
-                  <AxisBottom top={yMax} left={0} scale={xScale} tickValues={d.map(label)} />
+                  <AxisBottom label={config.x.label} top={yMax} left={0} scale={xScale} tickValues={d.map(label)} />
                   {d.map((bar: BarStats, j) => {
                     const barWidth = xScale.bandwidth();
                     const barHeight = config.y.domain.max < y(bar) ? yMax : yMax - yScale(y(bar));

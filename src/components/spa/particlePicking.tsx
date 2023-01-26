@@ -8,7 +8,7 @@ import { setLoading } from "../../features/uiSlice";
 import { client } from "../../utils/api/client";
 import { parseData } from "../../utils/generic";
 import { components } from "../../schema/main";
-import { DataConfig, SpaProps, Info, BoxPlotStats } from "../../utils/interfaces";
+import { DataConfig, SpaProps, Info, BoxPlotStats } from "../../schema/interfaces";
 import { PlotContainer } from "../visualisation/plotContainer";
 import { Box } from "../plots/box";
 

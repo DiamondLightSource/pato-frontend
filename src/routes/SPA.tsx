@@ -31,7 +31,7 @@ import { client } from "../utils/api/client";
 import { useAppDispatch } from "../store/hooks";
 import { setLoading } from "../features/uiSlice";
 import { parseData } from "../utils/generic";
-import { CollectionData, DataConfig } from "../utils/interfaces";
+import { CollectionData, DataConfig } from "../schema/interfaces";
 import { components } from "../schema/main";
 import { buildEndpoint } from "../utils/api/endpoint";
 import { SPA } from "../components/spa/main";

@@ -30,7 +30,7 @@ import { client } from "../../utils/api/client";
 import { parseData } from "../../utils/generic";
 import { driftPlotOptions } from "../../utils/config/plot";
 import { buildEndpoint } from "../../utils/api/endpoint";
-import { BasePoint, Info } from "../../utils/interfaces";
+import { BasePoint, Info } from "../../schema/interfaces";
 import { Scatter } from "../plots/scatter";
 import { setImage } from "../../utils/api/response";
 
@@ -186,9 +186,9 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
               </Heading>
             )}
             <Spacer />
-            <Tooltip id="comment" label='View Comments'>
+            <Tooltip id='comment' label='View Comments'>
               <Button
-                data-testid="comment"
+                data-testid='comment'
                 isDisabled={!(motion.comments_CTF || motion.comments_MotionCorrection)}
                 size='xs'
                 onClick={onOpen}

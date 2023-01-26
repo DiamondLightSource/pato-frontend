@@ -24,7 +24,7 @@ import { Motion } from "../motion/motion";
 import { useCallback, useEffect, useState } from "react";
 import { MdRedo } from "react-icons/md";
 import { client } from "../../utils/api/client";
-import { TomogramData, Info, BasePoint } from "../../utils/interfaces";
+import { TomogramData, Info, BasePoint } from "../../schema/interfaces";
 import { CTF } from "../ctf/ctf";
 import { Scatter } from "../plots/scatter";
 import { APNGViewer } from "../visualisation/apng";
