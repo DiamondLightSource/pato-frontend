@@ -1,10 +1,11 @@
-import { Divider, Heading, HStack, Input, Spacer, useToast, Box } from "@chakra-ui/react";
+import { Divider, Heading, HStack, Spacer, useToast, Box } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Pagination } from "../components/navigation/pagination";
 import { client } from "../utils/api/client";
 import { buildEndpoint } from "../utils/api/endpoint";
 import { Table } from "../components/visualisation/table";
+import { DebouncedInput } from "../components/input/debounced";
 
 interface TableProps {
   headers: {
@@ -13,7 +14,7 @@ interface TableProps {
   }[];
   endpoint: string;
   heading: string;
-  makePathCallback?: (item: Record<string, string | number>) => string;
+  makePathCallback?: (item: Record<string, string | number>, index: number) => string;
   processData?: (data: Record<string, any>[]) => Record<string, any>[];
 }
 
@@ -29,9 +30,9 @@ const GenericListing = ({ headers, endpoint, heading, makePathCallback, processD
   const params = useParams();
 
   const handleRowClicked = useCallback(
-    (item: Record<string, any>) => {
+    (item: Record<string, any>, index: number) => {
       if (makePathCallback) {
-        navigate(makePathCallback(item));
+        navigate(makePathCallback(item, index), { relative: "path" });
       }
     },
     [makePathCallback, navigate]
@@ -69,21 +70,16 @@ const GenericListing = ({ headers, endpoint, heading, makePathCallback, processD
       <HStack>
         <Heading>{heading}</Heading>
         <Spacer />
-        <Input
+        <DebouncedInput
           borderColor='gray.600'
           bg='diamond.50'
-          onKeyUp={(e) => {
-            if (e.key === "Enter") {
-              setSearch(e.currentTarget.value);
-            }
-          }}
-          onBlur={(e) => setSearch(e.currentTarget.value)}
+          onChangeEnd={setSearch}
           w='20%'
           size='sm'
           placeholder='Search...'
-        ></Input>
+        />
       </HStack>
-      <Divider />
+      <Divider mb={4} />
       <Table data={data} headers={headers} label={heading} onClick={handleRowClicked} />
       <Divider />
       <Pagination

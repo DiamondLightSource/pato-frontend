@@ -24,27 +24,6 @@ describe("GenericListing", () => {
     await expect(screen.findByRole("cell", { name: "value1cm3111" })).resolves.toBeInTheDocument();
   });
 
-  it("should include search in request (when enter pressed)", async () => {
-    renderWithProviders(
-      <GenericListing
-        heading='Test'
-        endpoint='proposals'
-        makePathCallback={(item) => item.test.toString()}
-        headers={[
-          { key: "key1", label: "label1" },
-          { key: "key2", label: "label2" },
-          { key: "key3", label: "label3" },
-        ]}
-      />
-    );
-
-    const search = screen.getByPlaceholderText("Search...");
-    fireEvent.change(search, { target: { value: "cm3111" } });
-    fireEvent.keyUp(search, { key: "Enter", code: "Enter", charCode: 13 });
-
-    await expect(screen.findByRole("cell", { name: "value1cm3111" })).resolves.toBeInTheDocument();
-  });
-
   it("should perform request again when page changes", async () => {
     renderWithProviders(
       <GenericListing

@@ -19,13 +19,12 @@ const Root = (): JSX.Element => {
     if (splitUrl.length === 2) {
       sessionStorage.setItem("token", splitUrl[1].split("&token_type")[0].toString());
       const url = new URL(splitUrl[0]).pathname;
-      navigate(url);
+      navigate(url, { replace: true });
     }
 
     if (!user) {
       dispatch(checkUser());
     }
-
   }, [navigate, dispatch, user]);
 
   return user !== undefined ? (

@@ -8,10 +8,9 @@ import {
   Spacer,
   Checkbox,
   Tag,
-  Input,
-  InputGroup,
-  InputLeftAddon,
   Icon,
+  Button,
+  Tooltip,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
@@ -24,7 +23,7 @@ import { InfoGroup } from "../components/visualisation/infogroup";
 import { CollectionLoader } from "../components/collectionLoading";
 import { buildEndpoint } from "../utils/api/endpoint";
 import { collectionConfig } from "../utils/config/parse";
-import { MdSearch } from "react-icons/md";
+import { MdList } from "react-icons/md";
 
 const tomogramConfig: DataConfig = {
   include: [
@@ -101,10 +100,11 @@ const TomogramPage = () => {
             <Heading>Data Collection #{params.collectionIndex}</Heading>
             <Tag colorScheme='teal'>Tomogram</Tag>
             <Spacer />
-            <InputGroup w='20%'>
-              <InputLeftAddon bg='diamond.600' color='diamond.50' children={<Icon as={MdSearch} />} />
-              <Input isDisabled placeholder='Search Collections...' />
-            </InputGroup>
+            <Tooltip label='List Collections'>
+              <Button onClick={() => navigate("../../collections", { relative: "path" })}>
+                <Icon as={MdList} />
+              </Button>
+            </Tooltip>
             <Divider orientation='vertical' h='5vh' />
             <MotionPagination
               size='md'

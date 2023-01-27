@@ -3,16 +3,22 @@ Changelog
 ==========
 
 ++++++++++
-v0.3.0 (23/01/2023)
+v0.3.0 (--/01/2023)
 ++++++++++
 
 **Added**
 
 - Data collection statistics page for single particle analysis
+- Users can now search through collections (tomogram) in a data collection group
+
+++++++++++
+v0.2.1 (27/01/2023)
+++++++++++
 
 **Changed**
 
 - Every request displays loading bar, instead of loading bar state being changed by hand
+- Fixes tilt alignment axis display in tomograms
 
 ++++++++++
 v0.2.0 (23/01/2023)

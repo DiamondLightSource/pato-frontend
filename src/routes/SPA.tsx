@@ -179,7 +179,7 @@ const SpaPage = () => {
       <Tabs isLazy onChange={handleTabChanged} index={tabIndex}>
         <TabList>
           <Tab>Processing Jobs</Tab>
-          <Tab>Collection Statistics</Tab>
+          <Tab isDisabled>Collection Statistics</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>

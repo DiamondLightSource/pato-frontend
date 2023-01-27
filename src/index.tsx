@@ -13,6 +13,13 @@ import { Accordion, Button, Text, Heading, Table, Card, Tabs } from "./styles/co
 import { Calendar } from "./routes/Calendar";
 import { colours } from "./styles/colours";
 import { Home } from "./routes/Home";
+import {
+  beamlineToMicroscope,
+  collectionHeaders,
+  groupsHeaders,
+  proposalHeaders,
+  sessionHeaders,
+} from "./utils/config/table";
 const { ToastContainer } = createStandaloneToast();
 
 const container = document.getElementById("root")!;
@@ -32,28 +39,6 @@ const theme = extendTheme({
   components: { Accordion, Button, Text, Heading, Table, Card, Tabs },
 });
 
-const proposalHeaders = [
-  { key: "proposalCode", label: "Code" },
-  { key: "proposalNumber", label: "Number" },
-  { key: "sessions", label: "sessions" },
-  { key: "title", label: "Title" },
-];
-
-const visitHeaders = [
-  { key: "visit_number", label: "Visit" },
-  { key: "startDate", label: "Start Date" },
-  { key: "endDate", label: "End Date" },
-  { key: "microscopeName", label: "Microscope" },
-  { key: "collectionGroups", label: "Collection Groups" },
-];
-
-const groupsHeaders = [
-  { key: "dataCollectionGroupId", label: "ID" },
-  { key: "comments", label: "Comments" },
-  { key: "collections", label: "Collections" },
-  { key: "experimentTypeName", label: "Experiment Type" },
-];
-
 const handleGroupClicked = (item: Record<string, string | number>) => {
   // Temporary workaround
   if (item.experimentType === "tomo") {
@@ -68,16 +53,7 @@ const handleGroupClicked = (item: Record<string, string | number>) => {
   }
 };
 
-const beamlineToMicroscope: Record<string, string> = {
-  m02: "Krios 1",
-  m03: "Krios 2",
-  m04: "Talos",
-  m06: "Krios 3",
-  m07: "Krios 4",
-  m08: "Krios 5",
-  m10: "Glacios 1",
-  m12: "Glacios 2",
-};
+const handleCollectionClicked = (item: Record<string, string | number>) => `../tomograms/${item.index}`;
 
 const processSessionData = (data: Record<string, string | number>[]) => {
   return data.map((item: Record<string, string | number>) => {
@@ -121,7 +97,7 @@ const router = createBrowserRouter([
         path: "/proposals/:propId/sessions",
         element: (
           <GenericListing
-            headers={visitHeaders}
+            headers={sessionHeaders}
             endpoint='sessions'
             heading='Sessions'
             makePathCallback={(item) => item.visit_number.toString()}
@@ -140,7 +116,18 @@ const router = createBrowserRouter([
             headers={groupsHeaders}
             endpoint='dataGroups'
             heading='Data Collection Groups'
-            makePathCallback={(item) => handleGroupClicked(item)}
+            makePathCallback={handleGroupClicked}
+          />
+        ),
+      },
+      {
+        path: "/proposals/:propId/sessions/:visitId/groups/:groupId/collections",
+        element: (
+          <GenericListing
+            headers={collectionHeaders}
+            endpoint='dataCollections'
+            heading='Data Collections'
+            makePathCallback={handleCollectionClicked}
           />
         ),
       },

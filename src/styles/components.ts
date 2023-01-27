@@ -95,6 +95,9 @@ const Button = defineStyleConfig({
     defaultProps: {
       variant: "default"
     },
+    baseStyle: {
+
+    },
     variants: {
       default: {
         color: "diamond.50",
