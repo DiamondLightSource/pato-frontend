@@ -52,10 +52,13 @@ const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
   const [tomogramInfo, setTomogramInfo] = useState<Info[]>([]);
 
   const handleMotionChange = useCallback((data: Record<string, any>) => {
-    if (data.refinedTiltAxis) {
+    if (data.items && data.items[0].TiltImageAlignment) {
       setTomogramInfo((oldInfo) =>
         oldInfo.map((t) => {
-          return { label: t.label, value: t.label === "Refined Tilt Axis" ? data.refinedTiltAxis : t.value };
+          return {
+            label: t.label,
+            value: t.label === "Refined Tilt Axis" ? `${data.items[0].TiltImageAlignment.refinedTiltAxis} °` : t.value,
+          };
         })
       );
     }

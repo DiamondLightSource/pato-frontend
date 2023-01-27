@@ -13,7 +13,7 @@ describe("Motion", () => {
   it("should display raw image count when no tilt. align. is present", async () => {
     renderWithProviders(<Motion parentType='dataCollections' parentId={2} />);
 
-    await screen.findByText("10");
+    await expect(screen.findByLabelText("Total Pages")).resolves.toHaveTextContent("10");
   });
 
   it("should display enabled comments button when comments are present", async () => {

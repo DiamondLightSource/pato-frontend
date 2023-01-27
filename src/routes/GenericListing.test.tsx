@@ -17,7 +17,7 @@ describe("GenericListing", () => {
       />
     );
 
-    const search = screen.getByPlaceholderText("Search");
+    const search = screen.getByPlaceholderText("Search...");
     fireEvent.change(search, { target: { value: "cm3111" } });
     fireEvent.blur(search);
 
@@ -38,7 +38,7 @@ describe("GenericListing", () => {
       />
     );
 
-    const search = screen.getByPlaceholderText("Search");
+    const search = screen.getByPlaceholderText("Search...");
     fireEvent.change(search, { target: { value: "cm3111" } });
     fireEvent.keyUp(search, { key: "Enter", code: "Enter", charCode: 13 });
 

@@ -80,7 +80,7 @@ const GenericListing = ({ headers, endpoint, heading, makePathCallback, processD
           onBlur={(e) => setSearch(e.currentTarget.value)}
           w='20%'
           size='sm'
-          placeholder='Search'
+          placeholder='Search...'
         ></Input>
       </HStack>
       <Divider />
