@@ -17,6 +17,12 @@ describe("MotionPagination", () => {
     expect(screen.getByDisplayValue("112")).toBeInTheDocument();
   });
 
+  it("should respect default item set by user", async () => {
+    renderWithProviders(<MotionPagination displayDefault='90' total={112} />);
+
+    expect(screen.getByDisplayValue("90")).toBeInTheDocument();
+  });
+
   it("should set middle item as default if startFrom is middle", async () => {
     renderWithProviders(<MotionPagination startFrom='middle' total={90} />);
 

@@ -2,8 +2,6 @@ import { Divider, Heading, Box, VStack, Code, HStack, Spacer, Checkbox, Tag } fr
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { client } from "../utils/api/client";
-import { useAppDispatch } from "../store/hooks";
-import { setLoading } from "../features/uiSlice";
 import { Tomogram } from "../components/tomogram/main";
 import { parseData } from "../utils/generic";
 import { CollectionData, DataConfig, TomogramData } from "../schema/interfaces";
@@ -32,7 +30,6 @@ const TomogramPage = () => {
   const [collectionData, setCollectionData] = useState<CollectionData>({ info: [], comments: "" });
   const [pageCount, setPageCount] = useState(1);
   const [onlyProcessed, setOnlyProcessed] = useState(searchParams.get("onlyProcessed") === "true");
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const updateCollection = useCallback(
@@ -50,7 +47,6 @@ const TomogramPage = () => {
 
   useEffect(() => {
     document.title = `eBIC » Tomograms » ${params.collectionIndex}`;
-    dispatch(setLoading(true));
 
     /** There should be 3 possible states: a null tomogram (for when it is still being processed),
     /* and undefined tomogram (waiting for information client-side) and a valid tomogram */
@@ -81,8 +77,7 @@ const TomogramPage = () => {
           });
         }
       })
-      .finally(() => dispatch(setLoading(false)));
-  }, [params, dispatch, navigate, updateCollection, onlyProcessed]);
+  }, [params, navigate, updateCollection, onlyProcessed]);
 
   return (
     <Box>

@@ -28,8 +28,6 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { client } from "../utils/api/client";
-import { useAppDispatch } from "../store/hooks";
-import { setLoading } from "../features/uiSlice";
 import { parseData } from "../utils/generic";
 import { CollectionData, DataConfig } from "../schema/interfaces";
 import { components } from "../schema/main";
@@ -95,7 +93,6 @@ const SpaPage = () => {
   const [accordionIndex, setAccordionIndex] = useState<number | number[]>(0);
   const [tabIndex, setTabIndex] = useState(0);
 
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -129,21 +126,17 @@ const SpaPage = () => {
   useEffect(() => {
     document.title = `eBIC » SPA » ${params.groupId}`;
 
-    dispatch(setLoading(true));
-    client
-      .safe_get(buildEndpoint("dataCollections", params, 1, 1))
-      .then((response) => {
-        if (response.data.items) {
-          const data = response.data.items[0] as DataCollection;
-          const parsedData = parseData(data, spaCollectionConfig) as SpaCollectionData;
+    client.safe_get(buildEndpoint("dataCollections", params, 1, 1)).then((response) => {
+      if (response.data.items) {
+        const data = response.data.items[0] as DataCollection;
+        const parsedData = parseData(data, spaCollectionConfig) as SpaCollectionData;
 
-          parsedData.info.unshift({ label: "Acquisition Software", value: getAcquisitionSoftware(data.fileTemplate) });
-          parsedData.info.push({ label: "Comments", value: getAcquisitionSoftware(data.comments ?? ""), wide: true });
-          setCollectionData(parsedData);
-        }
-      })
-      .finally(() => dispatch(setLoading(false)));
-  }, [params, dispatch, navigate]);
+        parsedData.info.unshift({ label: "Acquisition Software", value: getAcquisitionSoftware(data.fileTemplate) });
+        parsedData.info.push({ label: "Comments", value: getAcquisitionSoftware(data.comments ?? ""), wide: true });
+        setCollectionData(parsedData);
+      }
+    });
+  }, [params, navigate]);
 
   useEffect(() => {
     const collectionId = collectionData.dataCollectionId;

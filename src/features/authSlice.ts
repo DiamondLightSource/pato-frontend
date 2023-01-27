@@ -6,7 +6,7 @@ interface AuthState {
     /** Display name for the user */
     name: string,
     /** Federation ID (or unique identification) */ 
-    fedid: string} | null
+    fedid: string } | null | undefined;
 }
 
 export const checkUser = createAsyncThunk('auth/checkUser', async (_, {rejectWithValue}) => {

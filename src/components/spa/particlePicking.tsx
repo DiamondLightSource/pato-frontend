@@ -3,8 +3,6 @@ import { ImageCard } from "../visualisation/image";
 import { InfoGroup } from "../visualisation/infogroup";
 import { MotionPagination } from "../motion/pagination";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { setLoading } from "../../features/uiSlice";
 import { client } from "../../utils/api/client";
 import { parseData } from "../../utils/generic";
 import { components } from "../../schema/main";
@@ -42,8 +40,6 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
   const [summaryImage, setSummaryImage] = useState("");
   const [iceThickness, setIceThickness] = useState<BoxPlotStats[]>();
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
     if (lockPage) {
       if (page !== undefined && page > 0) {
@@ -56,40 +52,34 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
 
   useEffect(() => {
     if (innerPage) {
-      dispatch(setLoading(true));
-      client
-        .safe_get(`autoProc/${autoProcId}/particlePicker?page=${innerPage - 1}&limit=1`)
-        .then((response) => {
-          if (response.status === 200) {
-            const data = response.data.items[0] as ParticlePickingSchema;
-            if (data.particlePickerId) {
-              setParticleInfo(parseData(data, particleConfig).info);
-              client
-                .safe_get(`autoProc/${autoProcId}/particlePicker/${data.particlePickerId}/image`)
-                .then((response) => {
-                  if (response.status === 200) {
-                    setSummaryImage(URL.createObjectURL(response.data));
-                  }
-                });
+      client.safe_get(`autoProc/${autoProcId}/particlePicker?page=${innerPage - 1}&limit=1`).then((response) => {
+        if (response.status === 200) {
+          const data = response.data.items[0] as ParticlePickingSchema;
+          if (data.particlePickerId) {
+            setParticleInfo(parseData(data, particleConfig).info);
+            client.safe_get(`autoProc/${autoProcId}/particlePicker/${data.particlePickerId}/image`).then((response) => {
+              if (response.status === 200) {
+                setSummaryImage(URL.createObjectURL(response.data));
+              }
+            });
 
-              client.safe_get(`movies/${data.movieId}/iceThickness?getAverages=true`).then((response) => {
-                if (response.status === 200) {
-                  const data = response.data as IceThickness;
+            client.safe_get(`movies/${data.movieId}/iceThickness?getAverages=true`).then((response) => {
+              if (response.status === 200) {
+                const data = response.data as IceThickness;
 
-                  setIceThickness([
-                    convertToBoxPlot(data.current, "Current Image"),
-                    convertToBoxPlot(data.avg, "Average"),
-                  ]);
-                }
-              });
-            }
-          } else {
-            setParticleInfo(null);
+                setIceThickness([
+                  convertToBoxPlot(data.current, "Current Image"),
+                  convertToBoxPlot(data.avg, "Average"),
+                ]);
+              }
+            });
           }
-        })
-        .finally(() => dispatch(setLoading(false)));
+        } else {
+          setParticleInfo(null);
+        }
+      });
     }
-  }, [innerPage, autoProcId, dispatch]);
+  }, [innerPage, autoProcId]);
 
   return (
     <div>

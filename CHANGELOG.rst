@@ -10,6 +10,10 @@ v0.3.0 (23/01/2023)
 
 - Data collection statistics page for single particle analysis
 
+**Changed**
+
+- Every request displays loading bar, instead of loading bar state being changed by hand
+
 ++++++++++
 v0.2.0 (23/01/2023)
 ++++++++++

@@ -7,8 +7,6 @@ import { MotionPagination } from "../motion/pagination";
 import { components } from "../../schema/main";
 import { parseData } from "../../utils/generic";
 import { classificationConfig } from "../../utils/config/parse";
-import { setLoading } from "../../features/uiSlice";
-import { useAppDispatch } from "../../store/hooks";
 import { SpaProps, Info } from "../../schema/interfaces";
 
 type Classification2D = components["schemas"]["Classification2D"];
@@ -28,8 +26,6 @@ const Class2d = ({ autoProcId }: SpaProps) => {
   const [sortType, setSortType] = useState("particles");
   const [selectedClass, setSelectedClass] = useState(0);
 
-  const dispatch = useAppDispatch();
-
   const getClassImage = useCallback(
     async (item: FullClassification) => {
       const newClass = { ...item, imageUrl: "" } as FullClassification;
@@ -48,7 +44,6 @@ const Class2d = ({ autoProcId }: SpaProps) => {
 
   const handle2dClassificationChange = useCallback(
     (page: number) => {
-      dispatch(setLoading(true));
       client
         .safe_get(`autoProc/${autoProcId}/classification?limit=8&page=${page - 1}&sortBy=${sortType}`)
         .then(async (response) => {
@@ -63,10 +58,9 @@ const Class2d = ({ autoProcId }: SpaProps) => {
           } else {
             setClassificationData(null);
           }
-        })
-        .finally(() => dispatch(setLoading(false)));
+        });
     },
-    [autoProcId, sortType, getClassImage, dispatch]
+    [autoProcId, sortType, getClassImage]
   );
 
   useEffect(() => {

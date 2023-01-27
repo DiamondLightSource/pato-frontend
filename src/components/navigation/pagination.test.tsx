@@ -1,7 +1,6 @@
 import { fireEvent, screen } from "@testing-library/react";
 import { renderWithProviders } from "../../utils/test-utils";
 import { Pagination } from "./pagination";
-import React from "react";
 
 describe("Pagination", () => {
   it("should display first 5 pages when there are more than 5 pages", () => {
