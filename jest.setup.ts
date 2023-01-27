@@ -21,3 +21,4 @@ class ResizeObserver {
 
 global.ResizeObserver = ResizeObserver
 global.structuredClone = (val: Record<string, any>) => JSON.parse(JSON.stringify(val))
+jest.mock('./src/store/store')

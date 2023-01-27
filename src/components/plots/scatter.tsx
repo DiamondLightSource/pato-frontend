@@ -8,9 +8,10 @@ import { voronoi } from "@visx/voronoi";
 import { GridColumns, GridRows } from "@visx/grid";
 import { AxisBottom, AxisLeft } from "@visx/axis";
 import { localPoint } from "@visx/event";
-import { BasePoint, CompleteScatterPlotOptions, ScatterPlotOptions } from "../../utils/interfaces";
+import { BasePoint, CompleteScatterPlotOptions, ScatterPlotOptions } from "../../schema/interfaces";
 import { mergeDeep } from "../../utils/generic";
 import { Heading, VStack } from "@chakra-ui/react";
+import { defaultMargin } from "../../utils/config/plot";
 
 const x = (d: BasePoint) => d.x;
 const y = (d: BasePoint) => d.y;
@@ -21,8 +22,6 @@ export type DotsProps = {
   options?: ScatterPlotOptions;
   data: BasePoint[];
 };
-
-const defaultMargin = { top: 10, right: 30, bottom: 40, left: 60 };
 
 const defaultPlotOptions: ScatterPlotOptions = {
   x: { domain: { min: undefined, max: undefined }, label: "" },
@@ -43,7 +42,6 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
     options,
     data,
   }: DotsProps & WithTooltipProvidedProps<BasePoint>) => {
-    if (width < 10) return null;
     const svgRef = useRef<SVGSVGElement>(null);
 
     const neighborRadius = 4;

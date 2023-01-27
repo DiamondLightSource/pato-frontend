@@ -1,6 +1,6 @@
-import { DataConfig } from "../interfaces";
+import { DataConfig } from "../../schema/interfaces";
 
-const collectionConfig: DataConfig = {
+export const collectionConfig: DataConfig = {
   include: [
     { name: "pixelSizeOnImage", unit: "μm" },
     { name: "voltage", unit: "kV" },
@@ -9,7 +9,7 @@ const collectionConfig: DataConfig = {
   root: ["comments", "dataCollectionId"],
 };
 
-const classificationConfig: DataConfig = {
+export const classificationConfig: DataConfig = {
   include: [
     { name: "type" },
     { name: "batchNumber" },
@@ -27,5 +27,3 @@ const classificationConfig: DataConfig = {
     { name: "numberOfParticles" },
   ],
 };
-
-export { collectionConfig, classificationConfig };

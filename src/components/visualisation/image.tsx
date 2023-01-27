@@ -13,7 +13,7 @@ import {
   CardBody,
 } from "@chakra-ui/react";
 import { MouseEvent, useState } from "react";
-import { BaseCardProp } from "../../utils/interfaces";
+import { BaseCardProp } from "../../schema/interfaces";
 
 interface ImageProps extends BaseCardProp {
   /** Source path for the image */

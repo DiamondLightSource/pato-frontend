@@ -1,5 +1,5 @@
 import { Box, Heading, Progress } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Breadcrumbs } from "../components/navigation/breadcrumbs";
 import { Footer } from "../components/navigation/footer";
@@ -11,7 +11,6 @@ import "../styles/main.css";
 const Root = (): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(true);
   const user = useAppSelector((state) => state.auth.user);
 
   useEffect(() => {
@@ -27,10 +26,9 @@ const Root = (): JSX.Element => {
       dispatch(checkUser());
     }
 
-    setLoading(false);
   }, [navigate, dispatch, user]);
 
-  return !loading ? (
+  return user !== undefined ? (
     <div className='rootContainer'>
       <Navbar />
       <Box bg='diamond.50' marginTop={8} className='main'>

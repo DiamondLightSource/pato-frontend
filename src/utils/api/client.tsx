@@ -1,9 +1,12 @@
 import { createStandaloneToast } from "@chakra-ui/toast";
+import { setLoading } from "../../features/uiSlice";
+import { store } from "../../store/store";
 import { baseToast } from "../../styles/components";
 const { toast } = createStandaloneToast();
 
 const controller = new AbortController();
 const timeoutFetch = setTimeout(() => controller.abort(), 3000);
+let timer: ReturnType<typeof setTimeout>;
 
 interface RequestConfig {
   method: string;
@@ -87,6 +90,8 @@ client.safe_get = async (endpoint: string, customConfig = {}) => {
 client.get = async (endpoint: string, customConfig = {}) => {
   let resp: Response = { status: 0, data: {}, headers: {}, url: "" };
   try {
+    store.dispatch(setLoading(true))
+    clearTimeout(timer); // Debounces loading state
     resp = await client(
       endpoint,
       (customConfig = {
@@ -105,6 +110,8 @@ client.get = async (endpoint: string, customConfig = {}) => {
     }
 
     console.error(endpoint, customConfig, err);
+  } finally {
+    timer = setTimeout(()=>store.dispatch(setLoading(false)),200);
   }
   return resp;
 };

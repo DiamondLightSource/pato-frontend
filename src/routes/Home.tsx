@@ -65,6 +65,7 @@ const Home = () => {
                 <Grid w='100%' py={2} marginBottom={6} templateColumns='repeat(5, 1fr)' gap={2}>
                   {sessions.map((session) => (
                     <Link
+                      key={session.sessionId}
                       _hover={{ textDecor: "none" }}
                       as={LinkRouter}
                       to={`/proposals/${session.parentProposal}/sessions/${session.visit_number ?? 0}`}

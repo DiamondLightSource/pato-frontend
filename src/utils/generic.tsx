@@ -1,4 +1,4 @@
-import { DataConfig } from "./interfaces";
+import { DataConfig } from "../schema/interfaces";
 /**
  * Parses incoming raw data and processes it into labels and values for `InfoGroup` components, also returning raw values in the root of the returned object
  *
@@ -7,7 +7,7 @@ import { DataConfig } from "./interfaces";
  *
  * @returns An object containing an array of `InfoGroup` labels and values, alongside raw values (when passed in the configuration)
  */
-const parseData = (rawData: Record<string, any>, config: DataConfig) => {
+export const parseData = (rawData: Record<string, any>, config: DataConfig) => {
   const data: Record<string, any> = { info: [] };
   for (const item of config.include) {
     const unit = item.unit ?? "";
@@ -40,7 +40,7 @@ export function isObject(item: any) {
   return item && typeof item === "object" && !Array.isArray(item);
 }
 
-export default function mergeDeep(target: Record<string, any>, source: Record<string, any>) {
+export const mergeDeep = (target: Record<string, any>, source: Record<string, any>) => {
   let output = structuredClone(target);
   if (isObject(target) && isObject(source)) {
     Object.keys(source).forEach((key) => {
@@ -53,6 +53,4 @@ export default function mergeDeep(target: Record<string, any>, source: Record<st
     });
   }
   return output;
-}
-
-export { mergeDeep, parseData };
+};

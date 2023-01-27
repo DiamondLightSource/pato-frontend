@@ -7,9 +7,7 @@ import { MotionPagination } from "../motion/pagination";
 import { components } from "../../schema/main";
 import { parseData } from "../../utils/generic";
 import { classificationConfig } from "../../utils/config/parse";
-import { setLoading } from "../../features/uiSlice";
-import { useAppDispatch } from "../../store/hooks";
-import { SpaProps, Info } from "../../utils/interfaces";
+import { SpaProps, Info } from "../../schema/interfaces";
 
 type Classification2D = components["schemas"]["Classification2D"];
 interface FullClassification extends Classification2D {
@@ -27,8 +25,6 @@ const Class2d = ({ autoProcId }: SpaProps) => {
   const [pageAmount, setPageAmount] = useState(0);
   const [sortType, setSortType] = useState("particles");
   const [selectedClass, setSelectedClass] = useState(0);
-
-  const dispatch = useAppDispatch();
 
   const getClassImage = useCallback(
     async (item: FullClassification) => {
@@ -48,7 +44,6 @@ const Class2d = ({ autoProcId }: SpaProps) => {
 
   const handle2dClassificationChange = useCallback(
     (page: number) => {
-      dispatch(setLoading(true));
       client
         .safe_get(`autoProc/${autoProcId}/classification?limit=8&page=${page - 1}&sortBy=${sortType}`)
         .then(async (response) => {
@@ -63,10 +58,9 @@ const Class2d = ({ autoProcId }: SpaProps) => {
           } else {
             setClassificationData(null);
           }
-        })
-        .finally(() => dispatch(setLoading(false)));
+        });
     },
-    [autoProcId, sortType, getClassImage, dispatch]
+    [autoProcId, sortType, getClassImage]
   );
 
   useEffect(() => {
@@ -84,9 +78,7 @@ const Class2d = ({ autoProcId }: SpaProps) => {
   return (
     <Box>
       <HStack>
-        <Heading marginTop={3} variant='collection'>
-          2D Classification
-        </Heading>
+        <Heading variant='collection'>2D Classification</Heading>
         <Spacer />
         <Heading size='xs'>Sort by</Heading>
         <Select bg='white' onChange={(e) => setSortType(e.target.value)} size='xs' w='180px'>

@@ -24,13 +24,11 @@ import { PlotContainer } from "../visualisation/plotContainer";
 import { MotionPagination } from "./pagination";
 import { useEffect, useState } from "react";
 import { MdComment } from "react-icons/md";
-import { useDispatch } from "react-redux";
-import { setLoading } from "../../features/uiSlice";
 import { client } from "../../utils/api/client";
 import { parseData } from "../../utils/generic";
 import { driftPlotOptions } from "../../utils/config/plot";
 import { buildEndpoint } from "../../utils/api/endpoint";
-import { BasePoint, Info } from "../../utils/interfaces";
+import { BasePoint, Info } from "../../schema/interfaces";
 import { Scatter } from "../plots/scatter";
 import { setImage } from "../../utils/api/response";
 
@@ -115,8 +113,6 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
   const [fftImage, setFftImage] = useState<string>();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const dispatch = useDispatch();
-
   const flattenMovieData = (rawData: Record<string, any>) => {
     let flattenedData: Record<string, string> = { rawTotal: rawData.rawTotal, total: rawData.total };
     const items = rawData.items[0];
@@ -137,40 +133,36 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
   };
 
   useEffect(() => {
-    dispatch(setLoading(true));
-    client
-      .safe_get(buildEndpoint(`${parentType}/${parentId}/motion`, {}, 1, page ?? 0))
-      .then((response) => {
-        if (response.status === 200) {
-          setMotion(parseData(flattenMovieData(response.data), motionConfig) as MotionData);
-          if (onTotalChanged) {
-            onTotalChanged(response.data.total);
-          }
-
-          if (page !== undefined || parentType !== "tomograms") {
-            const movie = response.data.items[0].Movie;
-            if (movie !== undefined) {
-              setImage(`movies/${movie.movieId}/micrograph`, setMgImage);
-              setImage(`movies/${movie.movieId}/fft`, setFftImage);
-              const driftUrl = `movies/${movie.movieId}/drift?fromDb=${parentType === "autoProc"}`;
-
-              client.safe_get(driftUrl).then((response) => {
-                if (response.data.items) {
-                  setDrift(response.data.items);
-                }
-              });
-            }
-
-            if (onMotionChanged !== undefined) {
-              onMotionChanged(response.data, page ?? -1);
-            }
-          }
-        } else {
-          setMotion(null);
+    client.safe_get(buildEndpoint(`${parentType}/${parentId}/motion`, {}, 1, page ?? 0)).then((response) => {
+      if (response.status === 200) {
+        setMotion(parseData(flattenMovieData(response.data), motionConfig) as MotionData);
+        if (onTotalChanged) {
+          onTotalChanged(response.data.total);
         }
-      })
-      .finally(() => dispatch(setLoading(false)));
-  }, [page, parentId, parentType, dispatch, onMotionChanged, onTotalChanged]);
+
+        if (page !== undefined || parentType !== "tomograms") {
+          const movie = response.data.items[0].Movie;
+          if (movie !== undefined) {
+            setImage(`movies/${movie.movieId}/micrograph`, setMgImage);
+            setImage(`movies/${movie.movieId}/fft`, setFftImage);
+            const driftUrl = `movies/${movie.movieId}/drift?fromDb=${parentType === "autoProc"}`;
+
+            client.safe_get(driftUrl).then((response) => {
+              if (response.data.items) {
+                setDrift(response.data.items);
+              }
+            });
+          }
+
+          if (onMotionChanged !== undefined) {
+            onMotionChanged(response.data, page ?? -1);
+          }
+        }
+      } else {
+        setMotion(null);
+      }
+    });
+  }, [page, parentId, parentType, onMotionChanged, onTotalChanged]);
 
   return (
     <div>
@@ -186,9 +178,9 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
               </Heading>
             )}
             <Spacer />
-            <Tooltip id="comment" label='View Comments'>
+            <Tooltip id='comment' label='View Comments'>
               <Button
-                data-testid="comment"
+                data-testid='comment'
                 isDisabled={!(motion.comments_CTF || motion.comments_MotionCorrection)}
                 size='xs'
                 onClick={onOpen}

@@ -36,7 +36,7 @@ describe("Box Plot", () => {
     expect(screen.getByText("axis label")).toBeInTheDocument();
   });
 
-  it("should display tooltip when datapoint is hovered", async () => {
+  it("should display tooltip when box is hovered", async () => {
     renderWithProviders(
       <Box data={[{ min: 1, max: 10, median: 5, q1: 3, q3: 6, label: "test" }]} width={100} height={100} />
     );

@@ -5,13 +5,8 @@ import {
   VStack,
   Code,
   HStack,
-  Button,
   Accordion,
-  AccordionItem,
-  AccordionPanel,
-  AccordionButton,
   Spacer,
-  AccordionIcon,
   Divider,
   Icon,
   Skeleton,
@@ -24,22 +19,25 @@ import {
   ModalOverlay,
   ModalContent,
   ModalCloseButton,
-  Tooltip,
+  Tabs,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { client } from "../utils/api/client";
-import { useAppDispatch } from "../store/hooks";
-import { setLoading } from "../features/uiSlice";
 import { parseData } from "../utils/generic";
-import { CollectionData, DataConfig } from "../utils/interfaces";
+import { CollectionData, DataConfig } from "../schema/interfaces";
 import { components } from "../schema/main";
 import { buildEndpoint } from "../utils/api/endpoint";
-import SPA from "../components/spa/main";
+import { SPA } from "../components/spa/main";
 import { collectionConfig } from "../utils/config/parse";
-import { MdFolder, MdRedo } from "react-icons/md";
+import { MdFolder } from "react-icons/md";
 import { InfoGroup } from "../components/visualisation/infogroup";
 import { RelionReprocessing } from "../components/spa/relion";
+import { Statistics } from "../components/spa/statistics";
 
 type ProcessingJob = components["schemas"]["ProcessingJobOut"];
 type DataCollection = components["schemas"]["DataCollectionSummaryOut"];
@@ -77,36 +75,10 @@ const getAcquisitionSoftware = (fileTemplate: string) => {
   return "";
 };
 
-interface ProcTitleInfoProps {
-  title: string;
-  value: string | number;
-}
-
 interface SpaCollectionData extends CollectionData {
   fileTemplate: string;
   imageDirectory: string;
 }
-
-const ProcTitleInfo = ({ title, value }: ProcTitleInfoProps) => (
-  <>
-    <VStack spacing='0'>
-      <Text w='100%'>
-        <b>{title}</b>
-      </Text>
-      <Text w='100%' marginTop='0' fontSize={14}>
-        {value}
-      </Text>
-    </VStack>
-    <Spacer />
-  </>
-);
-
-const jobStatusColour: Record<string, string> = {
-  Success: "green",
-  Queued: "purple",
-  Fail: "red",
-  Running: "orange",
-};
 
 const SpaPage = () => {
   const params = useParams();
@@ -119,17 +91,11 @@ const SpaPage = () => {
   const [processingJobs, setProcessingJobs] = useState<ProcessingJob[]>([]);
   const [processingJobToEdit, setProcessingJobToEdit] = useState<number | null>(null);
   const [accordionIndex, setAccordionIndex] = useState<number | number[]>(0);
+  const [tabIndex, setTabIndex] = useState(0);
 
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const updateCollection = useCallback(
-    (page: number) => {
-      navigate(`../${page}`, { relative: "path" });
-    },
-    [navigate]
-  );
 
   const handleProcessingClicked = useCallback(
     (procJobId: number) => {
@@ -140,8 +106,26 @@ const SpaPage = () => {
   );
 
   useEffect(() => {
+    if (location.hash === "#statistics") {
+      setTabIndex(1);
+    }
+  }, [location]);
+
+  const handleTabChanged = useCallback(
+    (index: number) => {
+      if (index === 1) {
+        navigate("#statistics");
+      } else {
+        navigate("");
+        setTabIndex(index);
+      }
+    },
+    [navigate]
+  );
+
+  useEffect(() => {
     document.title = `eBIC » SPA » ${params.groupId}`;
-    dispatch(setLoading(true));
+
     client.safe_get(buildEndpoint("dataCollections", params, 1, 1)).then((response) => {
       if (response.data.items) {
         const data = response.data.items[0] as DataCollection;
@@ -152,7 +136,7 @@ const SpaPage = () => {
         setCollectionData(parsedData);
       }
     });
-  }, [params, dispatch, navigate, updateCollection]);
+  }, [params, navigate]);
 
   useEffect(() => {
     const collectionId = collectionData.dataCollectionId;
@@ -189,48 +173,45 @@ const SpaPage = () => {
           </HStack>
         </VStack>
       </HStack>
+
+      <InfoGroup cols={6} info={collectionData.info} />
       <Divider marginY={2} />
-      <InfoGroup cols={5} info={collectionData.info} />
-      <Divider marginY={2} />
-      {processingJobs.length ? (
-        <Accordion onChange={setAccordionIndex} index={accordionIndex} allowToggle>
-          {processingJobs.map((job, i) => (
-            <AccordionItem key={i}>
-              <h2>
-                <HStack py={1.5} px={3} w='100%' bg='diamond.100'>
-                  <ProcTitleInfo title='Processing Job' value={job.ProcessingJob.processingJobId} />
-                  <ProcTitleInfo title='AutoProc. Program' value={job.AutoProcProgram.autoProcProgramId} />
-                  <ProcTitleInfo title='Processing Start' value={job.AutoProcProgram.processingStartTime ?? "?"} />
-                  <ProcTitleInfo title='Processing End' value={job.AutoProcProgram.processingEndTime ?? "?"} />
-                  <Tag colorScheme={jobStatusColour[job.status]}>{job.status}</Tag>
-                  <Tooltip label='Run Reprocessing'>
-                    <Button isDisabled onClick={() => handleProcessingClicked(job.ProcessingJob.processingJobId)}>
-                      <Icon as={MdRedo} />
-                    </Button>
-                  </Tooltip>
-                  <AccordionButton width='auto'>
-                    <AccordionIcon />
-                  </AccordionButton>
-                </HStack>
-              </h2>
-              <AccordionPanel p={0}>
-                {
-                  accordionIndex === i && (
-                    <SPA autoProcId={job.AutoProcProgram.autoProcProgramId} />
-                  ) /* isExpanded is not to be trusted */
-                }
-              </AccordionPanel>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      ) : (
-        <Grid gap={3}>
-          <Skeleton h='4vh' />
-          <Skeleton h='25vh' />
-          <Skeleton h='25vh' />
-          <Skeleton h='20vh' />
-        </Grid>
-      )}
+      <Tabs isLazy onChange={handleTabChanged} index={tabIndex}>
+        <TabList>
+          <Tab>Processing Jobs</Tab>
+          <Tab>Collection Statistics</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            {processingJobs.length ? (
+              <Accordion onChange={setAccordionIndex} index={accordionIndex} allowToggle>
+                {processingJobs.map((job, i) => (
+                  /* isExpanded is not to be trusted */
+                  <SPA
+                    key={i}
+                    collapsed={accordionIndex === i}
+                    autoProc={job.AutoProcProgram}
+                    procJob={job.ProcessingJob}
+                    status={job.status}
+                    onReprocessingClicked={handleProcessingClicked}
+                  />
+                ))}
+              </Accordion>
+            ) : (
+              <Grid gap={3}>
+                <Skeleton h='4vh' />
+                <Skeleton h='25vh' />
+                <Skeleton h='25vh' />
+                <Skeleton h='20vh' />
+              </Grid>
+            )}
+          </TabPanel>
+          <TabPanel>
+            {collectionData.dataCollectionId ? <Statistics dataCollectionId={collectionData.dataCollectionId} /> : null}
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+
       {processingJobToEdit && (
         <Modal size='6xl' isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />

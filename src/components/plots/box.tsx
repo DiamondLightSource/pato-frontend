@@ -1,13 +1,15 @@
-import React, { useCallback, useMemo, useRef } from "react";
+import { useCallback, useMemo } from "react";
 import { Group } from "@visx/group";
 import { scaleBand, scaleLinear } from "@visx/scale";
 import { withTooltip, Tooltip } from "@visx/tooltip";
 import { WithTooltipProvidedProps } from "@visx/tooltip/lib/enhancers/withTooltip";
 import { GridRows } from "@visx/grid";
 import { AxisBottom, AxisLeft } from "@visx/axis";
-import { BoxPlotStats, CompleteScatterPlotOptions, ScatterPlotOptions } from "../../utils/interfaces";
+import { BoxPlotOptions, BoxPlotStats, CompleteScatterPlotOptions } from "../../schema/interfaces";
 import { mergeDeep } from "../../utils/generic";
 import { BoxPlot } from "@visx/stats";
+import { getFillColour } from "../../styles/colours";
+import { defaultMargin } from "../../utils/config/plot";
 
 const label = (d: BoxPlotStats) => d.label;
 const min = (d: BoxPlotStats) => d.min;
@@ -19,19 +21,14 @@ const median = (d: BoxPlotStats) => d.median;
 export type BoxPlotProps = {
   width?: number;
   height?: number;
-  options?: ScatterPlotOptions;
+  options?: BoxPlotOptions;
   data: BoxPlotStats[];
 };
 
-const defaultMargin = { top: 10, right: 30, bottom: 40, left: 60 };
-
-const defaultPlotOptions: ScatterPlotOptions = {
-  x: { domain: { min: undefined, max: undefined }, label: "" },
+const defaultPlotOptions: BoxPlotOptions = {
   y: { domain: { min: undefined, max: undefined }, label: "" },
-  points: { dotRadius: 2 },
+  x: { label: "" },
 };
-
-const fillColours = ["#ff5733", "#669bbc", "#c1121f"];
 
 const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
   ({
@@ -46,9 +43,6 @@ const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
     options,
     data,
   }: BoxPlotProps & WithTooltipProvidedProps<BoxPlotStats>) => {
-    if (width < 10) return null;
-    const svgRef = useRef<SVGSVGElement>(null);
-
     const config: CompleteScatterPlotOptions = useMemo(() => {
       const newConfig = mergeDeep(defaultPlotOptions, options ?? {});
 
@@ -78,12 +72,16 @@ const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
       [yMax, config]
     );
 
-    const xScale = scaleBand<string>({
-      range: [0, xMax],
-      round: true,
-      domain: data.map(label),
-      padding: 0.4,
-    });
+    const xScale = useMemo(
+      () =>
+        scaleBand<string>({
+          range: [0, xMax],
+          round: true,
+          domain: data.map(label),
+          padding: 0.4,
+        }),
+      [data, xMax]
+    );
 
     const checkBoundaries = useCallback(
       (d: BoxPlotStats) => {
@@ -97,7 +95,7 @@ const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
 
     return (
       <div>
-        <svg data-testid='graph-svg' width={width} height={height} ref={svgRef}>
+        <svg data-testid='graph-svg' width={width} height={height}>
           <rect
             width={xMax}
             height={yMax}
@@ -124,7 +122,7 @@ const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
                       thirdQuartile={q3(d)}
                       boxWidth={constrainedWidth * 0.4}
                       stroke='var(--chakra-colors-diamond-800)'
-                      fill={fillColours[i % fillColours.length]}
+                      fill={getFillColour(i)}
                       median={median(d)}
                       boxProps={{
                         "aria-label": "Box",
@@ -137,9 +135,7 @@ const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
                             },
                           });
                         },
-                        "onMouseLeave": () => {
-                          hideTooltip();
-                        },
+                        "onMouseLeave": hideTooltip,
                       }}
                       medianProps={{
                         style: {
@@ -158,31 +154,21 @@ const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
               <b style={{ color: "var(--chakra-colors-diamond-700)" }}>{tooltipData.label}</b>
             </div>
             <div style={{ marginTop: "5px", fontSize: "12px" }}>
-              {tooltipData.max && (
-                <div aria-label='Maximum'>
-                  <b>max:</b> {tooltipData.max}
-                </div>
-              )}
-              {tooltipData.q3 && (
-                <div aria-label='Third Quartile'>
-                  <b>third quartile:</b> {tooltipData.q3}
-                </div>
-              )}
-              {tooltipData.median && (
-                <div aria-label='Median'>
-                  <b>median:</b> {tooltipData.median}
-                </div>
-              )}
-              {tooltipData.q1 && (
-                <div aria-label='First Quartile'>
-                  <b>first quartile:</b> {tooltipData.q1}
-                </div>
-              )}
-              {tooltipData.min && (
-                <div aria-label='Minimum'>
-                  <b>min:</b> {tooltipData.min}
-                </div>
-              )}
+              <div aria-label='Maximum'>
+                <b>max:</b> {tooltipData.max}
+              </div>
+              <div aria-label='Third Quartile'>
+                <b>third quartile:</b> {tooltipData.q3}
+              </div>
+              <div aria-label='Median'>
+                <b>median:</b> {tooltipData.median}
+              </div>
+              <div aria-label='First Quartile'>
+                <b>first quartile:</b> {tooltipData.q1}
+              </div>
+              <div aria-label='Minimum'>
+                <b>min:</b> {tooltipData.min}
+              </div>
             </div>
           </Tooltip>
         )}

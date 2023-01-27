@@ -103,7 +103,7 @@ const Navbar = () => {
           </HStack>
         </HStack>
         <Flex alignItems={"center"}>
-          {user !== null ? (
+          {user ? (
             <Menu>
               <MenuButton
                 aria-label='User Avatar'

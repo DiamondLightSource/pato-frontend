@@ -2,8 +2,6 @@ import { Divider, Heading, HStack, Input, Spacer, useToast, Box } from "@chakra-
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Pagination } from "../components/navigation/pagination";
-import { setLoading } from "../features/uiSlice";
-import { useAppDispatch } from "../store/hooks";
 import { client } from "../utils/api/client";
 import { buildEndpoint } from "../utils/api/endpoint";
 import { Table } from "../components/visualisation/table";
@@ -29,7 +27,6 @@ const GenericListing = ({ headers, endpoint, heading, makePathCallback, processD
   const toast = useToast();
   const navigate = useNavigate();
   const params = useParams();
-  const dispatch = useAppDispatch();
 
   const handleRowClicked = useCallback(
     (item: Record<string, any>) => {
@@ -45,31 +42,27 @@ const GenericListing = ({ headers, endpoint, heading, makePathCallback, processD
   }, [heading]);
 
   useEffect(() => {
-    dispatch(setLoading(true));
     let builtEndpoint = buildEndpoint(`${endpoint}`, params, itemsPerPage, page);
 
     if (search) {
       builtEndpoint += `&search=${search}`;
     }
 
-    client
-      .safe_get(builtEndpoint)
-      .then((response) => {
-        if (response.data && response.data.items !== undefined) {
-          setTotal(response.data.total);
+    client.safe_get(builtEndpoint).then((response) => {
+      if (response.data && response.data.items !== undefined) {
+        setTotal(response.data.total);
 
-          if (processData) {
-            setData(processData(response.data.items));
-          } else {
-            setData(response.data.items);
-          }
+        if (processData) {
+          setData(processData(response.data.items));
         } else {
-          setTotal(0);
-          setData(null);
+          setData(response.data.items);
         }
-      })
-      .finally(() => dispatch(setLoading(false)));
-  }, [page, itemsPerPage, toast, endpoint, navigate, dispatch, processData, search, params]);
+      } else {
+        setTotal(0);
+        setData(null);
+      }
+    });
+  }, [page, itemsPerPage, toast, endpoint, navigate, processData, search, params]);
 
   return (
     <Box h='100%'>
