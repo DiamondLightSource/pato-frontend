@@ -17,7 +17,7 @@ interface ParticleProps extends SpaProps {
   /* Total number of available items */
   total: number;
   /* Page for parent motion correction, used if page match lock is set */
-  page?: number;
+  currentPage?: number;
 }
 
 const particleConfig: DataConfig = {
@@ -33,7 +33,7 @@ const convertToBoxPlot = (data: components["schemas"]["RelativeIceThickness"], l
   return { min: data.minimum, max: data.maximum, median: data.median, q1: data.q1, q3: data.q3, label };
 };
 
-const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
+const ParticlePicking = ({ autoProcId, total, currentPage }: ParticleProps) => {
   const [innerPage, setInnerPage] = useState<number | undefined>();
   const [lockPage, setLockpage] = useState<boolean>(true);
   const [particleInfo, setParticleInfo] = useState<Info[] | null | undefined>();
@@ -42,13 +42,13 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
 
   useEffect(() => {
     if (lockPage) {
-      if (page !== undefined && page > 0) {
-        setInnerPage(page);
+      if (currentPage !== undefined && currentPage > 0) {
+        setInnerPage(currentPage);
       } else {
         setInnerPage(total);
       }
     }
-  }, [page, lockPage, total]);
+  }, [currentPage, lockPage, total]);
 
   useEffect(() => {
     if (innerPage) {

@@ -13,7 +13,8 @@ v0.3.0 (--/01/2023)
 
 **Changed**
 
-- Resets page when searching
+- Resets listing page when searching
+- Performs auth before page is loaded, avoids multiple "refreshes"
 
 ++++++++++
 v0.2.1 (27/01/2023)

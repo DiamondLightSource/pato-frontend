@@ -55,6 +55,8 @@ interface MotionProps {
   onMotionChanged?: (motion: MotionData, page: number) => void;
   /** Callback for when the number of available items changes */
   onTotalChanged?: (newTotal: number) => void;
+  /** Current page */
+  currentPage?: number;
 }
 
 const motionConfig = {
@@ -105,7 +107,7 @@ const calcDarkImages = (total: number, rawTotal: number) => {
   return `Dark Images: ${rawTotal - total}`;
 };
 
-const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: MotionProps) => {
+const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType, currentPage }: MotionProps) => {
   const [page, setPage] = useState<number | undefined>();
   const [motion, setMotion] = useState<MotionData | null>();
   const [drift, setDrift] = useState<BasePoint[]>([]);
@@ -131,6 +133,12 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
 
     return flattenedData;
   };
+
+  useEffect(() => {
+    if (currentPage) {
+      setPage(currentPage);
+    }
+  }, [currentPage]);
 
   useEffect(() => {
     client.safe_get(buildEndpoint(`${parentType}/${parentId}/motion`, {}, 1, page ?? 0)).then((response) => {
@@ -194,7 +202,8 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType }: Motio
             <MotionPagination
               startFrom={parentType === "tomograms" ? "middle" : "end"}
               total={motion.total || motion.rawTotal}
-              onChange={(page) => setPage(page)}
+              onChange={setPage}
+              displayDefault={page ? page.toString() : undefined}
             />
           </>
         )}

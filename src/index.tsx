@@ -69,7 +69,7 @@ const userLoader = async (request: Request) => {
 
   if (splitUrl.length === 2) {
     sessionStorage.setItem("token", splitUrl[1].split("&token_type")[0].toString());
-    window.history.replaceState(null, " ");
+    window.history.replaceState({}, document.title, window.location.href.split("#")[0]);
   }
 
   const user = await client.get("user");

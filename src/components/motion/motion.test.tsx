@@ -41,4 +41,11 @@ describe("Motion", () => {
 
     await waitFor(() => expect(totalChanged).toBeCalled());
   });
+
+  it("should respect current page prop if passed", async () => {
+    const totalChanged = jest.fn();
+    renderWithProviders(<Motion currentPage={5} parentType='tomograms' onTotalChanged={totalChanged} parentId={3} />);
+
+    expect(await screen.findByLabelText("Current Page")).toHaveValue("5");
+  });
 });
