@@ -20,6 +20,7 @@ import {
   proposalHeaders,
   sessionHeaders,
 } from "./utils/config/table";
+import { client } from "./utils/api/client";
 const { ToastContainer } = createStandaloneToast();
 
 const container = document.getElementById("root")!;
@@ -55,13 +56,29 @@ const handleGroupClicked = (item: Record<string, string | number>) => {
 
 const handleCollectionClicked = (item: Record<string, string | number>) => `../tomograms/${item.index}`;
 
-const processSessionData = (data: Record<string, string | number>[]) => {
-  return data.map((item: Record<string, string | number>) => {
+const processSessionData = (data: Record<string, string | number>[]) =>
+  data.map((item: Record<string, string | number>) => {
     let newItem = Object.assign({}, item);
     const beamLineName = item.beamLineName as string;
     newItem["microscopeName"] = beamlineToMicroscope[beamLineName] ?? beamLineName;
     return newItem;
   });
+
+const userLoader = async (request: Request) => {
+  const splitUrl = window.location.href.split("access_token=");
+
+  if (splitUrl.length === 2) {
+    sessionStorage.setItem("token", splitUrl[1].split("&token_type")[0].toString());
+    window.history.replaceState(null, " ");
+  }
+
+  const user = await client.get("user");
+
+  if (user.status === 200) {
+    return { fedid: user.data.fedid, name: user.data.given_name };
+  }
+
+  return null;
 };
 
 const router = createBrowserRouter([
@@ -69,6 +86,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <Root />,
     errorElement: <Error />,
+    loader: async ({ request }) => userLoader(request),
     children: [
       {
         path: "/",

@@ -6,7 +6,6 @@ import type { PreloadedState } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 
 import type { AppStore, RootState } from "../store/store";
-import authReducer  from "../features/authSlice";
 import uiReducer from "../features/uiSlice";
 import { BrowserRouter } from "react-router-dom";
 
@@ -19,9 +18,9 @@ interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
 const renderWithProviders = (
   ui: React.ReactElement,
   {
-    preloadedState = { auth: { user: null }, ui: { loading: false } },
+    preloadedState = { ui: { loading: false } },
     route = "/",
-    store = configureStore({ reducer: { auth: authReducer, ui: uiReducer }, preloadedState }),
+    store = configureStore({ reducer: { ui: uiReducer }, preloadedState }),
     ...renderOptions
   }: ExtendedRenderOptions = {}
 ): any => {

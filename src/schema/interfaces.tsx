@@ -103,7 +103,12 @@ export interface ScatterPlotOptions extends DeepPartial<CompleteScatterPlotOptio
 
 export interface CompleteBoxOptions {
   y: PlotAxisOptions;
-  x: {label: string};
+  x: { label: string };
 }
 
 export interface BoxPlotOptions extends DeepPartial<CompleteBoxOptions> {}
+
+export interface AuthState {
+  fedid: string;
+  name: string;
+}

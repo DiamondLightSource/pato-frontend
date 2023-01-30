@@ -20,6 +20,7 @@ import {
 import { MdLogin, MdMenu, MdClose } from "react-icons/md";
 import { useAppSelector } from "../../store/hooks";
 import { Link as LinkRouter } from "react-router-dom";
+import { AuthState } from "../../schema/interfaces";
 
 const links = [
   { label: "Proposals", route: "proposals" },
@@ -66,9 +67,12 @@ const NavLinks = ({ loggedIn }: NavLinksProps) => (
   </HStack>
 );
 
-const Navbar = () => {
+interface NavbarProps {
+  user?: AuthState;
+}
+
+const Navbar = ({ user }: NavbarProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const user = useAppSelector((state) => state.auth.user);
   const loading = useAppSelector((state) => state.ui.loading);
 
   const logout = useCallback(() => {
