@@ -11,6 +11,10 @@ v0.3.0 (--/01/2023)
 - Data collection statistics page for single particle analysis
 - Users can now search through collections (tomogram) in a data collection group
 
+**Changed**
+
+- Resets page when searching
+
 ++++++++++
 v0.2.1 (27/01/2023)
 ++++++++++

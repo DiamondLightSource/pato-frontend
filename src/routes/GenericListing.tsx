@@ -29,6 +29,11 @@ const GenericListing = ({ headers, endpoint, heading, makePathCallback, processD
   const navigate = useNavigate();
   const params = useParams();
 
+  const handleSearch = useCallback((search: string) => {
+    setPage(1);
+    setSearch(search);
+  }, []);
+
   const handleRowClicked = useCallback(
     (item: Record<string, any>, index: number) => {
       if (makePathCallback) {
@@ -73,7 +78,7 @@ const GenericListing = ({ headers, endpoint, heading, makePathCallback, processD
         <DebouncedInput
           borderColor='gray.600'
           bg='diamond.50'
-          onChangeEnd={setSearch}
+          onChangeEnd={handleSearch}
           w='20%'
           size='sm'
           placeholder='Search...'
@@ -82,13 +87,7 @@ const GenericListing = ({ headers, endpoint, heading, makePathCallback, processD
       <Divider mb={4} />
       <Table data={data} headers={headers} label={heading} onClick={handleRowClicked} />
       <Divider />
-      <Pagination
-        onChange={(page, itemAmount) => {
-          setItemsPerPage(itemAmount);
-          setPage(page);
-        }}
-        total={total}
-      />
+      <Pagination value={page} onPageChange={setPage} onItemCountChange={setItemsPerPage} total={total} />
     </Box>
   );
 };

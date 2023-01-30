@@ -82,20 +82,34 @@ describe("Pagination", () => {
 
   it("should call callback when page changes", async () => {
     const mockCallback = jest.fn();
-    renderWithProviders(<Pagination total={160} onChange={mockCallback} />);
+    renderWithProviders(<Pagination total={160} onPageChange={mockCallback} />);
 
     const input = screen.getByLabelText("Next Page");
     fireEvent.click(input);
 
-    expect(mockCallback).toBeCalledWith(2, 20);
+    expect(mockCallback).toBeCalledWith(2);
   });
 
   it("should call items per page changes", async () => {
     const mockCallback = jest.fn();
-    renderWithProviders(<Pagination total={160} onChange={mockCallback} />);
+    renderWithProviders(<Pagination total={160} onItemCountChange={mockCallback} />);
 
     fireEvent.change(screen.getByRole("combobox"), { target: { value: 5 } });
 
-    expect(mockCallback).toBeCalledWith(1, 5);
+    expect(mockCallback).toBeCalledWith(5);
+  });
+
+  it("should reset page when page count changes if current page is greater than page count", async () => {
+    const mockCallback = jest.fn();
+    const { rerender } = renderWithProviders(<Pagination total={160} onPageChange={mockCallback} />);
+
+    const input = screen.getByLabelText("Next Page");
+    fireEvent.click(input);
+
+    expect(mockCallback).toBeCalledWith(2);
+
+    rerender(<Pagination total={20} onPageChange={mockCallback} />);
+
+    expect(mockCallback).toBeCalledWith(1);
   });
 });
