@@ -75,7 +75,7 @@ const userLoader = async (request: Request) => {
   const user = await client.get("user");
 
   if (user.status === 200) {
-    return { fedid: user.data.fedid, name: user.data.given_name };
+    return { fedid: user.data.fedid, name: user.data.givenName };
   }
 
   return null;
