@@ -98,7 +98,7 @@ const ParticlePicking = ({ autoProcId, total, currentPage }: ParticleProps) => {
           disabled={lockPage}
           total={total}
           onChange={(page) => setInnerPage(page)}
-          displayDefault={innerPage ? innerPage.toString() : undefined}
+          displayDefault={innerPage}
         />
       </HStack>
       <Divider />

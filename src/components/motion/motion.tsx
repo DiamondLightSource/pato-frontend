@@ -203,7 +203,7 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType, current
               startFrom={parentType === "tomograms" ? "middle" : "end"}
               total={motion.total || motion.rawTotal}
               onChange={setPage}
-              displayDefault={page ? page.toString() : undefined}
+              displayDefault={page}
             />
           </>
         )}
