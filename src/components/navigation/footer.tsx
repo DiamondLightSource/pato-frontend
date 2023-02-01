@@ -5,7 +5,7 @@ const Footer = () => (
     <Text textAlign='center'>
       eBIC{" "}
       <Link color='diamond.400' href='https://gitlab.diamond.ac.uk/lims/ebic-frontend'>
-        v{process.env.REACT_APP_VERSION}
+        {process.env.REACT_APP_VERSION}
       </Link>{" "}
       | © 2023{" "}
       <Link color='diamond.400' href='https://diamond.ac.uk'>
