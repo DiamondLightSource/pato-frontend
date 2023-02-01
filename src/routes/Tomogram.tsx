@@ -1,4 +1,17 @@
-import { Divider, Heading, Box, VStack, Code, HStack, Spacer, Checkbox, Tag } from "@chakra-ui/react";
+import {
+  Divider,
+  Heading,
+  Box,
+  VStack,
+  Code,
+  HStack,
+  Spacer,
+  Checkbox,
+  Tag,
+  Icon,
+  Button,
+  Tooltip,
+} from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { client } from "../utils/api/client";
@@ -10,6 +23,7 @@ import { InfoGroup } from "../components/visualisation/infogroup";
 import { CollectionLoader } from "../components/collectionLoading";
 import { buildEndpoint } from "../utils/api/endpoint";
 import { collectionConfig } from "../utils/config/parse";
+import { MdList } from "react-icons/md";
 
 const tomogramConfig: DataConfig = {
   include: [
@@ -40,10 +54,9 @@ const TomogramPage = () => {
   );
 
   const updateTomogramFilter = useCallback(() => {
-    setOnlyProcessed(!onlyProcessed)
-    setSearchParams({onlyProcessed: (!onlyProcessed).toString()})
-  },[onlyProcessed, setSearchParams]
-  )
+    setOnlyProcessed(!onlyProcessed);
+    setSearchParams({ onlyProcessed: (!onlyProcessed).toString() });
+  }, [onlyProcessed, setSearchParams]);
 
   useEffect(() => {
     document.title = `eBIC » Tomograms » ${params.collectionIndex}`;
@@ -76,33 +89,40 @@ const TomogramPage = () => {
             }
           });
         }
-      })
+      });
   }, [params, navigate, updateCollection, onlyProcessed]);
 
   return (
     <Box>
       <HStack marginBottom={2}>
-        <VStack>
+        <VStack w='100%'>
           <HStack w='100%'>
             <Heading>Data Collection #{params.collectionIndex}</Heading>
-            <Tag colorScheme="teal">Tomogram</Tag>
+            <Tag colorScheme='teal'>Tomogram</Tag>
+            <Spacer />
+            <Tooltip label='List Collections'>
+              <Button onClick={() => navigate("../../collections", { relative: "path" })}>
+                <Icon as={MdList} />
+              </Button>
+            </Tooltip>
+            <Divider orientation='vertical' h='5vh' />
+            <MotionPagination
+              size='md'
+              onChange={updateCollection}
+              displayDefault={parseInt(params.collectionIndex ?? "1")}
+              total={pageCount}
+            />
           </HStack>
-          <Heading color='diamond.300' size='sm'>
-            Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data collection group{" "}
-            <Code>{params.groupId}</Code>
-          </Heading>
-        </VStack>
-        <Spacer />
-        <VStack>
-          <MotionPagination
-            size='md'
-            onChange={updateCollection}
-            displayDefault={params.collectionIndex}
-            total={pageCount}
-          />
-          <Checkbox defaultChecked={onlyProcessed} onChange={updateTomogramFilter} alignSelf='end'>
-            Only show processed tomograms
-          </Checkbox>
+          <HStack w='100%'>
+            <Heading color='diamond.300' size='sm'>
+              Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data collection group{" "}
+              <Code>{params.groupId}</Code>
+            </Heading>
+            <Spacer />
+            <Checkbox defaultChecked={onlyProcessed} onChange={updateTomogramFilter} alignSelf='end'>
+              Only show processed tomograms
+            </Checkbox>
+          </HStack>
         </VStack>
       </HStack>
       <InfoGroup py={2} cols={3} info={collectionData.info}></InfoGroup>

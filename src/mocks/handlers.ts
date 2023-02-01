@@ -24,10 +24,15 @@ export const handlers = [
         break;
       case "3":
         data = {
-          items: [{CTF: {comments: "comment!"}, Movie: {}}],
+          items: [{CTF: {comments: "comment!"}, Movie: {}, TiltImageAlignment: {refinedTiltAxis: 958}}],
           total: 0,
           rawTotal: 20,
-          refinedTiltAxis: 958
+        }
+        break;
+      case "4":
+        data = {
+          items: [{CTF: {comments: "comment!"}, Movie: {}, TiltImageAlignment: {refinedTiltAxis: 958}}],
+          rawTotal: "asd",
         }
         break;
     }

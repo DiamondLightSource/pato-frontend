@@ -1,7 +1,8 @@
 import { Box, HStack, Select, Button, Text, Spacer, Divider } from "@chakra-ui/react";
 import { ChangeEvent, useEffect, useState } from "react";
 
-type ChangeCallback = (page: number, itemsPerPage: number) => void;
+type PageChangeCallback = (page: number) => void;
+type ItemChangeCallback = (items: number) => void;
 
 interface PaginationProps {
   /** Total number of items to paginate */
@@ -10,46 +11,61 @@ interface PaginationProps {
   possibleItemsPerPage?: Array<number>;
   /** Preselected item index */
   preselected?: number;
+  /** External bind for current page */
+  value?: number;
   /** Callback for page change events */
-  onChange?: ChangeCallback;
+  onPageChange?: PageChangeCallback;
+  /** Callback for item count change event */
+  onItemCountChange?: ItemChangeCallback;
 }
 
 const Pagination = ({
   total,
   possibleItemsPerPage = [5, 10, 15, 20, 30, 50, 100],
   preselected = 3,
-  onChange,
+  value,
+  onPageChange,
+  onItemCountChange,
 }: PaginationProps) => {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(value || 1);
   const [itemsPerPage, setItemsPerPage] = useState(possibleItemsPerPage[preselected]);
   const [pageAmount, setPageAmount] = useState(1);
 
-  const updatePage = (page: number) => {
-    if (onChange !== undefined) {
-      onChange(page, itemsPerPage);
+  useEffect(() => {
+    if (value) {
+      setPage(value);
     }
+  }, [value]);
 
-    setPage(page);
-  };
+  useEffect(() => {
+    if (onPageChange !== undefined) {
+      onPageChange(page);
+    }
+  }, [page, onPageChange]);
+
+  useEffect(() => {
+    if (onItemCountChange !== undefined) {
+      onItemCountChange(itemsPerPage);
+    }
+  }, [itemsPerPage, onItemCountChange]);
 
   const updateItemsPerPage = (event: ChangeEvent<HTMLSelectElement>) => {
     const newItemsPerPage = parseInt(event.target.value);
-    setPage(Math.ceil((page * itemsPerPage) / newItemsPerPage));
+    const newPage = Math.ceil((page * itemsPerPage) / newItemsPerPage);
+    setPage(newPage > pageAmount ? 1 : newPage);
     setItemsPerPage(newItemsPerPage);
-
-    if (onChange !== undefined) {
-      onChange(page, newItemsPerPage);
-    }
   };
 
   useEffect(() => {
-    setPageAmount(Math.ceil(total / itemsPerPage));
-  }, [total, itemsPerPage]);
+    const newPageAmount = Math.ceil(total / itemsPerPage);
+    setPage((prevPage) => (prevPage > newPageAmount ? 1 : prevPage));
+    setPageAmount(newPageAmount);
+  }, [total, itemsPerPage, setPage]);
 
   return (
     <Box py={2}>
       <HStack>
-        <Button aria-label='First Page' size='sm' variant='pgNotSelected' onClick={() => updatePage(1)}>
+        <Button aria-label='First Page' size='sm' variant='pgNotSelected' onClick={() => setPage(1)}>
           &lt;&lt;
         </Button>
         <Button
@@ -57,7 +73,7 @@ const Pagination = ({
           size='sm'
           variant='pgNotSelected'
           isDisabled={page === 1}
-          onClick={() => updatePage(page - 1)}
+          onClick={() => setPage(page - 1)}
         >
           &lt;
         </Button>
@@ -76,7 +92,7 @@ const Pagination = ({
                 key={pageDisplay}
                 mx={0.5}
                 variant={pageDisplay === page ? "pgSelected" : "pgNotSelected"}
-                onClick={() => updatePage(pageDisplay)}
+                onClick={() => setPage(pageDisplay)}
               >
                 {pageDisplay}
               </Button>
@@ -88,11 +104,11 @@ const Pagination = ({
           size='sm'
           variant='pgNotSelected'
           isDisabled={page === pageAmount}
-          onClick={() => updatePage(page + 1)}
+          onClick={() => setPage(page + 1)}
         >
           &gt;
         </Button>
-        <Button aria-label='Last Page' size='sm' variant='pgNotSelected' onClick={() => updatePage(pageAmount)}>
+        <Button aria-label='Last Page' size='sm' variant='pgNotSelected' onClick={() => setPage(pageAmount)}>
           &gt;&gt;
         </Button>
         <Divider orientation='vertical' h='30px' />

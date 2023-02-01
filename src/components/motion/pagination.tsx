@@ -6,7 +6,7 @@ type ChangeCallback = (page: number) => void;
 interface MotionPaginationProps {
   total: number;
   size?: "xs" | "md";
-  displayDefault?: string;
+  displayDefault?: number;
   onChange?: ChangeCallback;
   startFrom?: "start" | "middle" | "end";
   disabled?: boolean;
@@ -33,8 +33,8 @@ const MotionPagination = ({
   );
 
   useEffect(() => {
-    if (displayDefault) {
-      setValue(displayDefault);
+    if (displayDefault && displayDefault > 0) {
+      setValue(displayDefault.toString());
     }
   }, [displayDefault]);
 

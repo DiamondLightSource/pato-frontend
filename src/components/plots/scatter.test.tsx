@@ -105,4 +105,14 @@ describe("Scatter Plot", () => {
 
     expect(screen.getByText("No Data Available")).toBeInTheDocument();
   });
+
+  it("should fire event when point is clicked", () => {
+    const callback = jest.fn();
+    renderWithProviders(<Scatter data={[{ x: 522, y: 999 }]} width={100} height={100} onPointClicked={callback} />);
+
+    const graph = screen.getByLabelText("Graph");
+    fireEvent.click(graph, { clientX: 65, clientY: 35 });
+
+    expect(callback).toBeCalledWith(522, 999);
+  });
 });

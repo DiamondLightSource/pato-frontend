@@ -96,8 +96,8 @@ const APNGViewer = ({ src, width = "100%", height = "64vh" }: ImageProps) => {
     <Box h={height} w={width} p={4}>
       <HStack h='90%'>
         {currentFrame ? (
-          <VStack w='100%'>
-            <Image aria-label='Frame Image' objectFit='contain' w='100%' h='100%' src={currentFrame} />
+          <VStack bg='diamond.100' h='100%' w='100%'>
+            <Image aria-label='Frame Image' objectFit='contain' h='100%' maxW='100%' src={currentFrame} />
           </VStack>
         ) : (
           <>

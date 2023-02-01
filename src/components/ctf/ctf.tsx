@@ -14,9 +14,11 @@ import { Scatter } from "../plots/scatter";
 interface CTFProps {
   parentType: "autoProc" | "tomograms";
   parentId: number;
+  /** Event fired when one of the graphs is clicked */
+  onGraphClicked?: (x: number, y: number) => void;
 }
 
-const CTF = ({ parentId, parentType }: CTFProps) => {
+const CTF = ({ parentId, parentType, onGraphClicked }: CTFProps) => {
   const [ctfData, setCtfData] = useState<CtfData>();
   const resolutionOptions = parentType === "autoProc" ? resolutionSpaPlotOptions : resolutionPlotOptions;
 
@@ -46,17 +48,17 @@ const CTF = ({ parentId, parentType }: CTFProps) => {
         <Grid w='100%' py={2} marginBottom={6} templateColumns='repeat(3, 1fr)' h='20vh' gap={2}>
           <GridItem minW='100%'>
             <PlotContainer title='Astigmatism' height='20vh'>
-              <Scatter data={ctfData.astigmatism} options={astigmatismPlotOptions} />
+              <Scatter onPointClicked={onGraphClicked} data={ctfData.astigmatism} options={astigmatismPlotOptions} />
             </PlotContainer>
           </GridItem>
           <GridItem minW='100%'>
             <PlotContainer height='20vh' title='Defocus'>
-              <Scatter data={ctfData.defocus} options={defocusPlotOptions} />
+              <Scatter onPointClicked={onGraphClicked} data={ctfData.defocus} options={defocusPlotOptions} />
             </PlotContainer>
           </GridItem>
           <GridItem minW='100%'>
             <PlotContainer height='20vh' title='Resolution'>
-              <Scatter data={ctfData.resolution} options={resolutionOptions} />
+              <Scatter onPointClicked={onGraphClicked} data={ctfData.resolution} options={resolutionOptions} />
             </PlotContainer>
           </GridItem>
         </Grid>

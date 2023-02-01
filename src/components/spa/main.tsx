@@ -68,6 +68,10 @@ const SPA = ({ autoProc, procJob, status, onReprocessingClicked, collapsed }: Sp
     setPage(newPage);
   }, []);
 
+  const handleGraphClicked = useCallback((x: number) => {
+    setPage(x);
+  }, []);
+
   const handleProcessingClicked = useCallback(() => {
     if (onReprocessingClicked) {
       onReprocessingClicked(procJob.processingJobId);
@@ -97,15 +101,16 @@ const SPA = ({ autoProc, procJob, status, onReprocessingClicked, collapsed }: Sp
         {collapsed && (
           <Grid gap={3} bg='diamond.75' p={4}>
             <GridItem>
-              <CTF parentId={autoProc.autoProcProgramId} parentType='autoProc' />
+              <CTF onGraphClicked={handleGraphClicked} parentId={autoProc.autoProcProgramId} parentType='autoProc' />
             </GridItem>
             <Motion
+              currentPage={page}
               onMotionChanged={handlePageChanged}
               onTotalChanged={setTotal}
               parentType='autoProc'
               parentId={autoProc.autoProcProgramId}
             />
-            <ParticlePicking autoProcId={autoProc.autoProcProgramId} page={page} total={total} />
+            <ParticlePicking autoProcId={autoProc.autoProcProgramId} currentPage={page} total={total} />
             <Class2d autoProcId={autoProc.autoProcProgramId} />
           </Grid>
         )}

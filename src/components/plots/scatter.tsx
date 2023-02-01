@@ -21,6 +21,7 @@ export type DotsProps = {
   height?: number;
   options?: ScatterPlotOptions;
   data: BasePoint[];
+  onPointClicked?: (x: number, y: number) => void;
 };
 
 const defaultPlotOptions: ScatterPlotOptions = {
@@ -40,6 +41,7 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
     tooltipLeft,
     tooltipTop,
     options,
+    onPointClicked,
     data,
   }: DotsProps & WithTooltipProvidedProps<BasePoint>) => {
     const svgRef = useRef<SVGSVGElement>(null);
@@ -115,13 +117,30 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
       [width, height, xScale, yScale, data]
     );
 
-    const handleMouseMove = useCallback(
+    const findClosest = useCallback(
       (event: React.MouseEvent | React.TouchEvent) => {
-        clearTimeout(2);
         if (!svgRef.current) return;
         const point = localPoint(svgRef.current, event);
         if (!point) return;
-        const closest = voronoiLayout.find(point.x - defaultMargin.left, point.y - defaultMargin.top, neighborRadius);
+        return voronoiLayout.find(point.x - defaultMargin.left, point.y - defaultMargin.top, neighborRadius);
+      },
+      [voronoiLayout]
+    );
+
+    const handleMouseClick = useCallback(
+      (event: React.MouseEvent) => {
+        const closest = findClosest(event);
+        if (closest && onPointClicked) {
+          onPointClicked(x(closest.data), y(closest.data));
+        }
+      },
+      [findClosest, onPointClicked]
+    );
+
+    const handleMouseMove = useCallback(
+      (event: React.MouseEvent | React.TouchEvent) => {
+        clearTimeout(2);
+        const closest = findClosest(event);
         if (closest) {
           showTooltip({
             tooltipLeft: xScale(x(closest.data)),
@@ -130,7 +149,7 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
           });
         }
       },
-      [xScale, yScale, showTooltip, voronoiLayout, neighborRadius]
+      [xScale, yScale, showTooltip, findClosest]
     );
 
     const handleMouseLeave = useCallback(() => {
@@ -164,6 +183,7 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
             onMouseLeave={handleMouseLeave}
             onTouchMove={handleMouseMove}
             onTouchEnd={handleMouseLeave}
+            onClick={handleMouseClick}
           />
           <Group pointerEvents='none' left={defaultMargin.left} top={defaultMargin.top}>
             <GridRows scale={yScale} width={xMax} height={yMax} stroke='#e0e0e0' />

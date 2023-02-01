@@ -7,7 +7,7 @@ interface TableProps {
   /** Table headers and mapping to record keys */
   headers: { key: string; label: string }[];
   /** Callback when row is clicked */
-  onClick?: (item: Record<string, any>) => void;
+  onClick?: (item: Record<string, any>, index: number) => void;
   /** Label to be used when displaying "no data available" message */
   label?: string;
 }
@@ -18,7 +18,8 @@ const TableView = ({ data, headers, onClick, label = "data" }: TableProps) => {
       if (onClick && data) {
         const target = (row.target as HTMLTableCellElement).dataset.id;
         if (target) {
-          onClick(data[parseInt(target)]);
+          const intTarget = parseInt(target);
+          onClick(data[intTarget], intTarget);
         }
       }
     },
