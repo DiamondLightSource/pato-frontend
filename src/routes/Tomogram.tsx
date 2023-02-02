@@ -11,6 +11,7 @@ import {
   Icon,
   Button,
   Tooltip,
+  Accordion,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
@@ -24,6 +25,10 @@ import { CollectionLoader } from "../components/collectionLoading";
 import { buildEndpoint } from "../utils/api/endpoint";
 import { collectionConfig } from "../utils/config/parse";
 import { MdList } from "react-icons/md";
+import { Motion } from "../components/motion/motion";
+import { components } from "../schema/main";
+
+type TomogramResponse = components["schemas"]["Tomogram"];
 
 const tomogramConfig: DataConfig = {
   include: [
@@ -40,10 +45,11 @@ const tomogramConfig: DataConfig = {
 const TomogramPage = () => {
   const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [tomogram, setTomogram] = useState<TomogramData | null | undefined>();
+  const [tomograms, setTomograms] = useState<TomogramData[] | null | undefined>();
   const [collectionData, setCollectionData] = useState<CollectionData>({ info: [], comments: "" });
   const [pageCount, setPageCount] = useState(1);
   const [onlyProcessed, setOnlyProcessed] = useState(searchParams.get("onlyProcessed") === "true");
+  const [accordionIndex, setAccordionIndex] = useState<number | number[]>(0);
   const navigate = useNavigate();
 
   const updateCollection = useCallback(
@@ -63,7 +69,7 @@ const TomogramPage = () => {
 
     /** There should be 3 possible states: a null tomogram (for when it is still being processed),
     /* and undefined tomogram (waiting for information client-side) and a valid tomogram */
-    setTomogram(undefined);
+    setTomograms(undefined);
     client
       .safe_get(
         `${buildEndpoint(
@@ -81,11 +87,12 @@ const TomogramPage = () => {
           }
           setCollectionData(parseData(response.data.items[0], collectionConfig) as CollectionData);
 
-          client.safe_get(`dataCollections/${response.data.items[0].dataCollectionId}/tomogram`).then((response) => {
+          client.safe_get(`dataCollections/${response.data.items[0].dataCollectionId}/tomograms`).then((response) => {
             if (response.status !== 404 && response.data) {
-              setTomogram(parseData(response.data, tomogramConfig) as TomogramData);
+              const items = response.data.items as TomogramResponse[];
+              setTomograms(items.map((item) => parseData(item, tomogramConfig) as TomogramData));
             } else {
-              setTomogram(null);
+              setTomograms(null);
             }
           });
         }
@@ -126,17 +133,21 @@ const TomogramPage = () => {
         </VStack>
       </HStack>
       <InfoGroup py={2} cols={3} info={collectionData.info}></InfoGroup>
-      <Divider />
-      {collectionData.dataCollectionId === undefined ? (
-        <CollectionLoader />
+      <Divider mb={3} />
+      {tomograms ? (
+        <Accordion onChange={setAccordionIndex} index={accordionIndex} allowToggle>
+          {tomograms.map((tomogram, i) => (
+            <Tomogram key={tomogram.tomogramId} tomogram={tomogram} active={accordionIndex === i} title='test' />
+          ))}
+        </Accordion>
       ) : (
-        tomogram !== undefined && (
-          <Tomogram
-            title={collectionData.comments ?? "No Title Provided"}
-            tomogram={tomogram}
-            collection={collectionData.dataCollectionId}
-          />
-        )
+        <span>
+          {collectionData.dataCollectionId ? (
+            <Motion parentType={"dataCollections"} parentId={collectionData.dataCollectionId} />
+          ) : (
+            <CollectionLoader />
+          )}
+        </span>
       )}
     </Box>
   );

@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import type { AppStore, RootState } from "../store/store";
 import uiReducer from "../features/uiSlice";
 import { BrowserRouter } from "react-router-dom";
+import { Accordion } from "@chakra-ui/react";
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
   preloadedState?: PreloadedState<RootState>;
@@ -37,4 +38,8 @@ const renderWithProviders = (
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 };
 
-export { renderWithProviders };
+const renderAccordionItem = (ui: React.ReactElement) => {
+  return renderWithProviders(<Accordion>{ui}</Accordion>);
+};
+
+export { renderWithProviders, renderAccordionItem };

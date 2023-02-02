@@ -189,7 +189,7 @@ const SpaPage = () => {
                   /* isExpanded is not to be trusted */
                   <SPA
                     key={i}
-                    collapsed={accordionIndex === i}
+                    active={accordionIndex === i}
                     autoProc={job.AutoProcProgram}
                     procJob={job.ProcessingJob}
                     status={job.status}

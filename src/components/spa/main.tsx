@@ -31,7 +31,7 @@ interface SpaProps {
   procJob: ProcessingJobSchema;
   status: string;
   onReprocessingClicked?: (procJobId: number) => void;
-  collapsed: boolean;
+  active: boolean;
 }
 
 interface ProcTitleInfoProps {
@@ -60,7 +60,7 @@ const jobStatusColour: Record<string, string> = {
   Running: "orange",
 };
 
-const SPA = ({ autoProc, procJob, status, onReprocessingClicked, collapsed }: SpaProps) => {
+const SPA = ({ autoProc, procJob, status, onReprocessingClicked, active }: SpaProps) => {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState<number | undefined>();
 
@@ -98,7 +98,7 @@ const SPA = ({ autoProc, procJob, status, onReprocessingClicked, collapsed }: Sp
         </HStack>
       </h2>
       <AccordionPanel p={0}>
-        {collapsed && (
+        {active && (
           <Grid gap={3} bg='diamond.75' p={4}>
             <GridItem>
               <CTF onGraphClicked={handleGraphClicked} parentId={autoProc.autoProcProgramId} parentType='autoProc' />
