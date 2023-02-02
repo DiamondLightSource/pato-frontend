@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v0.4.0 (--/02/2023)
+++++++++++
+
+**Changed**
+
+- Dose weight removed from motion correction
+
+++++++++++
 v0.3.1 (01/02/2023)
 ++++++++++
 
