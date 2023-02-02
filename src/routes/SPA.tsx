@@ -124,7 +124,7 @@ const SpaPage = () => {
   );
 
   useEffect(() => {
-    document.title = `eBIC » SPA » ${params.groupId}`;
+    document.title = `PATo » SPA » ${params.groupId}`;
 
     client.safe_get(buildEndpoint("dataCollections", params, 1, 1)).then((response) => {
       if (response.data.items) {

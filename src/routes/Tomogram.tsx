@@ -65,7 +65,7 @@ const TomogramPage = () => {
   }, [onlyProcessed, setSearchParams]);
 
   useEffect(() => {
-    document.title = `eBIC » Tomograms » ${params.collectionIndex}`;
+    document.title = `PATo » Tomograms » ${params.collectionIndex}`;
 
     /** There should be 3 possible states: a null tomogram (for when it is still being processed),
     /* and undefined tomogram (waiting for information client-side) and a valid tomogram */

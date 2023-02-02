@@ -16,7 +16,7 @@ const Calendar = (): JSX.Element => {
   };
 
   useEffect(() => {
-    document.title = "eBIC » Calendar";
+    document.title = "PATo » Calendar";
     client.safe_get("sessions?minDate=2022-10-01&maxDate=2022-10-31").then((response) => {
       const events = response.data.map((event: Record<string, any>) => ({
         id: event.sessionId,

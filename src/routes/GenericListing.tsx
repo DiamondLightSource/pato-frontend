@@ -44,7 +44,7 @@ const GenericListing = ({ headers, endpoint, heading, makePathCallback, processD
   );
 
   useEffect(() => {
-    document.title = `eBIC » ${heading}`;
+    document.title = `PATo » ${heading}`;
   }, [heading]);
 
   useEffect(() => {

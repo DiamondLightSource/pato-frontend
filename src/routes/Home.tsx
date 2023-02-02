@@ -37,16 +37,16 @@ const Home = () => {
 
   return (
     <div className='rootContainer'>
-      <title>eBIC</title>
+      <title>PATo</title>
       <Box mt={-8} mx='-10vw' bg='diamond.50' flex='1 0 auto'>
         <Box w='100%' overflow='hidden'>
           <VStack className='homeRoot'>
             <VStack bg='diamond.700' justifyContent='start' alignItems='start'>
               <Heading size='xl' color='diamond.50'>
-                eBIC Experiment Data Display
+                PATo Visualisation Interface
               </Heading>
               <Heading pt='2vh' color='diamond.50' fontWeight='200' size='md'>
-                Single Particle Analysis and Tomography Data Visualisation Tool
+                (Single) Particle Analysis and Tomography Data Visualisation Interface
               </Heading>
               <HStack>
                 <Link href='https://gitlab.diamond.ac.uk/lims/ebic-frontend'>
