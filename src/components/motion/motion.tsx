@@ -67,7 +67,6 @@ const motionConfig = {
     { name: "lastFrame" },
     { name: "refinedMagnification" },
     { name: "dosePerFrame", unit: "e⁻/Å²" },
-    { name: "doseWeight" },
     { name: "totalMotion", unit: "Å" },
     { name: "averageMotionPerFrame", label: "Average Motion/Frame", unit: "Å" },
     { name: "imageNumber" },
