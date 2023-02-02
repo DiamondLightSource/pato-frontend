@@ -9,6 +9,7 @@ v0.4.0 (--/02/2023)
 **Changed**
 
 - Dose weight removed from motion correction
+- Multiple tomograms are now allowed per data collection
 
 ++++++++++
 v0.3.1 (01/02/2023)

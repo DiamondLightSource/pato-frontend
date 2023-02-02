@@ -124,7 +124,7 @@ const SpaPage = () => {
   );
 
   useEffect(() => {
-    document.title = `eBIC » SPA » ${params.groupId}`;
+    document.title = `PATo » SPA » ${params.groupId}`;
 
     client.safe_get(buildEndpoint("dataCollections", params, 1, 1)).then((response) => {
       if (response.data.items) {
@@ -189,7 +189,7 @@ const SpaPage = () => {
                   /* isExpanded is not to be trusted */
                   <SPA
                     key={i}
-                    collapsed={accordionIndex === i}
+                    active={accordionIndex === i}
                     autoProc={job.AutoProcProgram}
                     procJob={job.ProcessingJob}
                     status={job.status}

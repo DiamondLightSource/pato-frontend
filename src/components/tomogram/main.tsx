@@ -1,14 +1,10 @@
 import {
-  Spacer,
   HStack,
   Divider,
-  Icon,
   Grid,
   Button,
   Heading,
-  Box,
   GridItem,
-  Tooltip,
   useDisclosure,
   ModalContent,
   Modal,
@@ -16,13 +12,16 @@ import {
   ModalOverlay,
   ModalHeader,
   ModalBody,
+  AccordionItem,
+  AccordionPanel,
+  AccordionButton,
+  AccordionIcon,
 } from "@chakra-ui/react";
 import { ImageCard } from "../visualisation/image";
 import { InfoGroup } from "../visualisation/infogroup";
 import { PlotContainer } from "../visualisation/plotContainer";
 import { Motion } from "../motion/motion";
 import { useCallback, useEffect, useState } from "react";
-import { MdRedo } from "react-icons/md";
 import { client } from "../../utils/api/client";
 import { TomogramData, Info, BasePoint } from "../../schema/interfaces";
 import { CTF } from "../ctf/ctf";
@@ -36,14 +35,13 @@ import { setImage } from "../../utils/api/response";
 
 interface TomogramProps {
   /* Tomogram data */
-  tomogram: TomogramData | null;
+  tomogram: TomogramData;
   /* Tomogram title (generally the data collection comment) */
-  title: string | null;
-  /* Parent data collection ID*/
-  collection: number;
+  title: string;
+  active?: boolean;
 }
 
-const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
+const Tomogram = ({ tomogram, title, active = true }: TomogramProps) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [sliceImage, setSliceImage] = useState<string>();
   const [xyProjImage, setXyProjImage] = useState<string>();
@@ -83,20 +81,16 @@ const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
   }, [tomogram]);
 
   return (
-    <Box bg='diamond.75'>
-      <HStack w='100%' py={1.5} px={3} bg='diamond.100'>
-        <h2>{title ?? "No Title Provided"}</h2>
-        <Spacer />
-        <Tooltip label='Run Reprocessing'>
-          <Button isDisabled>
-            <Icon as={MdRedo} />
-          </Button>
-        </Tooltip>
-      </HStack>
-      <Box border='1px solid' p={4} borderColor='diamond.100'>
-        {tomogram === null ? (
-          <Motion parentType={"dataCollections"} parentId={collection} />
-        ) : (
+    <AccordionItem>
+      <h2>
+        <HStack py={1.5} px={3} w='100%' bg='diamond.100'>
+          <AccordionButton width='auto'>
+            <AccordionIcon />
+          </AccordionButton>
+        </HStack>
+      </h2>
+      {active && (
+        <AccordionPanel pt={4}>
           <Grid gap={3}>
             <GridItem>
               <Motion onMotionChanged={handleMotionChange} parentType='tomograms' parentId={tomogram.tomogramId} />
@@ -131,19 +125,19 @@ const Tomogram = ({ tomogram, title, collection }: TomogramProps) => {
               <CTF parentId={tomogram.tomogramId} parentType='tomograms' />
             </GridItem>
           </Grid>
-        )}
-      </Box>
-      <Modal size='xl' isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent minW={{ base: "95vh", md: "65vh" }}>
-          <ModalHeader paddingBottom={0}>{title}</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody h={{ base: "90vh", md: "60vh" }}>
-            {isOpen && tomogram && <APNGViewer src={`tomograms/${tomogram.tomogramId}/movie`} />}
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    </Box>
+          <Modal size='xl' isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent minW={{ base: "95vh", md: "65vh" }}>
+              <ModalHeader paddingBottom={0}>{title}</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody h={{ base: "90vh", md: "60vh" }}>
+                {isOpen && <APNGViewer src={`tomograms/${tomogram.tomogramId}/movie`} />}
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+        </AccordionPanel>
+      )}
+    </AccordionItem>
   );
 };
 
