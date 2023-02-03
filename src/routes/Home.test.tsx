@@ -1,8 +1,9 @@
 import { screen } from "@testing-library/react";
 import { rest } from "msw";
-import { renderWithProviders } from "../utils/test-utils";
+import { renderWithRoute } from "../utils/test-utils";
 import { server } from "../mocks/server";
 import { Home } from "./Home";
+import { getSessionData } from "../utils/loaders/listings";
 
 describe("Home", () => {
   it("should display message and button if not logged in", async () => {
@@ -12,7 +13,7 @@ describe("Home", () => {
       })
     );
 
-    renderWithProviders(<Home />);
+    renderWithRoute(<Home />, getSessionData);
 
     await screen.findByText("You must be logged in to view recent sessions");
   });
@@ -39,7 +40,7 @@ describe("Home", () => {
       })
     );
 
-    renderWithProviders(<Home />);
+    renderWithRoute(<Home />, getSessionData);
 
     await screen.findByText("cm31111-1");
     screen.getByText("m01");
@@ -68,7 +69,7 @@ describe("Home", () => {
       })
     );
 
-    renderWithProviders(<Home />);
+    renderWithRoute(<Home />, getSessionData);
 
     await screen.findByText("cm31111-1");
     screen.getByText("m01 - Dr. John Doe");
@@ -94,7 +95,7 @@ describe("Home", () => {
       })
     );
 
-    renderWithProviders(<Home />);
+    renderWithRoute(<Home />, getSessionData);
 
     await screen.findByText("cm31111-?");
   });

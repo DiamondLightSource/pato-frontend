@@ -12,28 +12,15 @@ import {
   StatNumber,
   VStack,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 import { MdLogin } from "react-icons/md";
 
-import { Link as LinkRouter } from "react-router-dom";
+import { Link as LinkRouter, useLoaderData } from "react-router-dom";
 import { components } from "../schema/main";
-import { client } from "../utils/api/client";
 
 type Session = components["schemas"]["VisitOut"];
 
 const Home = () => {
-  const [sessions, setSessions] = useState<Session[] | null>();
-
-  useEffect(() => {
-    client.get("sessions?limit=5&page=0&search=m").then((response) => {
-      if (response.status !== 200) {
-        setSessions(null);
-        return;
-      }
-
-      setSessions(response.data.items);
-    });
-  }, []);
+  const sessions = useLoaderData() as Session[] | null;
 
   return (
     <div className='rootContainer'>

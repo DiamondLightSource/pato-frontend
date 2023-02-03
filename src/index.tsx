@@ -20,7 +20,8 @@ import {
   proposalHeaders,
   sessionHeaders,
 } from "./utils/config/table";
-import { client } from "./utils/api/client";
+import { getUser } from "./utils/loaders/user";
+import { getListingData, getSessionData } from "./utils/loaders/listings";
 const { ToastContainer } = createStandaloneToast();
 
 const container = document.getElementById("root")!;
@@ -64,44 +65,28 @@ const processSessionData = (data: Record<string, string | number>[]) =>
     return newItem;
   });
 
-const userLoader = async (request: Request) => {
-  const splitUrl = window.location.href.split("access_token=");
-
-  if (splitUrl.length === 2) {
-    sessionStorage.setItem("token", splitUrl[1].split("&token_type")[0].toString());
-    window.history.replaceState({}, document.title, window.location.href.split("#")[0]);
-  }
-
-  const user = await client.get("user");
-
-  if (user.status === 200) {
-    return { fedid: user.data.fedid, name: user.data.givenName };
-  }
-
-  return null;
-};
-
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
     errorElement: <Error />,
-    loader: async ({ request }) => userLoader(request),
+    loader: async ({ request }) => getUser(request),
     children: [
       {
         path: "/",
         element: <Home />,
+        loader: getSessionData,
       },
       {
         path: "/proposals",
         element: (
           <GenericListing
             headers={proposalHeaders}
-            endpoint='proposals'
             heading='Proposals'
             makePathCallback={(item) => [item.proposalCode, item.proposalNumber].join("")}
           />
         ),
+        loader: ({ request, params }) => getListingData(request, params, "proposals"),
       },
       {
         path: "/calendar",
@@ -116,12 +101,11 @@ const router = createBrowserRouter([
         element: (
           <GenericListing
             headers={sessionHeaders}
-            endpoint='sessions'
             heading='Sessions'
             makePathCallback={(item) => item.visit_number.toString()}
-            processData={processSessionData}
           />
         ),
+        loader: ({ request, params }) => getListingData(request, params, "sessions", processSessionData),
       },
       {
         path: "/proposals/:propid/sessions/:visitId",
@@ -132,22 +116,22 @@ const router = createBrowserRouter([
         element: (
           <GenericListing
             headers={groupsHeaders}
-            endpoint='dataGroups'
             heading='Data Collection Groups'
             makePathCallback={handleGroupClicked}
           />
         ),
+        loader: ({ request, params }) => getListingData(request, params, "dataGroups"),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/collections",
         element: (
           <GenericListing
             headers={collectionHeaders}
-            endpoint='dataCollections'
             heading='Data Collections'
             makePathCallback={handleCollectionClicked}
           />
         ),
+        loader: ({ request, params }) => getListingData(request, params, "dataCollections"),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/tomograms/",

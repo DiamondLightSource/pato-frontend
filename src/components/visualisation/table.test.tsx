@@ -8,11 +8,6 @@ describe("GenericListing", () => {
     expect(screen.getByText("No data found")).toBeInTheDocument();
   });
 
-  it("should display skeleton when loading", () => {
-    renderWithProviders(<Table headers={[{ key: "key1", label: "label1" }]} data={undefined} />);
-    expect(screen.queryByText("No data found")).not.toBeInTheDocument();
-  });
-
   it("should render header labels", () => {
     renderWithProviders(
       <Table

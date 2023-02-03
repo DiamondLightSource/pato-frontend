@@ -1,23 +1,24 @@
 import { fireEvent, screen } from "@testing-library/react";
-import { renderWithProviders } from "../utils/test-utils";
+import { getListingData } from "../utils/loaders/listings";
+import { renderWithRoute } from "../utils/test-utils";
 import { GenericListing } from "./GenericListing";
 
 describe("GenericListing", () => {
   it("should include search in request", async () => {
-    renderWithProviders(
+    renderWithRoute(
       <GenericListing
         heading='Test'
-        endpoint='proposals'
         makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
           { key: "key2", label: "label2" },
           { key: "key3", label: "label3" },
         ]}
-      />
+      />,
+      ({ request, params }) => getListingData(request, params, "proposals")
     );
 
-    const search = screen.getByPlaceholderText("Search...");
+    const search = await screen.findByPlaceholderText("Search...");
     fireEvent.change(search, { target: { value: "cm3111" } });
     fireEvent.blur(search);
 
@@ -25,17 +26,17 @@ describe("GenericListing", () => {
   });
 
   it("should perform request again when page changes", async () => {
-    renderWithProviders(
+    renderWithRoute(
       <GenericListing
         heading='Test'
-        endpoint='proposals'
         makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
           { key: "key2", label: "label2" },
           { key: "key3", label: "label3" },
         ]}
-      />
+      />,
+      ({ request, params }) => getListingData(request, params, "proposals")
     );
 
     const nextPage = await screen.findByRole("button", { name: "4" });
@@ -45,37 +46,38 @@ describe("GenericListing", () => {
   });
 
   it("should set data to null when invalid response is provided", async () => {
-    renderWithProviders(
+    renderWithRoute(
       <GenericListing
         heading='data'
-        endpoint='invalidEndpoint'
         makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
           { key: "key2", label: "label2" },
           { key: "key3", label: "label3" },
         ]}
-      />
+      />,
+      () => ({ data: null, total: 0 })
     );
 
     await screen.findByText("No data found");
   });
 
   it("should set page to 1 when user performs search", async () => {
-    renderWithProviders(
+    renderWithRoute(
       <GenericListing
         heading='data'
-        endpoint='proposals'
         makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
           { key: "key2", label: "label2" },
           { key: "key3", label: "label3" },
         ]}
-      />
+      />,
+      ({ request, params }) => getListingData(request, params, "proposals")
     );
 
-    const search = screen.getByPlaceholderText("Search...");
+    const search = await screen.findByPlaceholderText("Search...");
+    fireEvent.click(screen.getByLabelText("Next Page"));
     fireEvent.change(search, { target: { value: "cm3111" } });
     fireEvent.blur(search);
 
@@ -83,18 +85,20 @@ describe("GenericListing", () => {
   });
 
   it("should run data through callback function if processData function is provided", async () => {
-    renderWithProviders(
+    renderWithRoute(
       <GenericListing
         heading='data'
-        endpoint='proposals'
-        processData={(data) => data.map(() => ({ key1: "AAAA", key2: "BBBB", key3: "CCCC" }))}
         makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
           { key: "key2", label: "label2" },
           { key: "key3", label: "label3" },
         ]}
-      />
+      />,
+      ({ request, params }) =>
+        getListingData(request, params, "proposals", (data) =>
+          data.map(() => ({ key1: "AAAA", key2: "BBBB", key3: "CCCC" }))
+        )
     );
 
     expect((await screen.findAllByText("AAAA")).length).toBe(3);
@@ -102,17 +106,17 @@ describe("GenericListing", () => {
 
   it("should call navigation callback when row is clicked", async () => {
     const mockCallback = jest.fn();
-    renderWithProviders(
+    renderWithRoute(
       <GenericListing
         heading='data'
-        endpoint='proposals'
         makePathCallback={mockCallback}
         headers={[
           { key: "key1", label: "label1" },
           { key: "key2", label: "label2" },
           { key: "key3", label: "label3" },
         ]}
-      />
+      />,
+      ({ request, params }) => getListingData(request, params, "proposals")
     );
 
     const row = await screen.findByText("value1");
