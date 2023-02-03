@@ -6,10 +6,15 @@ Changelog
 v0.4.0 (--/02/2023)
 ++++++++++
 
+**Added**
+
+- "Current Sessions" section to homepage
+
 **Changed**
 
 - Dose weight removed from motion correction
 - Multiple tomograms are now allowed per data collection
+- Session list now displays microscope ID alongside human-readable name
 
 ++++++++++
 v0.3.1 (01/02/2023)

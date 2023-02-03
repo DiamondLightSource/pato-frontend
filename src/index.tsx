@@ -61,7 +61,7 @@ const processSessionData = (data: Record<string, string | number>[]) =>
   data.map((item: Record<string, string | number>) => {
     let newItem = Object.assign({}, item);
     const beamLineName = item.beamLineName as string;
-    newItem["microscopeName"] = beamlineToMicroscope[beamLineName] ?? beamLineName;
+    newItem["microscopeName"] = `${beamlineToMicroscope[beamLineName]} (${beamLineName})` ?? beamLineName;
     return newItem;
   });
 

@@ -9,7 +9,7 @@ describe("Home", () => {
   it("should display message and button if not logged in", async () => {
     server.use(
       rest.get("http://localhost/sessions", (req, res, ctx) => {
-        return res.once(ctx.status(401), ctx.delay(0));
+        return res(ctx.status(401), ctx.delay(0));
       })
     );
 
@@ -21,7 +21,7 @@ describe("Home", () => {
   it("should render cards with data when possible", async () => {
     server.use(
       rest.get("http://localhost/sessions", (req, res, ctx) => {
-        return res.once(
+        return res(
           ctx.status(200),
           ctx.delay(0),
           ctx.json({
@@ -42,14 +42,14 @@ describe("Home", () => {
 
     renderWithRoute(<Home />, getSessionData);
 
-    await screen.findByText("cm31111-1");
-    screen.getByText("m01");
+    await screen.findAllByText(/cm31111-1/i);
+    expect(screen.getAllByText("m01").length).toBe(2);
   });
 
   it("should render beamline operator name alongside hyphen if available", async () => {
     server.use(
       rest.get("http://localhost/sessions", (req, res, ctx) => {
-        return res.once(
+        return res(
           ctx.status(200),
           ctx.delay(0),
           ctx.json({
@@ -71,14 +71,14 @@ describe("Home", () => {
 
     renderWithRoute(<Home />, getSessionData);
 
-    await screen.findByText("cm31111-1");
-    screen.getByText("m01 - Dr. John Doe");
+    await screen.findAllByText(/cm31111-1/i);
+    expect(screen.getAllByText("m01 - Dr. John Doe").length).toBe(2);
   });
 
   it("should render visit number as ? when not present", async () => {
     server.use(
       rest.get("http://localhost/sessions", (req, res, ctx) => {
-        return res.once(
+        return res(
           ctx.status(200),
           ctx.delay(0),
           ctx.json({
@@ -97,6 +97,25 @@ describe("Home", () => {
 
     renderWithRoute(<Home />, getSessionData);
 
-    await screen.findByText("cm31111-?");
+    await screen.findAllByText(/cm31111-?/i);
+  });
+
+  it("should display message when no sessions are available", async () => {
+    server.use(
+      rest.get("http://localhost/sessions", (req, res, ctx) => {
+        return res(
+          ctx.status(200),
+          ctx.delay(0),
+          ctx.json({
+            items: [],
+          })
+        );
+      })
+    );
+
+    renderWithRoute(<Home />, getSessionData);
+
+    await screen.findByText("No Recent Sessions Found");
+    await screen.findByText("No Current Sessions Found");
   });
 });

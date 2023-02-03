@@ -30,12 +30,18 @@ const getListingData = async (
 };
 
 const getSessionData = async () => {
-  const response = await client.get("sessions?limit=5&page=0&search=m");
-  if (response.status === 200) {
-    return response.data.items;
+  const currentDate = new Date().toISOString();
+  const responses = await Promise.all(
+    [
+      "sessions?limit=5&page=0&search=m",
+      `sessions?limit=5&page=0&search=m&minEndDate=${currentDate}&maxStartDate=${currentDate}`,
+    ].map((url) => client.get(url).then((r) => r))
+  );
+  if (responses.some((r) => r.status === 401)) {
+    return null;
   }
 
-  return null;
+  return { recent: responses[0].data.items, current: responses[1].data.items };
 };
 
 export { getListingData, getSessionData };

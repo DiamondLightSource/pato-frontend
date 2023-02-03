@@ -3,6 +3,7 @@ import {
   Button,
   Divider,
   Grid,
+  GridItem,
   Heading,
   HStack,
   Link,
@@ -19,8 +20,67 @@ import { components } from "../schema/main";
 
 type Session = components["schemas"]["VisitOut"];
 
+interface SessionRowProps {
+  sessions: Session[];
+  title: string;
+}
+
+const SessionRow = ({ sessions, title }: SessionRowProps) => (
+  <VStack w='100%' spacing={0}>
+    <Heading textAlign='left' w='100%' size='lg'>
+      {title}
+    </Heading>
+    <Divider borderColor='diamond.300' />
+    <Grid w='100%' py={2} marginBottom={6} templateColumns='repeat(5, 1fr)' gap={2}>
+      {sessions && sessions.length > 0 ? (
+        sessions.map((session) => (
+          <Link
+            key={session.sessionId}
+            _hover={{ textDecor: "none" }}
+            as={LinkRouter}
+            to={`/proposals/${session.parentProposal}/sessions/${session.visit_number ?? 0}`}
+          >
+            <Stat
+              _hover={{
+                borderColor: "diamond.400",
+              }}
+              bg='diamond.50'
+              overflow='hidden'
+              w='calc(100%)'
+              p={2}
+              border='1px solid grey'
+              borderRadius={5}
+            >
+              <StatLabel whiteSpace='nowrap' textOverflow='ellipsis' overflow='hidden'>
+                {session.beamLineName} {session.beamLineOperator && "-"} {session.beamLineOperator}
+              </StatLabel>
+              <StatNumber>
+                {session.parentProposal}-{session.visit_number ?? "?"}
+              </StatNumber>
+              <StatHelpText mb='0'>
+                <b>Start: </b>
+                {session.startDate}{" "}
+              </StatHelpText>
+              <StatHelpText mb='0'>
+                <b>End: </b>
+                {session.endDate}
+              </StatHelpText>
+            </Stat>
+          </Link>
+        ))
+      ) : (
+        <GridItem colSpan={5}>
+          <Heading textAlign='center' py={4} variant='notFound'>
+            No {title} Found
+          </Heading>
+        </GridItem>
+      )}
+    </Grid>
+  </VStack>
+);
+
 const Home = () => {
-  const sessions = useLoaderData() as Session[] | null;
+  const sessions = useLoaderData() as { recent: Session[]; current: Session[] } | null;
 
   return (
     <div className='rootContainer'>
@@ -46,46 +106,11 @@ const Home = () => {
             </VStack>
 
             <VStack mt='0 !important' w='100%' px='10vw' justifyContent='start' alignItems='start'>
-              <Heading size='lg'>Recent Sessions</Heading>
-              <Divider borderColor='diamond.300' />
               {sessions ? (
-                <Grid w='100%' py={2} marginBottom={6} templateColumns='repeat(5, 1fr)' gap={2}>
-                  {sessions.map((session) => (
-                    <Link
-                      key={session.sessionId}
-                      _hover={{ textDecor: "none" }}
-                      as={LinkRouter}
-                      to={`/proposals/${session.parentProposal}/sessions/${session.visit_number ?? 0}`}
-                    >
-                      <Stat
-                        _hover={{
-                          borderColor: "diamond.400",
-                        }}
-                        bg='diamond.50'
-                        overflow='hidden'
-                        w='calc(100%)'
-                        p={2}
-                        border='1px solid grey'
-                        borderRadius={5}
-                      >
-                        <StatLabel whiteSpace='nowrap' textOverflow='ellipsis' overflow='hidden'>
-                          {session.beamLineName} {session.beamLineOperator && "-"} {session.beamLineOperator}
-                        </StatLabel>
-                        <StatNumber>
-                          {session.parentProposal}-{session.visit_number ?? "?"}
-                        </StatNumber>
-                        <StatHelpText mb='0'>
-                          <b>Start: </b>
-                          {session.startDate}{" "}
-                        </StatHelpText>
-                        <StatHelpText mb='0'>
-                          <b>End: </b>
-                          {session.endDate}
-                        </StatHelpText>
-                      </Stat>
-                    </Link>
-                  ))}
-                </Grid>
+                <VStack w='100%' spacing={5}>
+                  <SessionRow title='Recent Sessions' sessions={sessions.recent} />
+                  <SessionRow title='Current Sessions' sessions={sessions.current} />
+                </VStack>
               ) : (
                 <VStack w='100%'>
                   <Heading w='100%' py={4} variant='notFound'>
