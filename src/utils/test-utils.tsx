@@ -38,8 +38,8 @@ const renderWithProviders = (
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 };
 
-const renderAccordionItem = (ui: React.ReactElement) => {
+const renderWithAccordion = (ui: React.ReactElement) => {
   return renderWithProviders(<Accordion>{ui}</Accordion>);
 };
 
-export { renderWithProviders, renderAccordionItem };
+export { renderWithProviders, renderWithAccordion };

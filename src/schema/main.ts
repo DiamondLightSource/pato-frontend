@@ -83,19 +83,12 @@ export interface paths {
      */
     get: operations["get_relative_ice_thickness_movies__movieId__iceThickness_get"];
   };
-  "/dataCollections": {
+  "/dataCollections/{collectionId}/tomograms": {
     /**
-     * Get Collections 
-     * @description List collections belonging to a data collection group
-     */
-    get: operations["get_collections_dataCollections_get"];
-  };
-  "/dataCollections/{collectionId}/tomogram": {
-    /**
-     * Get Tomogram 
+     * Get Tomograms 
      * @description Get tomogram that belongs to the collection
      */
-    get: operations["get_tomogram_dataCollections__collectionId__tomogram_get"];
+    get: operations["get_tomograms_dataCollections__collectionId__tomograms_get"];
   };
   "/dataCollections/{collectionId}/processingJobs": {
     /**
@@ -111,6 +104,13 @@ export interface paths {
      */
     get: operations["get_motion_correction_dataCollections__collectionId__motion_get"];
   };
+  "/dataCollections/{collectionId}/iceThickness": {
+    /**
+     * Get Ice Histogram 
+     * @description Get relative ice thickness histogram
+     */
+    get: operations["get_ice_histogram_dataCollections__collectionId__iceThickness_get"];
+  };
   "/dataGroups": {
     /**
      * Get Collection Groups 
@@ -118,12 +118,26 @@ export interface paths {
      */
     get: operations["get_collection_groups_dataGroups_get"];
   };
+  "/dataGroups/{groupId}/dataCollections": {
+    /**
+     * Get Collections 
+     * @description List collections belonging to a data collection group
+     */
+    get: operations["get_collections_dataGroups__groupId__dataCollections_get"];
+  };
   "/proposals": {
     /**
      * Get Proposals 
      * @description List proposals
      */
     get: operations["get_proposals_proposals_get"];
+  };
+  "/autoProc/{autoProcId}/tomogram": {
+    /**
+     * Get Tomogram 
+     * @description Get tomogram
+     */
+    get: operations["get_tomogram_autoProc__autoProcId__tomogram_get"];
   };
   "/autoProc/{autoProcId}/motion": {
     /**
@@ -167,6 +181,13 @@ export interface paths {
      * @description Get class image
      */
     get: operations["get_particle_picker_image_autoProc__autoProcId__particlePicker__particlePickerId__image_get"];
+  };
+  "/autoProc/{autoProcId}/iceThickness": {
+    /**
+     * Get Ice Histogram 
+     * @description Get relative ice thickness histogram
+     */
+    get: operations["get_ice_histogram_autoProc__autoProcId__iceThickness_get"];
   };
 }
 
@@ -367,8 +388,8 @@ export interface components {
       imageSizeY: number;
       /** Experimenttype */
       experimenttype: string;
-      /** Datacollectionnumber */
-      dataCollectionNumber?: number;
+      /** Index */
+      index: number;
       /**
        * Endtime 
        * Format: date-time 
@@ -752,6 +773,17 @@ export interface components {
       /** Limit */
       limit: number;
     };
+    /** Paged[TomogramOut] */
+    Paged_TomogramOut_: {
+      /** Items */
+      items: (components["schemas"]["TomogramOut"])[];
+      /** Total */
+      total: number;
+      /** Page */
+      page: number;
+      /** Limit */
+      limit: number;
+    };
     /** Paged[VisitOut] */
     Paged_VisitOut_: {
       /** Items */
@@ -884,8 +916,8 @@ export interface components {
       /** Residualerror */
       residualError?: number;
     };
-    /** Tomogram */
-    Tomogram: {
+    /** TomogramOut */
+    TomogramOut: {
       /** Tomogramid */
       tomogramId: number;
       /** Datacollectionid */
@@ -1168,8 +1200,8 @@ export interface operations {
      * @description Get tomogram projection image
      */
     parameters: {
-      query?: {
-        axis?: "xy" | "xz";
+      query: {
+        axis: "xy" | "xz";
       };
       path: {
         tomogramId: number;
@@ -1310,43 +1342,18 @@ export interface operations {
       };
     };
   };
-  get_collections_dataCollections_get: {
+  get_tomograms_dataCollections__collectionId__tomograms_get: {
     /**
-     * Get Collections 
-     * @description List collections belonging to a data collection group
-     */
-    parameters?: {
-        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-        /** @description Number of results to show */
-      query?: {
-        groupId?: number;
-        search?: string;
-        onlyTomograms?: boolean;
-        page?: number;
-        limit?: number;
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Paged_DataCollectionSummaryOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  get_tomogram_dataCollections__collectionId__tomogram_get: {
-    /**
-     * Get Tomogram 
+     * Get Tomograms 
      * @description Get tomogram that belongs to the collection
      */
     parameters: {
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        /** @description Number of results to show */
+      query?: {
+        page?: number;
+        limit?: number;
+      };
       path: {
         collectionId: number;
       };
@@ -1355,7 +1362,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Tomogram"];
+          "application/json": components["schemas"]["Paged_TomogramOut_"];
         };
       };
       /** @description Validation Error */
@@ -1429,6 +1436,34 @@ export interface operations {
       };
     };
   };
+  get_ice_histogram_dataCollections__collectionId__iceThickness_get: {
+    /**
+     * Get Ice Histogram 
+     * @description Get relative ice thickness histogram
+     */
+    parameters: {
+      query?: {
+        dataBin?: number;
+      };
+      path: {
+        collectionId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": Record<string, never>;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   get_collection_groups_dataGroups_get: {
     /**
      * Get Collection Groups 
@@ -1460,6 +1495,39 @@ export interface operations {
       };
     };
   };
+  get_collections_dataGroups__groupId__dataCollections_get: {
+    /**
+     * Get Collections 
+     * @description List collections belonging to a data collection group
+     */
+    parameters: {
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        /** @description Number of results to show */
+      query?: {
+        search?: string;
+        onlyTomograms?: boolean;
+        page?: number;
+        limit?: number;
+      };
+      path: {
+        groupId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Paged_DataCollectionSummaryOut_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   get_proposals_proposals_get: {
     /**
      * Get Proposals 
@@ -1479,6 +1547,37 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Paged_ProposalOut_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_tomogram_autoProc__autoProcId__tomogram_get: {
+    /**
+     * Get Tomogram 
+     * @description Get tomogram
+     */
+    parameters: {
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        /** @description Number of results to show */
+      query?: {
+        page?: number;
+        limit?: number;
+      };
+      path: {
+        autoProcId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Paged_FullMovie_"];
         };
       };
       /** @description Validation Error */
@@ -1646,6 +1745,34 @@ export interface operations {
     responses: {
       /** @description Successful Response */
       200: never;
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_ice_histogram_autoProc__autoProcId__iceThickness_get: {
+    /**
+     * Get Ice Histogram 
+     * @description Get relative ice thickness histogram
+     */
+    parameters: {
+      query?: {
+        dataBin?: number;
+      };
+      path: {
+        autoProcId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": Record<string, never>;
+        };
+      };
       /** @description Validation Error */
       422: {
         content: {

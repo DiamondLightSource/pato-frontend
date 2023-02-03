@@ -24,6 +24,8 @@ import {
   TabList,
   TabPanel,
   TabPanels,
+  Tooltip,
+  Button,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -38,6 +40,7 @@ import { MdFolder } from "react-icons/md";
 import { InfoGroup } from "../components/visualisation/infogroup";
 import { RelionReprocessing } from "../components/spa/relion";
 import { Statistics } from "../components/spa/statistics";
+import { MdRedo } from "react-icons/md";
 
 type ProcessingJob = components["schemas"]["ProcessingJobOut"];
 type DataCollection = components["schemas"]["DataCollectionSummaryOut"];
@@ -159,6 +162,11 @@ const SpaPage = () => {
             <Heading>Data Collection</Heading>
             <Tag colorScheme='orange'>SPA</Tag>
             <Spacer />
+            <Tooltip label='Run Reprocessing'>
+              <Button isDisabled>
+                <Icon as={MdRedo} />
+              </Button>
+            </Tooltip>
           </HStack>
           <HStack w='100%'>
             <Heading color='diamond.300' size='sm'>
@@ -175,7 +183,7 @@ const SpaPage = () => {
       </HStack>
 
       <InfoGroup cols={6} info={collectionData.info} />
-      <Divider marginY={2} />
+      <Divider my={2} />
       <Tabs isLazy onChange={handleTabChanged} index={tabIndex}>
         <TabList>
           <Tab>Processing Jobs</Tab>
