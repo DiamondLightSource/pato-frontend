@@ -44,6 +44,10 @@ export const handlers = [
     )
   }),
 
+  rest.get("http://localhost/autoProc/:autoProcId/tomogram", (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({tomogramId: 1, dataCollectionId: 1}), ctx.delay(0));
+  }),
+
   rest.get('http://localhost/dataCollections/:id/motion', (req, res, ctx) => {
     if (req.params.id === "9") {
       return res(ctx.status(404));
@@ -102,6 +106,16 @@ export const handlers = [
       ctx.delay(0),
       ctx.json({
         items: data
+      })
+    )
+  }),
+
+  rest.get('http://localhost/autoProc/:id/ctf', (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.delay(0),
+      ctx.json({
+        items: [{imageNumber: 1, estimatedResolution: 1, estimatedDefocus: 1, astigmatism: 1}]
       })
     )
   }),

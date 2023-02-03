@@ -1,36 +1,55 @@
-import { Tomogram } from "./main";
-import { renderAccordionItem } from "../../utils/test-utils";
 import { fireEvent, screen } from "@testing-library/react";
+import { rest } from "msw";
+import { server } from "../../mocks/server";
+import { renderWithAccordion } from "../../utils/test-utils";
+import { Tomogram } from "./main";
+import { BaseProcessingJobProps } from "../../schema/interfaces";
 
-describe("Tomogram", () => {
-  window.URL.createObjectURL = jest.fn();
+const basicProcJob: BaseProcessingJobProps["procJob"] = {
+  processingJobId: 1,
+  dataCollectionId: 1,
+  displayName: "Test",
+  comments: "Test",
+  recipe: "Test",
+  automatic: 1,
+};
 
-  it("should update refined tilt axis from motion data", async () => {
-    renderAccordionItem(
-      <Tomogram title={"Test"} tomogram={{ tomogramId: 3, info: [{ label: "Refined Tilt Axis", value: "?" }] }} />
+describe("Home", () => {
+  it("should only display motion correction if tomogram is not fully processed", async () => {
+    server.use(
+      rest.get("http://localhost/autoProc/:autoProcId/tomogram", (req, res, ctx) => {
+        return res.once(ctx.status(404), ctx.delay(0));
+      })
     );
 
-    const nextButton = await screen.findByLabelText("Previous Page", {}, { timeout: 3000 });
-    fireEvent.click(nextButton);
+    server.resetHandlers();
 
-    await expect(screen.findByText("958 °")).resolves.toBeInTheDocument();
+    renderWithAccordion(
+      <Tomogram active={true} autoProc={{ autoProcProgramId: 1 }} procJob={basicProcJob} status={"Queued"} />
+    );
+
+    await screen.findByText("Motion Correction/CTF");
+    expect(screen.queryByText("Alignment")).not.toBeInTheDocument();
   });
 
-  it("should display tomogram info", async () => {
-    renderAccordionItem(
-      <Tomogram title={"Tomogram 1"} tomogram={{ tomogramId: 1, info: [{ label: "testLabel", value: "testValue" }] }} />
+  it("should display tomogram if response is a valid tomogram", async () => {
+    renderWithAccordion(
+      <Tomogram active={true} autoProc={{ autoProcProgramId: 1 }} procJob={basicProcJob} status={"Queued"} />
     );
 
-    await screen.findByText("testLabel:");
-
-    expect(screen.getByText("testValue")).toBeInTheDocument();
+    await screen.findByText("Alignment");
   });
 
-  it("should display astigmatism/defocus/resolution data when done loading", async () => {
-    renderAccordionItem(
-      <Tomogram title={"Tomogram 1"} tomogram={{ tomogramId: 3, info: [{ label: "testLabel", value: "testValue" }] }} />
+  it("should open movie when button clicked", async () => {
+    renderWithAccordion(
+      <Tomogram active={true} autoProc={{ autoProcProgramId: 1 }} procJob={basicProcJob} status={"Queued"} />
     );
 
-    await screen.findByText("Defocus", {}, { timeout: 3000 });
+    await screen.findByText("Alignment");
+
+    fireEvent.click(screen.getByRole("button"));
+    fireEvent.click(screen.getByRole("button", { name: "View Movie" }));
+
+    expect(screen.getByLabelText("Play")).toBeInTheDocument();
   });
 });

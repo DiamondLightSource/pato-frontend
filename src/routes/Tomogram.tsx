@@ -12,40 +12,28 @@ import {
   Button,
   Tooltip,
   Accordion,
+  Skeleton,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { client } from "../utils/api/client";
 import { Tomogram } from "../components/tomogram/main";
 import { parseData } from "../utils/generic";
-import { CollectionData, DataConfig, TomogramData } from "../schema/interfaces";
+import { CollectionData } from "../schema/interfaces";
 import { MotionPagination } from "../components/motion/pagination";
 import { InfoGroup } from "../components/visualisation/infogroup";
-import { CollectionLoader } from "../components/collectionLoading";
 import { buildEndpoint } from "../utils/api/endpoint";
 import { collectionConfig } from "../utils/config/parse";
-import { MdList } from "react-icons/md";
+import { MdList, MdRedo } from "react-icons/md";
 import { Motion } from "../components/motion/motion";
 import { components } from "../schema/main";
 
-type TomogramResponse = components["schemas"]["Tomogram"];
-
-const tomogramConfig: DataConfig = {
-  include: [
-    { name: "stackFile" },
-    { name: "tiltAngleOffset", unit: "°" },
-    { name: "zShift" },
-    { name: "volumeFile" },
-    { name: "pixelSpacing" },
-    { name: "refinedTiltAxis", unit: "°" },
-  ],
-  root: ["tomogramId"],
-};
+type ProcessingResponse = components["schemas"]["ProcessingJobOut"];
 
 const TomogramPage = () => {
   const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [tomograms, setTomograms] = useState<TomogramData[] | null | undefined>();
+  const [jobs, setJobs] = useState<ProcessingResponse[] | null | undefined>();
   const [collectionData, setCollectionData] = useState<CollectionData>({ info: [], comments: "" });
   const [pageCount, setPageCount] = useState(1);
   const [onlyProcessed, setOnlyProcessed] = useState(searchParams.get("onlyProcessed") === "true");
@@ -69,7 +57,7 @@ const TomogramPage = () => {
 
     /** There should be 3 possible states: a null tomogram (for when it is still being processed),
     /* and undefined tomogram (waiting for information client-side) and a valid tomogram */
-    setTomograms(undefined);
+    setJobs(undefined);
     client
       .safe_get(
         `${buildEndpoint(
@@ -87,14 +75,17 @@ const TomogramPage = () => {
           }
           setCollectionData(parseData(response.data.items[0], collectionConfig) as CollectionData);
 
-          client.safe_get(`dataCollections/${response.data.items[0].dataCollectionId}/tomograms`).then((response) => {
-            if (response.status !== 404 && response.data) {
-              const items = response.data.items as TomogramResponse[];
-              setTomograms(items.map((item) => parseData(item, tomogramConfig) as TomogramData));
-            } else {
-              setTomograms(null);
-            }
-          });
+          client
+            .safe_get(`dataCollections/${response.data.items[0].dataCollectionId}/processingJobs?limit=3`)
+            .then((response) => {
+              console.log(response);
+              if (response.status === 200 && response.data) {
+                const items = response.data.items as ProcessingResponse[];
+                setJobs(items);
+              } else {
+                setJobs(null);
+              }
+            });
         }
       });
   }, [params, navigate, updateCollection, onlyProcessed]);
@@ -104,9 +95,14 @@ const TomogramPage = () => {
       <HStack marginBottom={2}>
         <VStack w='100%'>
           <HStack w='100%'>
-            <Heading>Data Collection #{params.collectionIndex}</Heading>
+            <Heading>{collectionData.comments}</Heading>
             <Tag colorScheme='teal'>Tomogram</Tag>
             <Spacer />
+            <Tooltip label='Run Reprocessing'>
+              <Button isDisabled>
+                <Icon as={MdRedo} />
+              </Button>
+            </Tooltip>
             <Tooltip label='List Collections'>
               <Button onClick={() => navigate("../../collections", { relative: "path" })}>
                 <Icon as={MdList} />
@@ -132,22 +128,30 @@ const TomogramPage = () => {
           </HStack>
         </VStack>
       </HStack>
-      <InfoGroup py={2} cols={3} info={collectionData.info}></InfoGroup>
-      <Divider mb={3} />
-      {tomograms ? (
+      <InfoGroup cols={3} info={collectionData.info} />
+      <Divider my={2} />
+      {jobs ? (
         <Accordion onChange={setAccordionIndex} index={accordionIndex} allowToggle>
-          {tomograms.map((tomogram, i) => (
-            <Tomogram key={tomogram.tomogramId} tomogram={tomogram} active={accordionIndex === i} title='test' />
+          {jobs.map((job, i) => (
+            <Tomogram
+              key={job.AutoProcProgram.autoProcProgramId}
+              autoProc={job.AutoProcProgram}
+              procJob={job.ProcessingJob}
+              status={job.status}
+              active={accordionIndex === i}
+            />
           ))}
         </Accordion>
       ) : (
-        <span>
+        <>
           {collectionData.dataCollectionId ? (
-            <Motion parentType={"dataCollections"} parentId={collectionData.dataCollectionId} />
+            <Box bg='diamond.75' border='solid 1px' borderColor='diamond.100' py={2} px={4}>
+              <Motion parentType={"dataCollections"} parentId={collectionData.dataCollectionId} />
+            </Box>
           ) : (
-            <CollectionLoader />
+            <Skeleton h='33vh' w='100%' />
           )}
-        </span>
+        </>
       )}
     </Box>
   );
