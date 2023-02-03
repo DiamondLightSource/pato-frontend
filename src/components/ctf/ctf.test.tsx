@@ -2,7 +2,7 @@ import { screen } from "@testing-library/react";
 import { renderWithProviders } from "../../utils/test-utils";
 import { CTF } from "./ctf";
 
-describe("Home", () => {
+describe("CTF", () => {
   it("should render when tomogram is parent", async () => {
     renderWithProviders(<CTF parentType='tomograms' parentId={3} />);
     await screen.findByText("Resolution");

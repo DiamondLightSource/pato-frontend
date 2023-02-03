@@ -14,15 +14,13 @@ const basicProcJob: BaseProcessingJobProps["procJob"] = {
   automatic: 1,
 };
 
-describe("Home", () => {
+describe("Tomogram", () => {
   it("should only display motion correction if tomogram is not fully processed", async () => {
     server.use(
       rest.get("http://localhost/autoProc/:autoProcId/tomogram", (req, res, ctx) => {
         return res.once(ctx.status(404), ctx.delay(0));
       })
     );
-
-    server.resetHandlers();
 
     renderWithAccordion(
       <Tomogram active={true} autoProc={{ autoProcProgramId: 1 }} procJob={basicProcJob} status={"Queued"} />
