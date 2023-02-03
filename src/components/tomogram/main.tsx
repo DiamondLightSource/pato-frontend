@@ -13,6 +13,8 @@ import {
   ModalBody,
   AccordionItem,
   AccordionPanel,
+  Skeleton,
+  VStack,
 } from "@chakra-ui/react";
 import { ImageCard } from "../visualisation/image";
 import { InfoGroup } from "../visualisation/infogroup";
@@ -47,7 +49,7 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
   const [xyProjImage, setXyProjImage] = useState<string>();
   const [xzProjImage, setXzProjImage] = useState<string>();
   const [shiftData, setShiftData] = useState<BasePoint[]>([]);
-  const [tomogram, setTomogram] = useState<TomogramData>();
+  const [tomogram, setTomogram] = useState<TomogramData | null>();
 
   useEffect(() => {
     client.safe_get(`autoProc/${autoProc.autoProcProgramId}/tomogram`).then((response) => {
@@ -65,6 +67,8 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
         });
 
         setTomogram(parseData(tomogram, tomogramConfig) as TomogramData);
+      } else {
+        setTomogram(null);
       }
     });
   }, [autoProc]);
@@ -74,7 +78,16 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
       <ProcessingTitle autoProc={autoProc} procJob={procJob} status={status} />
       {active && (
         <AccordionPanel pt={4}>
-          {tomogram ? (
+          {tomogram === null ? (
+            <Motion parentId={procJob.dataCollectionId} parentType='dataCollections' />
+          ) : tomogram === undefined ? (
+            <VStack h='82vh' w='100%' spacing={2}>
+              <Skeleton w='100%' h='22vh' />
+              <Skeleton w='100%' h='20vh' />
+              <Skeleton w='100%' h='20vh' />
+              <Skeleton w='100%' h='20vh' />
+            </VStack>
+          ) : (
             <Grid gap={3}>
               <GridItem>
                 <Motion parentType='tomograms' parentId={tomogram.tomogramId} />
@@ -109,8 +122,6 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
                 <CTF parentId={tomogram.tomogramId} parentType='tomograms' />
               </GridItem>
             </Grid>
-          ) : (
-            <Motion parentId={procJob.dataCollectionId} parentType='dataCollections' />
           )}
         </AccordionPanel>
       )}

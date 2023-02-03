@@ -25,7 +25,6 @@ import { InfoGroup } from "../components/visualisation/infogroup";
 import { buildEndpoint } from "../utils/api/endpoint";
 import { collectionConfig } from "../utils/config/parse";
 import { MdList, MdRedo } from "react-icons/md";
-import { Motion } from "../components/motion/motion";
 import { components } from "../schema/main";
 
 type ProcessingResponse = components["schemas"]["ProcessingJobOut"];
@@ -78,7 +77,6 @@ const TomogramPage = () => {
           client
             .safe_get(`dataCollections/${response.data.items[0].dataCollectionId}/processingJobs?limit=3`)
             .then((response) => {
-              console.log(response);
               if (response.status === 200 && response.data) {
                 const items = response.data.items as ProcessingResponse[];
                 setJobs(items);
@@ -143,15 +141,7 @@ const TomogramPage = () => {
           ))}
         </Accordion>
       ) : (
-        <>
-          {collectionData.dataCollectionId ? (
-            <Box bg='diamond.75' border='solid 1px' borderColor='diamond.100' py={2} px={4}>
-              <Motion parentType={"dataCollections"} parentId={collectionData.dataCollectionId} />
-            </Box>
-          ) : (
-            <Skeleton h='33vh' w='100%' />
-          )}
-        </>
+        <Skeleton h='33vh' w='100%' />
       )}
     </Box>
   );
