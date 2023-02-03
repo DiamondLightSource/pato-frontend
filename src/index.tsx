@@ -22,6 +22,7 @@ import {
 } from "./utils/config/table";
 import { getUser } from "./utils/loaders/user";
 import { getListingData, getSessionData } from "./utils/loaders/listings";
+import { parseDate } from "./utils/generic";
 const { ToastContainer } = createStandaloneToast();
 
 const container = document.getElementById("root")!;
@@ -59,9 +60,13 @@ const handleCollectionClicked = (item: Record<string, string | number>) => `../t
 
 const processSessionData = (data: Record<string, string | number>[]) =>
   data.map((item: Record<string, string | number>) => {
-    let newItem = Object.assign({}, item);
+    let newItem = Object.assign({}, item, {
+      startDate: parseDate(item.startDate as string),
+      endDate: parseDate(item.endDate as string),
+    });
     const beamLineName = item.beamLineName as string;
-    newItem["microscopeName"] = `${beamlineToMicroscope[beamLineName]} (${beamLineName})` ?? beamLineName;
+    const humanName = beamlineToMicroscope[beamLineName];
+    newItem["microscopeName"] = humanName ? `${humanName} (${beamLineName})` : beamLineName;
     return newItem;
   });
 

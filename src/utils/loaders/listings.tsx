@@ -1,8 +1,11 @@
 import { Params } from "react-router-dom";
+import { components } from "../../schema/main";
 import { client } from "../api/client";
 import { buildEndpoint } from "../api/endpoint";
+import { parseDate } from "../generic";
 
 type ProcessDataCallback = (data: Record<string, any>[]) => Record<string, any>[];
+type Session = components["schemas"]["VisitOut"];
 
 const getListingData = async (
   request: Request,
@@ -29,6 +32,11 @@ const getListingData = async (
   return { data: null, total: 0 };
 };
 
+const fixAllDates = (sessions: Session[]) =>
+  sessions.map((session) =>
+    Object.assign({}, session, { startDate: parseDate(session.startDate), endDate: parseDate(session.endDate) })
+  );
+
 const getSessionData = async () => {
   const currentDate = new Date().toISOString();
   const responses = await Promise.all(
@@ -37,11 +45,12 @@ const getSessionData = async () => {
       `sessions?limit=5&page=0&search=m&minEndDate=${currentDate}&maxStartDate=${currentDate}`,
     ].map((url) => client.get(url).then((r) => r))
   );
+
   if (responses.some((r) => r.status === 401)) {
     return null;
   }
 
-  return { recent: responses[0].data.items, current: responses[1].data.items };
+  return { recent: fixAllDates(responses[0].data.items), current: fixAllDates(responses[1].data.items) };
 };
 
 export { getListingData, getSessionData };

@@ -7,6 +7,8 @@ import { DataConfig } from "../schema/interfaces";
  *
  * @returns An object containing an array of `InfoGroup` labels and values, alongside raw values (when passed in the configuration)
  */
+const timeFormatter = new Intl.DateTimeFormat("en-GB", { dateStyle: "short", timeStyle: "short" });
+
 export const parseData = (rawData: Record<string, any>, config: DataConfig) => {
   const data: Record<string, any> = { info: [] };
   for (const item of config.include) {
@@ -53,4 +55,15 @@ export const mergeDeep = (target: Record<string, any>, source: Record<string, an
     });
   }
   return output;
+};
+
+export const parseDate = (dateString: string | undefined) => {
+  const safeDate = dateString ?? "";
+  const date = Date.parse(safeDate);
+
+  if (isNaN(date)) {
+    return safeDate;
+  }
+
+  return timeFormatter.format(date);
 };
