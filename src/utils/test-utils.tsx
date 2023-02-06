@@ -7,7 +7,8 @@ import { Provider } from "react-redux";
 
 import type { AppStore, RootState } from "../store/store";
 import uiReducer from "../features/uiSlice";
-import { BrowserRouter } from "react-router-dom";
+import { createMemoryRouter, LoaderFunction, MemoryRouter, RouterProvider } from "react-router-dom";
+import { Accordion } from "@chakra-ui/react";
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
   preloadedState?: PreloadedState<RootState>;
@@ -28,13 +29,28 @@ const renderWithProviders = (
     window.history.pushState({}, "Test page", route);
 
     return (
-      <BrowserRouter>
+      <MemoryRouter initialEntries={[route]}>
         <Provider store={store}>{children}</Provider>
-      </BrowserRouter>
+      </MemoryRouter>
     );
   }
 
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 };
 
-export { renderWithProviders };
+const renderWithAccordion = (ui: React.ReactElement) => {
+  return renderWithProviders(<Accordion>{ui}</Accordion>);
+};
+
+const renderWithRoute = (ui: React.ReactElement, loader: LoaderFunction, route = "/") => {
+  const router = createMemoryRouter([
+    {
+      path: "*",
+      element: ui,
+      loader: loader,
+    },
+  ]);
+  return render(<RouterProvider router={router} />);
+};
+
+export { renderWithProviders, renderWithAccordion, renderWithRoute };

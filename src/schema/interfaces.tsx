@@ -1,4 +1,8 @@
 import { ResponsiveValue } from "@chakra-ui/react";
+import { components } from "./main";
+
+type AutoProcSchema = components["schemas"]["AutoProcProgram"];
+type ProcessingJobSchema = components["schemas"]["ProcessingJob"];
 
 type DeepPartial<T> = T extends object
   ? {
@@ -28,11 +32,20 @@ export interface CtfData {
 export interface TomogramData {
   info: Info[];
   tomogramId: number;
+  dataCollectionId: number;
 }
 
 export interface SpaProps {
   /* Parent autoprocessing program ID*/
   autoProcId: number;
+}
+
+export interface BaseProcessingJobProps {
+  autoProc: AutoProcSchema;
+  procJob: ProcessingJobSchema;
+  status: string;
+  onReprocessingClicked?: (procJobId: number) => void;
+  active: boolean;
 }
 
 export interface Info {
@@ -111,4 +124,9 @@ export interface BoxPlotOptions extends DeepPartial<CompleteBoxOptions> {}
 export interface AuthState {
   fedid: string;
   name: string;
+}
+
+export interface SpaCollectionData extends CollectionData {
+  fileTemplate: string;
+  imageDirectory: string;
 }

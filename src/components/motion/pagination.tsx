@@ -80,7 +80,7 @@ const MotionPagination = ({
   }
 
   return (
-    <HStack py={1} maxW={size === "xs" ? "230px" : "295px"}>
+    <HStack py={size === "xs" ? 1 : 0} maxW={size === "xs" ? "230px" : "295px"}>
       <Button aria-label='First Page' isDisabled={disabled} size={size} onClick={() => setPage(1)}>
         &lt;&lt;
       </Button>

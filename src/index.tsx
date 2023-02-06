@@ -20,7 +20,11 @@ import {
   proposalHeaders,
   sessionHeaders,
 } from "./utils/config/table";
-import { client } from "./utils/api/client";
+import { getUser } from "./utils/loaders/user";
+import { getListingData, getSessionData } from "./utils/loaders/listings";
+import { parseDate } from "./utils/generic";
+import { getSpaData } from "./utils/loaders/spa";
+import { getTomogramData } from "./utils/loaders/tomogram";
 const { ToastContainer } = createStandaloneToast();
 
 const container = document.getElementById("root")!;
@@ -58,50 +62,38 @@ const handleCollectionClicked = (item: Record<string, string | number>) => `../t
 
 const processSessionData = (data: Record<string, string | number>[]) =>
   data.map((item: Record<string, string | number>) => {
-    let newItem = Object.assign({}, item);
+    let newItem = Object.assign({}, item, {
+      startDate: parseDate(item.startDate as string),
+      endDate: parseDate(item.endDate as string),
+    });
     const beamLineName = item.beamLineName as string;
-    newItem["microscopeName"] = beamlineToMicroscope[beamLineName] ?? beamLineName;
+    const humanName = beamlineToMicroscope[beamLineName];
+    newItem["microscopeName"] = humanName ? `${humanName} (${beamLineName})` : beamLineName;
     return newItem;
   });
-
-const userLoader = async (request: Request) => {
-  const splitUrl = window.location.href.split("access_token=");
-
-  if (splitUrl.length === 2) {
-    sessionStorage.setItem("token", splitUrl[1].split("&token_type")[0].toString());
-    window.history.replaceState({}, document.title, window.location.href.split("#")[0]);
-  }
-
-  const user = await client.get("user");
-
-  if (user.status === 200) {
-    return { fedid: user.data.fedid, name: user.data.givenName };
-  }
-
-  return null;
-};
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
     errorElement: <Error />,
-    loader: async ({ request }) => userLoader(request),
+    loader: async ({ request }) => getUser(request),
     children: [
       {
         path: "/",
         element: <Home />,
+        loader: getSessionData,
       },
       {
         path: "/proposals",
         element: (
           <GenericListing
             headers={proposalHeaders}
-            endpoint='proposals'
             heading='Proposals'
             makePathCallback={(item) => [item.proposalCode, item.proposalNumber].join("")}
           />
         ),
+        loader: ({ request, params }) => getListingData(request, params, "proposals"),
       },
       {
         path: "/calendar",
@@ -116,12 +108,11 @@ const router = createBrowserRouter([
         element: (
           <GenericListing
             headers={sessionHeaders}
-            endpoint='sessions'
             heading='Sessions'
             makePathCallback={(item) => item.visit_number.toString()}
-            processData={processSessionData}
           />
         ),
+        loader: ({ request, params }) => getListingData(request, params, "sessions", processSessionData),
       },
       {
         path: "/proposals/:propid/sessions/:visitId",
@@ -132,22 +123,22 @@ const router = createBrowserRouter([
         element: (
           <GenericListing
             headers={groupsHeaders}
-            endpoint='dataGroups'
             heading='Data Collection Groups'
             makePathCallback={handleGroupClicked}
           />
         ),
+        loader: ({ request, params }) => getListingData(request, params, "dataGroups"),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/collections",
         element: (
           <GenericListing
             headers={collectionHeaders}
-            endpoint='dataCollections'
             heading='Data Collections'
             makePathCallback={handleCollectionClicked}
           />
         ),
+        loader: ({ request, params }) => getListingData(request, params, "dataCollections"),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/tomograms/",
@@ -156,10 +147,12 @@ const router = createBrowserRouter([
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/tomograms/:collectionIndex",
         element: <TomogramPage />,
+        loader: ({params, request}) => getTomogramData(params, request)
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/spa/",
         element: <SpaPage />,
+        loader: ({params}) => getSpaData(params)
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/",

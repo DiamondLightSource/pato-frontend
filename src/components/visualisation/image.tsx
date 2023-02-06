@@ -11,6 +11,7 @@ import {
   Card,
   CardHeader,
   CardBody,
+  Skeleton,
 } from "@chakra-ui/react";
 import { MouseEvent, useState } from "react";
 import { BaseCardProp } from "../../schema/interfaces";
@@ -54,15 +55,19 @@ const ImageCard = ({
         </Heading>
       </CardHeader>
       <CardBody>
-        <Image
-          w='100%'
-          objectFit='contain'
-          src={src}
-          margin='auto'
-          maxH='100%'
-          alt={title}
-          fallbackSrc='/images/no-image.png'
-        />
+        {src === undefined ? (
+          <Skeleton data-testid='image-loader' h='100%' />
+        ) : (
+          <Image
+            w='100%'
+            objectFit='contain'
+            src={src}
+            margin='auto'
+            maxH='100%'
+            alt={title}
+            fallbackSrc='/images/no-image.png'
+          />
+        )}
         <Modal isOpen={isOpen && showModal} onClose={onClose}>
           <ModalOverlay bg='rgba(0,0,0,0.8)' opacity='0.5' />
           <ModalContent dropShadow='none' bg='none' w='fit-content' maxW='90vw'>

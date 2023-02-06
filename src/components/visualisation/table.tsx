@@ -1,9 +1,9 @@
-import { Box, Heading, Skeleton, Table, Tbody, Td, Th, Thead, Tr, VStack } from "@chakra-ui/react";
+import { Box, Heading, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useCallback } from "react";
 
 interface TableProps {
   /** Table data */
-  data: Record<string, any>[] | null | undefined;
+  data: Record<string, any>[] | null;
   /** Table headers and mapping to record keys */
   headers: { key: string; label: string }[];
   /** Callback when row is clicked */
@@ -28,42 +28,31 @@ const TableView = ({ data, headers, onClick, label = "data" }: TableProps) => {
 
   return (
     <Box overflow='scroll'>
-      {data === null ? (
+      {data === null || data.length === 0 ? (
         <Heading py={10} w='100%' variant='notFound'>
           No {label.toLowerCase()} found
         </Heading>
       ) : (
-        <>
-          {data !== undefined && data.length > 0 ? (
-            <Table size='sm' variant='diamondStriped'>
-              <Thead>
-                <Tr>
-                  {headers.map((header) => (
-                    <Th key={header.label}>{header.label}</Th>
-                  ))}
-                </Tr>
-              </Thead>
-              <Tbody cursor='pointer'>
-                {data.map((item, i) => (
-                  <Tr h='2vh' key={i} onClick={handleClick}>
-                    {headers.map((header) => (
-                      <Td data-id={i} key={header.key}>
-                        {item[header.key]}
-                      </Td>
-                    ))}
-                  </Tr>
+        <Table size='sm' variant='diamondStriped'>
+          <Thead>
+            <Tr>
+              {headers.map((header) => (
+                <Th key={header.label}>{header.label}</Th>
+              ))}
+            </Tr>
+          </Thead>
+          <Tbody cursor='pointer'>
+            {data.map((item, i) => (
+              <Tr h='2vh' key={i} onClick={handleClick}>
+                {headers.map((header) => (
+                  <Td data-id={i} key={header.key}>
+                    {item[header.key]}
+                  </Td>
                 ))}
-              </Tbody>
-            </Table>
-          ) : (
-            <VStack>
-              <Skeleton w='100%' h='2vh' />
-              <Skeleton w='100%' h='3vh' />
-              <Skeleton w='100%' h='3vh' />
-              <Skeleton w='100%' h='3vh' />
-            </VStack>
-          )}
-        </>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
       )}
     </Box>
   );

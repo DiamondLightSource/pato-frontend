@@ -1,13 +1,13 @@
-eBIC Web App
+PATo
 ===========================
 
 |code_ci| |code_cov|
 
 ============== ==============================================================
-Source code    https://gitlab.diamond.ac.uk/yrh59256/ebic-frontend
+Source code    https://gitlab.diamond.ac.uk/lims/pato-frontend
 ============== ==============================================================
 
-Web app for displaying eBIC related information.
+Particle Analysis and Tomography Visualization Interface
 
 ==========
 Deployment
@@ -23,7 +23,7 @@ Running development server on your machine:
 
 There is also a production Docker container. Nevertheless, you can compile a production-optimised build with :code:`yarn build` instead.
 
-For production deployment using Kubernetes, visit the `backend's repository <https://gitlab.diamond.ac.uk/yrh59256/ebic-frontend>`_
+For production deployment using Kubernetes, visit the `backend's repository <https://gitlab.diamond.ac.uk/lims/pato-backend>`_
 
 ============
 Testing
@@ -31,10 +31,10 @@ Testing
 
 - Run :code:`yarn test`
 
-.. |code_ci| image:: https://gitlab.diamond.ac.uk/lims/ebic-frontend/badges/master/pipeline.svg
+.. |code_ci| image:: https://gitlab.diamond.ac.uk/lims/pato-frontend/badges/master/pipeline.svg
     :alt: Code CI
 
-.. |code_cov| image:: https://gitlab.diamond.ac.uk/lims/ebic-frontend/badges/master/coverage.svg
+.. |code_cov| image:: https://gitlab.diamond.ac.uk/lims/pato-frontend/badges/master/coverage.svg
     :alt: Code Coverage
 ..
     Anything below this line is used when viewing README.rst and will be replaced
