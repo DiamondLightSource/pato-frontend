@@ -1,11 +1,12 @@
+import { redirect } from "react-router-dom";
 import { client } from "../api/client";
 
 const getUser = async (request: Request) => {
-  const splitUrl = window.location.href.split("access_token=");
+  const splitUrl = request.url.split("access_token=");
 
   if (splitUrl.length === 2) {
     sessionStorage.setItem("token", splitUrl[1].split("&token_type")[0].toString());
-    window.history.replaceState({}, document.title, window.location.href.split("#")[0]);
+    return redirect(request.url.split("#")[0]);
   }
 
   const user = await client.get("user");

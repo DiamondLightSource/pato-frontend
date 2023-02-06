@@ -31,7 +31,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jest",
+    "test": "REACT_APP_AUTH_ENDPOINT=auth/ jest",
     "eject": "react-scripts eject",
     "demo": "DEPLOY_TYPE=demo react-scripts start"
   },

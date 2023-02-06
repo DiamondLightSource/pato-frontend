@@ -46,7 +46,7 @@ const getSessionData = async () => {
     ].map((url) => client.get(url).then((r) => r))
   );
 
-  if (responses.some((r) => r.status === 401)) {
+  if (responses.some((r) => r.status !== 200)) {
     return null;
   }
 

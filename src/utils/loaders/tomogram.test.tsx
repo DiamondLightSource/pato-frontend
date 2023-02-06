@@ -6,7 +6,7 @@ const request = new Request(
   "https://localhost/proposals/cm33915/sessions/7/groups/8557661/tomograms/52?onlyTomograms=false"
 );
 
-describe("SPA Data", () => {
+describe("Tomogram Data", () => {
   it("should return data for jobs and collections if both are available", async () => {
     const data = await getTomogramData({ groupId: "1" }, request);
 
