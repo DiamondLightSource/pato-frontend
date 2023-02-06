@@ -1,7 +1,6 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { renderWithProviders } from "../../utils/test-utils";
 import { ImageCard } from "./image";
-import React from "react";
 
 describe("Image", () => {
   it("should render image title", () => {
@@ -39,5 +38,12 @@ describe("Image", () => {
     await waitFor(() => {
       expect(onClick).toBeCalled();
     });
+  });
+
+  it("should display skeleton when image source is undefined", async () => {
+    const onClick = jest.fn();
+    renderWithProviders(<ImageCard title='Image Title' src={undefined} showModal={false} onClick={onClick} />);
+
+    expect(screen.getByTestId("image-loader")).toBeInTheDocument();
   });
 });

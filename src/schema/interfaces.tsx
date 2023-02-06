@@ -125,3 +125,8 @@ export interface AuthState {
   fedid: string;
   name: string;
 }
+
+export interface SpaCollectionData extends CollectionData {
+  fileTemplate: string;
+  imageDirectory: string;
+}

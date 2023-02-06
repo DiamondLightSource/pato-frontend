@@ -23,6 +23,8 @@ import {
 import { getUser } from "./utils/loaders/user";
 import { getListingData, getSessionData } from "./utils/loaders/listings";
 import { parseDate } from "./utils/generic";
+import { getSpaData } from "./utils/loaders/spa";
+import { getTomogramData } from "./utils/loaders/tomogram";
 const { ToastContainer } = createStandaloneToast();
 
 const container = document.getElementById("root")!;
@@ -145,10 +147,12 @@ const router = createBrowserRouter([
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/tomograms/:collectionIndex",
         element: <TomogramPage />,
+        loader: ({params, request}) => getTomogramData(params, request)
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/spa/",
         element: <SpaPage />,
+        loader: ({params}) => getSpaData(params)
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/",

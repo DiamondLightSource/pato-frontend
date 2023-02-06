@@ -6,6 +6,8 @@ const setImage = (endpoint: string, setState: Dispatch<SetStateAction<string | u
   client.safe_get(endpoint).then((response) => {
     if (response.status === 200) {
       setState(URL.createObjectURL(response.data));
+    } else {
+      setState("");
     }
   });
 };

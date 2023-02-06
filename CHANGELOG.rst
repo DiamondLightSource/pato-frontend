@@ -9,12 +9,15 @@ v0.4.0 (--/02/2023)
 **Added**
 
 - "Current Sessions" section to homepage
+- Session list now displays microscope ID alongside human-readable name
+- Tomography reprocessing (currently disabled)
 
 **Changed**
 
 - Dose weight removed from motion correction
 - Multiple tomograms are now allowed per data collection
-- Session list now displays microscope ID alongside human-readable name
+- Images now display skeleton while loading
+- Data for SPA and tomography is loaded before the page is rendered
 
 ++++++++++
 v0.3.1 (01/02/2023)

@@ -136,17 +136,6 @@ export const handlers = [
     )
   }),
 
-  rest.get("http://localhost/dataCollections", async (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.delay(0),
-      ctx.json(
-        {total: req.url.searchParams.get("onlyTomograms") ? 3 : 5,
-        items: [{pixelSizeOnImage: 50, voltage: 1, imageSize: 1}]
-        , page: req.url.searchParams.get("page") ?? 1})
-    )
-  }),
-
   rest.get("http://localhost/invalidEndpoint", async (req, res, ctx) => {
     return res(
       ctx.status(404),
@@ -208,6 +197,13 @@ export const handlers = [
     )
   }),
 
+  rest.get("http://localhost/dataCollections/:collectionId/processingJobs", async (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({items: [{autoProcProgramId: 1}]})
+    )
+  }),
+
   rest.get("http://localhost/tomograms/:tomogramId/projection", async (req, res, ctx) => {
     return res(
       ctx.status(404),
@@ -246,6 +242,21 @@ export const handlers = [
   rest.get("http://localhost/unauthorisedEndpoint", async (req, res, ctx) => {
     return res(
       ctx.status(401),
+    )
+  }),
+
+  rest.get("http://localhost/dataGroups/:groupId/dataCollections", async (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({items: [
+        {
+          dataCollectionId:	9775784,
+          SESSIONID:	27489608,
+          fileTemplate: "/dls/files/GridSquare_11_1/"
+        }],
+        total: 80,
+        limit: 25
+      })
     )
   }),
 
