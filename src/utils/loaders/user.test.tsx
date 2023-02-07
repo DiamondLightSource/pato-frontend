@@ -2,8 +2,6 @@ import { rest } from "msw";
 import { server } from "../../mocks/server";
 import { getUser } from "./user";
 
-const request = new Request("https://localhost/proposals/");
-
 describe("User Data", () => {
   it("should return user data if available", async () => {
     server.use(
@@ -11,7 +9,7 @@ describe("User Data", () => {
         return res.once(ctx.status(200), ctx.json({ givenName: "John", fedid: "abc12345" }));
       })
     );
-    const data = await getUser(request);
+    const data = await getUser();
 
     if (data === null || data instanceof Response) {
       return;
@@ -27,15 +25,8 @@ describe("User Data", () => {
         return res.once(ctx.status(401));
       })
     );
-    const data = await getUser(request);
+    const data = await getUser();
 
     expect(data).toBe(null);
-  });
-
-  it("should redirect if access token is in URL", async () => {
-    const tokenRequest = new Request("https://localhost/proposals#access_token=abc12345&token_type=na");
-    const data = await getUser(tokenRequest);
-
-    expect(data).toBeInstanceOf(Response);
   });
 });

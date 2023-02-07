@@ -77,7 +77,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <Root />,
     errorElement: <Error />,
-    loader: async ({ request }) => getUser(request),
+    loader: async () => getUser(),
     children: [
       {
         path: "/",
@@ -147,12 +147,12 @@ const router = createBrowserRouter([
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/tomograms/:collectionIndex",
         element: <TomogramPage />,
-        loader: ({params, request}) => getTomogramData(params, request)
+        loader: ({ params, request }) => getTomogramData(params, request),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/spa/",
         element: <SpaPage />,
-        loader: ({params}) => getSpaData(params)
+        loader: ({ params }) => getSpaData(params),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/",

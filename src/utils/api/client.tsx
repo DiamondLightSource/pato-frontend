@@ -79,9 +79,8 @@ client.safe_get = async (endpoint: string, customConfig = {}) => {
   const resp = await client.get(endpoint, customConfig);
 
   if (resp.status === 401) {
-    window.location.href = `${process.env.REACT_APP_AUTH_ENDPOINT}authorise?redirect_uri=${encodeURIComponent(
-      window.location.href
-    )}`;
+    const url = encodeURIComponent(window.location.href);
+    window.location.href = `${process.env.REACT_APP_AUTH_ENDPOINT}authorise?redirect_uri=${url}`;
   }
 
   return resp;
@@ -90,7 +89,7 @@ client.safe_get = async (endpoint: string, customConfig = {}) => {
 client.get = async (endpoint: string, customConfig = {}) => {
   let resp: Response = { status: 0, data: {}, headers: {}, url: "" };
   try {
-    store.dispatch(setLoading(true))
+    store.dispatch(setLoading(true));
     clearTimeout(timer); // Debounces loading state
     resp = await client(
       endpoint,
@@ -111,7 +110,7 @@ client.get = async (endpoint: string, customConfig = {}) => {
 
     console.error(endpoint, customConfig, err);
   } finally {
-    timer = setTimeout(()=>store.dispatch(setLoading(false)),200);
+    timer = setTimeout(() => store.dispatch(setLoading(false)), 200);
   }
   return resp;
 };
