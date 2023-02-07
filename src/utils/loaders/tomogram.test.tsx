@@ -19,9 +19,9 @@ describe("Tomogram Data", () => {
   });
 
   it("should return data for jobs and collections without explicit tomogram filter", async () => {
-    const request = new Request("https://localhost/proposals/cm33915/sessions/7/groups/8557661/tomograms/52");
+    const noOnlyRequest = new Request("https://localhost/proposals/cm33915/sessions/7/groups/8557661/tomograms/52");
 
-    const data = await getTomogramData({ groupId: "1" }, request);
+    const data = await getTomogramData({ groupId: "1" }, noOnlyRequest);
 
     if (data instanceof Response) {
       return;

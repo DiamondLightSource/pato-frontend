@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v0.4.2 (07/02/2023)
+++++++++++
+
+**Changed**
+
+- Fixes tomogram filter default state on collection page
+
+++++++++++
 v0.4.1 (07/02/2023)
 ++++++++++
 

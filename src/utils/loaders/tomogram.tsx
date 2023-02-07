@@ -18,7 +18,7 @@ const getTomogramData = async (params: Params, request: Request) => {
   const collectionIndex = params.collectionIndex ?? "1";
 
   const collectionResponse = await client.safe_get(
-    `${buildEndpoint("dataCollections", params, 1, parseInt(collectionIndex))}&onlyTomograms=${onlyTomograms}`
+    `${buildEndpoint("dataCollections", params, 1, parseInt(collectionIndex))}&onlyTomograms=${onlyTomograms ?? false}`
   );
 
   if (collectionResponse.status !== 200) {
