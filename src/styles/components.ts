@@ -4,7 +4,7 @@ import { cardAnatomy, tabsAnatomy } from '@chakra-ui/anatomy'
 const baseToast: ToastProps = {
   id: "main-toast",
   status: "success",
-  duration: 4000,
+  duration: 6000,
   isClosable: true,
 };
 

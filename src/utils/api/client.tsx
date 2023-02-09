@@ -40,6 +40,7 @@ export async function client(
   if (body != null) {
     if (!(body instanceof FormData)) {
       config.body = JSON.stringify(body);
+      config.headers = { ...config.headers, "Accept": "application/json", "Content-Type": "application/json" };
     } else {
       config.body = body;
     }
@@ -49,30 +50,47 @@ export async function client(
   let target =
     (endpoint === "user" ? process.env.REACT_APP_AUTH_ENDPOINT : process.env.REACT_APP_API_ENDPOINT) + endpoint;
 
-  const response = await fetch(target, config);
-  clearTimeout(timeoutFetch);
+  try {
+    store.dispatch(setLoading(true));
+    clearTimeout(timer); // Debounces loading state
+    const response = await fetch(target, config);
+    clearTimeout(timeoutFetch);
 
-  switch (response.headers.get("content-type")) {
-    case "image/png":
-      data = await response.arrayBuffer();
-      break;
-    case "image/jpeg":
-      data = await response.blob();
-      break;
-    case "application/json":
-      data = await response.json();
-      break;
-    default:
-      data = null;
-      break;
+    switch (response.headers.get("content-type")) {
+      case "image/png":
+        data = await response.arrayBuffer();
+        break;
+      case "image/jpeg":
+        data = await response.blob();
+        break;
+      case "application/json":
+        data = await response.json();
+        break;
+      default:
+        data = null;
+        break;
+    }
+
+    return {
+      status: response.status,
+      data,
+      headers: response.headers,
+      url: response.url,
+    };
+  } catch (err) {
+    if (!toast.isActive("main-toast")) {
+      toast({
+        ...baseToast,
+        title: "An error has occurred while fetching data, please try again later.",
+        status: "error",
+      });
+    }
+
+    console.log(err);
+    return Promise.reject();
+  } finally {
+    timer = setTimeout(() => store.dispatch(setLoading(false)), 200);
   }
-
-  return {
-    status: response.status,
-    data,
-    headers: response.headers,
-    url: response.url,
-  };
 }
 
 client.safe_get = async (endpoint: string, customConfig = {}) => {
@@ -87,40 +105,20 @@ client.safe_get = async (endpoint: string, customConfig = {}) => {
 };
 
 client.get = async (endpoint: string, customConfig = {}) => {
-  let resp: Response = { status: 0, data: {}, headers: {}, url: "" };
-  try {
-    store.dispatch(setLoading(true));
-    clearTimeout(timer); // Debounces loading state
-    resp = await client(
-      endpoint,
-      (customConfig = {
-        ...customConfig,
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
-        method: "GET",
-      })
-    );
-  } catch (err) {
-    if (!toast.isActive("main-toast")) {
-      toast({
-        ...baseToast,
-        title: "An error has occurred while fetching data, please try again later.",
-        status: "error",
-      });
-    }
-
-    console.error(endpoint, customConfig, err);
-  } finally {
-    timer = setTimeout(() => store.dispatch(setLoading(false)), 200);
-  }
-  return resp;
+  return await client(
+    endpoint,
+    (customConfig = {
+      ...customConfig,
+      headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
+      method: "GET",
+    })
+  );
 };
 
 client.post = async (endpoint: string, body: Record<any, any> | FormData, customConfig = {}) => {
-  const resp = await client(endpoint, customConfig, body);
-  return resp;
-};
-
-client.delete = async (endpoint: string, customConfig = {}) => {
-  const resp = await client(endpoint, (customConfig = { ...customConfig, method: "DELETE" }));
-  return resp;
+  return await client(
+    endpoint,
+    { ...customConfig, headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` } },
+    body
+  );
 };
