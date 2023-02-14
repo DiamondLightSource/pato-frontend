@@ -17,7 +17,7 @@ const TomogramReprocessing = ({ pixelSize, collectionId, onClose }: Reprocessing
   const handleSubmit = useCallback(
     (formData: Record<string, any>) => {
       client.post(`dataCollections/${collectionId}/tomograms/reprocessing`, formData).then((response) => {
-        if (response.status !== 200) {
+        if (response.status !== 202) {
           toast({
             ...baseToast,
             title: "Error while initiating pipeline",
