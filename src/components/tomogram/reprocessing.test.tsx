@@ -23,7 +23,7 @@ describe("Tomogram Reprocessing", () => {
     const reprocessingCallback = jest.fn();
     server.use(
       rest.post("http://localhost/dataCollections/:collectionId/tomograms/reprocessing", (req, res, ctx) => {
-        return res.once(ctx.status(200), ctx.json({ processingJobId: 1 }));
+        return res.once(ctx.status(202), ctx.json({ processingJobId: 1 }));
       })
     );
 
@@ -37,7 +37,7 @@ describe("Tomogram Reprocessing", () => {
     const reprocessingCallback = jest.fn();
     server.use(
       rest.post("http://localhost/dataCollections/:collectionId/tomograms/reprocessing", (req, res, ctx) => {
-        return res.once(ctx.status(200), ctx.json({ processingJobId: 1 }));
+        return res.once(ctx.status(202), ctx.json({ processingJobId: 1 }));
       })
     );
 
