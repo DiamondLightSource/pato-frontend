@@ -47,8 +47,8 @@ const BarChart = withTooltip<BarProps, BarStats>(
       const yValues = data.map((bars) => bars.map(y)).flat();
 
       newConfig.y.domain = {
-        min: newConfig.y.domain.min ?? Math.min(...yValues) - 1,
-        max: newConfig.y.domain.max ?? Math.max(...yValues) + 1,
+        min: newConfig.y.domain.min ?? Math.min(...yValues),
+        max: newConfig.y.domain.max ?? Math.max(...yValues),
       };
 
       return newConfig as CompleteScatterPlotOptions;
@@ -123,6 +123,7 @@ const BarChart = withTooltip<BarProps, BarStats>(
                         data-testid={`${i}-${label(bar)}`}
                         key={label(bar)}
                         fill={getFillColour(i)}
+                        stroke="#FFF"
                         height={barHeight}
                         width={barWidth}
                         y={yMax - barHeight}
