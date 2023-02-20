@@ -5,7 +5,7 @@ import "whatwg-fetch";
 
 process.env.REACT_APP_API_ENDPOINT = "http://localhost/";
 
-beforeEach(() => server.listen())
+beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
