@@ -21,6 +21,7 @@ export interface CollectionData {
   info: Info[];
   comments: string | null;
   dataCollectionId?: number;
+  pixelSizeOnImage?: number;
 }
 
 export interface CtfData {

@@ -6,7 +6,7 @@ export const collectionConfig: DataConfig = {
     { name: "voltage", unit: "kV" },
     { name: ["imageSizeX", "imageSizeY"], unit: "pixels", label: "Image Size" },
   ],
-  root: ["comments", "dataCollectionId"],
+  root: ["comments", "dataCollectionId", "pixelSizeOnImage"],
 };
 
 export const classificationConfig: DataConfig = {

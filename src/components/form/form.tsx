@@ -4,9 +4,10 @@ import { FormEvent, ReactNode, useCallback } from "react";
 interface FormProps {
   children?: ReactNode;
   onSubmit?: (data: Record<string, any>) => void;
+  onClose?: () => void;
 }
 
-const Form = ({ onSubmit, children }: FormProps) => {
+const Form = ({ onSubmit, children, onClose = () => {} }: FormProps) => {
   const handleSubmit = useCallback(
     (form: FormEvent<HTMLFormElement>) => {
       form.preventDefault();
@@ -16,7 +17,7 @@ const Form = ({ onSubmit, children }: FormProps) => {
       for (let i = 0; i < formData.length; i++) {
         const element = formData[i] as HTMLInputElement;
         if (element.name) {
-          parsedData[element.name ?? i.toString()] = element.value;
+          parsedData[element.name] = element.value;
         }
       }
 
@@ -36,7 +37,9 @@ const Form = ({ onSubmit, children }: FormProps) => {
         <Divider />
         <HStack px={4} py={2} spacing={3}>
           <Spacer />
-          <Button variant='outline'>Cancel</Button>
+          <Button variant='outline' onClick={onClose}>
+            Cancel
+          </Button>
           <Button type='submit'>Submit</Button>
         </HStack>
       </form>

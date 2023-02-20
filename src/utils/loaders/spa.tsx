@@ -6,7 +6,7 @@ import { buildEndpoint } from "../api/endpoint";
 import { collectionConfig } from "../config/parse";
 import { parseData } from "../generic";
 
-type DataCollection = components["schemas"]["DataCollectionSummaryOut"];
+type DataCollection = components["schemas"]["DataCollectionSummary"];
 
 const spaCollectionConfig: DataConfig = {
   include: [

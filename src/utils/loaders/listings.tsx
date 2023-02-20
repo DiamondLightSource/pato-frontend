@@ -5,7 +5,7 @@ import { buildEndpoint } from "../api/endpoint";
 import { parseDate } from "../generic";
 
 type ProcessDataCallback = (data: Record<string, any>[]) => Record<string, any>[];
-type Session = components["schemas"]["VisitOut"];
+type Session = components["schemas"]["SessionResponse"];
 
 const getListingData = async (
   request: Request,

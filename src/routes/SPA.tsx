@@ -36,7 +36,7 @@ import { Statistics } from "../components/spa/statistics";
 import { MdRedo } from "react-icons/md";
 import { SpaCollectionData } from "../schema/interfaces";
 
-type ProcessingJob = components["schemas"]["ProcessingJobOut"];
+type ProcessingJob = components["schemas"]["ProcessingJobResponse"];
 
 const SpaPage = () => {
   const params = useParams();

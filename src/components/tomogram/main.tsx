@@ -54,7 +54,7 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
   useEffect(() => {
     client.safe_get(`autoProc/${autoProc.autoProcProgramId}/tomogram`).then((response) => {
       if (response.status === 200) {
-        const tomogram = response.data as components["schemas"]["TomogramOut"];
+        const tomogram = response.data as components["schemas"]["TomogramResponse"];
 
         setImage(`tomograms/${tomogram.tomogramId}/centralSlice`, setSliceImage);
         setImage(`tomograms/${tomogram.tomogramId}/projection?axis=xy`, setXyProjImage);

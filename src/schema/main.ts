@@ -90,6 +90,13 @@ export interface paths {
      */
     get: operations["get_tomograms_dataCollections__collectionId__tomograms_get"];
   };
+  "/dataCollections/{collectionId}/tomograms/reprocessing": {
+    /**
+     * Initiate Reprocessing 
+     * @description Initiate data reprocessing
+     */
+    post: operations["initiate_reprocessing_dataCollections__collectionId__tomograms_reprocessing_post"];
+  };
   "/dataCollections/{collectionId}/processingJobs": {
     /**
      * Get Processing Jobs 
@@ -329,8 +336,8 @@ export interface components {
       /** Items */
       items: (components["schemas"]["CtfTiltAlign"])[];
     };
-    /** DataCollectionGroupSummaryOut */
-    DataCollectionGroupSummaryOut: {
+    /** DataCollectionGroupSummaryResponse */
+    DataCollectionGroupSummaryResponse: {
       /**
        * Datacollectiongroupid 
        * @description Data Collection Group ID
@@ -358,8 +365,8 @@ export interface components {
       /** Collections */
       collections: number;
     };
-    /** DataCollectionSummaryOut */
-    DataCollectionSummaryOut: {
+    /** DataCollectionSummary */
+    DataCollectionSummary: {
       /**
        * Datacollectionid 
        * @description Data Collection ID
@@ -490,14 +497,6 @@ export interface components {
       centeringMethod: string;
       /** Averagetemperature */
       averageTemperature?: number;
-      /** Actualsamplebarcode */
-      ACTUALSAMPLEBARCODE: string;
-      /** Actualsampleslotincontainer */
-      ACTUALSAMPLESLOTINCONTAINER?: number;
-      /** Actualcontainerbarcode */
-      ACTUALCONTAINERBARCODE: string;
-      /** Actualcontainerslotinsc */
-      ACTUALCONTAINERSLOTINSC?: number;
       /** Actualcenteringposition */
       actualCenteringPosition: string;
       /** Beamshape */
@@ -508,14 +507,6 @@ export interface components {
       POSITIONID?: number;
       /** Detectorid */
       detectorId?: number;
-      /** Focalspotsizeatsamplex */
-      FOCALSPOTSIZEATSAMPLEX?: number;
-      /** Polarisation */
-      POLARISATION?: number;
-      /** Focalspotsizeatsampley */
-      FOCALSPOTSIZEATSAMPLEY?: number;
-      /** Apertureid */
-      APERTUREID?: number;
       /** Screeningorigid */
       screeningOrigId?: number;
       /** Startpositionid */
@@ -707,10 +698,10 @@ export interface components {
       /** Limit */
       limit: number;
     };
-    /** Paged[DataCollectionGroupSummaryOut] */
-    Paged_DataCollectionGroupSummaryOut_: {
+    /** Paged[DataCollectionGroupSummaryResponse] */
+    Paged_DataCollectionGroupSummaryResponse_: {
       /** Items */
-      items: (components["schemas"]["DataCollectionGroupSummaryOut"])[];
+      items: (components["schemas"]["DataCollectionGroupSummaryResponse"])[];
       /** Total */
       total: number;
       /** Page */
@@ -718,10 +709,10 @@ export interface components {
       /** Limit */
       limit: number;
     };
-    /** Paged[DataCollectionSummaryOut] */
-    Paged_DataCollectionSummaryOut_: {
+    /** Paged[DataCollectionSummary] */
+    Paged_DataCollectionSummary_: {
       /** Items */
-      items: (components["schemas"]["DataCollectionSummaryOut"])[];
+      items: (components["schemas"]["DataCollectionSummary"])[];
       /** Total */
       total: number;
       /** Page */
@@ -751,10 +742,10 @@ export interface components {
       /** Limit */
       limit: number;
     };
-    /** Paged[ProcessingJobOut] */
-    Paged_ProcessingJobOut_: {
+    /** Paged[ProcessingJobResponse] */
+    Paged_ProcessingJobResponse_: {
       /** Items */
-      items: (components["schemas"]["ProcessingJobOut"])[];
+      items: (components["schemas"]["ProcessingJobResponse"])[];
       /** Total */
       total: number;
       /** Page */
@@ -762,10 +753,10 @@ export interface components {
       /** Limit */
       limit: number;
     };
-    /** Paged[ProposalOut] */
-    Paged_ProposalOut_: {
+    /** Paged[ProposalResponse] */
+    Paged_ProposalResponse_: {
       /** Items */
-      items: (components["schemas"]["ProposalOut"])[];
+      items: (components["schemas"]["ProposalResponse"])[];
       /** Total */
       total: number;
       /** Page */
@@ -773,10 +764,10 @@ export interface components {
       /** Limit */
       limit: number;
     };
-    /** Paged[TomogramOut] */
-    Paged_TomogramOut_: {
+    /** Paged[SessionResponse] */
+    Paged_SessionResponse_: {
       /** Items */
-      items: (components["schemas"]["TomogramOut"])[];
+      items: (components["schemas"]["SessionResponse"])[];
       /** Total */
       total: number;
       /** Page */
@@ -784,10 +775,10 @@ export interface components {
       /** Limit */
       limit: number;
     };
-    /** Paged[VisitOut] */
-    Paged_VisitOut_: {
+    /** Paged[TomogramResponse] */
+    Paged_TomogramResponse_: {
       /** Items */
-      items: (components["schemas"]["VisitOut"])[];
+      items: (components["schemas"]["TomogramResponse"])[];
       /** Total */
       total: number;
       /** Page */
@@ -833,17 +824,17 @@ export interface components {
       /** Recipe */
       recipe: string;
       /** Automatic */
-      automatic: number;
+      automatic?: number;
     };
-    /** ProcessingJobOut */
-    ProcessingJobOut: {
+    /** ProcessingJobResponse */
+    ProcessingJobResponse: {
       AutoProcProgram: components["schemas"]["AutoProcProgram"];
       ProcessingJob: components["schemas"]["ProcessingJob"];
       /** Status */
       status: string;
     };
-    /** ProposalOut */
-    ProposalOut: {
+    /** ProposalResponse */
+    ProposalResponse: {
       /**
        * Proposalid 
        * @description Proposal ID
@@ -881,83 +872,26 @@ export interface components {
       /** Maximum */
       maximum: number;
     };
+    /** ReprocessingParameters */
+    ReprocessingParameters: {
+      /** Pixelsize */
+      pixelSize: number;
+      /** Tiltoffset */
+      tiltOffset: number;
+    };
+    /** ReprocessingResponse */
+    ReprocessingResponse: {
+      /** Processingjobid */
+      processingJobId: number;
+    };
     /**
      * RotationAxisEnum 
      * @description An enumeration. 
      * @enum {string}
      */
     RotationAxisEnum: "Omega" | "Kappa" | "Phi";
-    /**
-     * StateEnum 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    StateEnum: "Open" | "Closed" | "Cancelled";
-    /** TiltImageAlignment */
-    TiltImageAlignment: {
-      /** Movieid */
-      movieId: number;
-      /** Defocusu */
-      defocusU?: number;
-      /** Defocusv */
-      defocusV?: number;
-      /** Psdfile */
-      psdFile: string;
-      /** Resolution */
-      resolution?: number;
-      /** Fitquality */
-      fitQuality?: number;
-      /** Refinedmagnification */
-      refinedMagnification?: number;
-      /** Refinedtiltangle */
-      refinedTiltAngle?: number;
-      /** Refinedtiltaxis */
-      refinedTiltAxis?: number;
-      /** Residualerror */
-      residualError?: number;
-    };
-    /** TomogramOut */
-    TomogramOut: {
-      /** Tomogramid */
-      tomogramId: number;
-      /** Datacollectionid */
-      dataCollectionId: number;
-      /** Autoprocprogramid */
-      autoProcProgramId?: number;
-      /** Volumefile */
-      volumeFile: string;
-      /** Stackfile */
-      stackFile: string;
-      /** Sizex */
-      sizeX?: number;
-      /** Sizey */
-      sizeY?: number;
-      /** Sizez */
-      sizeZ?: number;
-      /** Pixelspacing */
-      pixelSpacing?: number;
-      /** Residualerrormean */
-      residualErrorMean?: number;
-      /** Residualerrorsd */
-      residualErrorSD?: number;
-      /** Xaxiscorrection */
-      xAxisCorrection?: number;
-      /** Tiltangleoffset */
-      tiltAngleOffset?: number;
-      /** Zshift */
-      zShift?: number;
-    };
-    /** ValidationError */
-    ValidationError: {
-      /** Location */
-      loc: (string | number)[];
-      /** Message */
-      msg: string;
-      /** Error Type */
-      type: string;
-    };
-    /** VisitOut */
-    VisitOut: {
+    /** SessionResponse */
+    SessionResponse: {
       /**
        * Sessionid 
        * @description Session ID
@@ -1052,6 +986,75 @@ export interface components {
       /** Datacollectiongroupid */
       dataCollectionGroupId?: number;
     };
+    /**
+     * StateEnum 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    StateEnum: "Open" | "Closed" | "Cancelled";
+    /** TiltImageAlignment */
+    TiltImageAlignment: {
+      /** Movieid */
+      movieId: number;
+      /** Defocusu */
+      defocusU?: number;
+      /** Defocusv */
+      defocusV?: number;
+      /** Psdfile */
+      psdFile: string;
+      /** Resolution */
+      resolution?: number;
+      /** Fitquality */
+      fitQuality?: number;
+      /** Refinedmagnification */
+      refinedMagnification?: number;
+      /** Refinedtiltangle */
+      refinedTiltAngle?: number;
+      /** Refinedtiltaxis */
+      refinedTiltAxis?: number;
+      /** Residualerror */
+      residualError?: number;
+    };
+    /** TomogramResponse */
+    TomogramResponse: {
+      /** Tomogramid */
+      tomogramId: number;
+      /** Datacollectionid */
+      dataCollectionId: number;
+      /** Autoprocprogramid */
+      autoProcProgramId?: number;
+      /** Volumefile */
+      volumeFile: string;
+      /** Stackfile */
+      stackFile: string;
+      /** Sizex */
+      sizeX?: number;
+      /** Sizey */
+      sizeY?: number;
+      /** Sizez */
+      sizeZ?: number;
+      /** Pixelspacing */
+      pixelSpacing?: number;
+      /** Residualerrormean */
+      residualErrorMean?: number;
+      /** Residualerrorsd */
+      residualErrorSD?: number;
+      /** Xaxiscorrection */
+      xAxisCorrection?: number;
+      /** Tiltangleoffset */
+      tiltAngleOffset?: number;
+      /** Zshift */
+      zShift?: number;
+    };
+    /** ValidationError */
+    ValidationError: {
+      /** Location */
+      loc: (string | number)[];
+      /** Message */
+      msg: string;
+      /** Error Type */
+      type: string;
+    };
   };
   responses: never;
   parameters: never;
@@ -1075,8 +1078,10 @@ export interface operations {
       query?: {
         proposal?: string;
         search?: string;
-        minDate?: string;
-        maxDate?: string;
+        minEndDate?: string;
+        maxEndDate?: string;
+        minStartDate?: string;
+        maxStartDate?: string;
         page?: number;
         limit?: number;
       };
@@ -1085,7 +1090,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Paged_VisitOut_"];
+          "application/json": components["schemas"]["Paged_SessionResponse_"];
         };
       };
       /** @description Validation Error */
@@ -1362,7 +1367,37 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Paged_TomogramOut_"];
+          "application/json": components["schemas"]["Paged_TomogramResponse_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  initiate_reprocessing_dataCollections__collectionId__tomograms_reprocessing_post: {
+    /**
+     * Initiate Reprocessing 
+     * @description Initiate data reprocessing
+     */
+    parameters: {
+      path: {
+        collectionId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReprocessingParameters"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ReprocessingResponse"];
         };
       };
       /** @description Validation Error */
@@ -1394,7 +1429,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Paged_ProcessingJobOut_"];
+          "application/json": components["schemas"]["Paged_ProcessingJobResponse_"];
         };
       };
       /** @description Validation Error */
@@ -1484,7 +1519,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Paged_DataCollectionGroupSummaryOut_"];
+          "application/json": components["schemas"]["Paged_DataCollectionGroupSummaryResponse_"];
         };
       };
       /** @description Validation Error */
@@ -1517,7 +1552,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Paged_DataCollectionSummaryOut_"];
+          "application/json": components["schemas"]["Paged_DataCollectionSummary_"];
         };
       };
       /** @description Validation Error */
@@ -1546,7 +1581,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Paged_ProposalOut_"];
+          "application/json": components["schemas"]["Paged_ProposalResponse_"];
         };
       };
       /** @description Validation Error */
@@ -1577,7 +1612,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Paged_FullMovie_"];
+          "application/json": components["schemas"]["TomogramResponse"];
         };
       };
       /** @description Validation Error */
