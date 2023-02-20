@@ -46,7 +46,7 @@ const Statistics = ({ dataCollectionId }: SpaProps) => {
       ) : [iceThickness, totalMotion, resolution, particleCount].some((i) => i === null) ? (
         <>
           <Heading py={3} variant='notFound'>
-            Frequency Data Unavailable
+            No Frequency Data Available
           </Heading>
         </>
       ) : (
