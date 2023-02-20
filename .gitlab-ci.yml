@@ -18,7 +18,8 @@ unit-test-job:
   before_script:
     - yarn install
   script:
-    - yarn run test --verbose
+    # Tests cannot run concurrently: https://github.com/mswjs/msw/issues/474
+    - yarn run test --verbose --runInBand
   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
   artifacts:
     reports:
