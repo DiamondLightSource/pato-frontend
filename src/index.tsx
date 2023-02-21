@@ -77,7 +77,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <Root />,
     errorElement: <Error />,
-    loader: async () => getUser(),
+    loader: getUser,
     children: [
       {
         path: "/",
