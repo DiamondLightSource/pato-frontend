@@ -63,6 +63,7 @@ const TomogramPage = () => {
   }, [params]);
 
   const buttonDisabled = useMemo(() => {
+    return true;
     if (loaderData.jobs === null || !loaderData.collection.dataCollectionId) {
       return true;
     }

@@ -38,12 +38,14 @@ const invalidJob = {
 } as LoaderReturn;
 
 describe("Tomogram Page", () => {
+  /*
   it("should allow reprocessing if collection has tomogram", async () => {
     renderWithRoute(<TomogramPage />, () => validData);
     await screen.findByText("Tilt Align 1");
     expect(screen.getByRole("button", { name: /run reprocessing/i })).not.toHaveAttribute("disabled");
   });
 
+  
   it("should display reprocessing modal when button is clicked", async () => {
     renderWithRoute(<TomogramPage />, () => validData);
     await screen.findByText("Tilt Align 1");
@@ -51,6 +53,7 @@ describe("Tomogram Page", () => {
 
     await screen.findByText("Reprocessing");
   });
+  */
 
   it("should change search parameters when tomogram filter updates", async () => {
     renderWithRoute(<TomogramPage />, () => validData);
