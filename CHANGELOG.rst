@@ -9,6 +9,7 @@ v0.5.0 (07/02/2023)
 **Added**
 
 - Tomogram reprocessing form enabled
+- Data statistics page now contains total motion, estimated resolution and particle count
 
 ++++++++++
 v0.4.2 (07/02/2023)
