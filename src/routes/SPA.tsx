@@ -36,7 +36,7 @@ import { Statistics } from "../components/spa/statistics";
 import { MdRedo } from "react-icons/md";
 import { SpaCollectionData } from "../schema/interfaces";
 
-type ProcessingJob = components["schemas"]["ProcessingJobOut"];
+type ProcessingJob = components["schemas"]["ProcessingJobResponse"];
 
 const SpaPage = () => {
   const params = useParams();
@@ -112,7 +112,7 @@ const SpaPage = () => {
       <Tabs isLazy onChange={handleTabChanged} index={tabIndex}>
         <TabList>
           <Tab>Processing Jobs</Tab>
-          <Tab isDisabled>Collection Statistics</Tab>
+          <Tab>Collection Statistics</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>

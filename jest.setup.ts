@@ -20,6 +20,7 @@ class ResizeObserver {
 }
 
 global.ResizeObserver = ResizeObserver
+global.window.scrollTo = () => {};
 global.structuredClone = (val: Record<string, any>) => JSON.parse(JSON.stringify(val))
 global.URL.createObjectURL = (url: Blob | MediaSource) => "blob://test";
 jest.mock('./src/store/store')

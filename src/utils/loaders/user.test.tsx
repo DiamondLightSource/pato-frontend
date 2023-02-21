@@ -29,4 +29,23 @@ describe("User Data", () => {
 
     expect(data).toBe(null);
   });
+
+  it("should redirect if access token is in URL", async () => {
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      enumerable: true,
+      value: new URL("http://localhost/test#access_token=abc123?token_type=na"),
+    });
+
+    global.window.history.replaceState = jest.fn()
+
+    server.use(
+      rest.get("http://localhost/auth/user", (req, res, ctx) => {
+        return res.once(ctx.status(401));
+      })
+    );
+
+    await getUser();
+    expect(global.window.history.replaceState).toBeCalled()
+  });
 });

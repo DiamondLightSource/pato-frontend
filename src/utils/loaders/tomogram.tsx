@@ -5,9 +5,19 @@ import { buildEndpoint } from "../api/endpoint";
 import { collectionConfig } from "../config/parse";
 import { parseData } from "../generic";
 import { redirect } from "react-router-dom";
+import { components } from "../../schema/main";
+
+type ProcessingJob = components["schemas"]["ProcessingJobResponse"];
+
+interface TomogramData {
+  collection: CollectionData,
+  total: number,
+  page: number,
+  jobs: ProcessingJob[] | null
+}
 
 const getTomogramData = async (params: Params, request: Request) => {
-  const returnData = {
+  const returnData: TomogramData = {
     collection: { info: [], comments: "", fileTemplate: "?", imageDirectory: "?" } as CollectionData,
     total: 1,
     page: 1,

@@ -18,7 +18,7 @@ import { MdLogin } from "react-icons/md";
 import { Link as LinkRouter, useLoaderData } from "react-router-dom";
 import { components } from "../schema/main";
 
-type Session = components["schemas"]["VisitOut"];
+type Session = components["schemas"]["SessionResponse"];
 
 interface SessionRowProps {
   sessions: Session[];
