@@ -32,7 +32,7 @@ function MolstarWrapper() {
   useEffect(() => {
     fetch("http://localhost:3050/test.mrc").then(async (response) => {
       if (response.status === 200) {
-        setRawData( await response.arrayBuffer());//response.data);
+        setRawData(await response.arrayBuffer()); //response.data);
         setDatatimestamp(new Date().getTime().toString());
       } else {
         setRawData(null);
