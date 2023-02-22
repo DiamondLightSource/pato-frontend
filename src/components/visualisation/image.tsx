@@ -54,7 +54,7 @@ const ImageCard = ({
           {title}
         </Heading>
       </CardHeader>
-      <CardBody>
+      <CardBody pt={0}>
         {src === undefined ? (
           <Skeleton data-testid='image-loader' h='100%' />
         ) : (
@@ -64,6 +64,7 @@ const ImageCard = ({
             src={src}
             margin='auto'
             maxH='100%'
+            pb={2}
             alt={title}
             fallbackSrc='/images/no-image.png'
           />

@@ -3,7 +3,16 @@ Changelog
 ==========
 
 ++++++++++
-v0.5.0 (07/02/2023)
+v0.6.0 (--/02/2023)
+++++++++++
+
+**Added**
+
+- 3D visualisation of volume files for SPA
+- 3D classification information
+
+++++++++++
+v0.5.0 (21/02/2023)
 ++++++++++
 
 **Added**

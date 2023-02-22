@@ -25,17 +25,18 @@ import {
   Tooltip,
   Button,
 } from "@chakra-ui/react";
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { useLoaderData, useLocation, useNavigate, useParams } from "react-router-dom";
 import { components } from "../schema/main";
 import { SPA } from "../components/spa/main";
 import { MdFolder } from "react-icons/md";
 import { InfoGroup } from "../components/visualisation/infogroup";
 import { RelionReprocessing } from "../components/spa/relion";
-import { Statistics } from "../components/spa/statistics";
 import { MdRedo } from "react-icons/md";
 import { SpaCollectionData } from "../schema/interfaces";
+import React from "react";
 
+const Statistics = React.lazy(() => import("../components/spa/statistics"));
 type ProcessingJob = components["schemas"]["ProcessingJobResponse"];
 
 const SpaPage = () => {
@@ -144,7 +145,9 @@ const SpaPage = () => {
           </TabPanel>
           <TabPanel>
             {loaderData.collection.dataCollectionId ? (
-              <Statistics dataCollectionId={loaderData.collection.dataCollectionId} />
+              <Suspense>
+                <Statistics dataCollectionId={loaderData.collection.dataCollectionId} />
+              </Suspense>
             ) : null}
           </TabPanel>
         </TabPanels>

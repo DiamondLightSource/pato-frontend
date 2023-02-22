@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
@@ -10,7 +10,6 @@ import { TomogramPage } from "./routes/Tomogram";
 import { SpaPage } from "./routes/SPA";
 import { Error } from "./routes/Error";
 import { Accordion, Button, Text, Heading, Table, Card, Tabs } from "./styles/components";
-import { Calendar } from "./routes/Calendar";
 import { colours } from "./styles/colours";
 import { Home } from "./routes/Home";
 import {
@@ -25,8 +24,9 @@ import { getListingData, getSessionData } from "./utils/loaders/listings";
 import { parseDate } from "./utils/generic";
 import { getSpaData } from "./utils/loaders/spa";
 import { getTomogramData } from "./utils/loaders/tomogram";
-const { ToastContainer } = createStandaloneToast();
+const Calendar = React.lazy(() => import("./routes/Calendar"));
 
+const { ToastContainer } = createStandaloneToast();
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
@@ -97,7 +97,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/calendar",
-        element: <Calendar />,
+        element: (
+          <Suspense>
+            <Calendar />
+          </Suspense>
+        ),
       },
       {
         path: "/proposals/:propid",

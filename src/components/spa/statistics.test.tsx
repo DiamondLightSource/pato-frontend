@@ -1,4 +1,4 @@
-import { Statistics } from "./statistics";
+import Statistics from "./statistics";
 import { renderWithProviders } from "../../utils/test-utils";
 import { screen } from "@testing-library/react";
 import { server } from "../../mocks/server";

@@ -174,4 +174,4 @@ const APNGViewer = ({ src, width = "100%", height = "64vh" }: ImageProps) => {
   );
 };
 
-export { APNGViewer };
+export default APNGViewer;

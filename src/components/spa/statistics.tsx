@@ -56,4 +56,4 @@ const Statistics = ({ dataCollectionId }: SpaProps) => {
   );
 };
 
-export { Statistics };
+export default Statistics;

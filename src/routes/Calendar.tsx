@@ -60,4 +60,4 @@ const Calendar = (): JSX.Element => {
   );
 };
 
-export { Calendar };
+export default Calendar;

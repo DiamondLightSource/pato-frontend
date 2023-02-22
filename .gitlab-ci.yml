@@ -10,6 +10,8 @@ install-job:
     - argus
   script:
     - yarn install
+  rules:
+    - if $CI_COMMIT_MESSAGE !~ [WIP].*
 
 unit-test-job:
   stage: test

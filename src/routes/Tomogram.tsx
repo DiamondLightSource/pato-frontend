@@ -20,7 +20,7 @@ import {
   ModalOverlay,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useLoaderData, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Tomogram } from "../components/tomogram/main";
 import { CollectionData } from "../schema/interfaces";
@@ -28,8 +28,9 @@ import { MotionPagination } from "../components/motion/pagination";
 import { InfoGroup } from "../components/visualisation/infogroup";
 import { MdList, MdRedo } from "react-icons/md";
 import { components } from "../schema/main";
-import { TomogramReprocessing } from "../components/tomogram/reprocessing";
+import React from "react";
 
+const TomogramReprocessing = React.lazy(() => import("../components/tomogram/reprocessing"));
 type ProcessingJob = components["schemas"]["ProcessingJobResponse"];
 
 const TomogramPage = () => {
@@ -150,11 +151,13 @@ const TomogramPage = () => {
             </ModalHeader>
             <Divider />
             <ModalBody p={0}>
-              <TomogramReprocessing
-                collectionId={loaderData.collection.dataCollectionId}
-                pixelSize={loaderData.collection.pixelSizeOnImage}
-                onClose={onClose}
-              />
+              <Suspense>
+                <TomogramReprocessing
+                  collectionId={loaderData.collection.dataCollectionId}
+                  pixelSize={loaderData.collection.pixelSizeOnImage}
+                  onClose={onClose}
+                />
+              </Suspense>
             </ModalBody>
           </ModalContent>
         </Modal>

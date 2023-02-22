@@ -1,11 +1,17 @@
-import { AccordionItem, AccordionPanel, Grid, GridItem } from "@chakra-ui/react";
+import {
+  AccordionItem,
+  AccordionPanel,
+  Grid,
+  GridItem,
+} from "@chakra-ui/react";
 import { Motion } from "../motion/motion";
 import { useCallback, useState } from "react";
-import { Class2d } from "./class2d";
+import { Classification } from "./classification";
 import { ParticlePicking } from "./particlePicking";
 import { CTF } from "../ctf/ctf";
 import { ProcessingTitle } from "../visualisation/processingTitle";
 import { BaseProcessingJobProps } from "../../schema/interfaces";
+
 
 const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
   const [total, setTotal] = useState(0);
@@ -36,7 +42,8 @@ const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
               parentId={autoProc.autoProcProgramId}
             />
             <ParticlePicking autoProcId={autoProc.autoProcProgramId} currentPage={page} total={total} />
-            <Class2d autoProcId={autoProc.autoProcProgramId} />
+            <Classification autoProcId={autoProc.autoProcProgramId} />
+            <Classification autoProcId={autoProc.autoProcProgramId} type='3d' />
           </Grid>
         )}
       </AccordionPanel>
