@@ -17,7 +17,7 @@ const InfoGroup = ({ info, height = "100%", cols = 2, py = 0 }: InfoProps) => (
     <Grid templateColumns={`repeat(${cols}, minmax(0, 1fr))`} maxH='100%' gap={1}>
       {info.map((box: Info) => (
         <GridItem key={box.label} colSpan={box.wide ? cols : 1}>
-          <Box h='100%' p={1} borderRadius={3} bg='diamond.100'>
+          <Box borderLeft="2px solid" borderColor="diamond.200" h='100%' p={1} borderRadius={3} bg='diamond.100'>
             <Text variant='infoGroupText' as='b'>{`${box.label}: `}</Text>
             <Text aria-label={`${box.label} Value`} variant='infoGroupText'>{`${box.value || "?"}`}</Text>
           </Box>

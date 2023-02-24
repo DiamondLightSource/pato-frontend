@@ -17,6 +17,7 @@ import {
   ModalOverlay,
   useDisclosure,
   Button,
+  Icon,
 } from "@chakra-ui/react";
 import { ImageCard } from "../visualisation/image";
 import { InfoGroup } from "../visualisation/infogroup";
@@ -28,6 +29,7 @@ import { parseData } from "../../utils/generic";
 import { classificationConfig } from "../../utils/config/parse";
 import { Info, ClassificationProps } from "../../schema/interfaces";
 import React from "react";
+import { MdOpenInNew } from "react-icons/md";
 const MolstarWrapper = React.lazy(() => import("./molstar"));
 
 type ClassificationSchema = components["schemas"]["Classification"];
@@ -160,28 +162,33 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
       )}
       {selectedClassInfo.info && <InfoGroup height='auto' cols={5} info={selectedClassInfo.info as Info[]} />}
       {classificationData && type === "3d" && (
-        <HStack mt={2}>
-          <Spacer />
-          <Button w='30%' onClick={onOpen}>
-            Open 3D Visualisation
-          </Button>
-        </HStack>
+        <>
+          <HStack mt={2}>
+            <Spacer />
+            <Button w='30%' onClick={onOpen}>
+              Open 3D Visualisation <Spacer />
+              <Icon as={MdOpenInNew}></Icon>
+            </Button>
+          </HStack>
+          <Modal size='2xl' isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent h='70%' minW={{ base: "95vh", md: "65vh" }}>
+              <ModalHeader paddingBottom={0}>3D Visualisation</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody h={{ base: "90vh", md: "60vh" }}>
+                {isOpen && (
+                  <Suspense>
+                    <MolstarWrapper
+                      autoProcId={autoProcId}
+                      classificationId={classificationData[selectedClass].particleClassificationId}
+                    />
+                  </Suspense>
+                )}
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+        </>
       )}
-
-      <Modal size='2xl' isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent h='70%' minW={{ base: "95vh", md: "65vh" }}>
-          <ModalHeader paddingBottom={0}>3D Visualisation</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody h={{ base: "90vh", md: "60vh" }}>
-            {isOpen && (
-              <Suspense>
-                <MolstarWrapper />
-              </Suspense>
-            )}
-          </ModalBody>
-        </ModalContent>
-      </Modal>
     </Box>
   );
 };

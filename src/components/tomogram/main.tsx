@@ -15,6 +15,8 @@ import {
   AccordionPanel,
   Skeleton,
   VStack,
+  Spacer,
+  Icon,
 } from "@chakra-ui/react";
 import { ImageCard } from "../visualisation/image";
 import { InfoGroup } from "../visualisation/infogroup";
@@ -30,6 +32,7 @@ import { components } from "../../schema/main";
 import { ProcessingTitle } from "../visualisation/processingTitle";
 import { parseData } from "../../utils/generic";
 import React from "react";
+import { MdOpenInNew } from "react-icons/md";
 
 const APNGViewer = React.lazy(() => import("../visualisation/apng"));
 
@@ -105,6 +108,8 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
                     <ImageCard height='85%' title='Central Slice' src={sliceImage} />
                     <Button w='100%' mt='1%' height='13%' alignSelf='end' size='sm' onClick={onOpen}>
                       View Movie
+                      <Spacer />
+                      <Icon as={MdOpenInNew}></Icon>
                     </Button>
                   </GridItem>
                   <GridItem height='20vh'>
