@@ -60,4 +60,16 @@ describe("2D Classification", () => {
 
     await waitFor(() => expect(screen.getByLabelText("Batch Number Value")).toHaveTextContent("355"));
   });
+
+  it("should open Molstar viewer dialog when button is clicked", async () => {
+    renderWithProviders(<Classification autoProcId={1} type='3d' />);
+
+    await waitFor(() => {
+      expect(screen.getByLabelText("Batch Number Value")).toHaveTextContent("155");
+    });
+
+    fireEvent.click(screen.getByText(/Open 3D Visualisation/i));
+
+    await screen.findByText("No Valid Volume File");
+  });
 });

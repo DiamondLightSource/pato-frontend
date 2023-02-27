@@ -15,10 +15,11 @@ import {
   HStack,
   Icon,
   Skeleton,
+  Spacer,
   Tooltip,
   VStack,
 } from "@chakra-ui/react";
-import { MdCamera, MdYoutubeSearchedFor } from "react-icons/md";
+import { MdCamera, MdFileDownload, MdYoutubeSearchedFor } from "react-icons/md";
 import { baseToast } from "../../styles/components";
 import { client } from "../../utils/api/client";
 
@@ -110,7 +111,7 @@ function MolstarWrapper({ classificationId, autoProcId }: MolstarWrapperProps) {
     <VStack h='100%'>
       <Box flexGrow={5} h='90%' key={dataTimestamp} w='100%' ref={viewerDiv}>
         {rawData ? (
-          <canvas ref={canvasRef} />
+          <canvas data-testid="render-canvas" ref={canvasRef} />
         ) : rawData === null ? (
           <VStack w='100%' h='100%' bg='diamond.75'>
             <Heading m='auto' variant='notFound'>
@@ -121,16 +122,22 @@ function MolstarWrapper({ classificationId, autoProcId }: MolstarWrapperProps) {
           <Skeleton h='100%' w='100%' />
         )}
       </Box>
-      <HStack>
+      <HStack w='100%'>
+        <Spacer />
+        <Tooltip label='Reset Zoom'>
+          <Button isDisabled={!window.molstar} onClick={() => window.molstar?.managers.camera.reset()}>
+            <Icon as={MdYoutubeSearchedFor} />
+          </Button>
+        </Tooltip>
+        <Divider orientation='vertical' />
         <Tooltip label='Take Screenshot'>
           <Button isDisabled={!window.molstar} onClick={() => window.molstar?.helpers.viewportScreenshot?.download()}>
             <Icon as={MdCamera} />
           </Button>
         </Tooltip>
-        <Divider orientation='vertical' />
-        <Tooltip label='Reset Zoom'>
-          <Button isDisabled={!window.molstar} onClick={() => window.molstar?.managers.camera.reset()}>
-            <Icon as={MdYoutubeSearchedFor} />
+        <Tooltip label='Download MRC File'>
+          <Button isDisabled>
+            <Icon as={MdFileDownload} />
           </Button>
         </Tooltip>
       </HStack>
