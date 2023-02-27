@@ -111,7 +111,7 @@ function MolstarWrapper({ classificationId, autoProcId }: MolstarWrapperProps) {
     <VStack h='100%'>
       <Box flexGrow={5} h='90%' key={dataTimestamp} w='100%' ref={viewerDiv}>
         {rawData ? (
-          <canvas data-testid="render-canvas" ref={canvasRef} />
+          <canvas data-testid='render-canvas' ref={canvasRef} />
         ) : rawData === null ? (
           <VStack w='100%' h='100%' bg='diamond.75'>
             <Heading m='auto' variant='notFound'>

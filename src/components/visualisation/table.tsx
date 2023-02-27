@@ -27,7 +27,7 @@ const TableView = ({ data, headers, onClick, label = "data" }: TableProps) => {
   );
 
   return (
-    <Box overflow='scroll'>
+    <Box overflowY='scroll'>
       {data === null || data.length === 0 ? (
         <Heading py={10} w='100%' variant='notFound'>
           No {label.toLowerCase()} found
