@@ -53,4 +53,4 @@ const TomogramReprocessing = ({ pixelSize, collectionId, onClose }: Reprocessing
   );
 };
 
-export { TomogramReprocessing };
+export default TomogramReprocessing;

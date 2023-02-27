@@ -48,6 +48,6 @@ describe("Tomogram", () => {
     fireEvent.click(screen.getByRole("button"));
     fireEvent.click(screen.getByRole("button", { name: "View Movie" }));
 
-    expect(screen.getByLabelText("Play")).toBeInTheDocument();
+    await screen.findByLabelText("Play");
   });
 });

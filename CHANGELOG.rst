@@ -3,6 +3,19 @@ Changelog
 ==========
 
 ++++++++++
+v0.6.0 (--/02/2023)
+++++++++++
+
+**Added**
+
+- 3D visualisation of volume files for SPA
+- 3D classification information
+
+**Changed**
+
+- Fixes inconsistencies between X overflow on Chrome and Firefox
+
+++++++++++
 v0.5.0 (21/02/2023)
 ++++++++++
 

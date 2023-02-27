@@ -10,6 +10,8 @@ install-job:
     - argus
   script:
     - yarn install
+  rules:
+    - if: $CI_COMMIT_MESSAGE !~ /\[WIP\].*/
 
 unit-test-job:
   stage: test
@@ -20,6 +22,8 @@ unit-test-job:
   script:
     # Tests cannot run concurrently, see https://github.com/mswjs/msw/issues/474
     - yarn run test --verbose --runInBand
+  rules:
+    - if: $CI_COMMIT_MESSAGE !~ /\[WIP\].*/
   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
   artifacts:
     reports:

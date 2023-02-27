@@ -118,6 +118,27 @@ export interface paths {
      */
     get: operations["get_ice_histogram_dataCollections__collectionId__iceThickness_get"];
   };
+  "/dataCollections/{collectionId}/totalMotion": {
+    /**
+     * Get Motion Histogram 
+     * @description Get total motion histogram
+     */
+    get: operations["get_motion_histogram_dataCollections__collectionId__totalMotion_get"];
+  };
+  "/dataCollections/{collectionId}/resolution": {
+    /**
+     * Get Resolution 
+     * @description Get estimated resolution histogram
+     */
+    get: operations["get_resolution_dataCollections__collectionId__resolution_get"];
+  };
+  "/dataCollections/{collectionId}/particles": {
+    /**
+     * Get Particle Count 
+     * @description Get particle count histogram
+     */
+    get: operations["get_particle_count_dataCollections__collectionId__particles_get"];
+  };
   "/dataGroups": {
     /**
      * Get Collection Groups 
@@ -170,17 +191,17 @@ export interface paths {
   };
   "/autoProc/{autoProcId}/classification": {
     /**
-     * Get 2D Classification 
-     * @description Get 2d classification data
+     * Get Classification 
+     * @description Get classification data
      */
-    get: operations["get_2d_classification_autoProc__autoProcId__classification_get"];
+    get: operations["get_classification_autoProc__autoProcId__classification_get"];
   };
   "/autoProc/{autoProcId}/classification/{classificationId}/image": {
     /**
-     * Get 2D Classification Image 
-     * @description Get class image
+     * Get Classification Image 
+     * @description Get class' image representation or MRC file
      */
-    get: operations["get_2d_classification_image_autoProc__autoProcId__classification__classificationId__image_get"];
+    get: operations["get_classification_image_autoProc__autoProcId__classification__classificationId__image_get"];
   };
   "/autoProc/{autoProcId}/particlePicker/{particlePickerId}/image": {
     /**
@@ -195,6 +216,27 @@ export interface paths {
      * @description Get relative ice thickness histogram
      */
     get: operations["get_ice_histogram_autoProc__autoProcId__iceThickness_get"];
+  };
+  "/autoProc/{autoProcId}/totalMotion": {
+    /**
+     * Get Motion 
+     * @description Get total motion histogram
+     */
+    get: operations["get_motion_autoProc__autoProcId__totalMotion_get"];
+  };
+  "/autoProc/{autoProcId}/resolution": {
+    /**
+     * Get Resolution 
+     * @description Get estimated resolution histogram
+     */
+    get: operations["get_resolution_autoProc__autoProcId__resolution_get"];
+  };
+  "/autoProc/{autoProcId}/particles": {
+    /**
+     * Get Particle Count 
+     * @description Get particle count histogram
+     */
+    get: operations["get_particle_count_autoProc__autoProcId__particles_get"];
   };
 }
 
@@ -267,8 +309,8 @@ export interface components {
       /** Comments */
       comments: string;
     };
-    /** Classification2D */
-    Classification2D: {
+    /** Classification */
+    Classification: {
       /** Particleclassificationgroupid */
       particleClassificationGroupId: number;
       /** Particlepickerid */
@@ -581,7 +623,7 @@ export interface components {
     /** DataPoint */
     DataPoint: {
       /** X */
-      x: number;
+      x: number | string;
       /** Y */
       y: number;
     };
@@ -687,10 +729,10 @@ export interface components {
       /** number of frames per movie */
       numberOfFrames: number;
     };
-    /** Paged[Classification2D] */
-    Paged_Classification2D_: {
+    /** Paged[Classification] */
+    Paged_Classification_: {
       /** Items */
-      items: (components["schemas"]["Classification2D"])[];
+      items: (components["schemas"]["Classification"])[];
       /** Total */
       total: number;
       /** Page */
@@ -1395,7 +1437,7 @@ export interface operations {
     };
     responses: {
       /** @description Successful Response */
-      200: {
+      202: {
         content: {
           "application/json": components["schemas"]["ReprocessingResponse"];
         };
@@ -1479,6 +1521,94 @@ export interface operations {
     parameters: {
       query?: {
         dataBin?: number;
+        minimum?: number;
+      };
+      path: {
+        collectionId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": Record<string, never>;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_motion_histogram_dataCollections__collectionId__totalMotion_get: {
+    /**
+     * Get Motion Histogram 
+     * @description Get total motion histogram
+     */
+    parameters: {
+      query?: {
+        dataBin?: number;
+        minimum?: number;
+      };
+      path: {
+        collectionId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": Record<string, never>;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_resolution_dataCollections__collectionId__resolution_get: {
+    /**
+     * Get Resolution 
+     * @description Get estimated resolution histogram
+     */
+    parameters: {
+      query?: {
+        dataBin?: number;
+        minimum?: number;
+      };
+      path: {
+        collectionId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": Record<string, never>;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_particle_count_dataCollections__collectionId__particles_get: {
+    /**
+     * Get Particle Count 
+     * @description Get particle count histogram
+     */
+    parameters: {
+      query?: {
+        dataBin?: number;
+        minimum?: number;
       };
       path: {
         collectionId: number;
@@ -1712,16 +1842,17 @@ export interface operations {
       };
     };
   };
-  get_2d_classification_autoProc__autoProcId__classification_get: {
+  get_classification_autoProc__autoProcId__classification_get: {
     /**
-     * Get 2D Classification 
-     * @description Get 2d classification data
+     * Get Classification 
+     * @description Get classification data
      */
     parameters: {
         /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
         /** @description Number of results to show */
       query?: {
         sortBy?: "class" | "particles" | "resolution";
+        classType?: "2d" | "3d";
         page?: number;
         limit?: number;
       };
@@ -1733,7 +1864,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Paged_Classification2D_"];
+          "application/json": components["schemas"]["Paged_Classification_"];
         };
       };
       /** @description Validation Error */
@@ -1744,10 +1875,10 @@ export interface operations {
       };
     };
   };
-  get_2d_classification_image_autoProc__autoProcId__classification__classificationId__image_get: {
+  get_classification_image_autoProc__autoProcId__classification__classificationId__image_get: {
     /**
-     * Get 2D Classification Image 
-     * @description Get class image
+     * Get Classification Image 
+     * @description Get class' image representation or MRC file
      */
     parameters: {
       path: {
@@ -1796,6 +1927,94 @@ export interface operations {
     parameters: {
       query?: {
         dataBin?: number;
+        minimum?: number;
+      };
+      path: {
+        autoProcId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": Record<string, never>;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_motion_autoProc__autoProcId__totalMotion_get: {
+    /**
+     * Get Motion 
+     * @description Get total motion histogram
+     */
+    parameters: {
+      query?: {
+        dataBin?: number;
+        minimum?: number;
+      };
+      path: {
+        autoProcId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": Record<string, never>;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_resolution_autoProc__autoProcId__resolution_get: {
+    /**
+     * Get Resolution 
+     * @description Get estimated resolution histogram
+     */
+    parameters: {
+      query?: {
+        dataBin?: number;
+        minimum?: number;
+      };
+      path: {
+        autoProcId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": Record<string, never>;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_particle_count_autoProc__autoProcId__particles_get: {
+    /**
+     * Get Particle Count 
+     * @description Get particle count histogram
+     */
+    parameters: {
+      query?: {
+        dataBin?: number;
+        minimum?: number;
       };
       path: {
         autoProcId: number;

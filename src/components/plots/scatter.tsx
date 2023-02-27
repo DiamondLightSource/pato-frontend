@@ -160,8 +160,8 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
 
     if (data.length === 0) {
       return (
-        <VStack alignItems='center' justifyContent='center' display='flex' width={width} height={height}>
-          <Heading lineHeight='100%' variant='notFound'>
+        <VStack width={width} height={height}>
+          <Heading variant='notFound'>
             No Data Available
           </Heading>
         </VStack>

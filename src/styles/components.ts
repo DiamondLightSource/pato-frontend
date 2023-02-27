@@ -70,9 +70,12 @@ const baseCardStyle = definePartsStyle({
     borderRadius:'lg',
     _hover: {
       borderColor: "diamond.400",
+      cursor: "pointer"
     },
     _selected: {
-      bg: "diamond.200"
+      bg: "diamond.100",
+      borderBottom: "3px solid",
+      borderColor: "diamond.400",
     }
   }, 
   header: {

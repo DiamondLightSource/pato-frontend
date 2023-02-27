@@ -1,6 +1,6 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { renderWithProviders } from "../../utils/test-utils";
-import { APNGViewer } from "./apng";
+import APNGViewer from "./apng";
 
 global.URL.createObjectURL = jest.fn(() => "http://localhost/noimage.png");
 

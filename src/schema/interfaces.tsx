@@ -41,6 +41,11 @@ export interface SpaProps {
   autoProcId: number;
 }
 
+export interface ClassificationProps extends SpaProps {
+  /* Classification type (2D or 3D) */
+  type?: "2d" | "3d"
+}
+
 export interface BaseProcessingJobProps {
   autoProc: AutoProcSchema;
   procJob: ProcessingJobSchema;

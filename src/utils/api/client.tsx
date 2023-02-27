@@ -57,6 +57,9 @@ export async function client(
     clearTimeout(timeoutFetch);
 
     switch (response.headers.get("content-type")) {
+      case "application/marc":
+        data = await response.arrayBuffer();
+        break;
       case "image/png":
         data = await response.arrayBuffer();
         break;
