@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v0.6.1 (28/02/2023)
+++++++++++
+
+**Changed**
+
+- Fixes rendering MRC files with non-standard content types
+
+++++++++++
 v0.6.0 (28/02/2023)
 ++++++++++
 
