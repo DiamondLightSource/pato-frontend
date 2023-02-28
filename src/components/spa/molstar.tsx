@@ -63,11 +63,8 @@ function MolstarWrapper({ classificationId, autoProcId }: MolstarWrapperProps) {
   }, [autoProcId, classificationId]);
 
   useEffect(() => {
-    window.molstar = new PluginContext(DefaultSpec);
     async function init() {
-      if (!window.molstar) {
-        return;
-      }
+      window.molstar = new PluginContext(DefaultSpec);
 
       await window.molstar.init();
 
