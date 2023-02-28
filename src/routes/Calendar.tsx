@@ -1,12 +1,11 @@
-import { Box, Divider, Heading, HStack, Square, Tag, Text } from "@chakra-ui/react";
-import FullCalendar, { EventClickArg, EventApi, EventInput } from "@fullcalendar/react";
+import { Box, Divider, Heading, HStack, Text } from "@chakra-ui/react";
+import FullCalendar, { EventClickArg, EventApi, EventInput, DatesSetArg } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import { EventSourceInput } from "@fullcalendar/react";
-import "../styles/main.css";
 import { useCallback, useEffect, useState } from "react";
 import { client } from "../utils/api/client";
 import { useNavigate } from "react-router-dom";
 import { components } from "../schema/main";
+import "../styles/calendar.css";
 
 type SessionSchema = components["schemas"]["SessionResponse"];
 
@@ -38,12 +37,20 @@ const Calendar = () => {
     navigate(`/proposals/${e.event.extendedProps.proposalId}/sessions/${e.event.id}`);
   };
 
-  const getEvents = useCallback((info: any , success: (e: EventInput[]) => void) => {
-    console.log(info);
+  const [events, setEvents] = useState<EventInput[]>();
+  const [calendarDates, setCalendarDates] = useState<{ start: string; end: string }>();
+
+  const updateDates = useCallback((dateInfo: DatesSetArg) => {
+    setCalendarDates({ start: dateInfo.start.toISOString(), end: dateInfo.end.toISOString() });
+  }, []);
+
+  useEffect(() => {
+    if (!calendarDates) {
+      return;
+    }
+
     client
-      .safe_get(
-        `sessions?minStartDate=${info.start.toISOString()}&maxStartDate=${info.end.toISOString()}&search=m&limit=250`
-      )
+      .safe_get(`sessions?minStartDate=${calendarDates.start}&maxStartDate=${calendarDates.end}&search=m&limit=250`)
       .then((response) => {
         const events: EventInput[] = response.data.items.map((event: SessionSchema) => ({
           id: event.sessionId,
@@ -55,9 +62,9 @@ const Calendar = () => {
             visitNumber: event.visit_number,
           },
         }));
-        success(events);
+        setEvents(events);
       });
-  }, []);
+  }, [calendarDates]);
 
   return (
     <div>
@@ -67,13 +74,16 @@ const Calendar = () => {
         <FullCalendar
           height='80vh'
           plugins={[dayGridPlugin]}
-          //events={(info, success) => getEvents(info, success)}
           eventTimeFormat={{
             hour: "2-digit",
             minute: "2-digit",
             meridiem: false,
           }}
-          datesSet={(info) => {console.log(info)}}
+          buttonText={{
+            today: "Current Month",
+          }}
+          datesSet={updateDates}
+          events={events}
           eventContent={(info) => <EventItem info={info.event} />}
           dayMaxEventRows={true}
           dayMaxEvents={true}
