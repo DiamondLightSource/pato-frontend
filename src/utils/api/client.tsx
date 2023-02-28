@@ -60,6 +60,9 @@ export async function client(
       case "application/marc":
         data = await response.arrayBuffer();
         break;
+      case "text/plain; charset=utf-8":
+        data = await response.arrayBuffer();
+        break;
       case "image/png":
         data = await response.arrayBuffer();
         break;
@@ -70,7 +73,7 @@ export async function client(
         data = await response.json();
         break;
       default:
-        data = null;
+        data = response;
         break;
     }
 
