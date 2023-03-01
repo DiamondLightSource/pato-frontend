@@ -15,10 +15,11 @@ interface EventProps {
 
 const EventItem = ({ info }: EventProps) => {
   return (
-    <Box cursor='pointer' w='100%'>
-      <HStack textOverflow='ellipsis' spacing={1} width='100%'>
+    <Box data-testid={`event-${info.title}`} cursor='pointer' w='100%'>
+      <HStack alignItems='stretch' textOverflow='ellipsis' spacing={1} width='100%'>
+        <Box w='2px' bg='diamond.600' />
         <Text fontWeight={600} color='diamond.600'>
-          {info.start?.toLocaleTimeString("en-gb", { hour: "2-digit", minute: "2-digit" })}
+          {info.start!.toLocaleTimeString("en-gb", { hour: "2-digit", minute: "2-digit" })}
         </Text>
         <Text>{info.title}</Text>
         <Text textOverflow='ellipsis' overflowX='hidden' opacity='0.7'>
@@ -33,9 +34,12 @@ const EventItem = ({ info }: EventProps) => {
 const Calendar = () => {
   const navigate = useNavigate();
 
-  const eventClick = (e: EventClickArg) => {
-    navigate(`/proposals/${e.event.extendedProps.proposalId}/sessions/${e.event.id}`);
-  };
+  const eventClick = useCallback(
+    (e: EventClickArg) => {
+      navigate(`/proposals/${e.event.extendedProps.proposalId}/sessions/${e.event.id}`);
+    },
+    [navigate]
+  );
 
   const [events, setEvents] = useState<EventInput[]>();
   const [calendarDates, setCalendarDates] = useState<{ start: string; end: string }>();
@@ -52,16 +56,18 @@ const Calendar = () => {
     client
       .safe_get(`sessions?minStartDate=${calendarDates.start}&maxStartDate=${calendarDates.end}&search=m&limit=250`)
       .then((response) => {
-        const events: EventInput[] = response.data.items.map((event: SessionSchema) => ({
-          id: event.sessionId,
-          start: event.startDate,
-          title: event.beamLineName,
-          extendedProps: {
-            proposalId: event.proposalId,
-            parentProposal: event.parentProposal,
-            visitNumber: event.visit_number,
-          },
-        }));
+        const events: EventInput[] = response.data.items
+          .filter((event: SessionSchema) => event.startDate !== null)
+          .map((event: SessionSchema) => ({
+            id: event.sessionId,
+            start: event.startDate,
+            title: event.beamLineName,
+            extendedProps: {
+              proposalId: event.proposalId,
+              parentProposal: event.parentProposal,
+              visitNumber: event.visit_number,
+            },
+          }));
         setEvents(events);
       });
   }, [calendarDates]);

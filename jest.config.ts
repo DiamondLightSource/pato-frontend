@@ -25,20 +25,13 @@ export default {
   // The directory where Jest should output its coverage files
   coverageDirectory: "coverage",
 
-  coveragePathIgnorePatterns: [
-    "/node_modules/",
-    "src/mocks"
-  ],
+  coveragePathIgnorePatterns: ["/node_modules/", "src/mocks"],
 
   // Indicates which provider should be used to instrument code for coverage
   coverageProvider: "v8",
 
   // A list of reporter names that Jest uses when writing coverage reports
-  coverageReporters: [
-     "json",
-     "text",
-     "cobertura" 
-  ],
+  coverageReporters: ["json", "text", "cobertura"],
 
   // An object that configures minimum threshold enforcement for coverage results
   // coverageThreshold: undefined,
@@ -80,7 +73,8 @@ export default {
   // ],
 
   moduleNameMapper: {
-  "^d3-(.*)$": `d3-$1/dist/d3-$1`
+    "^d3-(.*)$": `d3-$1/dist/d3-$1`,
+    "\\.(css|less)$": "identity-obj-proxy",
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -138,8 +132,8 @@ export default {
 
   // The test environment that will be used for testing
   testEnvironment: "jsdom",
-  preset: 'ts-jest',
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+  preset: "ts-jest",
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
