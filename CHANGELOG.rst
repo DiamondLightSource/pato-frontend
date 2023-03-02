@@ -16,6 +16,14 @@ v0.7.0 (--/02/2023)
 - Classification rows with no data no longer display skeleton for pagination
 
 ++++++++++
+v0.6.1 (28/02/2023)
+++++++++++
+
+**Changed**
+
+- Fixes rendering MRC files with non-standard content types
+
+++++++++++
 v0.6.0 (28/02/2023)
 ++++++++++
 
