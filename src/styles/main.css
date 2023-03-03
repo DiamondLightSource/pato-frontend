@@ -1,0 +1,27 @@
+.rootContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.footer {
+  flex-shrink: 0;
+}
+
+.main {
+  padding: 2.5vh 10vw;
+  flex: 1 0 auto;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+.homeRoot > * {
+  padding: 4vh 10vw;
+  width: 100%;
+  justify-content: start;
+  align-items: start;
+}
