@@ -3,6 +3,19 @@ Changelog
 ==========
 
 ++++++++++
+v0.7.0 (--/02/2023)
+++++++++++
+
+**Added**
+
+- Calendar page completely functional
+- Enabled screenshot/zoom reset buttons on 3D visualisation (SPA)
+
+**Changed**
+
+- Classification rows with no data no longer display skeleton for pagination
+
+++++++++++
 v0.6.1 (28/02/2023)
 ++++++++++
 
