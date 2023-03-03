@@ -1,0 +1,12 @@
+.fc-header-toolbar {
+  margin-bottom: 0.5em !important;
+}
+
+.fc-button-primary {
+  background-color: var(--chakra-colors-diamond-600) !important;
+  border: none !important;
+}
+
+.fc-button-primary:hover {
+  background-color: var(--chakra-colors-diamond-700) !important;
+}

@@ -264,6 +264,26 @@ export const handlers = [
     return res(ctx.status(401));
   }),
 
+  rest.get("http://localhost/sessions", (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.delay(0),
+      ctx.json({
+        items: [
+          {
+            proposalId: 999,
+            beamLineName: "m01",
+            sessionId: 1,
+            parentProposal: "cm31111",
+            visit_number: 1,
+            startDate: "2023-01-01T09:00",
+            endDate: "2023-01-01T09:00",
+          },
+        ],
+      })
+    );
+  }),
+
   rest.get("http://localhost/dataGroups/:groupId/dataCollections", async (req, res, ctx) => {
     return res(
       ctx.status(200),
