@@ -28,6 +28,8 @@ const DefaultSpec: PluginSpec = {
   config: [[PluginConfig.VolumeStreaming.Enabled, false]],
 };
 
+// This is a rather complex context instance, using it inside states would
+// incur heavy performance penalties
 declare global {
   interface Window {
     molstar?: PluginContext | null;
@@ -45,7 +47,7 @@ function MolstarWrapper({ classificationId, autoProcId }: MolstarWrapperProps) {
   const viewerDiv = createRef<HTMLDivElement>();
   const canvasRef = createRef<HTMLCanvasElement>();
   const [dataTimestamp, setDatatimestamp] = useState("1");
-  const [rawData, setRawData] = useState<ArrayBuffer | null>();
+  const [rawData, setRawData] = useState<ArrayBuffer | null | undefined>();
 
   useEffect(() => {
     client.safe_get(`autoProc/${autoProcId}/classification/${classificationId}/image`).then(async (response) => {
@@ -92,7 +94,7 @@ function MolstarWrapper({ classificationId, autoProcId }: MolstarWrapperProps) {
       await repr.commit();
     }
 
-    if (rawData) {
+    if (rawData && canvasRef) {
       init();
     }
 
@@ -102,7 +104,7 @@ function MolstarWrapper({ classificationId, autoProcId }: MolstarWrapperProps) {
       window.molstar?.dispose();
       window.molstar = null;
     };
-  }, [rawData, viewerDiv, canvasRef, toast]);
+  }, [canvasRef, rawData, toast, viewerDiv]);
 
   return (
     <VStack h='100%'>
@@ -122,13 +124,13 @@ function MolstarWrapper({ classificationId, autoProcId }: MolstarWrapperProps) {
       <HStack w='100%'>
         <Spacer />
         <Tooltip label='Reset Zoom'>
-          <Button isDisabled={!window.molstar} onClick={() => window.molstar?.managers.camera.reset()}>
+          <Button isDisabled={!rawData} onClick={() => window.molstar?.managers.camera.reset()}>
             <Icon as={MdYoutubeSearchedFor} />
           </Button>
         </Tooltip>
         <Divider orientation='vertical' />
         <Tooltip label='Take Screenshot'>
-          <Button isDisabled={!window.molstar} onClick={() => window.molstar?.helpers.viewportScreenshot?.download()}>
+          <Button isDisabled={!rawData} onClick={() => window.molstar?.helpers.viewportScreenshot?.download()}>
             <Icon as={MdCamera} />
           </Button>
         </Tooltip>
