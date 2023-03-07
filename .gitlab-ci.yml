@@ -55,3 +55,19 @@ sync-deploy-versions:
     - tags
   script:
     - curl --request POST "https://${CI_SERVER_HOST}/api/v4/projects/6068/trigger/pipeline?token=${CI_PIPELINE_TRIGGER}&ref=${CI_DEFAULT_BRANCH}"
+
+sync-github:
+  stage: build
+  tags:
+    - docker-image
+  image:
+    name: alpine/git
+  only:
+    - tags
+    - triggers
+  script:
+    - rm -rf .git
+    - git clone https://$CI_GITHUB_TOKEN@github.com/diamondLightSource/pato-frontend.git github-upstream && cd github-upstream
+    - cp ../src/ src/
+    - git commit -m "Release $CI_COMMIT_TAG"
+    - git push https://$CI_GITHUB_TOKEN@github.com/diamondLightSource/pato-frontend.git
