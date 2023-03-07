@@ -6,11 +6,11 @@ import { CollectionData } from "../schema/interfaces";
 
 type LoaderReturn = Awaited<ReturnType<typeof getTomogramData>>;
 
-const mockParams = jest.fn();
 const searchMap = new Map();
 
 searchMap.set("onlyTomograms", false);
 
+const mockParams = jest.fn();
 jest.mock("react-router-dom", () => ({
   ...(jest.requireActual("react-router-dom") as any),
   useNavigate: () => () => {},

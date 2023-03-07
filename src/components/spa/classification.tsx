@@ -107,15 +107,19 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
       <HStack>
         <Heading variant='collection'>{type.toUpperCase()} Classification</Heading>
         <Spacer />
-        <Heading size='xs'>Sort by</Heading>
-        <Select bg='white' onChange={(e) => setSortType(e.target.value)} size='xs' w='180px'>
-          {sortValues.map((item) => (
-            <option key={item.key} value={item.key}>
-              {item.label}
-            </option>
-          ))}
-        </Select>
-        <MotionPagination startFrom='start' onChange={handleClassificationChange} total={pageAmount} />
+        {classificationData !== null && (
+          <>
+            <Heading size='xs'>Sort by</Heading>
+            <Select bg='white' onChange={(e) => setSortType(e.target.value)} size='xs' w='180px'>
+              {sortValues.map((item) => (
+                <option key={item.key} value={item.key}>
+                  {item.label}
+                </option>
+              ))}
+            </Select>
+            <MotionPagination startFrom='start' onChange={handleClassificationChange} total={pageAmount} />
+          </>
+        )}
       </HStack>
       <Divider />
       {classificationData ? (
@@ -156,7 +160,7 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
       ) : classificationData === undefined ? (
         <Skeleton h='23vh' marginBottom={1} />
       ) : (
-        <Heading paddingTop={10} variant='notFound'>
+        <Heading h='14vh' paddingTop={10} variant='notFound'>
           No Classification Data Found
         </Heading>
       )}
