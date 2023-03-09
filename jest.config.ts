@@ -80,7 +80,8 @@ export default {
   // ],
 
   moduleNameMapper: {
-  "^d3-(.*)$": `d3-$1/dist/d3-$1`
+    "^d3-(.*)$": `d3-$1/dist/d3-$1`,
+    "\\.(css|less)$": "identity-obj-proxy",
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
