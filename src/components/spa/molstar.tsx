@@ -1,26 +1,13 @@
 import { DefaultPluginSpec, PluginSpec } from "molstar/lib/mol-plugin/spec";
 import { PluginContext } from "molstar/lib/mol-plugin/context";
 import { PluginConfig } from "molstar/lib/mol-plugin/config";
-import { createRef, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { StateObjectSelector } from "molstar/lib/mol-state";
 import { PluginStateObject } from "molstar/lib/mol-plugin-state/objects";
 import { StateTransforms } from "molstar/lib/mol-plugin-state/transforms";
 import { createVolumeRepresentationParams } from "molstar/lib/mol-plugin-state/helpers/volume-representation-params";
-import {
-  Box,
-  Button,
-  createStandaloneToast,
-  Divider,
-  Heading,
-  HStack,
-  Icon,
-  Skeleton,
-  Spacer,
-  Tooltip,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Button, Divider, Heading, HStack, Icon, Skeleton, Spacer, Tooltip, VStack } from "@chakra-ui/react";
 import { MdCamera, MdFileDownload, MdYoutubeSearchedFor } from "react-icons/md";
-import { baseToast } from "../../styles/components";
 import { client } from "../../utils/api/client";
 
 const DefaultSpec: PluginSpec = {
@@ -40,12 +27,13 @@ interface MolstarWrapperProps {
   /* Particle classification ID */
   classificationId: number;
   autoProcId: number;
+  /* Additional custom controls */
+  children?: ReactNode;
 }
 
-function MolstarWrapper({ classificationId, autoProcId }: MolstarWrapperProps) {
-  const { toast } = createStandaloneToast();
-  const viewerDiv = createRef<HTMLDivElement>();
-  const canvasRef = createRef<HTMLCanvasElement>();
+function MolstarWrapper({ classificationId, autoProcId, children }: MolstarWrapperProps) {
+  const viewerDiv = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [dataTimestamp, setDatatimestamp] = useState("1");
   const [rawData, setRawData] = useState<ArrayBuffer | null | undefined>();
 
@@ -58,10 +46,6 @@ function MolstarWrapper({ classificationId, autoProcId }: MolstarWrapperProps) {
         setRawData(null);
       }
     });
-
-    return () => {
-      setRawData(null);
-    };
   }, [autoProcId, classificationId]);
 
   useEffect(() => {
@@ -71,12 +55,7 @@ function MolstarWrapper({ classificationId, autoProcId }: MolstarWrapperProps) {
       await window.molstar.init();
 
       if (!window.molstar.initViewer(canvasRef.current as HTMLCanvasElement, viewerDiv.current as HTMLDivElement)) {
-        toast({
-          ...baseToast,
-          title: "Error while trying to render volume",
-          description: "The volume could not be rendered because of an internal error",
-          status: "error",
-        });
+        return;
       }
 
       const data = await window.molstar.builders.data.rawData({ data: rawData! }, { state: { isGhost: true } });
@@ -104,25 +83,11 @@ function MolstarWrapper({ classificationId, autoProcId }: MolstarWrapperProps) {
       window.molstar?.dispose();
       window.molstar = null;
     };
-  }, [canvasRef, rawData, toast, viewerDiv]);
+  }, [rawData, viewerDiv, canvasRef]);
 
   return (
     <VStack h='100%'>
-      <Box flexGrow={5} h='90%' key={dataTimestamp} w='100%' ref={viewerDiv}>
-        {rawData ? (
-          <canvas data-testid='render-canvas' ref={canvasRef} />
-        ) : rawData === null ? (
-          <VStack w='100%' h='100%' bg='diamond.75'>
-            <Heading m='auto' variant='notFound'>
-              No Valid Volume File
-            </Heading>
-          </VStack>
-        ) : (
-          <Skeleton h='100%' w='100%' />
-        )}
-      </Box>
       <HStack w='100%'>
-        <Spacer />
         <Tooltip label='Reset Zoom'>
           <Button isDisabled={!rawData} onClick={() => window.molstar?.managers.camera.reset()}>
             <Icon as={MdYoutubeSearchedFor} />
@@ -139,7 +104,22 @@ function MolstarWrapper({ classificationId, autoProcId }: MolstarWrapperProps) {
             <Icon as={MdFileDownload} />
           </Button>
         </Tooltip>
+        <Spacer />
+        {children}
       </HStack>
+      <Box flexGrow={5} h='90%' w='100%' ref={viewerDiv}>
+        {rawData ? (
+          <canvas key={dataTimestamp} data-testid='render-canvas' ref={canvasRef} />
+        ) : rawData === null ? (
+          <VStack w='100%' h='100%' bg='diamond.75'>
+            <Heading m='auto' variant='notFound'>
+              No Valid Volume File
+            </Heading>
+          </VStack>
+        ) : (
+          <Skeleton h='100%' w='100%' />
+        )}
+      </Box>
     </VStack>
   );
 }

@@ -104,7 +104,7 @@ const TomogramPage = () => {
             <MotionPagination
               size='md'
               onChange={updateCollection}
-              displayDefault={parseInt(params.collectionIndex ?? "1")}
+              defaultPage={parseInt(params.collectionIndex ?? "1")}
               total={loaderData.total}
             />
           </HStack>

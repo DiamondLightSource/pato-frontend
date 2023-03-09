@@ -11,9 +11,10 @@ const searchMap = new Map();
 searchMap.set("onlyTomograms", false);
 
 const mockParams = jest.fn();
+const mockNavigate = jest.fn();
 jest.mock("react-router-dom", () => ({
   ...(jest.requireActual("react-router-dom") as any),
-  useNavigate: () => () => {},
+  useNavigate: () => mockNavigate,
   useSearchParams: () => [searchMap, mockParams],
 }));
 
@@ -25,7 +26,7 @@ const validData = {
     fileTemplate: "?",
     imageDirectory: "?",
   } as CollectionData,
-  total: 1,
+  total: 2,
   page: 1,
   jobs: [{ ProcessingJob: { processingJobId: 123 }, AutoProcProgram: { autoProcProgramId: 1 }, status: "Successful" }],
 } as LoaderReturn;
@@ -55,10 +56,18 @@ describe("Tomogram Page", () => {
   });
   */
 
+  it("should change page when next page button is clicked", async () => {
+    renderWithRoute(<TomogramPage />, () => validData);
+    await screen.findByText("Tilt Align 1");
+    fireEvent.click(await screen.findByLabelText("Next Page"));
+
+    await waitFor(() => expect(mockNavigate).toBeCalledWith("../2?onlyTomograms=false", {"relative": "path"}));
+  });
+
   it("should change search parameters when tomogram filter updates", async () => {
     renderWithRoute(<TomogramPage />, () => validData);
     await screen.findByText("Tilt Align 1");
-    fireEvent.click(screen.getByTestId("filter-tomograms"), { value: true });
+    fireEvent.click(screen.getByTestId("filter-tomograms"));
 
     await waitFor(() => expect(mockParams).toBeCalledWith({ onlyTomograms: "true" }));
   });

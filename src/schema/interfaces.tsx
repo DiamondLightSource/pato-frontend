@@ -1,5 +1,5 @@
 import { ResponsiveValue } from "@chakra-ui/react";
-import { components } from "./main";
+import { components, paths } from "./main";
 
 type AutoProcSchema = components["schemas"]["AutoProcProgram"];
 type ProcessingJobSchema = components["schemas"]["ProcessingJob"];
@@ -43,7 +43,7 @@ export interface SpaProps {
 
 export interface ClassificationProps extends SpaProps {
   /* Classification type (2D or 3D) */
-  type?: "2d" | "3d"
+  type?: "2d" | "3d";
 }
 
 export interface BaseProcessingJobProps {
@@ -136,3 +136,7 @@ export interface SpaCollectionData extends CollectionData {
   fileTemplate: string;
   imageDirectory: string;
 }
+
+export type SortTypes = NonNullable<
+  NonNullable<paths["/autoProc/{autoProcId}/classification"]["get"]["parameters"]["query"]>["sortBy"]
+>;

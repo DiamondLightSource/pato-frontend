@@ -193,6 +193,14 @@ export const handlers = [
     return res(ctx.status(404));
   }),
 
+  rest.get("http://localhost/autoProc/:autoProcId/classification/:classId/image", (req, res, ctx) => {
+    return res.once(ctx.status(200), ctx.body("A"), ctx.set("Content-Type", "image/png"));
+  }),
+
+  rest.get("http://localhost/autoProc/:autoProcId/particlePicker/:classId/image", (req, res, ctx) => {
+    return res.once(ctx.status(200), ctx.body("A"), ctx.set("Content-Type", "image/png"));
+  }),
+
   rest.get("http://localhost/autoProc/:procId/classification", async (req, res, ctx) => {
     if (req.params.procId === "2") {
       return res(ctx.status(404));

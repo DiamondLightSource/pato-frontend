@@ -18,13 +18,13 @@ describe("MotionPagination", () => {
   });
 
   it("should respect default item set by user", async () => {
-    renderWithProviders(<MotionPagination displayDefault={90} total={112} />);
+    renderWithProviders(<MotionPagination defaultPage={90} total={112} />);
 
     expect(screen.getByDisplayValue("90")).toBeInTheDocument();
   });
 
   it("should not display default if default is an invalid page number", async () => {
-    renderWithProviders(<MotionPagination displayDefault={-1} total={112} />);
+    renderWithProviders(<MotionPagination defaultPage={-1} total={112} />);
 
     expect(screen.queryByDisplayValue("-1")).not.toBeInTheDocument();
   });
