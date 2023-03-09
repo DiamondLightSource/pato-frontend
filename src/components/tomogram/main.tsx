@@ -18,23 +18,23 @@ import {
   Spacer,
   Icon,
 } from "@chakra-ui/react";
-import { ImageCard } from "../visualisation/image";
-import { InfoGroup } from "../visualisation/infogroup";
-import { PlotContainer } from "../visualisation/plotContainer";
-import { Motion } from "../motion/motion";
+import { ImageCard } from "components/visualisation/image";
+import { InfoGroup } from "components/visualisation/infogroup";
+import { PlotContainer } from "components/visualisation/plotContainer";
+import { Motion } from "components/motion/motion";
 import { Suspense, useEffect, useState } from "react";
-import { client } from "../../utils/api/client";
-import { TomogramData, BasePoint, BaseProcessingJobProps, DataConfig } from "../../schema/interfaces";
-import { CTF } from "../ctf/ctf";
-import { Scatter } from "../plots/scatter";
-import { setImage } from "../../utils/api/response";
-import { components } from "../../schema/main";
-import { ProcessingTitle } from "../visualisation/processingTitle";
-import { parseData } from "../../utils/generic";
+import { client } from "utils/api/client";
+import { TomogramData, BasePoint, BaseProcessingJobProps, DataConfig } from "schema/interfaces";
+import { CTF } from "components/ctf/ctf";
+import { Scatter } from "components/plots/scatter";
+import { setImage } from "utils/api/response";
+import { components } from "schema/main";
+import { ProcessingTitle } from "components/visualisation/processingTitle";
+import { parseData } from "utils/generic";
 import React from "react";
 import { MdOpenInNew } from "react-icons/md";
 
-const APNGViewer = React.lazy(() => import("../visualisation/apng"));
+const APNGViewer = React.lazy(() => import("components/visualisation/apng"));
 
 const tomogramConfig: DataConfig = {
   include: [

@@ -1,8 +1,8 @@
 import { Params } from "react-router-dom";
-import { components } from "../../schema/main";
-import { client } from "../api/client";
-import { buildEndpoint } from "../api/endpoint";
-import { parseDate } from "../generic";
+import { components } from "schema/main";
+import { client } from "utils/api/client";
+import { buildEndpoint } from "utils/api/endpoint";
+import { parseDate } from "utils/generic";
 
 type ProcessDataCallback = (data: Record<string, any>[]) => Record<string, any>[];
 type Session = components["schemas"]["SessionResponse"];

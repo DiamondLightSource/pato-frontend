@@ -1,5 +1,5 @@
 import { ResponsiveValue } from "@chakra-ui/react";
-import { components, paths } from "./main";
+import { components, paths } from "schema/main";
 
 type AutoProcSchema = components["schemas"]["AutoProcProgram"];
 type ProcessingJobSchema = components["schemas"]["ProcessingJob"];
@@ -118,7 +118,8 @@ export interface CompleteScatterPlotOptions {
   };
 }
 
-export interface ScatterPlotOptions extends DeepPartial<CompleteScatterPlotOptions> {}
+export interface ScatterPlotOptions
+  extends DeepPartial<CompleteScatterPlotOptions> {}
 
 export interface CompleteBoxOptions {
   y: PlotAxisOptions;
@@ -138,5 +139,7 @@ export interface SpaCollectionData extends CollectionData {
 }
 
 export type SortTypes = NonNullable<
-  NonNullable<paths["/autoProc/{autoProcId}/classification"]["get"]["parameters"]["query"]>["sortBy"]
+  NonNullable<
+    paths["/autoProc/{autoProcId}/classification"]["get"]["parameters"]["query"]
+  >["sortBy"]
 >;

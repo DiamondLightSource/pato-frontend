@@ -1,6 +1,6 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import { renderWithProviders } from "../../utils/test-utils";
-import { DebouncedInput } from "./debounced";
+import { renderWithProviders } from "utils/test-utils";
+import { DebouncedInput } from "components/input/debounced";
 
 describe("Debounced Input", () => {
   it("should fire event on blur", () => {

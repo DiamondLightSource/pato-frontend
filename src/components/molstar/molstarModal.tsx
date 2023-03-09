@@ -15,13 +15,13 @@ import {
   Skeleton,
 } from "@chakra-ui/react";
 import { Suspense, useCallback, useEffect, useState } from "react";
-import { client } from "../../utils/api/client";
-import { MotionPagination } from "../motion/pagination";
-import { components } from "../../schema/main";
+import { client } from "utils/api/client";
+import { MotionPagination } from "components/motion/pagination";
+import { components } from "schema/main";
 import React from "react";
 import { MdOpenInNew } from "react-icons/md";
-import { SortTypes } from "../../schema/interfaces";
-const MolstarWrapper = React.lazy(() => import("./molstar"));
+import { SortTypes } from "schema/interfaces";
+const MolstarWrapper = React.lazy(() => import("components/molstar/molstar"));
 
 type ClassificationSchema = components["schemas"]["Classification"];
 
@@ -99,7 +99,9 @@ const MolstarModal = ({ autoProcId, defaultIndex, defaultSort, onChange }: Molst
                   No Classification Data
                 </Heading>
               </VStack>
-            ) : <Skeleton h="60vh"></Skeleton>}
+            ) : (
+              <Skeleton h='60vh'></Skeleton>
+            )}
           </ModalBody>
         </ModalContent>
       </Modal>

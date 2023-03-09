@@ -1,7 +1,7 @@
 import { createStandaloneToast } from "@chakra-ui/toast";
-import { setLoading } from "../../features/uiSlice";
-import { store } from "../../store/store";
-import { baseToast } from "../../styles/components";
+import { setLoading } from "features/uiSlice";
+import { store } from "store/store";
+import { baseToast } from "styles/components";
 const { toast } = createStandaloneToast();
 
 const controller = new AbortController();

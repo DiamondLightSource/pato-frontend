@@ -8,10 +8,10 @@ import { voronoi } from "@visx/voronoi";
 import { GridColumns, GridRows } from "@visx/grid";
 import { AxisBottom, AxisLeft } from "@visx/axis";
 import { localPoint } from "@visx/event";
-import { BasePoint, CompleteScatterPlotOptions, ScatterPlotOptions } from "../../schema/interfaces";
-import { mergeDeep } from "../../utils/generic";
+import { BasePoint, CompleteScatterPlotOptions, ScatterPlotOptions } from "schema/interfaces";
+import { mergeDeep } from "utils/generic";
 import { Heading, VStack } from "@chakra-ui/react";
-import { defaultMargin } from "../../utils/config/plot";
+import { defaultMargin } from "utils/config/plot";
 
 const x = (d: BasePoint) => d.x;
 const y = (d: BasePoint) => d.y;

@@ -1,6 +1,6 @@
 import { rest } from "msw";
-import { server } from "../../mocks/server";
-import { getListingData } from "./listings";
+import { server } from "mocks/server";
+import { getListingData } from "utils/loaders/listings";
 
 const request = new Request("https://localhost/proposals/");
 

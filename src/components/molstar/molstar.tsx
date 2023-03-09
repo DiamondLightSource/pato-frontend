@@ -8,7 +8,7 @@ import { StateTransforms } from "molstar/lib/mol-plugin-state/transforms";
 import { createVolumeRepresentationParams } from "molstar/lib/mol-plugin-state/helpers/volume-representation-params";
 import { Box, Button, Divider, Heading, HStack, Icon, Skeleton, Spacer, Tooltip, VStack } from "@chakra-ui/react";
 import { MdCamera, MdFileDownload, MdYoutubeSearchedFor } from "react-icons/md";
-import { client } from "../../utils/api/client";
+import { client } from "utils/api/client";
 
 const DefaultSpec: PluginSpec = {
   ...DefaultPluginSpec(),

@@ -1,6 +1,6 @@
 import { fireEvent, screen } from "@testing-library/react";
-import { renderWithProviders } from "../../utils/test-utils";
-import { BarChart } from "./bar";
+import { renderWithProviders } from "utils/test-utils";
+import { BarChart } from "components/plots/bar";
 
 describe("Box Plot", () => {
   it("should render bar", () => {

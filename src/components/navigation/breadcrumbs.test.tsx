@@ -1,7 +1,6 @@
 import { screen } from "@testing-library/react";
-import { renderWithProviders } from "../../utils/test-utils";
-import { Breadcrumbs } from "../navigation/breadcrumbs";
-import React from "react";
+import { renderWithProviders } from "utils/test-utils";
+import { Breadcrumbs } from "components/navigation/breadcrumbs";
 
 describe("Breadcrumbs", () => {
   it("should not be displayed on home page", () => {

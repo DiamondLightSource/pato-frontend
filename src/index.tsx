@@ -1,39 +1,34 @@
 import React, { Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
-import { store } from "./store/store";
+import { store } from "store/store";
 import { ChakraProvider, createStandaloneToast, extendTheme } from "@chakra-ui/react";
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
-import { Root } from "./routes/Root";
-import { GenericListing } from "./routes/GenericListing";
-import { TomogramPage } from "./routes/Tomogram";
-import { SpaPage } from "./routes/SPA";
-import { Error } from "./routes/Error";
-import { Accordion, Button, Text, Heading, Table, Card, Tabs } from "./styles/components";
-import { colours } from "./styles/colours";
-import { Home } from "./routes/Home";
+import { Root } from "routes/Root";
+import { GenericListing } from "routes/GenericListing";
+import { TomogramPage } from "routes/Tomogram";
+import { SpaPage } from "routes/SPA";
+import { Error } from "routes/Error";
+import { Accordion, Button, Text, Heading, Table, Card, Tabs } from "styles/components";
+import { colours } from "styles/colours";
+import { Home } from "routes/Home";
 import {
   beamlineToMicroscope,
   collectionHeaders,
   groupsHeaders,
   proposalHeaders,
   sessionHeaders,
-} from "./utils/config/table";
-import { getUser } from "./utils/loaders/user";
-import { getListingData, getSessionData } from "./utils/loaders/listings";
-import { parseDate } from "./utils/generic";
-import { getSpaData } from "./utils/loaders/spa";
-import { getTomogramData } from "./utils/loaders/tomogram";
-const Calendar = React.lazy(() => import("./routes/Calendar"));
+} from "utils/config/table";
+import { getUser } from "utils/loaders/user";
+import { getListingData, getSessionData } from "utils/loaders/listings";
+import { parseDate } from "utils/generic";
+import { getSpaData } from "utils/loaders/spa";
+import { getTomogramData } from "utils/loaders/tomogram";
+const Calendar = React.lazy(() => import("routes/Calendar"));
 
 const { ToastContainer } = createStandaloneToast();
 const container = document.getElementById("root")!;
 const root = createRoot(container);
-
-if (process.env.DEPLOY_TYPE === "demo") {
-  const { worker } = require("./mocks/browser");
-  worker.start();
-}
 
 if (process.env.REACT_APP_AUTH_TYPE === "dummy") {
   sessionStorage.setItem("token", "dummyToken");

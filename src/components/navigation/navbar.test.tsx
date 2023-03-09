@@ -1,6 +1,6 @@
 import { fireEvent, screen } from "@testing-library/react";
-import { renderWithProviders } from "../../utils/test-utils";
-import { Navbar } from "../navigation/navbar";
+import { renderWithProviders } from "utils/test-utils";
+import { Navbar } from "components/navigation/navbar";
 
 const localStorageMock = (() => {
   return {

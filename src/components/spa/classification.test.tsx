@@ -1,5 +1,5 @@
-import { Classification } from "./classification";
-import { renderWithProviders } from "../../utils/test-utils";
+import { Classification } from "components/spa/classification";
+import { renderWithProviders } from "utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 
 describe("Classification", () => {

@@ -1,6 +1,6 @@
 import { fireEvent, screen } from "@testing-library/react";
-import { renderWithProviders } from "../../utils/test-utils";
-import { Table } from "./table";
+import { renderWithProviders } from "utils/test-utils";
+import { Table } from "components/visualisation/table";
 
 describe("GenericListing", () => {
   it("should display message when no data is received", () => {

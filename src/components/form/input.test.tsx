@@ -1,6 +1,6 @@
 import { fireEvent, screen } from "@testing-library/react";
-import { renderWithProviders } from "../../utils/test-utils";
-import { Dropdown, FormItem, NumericInput } from "./input";
+import { renderWithProviders } from "utils/test-utils";
+import { Dropdown, FormItem, NumericInput } from "components/form/input";
 
 describe("Form", () => {
   it("should render provided combobox options", () => {

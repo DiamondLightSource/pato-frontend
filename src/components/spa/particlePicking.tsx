@@ -1,14 +1,14 @@
 import { Spacer, HStack, Divider, Heading, Text, Checkbox, VStack, Grid, Skeleton } from "@chakra-ui/react";
-import { ImageCard } from "../visualisation/image";
-import { InfoGroup } from "../visualisation/infogroup";
-import { MotionPagination } from "../motion/pagination";
+import { ImageCard } from "components/visualisation/image";
+import { InfoGroup } from "components/visualisation/infogroup";
+import { MotionPagination } from "components/motion/pagination";
 import { useEffect, useState } from "react";
-import { client } from "../../utils/api/client";
-import { parseData } from "../../utils/generic";
-import { components } from "../../schema/main";
-import { DataConfig, SpaProps, Info, BoxPlotStats } from "../../schema/interfaces";
-import { PlotContainer } from "../visualisation/plotContainer";
-import { Box } from "../plots/box";
+import { client } from "utils/api/client";
+import { parseData } from "utils/generic";
+import { components } from "schema/main";
+import { DataConfig, SpaProps, Info, BoxPlotStats } from "schema/interfaces";
+import { PlotContainer } from "components/visualisation/plotContainer";
+import { Box } from "components/plots/box";
 
 type ParticlePickingSchema = components["schemas"]["ParticlePicker"];
 type IceThickness = components["schemas"]["IceThicknessWithAverage"];

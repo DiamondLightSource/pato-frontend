@@ -1,15 +1,14 @@
 import { Spacer, HStack, Divider, Grid, Heading, Skeleton, Box, Select, Card, CardBody } from "@chakra-ui/react";
-import { ImageCard } from "../visualisation/image";
-import { InfoGroup } from "../visualisation/infogroup";
+import { ImageCard } from "components/visualisation/image";
+import { InfoGroup } from "components/visualisation/infogroup";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { client } from "../../utils/api/client";
-import { MotionPagination } from "../motion/pagination";
-import { components } from "../../schema/main";
-import { parseData } from "../../utils/generic";
-import { classificationConfig } from "../../utils/config/parse";
-import { Info, ClassificationProps, SortTypes } from "../../schema/interfaces";
-import React from "react";
-import { MolstarModal } from "./molstarModal";
+import { client } from "utils/api/client";
+import { MotionPagination } from "components/motion/pagination";
+import { components } from "schema/main";
+import { parseData } from "utils/generic";
+import { classificationConfig } from "utils/config/parse";
+import { Info, ClassificationProps, SortTypes } from "schema/interfaces";
+import { MolstarModal } from "components/molstar/molstarModal";
 
 type ClassificationSchema = components["schemas"]["Classification"];
 interface FullClassification extends ClassificationSchema {

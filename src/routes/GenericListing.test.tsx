@@ -1,13 +1,13 @@
 import { fireEvent, screen } from "@testing-library/react";
-import { getListingData } from "../utils/loaders/listings";
-import { renderWithRoute } from "../utils/test-utils";
-import { GenericListing } from "./GenericListing";
+import { getListingData } from "utils/loaders/listings";
+import { renderWithRoute } from "utils/test-utils";
+import { GenericListing } from "routes/GenericListing";
 
 describe("GenericListing", () => {
   it("should include search in request", async () => {
     renderWithRoute(
       <GenericListing
-        heading='Test'
+        heading="Test"
         makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
@@ -22,13 +22,15 @@ describe("GenericListing", () => {
     fireEvent.change(search, { target: { value: "cm3111" } });
     fireEvent.blur(search);
 
-    await expect(screen.findByRole("cell", { name: "value1cm3111" })).resolves.toBeInTheDocument();
+    await expect(
+      screen.findByRole("cell", { name: "value1cm3111" })
+    ).resolves.toBeInTheDocument();
   });
 
   it("should perform request again when page changes", async () => {
     renderWithRoute(
       <GenericListing
-        heading='Test'
+        heading="Test"
         makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
@@ -42,13 +44,15 @@ describe("GenericListing", () => {
     const nextPage = await screen.findByRole("button", { name: "4" });
     fireEvent.click(nextPage);
 
-    await expect(screen.findByText("Page 4 out of 15")).resolves.toBeInTheDocument();
+    await expect(
+      screen.findByText("Page 4 out of 15")
+    ).resolves.toBeInTheDocument();
   });
 
   it("should set data to null when invalid response is provided", async () => {
     renderWithRoute(
       <GenericListing
-        heading='data'
+        heading="data"
         makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
@@ -65,7 +69,7 @@ describe("GenericListing", () => {
   it("should set page to 1 when user performs search", async () => {
     renderWithRoute(
       <GenericListing
-        heading='data'
+        heading="data"
         makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
@@ -87,7 +91,7 @@ describe("GenericListing", () => {
   it("should run data through callback function if processData function is provided", async () => {
     renderWithRoute(
       <GenericListing
-        heading='data'
+        heading="data"
         makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
@@ -108,7 +112,7 @@ describe("GenericListing", () => {
     const mockCallback = jest.fn();
     renderWithRoute(
       <GenericListing
-        heading='data'
+        heading="data"
         makePathCallback={mockCallback}
         headers={[
           { key: "key1", label: "label1" },

@@ -18,19 +18,19 @@ import {
   Skeleton,
   Tooltip,
 } from "@chakra-ui/react";
-import { ImageCard } from "../visualisation/image";
-import { InfoGroup } from "../visualisation/infogroup";
-import { PlotContainer } from "../visualisation/plotContainer";
-import { MotionPagination } from "./pagination";
+import { ImageCard } from "components/visualisation/image";
+import { InfoGroup } from "components/visualisation/infogroup";
+import { PlotContainer } from "components/visualisation/plotContainer";
+import { MotionPagination } from "components/motion/pagination";
 import { useEffect, useState } from "react";
 import { MdComment } from "react-icons/md";
-import { client } from "../../utils/api/client";
-import { parseData } from "../../utils/generic";
-import { driftPlotOptions } from "../../utils/config/plot";
-import { buildEndpoint } from "../../utils/api/endpoint";
-import { BasePoint, Info } from "../../schema/interfaces";
-import { Scatter } from "../plots/scatter";
-import { setImage } from "../../utils/api/response";
+import { client } from "utils/api/client";
+import { parseData } from "utils/generic";
+import { driftPlotOptions } from "utils/config/plot";
+import { buildEndpoint } from "utils/api/endpoint";
+import { BasePoint, Info } from "schema/interfaces";
+import { Scatter } from "components/plots/scatter";
+import { setImage } from "utils/api/response";
 
 interface MotionData {
   /** Total number of tilt alignment images available */

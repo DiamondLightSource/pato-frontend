@@ -1,4 +1,4 @@
-import { client } from "../api/client";
+import { client } from "utils/api/client";
 
 const getUser = async () => {
   const url = window.location.href;

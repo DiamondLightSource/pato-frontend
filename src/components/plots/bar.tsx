@@ -5,11 +5,11 @@ import { withTooltip, Tooltip } from "@visx/tooltip";
 import { WithTooltipProvidedProps } from "@visx/tooltip/lib/enhancers/withTooltip";
 import { GridRows } from "@visx/grid";
 import { AxisBottom, AxisLeft } from "@visx/axis";
-import { BarStats, BoxPlotOptions, CompleteScatterPlotOptions } from "../../schema/interfaces";
-import { mergeDeep } from "../../utils/generic";
+import { BarStats, BoxPlotOptions, CompleteScatterPlotOptions } from "schema/interfaces";
+import { mergeDeep } from "utils/generic";
 import { Bar } from "@visx/shape";
-import { getFillColour } from "../../styles/colours";
-import { defaultMargin } from "../../utils/config/plot";
+import { getFillColour } from "styles/colours";
+import { defaultMargin } from "utils/config/plot";
 
 const label = (d: BarStats) => d.label;
 const y = (d: BarStats) => d.y;

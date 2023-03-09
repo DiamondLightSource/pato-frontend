@@ -21,16 +21,23 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
-import { useLoaderData, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { Tomogram } from "../components/tomogram/main";
-import { CollectionData } from "../schema/interfaces";
-import { MotionPagination } from "../components/motion/pagination";
-import { InfoGroup } from "../components/visualisation/infogroup";
+import {
+  useLoaderData,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
+import { Tomogram } from "components/tomogram/main";
+import { CollectionData } from "schema/interfaces";
+import { MotionPagination } from "components/motion/pagination";
+import { InfoGroup } from "components/visualisation/infogroup";
 import { MdList, MdRedo } from "react-icons/md";
-import { components } from "../schema/main";
+import { components } from "schema/main";
 import React from "react";
 
-const TomogramReprocessing = React.lazy(() => import("../components/tomogram/reprocessing"));
+const TomogramReprocessing = React.lazy(
+  () => import("components/tomogram/reprocessing")
+);
 type ProcessingJob = components["schemas"]["ProcessingJobResponse"];
 
 const TomogramPage = () => {
@@ -42,14 +49,18 @@ const TomogramPage = () => {
     jobs: ProcessingJob[] | null;
   };
   const [searchParams, setSearchParams] = useSearchParams();
-  const [onlyProcessed, setOnlyProcessed] = useState(searchParams.get("onlyTomograms") === "true");
+  const [onlyProcessed, setOnlyProcessed] = useState(
+    searchParams.get("onlyTomograms") === "true"
+  );
   const [accordionIndex, setAccordionIndex] = useState<number | number[]>(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
 
   const updateCollection = useCallback(
     (page: number) => {
-      navigate(`../${page}?onlyTomograms=${onlyProcessed}`, { relative: "path" });
+      navigate(`../${page}?onlyTomograms=${onlyProcessed}`, {
+        relative: "path",
+      });
     },
     [navigate, onlyProcessed]
   );
@@ -85,40 +96,50 @@ const TomogramPage = () => {
   return (
     <Box>
       <HStack marginBottom={2}>
-        <VStack w='100%'>
-          <HStack w='100%'>
+        <VStack w="100%">
+          <HStack w="100%">
             <Heading>{loaderData.collection.comments}</Heading>
-            <Tag colorScheme='teal'>Tomogram</Tag>
+            <Tag colorScheme="teal">Tomogram</Tag>
             <Spacer />
-            <Tooltip label='Run Reprocessing'>
-              <Button aria-label='Run Reprocessing' onClick={onOpen} isDisabled={buttonDisabled}>
+            <Tooltip label="Run Reprocessing">
+              <Button
+                aria-label="Run Reprocessing"
+                onClick={onOpen}
+                isDisabled={buttonDisabled}
+              >
                 <Icon as={MdRedo} />
               </Button>
             </Tooltip>
-            <Tooltip label='List Collections'>
-              <Button aria-label='List Collections' onClick={() => navigate("../../collections", { relative: "path" })}>
+            <Tooltip label="List Collections">
+              <Button
+                aria-label="List Collections"
+                onClick={() =>
+                  navigate("../../collections", { relative: "path" })
+                }
+              >
                 <Icon as={MdList} />
               </Button>
             </Tooltip>
-            <Divider orientation='vertical' h='5vh' />
+            <Divider orientation="vertical" h="5vh" />
             <MotionPagination
-              size='md'
+              size="md"
               onChange={updateCollection}
               defaultPage={parseInt(params.collectionIndex ?? "1")}
               total={loaderData.total}
             />
           </HStack>
-          <HStack w='100%'>
-            <Heading color='diamond.300' size='sm'>
-              Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data collection group{" "}
+          <HStack w="100%">
+            <Heading color="diamond.300" size="sm">
+              Proposal <Code>{params.propId}</Code>, visit{" "}
+              <Code>{params.visitId}</Code>, data collection group{" "}
               <Code>{params.groupId}</Code>
             </Heading>
             <Spacer />
             <Checkbox
-              data-testid='filter-tomograms'
+              data-testid="filter-tomograms"
               defaultChecked={onlyProcessed}
               onChange={updateTomogramFilter}
-              alignSelf='end'
+              alignSelf="end"
             >
               Only show processed tomograms
             </Checkbox>
@@ -128,7 +149,11 @@ const TomogramPage = () => {
       <InfoGroup cols={3} info={loaderData.collection.info} />
       <Divider my={2} />
       {loaderData.jobs ? (
-        <Accordion onChange={setAccordionIndex} index={accordionIndex} allowToggle>
+        <Accordion
+          onChange={setAccordionIndex}
+          index={accordionIndex}
+          allowToggle
+        >
           {loaderData.jobs.map((job, i) => (
             <Tomogram
               key={job.AutoProcProgram.autoProcProgramId}
@@ -140,14 +165,16 @@ const TomogramPage = () => {
           ))}
         </Accordion>
       ) : (
-        <Heading variant='notFound'>No Jobs Available for This Data Collection</Heading>
+        <Heading variant="notFound">
+          No Jobs Available for This Data Collection
+        </Heading>
       )}
       {loaderData.collection.dataCollectionId && (
-        <Modal size='2xl' isOpen={isOpen} onClose={onClose}>
+        <Modal size="2xl" isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>
-              <Heading size='md'>Reprocessing</Heading>
+              <Heading size="md">Reprocessing</Heading>
               <ModalCloseButton />
             </ModalHeader>
             <Divider />

@@ -1,7 +1,7 @@
-import { MolstarModal } from "./molstarModal";
-import { renderWithProviders } from "../../utils/test-utils";
+import { MolstarModal } from "components/molstar/molstarModal";
+import { renderWithProviders } from "utils/test-utils";
 import { fireEvent, screen } from "@testing-library/react";
-import { server } from "../../mocks/server";
+import { server } from "mocks/server";
 import { rest } from "msw";
 
 describe("Molstar Wrapper", () => {
