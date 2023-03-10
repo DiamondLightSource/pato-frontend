@@ -20,22 +20,22 @@ interface EventProps {
 
 const EventItem = ({ info }: EventProps) => {
   return (
-    <Box data-testid={`event-${info.title}`} cursor="pointer" w="100%">
+    <Box data-testid={`event-${info.title}`} cursor='pointer' w='100%'>
       <HStack
-        alignItems="stretch"
-        textOverflow="ellipsis"
+        alignItems='stretch'
+        textOverflow='ellipsis'
         spacing={1}
-        width="100%"
+        width='100%'
       >
-        <Box w="2px" bg="diamond.600" />
-        <Text fontWeight={600} color="diamond.600">
+        <Box w='2px' bg='diamond.600' />
+        <Text fontWeight={600} color='diamond.600'>
           {info.start!.toLocaleTimeString("en-gb", {
             hour: "2-digit",
             minute: "2-digit",
           })}
         </Text>
         <Text>{info.title}</Text>
-        <Text textOverflow="ellipsis" overflowX="hidden" opacity="0.7">
+        <Text textOverflow='ellipsis' overflowX='hidden' opacity='0.7'>
           ({info.extendedProps.parentProposal}-{info.extendedProps.visitNumber})
         </Text>
       </HStack>
@@ -101,7 +101,7 @@ const Calendar = () => {
       <Divider />
       <Box paddingTop={3}>
         <FullCalendar
-          height="80vh"
+          height='80vh'
           plugins={[dayGridPlugin]}
           eventTimeFormat={{
             hour: "2-digit",

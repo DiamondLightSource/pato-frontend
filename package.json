@@ -36,7 +36,7 @@
     "build": "react-app-rewired build",
     "test": "REACT_APP_AUTH_ENDPOINT=auth/ jest",
     "eject": "react-scripts eject",
-    "format": "prettier --write src/**/*.{ts,tsx,css}"
+    "format": "prettier --jsx-single-quote --write src/**/*.{ts,tsx,css}"
   },
   "eslintConfig": {
     "extends": [

@@ -93,26 +93,26 @@ const SpaPage = () => {
   return (
     <Box>
       <HStack marginBottom={2}>
-        <VStack w="100%">
-          <HStack w="100%">
+        <VStack w='100%'>
+          <HStack w='100%'>
             <Heading>Data Collection</Heading>
-            <Tag colorScheme="orange">SPA</Tag>
+            <Tag colorScheme='orange'>SPA</Tag>
             <Spacer />
-            <Tooltip label="Run Reprocessing">
+            <Tooltip label='Run Reprocessing'>
               <Button isDisabled>
                 <Icon as={MdRedo} />
               </Button>
             </Tooltip>
           </HStack>
-          <HStack w="100%">
-            <Heading color="diamond.300" size="sm">
+          <HStack w='100%'>
+            <Heading color='diamond.300' size='sm'>
               Proposal <Code>{params.propId}</Code>, visit{" "}
               <Code>{params.visitId}</Code>, data collection group{" "}
               <Code>{params.groupId}</Code>, data collection{" "}
               <Code>{loaderData.collection.dataCollectionId}</Code>
             </Heading>
             <Spacer />
-            <Tag bg="diamond.100">
+            <Tag bg='diamond.100'>
               <Icon as={MdFolder} />
               <Text
                 px={3}
@@ -152,10 +152,10 @@ const SpaPage = () => {
               </Accordion>
             ) : (
               <VStack>
-                <Heading pt={5} variant="notFound">
+                <Heading pt={5} variant='notFound'>
                   No Single Particle Analysis Data Available
                 </Heading>
-                <Heading w="50%" pb={5} variant="notFoundSubtitle">
+                <Heading w='50%' pb={5} variant='notFoundSubtitle'>
                   ...or you may not have permission to view data in this
                   collection. If this was shared with you through a link, check
                   with the person that sent it.
@@ -176,11 +176,11 @@ const SpaPage = () => {
       </Tabs>
 
       {processingJobToEdit && (
-        <Modal size="6xl" isOpen={isOpen} onClose={onClose}>
+        <Modal size='6xl' isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>
-              <Heading size="md">Relion Processing</Heading>
+              <Heading size='md'>Relion Processing</Heading>
               <ModalCloseButton />
             </ModalHeader>
             <Divider />

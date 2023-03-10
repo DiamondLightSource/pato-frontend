@@ -7,7 +7,7 @@ describe("GenericListing", () => {
   it("should include search in request", async () => {
     renderWithRoute(
       <GenericListing
-        heading="Test"
+        heading='Test'
         makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
@@ -30,7 +30,7 @@ describe("GenericListing", () => {
   it("should perform request again when page changes", async () => {
     renderWithRoute(
       <GenericListing
-        heading="Test"
+        heading='Test'
         makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
@@ -52,7 +52,7 @@ describe("GenericListing", () => {
   it("should set data to null when invalid response is provided", async () => {
     renderWithRoute(
       <GenericListing
-        heading="data"
+        heading='data'
         makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
@@ -69,7 +69,7 @@ describe("GenericListing", () => {
   it("should set page to 1 when user performs search", async () => {
     renderWithRoute(
       <GenericListing
-        heading="data"
+        heading='data'
         makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
@@ -91,7 +91,7 @@ describe("GenericListing", () => {
   it("should run data through callback function if processData function is provided", async () => {
     renderWithRoute(
       <GenericListing
-        heading="data"
+        heading='data'
         makePathCallback={(item) => item.test.toString()}
         headers={[
           { key: "key1", label: "label1" },
@@ -112,7 +112,7 @@ describe("GenericListing", () => {
     const mockCallback = jest.fn();
     renderWithRoute(
       <GenericListing
-        heading="data"
+        heading='data'
         makePathCallback={mockCallback}
         headers={[
           { key: "key1", label: "label1" },

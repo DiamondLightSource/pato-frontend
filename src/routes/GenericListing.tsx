@@ -69,17 +69,17 @@ const GenericListing = ({ headers, heading, makePathCallback }: TableProps) => {
   }, [heading]);
 
   return (
-    <Box h="100%">
+    <Box h='100%'>
       <HStack>
         <Heading>{heading}</Heading>
         <Spacer />
         <DebouncedInput
-          borderColor="gray.600"
-          bg="diamond.50"
+          borderColor='gray.600'
+          bg='diamond.50'
           onChangeEnd={handleSearch}
-          w="20%"
-          size="sm"
-          placeholder="Search..."
+          w='20%'
+          size='sm'
+          placeholder='Search...'
         />
       </HStack>
       <Divider mb={4} />

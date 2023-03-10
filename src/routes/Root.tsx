@@ -10,9 +10,9 @@ const Root = (): JSX.Element => {
   const loaderData = useLoaderData() as AuthState;
 
   return (
-    <div className="rootContainer">
+    <div className='rootContainer'>
       <Navbar user={loaderData} />
-      <Box bg="diamond.50" marginTop={8} className="main">
+      <Box bg='diamond.50' marginTop={8} className='main'>
         <Breadcrumbs />
         <Outlet />
       </Box>

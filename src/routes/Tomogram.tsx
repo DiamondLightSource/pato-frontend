@@ -96,23 +96,23 @@ const TomogramPage = () => {
   return (
     <Box>
       <HStack marginBottom={2}>
-        <VStack w="100%">
-          <HStack w="100%">
+        <VStack w='100%'>
+          <HStack w='100%'>
             <Heading>{loaderData.collection.comments}</Heading>
-            <Tag colorScheme="teal">Tomogram</Tag>
+            <Tag colorScheme='teal'>Tomogram</Tag>
             <Spacer />
-            <Tooltip label="Run Reprocessing">
+            <Tooltip label='Run Reprocessing'>
               <Button
-                aria-label="Run Reprocessing"
+                aria-label='Run Reprocessing'
                 onClick={onOpen}
                 isDisabled={buttonDisabled}
               >
                 <Icon as={MdRedo} />
               </Button>
             </Tooltip>
-            <Tooltip label="List Collections">
+            <Tooltip label='List Collections'>
               <Button
-                aria-label="List Collections"
+                aria-label='List Collections'
                 onClick={() =>
                   navigate("../../collections", { relative: "path" })
                 }
@@ -120,26 +120,26 @@ const TomogramPage = () => {
                 <Icon as={MdList} />
               </Button>
             </Tooltip>
-            <Divider orientation="vertical" h="5vh" />
+            <Divider orientation='vertical' h='5vh' />
             <MotionPagination
-              size="md"
+              size='md'
               onChange={updateCollection}
               defaultPage={parseInt(params.collectionIndex ?? "1")}
               total={loaderData.total}
             />
           </HStack>
-          <HStack w="100%">
-            <Heading color="diamond.300" size="sm">
+          <HStack w='100%'>
+            <Heading color='diamond.300' size='sm'>
               Proposal <Code>{params.propId}</Code>, visit{" "}
               <Code>{params.visitId}</Code>, data collection group{" "}
               <Code>{params.groupId}</Code>
             </Heading>
             <Spacer />
             <Checkbox
-              data-testid="filter-tomograms"
+              data-testid='filter-tomograms'
               defaultChecked={onlyProcessed}
               onChange={updateTomogramFilter}
-              alignSelf="end"
+              alignSelf='end'
             >
               Only show processed tomograms
             </Checkbox>
@@ -165,16 +165,16 @@ const TomogramPage = () => {
           ))}
         </Accordion>
       ) : (
-        <Heading variant="notFound">
+        <Heading variant='notFound'>
           No Jobs Available for This Data Collection
         </Heading>
       )}
       {loaderData.collection.dataCollectionId && (
-        <Modal size="2xl" isOpen={isOpen} onClose={onClose}>
+        <Modal size='2xl' isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>
-              <Heading size="md">Reprocessing</Heading>
+              <Heading size='md'>Reprocessing</Heading>
               <ModalCloseButton />
             </ModalHeader>
             <Divider />
