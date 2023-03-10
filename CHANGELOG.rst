@@ -13,6 +13,9 @@ v0.8.0 (14/03/2023)
 **Changed**
 
 - 3D visualisation modal does not try to render model twice
+- Performance improvements to non-cached homepage
+- Calendar styling improvements
+- Network errors now redirect to error page
 
 ++++++++++
 v0.7.0 (07/03/2023)

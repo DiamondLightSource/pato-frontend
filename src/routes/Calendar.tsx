@@ -1,10 +1,5 @@
 import { Box, Divider, Heading, HStack, Text } from "@chakra-ui/react";
-import FullCalendar, {
-  EventClickArg,
-  EventApi,
-  EventInput,
-  DatesSetArg,
-} from "@fullcalendar/react";
+import FullCalendar, { EventClickArg, EventApi, EventInput, DatesSetArg } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { useCallback, useEffect, useState } from "react";
 import { client } from "utils/api/client";
@@ -21,12 +16,7 @@ interface EventProps {
 const EventItem = ({ info }: EventProps) => {
   return (
     <Box data-testid={`event-${info.title}`} cursor='pointer' w='100%'>
-      <HStack
-        alignItems='stretch'
-        textOverflow='ellipsis'
-        spacing={1}
-        width='100%'
-      >
+      <HStack alignItems='stretch' textOverflow='ellipsis' spacing={1} width='100%'>
         <Box w='2px' bg='diamond.600' />
         <Text fontWeight={600} color='diamond.600'>
           {info.start!.toLocaleTimeString("en-gb", {
@@ -49,9 +39,7 @@ const Calendar = () => {
 
   const eventClick = useCallback(
     (e: EventClickArg) => {
-      navigate(
-        `/proposals/${e.event.extendedProps.proposalId}/sessions/${e.event.id}`
-      );
+      navigate(`/proposals/${e.event.extendedProps.proposalId}/sessions/${e.event.id}`);
     },
     [navigate]
   );
@@ -75,9 +63,7 @@ const Calendar = () => {
     }
 
     client
-      .safe_get(
-        `sessions?minStartDate=${calendarDates.start}&maxStartDate=${calendarDates.end}&search=m&limit=250`
-      )
+      .safe_get(`sessions?minStartDate=${calendarDates.start}&maxStartDate=${calendarDates.end}&search=m&limit=250`)
       .then((response) => {
         const events: EventInput[] = response.data.items
           .filter((event: SessionSchema) => event.startDate !== null)
