@@ -34,7 +34,7 @@ jest.mock("molstar/lib/mol-plugin/context", () => {
     dispose = () => {};
     init = jest.fn();
     initViewer = () => {};
-    build = () => ({ to: () => ({ apply: () => ({ commit: () => {} }) }) });
+    build = () => ({ to: () => ({ apply: () => ({ commit: jest.fn() }) }) });
   }
 
   return {

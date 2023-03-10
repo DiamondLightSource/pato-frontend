@@ -1,5 +1,5 @@
-import { ParticlePicking } from "./particlePicking";
-import { renderWithProviders } from "../../utils/test-utils";
+import { ParticlePicking } from "components/spa/particlePicking";
+import { renderWithProviders } from "utils/test-utils";
 import { fireEvent, screen } from "@testing-library/react";
 
 describe("Particle Picking", () => {

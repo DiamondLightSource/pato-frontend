@@ -1,9 +1,9 @@
 import { fireEvent, screen } from "@testing-library/react";
 import { rest } from "msw";
-import { server } from "../../mocks/server";
-import { renderWithAccordion } from "../../utils/test-utils";
-import { Tomogram } from "./main";
-import { BaseProcessingJobProps } from "../../schema/interfaces";
+import { server } from "mocks/server";
+import { renderWithAccordion } from "utils/test-utils";
+import { Tomogram } from "components/tomogram/main";
+import { BaseProcessingJobProps } from "schema/interfaces";
 
 const basicProcJob: BaseProcessingJobProps["procJob"] = {
   processingJobId: 1,

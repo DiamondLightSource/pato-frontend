@@ -1,9 +1,9 @@
 import { screen } from "@testing-library/react";
 import { rest } from "msw";
-import { renderWithRoute } from "../utils/test-utils";
-import { server } from "../mocks/server";
-import { Home } from "./Home";
-import { getSessionData } from "../utils/loaders/listings";
+import { renderWithRoute } from "utils/test-utils";
+import { server } from "mocks/server";
+import { Home } from "routes/Home";
+import { getSessionData } from "utils/loaders/listings";
 
 describe("Home", () => {
   it("should display message and button if not logged in", async () => {

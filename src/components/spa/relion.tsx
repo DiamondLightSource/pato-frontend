@@ -1,8 +1,8 @@
 import { Text, Checkbox, VStack, Grid, GridItem } from "@chakra-ui/react";
 import { useCallback, useState } from "react";
-import { FieldSet } from "../form/fieldset";
-import { Form } from "../form/form";
-import { Dropdown, FormItem, NumericInput } from "../form/input";
+import { FieldSet } from "components/form/fieldset";
+import { Form } from "components/form/form";
+import { Dropdown, FormItem, NumericInput } from "components/form/input";
 
 interface RelionProps {
   procJobId: number;

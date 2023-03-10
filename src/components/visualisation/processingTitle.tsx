@@ -1,6 +1,6 @@
 import { Spacer, VStack, Text, Tag, AccordionButton, HStack, AccordionIcon } from "@chakra-ui/react";
-import { components } from "../../schema/main";
-import { parseDate } from "../../utils/generic";
+import { components } from "schema/main";
+import { parseDate } from "utils/generic";
 
 interface TwoLineTitleProps {
   title: string;

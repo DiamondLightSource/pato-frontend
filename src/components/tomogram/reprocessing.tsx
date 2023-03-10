@@ -1,9 +1,9 @@
 import { createStandaloneToast, Grid } from "@chakra-ui/react";
 import { useCallback } from "react";
-import { client } from "../../utils/api/client";
-import { Form } from "../form/form";
-import { FormItem, NumericInput } from "../form/input";
-import { baseToast } from "../../styles/components";
+import { client } from "utils/api/client";
+import { Form } from "components/form/form";
+import { FormItem, NumericInput } from "components/form/input";
+import { baseToast } from "styles/components";
 
 interface ReprocessingProps {
   pixelSize?: number;

@@ -1,6 +1,6 @@
 import { rest } from "msw";
-import { server } from "../../mocks/server";
-import { getTomogramData } from "./tomogram";
+import { server } from "mocks/server";
+import { getTomogramData } from "utils/loaders/tomogram";
 
 const request = new Request(
   "https://localhost/proposals/cm33915/sessions/7/groups/8557661/tomograms/52?onlyTomograms=false"

@@ -1,4 +1,4 @@
-import { DataConfig } from "../schema/interfaces";
+import { DataConfig } from "schema/interfaces";
 /**
  * Parses incoming raw data and processes it into labels and values for `InfoGroup` components, also returning raw values in the root of the returned object
  *
@@ -7,17 +7,28 @@ import { DataConfig } from "../schema/interfaces";
  *
  * @returns An object containing an array of `InfoGroup` labels and values, alongside raw values (when passed in the configuration)
  */
-const timeFormatter = new Intl.DateTimeFormat("en-GB", { dateStyle: "short", timeStyle: "short" });
+const timeFormatter = new Intl.DateTimeFormat("en-GB", {
+  dateStyle: "short",
+  timeStyle: "short",
+});
 
 export const parseData = (rawData: Record<string, any>, config: DataConfig) => {
   const data: Record<string, any> = { info: [] };
   for (const item of config.include) {
     const unit = item.unit ?? "";
     if (Array.isArray(item.name)) {
-      const values = item.name.map((key) => prettifyValue(rawData[key], unit)).join(" - ");
-      data.info.push({ label: item.label ?? pascalToSpace(item.name[0]), value: values });
+      const values = item.name
+        .map((key) => prettifyValue(rawData[key], unit))
+        .join(" - ");
+      data.info.push({
+        label: item.label ?? pascalToSpace(item.name[0]),
+        value: values,
+      });
     } else {
-      data.info.push({ label: item.label ?? pascalToSpace(item.name), value: prettifyValue(rawData[item.name], unit) });
+      data.info.push({
+        label: item.label ?? pascalToSpace(item.name),
+        value: prettifyValue(rawData[item.name], unit),
+      });
     }
   }
 
@@ -30,7 +41,8 @@ export const parseData = (rawData: Record<string, any>, config: DataConfig) => {
   return data;
 };
 
-const prettifyValue = (value: number | string, unit: string) => (value ? `${value} ${unit}` : "?");
+const prettifyValue = (value: number | string, unit: string) =>
+  value ? `${value} ${unit}` : "?";
 
 const pascalToSpace = (input: string) => {
   return input.replace(/([A-Z])/g, " $1").replace(/^./, function (str) {
@@ -42,7 +54,10 @@ export function isObject(item: any) {
   return item && typeof item === "object" && !Array.isArray(item);
 }
 
-export const mergeDeep = (target: Record<string, any>, source: Record<string, any>) => {
+export const mergeDeep = (
+  target: Record<string, any>,
+  source: Record<string, any>
+) => {
   let output = structuredClone(target);
   if (isObject(target) && isObject(source)) {
     Object.keys(source).forEach((key) => {

@@ -2,10 +2,10 @@ import { Box, Divider, Heading, HStack, Text } from "@chakra-ui/react";
 import FullCalendar, { EventClickArg, EventApi, EventInput, DatesSetArg } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { useCallback, useEffect, useState } from "react";
-import { client } from "../utils/api/client";
+import { client } from "utils/api/client";
 import { useNavigate } from "react-router-dom";
-import { components } from "../schema/main";
-import "../styles/calendar.css";
+import { components } from "schema/main";
+import "styles/calendar.css";
 
 type SessionSchema = components["schemas"]["SessionResponse"];
 
@@ -19,7 +19,10 @@ const EventItem = ({ info }: EventProps) => {
       <HStack alignItems='stretch' textOverflow='ellipsis' spacing={1} width='100%'>
         <Box w='2px' bg='diamond.600' />
         <Text fontWeight={600} color='diamond.600'>
-          {info.start!.toLocaleTimeString("en-gb", { hour: "2-digit", minute: "2-digit" })}
+          {info.start!.toLocaleTimeString("en-gb", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
         </Text>
         <Text>{info.title}</Text>
         <Text textOverflow='ellipsis' overflowX='hidden' opacity='0.7'>
@@ -42,10 +45,16 @@ const Calendar = () => {
   );
 
   const [events, setEvents] = useState<EventInput[]>();
-  const [calendarDates, setCalendarDates] = useState<{ start: string; end: string }>();
+  const [calendarDates, setCalendarDates] = useState<{
+    start: string;
+    end: string;
+  }>();
 
   const updateDates = useCallback((dateInfo: DatesSetArg) => {
-    setCalendarDates({ start: dateInfo.start.toISOString(), end: dateInfo.end.toISOString() });
+    setCalendarDates({
+      start: dateInfo.start.toISOString(),
+      end: dateInfo.end.toISOString(),
+    });
   }, []);
 
   useEffect(() => {

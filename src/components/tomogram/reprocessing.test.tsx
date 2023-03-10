@@ -1,8 +1,8 @@
 import { waitFor, screen, fireEvent } from "@testing-library/react";
 import { rest } from "msw";
-import { server } from "../../mocks/server";
-import { renderWithProviders } from "../../utils/test-utils";
-import TomogramReprocessing from "./reprocessing";
+import { server } from "mocks/server";
+import { renderWithProviders } from "utils/test-utils";
+import TomogramReprocessing from "components/tomogram/reprocessing";
 
 describe("Tomogram Reprocessing", () => {
   it("should not close when not successful", async () => {

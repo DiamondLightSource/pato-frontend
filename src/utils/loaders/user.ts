@@ -1,4 +1,4 @@
-import { client } from "../api/client";
+import { client } from "utils/api/client";
 
 const getUser = async () => {
   const url = window.location.href;
@@ -9,13 +9,12 @@ const getUser = async () => {
     window.history.replaceState({}, document.title, window.location.href.split("#")[0]);
   }
 
-  const user = await client.get("user");
-
-  if (user.status === 200) {
-    return { fedid: user.data.fedid, name: user.data.givenName };
+  try {
+    const user = await client.get("user");
+    return user.status === 200 ? { fedid: user.data.fedid, name: user.data.givenName } : null;
+  } catch (NetworkError) {
+    return null;
   }
-
-  return null;
 };
 
 export { getUser };

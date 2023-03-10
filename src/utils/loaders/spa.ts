@@ -1,10 +1,10 @@
 import { Params } from "react-router-dom";
-import { DataConfig, SpaCollectionData } from "../../schema/interfaces";
-import { components } from "../../schema/main";
-import { client } from "../api/client";
-import { buildEndpoint } from "../api/endpoint";
-import { collectionConfig } from "../config/parse";
-import { parseData } from "../generic";
+import { DataConfig, SpaCollectionData } from "schema/interfaces";
+import { components } from "schema/main";
+import { client } from "utils/api/client";
+import { buildEndpoint } from "utils/api/endpoint";
+import { collectionConfig } from "utils/config/parse";
+import { parseData } from "utils/generic";
 
 type DataCollection = components["schemas"]["DataCollectionSummary"];
 

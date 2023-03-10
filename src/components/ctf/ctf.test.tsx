@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
-import { renderWithProviders } from "../../utils/test-utils";
-import { CTF } from "./ctf";
+import { renderWithProviders } from "utils/test-utils";
+import { CTF } from "components/ctf/ctf";
 
 describe("CTF", () => {
   it("should render when tomogram is parent", async () => {

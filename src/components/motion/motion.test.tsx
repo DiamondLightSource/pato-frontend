@@ -1,5 +1,5 @@
 import { Motion } from "./motion";
-import { renderWithProviders } from "../../utils/test-utils";
+import { renderWithProviders } from "utils/test-utils";
 import { screen, waitFor } from "@testing-library/react";
 
 describe("Motion", () => {

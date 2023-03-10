@@ -1,6 +1,6 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import { renderWithProviders } from "../../utils/test-utils";
-import { Box } from "./box";
+import { renderWithProviders } from "utils/test-utils";
+import { Box } from "components/plots/box";
 
 describe("Box Plot", () => {
   it("should render graph", () => {

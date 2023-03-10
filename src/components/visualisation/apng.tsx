@@ -24,7 +24,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import parseAPNG, { Frame } from "apng-js";
-import { client } from "../../utils/api/client";
+import { client } from "utils/api/client";
 import { MdFastForward, MdFastRewind, MdPause, MdPlayArrow } from "react-icons/md";
 
 interface ImageProps {

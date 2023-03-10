@@ -1,8 +1,8 @@
 import { Params } from "react-router-dom";
-import { components } from "../../schema/main";
-import { client } from "../api/client";
-import { buildEndpoint } from "../api/endpoint";
-import { parseDate } from "../generic";
+import { components } from "schema/main";
+import { client } from "utils/api/client";
+import { buildEndpoint } from "utils/api/endpoint";
+import { parseDate } from "utils/generic";
 
 type ProcessDataCallback = (data: Record<string, any>[]) => Record<string, any>[];
 type Session = components["schemas"]["SessionResponse"];
@@ -38,11 +38,14 @@ const fixAllDates = (sessions: Session[]) =>
   );
 
 const getSessionData = async () => {
-  const currentDate = new Date().toISOString();
+  const currentDate = new Date();
+  const daysAgoDate = new Date();
+  daysAgoDate.setDate(currentDate.getDate() - 10);
+  const currentDateStr = currentDate.toISOString();
   const responses = await Promise.all(
     [
-      "sessions?limit=5&page=0&search=m",
-      `sessions?limit=5&page=0&search=m&minEndDate=${currentDate}&maxStartDate=${currentDate}`,
+      `sessions?limit=5&page=0&search=m&minStartDate=${daysAgoDate.toISOString()}&maxStartDate=${currentDateStr}`,
+      `sessions?limit=5&page=0&search=m&minEndDate=${currentDateStr}&maxStartDate=${currentDateStr}`,
     ].map((url) => client.get(url).then((r) => r))
   );
 

@@ -1,7 +1,7 @@
-import Statistics from "./statistics";
-import { renderWithProviders } from "../../utils/test-utils";
+import Statistics from "components/spa/statistics";
+import { renderWithProviders } from "utils/test-utils";
 import { screen } from "@testing-library/react";
-import { server } from "../../mocks/server";
+import { server } from "mocks/server";
 import { rest } from "msw";
 
 describe("Collection Statistics", () => {

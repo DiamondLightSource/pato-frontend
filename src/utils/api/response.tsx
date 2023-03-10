@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
-import { BarStats } from "../../schema/interfaces";
-import { client } from "./client";
+import { BarStats } from "schema/interfaces";
+import { client } from "utils/api/client";
 
 const setImage = (endpoint: string, setState: Dispatch<SetStateAction<string | undefined>>) => {
   setState(undefined);

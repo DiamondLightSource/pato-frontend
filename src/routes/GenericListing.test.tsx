@@ -1,7 +1,7 @@
 import { fireEvent, screen } from "@testing-library/react";
-import { getListingData } from "../utils/loaders/listings";
-import { renderWithRoute } from "../utils/test-utils";
-import { GenericListing } from "./GenericListing";
+import { getListingData } from "utils/loaders/listings";
+import { renderWithRoute } from "utils/test-utils";
+import { GenericListing } from "routes/GenericListing";
 
 describe("GenericListing", () => {
   it("should include search in request", async () => {
@@ -22,7 +22,9 @@ describe("GenericListing", () => {
     fireEvent.change(search, { target: { value: "cm3111" } });
     fireEvent.blur(search);
 
-    await expect(screen.findByRole("cell", { name: "value1cm3111" })).resolves.toBeInTheDocument();
+    await expect(
+      screen.findByRole("cell", { name: "value1cm3111" })
+    ).resolves.toBeInTheDocument();
   });
 
   it("should perform request again when page changes", async () => {
@@ -42,7 +44,9 @@ describe("GenericListing", () => {
     const nextPage = await screen.findByRole("button", { name: "4" });
     fireEvent.click(nextPage);
 
-    await expect(screen.findByText("Page 4 out of 15")).resolves.toBeInTheDocument();
+    await expect(
+      screen.findByText("Page 4 out of 15")
+    ).resolves.toBeInTheDocument();
   });
 
   it("should set data to null when invalid response is provided", async () => {

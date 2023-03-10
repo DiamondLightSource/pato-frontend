@@ -3,53 +3,52 @@
  * Do not make direct changes to the file.
  */
 
-
 export interface paths {
   "/sessions": {
     /**
-     * Get Sessions 
+     * Get Sessions
      * @description List visits belonging to a proposal
      */
     get: operations["get_sessions_sessions_get"];
   };
   "/tomograms/{tomogramId}/shiftPlot": {
     /**
-     * Get Shift Plot 
+     * Get Shift Plot
      * @description Get X-Y shift plot data
      */
     get: operations["get_shift_plot_tomograms__tomogramId__shiftPlot_get"];
   };
   "/tomograms/{tomogramId}/motion": {
     /**
-     * Get Motion Correction 
+     * Get Motion Correction
      * @description Get motion correction data for the given tomogram
      */
     get: operations["get_motion_correction_tomograms__tomogramId__motion_get"];
   };
   "/tomograms/{tomogramId}/centralSlice": {
     /**
-     * Get Slice 
+     * Get Slice
      * @description Get tomogram central slice image
      */
     get: operations["get_slice_tomograms__tomogramId__centralSlice_get"];
   };
   "/tomograms/{tomogramId}/movie": {
     /**
-     * Get Movie 
+     * Get Movie
      * @description Get tomogram movie image
      */
     get: operations["get_movie_tomograms__tomogramId__movie_get"];
   };
   "/tomograms/{tomogramId}/projection": {
     /**
-     * Get Projection 
+     * Get Projection
      * @description Get tomogram projection image
      */
     get: operations["get_projection_tomograms__tomogramId__projection_get"];
   };
   "/tomograms/{tomogramId}/ctf": {
     /**
-     * Get Ctf 
+     * Get Ctf
      * @description Get astigmatism, resolution and defocus as a function of tilt image
      * alignment refined tilt angles
      */
@@ -57,126 +56,126 @@ export interface paths {
   };
   "/movies/{movieId}/micrograph": {
     /**
-     * Get Micrograph 
+     * Get Micrograph
      * @description Get micrograph snapshot
      */
     get: operations["get_micrograph_movies__movieId__micrograph_get"];
   };
   "/movies/{movieId}/fft": {
     /**
-     * Get Fft 
+     * Get Fft
      * @description Get FFT theoretical image
      */
     get: operations["get_fft_movies__movieId__fft_get"];
   };
   "/movies/{movieId}/drift": {
     /**
-     * Get Drift 
+     * Get Drift
      * @description Get drift from a JSON file or from the drift table
      */
     get: operations["get_drift_movies__movieId__drift_get"];
   };
   "/movies/{movieId}/iceThickness": {
     /**
-     * Get Relative Ice Thickness 
+     * Get Relative Ice Thickness
      * @description Get values for relative ice thickness for a given movie
      */
     get: operations["get_relative_ice_thickness_movies__movieId__iceThickness_get"];
   };
   "/dataCollections/{collectionId}/tomograms": {
     /**
-     * Get Tomograms 
+     * Get Tomograms
      * @description Get tomogram that belongs to the collection
      */
     get: operations["get_tomograms_dataCollections__collectionId__tomograms_get"];
   };
   "/dataCollections/{collectionId}/tomograms/reprocessing": {
     /**
-     * Initiate Reprocessing 
+     * Initiate Reprocessing
      * @description Initiate data reprocessing
      */
     post: operations["initiate_reprocessing_dataCollections__collectionId__tomograms_reprocessing_post"];
   };
   "/dataCollections/{collectionId}/processingJobs": {
     /**
-     * Get Processing Jobs 
+     * Get Processing Jobs
      * @description Get processing jobs that belong to the collection
      */
     get: operations["get_processing_jobs_dataCollections__collectionId__processingJobs_get"];
   };
   "/dataCollections/{collectionId}/motion": {
     /**
-     * Get Motion Correction 
+     * Get Motion Correction
      * @description Get motion correction and tilt alignment data
      */
     get: operations["get_motion_correction_dataCollections__collectionId__motion_get"];
   };
   "/dataCollections/{collectionId}/iceThickness": {
     /**
-     * Get Ice Histogram 
+     * Get Ice Histogram
      * @description Get relative ice thickness histogram
      */
     get: operations["get_ice_histogram_dataCollections__collectionId__iceThickness_get"];
   };
   "/dataCollections/{collectionId}/totalMotion": {
     /**
-     * Get Motion Histogram 
+     * Get Motion Histogram
      * @description Get total motion histogram
      */
     get: operations["get_motion_histogram_dataCollections__collectionId__totalMotion_get"];
   };
   "/dataCollections/{collectionId}/resolution": {
     /**
-     * Get Resolution 
+     * Get Resolution
      * @description Get estimated resolution histogram
      */
     get: operations["get_resolution_dataCollections__collectionId__resolution_get"];
   };
   "/dataCollections/{collectionId}/particles": {
     /**
-     * Get Particle Count 
+     * Get Particle Count
      * @description Get particle count histogram
      */
     get: operations["get_particle_count_dataCollections__collectionId__particles_get"];
   };
   "/dataGroups": {
     /**
-     * Get Collection Groups 
+     * Get Collection Groups
      * @description List collection groups belonging to a session
      */
     get: operations["get_collection_groups_dataGroups_get"];
   };
   "/dataGroups/{groupId}/dataCollections": {
     /**
-     * Get Collections 
+     * Get Collections
      * @description List collections belonging to a data collection group
      */
     get: operations["get_collections_dataGroups__groupId__dataCollections_get"];
   };
   "/proposals": {
     /**
-     * Get Proposals 
+     * Get Proposals
      * @description List proposals
      */
     get: operations["get_proposals_proposals_get"];
   };
   "/autoProc/{autoProcId}/tomogram": {
     /**
-     * Get Tomogram 
+     * Get Tomogram
      * @description Get tomogram
      */
     get: operations["get_tomogram_autoProc__autoProcId__tomogram_get"];
   };
   "/autoProc/{autoProcId}/motion": {
     /**
-     * Get Motion Correction 
+     * Get Motion Correction
      * @description Get motion correction and tilt alignment data (including drift plot)
      */
     get: operations["get_motion_correction_autoProc__autoProcId__motion_get"];
   };
   "/autoProc/{autoProcId}/ctf": {
     /**
-     * Get Ctf 
+     * Get Ctf
      * @description Get astigmatism, resolution and defocus as a function of motion correction
      * image numbers
      */
@@ -184,56 +183,56 @@ export interface paths {
   };
   "/autoProc/{autoProcId}/particlePicker": {
     /**
-     * Get Particle Picker 
+     * Get Particle Picker
      * @description Get particle picking data
      */
     get: operations["get_particle_picker_autoProc__autoProcId__particlePicker_get"];
   };
   "/autoProc/{autoProcId}/classification": {
     /**
-     * Get Classification 
+     * Get Classification
      * @description Get classification data
      */
     get: operations["get_classification_autoProc__autoProcId__classification_get"];
   };
   "/autoProc/{autoProcId}/classification/{classificationId}/image": {
     /**
-     * Get Classification Image 
+     * Get Classification Image
      * @description Get class' image representation or MRC file
      */
     get: operations["get_classification_image_autoProc__autoProcId__classification__classificationId__image_get"];
   };
   "/autoProc/{autoProcId}/particlePicker/{particlePickerId}/image": {
     /**
-     * Get Particle Picker Image 
+     * Get Particle Picker Image
      * @description Get class image
      */
     get: operations["get_particle_picker_image_autoProc__autoProcId__particlePicker__particlePickerId__image_get"];
   };
   "/autoProc/{autoProcId}/iceThickness": {
     /**
-     * Get Ice Histogram 
+     * Get Ice Histogram
      * @description Get relative ice thickness histogram
      */
     get: operations["get_ice_histogram_autoProc__autoProcId__iceThickness_get"];
   };
   "/autoProc/{autoProcId}/totalMotion": {
     /**
-     * Get Motion 
+     * Get Motion
      * @description Get total motion histogram
      */
     get: operations["get_motion_autoProc__autoProcId__totalMotion_get"];
   };
   "/autoProc/{autoProcId}/resolution": {
     /**
-     * Get Resolution 
+     * Get Resolution
      * @description Get estimated resolution histogram
      */
     get: operations["get_resolution_autoProc__autoProcId__resolution_get"];
   };
   "/autoProc/{autoProcId}/particles": {
     /**
-     * Get Particle Count 
+     * Get Particle Count
      * @description Get particle count histogram
      */
     get: operations["get_particle_count_autoProc__autoProcId__particles_get"];
@@ -257,19 +256,19 @@ export interface components {
       /** Processingmessage */
       processingMessage?: string;
       /**
-       * Processingstarttime 
+       * Processingstarttime
        * Format: date-time
        */
       processingStartTime?: string;
       /**
-       * Processingendtime 
+       * Processingendtime
        * Format: date-time
        */
       processingEndTime?: string;
       /** Processingenvironment */
       processingEnvironment?: string;
       /**
-       * Recordtimestamp 
+       * Recordtimestamp
        * Format: date-time
        */
       recordTimeStamp?: string;
@@ -360,7 +359,7 @@ export interface components {
     /** CtfImageNumberList */
     CtfImageNumberList: {
       /** Items */
-      items: (components["schemas"]["CtfImageNumber"])[];
+      items: components["schemas"]["CtfImageNumber"][];
     };
     /** CtfTiltAlign */
     CtfTiltAlign: {
@@ -376,29 +375,29 @@ export interface components {
     /** CtfTiltAlignList */
     CtfTiltAlignList: {
       /** Items */
-      items: (components["schemas"]["CtfTiltAlign"])[];
+      items: components["schemas"]["CtfTiltAlign"][];
     };
     /** DataCollectionGroupSummaryResponse */
     DataCollectionGroupSummaryResponse: {
       /**
-       * Datacollectiongroupid 
+       * Datacollectiongroupid
        * @description Data Collection Group ID
        */
       dataCollectionGroupId: number;
       /**
-       * Sessionid 
+       * Sessionid
        * @description Session ID
        */
       sessionId: number;
       /** Experimenttype */
       experimentType?: string;
       /**
-       * Experimenttypeid 
+       * Experimenttypeid
        * @default 37
        */
       experimentTypeId?: number;
       /**
-       * Experimenttypename 
+       * Experimenttypename
        * @default Single Particle
        */
       experimentTypeName?: string;
@@ -410,20 +409,20 @@ export interface components {
     /** DataCollectionSummary */
     DataCollectionSummary: {
       /**
-       * Datacollectionid 
+       * Datacollectionid
        * @description Data Collection ID
        */
       dataCollectionId: number;
       /**
-       * Sessionid 
+       * Sessionid
        * @description Session ID
        */
       SESSIONID: number;
       /** Comments */
       comments?: string;
       /**
-       * Starttime 
-       * Format: date-time 
+       * Starttime
+       * Format: date-time
        * @description Start time of the dataCollection
        */
       startTime: string;
@@ -440,8 +439,8 @@ export interface components {
       /** Index */
       index: number;
       /**
-       * Endtime 
-       * Format: date-time 
+       * Endtime
+       * Format: date-time
        * @description End time of the dataCollection
        */
       endTime: string;
@@ -464,7 +463,7 @@ export interface components {
       /** Exposuretime */
       exposureTime?: number;
       /**
-       * Imagedirectory 
+       * Imagedirectory
        * @description The directory where files reside - should end with a slash
        */
       imageDirectory: string;
@@ -473,7 +472,7 @@ export interface components {
       /** Imagesuffix */
       imageSuffix: string;
       /**
-       * Imagecontainersubpath 
+       * Imagecontainersubpath
        * @description Internal path of a HDF5 file pointing to the data
        *         for this data collection
        */
@@ -637,7 +636,7 @@ export interface components {
     /** FullMovieWithTilt */
     FullMovieWithTilt: {
       /** Items */
-      items: (components["schemas"]["FullMovie"])[];
+      items: components["schemas"]["FullMovie"][];
       /** Total */
       total: number;
       /** Page */
@@ -650,12 +649,12 @@ export interface components {
     /** GenericPlot */
     GenericPlot: {
       /** Items */
-      items: (components["schemas"]["DataPoint"])[];
+      items: components["schemas"]["DataPoint"][];
     };
     /** HTTPValidationError */
     HTTPValidationError: {
       /** Detail */
-      detail?: (components["schemas"]["ValidationError"])[];
+      detail?: components["schemas"]["ValidationError"][];
     };
     /** IceThicknessWithAverage */
     IceThicknessWithAverage: {
@@ -712,7 +711,7 @@ export interface components {
       /** Moviefullpath */
       movieFullPath: string;
       /**
-       * Createdtimestamp 
+       * Createdtimestamp
        * Format: date-time
        */
       createdTimeStamp: string;
@@ -732,7 +731,7 @@ export interface components {
     /** Paged[Classification] */
     Paged_Classification_: {
       /** Items */
-      items: (components["schemas"]["Classification"])[];
+      items: components["schemas"]["Classification"][];
       /** Total */
       total: number;
       /** Page */
@@ -743,7 +742,7 @@ export interface components {
     /** Paged[DataCollectionGroupSummaryResponse] */
     Paged_DataCollectionGroupSummaryResponse_: {
       /** Items */
-      items: (components["schemas"]["DataCollectionGroupSummaryResponse"])[];
+      items: components["schemas"]["DataCollectionGroupSummaryResponse"][];
       /** Total */
       total: number;
       /** Page */
@@ -754,7 +753,7 @@ export interface components {
     /** Paged[DataCollectionSummary] */
     Paged_DataCollectionSummary_: {
       /** Items */
-      items: (components["schemas"]["DataCollectionSummary"])[];
+      items: components["schemas"]["DataCollectionSummary"][];
       /** Total */
       total: number;
       /** Page */
@@ -765,7 +764,7 @@ export interface components {
     /** Paged[FullMovie] */
     Paged_FullMovie_: {
       /** Items */
-      items: (components["schemas"]["FullMovie"])[];
+      items: components["schemas"]["FullMovie"][];
       /** Total */
       total: number;
       /** Page */
@@ -776,7 +775,7 @@ export interface components {
     /** Paged[ParticlePicker] */
     Paged_ParticlePicker_: {
       /** Items */
-      items: (components["schemas"]["ParticlePicker"])[];
+      items: components["schemas"]["ParticlePicker"][];
       /** Total */
       total: number;
       /** Page */
@@ -787,7 +786,7 @@ export interface components {
     /** Paged[ProcessingJobResponse] */
     Paged_ProcessingJobResponse_: {
       /** Items */
-      items: (components["schemas"]["ProcessingJobResponse"])[];
+      items: components["schemas"]["ProcessingJobResponse"][];
       /** Total */
       total: number;
       /** Page */
@@ -798,7 +797,7 @@ export interface components {
     /** Paged[ProposalResponse] */
     Paged_ProposalResponse_: {
       /** Items */
-      items: (components["schemas"]["ProposalResponse"])[];
+      items: components["schemas"]["ProposalResponse"][];
       /** Total */
       total: number;
       /** Page */
@@ -809,7 +808,7 @@ export interface components {
     /** Paged[SessionResponse] */
     Paged_SessionResponse_: {
       /** Items */
-      items: (components["schemas"]["SessionResponse"])[];
+      items: components["schemas"]["SessionResponse"][];
       /** Total */
       total: number;
       /** Page */
@@ -820,7 +819,7 @@ export interface components {
     /** Paged[TomogramResponse] */
     Paged_TomogramResponse_: {
       /** Items */
-      items: (components["schemas"]["TomogramResponse"])[];
+      items: components["schemas"]["TomogramResponse"][];
       /** Total */
       total: number;
       /** Page */
@@ -843,7 +842,7 @@ export interface components {
       /** Movieid */
       movieId: number;
       /**
-       * Createdtimestamp 
+       * Createdtimestamp
        * Format: date-time
        */
       createdTimeStamp?: string;
@@ -859,7 +858,7 @@ export interface components {
       /** Comments */
       comments: string;
       /**
-       * Recordtimestamp 
+       * Recordtimestamp
        * Format: date-time
        */
       recordTimestamp?: string;
@@ -878,7 +877,7 @@ export interface components {
     /** ProposalResponse */
     ProposalResponse: {
       /**
-       * Proposalid 
+       * Proposalid
        * @description Proposal ID
        */
       proposalId: number;
@@ -891,7 +890,7 @@ export interface components {
       /** Proposalnumber */
       proposalNumber: string;
       /**
-       * Bltimestamp 
+       * Bltimestamp
        * Format: date-time
        */
       bltimeStamp: string;
@@ -927,22 +926,22 @@ export interface components {
       processingJobId: number;
     };
     /**
-     * RotationAxisEnum 
-     * @description An enumeration. 
+     * RotationAxisEnum
+     * @description An enumeration.
      * @enum {string}
      */
     RotationAxisEnum: "Omega" | "Kappa" | "Phi";
     /** SessionResponse */
     SessionResponse: {
       /**
-       * Sessionid 
+       * Sessionid
        * @description Session ID
        */
       sessionId: number;
       /** Beamlinesetupid */
       beamLineSetupId?: number;
       /**
-       * Proposalid 
+       * Proposalid
        * @description Proposal ID
        */
       proposalId: number;
@@ -951,12 +950,12 @@ export interface components {
       /** Projectcode */
       projectCode: string;
       /**
-       * Startdate 
+       * Startdate
        * Format: date-time
        */
       startDate?: string;
       /**
-       * Enddate 
+       * Enddate
        * Format: date-time
        */
       endDate?: string;
@@ -971,7 +970,7 @@ export interface components {
       /** Beamlineoperator */
       beamLineOperator?: string;
       /**
-       * Bltimestamp 
+       * Bltimestamp
        * Format: date-time
        */
       bltimeStamp: string;
@@ -980,7 +979,7 @@ export interface components {
       /** Visit Number */
       visit_number: number;
       /**
-       * Usedflag 
+       * Usedflag
        * @description Indicates if session has Datacollections or XFE or EnergyScans attached
        */
       usedFlag: number;
@@ -991,35 +990,35 @@ export interface components {
       /** Dewartransport */
       dewarTransport?: number;
       /**
-       * Databackupfrance 
+       * Databackupfrance
        * @description Data backup and express delivery France
        */
       databackupFrance: number;
       /**
-       * Databackupeurope 
+       * Databackupeurope
        * @description Data backup and express delivery Europe
        */
       databackupEurope: number;
       /** Expsessionpk */
       expSessionPk: number;
       /**
-       * Operatorsitenumber 
+       * Operatorsitenumber
        * @description Matricule site
        */
       operatorSiteNumber: string;
       /**
-       * Lastupdate 
-       * Format: date-time 
+       * Lastupdate
+       * Format: date-time
        * @description Last update timestamp: by default the end of the session, the last collect
        */
       lastUpdate: string;
       /**
-       * Protecteddata 
+       * Protecteddata
        * @description Indicates if the data is protected or not
        */
       protectedData: string;
       /**
-       * Archived 
+       * Archived
        * @description The data for the session is archived and no longer available on disk
        */
       archived: number;
@@ -1029,8 +1028,8 @@ export interface components {
       dataCollectionGroupId?: number;
     };
     /**
-     * StateEnum 
-     * @description An enumeration. 
+     * StateEnum
+     * @description An enumeration.
      * @enum {string}
      */
     StateEnum: "Open" | "Closed" | "Cancelled";
@@ -1108,15 +1107,14 @@ export interface components {
 export type external = Record<string, never>;
 
 export interface operations {
-
   get_sessions_sessions_get: {
     /**
-     * Get Sessions 
+     * Get Sessions
      * @description List visits belonging to a proposal
      */
     parameters?: {
-        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-        /** @description Number of results to show */
+      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+      /** @description Number of results to show */
       query?: {
         proposal?: string;
         search?: string;
@@ -1145,7 +1143,7 @@ export interface operations {
   };
   get_shift_plot_tomograms__tomogramId__shiftPlot_get: {
     /**
-     * Get Shift Plot 
+     * Get Shift Plot
      * @description Get X-Y shift plot data
      */
     parameters: {
@@ -1170,12 +1168,12 @@ export interface operations {
   };
   get_motion_correction_tomograms__tomogramId__motion_get: {
     /**
-     * Get Motion Correction 
+     * Get Motion Correction
      * @description Get motion correction data for the given tomogram
      */
     parameters: {
-        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-        /** @description Number of results to show */
+      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+      /** @description Number of results to show */
       query?: {
         page?: number;
         limit?: number;
@@ -1201,7 +1199,7 @@ export interface operations {
   };
   get_slice_tomograms__tomogramId__centralSlice_get: {
     /**
-     * Get Slice 
+     * Get Slice
      * @description Get tomogram central slice image
      */
     parameters: {
@@ -1222,7 +1220,7 @@ export interface operations {
   };
   get_movie_tomograms__tomogramId__movie_get: {
     /**
-     * Get Movie 
+     * Get Movie
      * @description Get tomogram movie image
      */
     parameters: {
@@ -1243,7 +1241,7 @@ export interface operations {
   };
   get_projection_tomograms__tomogramId__projection_get: {
     /**
-     * Get Projection 
+     * Get Projection
      * @description Get tomogram projection image
      */
     parameters: {
@@ -1267,7 +1265,7 @@ export interface operations {
   };
   get_ctf_tomograms__tomogramId__ctf_get: {
     /**
-     * Get Ctf 
+     * Get Ctf
      * @description Get astigmatism, resolution and defocus as a function of tilt image
      * alignment refined tilt angles
      */
@@ -1293,7 +1291,7 @@ export interface operations {
   };
   get_micrograph_movies__movieId__micrograph_get: {
     /**
-     * Get Micrograph 
+     * Get Micrograph
      * @description Get micrograph snapshot
      */
     parameters: {
@@ -1314,7 +1312,7 @@ export interface operations {
   };
   get_fft_movies__movieId__fft_get: {
     /**
-     * Get Fft 
+     * Get Fft
      * @description Get FFT theoretical image
      */
     parameters: {
@@ -1335,7 +1333,7 @@ export interface operations {
   };
   get_drift_movies__movieId__drift_get: {
     /**
-     * Get Drift 
+     * Get Drift
      * @description Get drift from a JSON file or from the drift table
      */
     parameters: {
@@ -1363,7 +1361,7 @@ export interface operations {
   };
   get_relative_ice_thickness_movies__movieId__iceThickness_get: {
     /**
-     * Get Relative Ice Thickness 
+     * Get Relative Ice Thickness
      * @description Get values for relative ice thickness for a given movie
      */
     parameters: {
@@ -1391,12 +1389,12 @@ export interface operations {
   };
   get_tomograms_dataCollections__collectionId__tomograms_get: {
     /**
-     * Get Tomograms 
+     * Get Tomograms
      * @description Get tomogram that belongs to the collection
      */
     parameters: {
-        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-        /** @description Number of results to show */
+      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+      /** @description Number of results to show */
       query?: {
         page?: number;
         limit?: number;
@@ -1422,7 +1420,7 @@ export interface operations {
   };
   initiate_reprocessing_dataCollections__collectionId__tomograms_reprocessing_post: {
     /**
-     * Initiate Reprocessing 
+     * Initiate Reprocessing
      * @description Initiate data reprocessing
      */
     parameters: {
@@ -1452,12 +1450,12 @@ export interface operations {
   };
   get_processing_jobs_dataCollections__collectionId__processingJobs_get: {
     /**
-     * Get Processing Jobs 
+     * Get Processing Jobs
      * @description Get processing jobs that belong to the collection
      */
     parameters: {
-        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-        /** @description Number of results to show */
+      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+      /** @description Number of results to show */
       query?: {
         search?: string;
         page?: number;
@@ -1484,12 +1482,12 @@ export interface operations {
   };
   get_motion_correction_dataCollections__collectionId__motion_get: {
     /**
-     * Get Motion Correction 
+     * Get Motion Correction
      * @description Get motion correction and tilt alignment data
      */
     parameters: {
-        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-        /** @description Number of results to show */
+      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+      /** @description Number of results to show */
       query?: {
         page?: number;
         limit?: number;
@@ -1515,7 +1513,7 @@ export interface operations {
   };
   get_ice_histogram_dataCollections__collectionId__iceThickness_get: {
     /**
-     * Get Ice Histogram 
+     * Get Ice Histogram
      * @description Get relative ice thickness histogram
      */
     parameters: {
@@ -1544,7 +1542,7 @@ export interface operations {
   };
   get_motion_histogram_dataCollections__collectionId__totalMotion_get: {
     /**
-     * Get Motion Histogram 
+     * Get Motion Histogram
      * @description Get total motion histogram
      */
     parameters: {
@@ -1573,7 +1571,7 @@ export interface operations {
   };
   get_resolution_dataCollections__collectionId__resolution_get: {
     /**
-     * Get Resolution 
+     * Get Resolution
      * @description Get estimated resolution histogram
      */
     parameters: {
@@ -1602,7 +1600,7 @@ export interface operations {
   };
   get_particle_count_dataCollections__collectionId__particles_get: {
     /**
-     * Get Particle Count 
+     * Get Particle Count
      * @description Get particle count histogram
      */
     parameters: {
@@ -1631,12 +1629,12 @@ export interface operations {
   };
   get_collection_groups_dataGroups_get: {
     /**
-     * Get Collection Groups 
+     * Get Collection Groups
      * @description List collection groups belonging to a session
      */
     parameters?: {
-        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-        /** @description Number of results to show */
+      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+      /** @description Number of results to show */
       query?: {
         session?: number;
         proposal?: string;
@@ -1662,12 +1660,12 @@ export interface operations {
   };
   get_collections_dataGroups__groupId__dataCollections_get: {
     /**
-     * Get Collections 
+     * Get Collections
      * @description List collections belonging to a data collection group
      */
     parameters: {
-        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-        /** @description Number of results to show */
+      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+      /** @description Number of results to show */
       query?: {
         search?: string;
         onlyTomograms?: boolean;
@@ -1695,12 +1693,12 @@ export interface operations {
   };
   get_proposals_proposals_get: {
     /**
-     * Get Proposals 
+     * Get Proposals
      * @description List proposals
      */
     parameters?: {
-        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-        /** @description Number of results to show */
+      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+      /** @description Number of results to show */
       query?: {
         search?: string;
         page?: number;
@@ -1724,12 +1722,12 @@ export interface operations {
   };
   get_tomogram_autoProc__autoProcId__tomogram_get: {
     /**
-     * Get Tomogram 
+     * Get Tomogram
      * @description Get tomogram
      */
     parameters: {
-        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-        /** @description Number of results to show */
+      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+      /** @description Number of results to show */
       query?: {
         page?: number;
         limit?: number;
@@ -1755,12 +1753,12 @@ export interface operations {
   };
   get_motion_correction_autoProc__autoProcId__motion_get: {
     /**
-     * Get Motion Correction 
+     * Get Motion Correction
      * @description Get motion correction and tilt alignment data (including drift plot)
      */
     parameters: {
-        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-        /** @description Number of results to show */
+      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+      /** @description Number of results to show */
       query?: {
         page?: number;
         limit?: number;
@@ -1786,7 +1784,7 @@ export interface operations {
   };
   get_ctf_autoProc__autoProcId__ctf_get: {
     /**
-     * Get Ctf 
+     * Get Ctf
      * @description Get astigmatism, resolution and defocus as a function of motion correction
      * image numbers
      */
@@ -1812,12 +1810,12 @@ export interface operations {
   };
   get_particle_picker_autoProc__autoProcId__particlePicker_get: {
     /**
-     * Get Particle Picker 
+     * Get Particle Picker
      * @description Get particle picking data
      */
     parameters: {
-        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-        /** @description Number of results to show */
+      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+      /** @description Number of results to show */
       query?: {
         filterNull?: boolean;
         page?: number;
@@ -1844,12 +1842,12 @@ export interface operations {
   };
   get_classification_autoProc__autoProcId__classification_get: {
     /**
-     * Get Classification 
+     * Get Classification
      * @description Get classification data
      */
     parameters: {
-        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-        /** @description Number of results to show */
+      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+      /** @description Number of results to show */
       query?: {
         sortBy?: "class" | "particles" | "resolution";
         classType?: "2d" | "3d";
@@ -1877,7 +1875,7 @@ export interface operations {
   };
   get_classification_image_autoProc__autoProcId__classification__classificationId__image_get: {
     /**
-     * Get Classification Image 
+     * Get Classification Image
      * @description Get class' image representation or MRC file
      */
     parameters: {
@@ -1899,7 +1897,7 @@ export interface operations {
   };
   get_particle_picker_image_autoProc__autoProcId__particlePicker__particlePickerId__image_get: {
     /**
-     * Get Particle Picker Image 
+     * Get Particle Picker Image
      * @description Get class image
      */
     parameters: {
@@ -1921,7 +1919,7 @@ export interface operations {
   };
   get_ice_histogram_autoProc__autoProcId__iceThickness_get: {
     /**
-     * Get Ice Histogram 
+     * Get Ice Histogram
      * @description Get relative ice thickness histogram
      */
     parameters: {
@@ -1950,7 +1948,7 @@ export interface operations {
   };
   get_motion_autoProc__autoProcId__totalMotion_get: {
     /**
-     * Get Motion 
+     * Get Motion
      * @description Get total motion histogram
      */
     parameters: {
@@ -1979,7 +1977,7 @@ export interface operations {
   };
   get_resolution_autoProc__autoProcId__resolution_get: {
     /**
-     * Get Resolution 
+     * Get Resolution
      * @description Get estimated resolution histogram
      */
     parameters: {
@@ -2008,7 +2006,7 @@ export interface operations {
   };
   get_particle_count_autoProc__autoProcId__particles_get: {
     /**
-     * Get Particle Count 
+     * Get Particle Count
      * @description Get particle count histogram
      */
     parameters: {
