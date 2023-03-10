@@ -92,8 +92,7 @@ export async function client(
       });
     }
 
-    console.error(err);
-    return Promise.reject();
+    throw err;
   } finally {
     timer = setTimeout(() => store.dispatch(setLoading(false)), 200);
   }

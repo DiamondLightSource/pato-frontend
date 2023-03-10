@@ -77,6 +77,7 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+        errorElement: <Error />,
         loader: getSessionData,
       },
       {
