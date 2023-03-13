@@ -50,6 +50,10 @@ jest.mock("molstar/lib/mol-plugin/config", () => ({
   },
 }));
 
+jest.mock("molstar/lib/mol-math/linear-algebra", () => ({
+  Vec3: { unitY: [0, 1, 0], negUnitZ: [0, 0, -1] },
+}));
+
 jest.mock("molstar/lib/mol-plugin-state/transforms", () => {
   return {
     StateTransforms: { Representation: { VolumeRepresentation3D: "" } },
