@@ -7,9 +7,10 @@ import { PluginStateObject } from "molstar/lib/mol-plugin-state/objects";
 import { StateTransforms } from "molstar/lib/mol-plugin-state/transforms";
 import { createVolumeRepresentationParams } from "molstar/lib/mol-plugin-state/helpers/volume-representation-params";
 import { Box, Button, Divider, Heading, HStack, Icon, Skeleton, Spacer, Tooltip, VStack } from "@chakra-ui/react";
-import { MdCamera, MdFileDownload, MdYoutubeSearchedFor } from "react-icons/md";
+import { Md3DRotation, MdCamera, MdFileDownload, MdYoutubeSearchedFor } from "react-icons/md";
 import { client } from "utils/api/client";
 import { downloadBuffer } from "utils/api/response";
+import { Vec3 } from "molstar/lib/mol-math/linear-algebra";
 
 const DefaultSpec: PluginSpec = {
   ...DefaultPluginSpec(),
@@ -32,7 +33,7 @@ interface MolstarWrapperProps {
   children?: ReactNode;
 }
 
-function MolstarWrapper({ classificationId, autoProcId, children }: MolstarWrapperProps) {
+const MolstarWrapper = ({ classificationId, autoProcId, children }: MolstarWrapperProps) => {
   const viewerDiv = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [dataTimestamp, setDatatimestamp] = useState("1");
@@ -45,6 +46,20 @@ function MolstarWrapper({ classificationId, autoProcId, children }: MolstarWrapp
 
     downloadBuffer(rawData, "text/plain; charset=utf-8");
   }, [rawData]);
+
+  const resetOrientation = useCallback(async () => {
+    // Resets to original orientation (XY plane, Z=0)
+
+    window.molstar!.canvas3d!.requestCameraReset({
+      snapshot: (scene, camera) =>
+        camera.getInvariantFocus(
+          scene.boundingSphereVisible.center,
+          scene.boundingSphereVisible.radius,
+          Vec3.unitY,
+          Vec3.negUnitZ
+        ),
+    });
+  }, []);
 
   useEffect(() => {
     client.safe_get(`autoProc/${autoProcId}/classification/${classificationId}/image`).then(async (response) => {
@@ -98,8 +113,13 @@ function MolstarWrapper({ classificationId, autoProcId, children }: MolstarWrapp
     <VStack h='100%'>
       <HStack w='100%'>
         <Tooltip label='Reset Zoom'>
-          <Button isDisabled={!rawData} onClick={() => window.molstar?.managers.camera.reset()}>
+          <Button isDisabled={!rawData} onClick={() => window.molstar!.managers.camera.reset()}>
             <Icon as={MdYoutubeSearchedFor} />
+          </Button>
+        </Tooltip>
+        <Tooltip label='Reset Original Orientation'>
+          <Button isDisabled={!rawData} onClick={resetOrientation}>
+            <Icon as={Md3DRotation} />
           </Button>
         </Tooltip>
         <Divider orientation='vertical' />
@@ -131,6 +151,6 @@ function MolstarWrapper({ classificationId, autoProcId, children }: MolstarWrapp
       </Box>
     </VStack>
   );
-}
+};
 
 export default MolstarWrapper;
