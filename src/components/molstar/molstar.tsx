@@ -1,7 +1,7 @@
 import { DefaultPluginSpec, PluginSpec } from "molstar/lib/mol-plugin/spec";
 import { PluginContext } from "molstar/lib/mol-plugin/context";
 import { PluginConfig } from "molstar/lib/mol-plugin/config";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { StateObjectSelector } from "molstar/lib/mol-state";
 import { PluginStateObject } from "molstar/lib/mol-plugin-state/objects";
 import { StateTransforms } from "molstar/lib/mol-plugin-state/transforms";
@@ -9,6 +9,7 @@ import { createVolumeRepresentationParams } from "molstar/lib/mol-plugin-state/h
 import { Box, Button, Divider, Heading, HStack, Icon, Skeleton, Spacer, Tooltip, VStack } from "@chakra-ui/react";
 import { MdCamera, MdFileDownload, MdYoutubeSearchedFor } from "react-icons/md";
 import { client } from "utils/api/client";
+import { downloadBuffer } from "utils/api/response";
 
 const DefaultSpec: PluginSpec = {
   ...DefaultPluginSpec(),
@@ -36,6 +37,14 @@ function MolstarWrapper({ classificationId, autoProcId, children }: MolstarWrapp
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [dataTimestamp, setDatatimestamp] = useState("1");
   const [rawData, setRawData] = useState<ArrayBuffer | null | undefined>();
+
+  const downloadMrc = useCallback(() => {
+    if (!rawData) {
+      return;
+    }
+
+    downloadBuffer(rawData, "text/plain; charset=utf-8");
+  }, [rawData]);
 
   useEffect(() => {
     client.safe_get(`autoProc/${autoProcId}/classification/${classificationId}/image`).then(async (response) => {
@@ -100,7 +109,7 @@ function MolstarWrapper({ classificationId, autoProcId, children }: MolstarWrapp
           </Button>
         </Tooltip>
         <Tooltip label='Download MRC File'>
-          <Button isDisabled>
+          <Button isDisabled={!rawData} onClick={downloadMrc}>
             <Icon as={MdFileDownload} />
           </Button>
         </Tooltip>
