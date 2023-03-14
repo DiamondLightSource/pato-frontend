@@ -1,6 +1,6 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import { renderWithProviders } from "../../utils/test-utils";
-import { ImageCard } from "./image";
+import { renderWithProviders } from "utils/test-utils";
+import { ImageCard } from "components/visualisation/image";
 
 describe("Image", () => {
   it("should render image title", () => {

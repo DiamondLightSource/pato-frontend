@@ -18,9 +18,9 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { MdLogin, MdMenu, MdClose } from "react-icons/md";
-import { useAppSelector } from "../../store/hooks";
+import { useAppSelector } from "store/hooks";
 import { Link as LinkRouter } from "react-router-dom";
-import { AuthState } from "../../schema/interfaces";
+import { AuthState } from "schema/interfaces";
 
 const links = [
   { label: "Proposals", route: "proposals" },

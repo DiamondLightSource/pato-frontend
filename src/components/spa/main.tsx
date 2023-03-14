@@ -1,17 +1,11 @@
-import {
-  AccordionItem,
-  AccordionPanel,
-  Grid,
-  GridItem,
-} from "@chakra-ui/react";
-import { Motion } from "../motion/motion";
+import { AccordionItem, AccordionPanel, Grid, GridItem } from "@chakra-ui/react";
+import { Motion } from "components/motion/motion";
 import { useCallback, useState } from "react";
-import { Classification } from "./classification";
-import { ParticlePicking } from "./particlePicking";
-import { CTF } from "../ctf/ctf";
-import { ProcessingTitle } from "../visualisation/processingTitle";
-import { BaseProcessingJobProps } from "../../schema/interfaces";
-
+import { Classification } from "components/spa/classification";
+import { ParticlePicking } from "components/spa/particlePicking";
+import { CTF } from "components/ctf/ctf";
+import { ProcessingTitle } from "components/visualisation/processingTitle";
+import { BaseProcessingJobProps } from "schema/interfaces";
 
 const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
   const [total, setTotal] = useState(0);

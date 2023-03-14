@@ -1,6 +1,6 @@
 import { rest } from "msw";
-import { server } from "../../mocks/server";
-import { getSpaData } from "./spa";
+import { server } from "mocks/server";
+import { getSpaData } from "utils/loaders/spa";
 
 describe("SPA Data", () => {
   it("should return data for jobs and collections if both are available", async () => {

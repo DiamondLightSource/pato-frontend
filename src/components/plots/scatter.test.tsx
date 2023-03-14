@@ -1,6 +1,6 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import { renderWithProviders } from "../../utils/test-utils";
-import { Scatter } from "./scatter";
+import { renderWithProviders } from "utils/test-utils";
+import { Scatter } from "components/plots/scatter";
 
 describe("Scatter Plot", () => {
   it("should render graph", () => {

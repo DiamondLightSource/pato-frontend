@@ -1,6 +1,6 @@
 import { rest } from "msw";
-import { server } from "../../mocks/server";
-import { getUser } from "./user";
+import { server } from "mocks/server";
+import { getUser } from "utils/loaders/user";
 
 describe("User Data", () => {
   it("should return user data if available", async () => {
@@ -47,5 +47,16 @@ describe("User Data", () => {
 
     await getUser();
     expect(global.window.history.replaceState).toBeCalled()
+  });
+
+  it("should return null if network request fails", async () => {
+    server.use(
+      rest.get("http://localhost/auth/user", (req, res, ctx) => {
+        return res.networkError("Failed to connect");
+      })
+    );
+
+    const user = await getUser();
+    expect(user).toBe(null)
   });
 });
