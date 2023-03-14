@@ -68,6 +68,8 @@ sync-github:
   script:
     - rm -rf .git
     - git clone https://$CI_GITHUB_USER:$CI_GITHUB_TOKEN@github.com/diamondLightSource/pato-frontend.git github-upstream && cd github-upstream
+    - git config --local user.name "Guilherme de Freitas"
+    - git config --local user.email guilherme.de-freitas@diamond.ac.uk
     - cp -r ../src src
     - git commit -m "Release $CI_COMMIT_TAG"
     - git push origin $CI_DEFAULT_BRANCH
