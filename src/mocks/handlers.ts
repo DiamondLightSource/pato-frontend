@@ -55,59 +55,36 @@ export const handlers = [
     return res(ctx.status(200), ctx.delay(0), ctx.json(data));
   }),
 
-  rest.get(
-    "http://localhost/autoProc/:autoProcId/tomogram",
-    (req, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json({ tomogramId: 1, dataCollectionId: 1 }),
-        ctx.delay(0)
-      );
-    }
+  rest.get("http://localhost/autoProc/:autoProcId/tomogram", (req, res, ctx) =>
+    res(
+      ctx.status(200),
+      ctx.json({ tomogramId: 1, dataCollectionId: 1 }),
+      ctx.delay(0)
+    )
   ),
 
   rest.get(
     "http://localhost/dataCollections/:collectionId/iceThickness",
-    (req, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json({ items: [{ x: 1, y: 1 }] }),
-        ctx.delay(0)
-      );
-    }
+    (req, res, ctx) =>
+      res(ctx.status(200), ctx.json({ items: [{ x: 1, y: 1 }] }), ctx.delay(0))
   ),
 
   rest.get(
     "http://localhost/dataCollections/:collectionId/totalMotion",
-    (req, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json({ items: [{ x: 1, y: 1 }] }),
-        ctx.delay(0)
-      );
-    }
+    (req, res, ctx) =>
+      res(ctx.status(200), ctx.json({ items: [{ x: 1, y: 1 }] }), ctx.delay(0))
   ),
 
   rest.get(
     "http://localhost/dataCollections/:collectionId/resolution",
-    (req, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json({ items: [{ x: 1, y: 1 }] }),
-        ctx.delay(0)
-      );
-    }
+    (req, res, ctx) =>
+      res(ctx.status(200), ctx.json({ items: [{ x: 1, y: 1 }] }), ctx.delay(0))
   ),
 
   rest.get(
     "http://localhost/dataCollections/:collectionId/particles",
-    (req, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json({ items: [{ x: 1, y: 1 }] }),
-        ctx.delay(0)
-      );
-    }
+    (req, res, ctx) =>
+      res(ctx.status(200), ctx.json({ items: [{ x: 1, y: 1 }] }), ctx.delay(0))
   ),
 
   rest.get("http://localhost/dataCollections/:id/motion", (req, res, ctx) => {
@@ -123,25 +100,21 @@ export const handlers = [
     return res(ctx.status(200), ctx.delay(0), ctx.json(data));
   }),
 
-  rest.get("http://localhost/movies/:id/fft", (req, res, ctx) => {
-    return res(ctx.status(200), ctx.delay(0), ctx.body(""));
-  }),
+  rest.get("http://localhost/movies/:id/fft", (req, res, ctx) =>
+    res(ctx.status(200), ctx.delay(0), ctx.body(""))
+  ),
 
-  rest.get("http://localhost/movies/:id/micrograph", (req, res, ctx) => {
-    return res(ctx.status(200), ctx.delay(0), ctx.body(""));
-  }),
+  rest.get("http://localhost/movies/:id/micrograph", (req, res, ctx) =>
+    res(ctx.status(200), ctx.delay(0), ctx.body(""))
+  ),
 
-  rest.get("http://localhost/tomograms/:id/centralSlice", (req, res, ctx) => {
-    return res(ctx.status(200), ctx.delay(0), ctx.body(""));
-  }),
+  rest.get("http://localhost/tomograms/:id/centralSlice", (req, res, ctx) =>
+    res(ctx.status(200), ctx.delay(0), ctx.body(""))
+  ),
 
-  rest.get("http://localhost/movies/:id/drift", (req, res, ctx) => {
-    return res(
-      ctx.delay(0),
-      ctx.status(200),
-      ctx.json({ items: [{ x: 1, y: 1 }] })
-    );
-  }),
+  rest.get("http://localhost/movies/:id/drift", (req, res, ctx) =>
+    res(ctx.delay(0), ctx.status(200), ctx.json({ items: [{ x: 1, y: 1 }] }))
+  ),
 
   rest.get("http://localhost/tomograms/:id/ctf", (req, res, ctx) => {
     let data: Record<string, number>[] = [];
@@ -200,14 +173,12 @@ export const handlers = [
 
   rest.get(
     "http://localhost/dataCollections/:collection/tomogram",
-    async (req, res, ctx) => {
-      return res(ctx.status(404));
-    }
+    async (req, res, ctx) => res(ctx.status(404))
   ),
 
-  rest.get("http://localhost/invalidEndpoint", async (req, res, ctx) => {
-    return res(ctx.status(404));
-  }),
+  rest.get("http://localhost/invalidEndpoint", async (req, res, ctx) =>
+    res(ctx.status(404))
+  ),
 
   rest.get(
     "http://localhost/autoProc/:procId/particlePicker",
@@ -280,32 +251,24 @@ export const handlers = [
 
   rest.get(
     "http://localhost/autoProc/:procId/particlePicker/:pickerId/image",
-    async (req, res, ctx) => {
-      return res(ctx.status(404));
-    }
+    async (req, res, ctx) => res(ctx.status(404))
   ),
 
   rest.get(
     "http://localhost/dataCollections/:collectionId/processingJobs",
-    async (req, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json({ items: [{ autoProcProgramId: 1 }] })
-      );
-    }
+    async (req, res, ctx) =>
+      res(ctx.status(200), ctx.json({ items: [{ autoProcProgramId: 1 }] }))
   ),
 
   rest.get(
     "http://localhost/tomograms/:tomogramId/projection",
-    async (req, res, ctx) => {
-      return res(ctx.status(404));
-    }
+    async (req, res, ctx) => res(ctx.status(404))
   ),
 
   rest.get(
     "http://localhost/autoProc/:autoProcId/classification/:classId/image",
     (req, res, ctx) => {
-      return res.once(
+      res.once(
         ctx.status(200),
         ctx.body("A"),
         ctx.set("Content-Type", "image/png")
@@ -316,7 +279,7 @@ export const handlers = [
   rest.get(
     "http://localhost/autoProc/:autoProcId/particlePicker/:classId/image",
     (req, res, ctx) => {
-      return res.once(
+      res.once(
         ctx.status(200),
         ctx.body("A"),
         ctx.set("Content-Type", "image/png")
@@ -326,11 +289,7 @@ export const handlers = [
 
   rest.get(
     "http://localhost/autoProc/:procId/classification",
-    async (req, res, ctx) => {
-      if (req.params.procId === "2") {
-        return res(ctx.status(404));
-      }
-
+    (req, res, ctx) => {
       if (req.url.searchParams.get("sortBy") === "class") {
         return res(
           ctx.status(200),
@@ -392,17 +351,15 @@ export const handlers = [
 
   rest.get(
     "http://localhost/autoProc/:procId/classification/:classId/image",
-    async (req, res, ctx) => {
-      return res(ctx.status(404));
-    }
+    (req, res, ctx) => res(ctx.status(404), ctx.delay(0))
   ),
 
-  rest.get("http://localhost/unauthorisedEndpoint", async (req, res, ctx) => {
-    return res(ctx.status(401));
-  }),
+  rest.get("http://localhost/unauthorisedEndpoint", async (req, res, ctx) =>
+    res(ctx.status(401))
+  ),
 
-  rest.get("http://localhost/sessions", (req, res, ctx) => {
-    return res(
+  rest.get("http://localhost/sessions", (req, res, ctx) =>
+    res(
       ctx.status(200),
       ctx.delay(0),
       ctx.json({
@@ -418,13 +375,13 @@ export const handlers = [
           },
         ],
       })
-    );
-  }),
+    )
+  ),
 
   rest.get(
     "http://localhost/dataGroups/:groupId/dataCollections",
-    async (req, res, ctx) => {
-      return res(
+    async (req, res, ctx) =>
+      res(
         ctx.status(200),
         ctx.json({
           items: [
@@ -437,8 +394,7 @@ export const handlers = [
           total: 80,
           limit: 25,
         })
-      );
-    }
+      )
   ),
 
   rest.get("http://localhost/proposals", (req, res, ctx) => {
