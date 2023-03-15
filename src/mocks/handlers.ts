@@ -268,22 +268,14 @@ export const handlers = [
   rest.get(
     "http://localhost/autoProc/:autoProcId/classification/:classId/image",
     (req, res, ctx) => {
-      res.once(
-        ctx.status(200),
-        ctx.body("A"),
-        ctx.set("Content-Type", "image/png")
-      );
+      res(ctx.status(404), ctx.delay(0));
     }
   ),
 
   rest.get(
     "http://localhost/autoProc/:autoProcId/particlePicker/:classId/image",
     (req, res, ctx) => {
-      res.once(
-        ctx.status(200),
-        ctx.body("A"),
-        ctx.set("Content-Type", "image/png")
-      );
+      res(ctx.status(200), ctx.body("A"), ctx.set("Content-Type", "image/png"));
     }
   ),
 

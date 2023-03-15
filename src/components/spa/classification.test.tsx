@@ -3,9 +3,46 @@ import { renderWithProviders } from "utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import { server } from "mocks/server";
+import { ReactNode } from "react";
+
+interface MolstarWrapperProps {
+  /* Particle classification ID */
+  classId: number;
+  autoProcId: number;
+  /* Additional custom controls */
+  children?: ReactNode;
+}
+
+jest.mock(
+  "components/molstar/molstar",
+  () =>
+    ({ classId, autoProcId, children }: MolstarWrapperProps) =>
+      children
+);
 
 describe("Classification", () => {
   window.URL.createObjectURL = jest.fn();
+
+  it("should match selected class to 3D visualisation modal page", async () => {
+    server.use(
+      rest.get("http://localhost/autoProc/:autoProcId/classification/:classId/image", (req, res, ctx) =>
+        res.once(ctx.status(404), ctx.delay(0))
+      )
+    );
+
+    renderWithProviders(<Classification autoProcId={5} type='3d' />);
+
+    const modalButton = await screen.findByText(/Open 3D Visualisation/i);
+
+    fireEvent.click(modalButton);
+    // Molstar + Suspense is a hefty combination
+    await screen.findByText("3D Visualisation", {}, { timeout: 1000 });
+
+    await waitFor(async () => expect((await screen.findAllByLabelText("Total Pages"))[1]).toHaveTextContent("2"));
+    fireEvent.click((await screen.findAllByLabelText("Next Page"))[1]);
+    await waitFor(() => expect(screen.getByLabelText("Batch Number Value")).toHaveTextContent("355"));
+  });
+
   it("should display first page as default", async () => {
     renderWithProviders(<Classification autoProcId={1} />);
 
@@ -55,7 +92,7 @@ describe("Classification", () => {
   });
 
   it("should update information when new class is selected (3d)", async () => {
-    renderWithProviders(<Classification autoProcId={1} type='3d' />);
+    await renderWithProviders(<Classification autoProcId={1} type='3d' />);
 
     await waitFor(() => {
       expect(screen.getByLabelText("Batch Number Value")).toHaveTextContent("155");
@@ -63,21 +100,6 @@ describe("Classification", () => {
 
     fireEvent.click(screen.getByTestId("class-1"));
 
-    await waitFor(() => expect(screen.getByLabelText("Batch Number Value")).toHaveTextContent("355"));
-  });
-
-  it("should match selected class to 3D visualisation modal page", async () => {
-    renderWithProviders(<Classification autoProcId={1} type='3d' />);
-
-    const modalButton = await screen.findByText(/Open 3D Visualisation/i);
-
-    fireEvent.click(modalButton);
-
-    // Molstar + Suspense is a hefty combination
-    await screen.findByText("No Valid Volume File", {}, { timeout: 4000 });
-
-    await waitFor(async () => expect((await screen.findAllByLabelText("Total Pages"))[1]).toHaveTextContent("2"));
-    fireEvent.click((await screen.findAllByLabelText("Next Page"))[1]);
     await waitFor(() => expect(screen.getByLabelText("Batch Number Value")).toHaveTextContent("355"));
   });
 });
