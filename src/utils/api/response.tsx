@@ -36,10 +36,10 @@ const setHistogram = (
   });
 };
 
-const downloadBuffer = (buffer: ArrayBuffer, contentType: string) => {
+const downloadBuffer = (buffer: ArrayBuffer, contentType: string, filename: string = "volume.mrc") => {
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([buffer], { type: contentType }));
-  a.download = "volume.mrc";
+  a.download = filename;
   a.click();
   a.remove();
 };

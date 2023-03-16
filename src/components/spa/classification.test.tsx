@@ -6,10 +6,8 @@ import { server } from "mocks/server";
 import { ReactNode } from "react";
 
 interface MolstarWrapperProps {
-  /* Particle classification ID */
   classId: number;
   autoProcId: number;
-  /* Additional custom controls */
   children?: ReactNode;
 }
 
