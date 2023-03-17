@@ -40,7 +40,9 @@ const CTF = ({ parentId, parentType, onGraphClicked }: CTFProps) => {
 
   return (
     <>
-      <Heading variant='collection'>Summary</Heading>
+      <Heading py='4px' variant='collection'>
+        Summary
+      </Heading>
       <Divider />
       {ctfData === undefined ? (
         <Skeleton h='20vh' />

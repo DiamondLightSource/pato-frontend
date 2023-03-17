@@ -65,7 +65,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
   }, [autoProcId, classId]);
 
   useEffect(() => {
-    async function init() {
+    const init = async () => {
       molstar = new PluginContext(DefaultSpec);
 
       await molstar.init();

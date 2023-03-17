@@ -143,26 +143,24 @@ const Button = defineStyleConfig({
   },
 });
 
-const collection = defineStyle({
-  fontSize: 20,
-});
-
 const notFound = defineStyle({
   textAlign: "center",
   color: "diamond.300",
 });
 
-const notFoundSubtitle = defineStyle({
-  ...notFound,
-  fontWeight: 200,
-  fontSize: 20,
-  paddingBottom: 10,
-});
 const Heading = defineStyleConfig({
   variants: {
-    collection,
+    collection: {
+      fontSize: 20,
+      py: "4px",
+    },
     notFound,
-    notFoundSubtitle,
+    notFoundSubtitle: {
+      ...notFound,
+      fontWeight: 200,
+      fontSize: 20,
+      paddingBottom: 10,
+    },
   },
 });
 

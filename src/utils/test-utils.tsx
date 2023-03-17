@@ -30,7 +30,7 @@ const renderWithProviders = (
     ...renderOptions
   }: ExtendedRenderOptions = {}
 ): any => {
-  function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
+  const Wrapper = ({ children }: PropsWithChildren<{}>) => {
     window.history.pushState({}, "Test page", route);
 
     return (
@@ -38,7 +38,7 @@ const renderWithProviders = (
         <Provider store={store}>{children}</Provider>
       </MemoryRouter>
     );
-  }
+  };
 
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 };

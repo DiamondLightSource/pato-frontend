@@ -11,6 +11,11 @@ v0.9.0 (21/03/2023)
 - "Reset Camera Orientation" function for Molstar viewer
 - Raw MRC file can now be downloaded
 
+**Changed**
+
+- Ultrawide monitors now display two columns of data in data collection pages
+- Fixed menu for mobile devices
+
 ++++++++++
 v0.8.0 (14/03/2023)
 ++++++++++

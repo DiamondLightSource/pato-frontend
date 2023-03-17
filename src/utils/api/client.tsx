@@ -22,11 +22,11 @@ interface Response {
   url: string;
 }
 
-export async function client(
+export const client = async (
   endpoint: string,
   customConfig: Record<any, any> = {},
   body?: Record<any, any> | FormData
-): Promise<never | Response> {
+): Promise<never | Response> => {
   const config: RequestConfig = {
     method: body != null ? "POST" : "GET",
     ...customConfig,
@@ -96,7 +96,7 @@ export async function client(
   } finally {
     timer = setTimeout(() => store.dispatch(setLoading(false)), 200);
   }
-}
+};
 
 client.safe_get = async (endpoint: string, customConfig = {}) => {
   const resp = await client.get(endpoint, customConfig);
