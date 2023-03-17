@@ -40,7 +40,7 @@ const CTF = ({ parentId, parentType, onGraphClicked }: CTFProps) => {
 
   return (
     <>
-      <Heading py='4px' variant='collection'>
+      <Heading variant='collection'>
         Summary
       </Heading>
       <Divider />
