@@ -29,12 +29,10 @@ describe("Classification", () => {
     );
 
     renderWithProviders(<Classification autoProcId={5} type='3d' />);
-
     const modalButton = await screen.findByText(/Open 3D Visualisation/i);
 
     fireEvent.click(modalButton);
-    // Molstar + Suspense is a hefty combination
-    await screen.findByText("3D Visualisation", {}, { timeout: 1000 });
+    await screen.findByText("3D Visualisation");
 
     await waitFor(async () => expect((await screen.findAllByLabelText("Total Pages"))[1]).toHaveTextContent("2"));
     fireEvent.click((await screen.findAllByLabelText("Next Page"))[1]);
@@ -66,7 +64,6 @@ describe("Classification", () => {
 
   it("should update query when different sort type is selected", async () => {
     renderWithProviders(<Classification autoProcId={1} />);
-
     fireEvent.change(screen.getByRole("combobox"), { target: { value: "class" } });
 
     await waitFor(() => {
