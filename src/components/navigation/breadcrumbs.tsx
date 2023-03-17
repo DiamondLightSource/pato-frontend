@@ -9,7 +9,8 @@ const Breadcrumbs = () => {
   const pathCrumbs = location.pathname.split("/").filter((name) => {
     return name !== "";
   });
-  if (pathCrumbs.length === 0) return <></>;
+  
+  if (pathCrumbs.length === 0) return null;
 
   const currentPage = pathCrumbs.pop();
   let partialPath: Array<string> = Array(pathCrumbs.length + 1).fill("..");
