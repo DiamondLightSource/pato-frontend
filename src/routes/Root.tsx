@@ -6,8 +6,8 @@ import { Navbar } from "components/navigation/navbar";
 import { AuthState } from "schema/interfaces";
 import "styles/main.css";
 
-const Root = (): JSX.Element => {
-  const loaderData = useLoaderData() as AuthState;
+const Root = () => {
+  const loaderData = useLoaderData() as AuthState | null;
 
   return (
     <div className='rootContainer'>

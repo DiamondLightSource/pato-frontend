@@ -20,33 +20,21 @@ describe("User Data", () => {
   });
 
   it("should return null if unauthorised", async () => {
-    server.use(
-      rest.get("http://localhost/auth/user", (req, res, ctx) => {
-        return res.once(ctx.status(401));
-      })
-    );
     const data = await getUser();
-
     expect(data).toBe(null);
   });
 
-  it("should redirect if access token is in URL", async () => {
-    Object.defineProperty(window, 'location', {
+  it("should redirect if code is in URL", async () => {
+    Object.defineProperty(window, "location", {
       configurable: true,
       enumerable: true,
-      value: new URL("http://localhost/test#access_token=abc123?token_type=na"),
+      value: new URL("http://localhost/test?code=abc123"),
     });
 
-    global.window.history.replaceState = jest.fn()
-
-    server.use(
-      rest.get("http://localhost/auth/user", (req, res, ctx) => {
-        return res.once(ctx.status(401));
-      })
-    );
+    global.window.history.replaceState = jest.fn();
 
     await getUser();
-    expect(global.window.history.replaceState).toBeCalled()
+    expect(global.window.history.replaceState).toBeCalled();
   });
 
   it("should return null if network request fails", async () => {
@@ -57,6 +45,6 @@ describe("User Data", () => {
     );
 
     const user = await getUser();
-    expect(user).toBe(null)
+    expect(user).toBe(null);
   });
 });

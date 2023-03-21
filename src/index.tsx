@@ -30,21 +30,19 @@ const { ToastContainer } = createStandaloneToast();
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
-if (process.env.REACT_APP_AUTH_TYPE === "dummy") {
-  sessionStorage.setItem("token", "dummyToken");
-}
-
 const theme = extendTheme({
   colors: colours,
   components: { Accordion, Button, Text, Heading, Table, Card, Tabs },
   breakpoints: {
-    sm: '30em', 
-    md: '48em', 
-    lg: '62em', 
-    xl: '80em', 
-    '2xl': '150em',
-  }
+    "sm": "30em",
+    "md": "48em",
+    "lg": "62em",
+    "xl": "80em",
+    "2xl": "150em",
+  },
 });
+
+const checkUrlChanged = (current: URL, next: URL) => current.href !== next.href
 
 const handleGroupClicked = (item: Record<string, string | number>) => {
   // Temporary workaround
@@ -80,6 +78,7 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <Error />,
     loader: getUser,
+    shouldRevalidate: () => false,
     children: [
       {
         path: "/",
@@ -97,6 +96,7 @@ const router = createBrowserRouter([
           />
         ),
         loader: ({ request, params }) => getListingData(request, params, "proposals"),
+        shouldRevalidate: ({currentUrl, nextUrl}) => checkUrlChanged(currentUrl, nextUrl),
       },
       {
         path: "/calendar",
@@ -120,6 +120,7 @@ const router = createBrowserRouter([
           />
         ),
         loader: ({ request, params }) => getListingData(request, params, "sessions", processSessionData),
+        shouldRevalidate: ({currentUrl, nextUrl}) => checkUrlChanged(currentUrl, nextUrl),
       },
       {
         path: "/proposals/:propid/sessions/:visitId",
@@ -146,6 +147,7 @@ const router = createBrowserRouter([
           />
         ),
         loader: ({ request, params }) => getListingData(request, params, "dataCollections"),
+        shouldRevalidate: ({currentUrl, nextUrl}) => checkUrlChanged(currentUrl, nextUrl),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/tomograms/",

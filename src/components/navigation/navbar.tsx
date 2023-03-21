@@ -1,4 +1,4 @@
-import { ReactElement, useCallback } from "react";
+import { ReactElement } from "react";
 import {
   Box,
   Flex,
@@ -69,17 +69,12 @@ const NavLinks = ({ loggedIn }: NavLinksProps) => (
 );
 
 interface NavbarProps {
-  user?: AuthState;
+  user?: AuthState | null;
 }
 
 const Navbar = ({ user }: NavbarProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const loading = useAppSelector((state) => state.ui.loading);
-
-  const logout = useCallback(() => {
-    sessionStorage.removeItem("token");
-    window.location.href = `${process.env.REACT_APP_AUTH_ENDPOINT}logout?redirect_uri=${window.location.href}`;
-  }, []);
 
   return (
     <Box zIndex={1} h='3em' position='fixed' w='100%' bg='diamond.800'>
@@ -134,8 +129,10 @@ const Navbar = ({ user }: NavbarProps) => {
                 </HStack>
               </MenuButton>
               <MenuList>
-                <MenuItem aria-label='Logout' onClick={logout}>
-                  Logout
+                <MenuItem aria-label='Logout'>
+                  <Link href={`${process.env.REACT_APP_AUTH_ENDPOINT}logout?redirect_uri=${window.location.href}`}>
+                    Logout
+                  </Link>
                 </MenuItem>
               </MenuList>
             </Menu>
@@ -143,7 +140,7 @@ const Navbar = ({ user }: NavbarProps) => {
             <Link
               href={`${process.env.REACT_APP_AUTH_ENDPOINT}authorise?redirect_uri=${encodeURIComponent(
                 window.location.href
-              )}`}
+              )}&responseType=code`}
             >
               <Button variant='onBlue' leftIcon={<MdLogin />}>
                 Login

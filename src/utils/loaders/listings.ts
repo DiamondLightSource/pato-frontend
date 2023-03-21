@@ -24,7 +24,7 @@ const getListingData = async (
     builtEndpoint += `&search=${search}`;
   }
 
-  const response = await client.safe_get(builtEndpoint);
+  const response = await client.safeGet(builtEndpoint);
   if (response.data && response.data.items !== undefined) {
     return { data: processData ? processData(response.data.items) : response.data.items, total: response.data.total };
   }

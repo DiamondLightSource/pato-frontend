@@ -74,6 +74,7 @@ const TomogramPage = () => {
     document.title = `PATo » Tomograms » ${params.collectionIndex}`;
   }, [params]);
 
+  // TODO: Enable this once reprocessing is released
   const buttonDisabled = useMemo(() => {
     return true;
     if (loaderData.jobs === null || !loaderData.collection.dataCollectionId) {

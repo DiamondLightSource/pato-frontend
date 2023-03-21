@@ -4,7 +4,7 @@ import { client } from "utils/api/client";
 
 const setImage = (endpoint: string, setState: Dispatch<SetStateAction<string | undefined>>) => {
   setState(undefined);
-  client.safe_get(endpoint).then((response) => {
+  client.safeGet(endpoint).then((response) => {
     if (response.status === 200) {
       setState(URL.createObjectURL(response.data));
     } else {
@@ -18,7 +18,7 @@ const setHistogram = (
   setState: Dispatch<SetStateAction<BarStats[] | null | undefined>>,
   div: number = 1
 ) => {
-  client.safe_get(endpoint).then((response) => {
+  client.safeGet(endpoint).then((response) => {
     if (response.status === 200 && response.data.items) {
       const histogram: BarStats[] = [];
       for (const bin of response.data.items) {

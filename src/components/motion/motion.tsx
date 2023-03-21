@@ -140,7 +140,7 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType, current
   }, [currentPage]);
 
   useEffect(() => {
-    client.safe_get(buildEndpoint(`${parentType}/${parentId}/motion`, {}, 1, page ?? 0)).then((response) => {
+    client.safeGet(buildEndpoint(`${parentType}/${parentId}/motion`, {}, 1, page ?? 0)).then((response) => {
       if (response.status === 200) {
         setMotion(parseData(flattenMovieData(response.data), motionConfig) as MotionData);
         if (onTotalChanged) {
@@ -154,7 +154,7 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType, current
             setImage(`movies/${movie.movieId}/fft`, setFftImage);
             const driftUrl = `movies/${movie.movieId}/drift?fromDb=${parentType === "autoProc"}`;
 
-            client.safe_get(driftUrl).then((response) => {
+            client.safeGet(driftUrl).then((response) => {
               if (response.data.items) {
                 setDrift(response.data.items);
               }

@@ -3,6 +3,15 @@ Changelog
 ==========
 
 ++++++++++
+v0.10.0 (28/03/2023)
+++++++++++
+
+**Changed**
+
+- Fixes redundant requests for user information on page changes
+- Token is now stored in cookies
+
+++++++++++
 v0.9.0 (21/03/2023)
 ++++++++++
 

@@ -1,19 +1,21 @@
+import { AuthState } from "schema/interfaces";
 import { client } from "utils/api/client";
 
 const getUser = async () => {
-  const url = window.location.href;
-  const splitUrl = url.split("access_token=");
+  const url = encodeURIComponent(window.location.href);
+  const splitUrl = window.location.href.split("code=");
+  let user: AuthState | null = null;
 
   if (splitUrl.length === 2) {
-    sessionStorage.setItem("token", splitUrl[1].split("&token_type")[0].toString());
-    window.history.replaceState({}, document.title, window.location.href.split("#")[0]);
+    await client.authGet(`token?redirect_uri=${url}&code=${splitUrl[1]}`);
+    window.history.replaceState({}, document.title, splitUrl[0].slice(0, -1));
   }
 
   try {
-    const user = await client.get("user");
-    return user.status === 200 ? { fedid: user.data.fedid, name: user.data.givenName } : null;
+    const response = await client.authGet("user");
+    return response.status === 200 ? { fedid: response.data.fedid, name: response.data.givenName } : null;
   } catch (NetworkError) {
-    return null;
+    return user;
   }
 };
 
