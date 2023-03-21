@@ -42,7 +42,7 @@ const theme = extendTheme({
   },
 });
 
-const checkUrlChanged = (current: URL, next: URL) => current.href !== next.href
+const checkUrlChanged = (current: URL, next: URL) => current.href !== next.href;
 
 const handleGroupClicked = (item: Record<string, string | number>) => {
   // Temporary workaround
@@ -83,7 +83,6 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
-        errorElement: <Error />,
         loader: getSessionData,
       },
       {
@@ -96,7 +95,7 @@ const router = createBrowserRouter([
           />
         ),
         loader: ({ request, params }) => getListingData(request, params, "proposals"),
-        shouldRevalidate: ({currentUrl, nextUrl}) => checkUrlChanged(currentUrl, nextUrl),
+        shouldRevalidate: ({ currentUrl, nextUrl }) => checkUrlChanged(currentUrl, nextUrl),
       },
       {
         path: "/calendar",
@@ -120,7 +119,7 @@ const router = createBrowserRouter([
           />
         ),
         loader: ({ request, params }) => getListingData(request, params, "sessions", processSessionData),
-        shouldRevalidate: ({currentUrl, nextUrl}) => checkUrlChanged(currentUrl, nextUrl),
+        shouldRevalidate: ({ currentUrl, nextUrl }) => checkUrlChanged(currentUrl, nextUrl),
       },
       {
         path: "/proposals/:propid/sessions/:visitId",
@@ -147,7 +146,7 @@ const router = createBrowserRouter([
           />
         ),
         loader: ({ request, params }) => getListingData(request, params, "dataCollections"),
-        shouldRevalidate: ({currentUrl, nextUrl}) => checkUrlChanged(currentUrl, nextUrl),
+        shouldRevalidate: ({ currentUrl, nextUrl }) => checkUrlChanged(currentUrl, nextUrl),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/tomograms/",

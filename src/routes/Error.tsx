@@ -23,9 +23,7 @@ const Error = () => {
       setMessage("This page does not exist.");
     } else {
       setHeading("An error has occurred");
-      setMessage(
-        "An unexpected error has occurred. If this persists, please contact the developers. Details:"
-      );
+      setMessage("An unexpected error has occurred. If this persists, please contact the developers. Details:");
       setDetails(error.toString());
     }
   }, [error]);
@@ -38,13 +36,7 @@ const Error = () => {
           <Heading color='diamond.800'>{heading}</Heading>
           <Text color='diamond.300'>{message}</Text>
           {details && (
-            <Code
-              fontFamily='monospace'
-              w='50%'
-              h='30%'
-              overflow='visible'
-              p={3}
-            >
+            <Code fontFamily='monospace' w='50%' h='30%' overflow='visible' p={3}>
               {details}
             </Code>
           )}
