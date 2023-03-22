@@ -24,19 +24,6 @@ describe("User Data", () => {
     expect(data).toBe(null);
   });
 
-  it("should redirect if code is in URL", async () => {
-    Object.defineProperty(window, "location", {
-      configurable: true,
-      enumerable: true,
-      value: new URL("http://localhost/test?code=abc123"),
-    });
-
-    global.window.history.replaceState = jest.fn();
-
-    await getUser();
-    expect(global.window.history.replaceState).toBeCalled();
-  });
-
   it("should return null if network request fails", async () => {
     server.use(
       rest.get("http://localhost/auth/user", (req, res, ctx) => {

@@ -22,6 +22,7 @@ import {
 } from "@chakra-ui/react";
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import {
+  createSearchParams,
   useLoaderData,
   useNavigate,
   useParams,
@@ -49,8 +50,9 @@ const TomogramPage = () => {
     jobs: ProcessingJob[] | null;
   };
   const [searchParams, setSearchParams] = useSearchParams();
-  const [onlyProcessed, setOnlyProcessed] = useState(
-    searchParams.get("onlyTomograms") === "true"
+  const onlyTomograms = useMemo(
+    () => searchParams.get("onlyTomograms") === "true",
+    [searchParams]
   );
   const [accordionIndex, setAccordionIndex] = useState<number | number[]>(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -58,17 +60,17 @@ const TomogramPage = () => {
 
   const updateCollection = useCallback(
     (page: number) => {
-      navigate(`../${page}?onlyTomograms=${onlyProcessed}`, {
-        relative: "path",
-      });
+      navigate(
+        { pathname: `../${page}`, search: `onlyTomograms=${onlyTomograms}` },
+        { relative: "path" }
+      );
     },
-    [navigate, onlyProcessed]
+    [navigate, onlyTomograms]
   );
 
   const updateTomogramFilter = useCallback(() => {
-    setOnlyProcessed(!onlyProcessed);
-    setSearchParams({ onlyTomograms: (!onlyProcessed).toString() });
-  }, [onlyProcessed, setSearchParams]);
+    setSearchParams({ onlyTomograms: (!onlyTomograms).toString() });
+  }, [setSearchParams, onlyTomograms]);
 
   useEffect(() => {
     document.title = `PATo » Tomograms » ${params.collectionIndex}`;
@@ -138,7 +140,7 @@ const TomogramPage = () => {
             <Spacer />
             <Checkbox
               data-testid='filter-tomograms'
-              defaultChecked={onlyProcessed}
+              isChecked={onlyTomograms}
               onChange={updateTomogramFilter}
               alignSelf='end'
             >

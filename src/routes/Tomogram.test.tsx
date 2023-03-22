@@ -73,9 +73,10 @@ describe("Tomogram Page", () => {
     fireEvent.click(await screen.findByLabelText("Next Page"));
 
     await waitFor(() =>
-      expect(mockNavigate).toBeCalledWith("../2?onlyTomograms=false", {
-        relative: "path",
-      })
+      expect(mockNavigate).toBeCalledWith(
+        { pathname: "../2", search: "onlyTomograms=false" },
+        { relative: "path" }
+      )
     );
   });
 

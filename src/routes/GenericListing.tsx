@@ -4,6 +4,7 @@ import {
   createSearchParams,
   useLoaderData,
   useNavigate,
+  useSearchParams,
 } from "react-router-dom";
 import { Pagination } from "components/navigation/pagination";
 import { Table } from "components/visualisation/table";
@@ -28,9 +29,12 @@ interface TableData {
 
 const GenericListing = ({ headers, heading, makePathCallback }: TableProps) => {
   const data = useLoaderData() as TableData;
-  const [page, setPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
-  const [search, setSearch] = useState("");
+  const [searchParams] = useSearchParams();
+  const [page, setPage] = useState(parseInt(searchParams.get("page") || "1"));
+  const [itemsPerPage, setItemsPerPage] = useState(
+    parseInt(searchParams.get("items") || "20")
+  );
+  const [search, setSearch] = useState(searchParams.get("search") || "");
 
   const navigate = useNavigate();
 
@@ -77,7 +81,7 @@ const GenericListing = ({ headers, heading, makePathCallback }: TableProps) => {
           borderColor='gray.600'
           bg='diamond.50'
           onChangeEnd={handleSearch}
-          w='20%'
+          w={{ base: "auto", md: "20%" }}
           size='sm'
           placeholder='Search...'
         />
