@@ -82,7 +82,7 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
     <AccordionItem isDisabled={false}>
       <ProcessingTitle autoProc={autoProc} procJob={procJob} status={status} />
       {active && (
-        <AccordionPanel pt={4}>
+        <AccordionPanel p={0}>
           {tomogram === null ? (
             <Motion parentId={procJob.dataCollectionId} parentType='dataCollections' />
           ) : tomogram === undefined ? (
@@ -93,7 +93,7 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
               <Skeleton w='100%' h='20vh' />
             </VStack>
           ) : (
-            <Grid gap={3}>
+            <Grid gap={3} bg='diamond.75' p={4} templateColumns={{base: "", "2xl": "repeat(2, 1fr)"}}>
               <GridItem>
                 <Motion parentType='tomograms' parentId={tomogram.tomogramId} />
               </GridItem>

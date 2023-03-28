@@ -26,4 +26,5 @@ export const classificationConfig: DataConfig = {
     { name: "resolution" },
     { name: "numberOfParticles" },
   ],
+  root: ["particleClassificationId"]
 };

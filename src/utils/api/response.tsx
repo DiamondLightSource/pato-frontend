@@ -36,4 +36,12 @@ const setHistogram = (
   });
 };
 
-export { setImage, setHistogram };
+const downloadBuffer = (buffer: ArrayBuffer, contentType: string, filename: string = "volume.mrc") => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([buffer], { type: contentType }));
+  a.download = filename;
+  a.click();
+  a.remove();
+};
+
+export { setImage, setHistogram, downloadBuffer };

@@ -36,7 +36,7 @@ const sortValues = [
 
 const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
   const [classificationData, setClassificationData] = useState<FullClassification[] | undefined | null>(undefined);
-  const [pageAmount, setPageAmount] = useState(0);
+  const [classCount, setClassCount] = useState(0);
   const [classPage, setClassPage] = useState(0);
   const [sortType, setSortType] = useState<SortTypes>("particles");
   const [selectedClass, setSelectedClass] = useState(0);
@@ -48,7 +48,7 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
         .safe_get(`autoProc/${autoProcId}/classification?limit=8&page=${page - 1}&sortBy=${sortType}&classType=${type}`)
         .then(async (response) => {
           if (response.status === 200 && response.data.items) {
-            setPageAmount(Math.ceil(response.data.total / 8));
+            setClassCount(response.data.total);
             let classes = response.data.items;
             if (type === "2d") {
               classes = await Promise.all(
@@ -65,6 +65,8 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
     },
     [autoProcId, sortType, type]
   );
+
+  const pageAmount = useMemo(() => Math.ceil(classCount / 8), [classCount]);
 
   const handle3dClassPageChange = useCallback((page: number) => {
     setClassPage(Math.floor((page - 1) / 8) + 1);
@@ -155,8 +157,9 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
         <MolstarModal
           onChange={handle3dClassPageChange}
           autoProcId={autoProcId}
-          defaultIndex={classIndex}
-          defaultSort={sortType}
+          page={classIndex}
+          pageCount={classCount}
+          classId={selectedClassInfo.particleClassificationId}
         />
       )}
     </Box>

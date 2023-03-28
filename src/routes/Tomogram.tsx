@@ -169,6 +169,7 @@ const TomogramPage = () => {
           No Jobs Available for This Data Collection
         </Heading>
       )}
+
       {loaderData.collection.dataCollectionId && (
         <Modal size='2xl' isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
