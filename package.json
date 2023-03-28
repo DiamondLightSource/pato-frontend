@@ -35,7 +35,8 @@
     "build": "react-app-rewired build",
     "test": "REACT_APP_AUTH_ENDPOINT=auth/ jest",
     "eject": "react-scripts eject",
-    "format": "prettier --jsx-single-quote --write src/**/*.{ts,tsx,css}"
+    "format": "prettier --jsx-single-quote --write src/**/*.{ts,tsx,css}",
+    "demo": "REACT_APP_DEMO=true HTTPS=false REACT_APP_AUTH_ENDPOINT=http://localhost/auth/ REACT_APP_API_ENDPOINT=http://localhost/ react-app-rewired start"
   },
   "eslintConfig": {
     "extends": [
@@ -56,7 +57,6 @@
     ]
   },
   "devDependencies": {
-    "react-app-rewired": "^2.2.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.0.1",
     "@testing-library/user-event": "^14.1.1",
@@ -66,6 +66,7 @@
     "@types/react-dom": "^18.0.2",
     "msw": "^0.47.4",
     "prettier": "^2.8.4",
+    "react-app-rewired": "^2.2.1",
     "ts-jest": "^29.0.3",
     "ts-node": "^10.9.1",
     "typescript": "^4.6.0",

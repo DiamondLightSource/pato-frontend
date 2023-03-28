@@ -7,7 +7,7 @@ describe("SPA Data", () => {
     const data = await getSpaData({ groupId: "1" });
     expect(data.collection.dataCollectionId).toBe(9775784);
     expect(data.collection.info[0].value).toBe("EPU");
-    expect(data.jobs[0].autoProcProgramId).toBe(1);
+    expect(data.jobs[0].AutoProcProgram.autoProcProgramId).toBe(1);
   });
 
   it("should return base object if no data collection is available", async () => {

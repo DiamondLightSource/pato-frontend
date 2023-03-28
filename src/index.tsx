@@ -30,6 +30,11 @@ const { ToastContainer } = createStandaloneToast();
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
+if (process.env.REACT_APP_DEMO === 'true') {
+  const { worker } = require('./mocks/browser')
+  worker.start()
+}
+
 const theme = extendTheme({
   colors: colours,
   components: { Accordion, Button, Text, Heading, Table, Card, Tabs },
@@ -53,6 +58,8 @@ const handleGroupClicked = (item: Record<string, string | number>) => {
   switch (item.experimentTypeName) {
     case "Single Particle":
       return `${item.dataCollectionGroupId}/spa`;
+    case "Tomogram":
+      return `${item.dataCollectionGroupId}/tomograms/1`;
     default:
       return `${item.dataCollectionGroupId}/spa`;
   }
