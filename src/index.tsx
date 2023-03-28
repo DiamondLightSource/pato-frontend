@@ -37,6 +37,13 @@ if (process.env.REACT_APP_AUTH_TYPE === "dummy") {
 const theme = extendTheme({
   colors: colours,
   components: { Accordion, Button, Text, Heading, Table, Card, Tabs },
+  breakpoints: {
+    sm: '30em', 
+    md: '48em', 
+    lg: '62em', 
+    xl: '80em', 
+    '2xl': '150em',
+  }
 });
 
 const handleGroupClicked = (item: Record<string, string | number>) => {

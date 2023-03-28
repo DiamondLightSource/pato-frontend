@@ -1,18 +1,18 @@
 import { Motion } from "./motion";
 import { renderWithProviders } from "utils/test-utils";
 import { screen, waitFor } from "@testing-library/react";
+import { server } from "mocks/server";
+import { rest } from "msw";
 
 describe("Motion", () => {
   window.URL.createObjectURL = jest.fn();
   it("should display message when no tilt alignment data is present", async () => {
     renderWithProviders(<Motion parentType='dataCollections' parentId={2} />);
-
     await screen.findByText("No tilt alignment data available");
   });
 
   it("should display raw image count when no tilt. align. is present", async () => {
     renderWithProviders(<Motion parentType='dataCollections' parentId={2} />);
-
     await expect(screen.findByLabelText("Total Pages")).resolves.toHaveTextContent("10");
   });
 
@@ -20,7 +20,6 @@ describe("Motion", () => {
     renderWithProviders(<Motion parentType='tomograms' parentId={3} />);
 
     await screen.findByText("20");
-
     await expect(screen.findByTestId("comment")).resolves.toBeEnabled();
   });
 
@@ -31,6 +30,8 @@ describe("Motion", () => {
   });
 
   it("should display message when no data is available", async () => {
+    server.use(rest.get("http://localhost/dataCollections/:id/motion", (req, res, ctx) => res.once(ctx.status(404))));
+
     renderWithProviders(<Motion parentType='dataCollections' parentId={9} />);
     await waitFor(() => screen.findByText("No Motion Correction Data Available"));
   });

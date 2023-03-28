@@ -13,9 +13,9 @@ import {
   MenuItem,
   useDisclosure,
   Image,
-  Stack,
   Progress,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import { MdLogin, MdMenu, MdClose } from "react-icons/md";
 import { useAppSelector } from "store/hooks";
@@ -57,14 +57,15 @@ const NavLink = ({ children, link }: NavLinkProps) => (
 );
 
 const NavLinks = ({ loggedIn }: NavLinksProps) => (
-  <HStack height='100%'>
-    {loggedIn &&
-      links.map((link) => (
-        <NavLink link={link.route} key={link.label}>
-          {link.label}
-        </NavLink>
-      ))}
-  </HStack>
+  <>
+    {loggedIn
+      ? links.map((link) => (
+          <NavLink link={link.route} key={link.label}>
+            {link.label}
+          </NavLink>
+        ))
+      : null}
+  </>
 );
 
 interface NavbarProps {
@@ -81,8 +82,8 @@ const Navbar = ({ user }: NavbarProps) => {
   }, []);
 
   return (
-    <Box zIndex={1} position='fixed' w='100%' bg='diamond.800'>
-      <Flex px={{ base: 4, md: 48 }} h={12} alignItems={"center"} justifyContent={"space-between"}>
+    <Box zIndex={1} h='3em' position='fixed' w='100%' bg='diamond.800'>
+      <Flex px={{ base: 4, md: "7.5vw" }} h={12} alignItems={"center"} justifyContent={"space-between"}>
         <IconButton
           size={"sm"}
           icon={isOpen ? <MdClose /> : <MdMenu />}
@@ -154,11 +155,9 @@ const Navbar = ({ user }: NavbarProps) => {
       {!isOpen && loading && <Progress isIndeterminate size='sm' />}
 
       {isOpen && (
-        <Box pb={4} display={{ md: "none" }}>
-          <Stack as={"nav"} spacing={4}>
-            <NavLinks loggedIn={user !== null} />
-          </Stack>
-        </Box>
+        <VStack bg='diamond.800' as={"nav"} spacing={4}>
+          <NavLinks loggedIn={user !== null} />
+        </VStack>
       )}
     </Box>
   );

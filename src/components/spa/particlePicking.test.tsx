@@ -1,6 +1,8 @@
 import { ParticlePicking } from "components/spa/particlePicking";
 import { renderWithProviders } from "utils/test-utils";
 import { fireEvent, screen } from "@testing-library/react";
+import { server } from "mocks/server";
+import { rest } from "msw";
 
 describe("Particle Picking", () => {
   window.URL.createObjectURL = jest.fn();
@@ -26,6 +28,9 @@ describe("Particle Picking", () => {
   });
 
   it("should display message when no particle picking data exists", async () => {
+    server.use(
+      rest.get("http://localhost/autoProc/:procId/particlePicker", (req, res, ctx) => res.once(ctx.status(404)))
+    );
     renderWithProviders(<ParticlePicking autoProcId={3} currentPage={12} total={150} />);
 
     await screen.findByText("No Particle Picking Data Found");

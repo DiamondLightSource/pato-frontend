@@ -9,68 +9,24 @@ import {
   ModalOverlay,
   useDisclosure,
   Button,
-  VStack,
-  Heading,
   Icon,
-  Skeleton,
 } from "@chakra-ui/react";
-import { Suspense, useCallback, useEffect, useState } from "react";
-import { client } from "utils/api/client";
+import { Suspense } from "react";
 import { MotionPagination } from "components/motion/pagination";
-import { components } from "schema/main";
 import React from "react";
 import { MdOpenInNew } from "react-icons/md";
-import { SortTypes } from "schema/interfaces";
 const MolstarWrapper = React.lazy(() => import("components/molstar/molstar"));
-
-type ClassificationSchema = components["schemas"]["Classification"];
 
 export interface MolstarModalProps {
   autoProcId: number;
-  defaultIndex: number;
-  defaultSort: SortTypes;
+  classId: number;
+  page: number;
+  pageCount: number;
   onChange?: (page: number) => void;
 }
 
-const MolstarModal = ({ autoProcId, defaultIndex, defaultSort, onChange }: MolstarModalProps) => {
+const MolstarModal = ({ autoProcId, classId, page, pageCount, onChange }: MolstarModalProps) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
-
-  const [page, setPage] = useState(defaultIndex);
-  const [pageAmount, setPageAmount] = useState(1);
-  const [classId, setClassId] = useState<number | null>();
-
-  useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-
-    client
-      .safe_get(`autoProc/${autoProcId}/classification?limit=1&page=${page}&sortBy=${defaultSort}&classType=3d`)
-      .then(async (response) => {
-        if (response.status === 200 && response.data.items) {
-          const selectedClass = response.data.items[0] as ClassificationSchema;
-          setPageAmount(response.data.total);
-          setClassId(selectedClass.particleClassificationId);
-        } else {
-          setClassId(null);
-        }
-      });
-  }, [autoProcId, defaultSort, isOpen, page]);
-
-  useEffect(() => {
-    setPage(defaultIndex);
-  }, [defaultIndex]);
-
-  const handlePageChanged = useCallback(
-    (newPage: number) => {
-      if (onChange) {
-        onChange(newPage);
-      }
-
-      setPage(newPage);
-    },
-    [onChange]
-  );
 
   return (
     <>
@@ -87,20 +43,12 @@ const MolstarModal = ({ autoProcId, defaultIndex, defaultSort, onChange }: Molst
           <ModalHeader paddingBottom={0}>3D Visualisation</ModalHeader>
           <ModalCloseButton />
           <ModalBody h={{ base: "90vh", md: "60vh" }}>
-            {isOpen && classId ? (
+            {isOpen && (
               <Suspense>
-                <MolstarWrapper autoProcId={autoProcId} classificationId={classId}>
-                  <MotionPagination size='md' total={pageAmount} defaultPage={page} onChange={handlePageChanged} />
+                <MolstarWrapper autoProcId={autoProcId} classId={classId}>
+                  <MotionPagination size='md' total={pageCount} defaultPage={page} onChange={onChange} />
                 </MolstarWrapper>
               </Suspense>
-            ) : classId === null ? (
-              <VStack w='100%' h='100%' bg='diamond.75'>
-                <Heading m='auto' variant='notFound'>
-                  No Classification Data
-                </Heading>
-              </VStack>
-            ) : (
-              <Skeleton h='60vh'></Skeleton>
             )}
           </ModalBody>
         </ModalContent>

@@ -17,9 +17,9 @@ const basicProcJob: BaseProcessingJobProps["procJob"] = {
 describe("Tomogram", () => {
   it("should only display motion correction if tomogram is not fully processed", async () => {
     server.use(
-      rest.get("http://localhost/autoProc/:autoProcId/tomogram", (req, res, ctx) => {
-        return res.once(ctx.status(404), ctx.delay(0));
-      })
+      rest.get("http://localhost/autoProc/:autoProcId/tomogram", (req, res, ctx) =>
+        res.once(ctx.status(404), ctx.delay(0))
+      )
     );
 
     renderWithAccordion(
