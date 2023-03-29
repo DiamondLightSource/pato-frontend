@@ -22,7 +22,6 @@ import {
 } from "@chakra-ui/react";
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import {
-  createSearchParams,
   useLoaderData,
   useNavigate,
   useParams,

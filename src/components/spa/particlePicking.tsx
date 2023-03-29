@@ -1,4 +1,4 @@
-import { Spacer, HStack, Divider, Heading, Text, Checkbox, VStack, Grid, Skeleton } from "@chakra-ui/react";
+import { Spacer, HStack, Divider, Heading, Checkbox, VStack, Grid, Skeleton } from "@chakra-ui/react";
 import { ImageCard } from "components/visualisation/image";
 import { InfoGroup } from "components/visualisation/infogroup";
 import { MotionPagination } from "components/motion/pagination";
@@ -49,38 +49,35 @@ const ParticlePicking = ({ autoProcId, total, currentPage }: ParticleProps) => {
 
   useEffect(() => {
     if (innerPage) {
-      client
-        .safeGet(`autoProc/${autoProcId}/particlePicker?filterNull=true&page=${innerPage - 1}&limit=1`)
-        .then((response) => {
-          if (response.status === 200 && response.data.items.length > 0) {
-            const data = response.data.items[0] as ParticlePickingSchema;
-            if (data.particlePickerId) {
-              setParticleInfo(parseData(data, particleConfig).info);
-              setInnerTotal(response.data.total as number);
+      client.safeGet(`autoProc/${autoProcId}/particlePicker?page=${innerPage - 1}&limit=1`).then((response) => {
+        if (response.status === 200 && response.data.items.length > 0) {
+          const data = response.data.items[0] as ParticlePickingSchema;
+          if (data.particlePickerId) {
+            setParticleInfo(parseData(data, particleConfig).info);
+            setInnerTotal(response.data.total as number);
 
-              client
-                .safeGet(`autoProc/${autoProcId}/particlePicker/${data.particlePickerId}/image`)
-                .then((response) => {
-                  if (response.status === 200) {
-                    setSummaryImage(URL.createObjectURL(response.data));
-                  }
-                });
+            client.safeGet(`autoProc/${autoProcId}/particlePicker/${data.particlePickerId}/image`).then((response) => {
+              if (response.status === 200) {
+                setSummaryImage(URL.createObjectURL(response.data));
+              }
+            });
 
-              client.safeGet(`movies/${data.movieId}/iceThickness?getAverages=true`).then((response) => {
-                if (response.status === 200) {
-                  const data = response.data as IceThickness;
+            client.safeGet(`movies/${data.movieId}/iceThickness?getAverages=true`).then((response) => {
+              if (response.status === 200) {
+                const data = response.data as IceThickness;
 
-                  setIceThickness([
-                    convertToBoxPlot(data.current, "Current Image"),
-                    convertToBoxPlot(data.avg, "Average"),
-                  ]);
-                }
-              });
-            }
-          } else {
-            setParticleInfo(null);
+                setIceThickness([
+                  convertToBoxPlot(data.current, "Current Image"),
+                  convertToBoxPlot(data.avg, "Average"),
+                ]);
+              }
+            });
+            return;
           }
-        });
+        }
+
+        setParticleInfo(null);
+      });
     }
   }, [innerPage, autoProcId]);
 
@@ -95,7 +92,7 @@ const ParticlePicking = ({ autoProcId, total, currentPage }: ParticleProps) => {
           size='sm'
           defaultChecked
         >
-          <Text verticalAlign='middle'>Match Selected Motion Correction Page</Text>
+          Match Selected Motion Correction Page
         </Checkbox>
         <MotionPagination
           disabled={lockPage}
