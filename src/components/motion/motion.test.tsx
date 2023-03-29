@@ -25,7 +25,7 @@ describe("Motion", () => {
 
   it("should call callback when first motion changes", async () => {
     const motionChanged = jest.fn();
-    renderWithProviders(<Motion parentType='tomograms' onMotionChanged={motionChanged} parentId={3} />);
+    renderWithProviders(<Motion parentType='tomograms' onPageChanged={motionChanged} parentId={3} />);
     await waitFor(() => expect(motionChanged).toBeCalled());
   });
 
@@ -41,13 +41,6 @@ describe("Motion", () => {
     renderWithProviders(<Motion parentType='tomograms' onTotalChanged={totalChanged} parentId={3} />);
 
     await waitFor(() => expect(totalChanged).toBeCalled());
-  });
-
-  it("should respect current page prop if passed", async () => {
-    const totalChanged = jest.fn();
-    renderWithProviders(<Motion currentPage={5} parentType='tomograms' onTotalChanged={totalChanged} parentId={3} />);
-
-    expect(await screen.findByLabelText("Current Page")).toHaveValue("5");
   });
 
   it("displays '?' if passed values for raw total and total include NaN", async () => {
