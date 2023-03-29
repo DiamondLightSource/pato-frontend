@@ -21,6 +21,7 @@ const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
               <CTF onGraphClicked={setPage} parentId={autoProc.autoProcProgramId} parentType='autoProc' />
             </GridItem>
             <Motion
+              currentPage={page}
               onPageChanged={setPage}
               onTotalChanged={setTotal}
               parentType='autoProc'

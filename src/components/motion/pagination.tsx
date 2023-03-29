@@ -60,7 +60,7 @@ const MotionPagination = ({
     }
   }, [total, startFrom, defaultPage, setPage, value]);
 
-  const editPage = (event: ReactFocusEvent<HTMLInputElement>) => {
+  const editPage = useCallback((event: ReactFocusEvent<HTMLInputElement>) => {
     let newPage = parseInt(event.target.value);
 
     if (newPage > total) {
@@ -73,7 +73,7 @@ const MotionPagination = ({
     if (!isNaN(newPage)) {
       setPage(newPage);
     }
-  };
+  },[setPage, total]);
 
   if (value === undefined) {
     return <Skeleton h='20px' w={size === "xs" ? "210px" : "295px"} />;
@@ -99,7 +99,7 @@ const MotionPagination = ({
           aria-label='Current Page'
           onChange={(event) => setValue(event.target.value)}
           value={value}
-          onBlur={(event) => editPage(event)}
+          onBlur={editPage}
         />
         <InputRightAddon aria-label='Total Pages' children={total} />
       </InputGroup>

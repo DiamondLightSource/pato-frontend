@@ -56,6 +56,8 @@ interface MotionProps {
   onPageChanged?: (page: number) => void;
   /** Callback for when the number of available items changes */
   onTotalChanged?: (newTotal: number) => void;
+  /** Current page */
+  currentPage?: number;
 }
 
 const motionConfig = {
@@ -105,7 +107,7 @@ const calcDarkImages = (total: number, rawTotal: number) => {
   return `Dark Images: ${rawTotal - total}`;
 };
 
-const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType }: MotionProps) => {
+const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, currentPage }: MotionProps) => {
   const [page, setPage] = useState<number | undefined>();
   const [motion, setMotion] = useState<MotionData | null>();
   const [drift, setDrift] = useState<BasePoint[]>([]);
@@ -132,12 +134,21 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType }: MotionP
     return flattenedData;
   };
 
+  useEffect(() => {
+    if (currentPage) {
+      setPage(currentPage);
+    }
+  }, [currentPage]);
+
   const handlePageChanged = useCallback((page: number) => {
     if (onPageChanged) {
       onPageChanged(page)
     } 
-    setPage(page)
-  }, [onPageChanged])
+
+    if (currentPage === undefined) {
+      setPage(page)
+    }
+  }, [onPageChanged, currentPage])
 
   useEffect(() => {
     client.safeGet(buildEndpoint(`${parentType}/${parentId}/motion`, {}, 1, page ?? 0)).then((response) => {
