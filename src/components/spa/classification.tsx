@@ -108,7 +108,7 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
         </Select>
         <MotionPagination
           startFrom='start'
-          defaultPage={classPage}
+          page={classPage}
           onChange={handleClassificationChange}
           total={pageAmount}
         />

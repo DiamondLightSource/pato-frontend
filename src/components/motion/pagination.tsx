@@ -6,7 +6,7 @@ type ChangeCallback = (page: number) => void;
 interface MotionPaginationProps {
   total: number;
   size?: "xs" | "md";
-  defaultPage?: number;
+  page?: number;
   onChange?: ChangeCallback;
   startFrom?: "start" | "middle" | "end";
   disabled?: boolean;
@@ -16,7 +16,7 @@ const MotionPagination = ({
   total,
   onChange,
   size = "xs",
-  defaultPage,
+  page,
   startFrom = "end",
   disabled = false,
 }: MotionPaginationProps) => {
@@ -24,26 +24,27 @@ const MotionPagination = ({
 
   const setPage = useCallback(
     (page: number) => {
-      setValue(page.toString());
       if (!isNaN(page) && onChange !== undefined) {
         onChange(page);
+      } else {
+        setValue(page.toString());
       }
     },
     [onChange]
   );
 
   useEffect(() => {
-    if (defaultPage && defaultPage > 0) {
-      setValue(defaultPage.toString());
+    if (page && page > 0) {
+      setValue(page.toString());
     }
-  }, [defaultPage]);
+  }, [page]);
 
   useEffect(() => {
     if (value !== undefined || total === 0) {
       return;
     }
 
-    if (total !== undefined && defaultPage === undefined) {
+    if (total !== undefined && page === undefined) {
       switch (startFrom) {
         case "end":
           setValue(total.toString());
@@ -58,7 +59,7 @@ const MotionPagination = ({
           break;
       }
     }
-  }, [total, startFrom, defaultPage, setPage, value]);
+  }, [total, startFrom, page, setPage, value]);
 
   const editPage = useCallback((event: ReactFocusEvent<HTMLInputElement>) => {
     let newPage = parseInt(event.target.value);

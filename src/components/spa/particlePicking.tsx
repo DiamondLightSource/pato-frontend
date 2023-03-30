@@ -17,7 +17,7 @@ interface ParticleProps extends SpaProps {
   /* Total number of available items */
   total: number;
   /* Page for parent motion correction, used if page match lock is set */
-  currentPage?: number;
+  page?: number;
 }
 
 const particleConfig: DataConfig = {
@@ -33,7 +33,7 @@ const convertToBoxPlot = (data: components["schemas"]["RelativeIceThickness"], l
   return { min: data.minimum, max: data.maximum, median: data.median, q1: data.q1, q3: data.q3, label };
 };
 
-const ParticlePicking = ({ autoProcId, total, currentPage }: ParticleProps) => {
+const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
   const [innerPage, setInnerPage] = useState<number | undefined>();
   const [innerTotal, setInnerTotal] = useState<number>(total);
   const [lockPage, setLockpage] = useState<boolean>(true);
@@ -43,9 +43,9 @@ const ParticlePicking = ({ autoProcId, total, currentPage }: ParticleProps) => {
 
   useEffect(() => {
     if (lockPage) {
-      setInnerPage(currentPage !== undefined && currentPage > 0 ? currentPage : total);
+      setInnerPage(page !== undefined && page > 0 ? page : total);
     }
-  }, [currentPage, lockPage, total]);
+  }, [page, lockPage, total]);
 
   useEffect(() => {
     if (innerPage) {
@@ -98,7 +98,7 @@ const ParticlePicking = ({ autoProcId, total, currentPage }: ParticleProps) => {
           disabled={lockPage}
           total={lockPage ? total : innerTotal}
           onChange={(page) => setInnerPage(page)}
-          defaultPage={innerPage}
+          page={innerPage}
         />
       </HStack>
       <Divider />

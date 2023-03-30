@@ -21,13 +21,13 @@ const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
               <CTF onGraphClicked={setPage} parentId={autoProc.autoProcProgramId} parentType='autoProc' />
             </GridItem>
             <Motion
-              currentPage={page}
+              page={page}
               onPageChanged={setPage}
               onTotalChanged={setTotal}
               parentType='autoProc'
               parentId={autoProc.autoProcProgramId}
             />
-            <ParticlePicking autoProcId={autoProc.autoProcProgramId} currentPage={page} total={total} />
+            <ParticlePicking autoProcId={autoProc.autoProcProgramId} page={page} total={total} />
             <Classification autoProcId={autoProc.autoProcProgramId} />
             <Classification autoProcId={autoProc.autoProcProgramId} type='3d' />
           </Grid>
