@@ -24,7 +24,7 @@ const CTF = ({ parentId, parentType, onGraphClicked }: CTFProps) => {
 
   useEffect(() => {
     const ctfData: CtfData = { resolution: [], astigmatism: [], defocus: [] };
-    client.safe_get(`${parentType}/${parentId}/ctf`).then((response) => {
+    client.safeGet(`${parentType}/${parentId}/ctf`).then((response) => {
       if (Array.isArray(response.data.items)) {
         for (const ctf of response.data.items) {
           // Converting astigmatism and defocus from Angstrom

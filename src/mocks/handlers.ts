@@ -60,6 +60,14 @@ export const handlers = [
     )
   ),
 
+  rest.get("http://localhost/auth/user", (req, res, ctx) => {
+    return res(ctx.status(401));
+  }),
+
+  rest.get("http://localhost/auth/token", (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
   rest.get(
     "http://localhost/dataCollections/:collectionId/iceThickness",
     (req, res, ctx) =>

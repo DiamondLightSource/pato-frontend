@@ -8,6 +8,10 @@ const controller = new AbortController();
 const timeoutFetch = setTimeout(() => controller.abort(), 3000);
 let timer: ReturnType<typeof setTimeout>;
 
+const defaultSettings: Partial<RequestConfig> = {
+  credentials: process.env.NODE_ENV === "development" ? "include" : "strict",
+};
+
 interface RequestConfig {
   method: string;
   headers: Record<string, string>;
@@ -25,7 +29,8 @@ interface Response {
 export const client = async (
   endpoint: string,
   customConfig: Record<any, any> = {},
-  body?: Record<any, any> | FormData
+  body?: Record<any, any> | FormData,
+  prefix = process.env.REACT_APP_API_ENDPOINT
 ): Promise<never | Response> => {
   const config: RequestConfig = {
     method: body != null ? "POST" : "GET",
@@ -35,6 +40,7 @@ export const client = async (
     },
     signal: controller.signal,
     body: undefined,
+    ...defaultSettings,
   };
 
   if (body != null) {
@@ -47,13 +53,11 @@ export const client = async (
   }
 
   let data;
-  let target =
-    (endpoint === "user" ? process.env.REACT_APP_AUTH_ENDPOINT : process.env.REACT_APP_API_ENDPOINT) + endpoint;
 
   try {
     store.dispatch(setLoading(true));
     clearTimeout(timer); // Debounces loading state
-    const response = await fetch(target, config);
+    const response = await fetch(prefix + endpoint, config);
     clearTimeout(timeoutFetch);
 
     switch (response.headers.get("content-type")) {
@@ -98,12 +102,12 @@ export const client = async (
   }
 };
 
-client.safe_get = async (endpoint: string, customConfig = {}) => {
+client.safeGet = async (endpoint: string, customConfig = {}) => {
   const resp = await client.get(endpoint, customConfig);
 
-  if (resp.status === 401) {
+  if (resp.status === 401 && !window.location.href.includes("code=")) {
     const url = encodeURIComponent(window.location.href);
-    window.location.href = `${process.env.REACT_APP_AUTH_ENDPOINT}authorise?redirect_uri=${url}`;
+    window.location.href = `${process.env.REACT_APP_AUTH_ENDPOINT}authorise?redirect_uri=${url}&responseType=code`;
   }
 
   return resp;
@@ -114,16 +118,21 @@ client.get = async (endpoint: string, customConfig = {}) => {
     endpoint,
     (customConfig = {
       ...customConfig,
-      headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
-      method: "GET",
     })
   );
 };
 
-client.post = async (endpoint: string, body: Record<any, any> | FormData, customConfig = {}) => {
+client.authGet = async (endpoint: string, customConfig = {}) => {
   return await client(
     endpoint,
-    { ...customConfig, headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` } },
-    body
+    (customConfig = {
+      ...customConfig,
+    }),
+    undefined,
+    process.env.REACT_APP_AUTH_ENDPOINT
   );
+};
+
+client.post = async (endpoint: string, body: Record<any, any> | FormData, customConfig = {}) => {
+  return await client(endpoint, { ...customConfig }, body);
 };

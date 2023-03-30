@@ -57,7 +57,7 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
   const [tomogram, setTomogram] = useState<TomogramData | null>();
 
   useEffect(() => {
-    client.safe_get(`autoProc/${autoProc.autoProcProgramId}/tomogram`).then((response) => {
+    client.safeGet(`autoProc/${autoProc.autoProcProgramId}/tomogram`).then((response) => {
       if (response.status === 200) {
         const tomogram = response.data as components["schemas"]["TomogramResponse"];
 
@@ -65,7 +65,7 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
         setImage(`tomograms/${tomogram.tomogramId}/projection?axis=xy`, setXyProjImage);
         setImage(`tomograms/${tomogram.tomogramId}/projection?axis=xz`, setXzProjImage);
 
-        client.safe_get(`tomograms/${tomogram.tomogramId}/shiftPlot`).then((response) => {
+        client.safeGet(`tomograms/${tomogram.tomogramId}/shiftPlot`).then((response) => {
           if (response.status === 200 && response.data.items) {
             setShiftData(response.data.items);
           }

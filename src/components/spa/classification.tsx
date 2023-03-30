@@ -17,7 +17,7 @@ interface FullClassification extends ClassificationSchema {
 
 const getClassImage = async (item: FullClassification) => {
   const newClass = { ...item, imageUrl: "" } as FullClassification;
-  const response = await client.safe_get(
+  const response = await client.safeGet(
     `autoProc/${item.programId}/classification/${item.particleClassificationId}/image`
   );
 
@@ -45,7 +45,7 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
     (page: number) => {
       setClassPage(page);
       client
-        .safe_get(`autoProc/${autoProcId}/classification?limit=8&page=${page - 1}&sortBy=${sortType}&classType=${type}`)
+        .safeGet(`autoProc/${autoProcId}/classification?limit=8&page=${page - 1}&sortBy=${sortType}&classType=${type}`)
         .then(async (response) => {
           if (response.status === 200 && response.data.items) {
             setClassCount(response.data.total);

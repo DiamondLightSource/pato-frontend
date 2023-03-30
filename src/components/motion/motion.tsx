@@ -17,6 +17,7 @@ import {
   GridItem,
   Skeleton,
   Tooltip,
+  Stack,
 } from "@chakra-ui/react";
 import { ImageCard } from "components/visualisation/image";
 import { InfoGroup } from "components/visualisation/infogroup";
@@ -140,7 +141,7 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType, current
   }, [currentPage]);
 
   useEffect(() => {
-    client.safe_get(buildEndpoint(`${parentType}/${parentId}/motion`, {}, 1, page ?? 0)).then((response) => {
+    client.safeGet(buildEndpoint(`${parentType}/${parentId}/motion`, {}, 1, page ?? 0)).then((response) => {
       if (response.status === 200) {
         setMotion(parseData(flattenMovieData(response.data), motionConfig) as MotionData);
         if (onTotalChanged) {
@@ -154,7 +155,7 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType, current
             setImage(`movies/${movie.movieId}/fft`, setFftImage);
             const driftUrl = `movies/${movie.movieId}/drift?fromDb=${parentType === "autoProc"}`;
 
-            client.safe_get(driftUrl).then((response) => {
+            client.safeGet(driftUrl).then((response) => {
               if (response.data.items) {
                 setDrift(response.data.items);
               }
@@ -173,10 +174,11 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType, current
 
   return (
     <div>
-      <HStack>
+      <Stack direction={{ base: "column", md: "row" }}>
         <Heading variant='collection' mt='0'>
           Motion Correction/CTF
         </Heading>
+
         {motion && (
           <>
             {parentType !== "autoProc" && (
@@ -185,28 +187,30 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType, current
               </Heading>
             )}
             <Spacer />
-            <Tooltip id='comment' label='View Comments'>
-              <Button
-                data-testid='comment'
-                isDisabled={!(motion.comments_CTF || motion.comments_MotionCorrection)}
-                size='xs'
-                onClick={onOpen}
-              >
-                <MdComment />
-                {(motion.comments_CTF || motion.comments_MotionCorrection) && (
-                  <Circle size='3' position='absolute' top='-1' left='-1' bg='red'></Circle>
-                )}
-              </Button>
-            </Tooltip>
-            <MotionPagination
-              startFrom={parentType === "tomograms" ? "middle" : "end"}
-              total={motion.total || motion.rawTotal}
-              onChange={setPage}
-              defaultPage={page}
-            />
+            <HStack>
+              <Tooltip id='comment' label='View Comments'>
+                <Button
+                  data-testid='comment'
+                  isDisabled={!(motion.comments_CTF || motion.comments_MotionCorrection)}
+                  size='xs'
+                  onClick={onOpen}
+                >
+                  <MdComment />
+                  {(motion.comments_CTF || motion.comments_MotionCorrection) && (
+                    <Circle size='3' position='absolute' top='-1' left='-1' bg='red'></Circle>
+                  )}
+                </Button>
+              </Tooltip>
+              <MotionPagination
+                startFrom={parentType === "tomograms" ? "middle" : "end"}
+                total={motion.total || motion.rawTotal}
+                onChange={setPage}
+                defaultPage={page}
+              />
+            </HStack>
           </>
         )}
-      </HStack>
+      </Stack>
       <Divider />
       {motion ? (
         <Grid py={2} templateColumns='repeat(4, 1fr)' gap={2}>

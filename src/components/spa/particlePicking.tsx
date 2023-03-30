@@ -52,18 +52,18 @@ const ParticlePicking = ({ autoProcId, total, currentPage }: ParticleProps) => {
 
   useEffect(() => {
     if (innerPage) {
-      client.safe_get(`autoProc/${autoProcId}/particlePicker?page=${innerPage - 1}&limit=1`).then((response) => {
+      client.safeGet(`autoProc/${autoProcId}/particlePicker?page=${innerPage - 1}&limit=1`).then((response) => {
         if (response.status === 200) {
           const data = response.data.items[0] as ParticlePickingSchema;
           if (data.particlePickerId) {
             setParticleInfo(parseData(data, particleConfig).info);
-            client.safe_get(`autoProc/${autoProcId}/particlePicker/${data.particlePickerId}/image`).then((response) => {
+            client.safeGet(`autoProc/${autoProcId}/particlePicker/${data.particlePickerId}/image`).then((response) => {
               if (response.status === 200) {
                 setSummaryImage(URL.createObjectURL(response.data));
               }
             });
 
-            client.safe_get(`movies/${data.movieId}/iceThickness?getAverages=true`).then((response) => {
+            client.safeGet(`movies/${data.movieId}/iceThickness?getAverages=true`).then((response) => {
               if (response.status === 200) {
                 const data = response.data as IceThickness;
 

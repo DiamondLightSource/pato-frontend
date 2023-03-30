@@ -75,7 +75,7 @@ const Calendar = () => {
     }
 
     client
-      .safe_get(
+      .safeGet(
         `sessions?minStartDate=${calendarDates.start}&maxStartDate=${calendarDates.end}&search=m&limit=250`
       )
       .then((response) => {

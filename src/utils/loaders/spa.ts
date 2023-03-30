@@ -42,7 +42,7 @@ const getAcquisitionSoftware = (fileTemplate: string) => {
 };
 
 const getSpaData = async (params: Params) => {
-  const response = await client.safe_get(buildEndpoint("dataCollections", params, 1, 1));
+  const response = await client.safeGet(buildEndpoint("dataCollections", params, 1, 1));
   const returnData = {
     collection: { info: [], comments: "", fileTemplate: "?", imageDirectory: "?" } as SpaCollectionData,
     jobs: null,
@@ -65,7 +65,7 @@ const getSpaData = async (params: Params) => {
     returnData.collection = parsedCollectionData;
 
     if (parsedCollectionData.dataCollectionId) {
-      const jobsResponse = await client.safe_get(
+      const jobsResponse = await client.safeGet(
         buildEndpoint("processingJobs", { collectionId: parsedCollectionData.dataCollectionId.toString() }, 25, 1)
       );
 
