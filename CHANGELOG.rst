@@ -13,6 +13,7 @@ v0.9.1 (04/04/2023)
 - UI respects search parameters properly
 - Fixes motion correction pagination in SPA when moving through records quickly
 - Fixes "unavailable" message on particle picking
+- Improves rendering performance for scatter plots
 
 ++++++++++
 v0.9.0 (28/03/2023)
