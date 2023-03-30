@@ -10,8 +10,8 @@ import { AxisBottom, AxisLeft } from "@visx/axis";
 import { localPoint } from "@visx/event";
 import { BasePoint, CompleteScatterPlotOptions, ScatterPlotOptions } from "schema/interfaces";
 import { mergeDeep } from "utils/generic";
-import { Heading, VStack } from "@chakra-ui/react";
 import { defaultMargin } from "utils/config/plot";
+import { NoData } from "components/visualisation/noData";
 
 const x = (d: BasePoint) => d.x;
 const y = (d: BasePoint) => d.y;
@@ -156,11 +156,7 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
     }, [hideTooltip]);
 
     if (data.length === 0) {
-      return (
-        <VStack width={width} height={height}>
-          <Heading variant='notFound'>No Data Available</Heading>
-        </VStack>
-      );
+      return <NoData/>
     }
 
     return (

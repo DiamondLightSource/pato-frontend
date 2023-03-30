@@ -184,14 +184,14 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
   return (
     <div>
       <Stack direction={{ base: "column", md: "row" }}>
-        <Heading variant='collection' mt='0'>
+        <Heading variant='collection' pr='2' mt='0'>
           Motion Correction/CTF
         </Heading>
 
         {motion && (
           <>
             {parentType !== "autoProc" && (
-              <Heading size='sm' color='diamond.300'>
+              <Heading size='sm' display='flex' alignSelf='center' color='diamond.300'>
                 {calcDarkImages(motion.total, motion.rawTotal)}
               </Heading>
             )}

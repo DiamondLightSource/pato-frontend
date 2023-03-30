@@ -79,6 +79,12 @@ describe("Box Plot", () => {
     expect(screen.queryByLabelText("Y Value")).not.toBeInTheDocument();
   });
 
+  it("should display message when no data is available", () => {
+    renderWithProviders(<BarChart data={[]} width={1000} height={1000} />);
+
+    expect(screen.getByText("No Data Available")).toBeInTheDocument();
+  });
+
   it("should clamp bars at user set domain", () => {
     renderWithProviders(
       <BarChart
