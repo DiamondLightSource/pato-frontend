@@ -13,6 +13,8 @@ const setImage = (endpoint: string, setState: Dispatch<SetStateAction<string | u
   });
 };
 
+const getImage =(data: Blob) => data ? URL.createObjectURL(data) : "";
+
 const setHistogram = (
   endpoint: string,
   setState: Dispatch<SetStateAction<BarStats[] | null | undefined>>,
@@ -44,4 +46,4 @@ const downloadBuffer = (buffer: ArrayBuffer, contentType: string, filename: stri
   a.remove();
 };
 
-export { setImage, setHistogram, downloadBuffer };
+export { getImage, setImage, setHistogram, downloadBuffer };

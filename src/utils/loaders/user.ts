@@ -1,4 +1,3 @@
-import { redirect } from "react-router-dom";
 import { AuthState } from "schema/interfaces";
 import { client } from "utils/api/client";
 

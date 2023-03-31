@@ -24,11 +24,15 @@ import { getListingData, getSessionData } from "utils/loaders/listings";
 import { parseDate } from "utils/generic";
 import { getSpaData } from "utils/loaders/spa";
 import { getTomogramData } from "utils/loaders/tomogram";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
 const Calendar = React.lazy(() => import("routes/Calendar"));
 
 const { ToastContainer } = createStandaloneToast();
 const container = document.getElementById("root")!;
 const root = createRoot(container);
+const queryClient = new QueryClient()
 
 if (process.env.REACT_APP_DEMO === "true") {
   const { worker } = require("./mocks/browser");
@@ -183,8 +187,11 @@ root.render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
       <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
         <ToastContainer />
+        <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
       </Provider>
     </ChakraProvider>
   </React.StrictMode>
