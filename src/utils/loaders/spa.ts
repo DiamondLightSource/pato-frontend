@@ -1,12 +1,14 @@
+import { QueryClient } from "@tanstack/react-query";
 import { Params } from "react-router-dom";
 import { DataConfig, SpaCollectionData } from "schema/interfaces";
 import { components } from "schema/main";
 import { client } from "utils/api/client";
-import { buildEndpoint } from "utils/api/endpoint";
+import { buildEndpoint, includePage } from "utils/api/endpoint";
 import { collectionConfig } from "utils/config/parse";
 import { parseData } from "utils/generic";
 
 type DataCollection = components["schemas"]["DataCollectionSummary"];
+type ProcessingJob = components["schemas"]["ProcessingJobResponse"];
 
 const spaCollectionConfig: DataConfig = {
   include: [
@@ -41,8 +43,13 @@ const getAcquisitionSoftware = (fileTemplate: string) => {
   return "";
 };
 
-const getSpaData = async (params: Params) => {
-  const response = await client.safeGet(buildEndpoint("dataCollections", params, 1, 1));
+export interface SpaResponse {
+  collection: SpaCollectionData;
+  jobs: ProcessingJob[] | null;
+}
+
+const getSpaData = async (groupId: string) => {
+  const response = await client.safeGet(includePage(`dataGroups/${groupId}/dataCollections`, 1, 1));
   const returnData = {
     collection: { info: [], comments: "", fileTemplate: "?", imageDirectory: "?" } as SpaCollectionData,
     jobs: null,
@@ -78,4 +85,13 @@ const getSpaData = async (params: Params) => {
   return returnData;
 };
 
-export { getSpaData };
+const queryBuilder = (groupId: string = "0") => ({
+  queryKey: ["spaAutoProc", groupId],
+  queryFn: () => getSpaData(groupId),
+  staleTime: 60000,
+});
+
+export const spaLoader = (queryClient: QueryClient) => async (params: Params) => {
+  const query = queryBuilder(params.groupId);
+  return ((await queryClient.getQueryData(query.queryKey)) ?? (await queryClient.fetchQuery(query))) as SpaResponse;
+};

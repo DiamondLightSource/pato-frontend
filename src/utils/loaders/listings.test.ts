@@ -1,10 +1,9 @@
 import { listingLoader } from "utils/loaders/listings";
-import { QueryClient } from "@tanstack/react-query";
 import { server } from "mocks/server";
 import { rest } from "msw";
+import { queryClient } from "utils/test-utils";
 
 const request = new Request("http://localhost/proposals/");
-const queryClient = new QueryClient();
 
 describe("Listing Data", () => {
   it("should return data for listing if available", async () => {

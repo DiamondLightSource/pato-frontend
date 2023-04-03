@@ -18,12 +18,13 @@ import {
   sessionHeaders,
 } from "utils/config/table";
 import { getUser } from "utils/loaders/user";
-import { getSessionData, listingLoader } from "utils/loaders/listings";
+import { listingLoader } from "utils/loaders/listings";
 import { parseDate } from "utils/generic";
-import { getSpaData } from "utils/loaders/spa";
-import { getTomogramData } from "utils/loaders/tomogram";
+import { spaLoader } from "utils/loaders/spa";
+import { tomogramLoader } from "utils/loaders/tomogram";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { sessionLoader } from "utils/loaders/sessions";
 
 const Calendar = React.lazy(() => import("routes/Calendar"));
 
@@ -94,7 +95,7 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
-        loader: getSessionData,
+        loader: sessionLoader(queryClient),
       },
       {
         path: "/proposals",
@@ -166,12 +167,12 @@ const router = createBrowserRouter([
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/tomograms/:collectionIndex",
         element: <TomogramPage />,
-        loader: ({ params, request }) => getTomogramData(params, request),
+        loader: ({ params, request }) => tomogramLoader(queryClient)(params, request),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/spa/",
         element: <SpaPage />,
-        loader: ({ params }) => getSpaData(params),
+        loader: ({ params }) => spaLoader(queryClient)(params),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/",

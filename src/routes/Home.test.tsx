@@ -1,9 +1,9 @@
 import { screen } from "@testing-library/react";
 import { rest } from "msw";
-import { renderWithRoute } from "utils/test-utils";
+import { queryClient, renderWithRoute } from "utils/test-utils";
 import { server } from "mocks/server";
 import { Home } from "routes/Home";
-import { getSessionData } from "utils/loaders/listings";
+import { sessionLoader } from "utils/loaders/sessions";
 
 describe("Home", () => {
   it("should display message and button if not logged in", async () => {
@@ -13,7 +13,7 @@ describe("Home", () => {
       })
     );
 
-    renderWithRoute(<Home />, getSessionData);
+    renderWithRoute(<Home />, sessionLoader(queryClient));
 
     await screen.findByText("You must be logged in to view recent sessions");
   });
@@ -40,7 +40,7 @@ describe("Home", () => {
       })
     );
 
-    renderWithRoute(<Home />, getSessionData);
+    renderWithRoute(<Home />, sessionLoader(queryClient));
 
     await screen.findAllByText(/cm31111-1/i);
     expect(screen.getAllByText("m01").length).toBe(2);
@@ -69,7 +69,7 @@ describe("Home", () => {
       })
     );
 
-    renderWithRoute(<Home />, getSessionData);
+    renderWithRoute(<Home />, sessionLoader(queryClient));
 
     await screen.findAllByText(/cm31111-1/i);
     expect(screen.getAllByText("m01 - Dr. John Doe").length).toBe(2);
@@ -95,7 +95,7 @@ describe("Home", () => {
       })
     );
 
-    renderWithRoute(<Home />, getSessionData);
+    renderWithRoute(<Home />, sessionLoader(queryClient));
 
     await screen.findAllByText(/cm31111-?/i);
   });
@@ -113,7 +113,7 @@ describe("Home", () => {
       })
     );
 
-    renderWithRoute(<Home />, getSessionData);
+    renderWithRoute(<Home />, sessionLoader(queryClient));
 
     await screen.findByText("No Recent Sessions Found");
     await screen.findByText("No Current Sessions Found");

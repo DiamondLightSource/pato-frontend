@@ -1,10 +1,11 @@
 import { Params, redirect } from "react-router-dom";
 import { CollectionData } from "schema/interfaces";
 import { client } from "utils/api/client";
-import { buildEndpoint } from "utils/api/endpoint";
+import { includePage } from "utils/api/endpoint";
 import { collectionConfig } from "utils/config/parse";
 import { parseData } from "utils/generic";
 import { components } from "schema/main";
+import { QueryClient } from "@tanstack/react-query";
 
 type ProcessingJob = components["schemas"]["ProcessingJobResponse"];
 
@@ -15,7 +16,14 @@ interface TomogramData {
   jobs: ProcessingJob[] | null;
 }
 
-const getTomogramData = async (params: Params, request: Request) => {
+export interface TomogramResponse {
+  collection: CollectionData;
+  total: number;
+  page: number;
+  jobs: ProcessingJob[] | null;
+}
+
+const getTomogramData = async (groupId: string, collectionIndex: string, request: Request) => {
   const returnData: TomogramData = {
     collection: { info: [], comments: "", fileTemplate: "?", imageDirectory: "?" } as CollectionData,
     total: 1,
@@ -24,10 +32,13 @@ const getTomogramData = async (params: Params, request: Request) => {
   };
   const searchParams = new URL(request.url).searchParams;
   const onlyTomograms = searchParams.get("onlyTomograms");
-  const collectionIndex = params.collectionIndex ?? "1";
 
   const collectionResponse = await client.safeGet(
-    `${buildEndpoint("dataCollections", params, 1, parseInt(collectionIndex))}&onlyTomograms=${onlyTomograms ?? false}`
+    includePage(
+      `dataGroups/${groupId}/dataCollections?onlyTomograms=${onlyTomograms ?? false}`,
+      1,
+      parseInt(collectionIndex)
+    )
   );
 
   if (collectionResponse.status !== 200) {
@@ -55,4 +66,14 @@ const getTomogramData = async (params: Params, request: Request) => {
   return returnData;
 };
 
-export { getTomogramData };
+const queryBuilder = (groupId: string = "0", collectionIndex: string = "1", request: Request) => ({
+  queryKey: ["spaAutoProc", groupId],
+  queryFn: () => getTomogramData(groupId, collectionIndex, request),
+  staleTime: 60000,
+});
+
+export const tomogramLoader = (queryClient: QueryClient) => async (params: Params, request: Request) => {
+  const query = queryBuilder(params.groupId, params.collectionIndex, request);
+  return ((await queryClient.getQueryData(query.queryKey)) ??
+    (await queryClient.fetchQuery(query))) as TomogramResponse;
+};

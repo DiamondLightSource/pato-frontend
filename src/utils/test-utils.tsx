@@ -15,6 +15,10 @@ interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
   route?: string;
 }
 
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { staleTime: 0 } },
+});
+
 const renderWithProviders = (
   ui: React.ReactElement,
   { route = "/", ...renderOptions }: ExtendedRenderOptions = {}
@@ -24,7 +28,7 @@ const renderWithProviders = (
 
     return (
       <MemoryRouter initialEntries={[route]}>
-        <QueryClientProvider client={new QueryClient()}>
+        <QueryClientProvider client={queryClient}>
           {children}
         </QueryClientProvider>
       </MemoryRouter>
@@ -51,10 +55,15 @@ const renderWithRoute = (
     },
   ]);
   return render(
-    <QueryClientProvider client={new QueryClient()}>
+    <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
     </QueryClientProvider>
   );
 };
 
-export { renderWithProviders, renderWithAccordion, renderWithRoute };
+export {
+  renderWithProviders,
+  renderWithAccordion,
+  renderWithRoute,
+  queryClient,
+};

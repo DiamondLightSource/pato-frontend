@@ -1,10 +1,10 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { renderWithRoute } from "utils/test-utils";
 import { TomogramPage } from "routes/Tomogram";
-import { getTomogramData } from "utils/loaders/tomogram";
+import { TomogramResponse } from "utils/loaders/tomogram";
 import { CollectionData } from "schema/interfaces";
 
-type LoaderReturn = Awaited<ReturnType<typeof getTomogramData>>;
+type LoaderReturn = Awaited<TomogramResponse>;
 
 const searchMap = new Map();
 

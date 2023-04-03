@@ -1,13 +1,14 @@
 import { rest } from "msw";
 import { server } from "mocks/server";
-import { getSpaData } from "utils/loaders/spa";
+import { spaLoader } from "utils/loaders/spa";
+import { queryClient } from "utils/test-utils";
 
 describe("SPA Data", () => {
   it("should return data for jobs and collections if both are available", async () => {
-    const data = await getSpaData({ groupId: "1" });
+    const data = await spaLoader(queryClient)({ groupId: "1" });
     expect(data.collection.dataCollectionId).toBe(9775784);
     expect(data.collection.info[0].value).toBe("EPU");
-    expect(data.jobs[0].AutoProcProgram.autoProcProgramId).toBe(1);
+    expect(data.jobs![0].AutoProcProgram.autoProcProgramId).toBe(1);
   });
 
   it("should return base object if no data collection is available", async () => {
@@ -17,7 +18,7 @@ describe("SPA Data", () => {
       })
     );
 
-    const data = await getSpaData({ groupId: "1" });
+    const data = await spaLoader(queryClient)({ groupId: "1" });
     expect(data.collection.info.length).toBe(0);
     expect(data.jobs).toBe(null);
   });
@@ -29,7 +30,7 @@ describe("SPA Data", () => {
       })
     );
 
-    const data = await getSpaData({ groupId: "1" });
+    const data = await spaLoader(queryClient)({ groupId: "1" });
     expect(data.collection.dataCollectionId).toBe(9775784);
     expect(data.jobs).toBe(null);
   });
@@ -52,7 +53,7 @@ describe("SPA Data", () => {
       })
     );
 
-    const data = await getSpaData({ groupId: "1" });
+    const data = await spaLoader(queryClient)({ groupId: "1" });
     expect(data.collection.dataCollectionId).toBe(9775784);
     expect(data.collection.info[0].value).toBe("SerialEM");
   });
@@ -75,7 +76,7 @@ describe("SPA Data", () => {
       })
     );
 
-    const data = await getSpaData({ groupId: "1" });
+    const data = await spaLoader(queryClient)({ groupId: "1" });
     expect(data.collection.dataCollectionId).toBe(9775784);
     expect(data.collection.info[0].value).toBe("");
   });
