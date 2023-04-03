@@ -20,7 +20,6 @@ global.window.scrollTo = () => {};
 global.structuredClone = (val: Record<string, any>) => JSON.parse(JSON.stringify(val));
 global.URL.createObjectURL = (url: Blob | MediaSource) => "blob://test";
 
-jest.mock("./src/store/store");
 jest.mock("molstar/lib/mol-canvas3d/canvas3d");
 jest.mock("molstar/lib/mol-plugin/context");
 jest.mock("molstar/lib/mol-plugin/spec");

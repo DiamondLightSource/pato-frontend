@@ -1,45 +1,48 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import { getListingData } from "utils/loaders/listings";
 import { renderWithRoute } from "utils/test-utils";
 import { GenericListing } from "routes/GenericListing";
 import { proposalHeaders } from "utils/config/table";
 
 describe("GenericListing", () => {
   it("should include search in request", async () => {
+    const loaderFn = jest.fn();
     renderWithRoute(
       <GenericListing
         heading='Test'
         makePathCallback={(item) => item.test.toString()}
         headers={proposalHeaders}
       />,
-      ({ request, params }) => getListingData(request, params, "proposals")
+      ({ request }) => {
+        loaderFn(new URL(request.url).searchParams.get("search"));
+        return { data: null };
+      }
     );
 
     const search = await screen.findByPlaceholderText("Search...");
     fireEvent.change(search, { target: { value: "cm31111" } });
     fireEvent.blur(search);
 
-    await waitFor(() => {
-      expect(screen.getAllByText("cm").length).toBe(1);
-    });
+    await waitFor(() => expect(loaderFn).toBeCalledWith("cm31111"));
   });
 
   it("should perform request again when page changes", async () => {
+    const loaderFn = jest.fn();
     renderWithRoute(
       <GenericListing
         heading='Test'
         makePathCallback={(item) => item.test.toString()}
         headers={proposalHeaders}
       />,
-      ({ request, params }) => getListingData(request, params, "proposals")
+      ({ request }) => {
+        loaderFn(new URL(request.url).searchParams.get("page"));
+        return { data: null, total: 300 };
+      }
     );
 
     const nextPage = await screen.findByRole("button", { name: "4" });
     fireEvent.click(nextPage);
 
-    await expect(
-      screen.findByText("Page 4 out of 15")
-    ).resolves.toBeInTheDocument();
+    await waitFor(() => expect(loaderFn).toBeCalledWith("4"));
   });
 
   it("should set data to null when invalid response is provided", async () => {
@@ -62,7 +65,7 @@ describe("GenericListing", () => {
         makePathCallback={(item) => item.test.toString()}
         headers={proposalHeaders}
       />,
-      ({ request, params }) => getListingData(request, params, "proposals")
+      () => ({ data: [], total: 300 })
     );
 
     const search = await screen.findByPlaceholderText("Search...");
@@ -73,26 +76,6 @@ describe("GenericListing", () => {
     await screen.findByText("Page 1 out of 15");
   });
 
-  it("should run data through callback function if processData function is provided", async () => {
-    renderWithRoute(
-      <GenericListing
-        heading='data'
-        makePathCallback={(item) => item.test.toString()}
-        headers={proposalHeaders}
-      />,
-      ({ request, params }) =>
-        getListingData(request, params, "proposals", (data) =>
-          data.map(() => ({
-            proposalCode: "AAAA",
-            proposalNumber: "2222",
-            sessions: "1",
-          }))
-        )
-    );
-
-    expect((await screen.findAllByText("AAAA")).length).toBe(4);
-  });
-
   it("should call navigation callback when row is clicked", async () => {
     const mockCallback = jest.fn();
     renderWithRoute(
@@ -101,7 +84,7 @@ describe("GenericListing", () => {
         makePathCallback={mockCallback}
         headers={proposalHeaders}
       />,
-      ({ request, params }) => getListingData(request, params, "proposals")
+      () => ({ data: [{ proposalNumber: 31111 }] })
     );
 
     const row = await screen.findByText("31111");

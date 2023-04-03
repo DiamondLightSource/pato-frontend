@@ -6,7 +6,6 @@ import { Navbar } from "components/navigation/navbar";
 import { AuthState } from "schema/interfaces";
 import "styles/main.css";
 import { useEffect } from "react";
-import { client } from "utils/api/client";
 
 const Root = () => {
   const loaderData = useLoaderData() as AuthState | null;
@@ -14,17 +13,11 @@ const Root = () => {
   const [_, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    const url = encodeURIComponent(window.location.href);
-    const splitUrl = window.location.href.split("code=");
-
-    if (splitUrl.length === 2) {
-      client
-        .authGet(`token?redirect_uri=${url}&code=${splitUrl[1]}`)
-        .then(() => {
-          setSearchParams((prev) =>
-            [...prev.entries()].filter((param) => param[0] !== "code")
-          );
-        });
+    if (window.location.href.split("code=").length === 2) {
+      setSearchParams(
+        (prev) => [...prev.entries()].filter((param) => param[0] !== "code"),
+        { replace: true }
+      );
     }
   }, [setSearchParams]);
 

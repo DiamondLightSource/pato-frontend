@@ -2,7 +2,7 @@ import { Spacer, HStack, Divider, Grid, Heading, Skeleton, Box, Select, Card, Ca
 import { ImageCard } from "components/visualisation/image";
 import { InfoGroup } from "components/visualisation/infogroup";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { client } from "utils/api/client";
+import { client, prependApiUrl } from "utils/api/client";
 import { MotionPagination } from "components/motion/pagination";
 import { components } from "schema/main";
 import { parseData } from "utils/generic";
@@ -14,19 +14,6 @@ type ClassificationSchema = components["schemas"]["Classification"];
 interface FullClassification extends ClassificationSchema {
   imageUrl: string;
 }
-
-const getClassImage = async (item: FullClassification) => {
-  const newClass = { ...item, imageUrl: "" } as FullClassification;
-  const response = await client.safeGet(
-    `autoProc/${item.programId}/classification/${item.particleClassificationId}/image`
-  );
-
-  if (response.status === 200) {
-    newClass.imageUrl = URL.createObjectURL(response.data);
-  }
-
-  return newClass;
-};
 
 const sortValues = [
   { key: "particles", label: "Particles per Class" },
@@ -51,11 +38,12 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
             setClassCount(response.data.total);
             let classes = response.data.items;
             if (type === "2d") {
-              classes = await Promise.all(
-                classes.map(async (item: FullClassification) => {
-                  return await getClassImage(item);
-                })
-              );
+              classes = classes.map((item: FullClassification) => ({
+                ...item,
+                imageUrl: prependApiUrl(
+                  `autoProc/${item.programId}/classification/${item.particleClassificationId}/image`
+                ),
+              }));
             }
             setClassificationData(classes);
           } else {
@@ -106,12 +94,7 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
             </option>
           ))}
         </Select>
-        <MotionPagination
-          startFrom='start'
-          page={classPage}
-          onChange={handleClassificationChange}
-          total={pageAmount}
-        />
+        <MotionPagination startFrom='start' page={classPage} onChange={handleClassificationChange} total={pageAmount} />
       </HStack>
       <Divider />
       {classificationData !== undefined ? (

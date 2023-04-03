@@ -50,6 +50,7 @@ const getMotionData = (parentId: string) => {
           },
         ],
         rawTotal: "asd",
+        total: 10,
       };
       break;
   }

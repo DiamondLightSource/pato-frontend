@@ -6,7 +6,6 @@ import {
   resolutionSpaPlotOptions,
 } from "utils/config/plot";
 import { PlotContainer } from "components/visualisation/plotContainer";
-import { useEffect, useState } from "react";
 import { client } from "utils/api/client";
 import { CtfData } from "schema/interfaces";
 import { Scatter } from "components/plots/scatter";

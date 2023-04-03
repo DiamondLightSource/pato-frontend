@@ -18,9 +18,9 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { MdLogin, MdMenu, MdClose } from "react-icons/md";
-import { useAppSelector } from "store/hooks";
 import { Link as LinkRouter } from "react-router-dom";
 import { AuthState } from "schema/interfaces";
+import { useIsFetching } from "@tanstack/react-query";
 
 const links = [
   { label: "Proposals", route: "proposals" },
@@ -74,7 +74,7 @@ interface NavbarProps {
 
 const Navbar = ({ user }: NavbarProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const loading = useAppSelector((state) => state.ui.loading);
+  const loadingRemaining = useIsFetching();
 
   return (
     <Box zIndex={1} h='3em' position='fixed' w='100%' bg='diamond.800'>
@@ -149,7 +149,7 @@ const Navbar = ({ user }: NavbarProps) => {
           )}
         </Flex>
       </Flex>
-      {!isOpen && loading && <Progress isIndeterminate size='sm' />}
+      {!isOpen && loadingRemaining !== 0 && <Progress isIndeterminate  size='sm' />}
 
       {isOpen && (
         <VStack bg='diamond.800' as={"nav"} spacing={4}>

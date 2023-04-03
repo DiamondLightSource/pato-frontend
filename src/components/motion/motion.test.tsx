@@ -21,15 +21,34 @@ describe("Motion", () => {
   it("should display enabled comments button when comments are present", async () => {
     renderWithProviders(<Motion parentType='tomograms' parentId={3} />);
 
-    await screen.findByText("20");
+    await screen.findAllByText("20");
     await expect(screen.findByTestId("comment")).resolves.toBeEnabled();
   });
 
-  it("should call callback when first motion changes", async () => {
+  it("should call callback when page changes", async () => {
     const motionChanged = jest.fn();
     renderWithProviders(<Motion parentType='tomograms' onPageChanged={motionChanged} parentId={3} />);
 
-    await waitFor(() => expect(motionChanged).toBeCalled());
+    await waitFor(() => expect(screen.getByLabelText("Current Page")).toHaveAttribute("value", "10"));
+    fireEvent.click(screen.getByLabelText("Next Page"));
+
+    await waitFor(() => expect(motionChanged).toBeCalledWith(11));
+  });
+
+  it("should calculate number of dark images appropriately", async () => {
+    const motionChanged = jest.fn();
+    renderWithProviders(<Motion parentType='tomograms' onPageChanged={motionChanged} parentId={1} />);
+
+    await screen.findByText("Dark Images: 10");
+  });
+
+  it("should change page internally if no external control is used", async () => {
+    renderWithProviders(<Motion parentType='tomograms' parentId={3} />);
+
+    await waitFor(() => expect(screen.getByLabelText("Current Page")).toHaveAttribute("value", "10"));
+    fireEvent.click(screen.getByLabelText("Next Page"));
+
+    await waitFor(() => expect(screen.getByLabelText("Current Page")).toHaveAttribute("value", "11"));
   });
 
   it("should display message when no data is available", async () => {
@@ -43,7 +62,7 @@ describe("Motion", () => {
     const totalChanged = jest.fn();
     renderWithProviders(<Motion parentType='tomograms' onTotalChanged={totalChanged} parentId={3} />);
 
-    await waitFor(() => expect(totalChanged).toBeCalled());
+    await waitFor(() => expect(totalChanged).toBeCalledWith(20));
   });
 
   it("displays '?' if passed values for raw total and total include NaN", async () => {

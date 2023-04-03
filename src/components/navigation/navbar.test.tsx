@@ -15,26 +15,10 @@ describe("Navbar", () => {
   it("should display logout button when authenticated", () => {
     const textToFind = "Logout";
 
-    renderWithProviders(<Navbar user={{ fedid: "1", name: "1" }} />, {
-      preloadedState: { ui: { loading: false } },
-    });
+    renderWithProviders(<Navbar user={{ fedid: "1", name: "1" }} />, {});
     const logoutButton = screen.getByText(textToFind);
 
     expect(logoutButton).toBeInTheDocument();
-  });
-
-  it("should display loading bar when loading", () => {
-    renderWithProviders(<Navbar />, {
-      preloadedState: { ui: { loading: true } },
-    });
-    expect(screen.getByRole("progressbar")).toBeInTheDocument();
-  });
-
-  it("should not display loading bar when not loading", () => {
-    renderWithProviders(<Navbar />, {
-      preloadedState: { ui: { loading: false } },
-    });
-    expect(screen.queryByRole("progressbar")).toBeNull();
   });
 
   it("should display hamburger menu on narrow displays", () => {
@@ -45,9 +29,7 @@ describe("Navbar", () => {
 
   it("should display menu items when hamburger menu is clicked", () => {
     global.innerWidth = 600;
-    renderWithProviders(<Navbar />, {
-      preloadedState: { ui: { loading: false } },
-    });
+    renderWithProviders(<Navbar />);
     const menu = screen.getByRole("button", { name: /open menu/i });
     fireEvent.click(menu);
 

@@ -17,17 +17,17 @@ import {
   VStack,
   Spacer,
   Icon,
+  Box,
 } from "@chakra-ui/react";
 import { ImageCard } from "components/visualisation/image";
 import { InfoGroup } from "components/visualisation/infogroup";
 import { PlotContainer } from "components/visualisation/plotContainer";
 import { Motion } from "components/motion/motion";
-import { Suspense, useMemo } from "react";
-import { client } from "utils/api/client";
+import { Suspense, } from "react";
+import { client, prependApiUrl } from "utils/api/client";
 import { TomogramData, BasePoint, BaseProcessingJobProps, DataConfig } from "schema/interfaces";
 import { CTF } from "components/ctf/ctf";
 import { Scatter } from "components/plots/scatter";
-import { getImage } from "utils/api/response";
 import { components } from "schema/main";
 import { ProcessingTitle } from "components/visualisation/processingTitle";
 import { parseData } from "utils/generic";
@@ -51,35 +51,29 @@ const tomogramConfig: DataConfig = {
 
 interface FullTomogramData {
   tomogram: TomogramData | null;
-  centralSlice: Blob;
-  xyProj: Blob;
-  xzProj: Blob;
+  centralSlice: string;
+  xyProj: string;
+  xzProj: string;
   shiftPlot: BasePoint[];
 }
 
 const fetchTomogramData = async (autoProcProgramId: number) => {
-  let data: FullTomogramData = { tomogram: null, centralSlice: new Blob(), xyProj: new Blob(), xzProj: new Blob(), shiftPlot: [] };
+  let data: FullTomogramData = { tomogram: null, centralSlice: "", xyProj: "", xzProj: "", shiftPlot: [] };
   const response = await client.safeGet(`autoProc/${autoProcProgramId}/tomogram`);
   if (response.status === 200) {
     const tomogram = response.data as components["schemas"]["TomogramResponse"];
-
-    const fileData = await Promise.all([
-      client.safeGet(`tomograms/${tomogram.tomogramId}/centralSlice`),
-      client.safeGet(`tomograms/${tomogram.tomogramId}/projection?axis=xy`),
-      client.safeGet(`tomograms/${tomogram.tomogramId}/projection?axis=xz`),
-      client.safeGet(`tomograms/${tomogram.tomogramId}/shiftPlot`),
-    ]);
+    const fileData = await client.safeGet(`tomograms/${tomogram.tomogramId}/shiftPlot`);
 
     data = {
       ...data,
       tomogram: parseData(tomogram, tomogramConfig) as TomogramData,
-      centralSlice: fileData[0].data as Blob,
-      xyProj: fileData[1].data as Blob,
-      xzProj: fileData[2].data as Blob,
+      centralSlice: prependApiUrl(`tomograms/${tomogram.tomogramId}/centralSlice`),
+      xyProj: prependApiUrl(`tomograms/${tomogram.tomogramId}/projection?axis=xy`),
+      xzProj: prependApiUrl(`tomograms/${tomogram.tomogramId}/projection?axis=xz`),
     };
 
-    if (fileData[3].status === 200 && fileData[3].data.items) {
-      data.shiftPlot = fileData[3].data.items;
+    if (fileData.status === 200 && fileData.data.items) {
+      data.shiftPlot = fileData.data.items;
     }
   }
 
@@ -91,12 +85,8 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
   const { data, isLoading } = useQuery({
     queryKey: ["tomogramAutoProc", autoProc.autoProcProgramId],
     queryFn: async () => await fetchTomogramData(autoProc.autoProcProgramId),
-    staleTime: 3000000
+    staleTime: 3000000,
   });
-
-  const sliceImage = useMemo(() => data ? getImage(data.centralSlice) : "", [data])
-  const xyProjImage = useMemo(() => data ? getImage(data.xyProj) : "", [data])
-  const xzProjImage = useMemo(() => data ? getImage(data.xzProj) : "", [data])
 
   return (
     <AccordionItem isDisabled={false}>
@@ -111,7 +101,9 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
               <Skeleton w='100%' h='20vh' />
             </VStack>
           ) : data.tomogram === null ? (
-            <Motion parentId={procJob.dataCollectionId} parentType='dataCollections' />
+            <Box p={4}>
+              <Motion parentId={procJob.dataCollectionId} parentType='dataCollections' />
+            </Box>
           ) : (
             <Grid gap={3} bg='diamond.75' p={4} templateColumns={{ "base": "", "2xl": "repeat(2, 1fr)" }}>
               <GridItem>
@@ -125,7 +117,7 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
                     <InfoGroup info={data.tomogram.info} />
                   </GridItem>
                   <GridItem height='20vh'>
-                    <ImageCard height='85%' title='Central Slice' src={sliceImage} />
+                    <ImageCard height='85%' title='Central Slice' src={data.centralSlice} />
                     <Button w='100%' mt='1%' height='13%' alignSelf='end' size='sm' onClick={onOpen}>
                       View Movie
                       <Spacer />
@@ -133,7 +125,7 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
                     </Button>
                   </GridItem>
                   <GridItem height='20vh'>
-                    <ImageCard src={xyProjImage} title='XY Projection' />
+                    <ImageCard src={data.xyProj} title='XY Projection' />
                   </GridItem>
                   <GridItem colSpan={{ base: 3, md: 1 }} minW='100%' height='22vh'>
                     <PlotContainer title='Shift Plot'>
@@ -141,7 +133,7 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
                     </PlotContainer>
                   </GridItem>
                   <GridItem colSpan={2} height='22vh'>
-                    <ImageCard src={xzProjImage} title='XZ Projection' />
+                    <ImageCard src={data.xzProj} title='XZ Projection' />
                   </GridItem>
                 </Grid>
               </GridItem>

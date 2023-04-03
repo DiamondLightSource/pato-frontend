@@ -67,8 +67,6 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
       return newConfig as CompleteScatterPlotOptions;
     }, [data, options]);
 
-    //const decimationThreshold = useMemo(() => (config.y.domain.max - config.y.domain.min)/25, [config])
-
     const checkBoundaries = useCallback(
       (d: BasePoint) => {
         return (
@@ -156,7 +154,7 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
     }, [hideTooltip]);
 
     if (data.length === 0) {
-      return <NoData/>
+      return <NoData />;
     }
 
     return (
@@ -191,7 +189,6 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
                     className='dot'
                     cx={xScale(x(point))}
                     cy={yScale(y(point))}
-                    shapeRendering='optimizeSpeed'
                     r={config.points.dotRadius}
                     fill={tooltipData === point ? "pink" : "#ff5733"}
                   />

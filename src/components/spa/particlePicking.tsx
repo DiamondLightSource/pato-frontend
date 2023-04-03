@@ -2,16 +2,16 @@ import { Spacer, HStack, Divider, Heading, Checkbox, VStack, Grid, Skeleton } fr
 import { ImageCard } from "components/visualisation/image";
 import { InfoGroup } from "components/visualisation/infogroup";
 import { MotionPagination } from "components/motion/pagination";
-import { useEffect, useState } from "react";
-import { client } from "utils/api/client";
+import { useCallback, useEffect, useState } from "react";
+import { client, prependApiUrl } from "utils/api/client";
 import { parseData } from "utils/generic";
 import { components } from "schema/main";
 import { DataConfig, SpaProps, Info, BoxPlotStats } from "schema/interfaces";
 import { PlotContainer } from "components/visualisation/plotContainer";
 import { Box } from "components/plots/box";
+import { useQuery } from "@tanstack/react-query";
 
 type ParticlePickingSchema = components["schemas"]["ParticlePicker"];
-type IceThickness = components["schemas"]["IceThicknessWithAverage"];
 
 interface ParticleProps extends SpaProps {
   /* Total number of available items */
@@ -29,17 +29,49 @@ const particleConfig: DataConfig = {
   ],
 };
 
+interface FullParticleData {
+  particlePicker: Info[] | null;
+  total: number | null;
+  summary: string;
+  iceThickness: BoxPlotStats[];
+}
+
 const convertToBoxPlot = (data: components["schemas"]["RelativeIceThickness"], label: string): BoxPlotStats => {
   return { min: data.minimum, max: data.maximum, median: data.median, q1: data.q1, q3: data.q3, label };
 };
 
+const fetchParticlePickingData = async (autoProcId: number, page: number) => {
+  let data: FullParticleData = { particlePicker: null, total: null, summary: "", iceThickness: [] };
+  const response = await client.safeGet(`autoProc/${autoProcId}/particlePicker?page=${page - 1}&limit=1`);
+
+  if (response.status === 200 && response.data.items.length > 0) {
+    const responseData = response.data.items[0] as ParticlePickingSchema;
+    if (responseData.particlePickerId) {
+      data = {
+        iceThickness: [],
+        particlePicker: parseData(responseData, particleConfig).info as Info[],
+        total: response.data.total,
+        summary: prependApiUrl(`autoProc/${autoProcId}/particlePicker/${responseData.particlePickerId}/image`),
+      };
+
+      const fileData = await client.safeGet(`movies/${responseData.movieId}/iceThickness?getAverages=true`);
+
+      if (fileData.status === 200) {
+        data.iceThickness = [
+          convertToBoxPlot(fileData.data.current, "Current Image"),
+          convertToBoxPlot(fileData.data.avg, "Average"),
+        ];
+      }
+    }
+  }
+
+  return data;
+};
+
 const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
-  const [innerPage, setInnerPage] = useState<number | undefined>();
-  const [innerTotal, setInnerTotal] = useState<number>(total);
-  const [lockPage, setLockpage] = useState<boolean>(true);
-  const [particleInfo, setParticleInfo] = useState<Info[] | null | undefined>();
-  const [summaryImage, setSummaryImage] = useState("");
-  const [iceThickness, setIceThickness] = useState<BoxPlotStats[]>();
+  const [innerPage, setInnerPage] = useState<number | undefined>(page);
+  const [innerTotal, setInnerTotal] = useState(total);
+  const [lockPage, setLockpage] = useState(true);
 
   useEffect(() => {
     if (lockPage) {
@@ -47,39 +79,25 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
     }
   }, [page, lockPage, total]);
 
+  const { data, isLoading } = useQuery({
+    queryKey: ["particlePicker", autoProcId, innerPage],
+    queryFn: async () => await fetchParticlePickingData(autoProcId, innerPage!),
+    staleTime: 3000000,
+    enabled: !!innerPage,
+  });
+
   useEffect(() => {
-    if (innerPage) {
-      client.safeGet(`autoProc/${autoProcId}/particlePicker?page=${innerPage - 1}&limit=1`).then((response) => {
-        if (response.status === 200 && response.data.items.length > 0) {
-          const data = response.data.items[0] as ParticlePickingSchema;
-          if (data.particlePickerId) {
-            setParticleInfo(parseData(data, particleConfig).info);
-            setInnerTotal(response.data.total as number);
-
-            client.safeGet(`autoProc/${autoProcId}/particlePicker/${data.particlePickerId}/image`).then((response) => {
-              if (response.status === 200) {
-                setSummaryImage(URL.createObjectURL(response.data));
-              }
-            });
-
-            client.safeGet(`movies/${data.movieId}/iceThickness?getAverages=true`).then((response) => {
-              if (response.status === 200) {
-                const data = response.data as IceThickness;
-
-                setIceThickness([
-                  convertToBoxPlot(data.current, "Current Image"),
-                  convertToBoxPlot(data.avg, "Average"),
-                ]);
-              }
-            });
-            return;
-          }
-        }
-
-        setParticleInfo(null);
-      });
+    if (lockPage) {
+      setInnerTotal(total);
+    } else {
+      if (!data || !data.total) {
+        return;
+      }
+      setInnerTotal(data.total);
     }
-  }, [innerPage, autoProcId]);
+  }, [data, lockPage, total]);
+
+  const handlePageChanged = useCallback((newPage: number) => setInnerPage(newPage), []);
 
   return (
     <div>
@@ -94,39 +112,26 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
         >
           Match Selected Motion Correction Page
         </Checkbox>
-        <MotionPagination
-          disabled={lockPage}
-          total={lockPage ? total : innerTotal}
-          onChange={(page) => setInnerPage(page)}
-          page={innerPage}
-        />
+        <MotionPagination disabled={lockPage} total={innerTotal} onChange={handlePageChanged} page={innerPage} />
       </HStack>
       <Divider />
-      {particleInfo ? (
+      {data && data.particlePicker ? (
         <Grid py={2} marginBottom={6} templateColumns='repeat(3, 1fr)' h='25vh' gap={2}>
-          <InfoGroup cols={1} info={particleInfo} />
-          {iceThickness !== undefined ? (
-            <PlotContainer title='Relative Ice Thickness' height='25vh'>
-              <Box data={iceThickness} options={{ y: { domain: { min: 120000, max: 160000 } } }} />
-            </PlotContainer>
-          ) : (
-            <Skeleton h='25vh' />
-          )}
-          <ImageCard src={summaryImage} title='Summary' />
+          <InfoGroup cols={1} info={data.particlePicker!} />
+          <PlotContainer title='Relative Ice Thickness' height='25vh'>
+            <Box data={data.iceThickness} options={{ y: { domain: { min: 120000, max: 160000 } } }} />
+          </PlotContainer>
+          <ImageCard src={data.summary} title='Summary' />
         </Grid>
+      ) : isLoading ? (
+        <Skeleton h='25vh' />
       ) : (
-        <>
-          {particleInfo === null ? (
-            <VStack>
-              <Heading paddingTop={10} variant='notFound'>
-                No Particle Picking Data Found
-              </Heading>
-              <Heading variant='notFoundSubtitle'>This page does not contain any particle picking information.</Heading>
-            </VStack>
-          ) : (
-            <Skeleton h='25vh' />
-          )}
-        </>
+        <VStack>
+          <Heading paddingTop={10} variant='notFound'>
+            No Particle Picking Data Found
+          </Heading>
+          <Heading variant='notFoundSubtitle'>This page does not contain any particle picking information.</Heading>
+        </VStack>
       )}
     </div>
   );

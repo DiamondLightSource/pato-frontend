@@ -1,12 +1,7 @@
-import type { AppStore, RootState } from "store/store";
 import type { RenderOptions } from "@testing-library/react";
-import type { PreloadedState } from "@reduxjs/toolkit";
 
-import { configureStore } from "@reduxjs/toolkit";
 import React, { PropsWithChildren } from "react";
 import { render } from "@testing-library/react";
-import { Provider } from "react-redux";
-import uiReducer from "features/uiSlice";
 import {
   createMemoryRouter,
   LoaderFunction,
@@ -14,33 +9,29 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { Accordion } from "@chakra-ui/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
-  preloadedState?: PreloadedState<RootState>;
   route?: string;
-  store?: AppStore;
 }
 
 const renderWithProviders = (
   ui: React.ReactElement,
-  {
-    preloadedState = { ui: { loading: false } },
-    route = "/",
-    store = configureStore({ reducer: { ui: uiReducer }, preloadedState }),
-    ...renderOptions
-  }: ExtendedRenderOptions = {}
+  { route = "/", ...renderOptions }: ExtendedRenderOptions = {}
 ): any => {
   const Wrapper = ({ children }: PropsWithChildren<{}>) => {
     window.history.pushState({}, "Test page", route);
 
     return (
       <MemoryRouter initialEntries={[route]}>
-        <Provider store={store}>{children}</Provider>
+        <QueryClientProvider client={new QueryClient()}>
+          {children}
+        </QueryClientProvider>
       </MemoryRouter>
     );
   };
 
-  return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
+  return { ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 };
 
 const renderWithAccordion = (ui: React.ReactElement) => {
@@ -59,7 +50,11 @@ const renderWithRoute = (
       loader: loader,
     },
   ]);
-  return render(<RouterProvider router={router} />);
+  return render(
+    <QueryClientProvider client={new QueryClient()}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
 };
 
 export { renderWithProviders, renderWithAccordion, renderWithRoute };

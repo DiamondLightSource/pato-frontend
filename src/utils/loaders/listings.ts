@@ -1,3 +1,4 @@
+import { QueryClient } from "@tanstack/react-query";
 import { Params } from "react-router-dom";
 import { components } from "schema/main";
 import { client } from "utils/api/client";
@@ -7,30 +8,46 @@ import { parseDate } from "utils/generic";
 type ProcessDataCallback = (data: Record<string, any>[]) => Record<string, any>[];
 type Session = components["schemas"]["SessionResponse"];
 
-const getListingData = async (
-  request: Request,
-  params: Params<string>,
-  endpoint: string,
-  processData?: ProcessDataCallback
-) => {
+const listingQueryBuilder = (request: Request, params: Params<string>, endpoint: string) => {
   const searchParams = new URL(request.url).searchParams;
-  const search = searchParams.get("search");
+  const search = searchParams.get("search") || "";
   const items = searchParams.get("items") || "20";
   const page = searchParams.get("page") || "1";
 
   let builtEndpoint = buildEndpoint(`${endpoint}`, params, parseInt(items), parseInt(page));
-
   if (search) {
     builtEndpoint += `&search=${search}`;
   }
 
-  const response = await client.safeGet(builtEndpoint);
-  if (response.data && response.data.items !== undefined) {
-    return { data: processData ? processData(response.data.items) : response.data.items, total: response.data.total };
+  return {
+    queryKey: [endpoint, search, items, page, params],
+    queryFn: async () => getListingData(builtEndpoint),
+    staleTime: 60000,
+  };
+};
+
+const getListingData = async (endpoint: string) => {
+  const response = await client.safeGet(endpoint);
+
+  if (response.status === 200) {
+    return response.data;
   }
 
-  return { data: null, total: 0 };
+  return null;
 };
+
+const listingLoader =
+  (queryClient: QueryClient) =>
+  async (request: Request, params: Params<string>, endpoint: string, processData?: ProcessDataCallback) => {
+    const query = listingQueryBuilder(request, params, endpoint);
+    const data = queryClient.getQueryData(query.queryKey) ?? (await queryClient.fetchQuery(query));
+
+    if (data && data.items !== undefined) {
+      return { data: processData ? processData(data.items) : data.items, total: data.total };
+    }
+
+    return { data: null, total: 0 };
+  };
 
 const fixAllDates = (sessions: Session[]) =>
   sessions.map((session) =>
@@ -56,4 +73,4 @@ const getSessionData = async () => {
   return { recent: fixAllDates(responses[0].data.items), current: fixAllDates(responses[1].data.items) };
 };
 
-export { getListingData, getSessionData };
+export { listingLoader, getSessionData };
