@@ -3,7 +3,7 @@ import { rest } from "msw";
 import { queryClient, renderWithRoute } from "utils/test-utils";
 import { server } from "mocks/server";
 import { Home } from "routes/Home";
-import { sessionLoader } from "utils/loaders/sessions";
+import { sessionLoader } from "loaders/sessions";
 
 describe("Home", () => {
   it("should display message and button if not logged in", async () => {

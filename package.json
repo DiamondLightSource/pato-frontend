@@ -36,7 +36,7 @@
     "test": "REACT_APP_AUTH_ENDPOINT=auth/ jest",
     "eject": "react-scripts eject",
     "format": "prettier --jsx-single-quote --write src/**/*.{ts,tsx,css}",
-    "demo": "REACT_APP_DEMO=true HTTPS=false REACT_APP_AUTH_ENDPOINT=http://localhost/auth/ REACT_APP_API_ENDPOINT=http://localhost/ react-app-rewired start"
+    "demo": "REACT_APP_DEPLOY_TYPE=demo HTTPS=false REACT_APP_AUTH_ENDPOINT=http://localhost/auth/ REACT_APP_API_ENDPOINT=http://localhost/ react-app-rewired start"
   },
   "eslintConfig": {
     "extends": [

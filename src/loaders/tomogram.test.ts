@@ -1,6 +1,6 @@
 import { rest } from "msw";
 import { server } from "mocks/server";
-import { tomogramLoader } from "utils/loaders/tomogram";
+import { tomogramLoader } from "loaders/tomogram";
 import { queryClient } from "utils/test-utils";
 
 const request = new Request(

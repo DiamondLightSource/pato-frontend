@@ -17,14 +17,14 @@ import {
   proposalHeaders,
   sessionHeaders,
 } from "utils/config/table";
-import { getUser } from "utils/loaders/user";
-import { listingLoader } from "utils/loaders/listings";
+import { getUser } from "loaders/user";
+import { listingLoader } from "loaders/listings";
 import { parseDate } from "utils/generic";
-import { spaLoader } from "utils/loaders/spa";
-import { tomogramLoader } from "utils/loaders/tomogram";
+import { spaLoader } from "loaders/spa";
+import { tomogramLoader } from "loaders/tomogram";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { sessionLoader } from "utils/loaders/sessions";
+import { sessionLoader } from "loaders/sessions";
 
 const Calendar = React.lazy(() => import("routes/Calendar"));
 
@@ -33,7 +33,7 @@ const container = document.getElementById("root")!;
 const root = createRoot(container);
 const queryClient = new QueryClient();
 
-if (process.env.REACT_APP_DEMO === "true") {
+if (process.env.REACT_APP_DEPLOY_TYPE === "demo") {
   const { worker } = require("./mocks/browser");
   worker.start();
 }

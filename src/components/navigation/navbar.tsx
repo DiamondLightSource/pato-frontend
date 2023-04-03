@@ -21,6 +21,7 @@ import { MdLogin, MdMenu, MdClose } from "react-icons/md";
 import { Link as LinkRouter } from "react-router-dom";
 import { AuthState } from "schema/interfaces";
 import { useIsFetching } from "@tanstack/react-query";
+import { PhaseBanner } from "./phaseBanner";
 
 const links = [
   { label: "Proposals", route: "proposals" },
@@ -77,8 +78,8 @@ const Navbar = ({ user }: NavbarProps) => {
   const loadingRemaining = useIsFetching();
 
   return (
-    <Box zIndex={1} h='3em' position='fixed' w='100%' bg='diamond.800'>
-      <Flex px={{ base: 4, md: "7.5vw" }} h={12} alignItems={"center"} justifyContent={"space-between"}>
+    <Box zIndex={1} w='100%'>
+      <Flex bg='diamond.800' px={{ base: 4, md: "7.5vw" }} h={12} alignItems={"center"} justifyContent={"space-between"}>
         <IconButton
           size={"sm"}
           icon={isOpen ? <MdClose /> : <MdMenu />}
@@ -149,8 +150,12 @@ const Navbar = ({ user }: NavbarProps) => {
           )}
         </Flex>
       </Flex>
-      {!isOpen && loadingRemaining !== 0 && <Progress isIndeterminate  size='sm' />}
-
+      {process.env.REACT_APP_DEPLOY_TYPE === "staging" && <PhaseBanner />}
+      {!isOpen && loadingRemaining !== 0 ? (
+        <Progress h='0.5em' isIndeterminate size='sm' />
+      ) : (
+        <Box bg='rgba(0,0,0,0)' h='0.5em' />
+      )}
       {isOpen && (
         <VStack bg='diamond.800' as={"nav"} spacing={4}>
           <NavLinks loggedIn={user !== null} />

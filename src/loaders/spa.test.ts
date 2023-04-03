@@ -1,6 +1,6 @@
 import { rest } from "msw";
 import { server } from "mocks/server";
-import { spaLoader } from "utils/loaders/spa";
+import { spaLoader } from "loaders/spa";
 import { queryClient } from "utils/test-utils";
 
 describe("SPA Data", () => {

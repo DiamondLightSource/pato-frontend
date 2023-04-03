@@ -1,6 +1,6 @@
 import { rest } from "msw";
 import { server } from "mocks/server";
-import { getUser } from "utils/loaders/user";
+import { getUser } from "loaders/user";
 
 describe("User Data", () => {
   it("should return user data if available", async () => {

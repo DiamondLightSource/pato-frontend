@@ -1,7 +1,7 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { renderWithRoute } from "utils/test-utils";
 import { TomogramPage } from "routes/Tomogram";
-import { TomogramResponse } from "utils/loaders/tomogram";
+import { TomogramResponse } from "loaders/tomogram";
 import { CollectionData } from "schema/interfaces";
 
 type LoaderReturn = Awaited<TomogramResponse>;

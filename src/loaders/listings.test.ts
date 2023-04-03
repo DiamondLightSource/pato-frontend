@@ -1,4 +1,4 @@
-import { listingLoader } from "utils/loaders/listings";
+import { listingLoader } from "loaders/listings";
 import { server } from "mocks/server";
 import { rest } from "msw";
 import { queryClient } from "utils/test-utils";

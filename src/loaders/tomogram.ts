@@ -23,22 +23,16 @@ export interface TomogramResponse {
   jobs: ProcessingJob[] | null;
 }
 
-const getTomogramData = async (groupId: string, collectionIndex: string, request: Request) => {
+const getTomogramData = async (groupId: string, collectionIndex: string, onlyTomograms: boolean, request: Request) => {
   const returnData: TomogramData = {
     collection: { info: [], comments: "", fileTemplate: "?", imageDirectory: "?" } as CollectionData,
     total: 1,
     page: 1,
     jobs: null,
   };
-  const searchParams = new URL(request.url).searchParams;
-  const onlyTomograms = searchParams.get("onlyTomograms");
 
   const collectionResponse = await client.safeGet(
-    includePage(
-      `dataGroups/${groupId}/dataCollections?onlyTomograms=${onlyTomograms ?? false}`,
-      1,
-      parseInt(collectionIndex)
-    )
+    includePage(`dataGroups/${groupId}/dataCollections?onlyTomograms=${onlyTomograms}`, 1, parseInt(collectionIndex))
   );
 
   if (collectionResponse.status !== 200) {
@@ -66,11 +60,14 @@ const getTomogramData = async (groupId: string, collectionIndex: string, request
   return returnData;
 };
 
-const queryBuilder = (groupId: string = "0", collectionIndex: string = "1", request: Request) => ({
-  queryKey: ["spaAutoProc", groupId],
-  queryFn: () => getTomogramData(groupId, collectionIndex, request),
-  staleTime: 60000,
-});
+const queryBuilder = (groupId: string = "0", collectionIndex: string = "1", request: Request) => {
+  const onlyTomograms = new URL(request.url).searchParams.get("onlyTomograms") === "true";
+  return {
+    queryKey: ["tomogramAutoProc", groupId, collectionIndex, onlyTomograms],
+    queryFn: () => getTomogramData(groupId, collectionIndex, onlyTomograms, request),
+    staleTime: 60000,
+  };
+};
 
 export const tomogramLoader = (queryClient: QueryClient) => async (params: Params, request: Request) => {
   const query = queryBuilder(params.groupId, params.collectionIndex, request);
