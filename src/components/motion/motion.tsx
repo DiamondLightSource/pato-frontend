@@ -23,7 +23,7 @@ import { ImageCard } from "components/visualisation/image";
 import { InfoGroup } from "components/visualisation/infogroup";
 import { PlotContainer } from "components/visualisation/plotContainer";
 import { MotionPagination } from "components/motion/pagination";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { MdComment } from "react-icons/md";
 import { client } from "utils/api/client";
 import { parseData } from "utils/generic";
@@ -52,8 +52,8 @@ interface MotionProps {
   parentId: number;
   /** Whether parent is a tomogram or data collection */
   parentType: "tomograms" | "dataCollections" | "autoProc";
-  /** Callback for when a new motion correction item is requested and received */
-  onMotionChanged?: (motion: MotionData, page: number) => void;
+  /** Callback for when page changes */
+  onPageChanged?: (page: number) => void;
   /** Callback for when the number of available items changes */
   onTotalChanged?: (newTotal: number) => void;
   /** Current page */
@@ -107,7 +107,7 @@ const calcDarkImages = (total: number, rawTotal: number) => {
   return `Dark Images: ${rawTotal - total}`;
 };
 
-const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType, currentPage }: MotionProps) => {
+const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, currentPage }: MotionProps) => {
   const [page, setPage] = useState<number | undefined>();
   const [motion, setMotion] = useState<MotionData | null>();
   const [drift, setDrift] = useState<BasePoint[]>([]);
@@ -140,6 +140,16 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType, current
     }
   }, [currentPage]);
 
+  const handlePageChanged = useCallback((page: number) => {
+    if (onPageChanged) {
+      onPageChanged(page)
+    } 
+
+    if (currentPage === undefined) {
+      setPage(page)
+    }
+  }, [onPageChanged, currentPage])
+
   useEffect(() => {
     client.safeGet(buildEndpoint(`${parentType}/${parentId}/motion`, {}, 1, page ?? 0)).then((response) => {
       if (response.status === 200) {
@@ -161,16 +171,12 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType, current
               }
             });
           }
-
-          if (onMotionChanged !== undefined) {
-            onMotionChanged(response.data, page ?? -1);
-          }
         }
       } else {
         setMotion(null);
       }
     });
-  }, [page, parentId, parentType, onMotionChanged, onTotalChanged]);
+  }, [page, parentId, parentType, onTotalChanged]);
 
   return (
     <div>
@@ -204,7 +210,7 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType, current
               <MotionPagination
                 startFrom={parentType === "tomograms" ? "middle" : "end"}
                 total={motion.total || motion.rawTotal}
-                onChange={setPage}
+                onChange={handlePageChanged}
                 defaultPage={page}
               />
             </HStack>

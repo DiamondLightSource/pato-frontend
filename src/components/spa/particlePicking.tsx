@@ -1,4 +1,4 @@
-import { Spacer, HStack, Divider, Heading, Text, Checkbox, VStack, Grid, Skeleton } from "@chakra-ui/react";
+import { Spacer, HStack, Divider, Heading, Checkbox, VStack, Grid, Skeleton } from "@chakra-ui/react";
 import { ImageCard } from "components/visualisation/image";
 import { InfoGroup } from "components/visualisation/infogroup";
 import { MotionPagination } from "components/motion/pagination";
@@ -35,6 +35,7 @@ const convertToBoxPlot = (data: components["schemas"]["RelativeIceThickness"], l
 
 const ParticlePicking = ({ autoProcId, total, currentPage }: ParticleProps) => {
   const [innerPage, setInnerPage] = useState<number | undefined>();
+  const [innerTotal, setInnerTotal] = useState<number>(total);
   const [lockPage, setLockpage] = useState<boolean>(true);
   const [particleInfo, setParticleInfo] = useState<Info[] | null | undefined>();
   const [summaryImage, setSummaryImage] = useState("");
@@ -42,21 +43,19 @@ const ParticlePicking = ({ autoProcId, total, currentPage }: ParticleProps) => {
 
   useEffect(() => {
     if (lockPage) {
-      if (currentPage !== undefined && currentPage > 0) {
-        setInnerPage(currentPage);
-      } else {
-        setInnerPage(total);
-      }
+      setInnerPage(currentPage !== undefined && currentPage > 0 ? currentPage : total);
     }
   }, [currentPage, lockPage, total]);
 
   useEffect(() => {
     if (innerPage) {
       client.safeGet(`autoProc/${autoProcId}/particlePicker?page=${innerPage - 1}&limit=1`).then((response) => {
-        if (response.status === 200) {
+        if (response.status === 200 && response.data.items.length > 0) {
           const data = response.data.items[0] as ParticlePickingSchema;
           if (data.particlePickerId) {
             setParticleInfo(parseData(data, particleConfig).info);
+            setInnerTotal(response.data.total as number);
+
             client.safeGet(`autoProc/${autoProcId}/particlePicker/${data.particlePickerId}/image`).then((response) => {
               if (response.status === 200) {
                 setSummaryImage(URL.createObjectURL(response.data));
@@ -73,10 +72,11 @@ const ParticlePicking = ({ autoProcId, total, currentPage }: ParticleProps) => {
                 ]);
               }
             });
+            return;
           }
-        } else {
-          setParticleInfo(null);
         }
+
+        setParticleInfo(null);
       });
     }
   }, [innerPage, autoProcId]);
@@ -92,11 +92,11 @@ const ParticlePicking = ({ autoProcId, total, currentPage }: ParticleProps) => {
           size='sm'
           defaultChecked
         >
-          <Text verticalAlign='middle'>Match Selected Motion Correction Page</Text>
+          Match Selected Motion Correction Page
         </Checkbox>
         <MotionPagination
           disabled={lockPage}
-          total={total}
+          total={lockPage ? total : innerTotal}
           onChange={(page) => setInnerPage(page)}
           defaultPage={innerPage}
         />

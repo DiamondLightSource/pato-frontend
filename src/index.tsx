@@ -9,7 +9,7 @@ import { GenericListing } from "routes/GenericListing";
 import { TomogramPage } from "routes/Tomogram";
 import { SpaPage } from "routes/SPA";
 import { Error } from "routes/Error";
-import { Accordion, Button, Text, Heading, Table, Card, Tabs } from "styles/components";
+import { Accordion, Button, Text, Heading, Table, Card, Tabs, Checkbox } from "styles/components";
 import { colours } from "styles/colours";
 import { Home } from "routes/Home";
 import {
@@ -37,7 +37,7 @@ if (process.env.REACT_APP_DEMO === 'true') {
 
 const theme = extendTheme({
   colors: colours,
-  components: { Accordion, Button, Text, Heading, Table, Card, Tabs },
+  components: { Accordion, Checkbox, Button, Text, Heading, Table, Card, Tabs },
   breakpoints: {
     "sm": "30em",
     "md": "48em",
