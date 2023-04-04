@@ -67,7 +67,7 @@ sync-github:
   script:
     - rm -rf .git
     - git clone https://$CI_GITHUB_USER:$CI_GITHUB_TOKEN@github.com/diamondLightSource/pato-frontend.git github-upstream && cd github-upstream
-    - cp -r ../src ../yarn.lock ../package.json ../jest.config.ts ../jest.setup.ts ../CHANGELOG.rst .
+    - rm -rf src && cp -r ../src ../yarn.lock ../package.json ../jest.config.ts ../jest.setup.ts ../CHANGELOG.rst .
     - git config --local user.name "Guilherme de Freitas"
     - git config --local user.email guilherme.de-freitas@diamond.ac.uk
     - git add .
