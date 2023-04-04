@@ -44,7 +44,7 @@ const ProcessingTitle = ({ procJob, autoProc, status }: ProcTitleProps) => (
     w='100%'
     bg='diamond.100'
   >
-    <HStack flexGrow={1}>
+    <HStack gap={{ base: 0, xl: 10 }}>
       <TwoLineTitle title='Processing Job' value={procJob.processingJobId} />
       <TwoLineTitle title='AutoProc. Program' value={autoProc.autoProcProgramId} />
       <TwoLineTitle title='Processing Start' value={parseDate(autoProc.processingStartTime ?? "?")} />

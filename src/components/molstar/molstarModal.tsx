@@ -46,7 +46,7 @@ const MolstarModal = ({ autoProcId, classId, page, pageCount, onChange }: Molsta
             {isOpen && (
               <Suspense>
                 <MolstarWrapper autoProcId={autoProcId} classId={classId}>
-                  <MotionPagination size='md' total={pageCount} defaultPage={page} onChange={onChange} />
+                  <MotionPagination size='md' total={pageCount} page={page} onChange={onChange} />
                 </MolstarWrapper>
               </Suspense>
             )}

@@ -10,8 +10,8 @@ import { AxisBottom, AxisLeft } from "@visx/axis";
 import { localPoint } from "@visx/event";
 import { BasePoint, CompleteScatterPlotOptions, ScatterPlotOptions } from "schema/interfaces";
 import { mergeDeep } from "utils/generic";
-import { Heading, VStack } from "@chakra-ui/react";
 import { defaultMargin } from "utils/config/plot";
+import { NoData } from "components/visualisation/noData";
 
 const x = (d: BasePoint) => d.x;
 const y = (d: BasePoint) => d.y;
@@ -67,6 +67,8 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
       return newConfig as CompleteScatterPlotOptions;
     }, [data, options]);
 
+    //const decimationThreshold = useMemo(() => (config.y.domain.max - config.y.domain.min)/25, [config])
+
     const checkBoundaries = useCallback(
       (d: BasePoint) => {
         return (
@@ -79,13 +81,8 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
       [config]
     );
 
-    const xMax = useMemo(() => {
-      return width - defaultMargin.left - defaultMargin.right;
-    }, [width]);
-
-    const yMax = useMemo(() => {
-      return height - defaultMargin.top - defaultMargin.bottom;
-    }, [height]);
+    const xMax = useMemo(() => width - defaultMargin.left - defaultMargin.right, [width]);
+    const yMax = useMemo(() => height - defaultMargin.top - defaultMargin.bottom, [height]);
 
     const xScale = useMemo(
       () =>
@@ -159,13 +156,7 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
     }, [hideTooltip]);
 
     if (data.length === 0) {
-      return (
-        <VStack width={width} height={height}>
-          <Heading variant='notFound'>
-            No Data Available
-          </Heading>
-        </VStack>
-      );
+      return <NoData/>
     }
 
     return (
@@ -179,6 +170,7 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
             y={defaultMargin.top}
             fill='white'
             aria-label='Graph'
+            shapeRendering='optimizeSpeed'
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             onTouchMove={handleMouseMove}
@@ -186,8 +178,8 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
             onClick={handleMouseClick}
           />
           <Group pointerEvents='none' left={defaultMargin.left} top={defaultMargin.top}>
-            <GridRows scale={yScale} width={xMax} height={yMax} stroke='#e0e0e0' />
-            <GridColumns scale={xScale} width={xMax} height={yMax} stroke='#e0e0e0' />
+            <GridRows shapeRendering='optimizeSpeed' scale={yScale} width={xMax} height={yMax} stroke='#e0e0e0' />
+            <GridColumns shapeRendering='optimizeSpeed' scale={xScale} width={xMax} height={yMax} stroke='#e0e0e0' />
             <AxisBottom label={config.x.label} top={yMax} scale={xScale} numTicks={5} />
             <AxisLeft label={config.y.label} scale={yScale} numTicks={5} />
             {data.map(

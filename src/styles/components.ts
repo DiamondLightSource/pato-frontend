@@ -208,6 +208,13 @@ const Tabs = defineTabsConfig({
   defaultProps: { variant: "none" },
 });
 
+const Code = defineStyleConfig({
+  baseStyle: {
+    backgroundColor: "diamond.100",
+    color: "diamond.800",
+  },
+});
+
 export {
   Accordion,
   Button,
@@ -220,4 +227,5 @@ export {
   Tabs,
   baseToast,
   Checkbox,
+  Code,
 };

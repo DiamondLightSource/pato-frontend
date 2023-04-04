@@ -53,11 +53,11 @@ interface MotionProps {
   /** Whether parent is a tomogram or data collection */
   parentType: "tomograms" | "dataCollections" | "autoProc";
   /** Callback for when page changes */
-  onPageChanged?: (page: number) => void;
+  onPageChanged?: (newPage: number) => void;
   /** Callback for when the number of available items changes */
   onTotalChanged?: (newTotal: number) => void;
   /** Current page */
-  currentPage?: number;
+  page?: number;
 }
 
 const motionConfig = {
@@ -107,8 +107,8 @@ const calcDarkImages = (total: number, rawTotal: number) => {
   return `Dark Images: ${rawTotal - total}`;
 };
 
-const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, currentPage }: MotionProps) => {
-  const [page, setPage] = useState<number | undefined>();
+const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: MotionProps) => {
+  const [innerPage, setInnerPage] = useState<number | undefined>();
   const [motion, setMotion] = useState<MotionData | null>();
   const [drift, setDrift] = useState<BasePoint[]>([]);
   const [mgImage, setMgImage] = useState<string>();
@@ -135,30 +135,33 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, currentPa
   };
 
   useEffect(() => {
-    if (currentPage) {
-      setPage(currentPage);
+    if (page) {
+      setInnerPage(page);
     }
-  }, [currentPage]);
+  }, [page]);
 
-  const handlePageChanged = useCallback((page: number) => {
-    if (onPageChanged) {
-      onPageChanged(page)
-    } 
+  const handlePageChanged = useCallback(
+    (newPage: number) => {
+      if (onPageChanged) {
+        onPageChanged(newPage);
+      }
 
-    if (currentPage === undefined) {
-      setPage(page)
-    }
-  }, [onPageChanged, currentPage])
+      if (page === undefined) {
+        setInnerPage(newPage);
+      }
+    },
+    [onPageChanged, page]
+  );
 
   useEffect(() => {
-    client.safeGet(buildEndpoint(`${parentType}/${parentId}/motion`, {}, 1, page ?? 0)).then((response) => {
+    client.safeGet(buildEndpoint(`${parentType}/${parentId}/motion`, {}, 1, innerPage ?? 0)).then((response) => {
       if (response.status === 200) {
         setMotion(parseData(flattenMovieData(response.data), motionConfig) as MotionData);
         if (onTotalChanged) {
           onTotalChanged(response.data.total);
         }
 
-        if (page !== undefined || parentType !== "tomograms") {
+        if (innerPage !== undefined || parentType !== "tomograms") {
           const movie = response.data.items[0].Movie;
           if (movie !== undefined) {
             setImage(`movies/${movie.movieId}/micrograph`, setMgImage);
@@ -176,19 +179,19 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, currentPa
         setMotion(null);
       }
     });
-  }, [page, parentId, parentType, onTotalChanged]);
+  }, [innerPage, parentId, parentType, onTotalChanged]);
 
   return (
     <div>
       <Stack direction={{ base: "column", md: "row" }}>
-        <Heading variant='collection' mt='0'>
+        <Heading variant='collection' pr='2' mt='0'>
           Motion Correction/CTF
         </Heading>
 
         {motion && (
           <>
             {parentType !== "autoProc" && (
-              <Heading size='sm' color='diamond.300'>
+              <Heading size='sm' display='flex' alignSelf='center' color='diamond.300'>
                 {calcDarkImages(motion.total, motion.rawTotal)}
               </Heading>
             )}
@@ -211,7 +214,7 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, currentPa
                 startFrom={parentType === "tomograms" ? "middle" : "end"}
                 total={motion.total || motion.rawTotal}
                 onChange={handlePageChanged}
-                defaultPage={page}
+                page={innerPage}
               />
             </HStack>
           </>

@@ -122,11 +122,11 @@ const TomogramPage = () => {
                 <Icon as={MdList} />
               </Button>
             </Tooltip>
-            <Divider orientation='vertical' h='5vh' />
+            <Divider orientation='vertical' h={10} />
             <MotionPagination
               size='md'
               onChange={updateCollection}
-              defaultPage={parseInt(params.collectionIndex ?? "1")}
+              page={parseInt(params.collectionIndex ?? "1")}
               total={loaderData.total}
             />
           </HStack>
