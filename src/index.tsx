@@ -188,7 +188,7 @@ root.render(
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
         <ToastContainer />
-        <ReactQueryDevtools initialIsOpen={false} />
+        {process.env.REACT_APP_ENVIRONMENT === "development" && <ReactQueryDevtools initialIsOpen={false} />}
       </QueryClientProvider>
     </ChakraProvider>
   </React.StrictMode>
