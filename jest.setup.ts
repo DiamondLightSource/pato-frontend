@@ -1,7 +1,6 @@
 import "@testing-library/jest-dom";
 
 import { server } from "./src/mocks/server";
-import { queryClient } from "./src/utils/test-utils";
 import "whatwg-fetch";
 
 process.env.REACT_APP_API_ENDPOINT = "http://localhost/";
@@ -9,7 +8,6 @@ process.env.REACT_APP_API_ENDPOINT = "http://localhost/";
 beforeEach(() => server.listen());
 afterEach(() => {
   server.resetHandlers();
-  queryClient.clear();
 });
 afterAll(() => server.close());
 
