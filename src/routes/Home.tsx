@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Divider,
-  Grid,
   GridItem,
   Heading,
   HStack,
@@ -31,16 +30,11 @@ const SessionRow = ({ sessions, title }: SessionRowProps) => (
       {title}
     </Heading>
     <Divider borderColor='diamond.300' />
-    <Grid
-      w='100%'
-      py={2}
-      marginBottom={6}
-      templateColumns='repeat(5, 1fr)'
-      gap={2}
-    >
+    <HStack w='100%' spacing='0.5%' py='0.8em'>
       {sessions && sessions.length > 0 ? (
         sessions.map((session) => (
           <Link
+            w='19.6%'
             key={session.sessionId}
             _hover={{ textDecor: "none" }}
             as={LinkRouter}
@@ -88,7 +82,7 @@ const SessionRow = ({ sessions, title }: SessionRowProps) => (
           </Heading>
         </GridItem>
       )}
-    </Grid>
+    </HStack>
   </VStack>
 );
 
@@ -150,7 +144,7 @@ const Home = () => {
                       process.env.REACT_APP_AUTH_ENDPOINT
                     }authorise?redirect_uri=${encodeURIComponent(
                       window.location.href
-                    )}`}
+                    )}&responseType=code`}
                   >
                     <Button leftIcon={<MdLogin />}>Login</Button>
                   </Link>

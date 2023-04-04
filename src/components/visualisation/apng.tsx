@@ -48,7 +48,7 @@ const APNGViewer = ({ src, width = "100%", height = "64vh" }: ImageProps) => {
   }, [playForward]);
 
   useEffect(() => {
-    client.safe_get(src).then((response) => {
+    client.safeGet(src).then((response) => {
       if (response.status !== 200) {
         setFrames(null);
       }

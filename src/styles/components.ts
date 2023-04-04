@@ -31,6 +31,14 @@ const Text = defineStyleConfig({
   },
 });
 
+const Checkbox = defineStyleConfig({
+  baseStyle: {
+    control: {
+      backgroundColor: "#FFF",
+    },
+  },
+});
+
 const Table = defineStyleConfig({
   variants: {
     diamondStriped: {
@@ -200,6 +208,13 @@ const Tabs = defineTabsConfig({
   defaultProps: { variant: "none" },
 });
 
+const Code = defineStyleConfig({
+  baseStyle: {
+    backgroundColor: "diamond.100",
+    color: "diamond.800",
+  },
+});
+
 export {
   Accordion,
   Button,
@@ -211,4 +226,6 @@ export {
   CardBody,
   Tabs,
   baseToast,
+  Checkbox,
+  Code,
 };

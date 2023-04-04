@@ -8,7 +8,7 @@ describe("Listing Data", () => {
   it("should return data for listing if available", async () => {
     const data = await getListingData(request, { groupId: "1" }, "proposals");
 
-    expect(data.data[0].key1).toBe("value1");
+    expect(data.data[0].proposalNumber).toBe("31111");
     expect(data.total).toBe(300);
   });
 

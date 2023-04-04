@@ -92,6 +92,12 @@ describe("Box Plot", () => {
     expect(screen.getAllByText("5.0").length).toBe(2);
   });
 
+  it("should display message when no data is available", () => {
+    renderWithProviders(<Box data={[]} width={1000} height={1000} />);
+
+    expect(screen.getByText("No Data Available")).toBeInTheDocument();
+  });
+
   it("should not render outside domain boundaries", () => {
     renderWithProviders(
       <Box

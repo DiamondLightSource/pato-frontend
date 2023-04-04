@@ -10,6 +10,7 @@ import { mergeDeep } from "utils/generic";
 import { Bar } from "@visx/shape";
 import { getFillColour } from "styles/colours";
 import { defaultMargin } from "utils/config/plot";
+import { NoData } from "components/visualisation/noData";
 
 const label = (d: BarStats) => d.label;
 const y = (d: BarStats) => d.y;
@@ -42,6 +43,10 @@ const BarChart = withTooltip<BarProps, BarStats>(
     options,
     data,
   }: BarProps & WithTooltipProvidedProps<BarStats>) => {
+    if (data.length === 0) {
+      return <NoData/>
+    }
+
     const config: CompleteScatterPlotOptions = useMemo(() => {
       const newConfig = mergeDeep(defaultPlotOptions, options ?? {});
       const yValues = data.map((bars) => bars.map(y)).flat();

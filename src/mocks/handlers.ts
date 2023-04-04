@@ -1,55 +1,76 @@
 import { rest } from "msw";
 
+const withSearch = (items: Record<string, any>[], search?: string | null) =>
+  items.filter(
+    (item) =>
+      !search || (item.proposalCode + item.proposalNumber).includes(search)
+  );
+
+const getMotionData = (parentId: string) => {
+  let data = {};
+  const items = [
+    { Movie: {}, CTF: {}, MotionCorrection: {}, TiltImageAlignment: {} },
+  ];
+
+  switch (parentId) {
+    case "1":
+      data = {
+        items,
+        total: 10,
+        rawTotal: 20,
+      };
+      break;
+    case "2":
+      data = {
+        items,
+        total: 0,
+        rawTotal: 20,
+      };
+      break;
+    case "3":
+      data = {
+        items: [
+          {
+            CTF: { comments: "comment!" },
+            Movie: {},
+            TiltImageAlignment: { refinedTiltAxis: 958 },
+          },
+        ],
+        total: 0,
+        rawTotal: 20,
+      };
+      break;
+    case "4":
+      data = {
+        items: [
+          {
+            CTF: { comments: "comment!" },
+            Movie: {},
+            TiltImageAlignment: { refinedTiltAxis: 958 },
+          },
+        ],
+        rawTotal: "asd",
+      };
+      break;
+  }
+  return data;
+};
+
 export const handlers = [
   rest.get("http://localhost/tomograms/:id/motion", (req, res, ctx) => {
-    let data = {};
-    const items = [
-      { Movie: {}, CTF: {}, MotionCorrection: {}, TiltImageAlignment: {} },
-    ];
+    return res(
+      ctx.status(200),
+      ctx.delay(0),
+      ctx.json(getMotionData(req.params.id.toString()))
+    );
+  }),
 
-    switch (req.params.id) {
-      case "1":
-        data = {
-          items,
-          total: 10,
-          rawTotal: 20,
-        };
-        break;
-      case "2":
-        data = {
-          items,
-          total: 0,
-          rawTotal: 20,
-        };
-        break;
-      case "3":
-        data = {
-          items: [
-            {
-              CTF: { comments: "comment!" },
-              Movie: {},
-              TiltImageAlignment: { refinedTiltAxis: 958 },
-            },
-          ],
-          total: 0,
-          rawTotal: 20,
-        };
-        break;
-      case "4":
-        data = {
-          items: [
-            {
-              CTF: { comments: "comment!" },
-              Movie: {},
-              TiltImageAlignment: { refinedTiltAxis: 958 },
-            },
-          ],
-          rawTotal: "asd",
-        };
-        break;
-    }
-
-    return res(ctx.status(200), ctx.delay(0), ctx.json(data));
+  rest.get("http://localhost/autoProc/:id/motion", (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.delay(0),
+      ctx.json(getMotionData(req.params.id.toString()))
+    );
   }),
 
   rest.get("http://localhost/autoProc/:autoProcId/tomogram", (req, res, ctx) =>
@@ -59,6 +80,14 @@ export const handlers = [
       ctx.delay(0)
     )
   ),
+
+  rest.get("http://localhost/auth/user", (req, res, ctx) =>
+    res(ctx.status(200), ctx.json({ givenName: "Person", fedid: "abc12345" }))
+  ),
+
+  rest.get("http://localhost/auth/token", (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
 
   rest.get(
     "http://localhost/dataCollections/:collectionId/iceThickness",
@@ -241,7 +270,18 @@ export const handlers = [
   rest.get(
     "http://localhost/dataCollections/:collectionId/processingJobs",
     async (req, res, ctx) =>
-      res(ctx.status(200), ctx.json({ items: [{ autoProcProgramId: 1 }] }))
+      res(
+        ctx.status(200),
+        ctx.json({
+          items: [
+            {
+              AutoProcProgram: { autoProcProgramId: 1 },
+              ProcessingJob: {},
+              status: "Success",
+            },
+          ],
+        })
+      )
   ),
 
   rest.get(
@@ -354,6 +394,26 @@ export const handlers = [
     )
   ),
 
+  rest.get("http://localhost/dataGroups", async (req, res, ctx) =>
+    res(
+      ctx.status(200),
+      ctx.json({
+        items: withSearch(
+          [
+            {
+              dataCollectionGroupId: 1,
+              collections: 1,
+              experimentTypeName: "Tomogram",
+            },
+          ],
+          req.url.searchParams.get("search")
+        ),
+        total: 1,
+        limit: 25,
+      })
+    )
+  ),
+
   rest.get(
     "http://localhost/dataGroups/:groupId/dataCollections",
     async (req, res, ctx) =>
@@ -365,6 +425,7 @@ export const handlers = [
               dataCollectionId: 9775784,
               SESSIONID: 27489608,
               fileTemplate: "/dls/files/GridSquare_11_1/",
+              comments: "Sample Tomogram",
             },
           ],
           total: 80,
@@ -374,17 +435,42 @@ export const handlers = [
   ),
 
   rest.get("http://localhost/proposals", (req, res, ctx) => {
-    const valueAppend = req.url.searchParams.get("search") ?? "";
+    const items = [
+      {
+        proposalCode: "cm",
+        proposalNumber: "31111",
+        label: "Number",
+        sessions: 1,
+        title: "Sample Proposal 1",
+      },
+      {
+        proposalCode: "cm",
+        proposalNumber: "31112",
+        label: "Number",
+        sessions: 1,
+        title: "Sample Proposal 2",
+      },
+      {
+        proposalCode: "cm",
+        proposalNumber: "31113",
+        label: "Number",
+        sessions: 1,
+        title: "Sample Proposal 3",
+      },
+      {
+        proposalCode: "cm",
+        proposalNumber: "31114",
+        label: "Number",
+        sessions: 1,
+        title: "Sample Proposal 4",
+      },
+    ];
 
     return res(
       ctx.status(200),
       ctx.delay(0),
       ctx.json({
-        items: [
-          { key1: "value1" + valueAppend },
-          { key2: "value2" + valueAppend },
-          { key3: "value3" + valueAppend },
-        ],
+        items: withSearch(items, req.url.searchParams.get("search")),
         page: req.url.searchParams.get("page") ?? 1,
         total: 300,
       })

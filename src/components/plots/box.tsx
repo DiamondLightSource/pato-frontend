@@ -10,6 +10,7 @@ import { mergeDeep } from "utils/generic";
 import { BoxPlot } from "@visx/stats";
 import { getFillColour } from "styles/colours";
 import { defaultMargin } from "utils/config/plot";
+import { NoData } from "components/visualisation/noData";
 
 const label = (d: BoxPlotStats) => d.label;
 const min = (d: BoxPlotStats) => d.min;
@@ -92,6 +93,10 @@ const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
 
     const boxWidth = xScale.bandwidth();
     const constrainedWidth = Math.min(40, boxWidth);
+
+    if (data.length === 0) {
+      return <NoData/>
+    }
 
     return (
       <div>

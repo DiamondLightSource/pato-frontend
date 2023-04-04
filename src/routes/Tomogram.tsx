@@ -49,8 +49,9 @@ const TomogramPage = () => {
     jobs: ProcessingJob[] | null;
   };
   const [searchParams, setSearchParams] = useSearchParams();
-  const [onlyProcessed, setOnlyProcessed] = useState(
-    searchParams.get("onlyTomograms") === "true"
+  const onlyTomograms = useMemo(
+    () => searchParams.get("onlyTomograms") === "true",
+    [searchParams]
   );
   const [accordionIndex, setAccordionIndex] = useState<number | number[]>(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -58,22 +59,23 @@ const TomogramPage = () => {
 
   const updateCollection = useCallback(
     (page: number) => {
-      navigate(`../${page}?onlyTomograms=${onlyProcessed}`, {
-        relative: "path",
-      });
+      navigate(
+        { pathname: `../${page}`, search: `onlyTomograms=${onlyTomograms}` },
+        { relative: "path" }
+      );
     },
-    [navigate, onlyProcessed]
+    [navigate, onlyTomograms]
   );
 
   const updateTomogramFilter = useCallback(() => {
-    setOnlyProcessed(!onlyProcessed);
-    setSearchParams({ onlyTomograms: (!onlyProcessed).toString() });
-  }, [onlyProcessed, setSearchParams]);
+    setSearchParams({ onlyTomograms: (!onlyTomograms).toString() });
+  }, [setSearchParams, onlyTomograms]);
 
   useEffect(() => {
     document.title = `PATo » Tomograms » ${params.collectionIndex}`;
   }, [params]);
 
+  // TODO: Enable this once reprocessing is released
   const buttonDisabled = useMemo(() => {
     return true;
     if (loaderData.jobs === null || !loaderData.collection.dataCollectionId) {
@@ -120,11 +122,11 @@ const TomogramPage = () => {
                 <Icon as={MdList} />
               </Button>
             </Tooltip>
-            <Divider orientation='vertical' h='5vh' />
+            <Divider orientation='vertical' h={10} />
             <MotionPagination
               size='md'
               onChange={updateCollection}
-              defaultPage={parseInt(params.collectionIndex ?? "1")}
+              page={parseInt(params.collectionIndex ?? "1")}
               total={loaderData.total}
             />
           </HStack>
@@ -137,7 +139,7 @@ const TomogramPage = () => {
             <Spacer />
             <Checkbox
               data-testid='filter-tomograms'
-              defaultChecked={onlyProcessed}
+              isChecked={onlyTomograms}
               onChange={updateTomogramFilter}
               alignSelf='end'
             >

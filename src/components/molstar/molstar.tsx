@@ -54,7 +54,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
   }, [rawData]);
 
   useEffect(() => {
-    client.safe_get(`autoProc/${autoProcId}/classification/${classId}/image`).then(async (response) => {
+    client.safeGet(`autoProc/${autoProcId}/classification/${classId}/image`).then(async (response) => {
       if (response.status === 200) {
         setRawData(response.data);
         setDatatimestamp(new Date().getTime().toString());

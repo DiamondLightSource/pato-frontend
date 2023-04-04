@@ -1,4 +1,4 @@
-import { Spacer, VStack, Text, Tag, AccordionButton, HStack, AccordionIcon } from "@chakra-ui/react";
+import { Spacer, VStack, Text, Tag, AccordionButton, HStack, AccordionIcon, Stack } from "@chakra-ui/react";
 import { components } from "schema/main";
 import { parseDate } from "utils/generic";
 
@@ -35,16 +35,30 @@ const TwoLineTitle = ({ title, value }: TwoLineTitleProps) => (
 );
 
 const ProcessingTitle = ({ procJob, autoProc, status }: ProcTitleProps) => (
-  <HStack borderTop='solid 4px' borderColor='diamond.200' py={1.5} px={3} w='100%' bg='diamond.100'>
-    <TwoLineTitle title='Processing Job' value={procJob.processingJobId} />
-    <TwoLineTitle title='AutoProc. Program' value={autoProc.autoProcProgramId} />
-    <TwoLineTitle title='Processing Start' value={parseDate(autoProc.processingStartTime ?? "?")} />
-    <TwoLineTitle title='Processing End' value={parseDate(autoProc.processingEndTime ?? "?")} />
-    <Tag colorScheme={jobStatusColour[status]}>{status}</Tag>
-    <AccordionButton width='auto'>
-      <AccordionIcon />
-    </AccordionButton>
-  </HStack>
+  <Stack
+    direction={{ base: "column", md: "row" }}
+    borderTop='solid 4px'
+    borderColor='diamond.200'
+    py={1.5}
+    px={3}
+    w='100%'
+    bg='diamond.100'
+  >
+    <HStack gap={{ base: 0, xl: 10 }}>
+      <TwoLineTitle title='Processing Job' value={procJob.processingJobId} />
+      <TwoLineTitle title='AutoProc. Program' value={autoProc.autoProcProgramId} />
+      <TwoLineTitle title='Processing Start' value={parseDate(autoProc.processingStartTime ?? "?")} />
+      <TwoLineTitle title='Processing End' value={parseDate(autoProc.processingEndTime ?? "?")} />
+    </HStack>
+    <Spacer />
+    <HStack>
+      <Tag colorScheme={jobStatusColour[status]}>{status}</Tag>
+      <Spacer />
+      <AccordionButton width='auto'>
+        <AccordionIcon />
+      </AccordionButton>
+    </HStack>
+  </Stack>
 );
 
 export { TwoLineTitle, ProcessingTitle };

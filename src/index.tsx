@@ -9,7 +9,7 @@ import { GenericListing } from "routes/GenericListing";
 import { TomogramPage } from "routes/Tomogram";
 import { SpaPage } from "routes/SPA";
 import { Error } from "routes/Error";
-import { Accordion, Button, Text, Heading, Table, Card, Tabs } from "styles/components";
+import { Accordion, Button, Text, Heading, Table, Card, Tabs, Checkbox, Code } from "styles/components";
 import { colours } from "styles/colours";
 import { Home } from "routes/Home";
 import {
@@ -30,21 +30,26 @@ const { ToastContainer } = createStandaloneToast();
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
-if (process.env.REACT_APP_AUTH_TYPE === "dummy") {
-  sessionStorage.setItem("token", "dummyToken");
+if (process.env.REACT_APP_DEMO === "true") {
+  const { worker } = require("./mocks/browser");
+  worker.start();
 }
 
 const theme = extendTheme({
   colors: colours,
-  components: { Accordion, Button, Text, Heading, Table, Card, Tabs },
+  components: { Accordion, Checkbox, Button, Text, Heading, Table, Card, Tabs, Code },
   breakpoints: {
-    sm: '30em', 
-    md: '48em', 
-    lg: '62em', 
-    xl: '80em', 
-    '2xl': '150em',
-  }
+    "sm": "30em",
+    "md": "48em",
+    "lg": "62em",
+    "xl": "80em",
+    "2xl": "150em",
+  },
 });
+
+const checkListingChanged = (current: URL, next: URL) =>
+  (current.searchParams.get("items") !== null || current.searchParams.get("page") !== null) &&
+  current.href !== next.href;
 
 const handleGroupClicked = (item: Record<string, string | number>) => {
   // Temporary workaround
@@ -55,6 +60,8 @@ const handleGroupClicked = (item: Record<string, string | number>) => {
   switch (item.experimentTypeName) {
     case "Single Particle":
       return `${item.dataCollectionGroupId}/spa`;
+    case "Tomogram":
+      return `${item.dataCollectionGroupId}/tomograms/1`;
     default:
       return `${item.dataCollectionGroupId}/spa`;
   }
@@ -80,11 +87,11 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <Error />,
     loader: getUser,
+    shouldRevalidate: () => false,
     children: [
       {
         path: "/",
         element: <Home />,
-        errorElement: <Error />,
         loader: getSessionData,
       },
       {
@@ -97,6 +104,7 @@ const router = createBrowserRouter([
           />
         ),
         loader: ({ request, params }) => getListingData(request, params, "proposals"),
+        shouldRevalidate: ({ currentUrl, nextUrl }) => checkListingChanged(currentUrl, nextUrl),
       },
       {
         path: "/calendar",
@@ -120,6 +128,7 @@ const router = createBrowserRouter([
           />
         ),
         loader: ({ request, params }) => getListingData(request, params, "sessions", processSessionData),
+        shouldRevalidate: ({ currentUrl, nextUrl }) => checkListingChanged(currentUrl, nextUrl),
       },
       {
         path: "/proposals/:propid/sessions/:visitId",
@@ -146,6 +155,7 @@ const router = createBrowserRouter([
           />
         ),
         loader: ({ request, params }) => getListingData(request, params, "dataCollections"),
+        shouldRevalidate: ({ currentUrl, nextUrl }) => checkListingChanged(currentUrl, nextUrl),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/tomograms/",

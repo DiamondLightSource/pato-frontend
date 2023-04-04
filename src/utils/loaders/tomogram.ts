@@ -26,7 +26,7 @@ const getTomogramData = async (params: Params, request: Request) => {
   const onlyTomograms = searchParams.get("onlyTomograms");
   const collectionIndex = params.collectionIndex ?? "1";
 
-  const collectionResponse = await client.safe_get(
+  const collectionResponse = await client.safeGet(
     `${buildEndpoint("dataCollections", params, 1, parseInt(collectionIndex))}&onlyTomograms=${onlyTomograms ?? false}`
   );
 
@@ -43,7 +43,7 @@ const getTomogramData = async (params: Params, request: Request) => {
 
     returnData.collection = parseData(collectionResponse.data.items[0], collectionConfig) as CollectionData;
 
-    const jobsResponse = await client.safe_get(
+    const jobsResponse = await client.safeGet(
       `dataCollections/${collectionResponse.data.items[0].dataCollectionId}/processingJobs?limit=3`
     );
     if (jobsResponse.status === 200 && jobsResponse.data) {
