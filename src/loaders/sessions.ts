@@ -7,7 +7,10 @@ type Session = components["schemas"]["SessionResponse"];
 
 const fixAllDates = (sessions: Session[]) =>
   sessions.map((session) =>
-    Object.assign({}, session, { startDate: parseDate(session.startDate), endDate: parseDate(session.endDate) })
+    Object.assign({}, session, {
+      startDate: parseDate(session.startDate),
+      endDate: parseDate(session.endDate),
+    })
   );
 
 const getSessionData = async () => {
@@ -26,7 +29,10 @@ const getSessionData = async () => {
     return null;
   }
 
-  return { recent: fixAllDates(responses[0].data.items), current: fixAllDates(responses[1].data.items) };
+  return {
+    recent: fixAllDates(responses[0].data.items),
+    current: fixAllDates(responses[1].data.items),
+  };
 };
 
 const query = {
@@ -36,4 +42,5 @@ const query = {
 };
 
 export const sessionLoader = (queryClient: QueryClient) => async () =>
-  (await queryClient.getQueryData(query.queryKey)) ?? (await queryClient.fetchQuery(query));
+  (await queryClient.getQueryData(query.queryKey)) ??
+  (await queryClient.fetchQuery(query));

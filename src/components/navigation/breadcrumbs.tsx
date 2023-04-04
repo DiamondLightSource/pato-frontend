@@ -9,16 +9,25 @@ const Breadcrumbs = () => {
   const pathCrumbs = location.pathname.split("/").filter((name) => {
     return name !== "";
   });
-  
+
   if (pathCrumbs.length === 0) return null;
 
   const currentPage = pathCrumbs.pop();
   let partialPath: Array<string> = Array(pathCrumbs.length + 1).fill("..");
 
   return (
-    <Breadcrumb mb={4} id='breadcrumbs' separator='>'>
+    <Breadcrumb
+      bg='diamond.700'
+      w='100%'
+      color='diamond.50'
+      fontSize='0.9em'
+      py='0.2em'
+      px='7.6vw'
+      id='breadcrumbs'
+      separator='>'
+    >
       <BreadcrumbItem>
-        <BreadcrumbLink aria-label='Home' as={Link} to='/'>
+        <BreadcrumbLink _hover={{ opacity: "0.6" }} aria-label='Home' as={Link} to='/'>
           <MdHome />
         </BreadcrumbLink>
       </BreadcrumbItem>
@@ -26,14 +35,19 @@ const Breadcrumbs = () => {
         partialPath.pop();
         return (
           <BreadcrumbItem key={pathname}>
-            <BreadcrumbLink preventScrollReset={true} as={Link} to={partialPath.join("/")} relative='path'>
+            <BreadcrumbLink
+              preventScrollReset={true}
+              as={Link}
+              to={partialPath.join("/")}
+              relative='path'
+            >
               {pathname}
             </BreadcrumbLink>
           </BreadcrumbItem>
         );
       })}
-      <BreadcrumbItem>
-        <BreadcrumbLink isCurrentPage key={currentPage}>
+      <BreadcrumbItem color='diamond.500'>
+        <BreadcrumbLink color='diamond.500' isCurrentPage key={currentPage}>
           {currentPage}
         </BreadcrumbLink>
       </BreadcrumbItem>

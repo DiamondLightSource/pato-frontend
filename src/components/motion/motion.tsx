@@ -169,7 +169,6 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
   const { data, isLoading } = useQuery({
     queryKey: ["motion", parentId, parentType, innerPage],
     queryFn: async () => await fetchMotionData(parentType, parentId, innerPage),
-    staleTime: 3000000,
   });
 
   const darkImages = useMemo(() => {

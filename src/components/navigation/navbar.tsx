@@ -21,7 +21,7 @@ import { MdLogin, MdMenu, MdClose } from "react-icons/md";
 import { Link as LinkRouter } from "react-router-dom";
 import { AuthState } from "schema/interfaces";
 import { useIsFetching } from "@tanstack/react-query";
-import { PhaseBanner } from "./phaseBanner";
+import { Breadcrumbs } from "./breadcrumbs";
 
 const links = [
   { label: "Proposals", route: "proposals" },
@@ -33,16 +33,13 @@ interface NavLinkProps {
   link: string;
 }
 
-interface NavLinksProps {
-  loggedIn: boolean;
-}
-
 const NavLink = ({ children, link }: NavLinkProps) => (
   <Link
     height='100%'
     alignItems='center'
     display='flex'
     px={2}
+    textDecor='none'
     as={LinkRouter}
     borderTop='4px solid transparent'
     borderBottom='4px solid transparent'
@@ -57,15 +54,13 @@ const NavLink = ({ children, link }: NavLinkProps) => (
   </Link>
 );
 
-const NavLinks = ({ loggedIn }: NavLinksProps) => (
+const NavLinks = () => (
   <>
-    {loggedIn
-      ? links.map((link) => (
-          <NavLink link={link.route} key={link.label}>
-            {link.label}
-          </NavLink>
-        ))
-      : null}
+    {links.map((link) => (
+      <NavLink link={link.route} key={link.label}>
+        {link.label}
+      </NavLink>
+    ))}
   </>
 );
 
@@ -79,7 +74,13 @@ const Navbar = ({ user }: NavbarProps) => {
 
   return (
     <Box zIndex={1} w='100%'>
-      <Flex bg='diamond.800' px={{ base: 4, md: "7.5vw" }} h={12} alignItems={"center"} justifyContent={"space-between"}>
+      <Flex
+        bg='diamond.800'
+        px={{ base: 4, md: "7.5vw" }}
+        h={12}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+      >
         <IconButton
           size={"sm"}
           icon={isOpen ? <MdClose /> : <MdMenu />}
@@ -100,7 +101,7 @@ const Navbar = ({ user }: NavbarProps) => {
             </Box>
           </NavLink>
           <HStack h='100%' as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
-            <NavLinks loggedIn={user !== null} />
+            {user !== null && <NavLinks />}
           </HStack>
         </HStack>
         <Flex alignItems={"center"}>
@@ -150,7 +151,7 @@ const Navbar = ({ user }: NavbarProps) => {
           )}
         </Flex>
       </Flex>
-      {process.env.REACT_APP_DEPLOY_TYPE === "staging" && <PhaseBanner />}
+      <Breadcrumbs />
       {!isOpen && loadingRemaining !== 0 ? (
         <Progress h='0.5em' isIndeterminate size='sm' />
       ) : (
@@ -158,7 +159,7 @@ const Navbar = ({ user }: NavbarProps) => {
       )}
       {isOpen && (
         <VStack bg='diamond.800' as={"nav"} spacing={4}>
-          <NavLinks loggedIn={user !== null} />
+          {user !== null && <NavLinks />}
         </VStack>
       )}
     </Box>

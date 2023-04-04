@@ -31,7 +31,7 @@ const Calendar = React.lazy(() => import("routes/Calendar"));
 const { ToastContainer } = createStandaloneToast();
 const container = document.getElementById("root")!;
 const root = createRoot(container);
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: 1.08e7 } } });
 
 if (process.env.REACT_APP_DEPLOY_TYPE === "demo") {
   const { worker } = require("./mocks/browser");

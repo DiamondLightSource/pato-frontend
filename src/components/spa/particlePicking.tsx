@@ -82,7 +82,6 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
   const { data, isLoading } = useQuery({
     queryKey: ["particlePicker", autoProcId, innerPage],
     queryFn: async () => await fetchParticlePickingData(autoProcId, innerPage!),
-    staleTime: 3000000,
     enabled: !!innerPage,
   });
 

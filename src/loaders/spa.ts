@@ -22,9 +22,17 @@ const spaCollectionConfig: DataConfig = {
       { name: "c2lens", label: "C2 Lens", unit: "%" },
       { name: "c2aperture", label: "C2 Aperture", unit: "μm" },
       { name: "magnification" },
-      { name: ["beamSizeAtSampleX, beamSizeAtSampleY"], unit: "μm", label: "Illuminated Area" },
+      {
+        name: ["beamSizeAtSampleX, beamSizeAtSampleY"],
+        unit: "μm",
+        label: "Illuminated Area",
+      },
       { name: "frameDose", unit: "e⁻/Å²" },
-      { name: "slitGapHorizontal", label: "Energy Filter / Slit Width", unit: "eV" },
+      {
+        name: "slitGapHorizontal",
+        label: "Energy Filter / Slit Width",
+        unit: "eV",
+      },
       { name: "detectorMode" },
     ],
   ],
@@ -49,15 +57,29 @@ export interface SpaResponse {
 }
 
 const getSpaData = async (groupId: string) => {
-  const response = await client.safeGet(includePage(`dataGroups/${groupId}/dataCollections`, 1, 1));
+  const response = await client.safeGet(
+    includePage(`dataGroups/${groupId}/dataCollections`, 1, 1)
+  );
   const returnData = {
-    collection: { info: [], comments: "", fileTemplate: "?", imageDirectory: "?" } as SpaCollectionData,
+    collection: {
+      info: [],
+      comments: "",
+      fileTemplate: "?",
+      imageDirectory: "?",
+    } as SpaCollectionData,
     jobs: null,
   };
 
-  if (response.status === 200 && response.data.items && response.data.items[0].fileTemplate) {
+  if (
+    response.status === 200 &&
+    response.data.items &&
+    response.data.items[0].fileTemplate
+  ) {
     const data = response.data.items[0] as DataCollection;
-    const parsedCollectionData = parseData(data, spaCollectionConfig) as SpaCollectionData;
+    const parsedCollectionData = parseData(
+      data,
+      spaCollectionConfig
+    ) as SpaCollectionData;
 
     parsedCollectionData.info.unshift({
       label: "Acquisition Software",
@@ -73,11 +95,19 @@ const getSpaData = async (groupId: string) => {
 
     if (parsedCollectionData.dataCollectionId) {
       const jobsResponse = await client.safeGet(
-        buildEndpoint("processingJobs", { collectionId: parsedCollectionData.dataCollectionId.toString() }, 25, 1)
+        buildEndpoint(
+          "processingJobs",
+          { collectionId: parsedCollectionData.dataCollectionId.toString() },
+          25,
+          1
+        )
       );
 
       if (jobsResponse.status === 200 && jobsResponse.data.items) {
-        return { collection: parsedCollectionData, jobs: jobsResponse.data.items };
+        return {
+          collection: parsedCollectionData,
+          jobs: jobsResponse.data.items,
+        };
       }
     }
   }
@@ -91,7 +121,9 @@ const queryBuilder = (groupId: string = "0") => ({
   staleTime: 60000,
 });
 
-export const spaLoader = (queryClient: QueryClient) => async (params: Params) => {
-  const query = queryBuilder(params.groupId);
-  return ((await queryClient.getQueryData(query.queryKey)) ?? (await queryClient.fetchQuery(query))) as SpaResponse;
-};
+export const spaLoader =
+  (queryClient: QueryClient) => async (params: Params) => {
+    const query = queryBuilder(params.groupId);
+    return ((await queryClient.getQueryData(query.queryKey)) ??
+      (await queryClient.fetchQuery(query))) as SpaResponse;
+  };

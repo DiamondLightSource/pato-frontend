@@ -85,7 +85,6 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
   const { data, isLoading } = useQuery({
     queryKey: ["tomogramAutoProc", autoProc.autoProcProgramId],
     queryFn: async () => await fetchTomogramData(autoProc.autoProcProgramId),
-    staleTime: 3000000,
   });
 
   return (

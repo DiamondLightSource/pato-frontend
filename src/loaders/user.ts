@@ -13,7 +13,9 @@ const getUser = async () => {
 
   try {
     const response = await client.authGet("user");
-    return response.status === 200 ? { fedid: response.data.fedid, name: response.data.givenName } : null;
+    return response.status === 200
+      ? { fedid: response.data.fedid, name: response.data.givenName }
+      : null;
   } catch (NetworkError) {
     return user;
   }

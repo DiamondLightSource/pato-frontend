@@ -1,11 +1,38 @@
-import { Box } from "@chakra-ui/react";
+import {
+  Box,
+  Divider,
+  HStack,
+  Tag,
+  VStack,
+  Text,
+  Link,
+} from "@chakra-ui/react";
 import { Outlet, useLoaderData, useSearchParams } from "react-router-dom";
-import { Breadcrumbs } from "components/navigation/breadcrumbs";
 import { Footer } from "components/navigation/footer";
 import { Navbar } from "components/navigation/navbar";
 import { AuthState } from "schema/interfaces";
 import "styles/main.css";
 import { useEffect } from "react";
+
+const PhaseBanner = () => (
+  <VStack mb='10px'>
+    <HStack w='100%'>
+      <Tag
+        fontWeight='600'
+        bg='diamond.700'
+        color='diamond.50'
+        borderRadius='0'
+      >
+        BETA
+      </Tag>
+      <Text>
+        This version of the service is still in testing, report any issues to
+        the <Link color='diamond.700'>developers.</Link>
+      </Text>
+    </HStack>
+    <Divider borderColor='diamond.200' />
+  </VStack>
+);
 
 const Root = () => {
   const loaderData = useLoaderData() as AuthState | null;
@@ -24,8 +51,8 @@ const Root = () => {
   return (
     <div className='rootContainer'>
       <Navbar user={loaderData} />
-      <Box marginTop={8} className='main'>
-        <Breadcrumbs />
+      <Box className='main'>
+        {process.env.REACT_APP_DEPLOY_TYPE === "beta" && <PhaseBanner />}
         <Outlet />
       </Box>
       <Footer />
