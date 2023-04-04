@@ -1,6 +1,5 @@
-import { MotionPagination } from "./pagination";
-import React from "react";
-import { renderWithProviders } from "../../utils/test-utils";
+import { MotionPagination } from "components/motion/pagination";
+import { renderWithProviders } from "utils/test-utils";
 import { fireEvent, screen } from "@testing-library/react";
 
 describe("MotionPagination", () => {
@@ -18,13 +17,13 @@ describe("MotionPagination", () => {
   });
 
   it("should respect default item set by user", async () => {
-    renderWithProviders(<MotionPagination displayDefault={90} total={112} />);
+    renderWithProviders(<MotionPagination page={90} total={112} />);
 
     expect(screen.getByDisplayValue("90")).toBeInTheDocument();
   });
 
   it("should not display default if default is an invalid page number", async () => {
-    renderWithProviders(<MotionPagination displayDefault={-1} total={112} />);
+    renderWithProviders(<MotionPagination page={-1} total={112} />);
 
     expect(screen.queryByDisplayValue("-1")).not.toBeInTheDocument();
   });
@@ -82,5 +81,16 @@ describe("MotionPagination", () => {
     fireEvent.click(input);
 
     expect(mockCallback).toBeCalledWith(111);
+  });
+
+  it("should not change page if page is controlled externally", async () => {
+    const mockCallback = jest.fn();
+    renderWithProviders(<MotionPagination total={112} onChange={mockCallback} />);
+
+    const input = screen.getByLabelText("Previous Page");
+    fireEvent.click(input);
+
+    expect(mockCallback).toBeCalledWith(111);
+    expect(screen.getByLabelText("Current Page")).not.toHaveAttribute("value", "111");
   });
 });

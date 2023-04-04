@@ -24,7 +24,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import parseAPNG, { Frame } from "apng-js";
-import { client } from "../../utils/api/client";
+import { client } from "utils/api/client";
 import { MdFastForward, MdFastRewind, MdPause, MdPlayArrow } from "react-icons/md";
 
 interface ImageProps {
@@ -48,7 +48,7 @@ const APNGViewer = ({ src, width = "100%", height = "64vh" }: ImageProps) => {
   }, [playForward]);
 
   useEffect(() => {
-    client.safe_get(src).then((response) => {
+    client.safeGet(src).then((response) => {
       if (response.status !== 200) {
         setFrames(null);
       }

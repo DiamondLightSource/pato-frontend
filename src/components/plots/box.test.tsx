@@ -1,6 +1,6 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import { renderWithProviders } from "../../utils/test-utils";
-import { Box } from "./box";
+import { renderWithProviders } from "utils/test-utils";
+import { Box } from "components/plots/box";
 
 describe("Box Plot", () => {
   it("should render graph", () => {
@@ -90,6 +90,12 @@ describe("Box Plot", () => {
 
     expect(screen.getByText("0.0")).toBeInTheDocument();
     expect(screen.getAllByText("5.0").length).toBe(2);
+  });
+
+  it("should display message when no data is available", () => {
+    renderWithProviders(<Box data={[]} width={1000} height={1000} />);
+
+    expect(screen.getByText("No Data Available")).toBeInTheDocument();
   });
 
   it("should not render outside domain boundaries", () => {

@@ -10,3 +10,19 @@
 .fc-button-primary:hover {
   background-color: var(--chakra-colors-diamond-700) !important;
 }
+
+.fc-popover-header {
+  background-color: var(--chakra-colors-diamond-200) !important;
+}
+
+.fc-popover {
+  box-shadow: none !important;
+}
+
+.fc-button:disabled {
+  cursor: not-allowed;
+}
+
+.fc-button:disabled:hover {
+  background-color: var(--chakra-colors-diamond-600) !important;
+}

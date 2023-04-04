@@ -1,14 +1,14 @@
-import { Spacer, HStack, Divider, Heading, Text, Checkbox, VStack, Grid, Skeleton } from "@chakra-ui/react";
-import { ImageCard } from "../visualisation/image";
-import { InfoGroup } from "../visualisation/infogroup";
-import { MotionPagination } from "../motion/pagination";
+import { Spacer, HStack, Divider, Heading, Checkbox, VStack, Grid, Skeleton } from "@chakra-ui/react";
+import { ImageCard } from "components/visualisation/image";
+import { InfoGroup } from "components/visualisation/infogroup";
+import { MotionPagination } from "components/motion/pagination";
 import { useEffect, useState } from "react";
-import { client } from "../../utils/api/client";
-import { parseData } from "../../utils/generic";
-import { components } from "../../schema/main";
-import { DataConfig, SpaProps, Info, BoxPlotStats } from "../../schema/interfaces";
-import { PlotContainer } from "../visualisation/plotContainer";
-import { Box } from "../plots/box";
+import { client } from "utils/api/client";
+import { parseData } from "utils/generic";
+import { components } from "schema/main";
+import { DataConfig, SpaProps, Info, BoxPlotStats } from "schema/interfaces";
+import { PlotContainer } from "components/visualisation/plotContainer";
+import { Box } from "components/plots/box";
 
 type ParticlePickingSchema = components["schemas"]["ParticlePicker"];
 type IceThickness = components["schemas"]["IceThicknessWithAverage"];
@@ -17,7 +17,7 @@ interface ParticleProps extends SpaProps {
   /* Total number of available items */
   total: number;
   /* Page for parent motion correction, used if page match lock is set */
-  currentPage?: number;
+  page?: number;
 }
 
 const particleConfig: DataConfig = {
@@ -33,8 +33,9 @@ const convertToBoxPlot = (data: components["schemas"]["RelativeIceThickness"], l
   return { min: data.minimum, max: data.maximum, median: data.median, q1: data.q1, q3: data.q3, label };
 };
 
-const ParticlePicking = ({ autoProcId, total, currentPage }: ParticleProps) => {
+const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
   const [innerPage, setInnerPage] = useState<number | undefined>();
+  const [innerTotal, setInnerTotal] = useState<number>(total);
   const [lockPage, setLockpage] = useState<boolean>(true);
   const [particleInfo, setParticleInfo] = useState<Info[] | null | undefined>();
   const [summaryImage, setSummaryImage] = useState("");
@@ -42,28 +43,26 @@ const ParticlePicking = ({ autoProcId, total, currentPage }: ParticleProps) => {
 
   useEffect(() => {
     if (lockPage) {
-      if (currentPage !== undefined && currentPage > 0) {
-        setInnerPage(currentPage);
-      } else {
-        setInnerPage(total);
-      }
+      setInnerPage(page !== undefined && page > 0 ? page : total);
     }
-  }, [currentPage, lockPage, total]);
+  }, [page, lockPage, total]);
 
   useEffect(() => {
     if (innerPage) {
-      client.safe_get(`autoProc/${autoProcId}/particlePicker?page=${innerPage - 1}&limit=1`).then((response) => {
-        if (response.status === 200) {
+      client.safeGet(`autoProc/${autoProcId}/particlePicker?page=${innerPage - 1}&limit=1`).then((response) => {
+        if (response.status === 200 && response.data.items.length > 0) {
           const data = response.data.items[0] as ParticlePickingSchema;
           if (data.particlePickerId) {
             setParticleInfo(parseData(data, particleConfig).info);
-            client.safe_get(`autoProc/${autoProcId}/particlePicker/${data.particlePickerId}/image`).then((response) => {
+            setInnerTotal(response.data.total as number);
+
+            client.safeGet(`autoProc/${autoProcId}/particlePicker/${data.particlePickerId}/image`).then((response) => {
               if (response.status === 200) {
                 setSummaryImage(URL.createObjectURL(response.data));
               }
             });
 
-            client.safe_get(`movies/${data.movieId}/iceThickness?getAverages=true`).then((response) => {
+            client.safeGet(`movies/${data.movieId}/iceThickness?getAverages=true`).then((response) => {
               if (response.status === 200) {
                 const data = response.data as IceThickness;
 
@@ -73,10 +72,11 @@ const ParticlePicking = ({ autoProcId, total, currentPage }: ParticleProps) => {
                 ]);
               }
             });
+            return;
           }
-        } else {
-          setParticleInfo(null);
         }
+
+        setParticleInfo(null);
       });
     }
   }, [innerPage, autoProcId]);
@@ -92,13 +92,13 @@ const ParticlePicking = ({ autoProcId, total, currentPage }: ParticleProps) => {
           size='sm'
           defaultChecked
         >
-          <Text verticalAlign='middle'>Match Selected Motion Correction Page</Text>
+          Match Selected Motion Correction Page
         </Checkbox>
         <MotionPagination
           disabled={lockPage}
-          total={total}
+          total={lockPage ? total : innerTotal}
           onChange={(page) => setInnerPage(page)}
-          displayDefault={innerPage}
+          page={innerPage}
         />
       </HStack>
       <Divider />

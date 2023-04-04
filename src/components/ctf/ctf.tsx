@@ -4,12 +4,12 @@ import {
   defocusPlotOptions,
   resolutionPlotOptions,
   resolutionSpaPlotOptions,
-} from "../../utils/config/plot";
-import { PlotContainer } from "../visualisation/plotContainer";
+} from "utils/config/plot";
+import { PlotContainer } from "components/visualisation/plotContainer";
 import { useEffect, useState } from "react";
-import { client } from "../../utils/api/client";
-import { CtfData } from "../../schema/interfaces";
-import { Scatter } from "../plots/scatter";
+import { client } from "utils/api/client";
+import { CtfData } from "schema/interfaces";
+import { Scatter } from "components/plots/scatter";
 
 interface CTFProps {
   parentType: "autoProc" | "tomograms";
@@ -24,7 +24,7 @@ const CTF = ({ parentId, parentType, onGraphClicked }: CTFProps) => {
 
   useEffect(() => {
     const ctfData: CtfData = { resolution: [], astigmatism: [], defocus: [] };
-    client.safe_get(`${parentType}/${parentId}/ctf`).then((response) => {
+    client.safeGet(`${parentType}/${parentId}/ctf`).then((response) => {
       if (Array.isArray(response.data.items)) {
         for (const ctf of response.data.items) {
           // Converting astigmatism and defocus from Angstrom
@@ -40,7 +40,9 @@ const CTF = ({ parentId, parentType, onGraphClicked }: CTFProps) => {
 
   return (
     <>
-      <Heading variant='collection'>Summary</Heading>
+      <Heading variant='collection'>
+        Summary
+      </Heading>
       <Divider />
       {ctfData === undefined ? (
         <Skeleton h='20vh' />

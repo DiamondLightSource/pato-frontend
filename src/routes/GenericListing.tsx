@@ -1,9 +1,14 @@
 import { Divider, Heading, HStack, Spacer, Box } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-import { createSearchParams, useLoaderData, useNavigate } from "react-router-dom";
-import { Pagination } from "../components/navigation/pagination";
-import { Table } from "../components/visualisation/table";
-import { DebouncedInput } from "../components/input/debounced";
+import {
+  createSearchParams,
+  useLoaderData,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
+import { Pagination } from "components/navigation/pagination";
+import { Table } from "components/visualisation/table";
+import { DebouncedInput } from "components/input/debounced";
 
 interface TableProps {
   headers: {
@@ -11,7 +16,10 @@ interface TableProps {
     label: string;
   }[];
   heading: string;
-  makePathCallback?: (item: Record<string, string | number>, index: number) => string;
+  makePathCallback?: (
+    item: Record<string, string | number>,
+    index: number
+  ) => string;
 }
 
 interface TableData {
@@ -21,9 +29,12 @@ interface TableData {
 
 const GenericListing = ({ headers, heading, makePathCallback }: TableProps) => {
   const data = useLoaderData() as TableData;
-  const [page, setPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
-  const [search, setSearch] = useState("");
+  const [searchParams] = useSearchParams();
+  const [page, setPage] = useState(parseInt(searchParams.get("page") || "1"));
+  const [itemsPerPage, setItemsPerPage] = useState(
+    parseInt(searchParams.get("items") || "20")
+  );
+  const [search, setSearch] = useState(searchParams.get("search") || "");
 
   const navigate = useNavigate();
 
@@ -37,7 +48,11 @@ const GenericListing = ({ headers, heading, makePathCallback }: TableProps) => {
       navigate(
         {
           pathname: ".",
-          search: `?${createSearchParams({ search: search, page: page.toString(), items: itemsPerPage.toString() })}`,
+          search: `?${createSearchParams({
+            search: search,
+            page: page.toString(),
+            items: itemsPerPage.toString(),
+          })}`,
         },
         { replace: true }
       ),
@@ -66,15 +81,25 @@ const GenericListing = ({ headers, heading, makePathCallback }: TableProps) => {
           borderColor='gray.600'
           bg='diamond.50'
           onChangeEnd={handleSearch}
-          w='20%'
+          w={{ base: "auto", md: "20%" }}
           size='sm'
           placeholder='Search...'
         />
       </HStack>
       <Divider mb={4} />
-      <Table data={data.data} headers={headers} label={heading} onClick={handleRowClicked} />
+      <Table
+        data={data.data}
+        headers={headers}
+        label={heading}
+        onClick={handleRowClicked}
+      />
       <Divider />
-      <Pagination value={page} onPageChange={setPage} onItemCountChange={setItemsPerPage} total={data.total} />
+      <Pagination
+        value={page}
+        onPageChange={setPage}
+        onItemCountChange={setItemsPerPage}
+        total={data.total}
+      />
     </Box>
   );
 };

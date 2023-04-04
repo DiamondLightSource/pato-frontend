@@ -1,6 +1,6 @@
 import { fireEvent, screen } from "@testing-library/react";
-import { renderWithProviders } from "../utils/test-utils";
-import Calendar from "./Calendar";
+import { renderWithProviders } from "utils/test-utils";
+import Calendar from "routes/Calendar";
 
 const mockNavigate = jest.fn();
 

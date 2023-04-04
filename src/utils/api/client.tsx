@@ -1,12 +1,16 @@
 import { createStandaloneToast } from "@chakra-ui/toast";
-import { setLoading } from "../../features/uiSlice";
-import { store } from "../../store/store";
-import { baseToast } from "../../styles/components";
+import { setLoading } from "features/uiSlice";
+import { store } from "store/store";
+import { baseToast } from "styles/components";
 const { toast } = createStandaloneToast();
 
 const controller = new AbortController();
 const timeoutFetch = setTimeout(() => controller.abort(), 3000);
 let timer: ReturnType<typeof setTimeout>;
+
+const defaultSettings: Partial<RequestConfig> = {
+  credentials: process.env.NODE_ENV === "development" ? "include" : "strict",
+};
 
 interface RequestConfig {
   method: string;
@@ -22,11 +26,12 @@ interface Response {
   url: string;
 }
 
-export async function client(
+export const client = async (
   endpoint: string,
   customConfig: Record<any, any> = {},
-  body?: Record<any, any> | FormData
-): Promise<never | Response> {
+  body?: Record<any, any> | FormData,
+  prefix = process.env.REACT_APP_API_ENDPOINT
+): Promise<never | Response> => {
   const config: RequestConfig = {
     method: body != null ? "POST" : "GET",
     ...customConfig,
@@ -35,6 +40,7 @@ export async function client(
     },
     signal: controller.signal,
     body: undefined,
+    ...defaultSettings,
   };
 
   if (body != null) {
@@ -47,13 +53,11 @@ export async function client(
   }
 
   let data;
-  let target =
-    (endpoint === "user" ? process.env.REACT_APP_AUTH_ENDPOINT : process.env.REACT_APP_API_ENDPOINT) + endpoint;
 
   try {
     store.dispatch(setLoading(true));
     clearTimeout(timer); // Debounces loading state
-    const response = await fetch(target, config);
+    const response = await fetch(prefix + endpoint, config);
     clearTimeout(timeoutFetch);
 
     switch (response.headers.get("content-type")) {
@@ -92,19 +96,18 @@ export async function client(
       });
     }
 
-    console.error(err);
-    return Promise.reject();
+    throw err;
   } finally {
     timer = setTimeout(() => store.dispatch(setLoading(false)), 200);
   }
-}
+};
 
-client.safe_get = async (endpoint: string, customConfig = {}) => {
+client.safeGet = async (endpoint: string, customConfig = {}) => {
   const resp = await client.get(endpoint, customConfig);
 
-  if (resp.status === 401) {
+  if (resp.status === 401 && !window.location.href.includes("code=")) {
     const url = encodeURIComponent(window.location.href);
-    window.location.href = `${process.env.REACT_APP_AUTH_ENDPOINT}authorise?redirect_uri=${url}`;
+    window.location.href = `${process.env.REACT_APP_AUTH_ENDPOINT}authorise?redirect_uri=${url}&responseType=code`;
   }
 
   return resp;
@@ -115,16 +118,21 @@ client.get = async (endpoint: string, customConfig = {}) => {
     endpoint,
     (customConfig = {
       ...customConfig,
-      headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
-      method: "GET",
     })
   );
 };
 
-client.post = async (endpoint: string, body: Record<any, any> | FormData, customConfig = {}) => {
+client.authGet = async (endpoint: string, customConfig = {}) => {
   return await client(
     endpoint,
-    { ...customConfig, headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` } },
-    body
+    (customConfig = {
+      ...customConfig,
+    }),
+    undefined,
+    process.env.REACT_APP_AUTH_ENDPOINT
   );
+};
+
+client.post = async (endpoint: string, body: Record<any, any> | FormData, customConfig = {}) => {
+  return await client(endpoint, { ...customConfig }, body);
 };

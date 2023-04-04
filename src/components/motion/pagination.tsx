@@ -6,7 +6,7 @@ type ChangeCallback = (page: number) => void;
 interface MotionPaginationProps {
   total: number;
   size?: "xs" | "md";
-  displayDefault?: number;
+  page?: number;
   onChange?: ChangeCallback;
   startFrom?: "start" | "middle" | "end";
   disabled?: boolean;
@@ -16,7 +16,7 @@ const MotionPagination = ({
   total,
   onChange,
   size = "xs",
-  displayDefault,
+  page,
   startFrom = "end",
   disabled = false,
 }: MotionPaginationProps) => {
@@ -24,26 +24,27 @@ const MotionPagination = ({
 
   const setPage = useCallback(
     (page: number) => {
-      setValue(page.toString());
       if (!isNaN(page) && onChange !== undefined) {
         onChange(page);
+      } else {
+        setValue(page.toString());
       }
     },
     [onChange]
   );
 
   useEffect(() => {
-    if (displayDefault && displayDefault > 0) {
-      setValue(displayDefault.toString());
+    if (page && page > 0) {
+      setValue(page.toString());
     }
-  }, [displayDefault]);
+  }, [page]);
 
   useEffect(() => {
     if (value !== undefined || total === 0) {
       return;
     }
 
-    if (total !== undefined && displayDefault === undefined) {
+    if (total !== undefined && page === undefined) {
       switch (startFrom) {
         case "end":
           setValue(total.toString());
@@ -58,9 +59,9 @@ const MotionPagination = ({
           break;
       }
     }
-  }, [total, startFrom, displayDefault, setPage, value]);
+  }, [total, startFrom, page, setPage, value]);
 
-  const editPage = (event: ReactFocusEvent<HTMLInputElement>) => {
+  const editPage = useCallback((event: ReactFocusEvent<HTMLInputElement>) => {
     let newPage = parseInt(event.target.value);
 
     if (newPage > total) {
@@ -73,7 +74,7 @@ const MotionPagination = ({
     if (!isNaN(newPage)) {
       setPage(newPage);
     }
-  };
+  },[setPage, total]);
 
   if (value === undefined) {
     return <Skeleton h='20px' w={size === "xs" ? "210px" : "295px"} />;
@@ -99,7 +100,7 @@ const MotionPagination = ({
           aria-label='Current Page'
           onChange={(event) => setValue(event.target.value)}
           value={value}
-          onBlur={(event) => editPage(event)}
+          onBlur={editPage}
         />
         <InputRightAddon aria-label='Total Pages' children={total} />
       </InputGroup>

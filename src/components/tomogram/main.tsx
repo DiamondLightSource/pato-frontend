@@ -18,23 +18,23 @@ import {
   Spacer,
   Icon,
 } from "@chakra-ui/react";
-import { ImageCard } from "../visualisation/image";
-import { InfoGroup } from "../visualisation/infogroup";
-import { PlotContainer } from "../visualisation/plotContainer";
-import { Motion } from "../motion/motion";
+import { ImageCard } from "components/visualisation/image";
+import { InfoGroup } from "components/visualisation/infogroup";
+import { PlotContainer } from "components/visualisation/plotContainer";
+import { Motion } from "components/motion/motion";
 import { Suspense, useEffect, useState } from "react";
-import { client } from "../../utils/api/client";
-import { TomogramData, BasePoint, BaseProcessingJobProps, DataConfig } from "../../schema/interfaces";
-import { CTF } from "../ctf/ctf";
-import { Scatter } from "../plots/scatter";
-import { setImage } from "../../utils/api/response";
-import { components } from "../../schema/main";
-import { ProcessingTitle } from "../visualisation/processingTitle";
-import { parseData } from "../../utils/generic";
+import { client } from "utils/api/client";
+import { TomogramData, BasePoint, BaseProcessingJobProps, DataConfig } from "schema/interfaces";
+import { CTF } from "components/ctf/ctf";
+import { Scatter } from "components/plots/scatter";
+import { setImage } from "utils/api/response";
+import { components } from "schema/main";
+import { ProcessingTitle } from "components/visualisation/processingTitle";
+import { parseData } from "utils/generic";
 import React from "react";
 import { MdOpenInNew } from "react-icons/md";
 
-const APNGViewer = React.lazy(() => import("../visualisation/apng"));
+const APNGViewer = React.lazy(() => import("components/visualisation/apng"));
 
 const tomogramConfig: DataConfig = {
   include: [
@@ -57,7 +57,7 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
   const [tomogram, setTomogram] = useState<TomogramData | null>();
 
   useEffect(() => {
-    client.safe_get(`autoProc/${autoProc.autoProcProgramId}/tomogram`).then((response) => {
+    client.safeGet(`autoProc/${autoProc.autoProcProgramId}/tomogram`).then((response) => {
       if (response.status === 200) {
         const tomogram = response.data as components["schemas"]["TomogramResponse"];
 
@@ -65,7 +65,7 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
         setImage(`tomograms/${tomogram.tomogramId}/projection?axis=xy`, setXyProjImage);
         setImage(`tomograms/${tomogram.tomogramId}/projection?axis=xz`, setXzProjImage);
 
-        client.safe_get(`tomograms/${tomogram.tomogramId}/shiftPlot`).then((response) => {
+        client.safeGet(`tomograms/${tomogram.tomogramId}/shiftPlot`).then((response) => {
           if (response.status === 200 && response.data.items) {
             setShiftData(response.data.items);
           }
@@ -82,7 +82,7 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
     <AccordionItem isDisabled={false}>
       <ProcessingTitle autoProc={autoProc} procJob={procJob} status={status} />
       {active && (
-        <AccordionPanel pt={4}>
+        <AccordionPanel p={0}>
           {tomogram === null ? (
             <Motion parentId={procJob.dataCollectionId} parentType='dataCollections' />
           ) : tomogram === undefined ? (
@@ -93,7 +93,7 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
               <Skeleton w='100%' h='20vh' />
             </VStack>
           ) : (
-            <Grid gap={3}>
+            <Grid gap={3} bg='diamond.75' p={4} templateColumns={{base: "", "2xl": "repeat(2, 1fr)"}}>
               <GridItem>
                 <Motion parentType='tomograms' parentId={tomogram.tomogramId} />
               </GridItem>

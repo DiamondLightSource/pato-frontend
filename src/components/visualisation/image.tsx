@@ -14,7 +14,7 @@ import {
   Skeleton,
 } from "@chakra-ui/react";
 import { MouseEvent, useState } from "react";
-import { BaseCardProp } from "../../schema/interfaces";
+import { BaseCardProp } from "schema/interfaces";
 
 interface ImageProps extends BaseCardProp {
   /** Source path for the image */

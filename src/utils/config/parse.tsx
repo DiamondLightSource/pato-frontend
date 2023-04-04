@@ -1,4 +1,4 @@
-import { DataConfig } from "../../schema/interfaces";
+import { DataConfig } from "schema/interfaces";
 
 export const collectionConfig: DataConfig = {
   include: [
@@ -26,4 +26,5 @@ export const classificationConfig: DataConfig = {
     { name: "resolution" },
     { name: "numberOfParticles" },
   ],
+  root: ["particleClassificationId"]
 };

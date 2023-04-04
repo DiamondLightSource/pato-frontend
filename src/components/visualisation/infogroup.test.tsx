@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
-import { renderWithProviders } from "../../utils/test-utils";
-import { InfoGroup } from "./infogroup";
+import { renderWithProviders } from "utils/test-utils";
+import { InfoGroup } from "components/visualisation/infogroup";
 
 describe("InfoGroup", () => {
   it('should display "?" when no value is present', () => {

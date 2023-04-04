@@ -1,6 +1,6 @@
 import { fireEvent, screen } from "@testing-library/react";
-import { renderWithProviders } from "../../utils/test-utils";
-import { BarChart } from "./bar";
+import { renderWithProviders } from "utils/test-utils";
+import { BarChart } from "components/plots/bar";
 
 describe("Box Plot", () => {
   it("should render bar", () => {
@@ -77,6 +77,12 @@ describe("Box Plot", () => {
     fireEvent.mouseLeave(bar);
 
     expect(screen.queryByLabelText("Y Value")).not.toBeInTheDocument();
+  });
+
+  it("should display message when no data is available", () => {
+    renderWithProviders(<BarChart data={[]} width={1000} height={1000} />);
+
+    expect(screen.getByText("No Data Available")).toBeInTheDocument();
   });
 
   it("should clamp bars at user set domain", () => {

@@ -1,6 +1,8 @@
 import { Motion } from "./motion";
-import { renderWithProviders } from "../../utils/test-utils";
-import { screen, waitFor } from "@testing-library/react";
+import { renderWithProviders } from "utils/test-utils";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { server } from "mocks/server";
+import { rest } from "msw";
 
 describe("Motion", () => {
   window.URL.createObjectURL = jest.fn();
@@ -20,18 +22,20 @@ describe("Motion", () => {
     renderWithProviders(<Motion parentType='tomograms' parentId={3} />);
 
     await screen.findByText("20");
-
     await expect(screen.findByTestId("comment")).resolves.toBeEnabled();
   });
 
   it("should call callback when first motion changes", async () => {
     const motionChanged = jest.fn();
-    renderWithProviders(<Motion parentType='tomograms' onMotionChanged={motionChanged} parentId={3} />);
+    renderWithProviders(<Motion parentType='tomograms' onPageChanged={motionChanged} parentId={3} />);
+
     await waitFor(() => expect(motionChanged).toBeCalled());
   });
 
   it("should display message when no data is available", async () => {
+    server.use(rest.get("http://localhost/dataCollections/:id/motion", (req, res, ctx) => res.once(ctx.status(404))));
     renderWithProviders(<Motion parentType='dataCollections' parentId={9} />);
+
     await waitFor(() => screen.findByText("No Motion Correction Data Available"));
   });
 
@@ -42,15 +46,27 @@ describe("Motion", () => {
     await waitFor(() => expect(totalChanged).toBeCalled());
   });
 
-  it("should respect current page prop if passed", async () => {
-    const totalChanged = jest.fn();
-    renderWithProviders(<Motion currentPage={5} parentType='tomograms' onTotalChanged={totalChanged} parentId={3} />);
-
-    expect(await screen.findByLabelText("Current Page")).toHaveValue("5");
-  });
-
   it("displays '?' if passed values for raw total and total include NaN", async () => {
     renderWithProviders(<Motion parentType='tomograms' parentId={4} />);
     await screen.findByRole("heading", { name: "?" });
+  });
+
+  it("should update current page if external control variable changes", async () => {
+    const { rerender } = renderWithProviders(<Motion parentType='tomograms' parentId={4} page={1} />);
+    await waitFor(() => expect(screen.getByLabelText("Current Page")).toHaveAttribute("value", "1"));
+
+    rerender(<Motion parentType='tomograms' parentId={4} page={2} />);
+    await waitFor(() => expect(screen.getByLabelText("Current Page")).toHaveAttribute("value", "2"));
+  });
+
+  it("should not update page if current page is controlled externally", async () => {
+    const motionCallback = jest.fn();
+    renderWithProviders(<Motion parentType='tomograms' parentId={4} page={1} onPageChanged={motionCallback} />);
+    await waitFor(() => expect(screen.getByLabelText("Current Page")).toHaveAttribute("value", "1"));
+
+    fireEvent.click(screen.getByLabelText("Next Page"));
+    await waitFor(() => expect(motionCallback).toBeCalled());
+
+    expect(screen.getByLabelText("Current Page")).not.toHaveAttribute("value", "2");
   });
 });

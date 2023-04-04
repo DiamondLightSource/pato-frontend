@@ -1,5 +1,5 @@
 import { Box, Text, Grid, GridItem, Skeleton } from "@chakra-ui/react";
-import { Info } from "../../schema/interfaces";
+import { Info } from "schema/interfaces";
 
 interface InfoProps {
   info: Info[];

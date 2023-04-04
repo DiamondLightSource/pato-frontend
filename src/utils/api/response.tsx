@@ -1,10 +1,10 @@
 import { Dispatch, SetStateAction } from "react";
-import { BarStats } from "../../schema/interfaces";
-import { client } from "./client";
+import { BarStats } from "schema/interfaces";
+import { client } from "utils/api/client";
 
 const setImage = (endpoint: string, setState: Dispatch<SetStateAction<string | undefined>>) => {
   setState(undefined);
-  client.safe_get(endpoint).then((response) => {
+  client.safeGet(endpoint).then((response) => {
     if (response.status === 200) {
       setState(URL.createObjectURL(response.data));
     } else {
@@ -18,7 +18,7 @@ const setHistogram = (
   setState: Dispatch<SetStateAction<BarStats[] | null | undefined>>,
   div: number = 1
 ) => {
-  client.safe_get(endpoint).then((response) => {
+  client.safeGet(endpoint).then((response) => {
     if (response.status === 200 && response.data.items) {
       const histogram: BarStats[] = [];
       for (const bin of response.data.items) {
@@ -36,4 +36,12 @@ const setHistogram = (
   });
 };
 
-export { setImage, setHistogram };
+const downloadBuffer = (buffer: ArrayBuffer, contentType: string, filename: string = "volume.mrc") => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([buffer], { type: contentType }));
+  a.download = filename;
+  a.click();
+  a.remove();
+};
+
+export { setImage, setHistogram, downloadBuffer };

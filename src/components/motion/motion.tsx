@@ -17,20 +17,21 @@ import {
   GridItem,
   Skeleton,
   Tooltip,
+  Stack,
 } from "@chakra-ui/react";
-import { ImageCard } from "../visualisation/image";
-import { InfoGroup } from "../visualisation/infogroup";
-import { PlotContainer } from "../visualisation/plotContainer";
-import { MotionPagination } from "./pagination";
-import { useEffect, useState } from "react";
+import { ImageCard } from "components/visualisation/image";
+import { InfoGroup } from "components/visualisation/infogroup";
+import { PlotContainer } from "components/visualisation/plotContainer";
+import { MotionPagination } from "components/motion/pagination";
+import { useCallback, useEffect, useState } from "react";
 import { MdComment } from "react-icons/md";
-import { client } from "../../utils/api/client";
-import { parseData } from "../../utils/generic";
-import { driftPlotOptions } from "../../utils/config/plot";
-import { buildEndpoint } from "../../utils/api/endpoint";
-import { BasePoint, Info } from "../../schema/interfaces";
-import { Scatter } from "../plots/scatter";
-import { setImage } from "../../utils/api/response";
+import { client } from "utils/api/client";
+import { parseData } from "utils/generic";
+import { driftPlotOptions } from "utils/config/plot";
+import { buildEndpoint } from "utils/api/endpoint";
+import { BasePoint, Info } from "schema/interfaces";
+import { Scatter } from "components/plots/scatter";
+import { setImage } from "utils/api/response";
 
 interface MotionData {
   /** Total number of tilt alignment images available */
@@ -51,12 +52,12 @@ interface MotionProps {
   parentId: number;
   /** Whether parent is a tomogram or data collection */
   parentType: "tomograms" | "dataCollections" | "autoProc";
-  /** Callback for when a new motion correction item is requested and received */
-  onMotionChanged?: (motion: MotionData, page: number) => void;
+  /** Callback for when page changes */
+  onPageChanged?: (newPage: number) => void;
   /** Callback for when the number of available items changes */
   onTotalChanged?: (newTotal: number) => void;
   /** Current page */
-  currentPage?: number;
+  page?: number;
 }
 
 const motionConfig = {
@@ -106,8 +107,8 @@ const calcDarkImages = (total: number, rawTotal: number) => {
   return `Dark Images: ${rawTotal - total}`;
 };
 
-const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType, currentPage }: MotionProps) => {
-  const [page, setPage] = useState<number | undefined>();
+const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: MotionProps) => {
+  const [innerPage, setInnerPage] = useState<number | undefined>();
   const [motion, setMotion] = useState<MotionData | null>();
   const [drift, setDrift] = useState<BasePoint[]>([]);
   const [mgImage, setMgImage] = useState<string>();
@@ -134,79 +135,91 @@ const Motion = ({ parentId, onMotionChanged, onTotalChanged, parentType, current
   };
 
   useEffect(() => {
-    if (currentPage) {
-      setPage(currentPage);
+    if (page) {
+      setInnerPage(page);
     }
-  }, [currentPage]);
+  }, [page]);
+
+  const handlePageChanged = useCallback(
+    (newPage: number) => {
+      if (onPageChanged) {
+        onPageChanged(newPage);
+      }
+
+      if (page === undefined) {
+        setInnerPage(newPage);
+      }
+    },
+    [onPageChanged, page]
+  );
 
   useEffect(() => {
-    client.safe_get(buildEndpoint(`${parentType}/${parentId}/motion`, {}, 1, page ?? 0)).then((response) => {
+    client.safeGet(buildEndpoint(`${parentType}/${parentId}/motion`, {}, 1, innerPage ?? 0)).then((response) => {
       if (response.status === 200) {
         setMotion(parseData(flattenMovieData(response.data), motionConfig) as MotionData);
         if (onTotalChanged) {
           onTotalChanged(response.data.total);
         }
 
-        if (page !== undefined || parentType !== "tomograms") {
+        if (innerPage !== undefined || parentType !== "tomograms") {
           const movie = response.data.items[0].Movie;
           if (movie !== undefined) {
             setImage(`movies/${movie.movieId}/micrograph`, setMgImage);
             setImage(`movies/${movie.movieId}/fft`, setFftImage);
             const driftUrl = `movies/${movie.movieId}/drift?fromDb=${parentType === "autoProc"}`;
 
-            client.safe_get(driftUrl).then((response) => {
+            client.safeGet(driftUrl).then((response) => {
               if (response.data.items) {
                 setDrift(response.data.items);
               }
             });
-          }
-
-          if (onMotionChanged !== undefined) {
-            onMotionChanged(response.data, page ?? -1);
           }
         }
       } else {
         setMotion(null);
       }
     });
-  }, [page, parentId, parentType, onMotionChanged, onTotalChanged]);
+  }, [innerPage, parentId, parentType, onTotalChanged]);
 
   return (
     <div>
-      <HStack>
-        <Heading variant='collection' mt='0'>
+      <Stack direction={{ base: "column", md: "row" }}>
+        <Heading variant='collection' pr='2' mt='0'>
           Motion Correction/CTF
         </Heading>
+
         {motion && (
           <>
             {parentType !== "autoProc" && (
-              <Heading size='sm' color='diamond.300'>
+              <Heading size='sm' display='flex' alignSelf='center' color='diamond.300'>
                 {calcDarkImages(motion.total, motion.rawTotal)}
               </Heading>
             )}
             <Spacer />
-            <Tooltip id='comment' label='View Comments'>
-              <Button
-                data-testid='comment'
-                isDisabled={!(motion.comments_CTF || motion.comments_MotionCorrection)}
-                size='xs'
-                onClick={onOpen}
-              >
-                <MdComment />
-                {(motion.comments_CTF || motion.comments_MotionCorrection) && (
-                  <Circle size='3' position='absolute' top='-1' left='-1' bg='red'></Circle>
-                )}
-              </Button>
-            </Tooltip>
-            <MotionPagination
-              startFrom={parentType === "tomograms" ? "middle" : "end"}
-              total={motion.total || motion.rawTotal}
-              onChange={setPage}
-              displayDefault={page}
-            />
+            <HStack>
+              <Tooltip id='comment' label='View Comments'>
+                <Button
+                  data-testid='comment'
+                  isDisabled={!(motion.comments_CTF || motion.comments_MotionCorrection)}
+                  size='xs'
+                  onClick={onOpen}
+                >
+                  <MdComment />
+                  {(motion.comments_CTF || motion.comments_MotionCorrection) && (
+                    <Circle size='3' position='absolute' top='-1' left='-1' bg='red'></Circle>
+                  )}
+                </Button>
+              </Tooltip>
+              <MotionPagination
+                startFrom={parentType === "tomograms" ? "middle" : "end"}
+                total={motion.total || motion.rawTotal}
+                onChange={handlePageChanged}
+                page={innerPage}
+              />
+            </HStack>
           </>
         )}
-      </HStack>
+      </Stack>
       <Divider />
       {motion ? (
         <Grid py={2} templateColumns='repeat(4, 1fr)' gap={2}>

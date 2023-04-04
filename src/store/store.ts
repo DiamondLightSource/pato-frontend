@@ -1,9 +1,9 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import uiReducer from "../features/uiSlice"
+import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import uiReducer from "features/uiSlice";
 
 export const store = configureStore({
   reducer: {
-    ui: uiReducer
+    ui: uiReducer,
   },
 });
 
