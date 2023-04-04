@@ -191,7 +191,6 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
                     className='dot'
                     cx={xScale(x(point))}
                     cy={yScale(y(point))}
-                    shapeRendering='optimizeSpeed'
                     r={config.points.dotRadius}
                     fill={tooltipData === point ? "pink" : "#ff5733"}
                   />
