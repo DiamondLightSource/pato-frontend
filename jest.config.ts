@@ -3,12 +3,12 @@
  * https://jestjs.io/docs/configuration
  */
 
-export default {
+const config = {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
   // Stop running tests after `n` failures
-  // bail: 0,
+  // bail: 1,
 
   // The directory where Jest should store its cached dependency information
   // cacheDirectory: "/tmp/jest_rs",
@@ -25,20 +25,13 @@ export default {
   // The directory where Jest should output its coverage files
   coverageDirectory: "coverage",
 
-  coveragePathIgnorePatterns: [
-    "/node_modules/",
-    "src/mocks"
-  ],
+  coveragePathIgnorePatterns: ["/node_modules/", "src/mocks"],
 
   // Indicates which provider should be used to instrument code for coverage
   coverageProvider: "v8",
 
   // A list of reporter names that Jest uses when writing coverage reports
-  coverageReporters: [
-     "json",
-     "text",
-     "cobertura" 
-  ],
+  coverageReporters: ["json", "text", "cobertura"],
 
   // An object that configures minimum threshold enforcement for coverage results
   // coverageThreshold: undefined,
@@ -65,9 +58,7 @@ export default {
   // maxWorkers: "50%",
 
   // An array of directory names to be searched recursively up from the requiring module's location
-  // moduleDirectories: [
-  //   "node_modules"
-  // ],
+  moduleDirectories: ["node_modules", "src"],
 
   // An array of file extensions your modules use
   // moduleFileExtensions: [
@@ -139,8 +130,8 @@ export default {
 
   // The test environment that will be used for testing
   testEnvironment: "jsdom",
-  preset: 'ts-jest',
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+  preset: "ts-jest",
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
@@ -175,13 +166,13 @@ export default {
   // timers: "real",
 
   // A map from regular expressions to paths to transformers
-  // transform: undefined,
+  transform: { "^.+\\.js": "babel-jest" },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
-  // transformIgnorePatterns: [
-  //   "/node_modules/",
-  //   "\\.pnp\\.[^\\/]+$"
-  // ],
+  transformIgnorePatterns: [
+    "node_modules/(?!(molstar)/)",
+    //   "\\.pnp\\.[^\\/]+$"
+  ],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,
@@ -195,3 +186,5 @@ export default {
   // Whether to use watchman for file crawling
   // watchman: true,
 };
+
+export default config;
