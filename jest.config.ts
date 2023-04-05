@@ -55,7 +55,7 @@ const config = {
   // globals: {},
 
   // The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.
-  // maxWorkers: "50%",
+  maxWorkers: "1",
 
   // An array of directory names to be searched recursively up from the requiring module's location
   moduleDirectories: ["node_modules", "src"],
@@ -185,7 +185,6 @@ const config = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-  workerIdleMemoryLimit: "60MB"
 };
 
 export default config;

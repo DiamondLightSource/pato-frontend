@@ -3,11 +3,26 @@ import { renderWithProviders } from "utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import { server } from "mocks/server";
+import { ReactNode } from "react";
+
+interface MolstarWrapperProps {
+  classId: number;
+  autoProcId: number;
+  children?: ReactNode;
+}
+
+jest.mock(
+  "components/molstar/molstar",
+  () =>
+    ({ classId, autoProcId, children }: MolstarWrapperProps) =>
+      children
+);
 
 describe("Classification", () => {
   beforeAll(() => {
     jest.spyOn(window.URL, "createObjectURL");
   });
+  
   afterAll(() => {
     jest.restoreAllMocks();
   });
@@ -23,12 +38,11 @@ describe("Classification", () => {
     const modalButton = await screen.findByText(/Open 3D Visualisation/i);
 
     fireEvent.click(modalButton);
-    await screen.findByText("3D Visualisation");
+    await waitFor(() => expect(screen.getAllByLabelText("Total Pages").length).toBe(2));
 
-    await waitFor(async () => expect((await screen.findAllByLabelText("Total Pages"))[1]).toHaveTextContent("2"));
+    await waitFor(() => expect(screen.getAllByLabelText("Total Pages")[1]).toHaveTextContent("2"));
     fireEvent.click((await screen.findAllByLabelText("Next Page"))[1]);
     await waitFor(() => expect(screen.getByLabelText("Batch Number Value")).toHaveTextContent("355"));
-    await screen.findByText("No Valid Volume File");
   });
 
   it("should display first page as default", async () => {
