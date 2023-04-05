@@ -31,8 +31,8 @@
     "react-scripts": "5.0.1"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "REACT_APP_AUTH_ENDPOINT=auth/ jest",
     "eject": "react-scripts eject",
     "format": "prettier --jsx-single-quote --write src/**/*.{ts,tsx,css}",
