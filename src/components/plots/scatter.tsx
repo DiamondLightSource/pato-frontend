@@ -148,7 +148,7 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
     );
 
     const handleMouseLeave = useCallback(() => {
-      window.setTimeout(() => {
+      setTimeout(() => {
         hideTooltip();
       }, 300);
     }, [hideTooltip]);

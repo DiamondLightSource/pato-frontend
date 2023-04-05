@@ -16,6 +16,7 @@ describe("Calendar", () => {
 
   afterAll(() => {
     jest.useRealTimers();
+    jest.restoreAllMocks();
   });
 
   it("should load current month by default", async () => {

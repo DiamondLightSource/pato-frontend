@@ -3,46 +3,55 @@ import { renderWithRoute } from "utils/test-utils";
 import { GenericListing } from "routes/GenericListing";
 import { proposalHeaders } from "utils/config/table";
 
+const mockNavigate = jest.fn();
+jest.mock("react-router-dom", () => ({
+  ...(jest.requireActual("react-router-dom") as any),
+  useNavigate: () => mockNavigate,
+}));
+
 describe("GenericListing", () => {
+  afterAll(() => jest.resetAllMocks());
   it("should include search in request", async () => {
-    const loaderFn = jest.fn();
     renderWithRoute(
       <GenericListing
         heading='Test'
         makePathCallback={(item) => item.test.toString()}
         headers={proposalHeaders}
       />,
-      ({ request }) => {
-        loaderFn(new URL(request.url).searchParams.get("search"));
-        return { data: null };
-      }
+      () => ({ data: null, total: 300 })
     );
 
     const search = await screen.findByPlaceholderText("Search...");
     fireEvent.change(search, { target: { value: "cm31111" } });
     fireEvent.blur(search);
 
-    await waitFor(() => expect(loaderFn).toBeCalledWith("cm31111"));
+    await waitFor(() =>
+      expect(mockNavigate).toBeCalledWith(
+        { pathname: ".", search: "?search=cm31111&page=1&items=20" },
+        { replace: true }
+      )
+    );
   });
 
   it("should perform request again when page changes", async () => {
-    const loaderFn = jest.fn();
     renderWithRoute(
       <GenericListing
         heading='Test'
         makePathCallback={(item) => item.test.toString()}
         headers={proposalHeaders}
       />,
-      ({ request }) => {
-        loaderFn(new URL(request.url).searchParams.get("page"));
-        return { data: null, total: 300 };
-      }
+      () => ({ data: null, total: 300 })
     );
 
     const nextPage = await screen.findByRole("button", { name: "4" });
     fireEvent.click(nextPage);
 
-    await waitFor(() => expect(loaderFn).toBeCalledWith("4"));
+    await waitFor(() =>
+      expect(mockNavigate).toBeCalledWith(
+        { pathname: ".", search: "?search=&page=4&items=20" },
+        { replace: true }
+      )
+    );
   });
 
   it("should set data to null when invalid response is provided", async () => {

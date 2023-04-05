@@ -66,6 +66,7 @@ describe("Tomogram Page", () => {
     await screen.findByText("Reprocessing");
   });
   */
+  afterAll(() => jest.restoreAllMocks());
 
   it("should change page when next page button is clicked", async () => {
     renderWithRoute(<TomogramPage />, () => validData);

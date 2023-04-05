@@ -185,6 +185,7 @@ const config = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
+  workerIdleMemoryLimit: "60MB"
 };
 
 export default config;

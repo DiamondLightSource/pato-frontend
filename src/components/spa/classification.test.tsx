@@ -3,23 +3,14 @@ import { renderWithProviders } from "utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import { server } from "mocks/server";
-import { ReactNode } from "react";
-
-interface MolstarWrapperProps {
-  classId: number;
-  autoProcId: number;
-  children?: ReactNode;
-}
-
-jest.mock(
-  "components/molstar/molstar",
-  () =>
-    ({ classId, autoProcId, children }: MolstarWrapperProps) =>
-      children
-);
 
 describe("Classification", () => {
-  window.URL.createObjectURL = jest.fn();
+  beforeAll(() => {
+    jest.spyOn(window.URL, "createObjectURL");
+  });
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
 
   it("should match selected class to 3D visualisation modal page", async () => {
     server.use(
@@ -37,6 +28,7 @@ describe("Classification", () => {
     await waitFor(async () => expect((await screen.findAllByLabelText("Total Pages"))[1]).toHaveTextContent("2"));
     fireEvent.click((await screen.findAllByLabelText("Next Page"))[1]);
     await waitFor(() => expect(screen.getByLabelText("Batch Number Value")).toHaveTextContent("355"));
+    await screen.findByText("No Valid Volume File");
   });
 
   it("should display first page as default", async () => {

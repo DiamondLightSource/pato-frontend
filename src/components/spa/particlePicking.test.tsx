@@ -5,7 +5,12 @@ import { server } from "mocks/server";
 import { rest } from "msw";
 
 describe("Particle Picking", () => {
-  window.URL.createObjectURL = jest.fn();
+  beforeAll(() => {
+    jest.spyOn(window.URL, "createObjectURL");
+  });
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
   it("should display last page as default", () => {
     renderWithProviders(<ParticlePicking autoProcId={1} page={undefined} total={150} />);
     expect(screen.getByLabelText("Current Page")).toHaveValue("150");
