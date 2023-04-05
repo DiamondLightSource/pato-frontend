@@ -73,7 +73,7 @@ const Navbar = ({ user }: NavbarProps) => {
   const loadingRemaining = useIsFetching();
 
   return (
-    <Box position="fixed" zIndex={1} w='100%'>
+    <Box position='sticky' top='0' zIndex={1} w='100%'>
       <Flex
         bg='diamond.800'
         px={{ base: 4, md: "7.5vw" }}

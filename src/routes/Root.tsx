@@ -14,25 +14,51 @@ import { AuthState } from "schema/interfaces";
 import "styles/main.css";
 import { useEffect } from "react";
 
-const PhaseBanner = () => (
-  <VStack mb='10px'>
-    <HStack w='100%'>
-      <Tag
-        fontWeight='600'
-        bg='diamond.700'
-        color='diamond.50'
-        borderRadius='0'
-      >
-        BETA
-      </Tag>
-      <Text>
-        This version of the service is still in testing, report any issues to
-        the <Link color='diamond.700'>developers.</Link>
-      </Text>
-    </HStack>
-    <Divider borderColor='diamond.200' />
-  </VStack>
-);
+const deployType = () => {
+  if (process.env.NODE_ENV === "development") {
+    return "dev";
+  }
+
+  return process.env.REACT_APP_STAGING_HOST === window.location.host
+    ? "beta"
+    : "production";
+};
+
+const PhaseBanner = ({
+  deployType,
+}: {
+  deployType: "dev" | "production" | "beta";
+}) => {
+  if (deployType === "production") {
+    return null;
+  }
+
+  return (
+    <VStack mb='10px'>
+      <HStack w='100%'>
+        <Tag
+          fontWeight='600'
+          bg={deployType === "dev" ? "purple" : "diamond.700"}
+          color='diamond.50'
+          borderRadius='0'
+        >
+          {deployType.toUpperCase()}
+        </Tag>
+        <Text>
+          This version of the service is still in testing, report any issues to
+          the{" "}
+          <Link
+            color='diamond.700'
+            href={"mailto:" + process.env.REACT_APP_DEV_CONTACT}
+          >
+            developers.
+          </Link>
+        </Text>
+      </HStack>
+      <Divider borderColor='diamond.200' />
+    </VStack>
+  );
+};
 
 const Root = () => {
   const loaderData = useLoaderData() as AuthState | null;
@@ -52,7 +78,7 @@ const Root = () => {
     <div className='rootContainer'>
       <Navbar user={loaderData} />
       <Box className='main'>
-        {process.env.REACT_APP_DEPLOY_TYPE === "beta" && <PhaseBanner />}
+        <PhaseBanner deployType={deployType()} />
         <Outlet />
       </Box>
       <Footer />

@@ -95,7 +95,7 @@ const Home = () => {
   return (
     <div className='rootContainer'>
       <title>PATo</title>
-      <Box mt={-8} mx='-7.3vw' bg='diamond.50' flex='1 0 auto'>
+      <Box mt='-1em' mx='-7.3vw' bg='diamond.50' flex='1 0 auto'>
         <Box w='100%' overflow='hidden'>
           <VStack className='homeRoot'>
             <VStack bg='diamond.700' justifyContent='start' alignItems='start'>
