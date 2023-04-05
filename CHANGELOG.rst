@@ -13,7 +13,6 @@ v0.10.0 (11/04/2023)
 
 **Changed**
 
-- Navigation bar is no longer fixed to top of page
 - Breadcrumbs moved to just under navigation bar
 - Homepage no longer has horizontal overflow
 
