@@ -3,12 +3,6 @@ import { renderWithProviders } from "utils/test-utils";
 import { fireEvent, screen } from "@testing-library/react";
 
 describe("MotionPagination", () => {
-  beforeAll(() => {
-    jest.spyOn(window.URL, "createObjectURL");
-  });
-  afterAll(() => {
-    jest.restoreAllMocks();
-  });
   it("should display item count properly", async () => {
     renderWithProviders(<MotionPagination total={112} />);
 

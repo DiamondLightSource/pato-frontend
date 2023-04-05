@@ -19,14 +19,6 @@ jest.mock(
 );
 
 describe("Classification", () => {
-  beforeAll(() => {
-    jest.spyOn(window.URL, "createObjectURL");
-  });
-  
-  afterAll(() => {
-    jest.restoreAllMocks();
-  });
-
   it("should match selected class to 3D visualisation modal page", async () => {
     server.use(
       rest.get("http://localhost/autoProc/:autoProcId/classification/:classId/image", (req, res, ctx) =>

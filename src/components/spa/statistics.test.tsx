@@ -5,12 +5,6 @@ import { server } from "mocks/server";
 import { rest } from "msw";
 
 describe("Collection Statistics", () => {
-  beforeAll(() => {
-    jest.spyOn(window.URL, "createObjectURL");
-  });
-  afterAll(() => {
-    jest.restoreAllMocks();
-  });
   it("should display data when available", async () => {
     renderWithProviders(<Statistics dataCollectionId={1} />);
 

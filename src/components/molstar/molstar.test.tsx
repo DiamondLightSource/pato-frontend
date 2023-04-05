@@ -6,9 +6,9 @@ import { rest } from "msw";
 import { downloadBuffer } from "utils/api/response";
 
 jest.mock("utils/api/response", () => ({ downloadBuffer: jest.fn() }));
-  jest.mock("molstar/lib/mol-canvas3d/canvas3d");
-  jest.mock("molstar/lib/mol-plugin/context");
-  jest.mock("molstar/lib/mol-plugin/spec");
+jest.mock("molstar/lib/mol-canvas3d/canvas3d");
+jest.mock("molstar/lib/mol-plugin/context");
+jest.mock("molstar/lib/mol-plugin/spec");
 
 describe("Molstar Wrapper", () => {
   afterAll(() => {

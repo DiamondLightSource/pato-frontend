@@ -11,7 +11,6 @@ describe("Image", () => {
   it("should open dialog when image is clicked", () => {
     renderWithProviders(<ImageCard title='Image Title' src='' />);
     const imageThumbnail = screen.getByLabelText("Image Title");
-
     fireEvent.click(imageThumbnail);
 
     expect(screen.getByTestId("zoomed-out-image")).toBeInTheDocument();

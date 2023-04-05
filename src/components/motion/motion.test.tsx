@@ -5,12 +5,6 @@ import { server } from "mocks/server";
 import { rest } from "msw";
 
 describe("Motion", () => {
-  beforeAll(() => {
-    jest.spyOn(window.URL, "createObjectURL");
-  });
-  afterAll(() => {
-    jest.restoreAllMocks();
-  });
   it("should display message when no tilt alignment data is present", async () => {
     renderWithProviders(<Motion parentType='dataCollections' parentId={2} />);
 
