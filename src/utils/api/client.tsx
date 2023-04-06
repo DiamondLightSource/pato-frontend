@@ -9,7 +9,7 @@ const timeoutFetch = setTimeout(() => controller.abort(), 3000);
 let timer: ReturnType<typeof setTimeout>;
 
 const defaultSettings: Partial<RequestConfig> = {
-  credentials: process.env.NODE_ENV === "development" ? "include" : "strict",
+  credentials: process.env.NODE_ENV === "development" ? "include" : "same-origin",
 };
 
 interface RequestConfig {

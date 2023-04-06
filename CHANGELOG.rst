@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v0.9.3 (06/04/2023)
+++++++++++
+
+**Changed**
+
+- Uses strict-mode for cookies in production
+
+++++++++++
 v0.9.2 (06/04/2023)
 ++++++++++
 
