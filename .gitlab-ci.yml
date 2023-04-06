@@ -64,6 +64,8 @@ sync-github:
     name: alpine/git
   only:
     - tags
+  before-script:
+    - apk add rsync
   script:
     - rm -rf .git README.rst .gitlab-ci.yml nginx
     - cd .. && git clone https://$CI_GITHUB_USER:$CI_GITHUB_TOKEN@github.com/diamondLightSource/pato-frontend.git github-upstream 
