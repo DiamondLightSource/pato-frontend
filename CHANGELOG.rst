@@ -3,6 +3,70 @@ Changelog
 ==========
 
 ++++++++++
+v0.9.2 (06/04/2023)
+++++++++++
+
+**Changed**
+
+- API endpoints can be configured to be generated based on the current origin
+
+++++++++++
+v0.9.1 (04/04/2023)
+++++++++++
+
+**Changed**
+
+- Fixes redundant requests for user information on page changes
+- Token is now stored in cookies
+- UI respects search parameters properly
+- Fixes motion correction pagination in SPA when moving through records quickly
+- Fixes "unavailable" message on particle picking
+- Improves rendering performance for scatter plots
+- Fixes "jumping" "No Data Available" message for plots
+
+++++++++++
+v0.9.0 (28/03/2023)
+++++++++++
+
+**Added**
+
+- "Reset Camera Orientation" function for Molstar viewer
+- Raw MRC file can now be downloaded
+
+**Changed**
+
+- Ultrawide monitors now display two columns of data in data collection pages
+- Fixed menu for mobile devices
+
+++++++++++
+v0.8.0 (14/03/2023)
+++++++++++
+
+**Added**
+
+- Adds pagination to 3D visualisation modal
+
+**Changed**
+
+- 3D visualisation modal does not try to render model twice
+- Performance improvements to non-cached homepage
+- Calendar styling improvements
+- Network errors now redirect to error page
+
+++++++++++
+v0.7.0 (07/03/2023)
+++++++++++
+
+**Added**
+
+- Calendar page completely functional
+- Enabled screenshot/zoom reset buttons on 3D visualisation (SPA)
+
+**Changed**
+
+- Classification rows with no data no longer display skeleton for pagination
+
+++++++++++
 v0.6.1 (28/02/2023)
 ++++++++++
 

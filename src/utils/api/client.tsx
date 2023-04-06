@@ -19,18 +19,26 @@ interface RequestConfig {
   [k: string]: any;
 }
 
-interface Response {
+export interface Response {
   status: number;
   data: any;
   headers: Record<string, any>;
   url: string;
 }
 
+const getPrefix = (prefix: string = "/api/") => {
+  if (prefix.substring(0, 1) === "/") {
+    return window.location.origin + prefix;
+  }
+
+  return prefix;
+};
+
 export const client = async (
   endpoint: string,
   customConfig: Record<any, any> = {},
   body?: Record<any, any> | FormData,
-  prefix = process.env.REACT_APP_API_ENDPOINT
+  prefix = getPrefix(process.env.REACT_APP_API_ENDPOINT)
 ): Promise<never | Response> => {
   const config: RequestConfig = {
     method: body != null ? "POST" : "GET",
@@ -107,7 +115,9 @@ client.safeGet = async (endpoint: string, customConfig = {}) => {
 
   if (resp.status === 401 && !window.location.href.includes("code=")) {
     const url = encodeURIComponent(window.location.href);
-    window.location.href = `${process.env.REACT_APP_AUTH_ENDPOINT}authorise?redirect_uri=${url}&responseType=code`;
+    window.location.href = `${getPrefix(
+      process.env.REACT_APP_AUTH_ENDPOINT
+    )}authorise?redirect_uri=${url}&responseType=code`;
   }
 
   return resp;
@@ -129,10 +139,12 @@ client.authGet = async (endpoint: string, customConfig = {}) => {
       ...customConfig,
     }),
     undefined,
-    process.env.REACT_APP_AUTH_ENDPOINT
+    getPrefix(process.env.REACT_APP_AUTH_ENDPOINT)
   );
 };
 
 client.post = async (endpoint: string, body: Record<any, any> | FormData, customConfig = {}) => {
   return await client(endpoint, { ...customConfig }, body);
 };
+
+export const prependApiUrl = (url: string) => `${getPrefix(process.env.REACT_APP_API_ENDPOINT)}${url}`;
