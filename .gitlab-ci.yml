@@ -64,7 +64,7 @@ sync-github:
     name: alpine/git
   only:
     - tags
-  before-script:
+  before_script:
     - apk add rsync
   script:
     - rm -rf .git README.rst .gitlab-ci.yml nginx
