@@ -116,7 +116,7 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
       <Divider />
       {data && data.particlePicker ? (
         <Grid py={2} marginBottom={6} templateColumns='repeat(3, 1fr)' h='25vh' gap={2}>
-          <InfoGroup cols={1} info={data.particlePicker!} />
+          <InfoGroup cols={1} info={data.particlePicker} />
           <PlotContainer title='Relative Ice Thickness' height='25vh'>
             <Box data={data.iceThickness} options={{ y: { domain: { min: 120000, max: 160000 } } }} />
           </PlotContainer>

@@ -89,7 +89,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <Root />,
     errorElement: <Error />,
-    loader: getUser,
+    loader: (getUser),
     shouldRevalidate: () => false,
     children: [
       {

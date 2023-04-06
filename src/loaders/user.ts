@@ -5,10 +5,14 @@ const getUser = async () => {
   let user: AuthState | null = null;
 
   const url = encodeURIComponent(window.location.href);
-  const splitUrl = window.location.href.split("code=");
+  const searchParams = new URL(window.location.href).searchParams;
+  const code = searchParams.get("code");
 
-  if (splitUrl.length === 2) {
-    await client.authGet(`token?redirect_uri=${url}&code=${splitUrl[1]}`);
+  if (code) {
+    client.authGet(`token?redirect_uri=${url}&code=${code}`).then(() => {
+      searchParams.delete("code");
+      window.location.search = searchParams.toString();
+    });
   }
 
   try {

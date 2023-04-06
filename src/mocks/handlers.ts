@@ -226,7 +226,7 @@ export const handlers = [
                   createdTimestamp: "1",
                 },
               ],
-              total: 1,
+              total: 3,
               limit: 1,
             })
           );

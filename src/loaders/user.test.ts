@@ -27,12 +27,28 @@ describe("User Data", () => {
 
   it("should return null if network request fails", async () => {
     server.use(
-      rest.get("http://localhost/auth/user", (req, res, ctx) => {
-        return res.networkError("Failed to connect");
-      })
+      rest.get("http://localhost/auth/user", (req, res, ctx) =>
+        res.networkError("Failed to connect")
+      )
     );
 
     const user = await getUser();
     expect(user).toBe(null);
+  });
+
+  it("should get token and redirect if code is in URL", async () => {
+    Object.defineProperty(window, "location", {
+      value: new URL("http://localhost/?code=abc1234&otherVal=1234"),
+      configurable: true,
+    });
+
+    server.use(
+      rest.get("http://localhost/auth/token", (req, res, ctx) =>
+        res.once(ctx.status(200))
+      )
+    );
+
+    await getUser();
+    expect(window.location.href).toBe("http://localhost/?otherVal=1234");
   });
 });
