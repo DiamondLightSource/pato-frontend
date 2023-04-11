@@ -1,16 +1,17 @@
 import { Box, Divider, Heading, HStack, Text } from "@chakra-ui/react";
-import FullCalendar, {
+import {
   EventClickArg,
   EventApi,
   EventInput,
   DatesSetArg,
-} from "@fullcalendar/react";
+} from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { useCallback, useEffect, useState } from "react";
 import { client } from "utils/api/client";
 import { useNavigate } from "react-router-dom";
 import { components } from "schema/main";
 import "styles/calendar.css";
+import FullCalendar from "@fullcalendar/react";
 
 type SessionSchema = components["schemas"]["SessionResponse"];
 
