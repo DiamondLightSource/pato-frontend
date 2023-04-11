@@ -7,12 +7,11 @@ const getUser = async () => {
   const url = encodeURIComponent(window.location.href);
   const searchParams = new URL(window.location.href).searchParams;
   const code = searchParams.get("code");
+  searchParams.delete("code");
 
   if (code) {
-    client.authGet(`token?redirect_uri=${url}&code=${code}`).then(() => {
-      searchParams.delete("code");
-      window.location.search = searchParams.toString();
-    });
+    window.location.search = searchParams.toString();
+    await client.authGet(`token?redirect_uri=${url}&code=${code}`);
   }
 
   try {

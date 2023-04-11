@@ -133,28 +133,31 @@ const fetchMotionData = async (
   }
 
   const response = await client.safeGet(fullEndpoint);
-
   let data: FullMotionData = { motion: null, total: null, micrograph: "", fft: "", drift: [] };
 
   if (response.status !== 200) {
     return data;
   }
 
-  data.total = response.data.total;
+  data = {
+    ...data,
+    total: response.data.total,
+    motion: parseData(flattenMovieData(response.data), motionConfig) as MotionData,
+  };
 
-  if (page !== -1 || parentType !== "tomograms") {
-    data.motion = parseData(flattenMovieData(response.data), motionConfig) as MotionData;
-    const movie = response.data.items[0].Movie;
+  const movie = response.data.items[0].Movie;
 
-    if (movie !== undefined) {
-      const fileData = await client.safeGet(`movies/${movie.movieId}/drift?fromDb=${parentType === "autoProc"}`);
+  if (movie !== undefined) {
+    data = {
+      ...data,
+      micrograph: prependApiUrl(`movies/${movie.movieId}/micrograph`),
+      fft: prependApiUrl(`movies/${movie.movieId}/fft`),
+    };
 
-      data = {
-        ...data,
-        micrograph: prependApiUrl(`movies/${movie.movieId}/micrograph`),
-        fft: prependApiUrl(`movies/${movie.movieId}/fft`),
-        drift: fileData.data.items.length > 0 ? fileData.data.items : [],
-      };
+    const fileData = await client.safeGet(`movies/${movie.movieId}/drift?fromDb=${parentType === "autoProc"}`);
+
+    if (fileData.status === 200) {
+      data.drift = fileData.data.items;
     }
   }
 

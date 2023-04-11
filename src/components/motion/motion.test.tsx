@@ -77,6 +77,12 @@ describe("Motion", () => {
     await waitFor(() => expect(screen.getByLabelText("Current Page")).toHaveAttribute("value", "2"));
   });
 
+  it("should render even if drift is not available", async () => {
+    server.use(rest.get("http://localhost/movies/:id/drift", (req, res, ctx) => res(ctx.delay(0), ctx.status(404))));
+    renderWithProviders(<Motion parentType='tomograms' parentId={1} page={1} />);
+    await screen.findByText("Refined Tilt Angle:");
+  });
+
   it("should not update page if current page is controlled externally", async () => {
     const motionCallback = jest.fn();
     renderWithProviders(<Motion parentType='tomograms' parentId={4} page={1} onPageChanged={motionCallback} />);

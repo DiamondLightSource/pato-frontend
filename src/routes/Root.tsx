@@ -33,7 +33,7 @@ const PhaseBanner = ({
   }
 
   return (
-    <VStack mb='10px'>
+    <VStack h='3em' mb='2px'>
       <HStack w='100%'>
         <Tag
           fontWeight='600'
