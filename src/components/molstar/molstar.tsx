@@ -1,15 +1,14 @@
 import { DefaultPluginSpec, PluginSpec } from "molstar/lib/mol-plugin/spec";
 import { PluginContext } from "molstar/lib/mol-plugin/context";
 import { PluginConfig } from "molstar/lib/mol-plugin/config";
-import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { StateObjectSelector } from "molstar/lib/mol-state";
 import { PluginStateObject } from "molstar/lib/mol-plugin-state/objects";
 import { StateTransforms } from "molstar/lib/mol-plugin-state/transforms";
 import { createVolumeRepresentationParams } from "molstar/lib/mol-plugin-state/helpers/volume-representation-params";
-import { Box, Button, Divider, Heading, HStack, Icon, Skeleton, Spacer, Tooltip, VStack } from "@chakra-ui/react";
+import { Box, Button, Divider, Heading, HStack, Icon, Link, Skeleton, Spacer, Tooltip, VStack } from "@chakra-ui/react";
 import { Md3DRotation, MdCamera, MdFileDownload, MdYoutubeSearchedFor } from "react-icons/md";
-import { client } from "utils/api/client";
-import { downloadBuffer } from "utils/api/response";
+import { client, prependApiUrl } from "utils/api/client";
 import { Vec3 } from "molstar/lib/mol-math/linear-algebra";
 
 const DefaultSpec: PluginSpec = {
@@ -49,12 +48,10 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
   const [dataTimestamp, setDatatimestamp] = useState("1");
   const [rawData, setRawData] = useState<ArrayBuffer | null | undefined>();
 
-  const downloadMrc = useCallback(() => {
-    downloadBuffer(rawData!, "text/plain; charset=utf-8");
-  }, [rawData]);
+  const mrcUrl = useMemo(() => `autoProc/${autoProcId}/classification/${classId}/image`, [autoProcId, classId]);
 
   useEffect(() => {
-    client.safeGet(`autoProc/${autoProcId}/classification/${classId}/image`).then(async (response) => {
+    client.safeGet(mrcUrl).then(async (response) => {
       if (response.status === 200) {
         setRawData(response.data);
         setDatatimestamp(new Date().getTime().toString());
@@ -62,7 +59,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
         setRawData(null);
       }
     });
-  }, [autoProcId, classId]);
+  }, [mrcUrl]);
 
   useEffect(() => {
     const init = async () => {
@@ -87,7 +84,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
         );
 
       await repr.commit();
-    }
+    };
 
     if (rawData && canvasRef) {
       init();
@@ -124,9 +121,11 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
           </Button>
         </Tooltip>
         <Tooltip label='Download File'>
-          <Button aria-label='Download File' isDisabled={!rawData} onClick={downloadMrc}>
-            <Icon as={MdFileDownload} />
-          </Button>
+          <Link href={prependApiUrl(mrcUrl)}>
+            <Button aria-label='Download File' isDisabled={!rawData}>
+              <Icon as={MdFileDownload} />
+            </Button>
+          </Link>
         </Tooltip>
         <Spacer />
         {children}

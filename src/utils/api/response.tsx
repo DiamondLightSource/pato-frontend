@@ -30,12 +30,4 @@ const handleFileData = (response: Response) => {
   return response.status === 200 ? response.data as Blob : null
 }
 
-const downloadBuffer = (buffer: ArrayBuffer, contentType: string, filename: string = "volume.mrc") => {
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([buffer], { type: contentType }));
-  a.download = filename;
-  a.click();
-  a.remove();
-};
-
-export { setHistogram, downloadBuffer, handleFileData };
+export { setHistogram, handleFileData };
