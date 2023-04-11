@@ -41,7 +41,6 @@ const CTF = ({ parentId, parentType, onGraphClicked }: CTFProps) => {
   const { data, isLoading } = useQuery({
     queryKey: ["ctf", parentType, parentId],
     queryFn: async () => await fetchCtfData(parentType, parentId),
-    staleTime: 30000,
   });
 
   return (
