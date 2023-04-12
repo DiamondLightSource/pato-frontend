@@ -43,9 +43,7 @@ const APNGViewer = ({ src, width = "100%", height = "64vh" }: ImageProps) => {
 
   const playRef = useRef<ReturnType<typeof setInterval>>();
 
-  const playIncrement = useMemo(() => {
-    return playForward ? 1 : -1;
-  }, [playForward]);
+  const playIncrement = useMemo(() => (playForward ? 1 : -1), [playForward]);
 
   useEffect(() => {
     client.safeGet(src).then((response) => {
@@ -63,9 +61,7 @@ const APNGViewer = ({ src, width = "100%", height = "64vh" }: ImageProps) => {
     });
   }, [src]);
 
-  const frameLength = useMemo(() => {
-    return frames ? frames.length - 1 : 100;
-  }, [frames]);
+  const frameLength = useMemo(() => (frames ? frames.length - 1 : 100), [frames]);
 
   useEffect(() => {
     if (frames) {
@@ -135,10 +131,10 @@ const APNGViewer = ({ src, width = "100%", height = "64vh" }: ImageProps) => {
           <Icon aria-label={playing ? "Pause" : "Play"} as={playing ? MdPause : MdPlayArrow}></Icon>
         </Button>
         <ButtonGroup isAttached>
-          <Button aria-label='Play Forwards' isDisabled={!playForward || !frames} onClick={() => setPlayForward(false)}>
+          <Button aria-label='Play in Reverse' isDisabled={!playForward || !frames} onClick={() => setPlayForward(false)}>
             <Icon as={MdFastRewind} />
           </Button>
-          <Button aria-label='Play in Reverse' isDisabled={playForward} onClick={() => setPlayForward(true)}>
+          <Button aria-label='Play Forwards' isDisabled={playForward} onClick={() => setPlayForward(true)}>
             <Icon as={MdFastForward} />
           </Button>
         </ButtonGroup>
