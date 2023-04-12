@@ -56,35 +56,13 @@ export const client = async (
     }
   }
 
-  let data;
-
   try {
     const response = await fetch(prefix + endpoint, config);
-
-    switch (response.headers.get("content-type")) {
-      case "application/marc":
-        data = await response.arrayBuffer();
-        break;
-      case "text/plain; charset=utf-8":
-        data = await response.arrayBuffer();
-        break;
-      case "image/png":
-        data = await response.arrayBuffer();
-        break;
-      case "image/jpeg":
-        data = await response.blob();
-        break;
-      case "application/json":
-        data = await response.json();
-        break;
-      default:
-        data = response;
-        break;
-    }
+    const isJson = response.headers.get("content-type") === "application/json";
 
     return {
       status: response.status,
-      data,
+      data: isJson ? await response.json() : await response.arrayBuffer(),
       headers: response.headers,
       url: response.url,
     };

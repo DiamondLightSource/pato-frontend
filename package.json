@@ -157,7 +157,7 @@
     "transformIgnorePatterns": [
       "node_modules/(?!(molstar)/)"
     ],
-    "workerIdleMemoryLimit": "250MB",
+    "workerIdleMemoryLimit": "750MB",
     "testEnvironmentOptions": {
       "customExportConditions": []
     }

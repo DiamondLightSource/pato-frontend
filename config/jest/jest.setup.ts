@@ -23,5 +23,6 @@ class ResizeObserver {
   disconnect() {}
 }
 
+global.window.scrollTo = () => {}
 global.ResizeObserver = ResizeObserver;
 global.structuredClone = (val: Record<string, any>) => JSON.parse(JSON.stringify(val));
