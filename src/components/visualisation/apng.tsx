@@ -95,18 +95,14 @@ const APNGViewer = ({ src, width = "100%", height = "64vh" }: ImageProps) => {
           <VStack bg='diamond.100' h='100%' w='100%'>
             <Image aria-label='Frame Image' objectFit='contain' h='100%' maxW='100%' src={currentFrame} />
           </VStack>
+        ) : frames === null ? (
+          <VStack w='100%' h='100%' bg='diamond.100'>
+            <Heading m='auto' variant='notFound'>
+              No Image Data Available
+            </Heading>
+          </VStack>
         ) : (
-          <>
-            {frames === null ? (
-              <VStack w='100%' h='100%' bg='diamond.100'>
-                <Heading m='auto' variant='notFound'>
-                  No Image Data Available
-                </Heading>
-              </VStack>
-            ) : (
-              <Skeleton h='100%' w='100%' />
-            )}
-          </>
+          <Skeleton h='100%' w='100%' />
         )}
         <Spacer />
         <Slider
@@ -131,7 +127,11 @@ const APNGViewer = ({ src, width = "100%", height = "64vh" }: ImageProps) => {
           <Icon aria-label={playing ? "Pause" : "Play"} as={playing ? MdPause : MdPlayArrow}></Icon>
         </Button>
         <ButtonGroup isAttached>
-          <Button aria-label='Play in Reverse' isDisabled={!playForward || !frames} onClick={() => setPlayForward(false)}>
+          <Button
+            aria-label='Play in Reverse'
+            isDisabled={!playForward || !frames}
+            onClick={() => setPlayForward(false)}
+          >
             <Icon as={MdFastRewind} />
           </Button>
           <Button aria-label='Play Forwards' isDisabled={playForward} onClick={() => setPlayForward(true)}>
