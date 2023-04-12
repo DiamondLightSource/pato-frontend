@@ -32,7 +32,7 @@ describe("Calendar", () => {
     expect(screen.getByText(/\(cm31111-1\)/i)).toBeInTheDocument();
   });
 
-  it("should update query date when month changes", async () => {
+  it("should update query date when month changes", () => {
     const fetchSpy = jest.spyOn(global, "fetch");
 
     renderWithProviders(<Calendar />);

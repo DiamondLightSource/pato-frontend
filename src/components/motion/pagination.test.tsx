@@ -3,43 +3,43 @@ import { renderWithProviders } from "utils/test-utils";
 import { fireEvent, screen } from "@testing-library/react";
 
 describe("MotionPagination", () => {
-  it("should display item count properly", async () => {
+  it("should display item count properly", () => {
     renderWithProviders(<MotionPagination total={112} />);
 
     expect(screen.getByText("112")).toBeInTheDocument();
   });
 
-  it("should set last item as default", async () => {
+  it("should set last item as default", () => {
     renderWithProviders(<MotionPagination total={112} />);
 
     expect(screen.getByDisplayValue("112")).toBeInTheDocument();
   });
 
-  it("should respect default item set by user", async () => {
+  it("should respect default item set by user", () => {
     renderWithProviders(<MotionPagination page={90} total={112} />);
 
     expect(screen.getByDisplayValue("90")).toBeInTheDocument();
   });
 
-  it("should not display default if default is an invalid page number", async () => {
+  it("should not display default if default is an invalid page number", () => {
     renderWithProviders(<MotionPagination page={-1} total={112} />);
 
     expect(screen.queryByDisplayValue("-1")).not.toBeInTheDocument();
   });
 
-  it("should set middle item as default if startFrom is middle", async () => {
+  it("should set middle item as default if startFrom is middle", () => {
     renderWithProviders(<MotionPagination startFrom='middle' total={90} />);
 
     expect(screen.getByDisplayValue("45")).toBeInTheDocument();
   });
 
-  it("should set first item as default if startFrom is start", async () => {
+  it("should set first item as default if startFrom is start", () => {
     renderWithProviders(<MotionPagination startFrom='start' total={90} />);
 
     expect(screen.getByDisplayValue("1")).toBeInTheDocument();
   });
 
-  it("should not allow item greater than the item count to be set", async () => {
+  it("should not allow item greater than the item count to be set", () => {
     renderWithProviders(<MotionPagination total={112} />);
 
     const input = screen.getByDisplayValue("112");
@@ -50,7 +50,7 @@ describe("MotionPagination", () => {
     expect(screen.getByDisplayValue("112")).toBeInTheDocument();
   });
 
-  it("should not allow item inferior to the item count to be set", async () => {
+  it("should not allow item inferior to the item count to be set", () => {
     renderWithProviders(<MotionPagination total={112} />);
 
     const input = screen.getByDisplayValue("112");
@@ -61,7 +61,7 @@ describe("MotionPagination", () => {
     expect(screen.getByDisplayValue("1")).toBeInTheDocument();
   });
 
-  it("should allow any valid page to be set", async () => {
+  it("should allow any valid page to be set", () => {
     renderWithProviders(<MotionPagination total={112} />);
 
     const input = screen.getByDisplayValue("112");
@@ -72,7 +72,7 @@ describe("MotionPagination", () => {
     expect(screen.getByDisplayValue("20")).toBeInTheDocument();
   });
 
-  it("should call callback when page changes", async () => {
+  it("should call callback when page changes", () => {
     const mockCallback = jest.fn();
     renderWithProviders(<MotionPagination total={112} onChange={mockCallback} />);
 
@@ -82,7 +82,7 @@ describe("MotionPagination", () => {
     expect(mockCallback).toBeCalledWith(111);
   });
 
-  it("should not change page if page is controlled externally", async () => {
+  it("should not change page if page is controlled externally", () => {
     const mockCallback = jest.fn();
     renderWithProviders(<MotionPagination total={112} onChange={mockCallback} />);
 

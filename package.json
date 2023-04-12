@@ -90,7 +90,7 @@
     "jest-resolve": "^29.5.0",
     "jest-watch-typeahead": "^2.2.2",
     "mini-css-extract-plugin": "^2.4.5",
-    "msw": "^0.47.4",
+    "msw": "^1.2.1",
     "postcss": "^8.4.4",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-loader": "^7.2.4",

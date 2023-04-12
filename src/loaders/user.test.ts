@@ -17,7 +17,7 @@ describe("User Data", () => {
   it("should return null if unauthorised", async () => {
     server.use(
       rest.get("http://localhost/auth/user", (req, res, ctx) =>
-        res.once(ctx.status(401))
+        res(ctx.status(401))
       )
     );
 

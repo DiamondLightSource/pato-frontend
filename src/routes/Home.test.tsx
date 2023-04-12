@@ -20,8 +20,8 @@ describe("Home", () => {
 
   it("should render cards with data when possible", async () => {
     server.use(
-      rest.get("http://localhost/sessions", (req, res, ctx) => {
-        return res(
+      rest.get("http://localhost/sessions", (req, res, ctx) =>
+        res(
           ctx.status(200),
           ctx.delay(0),
           ctx.json({
@@ -36,8 +36,8 @@ describe("Home", () => {
               },
             ],
           })
-        );
-      })
+        )
+      )
     );
 
     renderWithRoute(<Home />, sessionLoader(queryClient));
@@ -48,8 +48,8 @@ describe("Home", () => {
 
   it("should render beamline operator name alongside hyphen if available", async () => {
     server.use(
-      rest.get("http://localhost/sessions", (req, res, ctx) => {
-        return res(
+      rest.get("http://localhost/sessions", (req, res, ctx) =>
+        res(
           ctx.status(200),
           ctx.delay(0),
           ctx.json({
@@ -65,8 +65,8 @@ describe("Home", () => {
               },
             ],
           })
-        );
-      })
+        )
+      )
     );
 
     renderWithRoute(<Home />, sessionLoader(queryClient));
@@ -77,8 +77,8 @@ describe("Home", () => {
 
   it("should render visit number as ? when not present", async () => {
     server.use(
-      rest.get("http://localhost/sessions", (req, res, ctx) => {
-        return res(
+      rest.get("http://localhost/sessions", (req, res, ctx) =>
+        res(
           ctx.status(200),
           ctx.delay(0),
           ctx.json({
@@ -91,8 +91,8 @@ describe("Home", () => {
               },
             ],
           })
-        );
-      })
+        )
+      )
     );
 
     renderWithRoute(<Home />, sessionLoader(queryClient));
