@@ -19,8 +19,6 @@ jest.mock(
 );
 
 describe("Classification", () => {
-  window.URL.createObjectURL = jest.fn();
-
   it("should match selected class to 3D visualisation modal page", async () => {
     server.use(
       rest.get("http://localhost/autoProc/:autoProcId/classification/:classId/image", (req, res, ctx) =>
@@ -32,9 +30,9 @@ describe("Classification", () => {
     const modalButton = await screen.findByText(/Open 3D Visualisation/i);
 
     fireEvent.click(modalButton);
-    await screen.findByText("3D Visualisation");
+    await waitFor(() => expect(screen.getAllByLabelText("Total Pages").length).toBe(2));
 
-    await waitFor(async () => expect((await screen.findAllByLabelText("Total Pages"))[1]).toHaveTextContent("2"));
+    await waitFor(() => expect(screen.getAllByLabelText("Total Pages")[1]).toHaveTextContent("2"));
     fireEvent.click((await screen.findAllByLabelText("Next Page"))[1]);
     await waitFor(() => expect(screen.getByLabelText("Batch Number Value")).toHaveTextContent("355"));
   });

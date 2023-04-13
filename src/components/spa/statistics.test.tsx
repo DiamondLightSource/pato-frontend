@@ -5,7 +5,6 @@ import { server } from "mocks/server";
 import { rest } from "msw";
 
 describe("Collection Statistics", () => {
-  window.URL.createObjectURL = jest.fn();
   it("should display data when available", async () => {
     renderWithProviders(<Statistics dataCollectionId={1} />);
 

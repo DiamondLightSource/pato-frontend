@@ -18,9 +18,10 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { MdLogin, MdMenu, MdClose } from "react-icons/md";
-import { useAppSelector } from "store/hooks";
 import { Link as LinkRouter } from "react-router-dom";
 import { AuthState } from "schema/interfaces";
+import { useIsFetching } from "@tanstack/react-query";
+import { Breadcrumbs } from "./breadcrumbs";
 
 const links = [
   { label: "Proposals", route: "proposals" },
@@ -32,16 +33,13 @@ interface NavLinkProps {
   link: string;
 }
 
-interface NavLinksProps {
-  loggedIn: boolean;
-}
-
 const NavLink = ({ children, link }: NavLinkProps) => (
   <Link
     height='100%'
     alignItems='center'
     display='flex'
     px={2}
+    textDecor='none'
     as={LinkRouter}
     borderTop='4px solid transparent'
     borderBottom='4px solid transparent'
@@ -56,15 +54,13 @@ const NavLink = ({ children, link }: NavLinkProps) => (
   </Link>
 );
 
-const NavLinks = ({ loggedIn }: NavLinksProps) => (
+const NavLinks = () => (
   <>
-    {loggedIn
-      ? links.map((link) => (
-          <NavLink link={link.route} key={link.label}>
-            {link.label}
-          </NavLink>
-        ))
-      : null}
+    {links.map((link) => (
+      <NavLink link={link.route} key={link.label}>
+        {link.label}
+      </NavLink>
+    ))}
   </>
 );
 
@@ -74,11 +70,17 @@ interface NavbarProps {
 
 const Navbar = ({ user }: NavbarProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const loading = useAppSelector((state) => state.ui.loading);
+  const loadingRemaining = useIsFetching();
 
   return (
-    <Box zIndex={1} h='3em' position='fixed' w='100%' bg='diamond.800'>
-      <Flex px={{ base: 4, md: "7.5vw" }} h={12} alignItems={"center"} justifyContent={"space-between"}>
+    <Box position='sticky' top='0' zIndex={1} w='100%'>
+      <Flex
+        bg='diamond.800'
+        px={{ base: 4, md: "7.5vw" }}
+        h={12}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+      >
         <IconButton
           size={"sm"}
           icon={isOpen ? <MdClose /> : <MdMenu />}
@@ -99,7 +101,7 @@ const Navbar = ({ user }: NavbarProps) => {
             </Box>
           </NavLink>
           <HStack h='100%' as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
-            <NavLinks loggedIn={user !== null} />
+            {user !== null && <NavLinks />}
           </HStack>
         </HStack>
         <Flex alignItems={"center"}>
@@ -149,11 +151,15 @@ const Navbar = ({ user }: NavbarProps) => {
           )}
         </Flex>
       </Flex>
-      {!isOpen && loading && <Progress isIndeterminate size='sm' />}
-
+      <Breadcrumbs />
+      {!isOpen && loadingRemaining !== 0 ? (
+        <Progress h='0.5em' isIndeterminate size='sm' />
+      ) : (
+        <Box bg='rgba(0,0,0,0)' h='0.5em' />
+      )}
       {isOpen && (
         <VStack bg='diamond.800' as={"nav"} spacing={4}>
-          <NavLinks loggedIn={user !== null} />
+          {user !== null && <NavLinks />}
         </VStack>
       )}
     </Box>

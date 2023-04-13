@@ -67,8 +67,6 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
       return newConfig as CompleteScatterPlotOptions;
     }, [data, options]);
 
-    //const decimationThreshold = useMemo(() => (config.y.domain.max - config.y.domain.min)/25, [config])
-
     const checkBoundaries = useCallback(
       (d: BasePoint) => {
         return (
@@ -150,13 +148,13 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
     );
 
     const handleMouseLeave = useCallback(() => {
-      window.setTimeout(() => {
+      setTimeout(() => {
         hideTooltip();
       }, 300);
     }, [hideTooltip]);
 
     if (data.length === 0) {
-      return <NoData/>
+      return <NoData />;
     }
 
     return (

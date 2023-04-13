@@ -9,7 +9,7 @@
     "@fullcalendar/daygrid": "^5.11.3",
     "@fullcalendar/react": "^5.11.2",
     "@fullcalendar/timegrid": "^5.11.3",
-    "@reduxjs/toolkit": "^1.8.1",
+    "@tanstack/react-query": "^4.28.0",
     "@visx/axis": "^3.0.0",
     "@visx/event": "^3.0.0",
     "@visx/grid": "^3.0.0",
@@ -31,12 +31,12 @@
     "react-scripts": "5.0.1"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "REACT_APP_AUTH_ENDPOINT=auth/ jest",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "REACT_APP_AUTH_ENDPOINT=auth/ jest --logHeapUsage",
     "eject": "react-scripts eject",
     "format": "prettier --jsx-single-quote --write src/**/*.{ts,tsx,css}",
-    "demo": "REACT_APP_DEMO=true HTTPS=false REACT_APP_AUTH_ENDPOINT=http://localhost/auth/ REACT_APP_API_ENDPOINT=http://localhost/ react-app-rewired start"
+    "demo": "REACT_APP_DEPLOY_TYPE=demo HTTPS=false REACT_APP_AUTH_ENDPOINT=http://localhost/auth/ REACT_APP_API_ENDPOINT=http://localhost/ react-app-rewired start"
   },
   "eslintConfig": {
     "extends": [
@@ -57,6 +57,7 @@
     ]
   },
   "devDependencies": {
+    "@tanstack/react-query-devtools": "^4.28.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.0.1",
     "@testing-library/user-event": "^14.1.1",
@@ -66,10 +67,10 @@
     "@types/react-dom": "^18.0.2",
     "msw": "^0.47.4",
     "prettier": "^2.8.4",
-    "react-app-rewired": "^2.2.1",
     "ts-jest": "^29.0.3",
     "ts-node": "^10.9.1",
     "typescript": "^4.6.0",
+    "weak-napi": "^2.0.2",
     "whatwg-fetch": "^3.6.2"
   },
   "msw": {

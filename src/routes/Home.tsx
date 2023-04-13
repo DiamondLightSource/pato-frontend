@@ -95,7 +95,7 @@ const Home = () => {
   return (
     <div className='rootContainer'>
       <title>PATo</title>
-      <Box mt={-8} mx='-10vw' bg='diamond.50' flex='1 0 auto'>
+      <Box mt='-1em' mx='-7.3vw' bg='diamond.50' flex='1 0 auto'>
         <Box w='100%' overflow='hidden'>
           <VStack className='homeRoot'>
             <VStack bg='diamond.700' justifyContent='start' alignItems='start'>
@@ -107,11 +107,11 @@ const Home = () => {
                 Interface
               </Heading>
               <HStack>
-                <Link href='https://gitlab.diamond.ac.uk/lims/ebic-frontend'>
-                  <Button variant='onBlue'>View Code</Button>
-                </Link>
                 <Link as={LinkRouter} to='/proposals'>
                   <Button variant='onBlue'>List Proposals</Button>
+                </Link>
+                <Link as={LinkRouter} to='/calendar'>
+                  <Button variant='onBlue'>View Calendar</Button>
                 </Link>
               </HStack>
             </VStack>

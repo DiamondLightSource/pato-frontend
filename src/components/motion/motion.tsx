@@ -23,15 +23,14 @@ import { ImageCard } from "components/visualisation/image";
 import { InfoGroup } from "components/visualisation/infogroup";
 import { PlotContainer } from "components/visualisation/plotContainer";
 import { MotionPagination } from "components/motion/pagination";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { MdComment } from "react-icons/md";
-import { client } from "utils/api/client";
+import { client, prependApiUrl } from "utils/api/client";
 import { parseData } from "utils/generic";
 import { driftPlotOptions } from "utils/config/plot";
-import { buildEndpoint } from "utils/api/endpoint";
 import { BasePoint, Info } from "schema/interfaces";
 import { Scatter } from "components/plots/scatter";
-import { setImage } from "utils/api/response";
+import { useQuery } from "@tanstack/react-query";
 
 interface MotionData {
   /** Total number of tilt alignment images available */
@@ -95,44 +94,101 @@ const motionConfig = {
   ],
 };
 
-const calcDarkImages = (total: number, rawTotal: number) => {
-  if (rawTotal === undefined) {
-    return "No tilt alignment data available";
+const flattenMovieData = (rawData: Record<string, any>) => {
+  let flattenedData: Record<string, string> = { rawTotal: rawData.rawTotal, total: rawData.total };
+  const items = rawData.items[0];
+
+  for (let type in items) {
+    if (items[type] !== null) {
+      for (let [key, value] of Object.entries(items[type])) {
+        if (key !== "comments") {
+          flattenedData[key] = value as string;
+        } else {
+          flattenedData[`${key}_${type}`] = value as string;
+        }
+      }
+    }
   }
 
-  if (isNaN(rawTotal - total)) {
-    return "?";
+  return flattenedData;
+};
+
+interface FullMotionData {
+  motion: MotionData | null;
+  total: number | null;
+  micrograph: string;
+  fft: string;
+  drift: BasePoint[];
+}
+
+const fetchMotionData = async (
+  parentType: "tomograms" | "dataCollections" | "autoProc",
+  parentId: number,
+  page: number | undefined
+) => {
+  let fullEndpoint = `${parentType}/${parentId}/motion?limit=1&page=${page ? page - 1 : 0}`;
+
+  if (parentType === "tomograms" && page === undefined) {
+    fullEndpoint += "&getMiddle=true";
   }
 
-  return `Dark Images: ${rawTotal - total}`;
+  const response = await client.safeGet(fullEndpoint);
+  let data: FullMotionData = { motion: null, total: null, micrograph: "", fft: "", drift: [] };
+
+  if (response.status !== 200) {
+    return data;
+  }
+
+  data = {
+    ...data,
+    total: response.data.total,
+    motion: parseData(flattenMovieData(response.data), motionConfig) as MotionData,
+  };
+
+  const movie = response.data.items[0].Movie;
+
+  if (movie !== undefined) {
+    data = {
+      ...data,
+      micrograph: prependApiUrl(`movies/${movie.movieId}/micrograph`),
+      fft: prependApiUrl(`movies/${movie.movieId}/fft`),
+    };
+
+    const fileData = await client.safeGet(`movies/${movie.movieId}/drift?fromDb=${parentType === "autoProc"}`);
+
+    if (fileData.status === 200) {
+      data.drift = fileData.data.items;
+    }
+  }
+
+  return data;
 };
 
 const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: MotionProps) => {
   const [innerPage, setInnerPage] = useState<number | undefined>();
-  const [motion, setMotion] = useState<MotionData | null>();
-  const [drift, setDrift] = useState<BasePoint[]>([]);
-  const [mgImage, setMgImage] = useState<string>();
-  const [fftImage, setFftImage] = useState<string>();
+  const [actualTotal, setActualTotal] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const flattenMovieData = (rawData: Record<string, any>) => {
-    let flattenedData: Record<string, string> = { rawTotal: rawData.rawTotal, total: rawData.total };
-    const items = rawData.items[0];
+  const { data, isLoading } = useQuery({
+    queryKey: ["motion", parentId, parentType, innerPage],
+    queryFn: async () => await fetchMotionData(parentType, parentId, innerPage),
+  });
 
-    for (let type in items) {
-      if (items[type] !== null) {
-        for (let [key, value] of Object.entries(items[type])) {
-          if (key !== "comments") {
-            flattenedData[key] = value as string;
-          } else {
-            flattenedData[`${key}_${type}`] = value as string;
-          }
-        }
-      }
+  const darkImages = useMemo(() => {
+    if (!data || !data.motion || !data.total || data.motion.rawTotal === undefined) {
+      return "No tilt alignment data available";
     }
 
-    return flattenedData;
-  };
+    if (isNaN(data.motion.rawTotal - data.total)) {
+      return "?";
+    }
+
+    return `Dark Images: ${data.motion.rawTotal - data.total}`;
+  }, [data]);
+  const hasComments = useMemo(
+    () => data && data.motion && (data.motion.comments_CTF || data.motion.comments_MotionCorrection),
+    [data]
+  );
 
   useEffect(() => {
     if (page) {
@@ -154,32 +210,14 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
   );
 
   useEffect(() => {
-    client.safeGet(buildEndpoint(`${parentType}/${parentId}/motion`, {}, 1, innerPage ?? 0)).then((response) => {
-      if (response.status === 200) {
-        setMotion(parseData(flattenMovieData(response.data), motionConfig) as MotionData);
-        if (onTotalChanged) {
-          onTotalChanged(response.data.total);
-        }
-
-        if (innerPage !== undefined || parentType !== "tomograms") {
-          const movie = response.data.items[0].Movie;
-          if (movie !== undefined) {
-            setImage(`movies/${movie.movieId}/micrograph`, setMgImage);
-            setImage(`movies/${movie.movieId}/fft`, setFftImage);
-            const driftUrl = `movies/${movie.movieId}/drift?fromDb=${parentType === "autoProc"}`;
-
-            client.safeGet(driftUrl).then((response) => {
-              if (response.data.items) {
-                setDrift(response.data.items);
-              }
-            });
-          }
-        }
-      } else {
-        setMotion(null);
+    if (data && data.motion) {
+      const total = data.total || data.motion.rawTotal;
+      setActualTotal(total);
+      if (onTotalChanged) {
+        onTotalChanged(total);
       }
-    });
-  }, [innerPage, parentId, parentType, onTotalChanged]);
+    }
+  }, [onTotalChanged, data]);
 
   return (
     <div>
@@ -187,54 +225,42 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
         <Heading variant='collection' pr='2' mt='0'>
           Motion Correction/CTF
         </Heading>
-
-        {motion && (
-          <>
-            {parentType !== "autoProc" && (
-              <Heading size='sm' display='flex' alignSelf='center' color='diamond.300'>
-                {calcDarkImages(motion.total, motion.rawTotal)}
-              </Heading>
-            )}
-            <Spacer />
-            <HStack>
-              <Tooltip id='comment' label='View Comments'>
-                <Button
-                  data-testid='comment'
-                  isDisabled={!(motion.comments_CTF || motion.comments_MotionCorrection)}
-                  size='xs'
-                  onClick={onOpen}
-                >
-                  <MdComment />
-                  {(motion.comments_CTF || motion.comments_MotionCorrection) && (
-                    <Circle size='3' position='absolute' top='-1' left='-1' bg='red'></Circle>
-                  )}
-                </Button>
-              </Tooltip>
-              <MotionPagination
-                startFrom={parentType === "tomograms" ? "middle" : "end"}
-                total={motion.total || motion.rawTotal}
-                onChange={handlePageChanged}
-                page={innerPage}
-              />
-            </HStack>
-          </>
+        {parentType !== "autoProc" && (
+          <Heading size='sm' display='flex' alignSelf='center' color='diamond.300'>
+            {darkImages}
+          </Heading>
         )}
+        <Spacer />
+        <HStack>
+          <Tooltip id='comment' label='View Comments'>
+            <Button data-testid='comment' isDisabled={!hasComments} size='xs' onClick={onOpen}>
+              <MdComment />
+              {hasComments && <Circle size='3' position='absolute' top='-1' left='-1' bg='red'></Circle>}
+            </Button>
+          </Tooltip>
+          <MotionPagination
+            startFrom={parentType === "tomograms" ? "middle" : "end"}
+            total={actualTotal}
+            onChange={handlePageChanged}
+            page={innerPage}
+          />
+        </HStack>
       </Stack>
       <Divider />
-      {motion ? (
+      {data && data.motion ? (
         <Grid py={2} templateColumns='repeat(4, 1fr)' gap={2}>
           <GridItem h='25vh' colSpan={{ base: 2, md: 1 }}>
-            <InfoGroup info={motion.info} />
+            <InfoGroup info={data.motion.info} />
           </GridItem>
           <GridItem h='25vh' colSpan={{ base: 2, md: 1 }}>
-            <ImageCard src={mgImage} title='Micrograph Snapshot' height='100%' />
+            <ImageCard src={data.micrograph} title='Micrograph Snapshot' height='100%' />
           </GridItem>
           <GridItem h='25vh' colSpan={{ base: 2, md: 1 }}>
-            <ImageCard src={fftImage} title='FFT Theoretical' height='100%' />
+            <ImageCard src={data.fft} title='FFT Theoretical' height='100%' />
           </GridItem>
           <GridItem h='25vh' colSpan={{ base: 2, md: 1 }}>
             <PlotContainer title='Drift'>
-              <Scatter options={driftPlotOptions} data={drift} />
+              <Scatter options={driftPlotOptions} data={data.drift} />
             </PlotContainer>
           </GridItem>
           <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
@@ -245,27 +271,23 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
               <DrawerBody>
                 <Heading size='sm'>CTF</Heading>
                 <Code h='25vh' w='100%' overflowY='scroll'>
-                  {motion.comments_CTF}
+                  {data.motion.comments_CTF}
                 </Code>
                 <Divider marginY={3} />
                 <Heading size='sm'>Motion Correction</Heading>
                 <Code h='25vh' w='100%' overflowY='scroll'>
-                  {motion.comments_MotionCorrection}
+                  {data.motion.comments_MotionCorrection}
                 </Code>
               </DrawerBody>
             </DrawerContent>
           </Drawer>
         </Grid>
+      ) : isLoading ? (
+        <Skeleton h='25vh' />
       ) : (
-        <>
-          {motion === undefined ? (
-            <Skeleton h='25vh' />
-          ) : (
-            <Heading pt='10vh' variant='notFound' h='25vh'>
-              No Motion Correction Data Available
-            </Heading>
-          )}
-        </>
+        <Heading pt='10vh' variant='notFound' h='25vh'>
+          No Motion Correction Data Available
+        </Heading>
       )}
     </div>
   );
