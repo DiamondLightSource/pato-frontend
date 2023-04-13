@@ -9,7 +9,12 @@ const withSearch = (items: Record<string, any>[], search?: string | null) =>
 const getMotionData = (parentId: string) => {
   let data = {};
   const items = [
-    { Movie: {}, CTF: {}, MotionCorrection: {}, TiltImageAlignment: {} },
+    {
+      Movie: { movieId: 1 },
+      CTF: {},
+      MotionCorrection: {},
+      TiltImageAlignment: {},
+    },
   ];
 
   switch (parentId) {
@@ -50,6 +55,7 @@ const getMotionData = (parentId: string) => {
           },
         ],
         rawTotal: "asd",
+        total: 10,
       };
       break;
   }
@@ -57,13 +63,13 @@ const getMotionData = (parentId: string) => {
 };
 
 export const handlers = [
-  rest.get("http://localhost/tomograms/:id/motion", (req, res, ctx) => {
-    return res(
+  rest.get("http://localhost/tomograms/:id/motion", (req, res, ctx) =>
+    res(
       ctx.status(200),
       ctx.delay(0),
       ctx.json(getMotionData(req.params.id.toString()))
-    );
-  }),
+    )
+  ),
 
   rest.get("http://localhost/autoProc/:id/motion", (req, res, ctx) => {
     return res(
@@ -85,9 +91,9 @@ export const handlers = [
     res(ctx.status(200), ctx.json({ givenName: "Person", fedid: "abc12345" }))
   ),
 
-  rest.get("http://localhost/auth/token", (req, res, ctx) => {
-    return res(ctx.status(200));
-  }),
+  rest.get("http://localhost/auth/token", (req, res, ctx) =>
+    res(ctx.status(200))
+  ),
 
   rest.get(
     "http://localhost/dataCollections/:collectionId/iceThickness",
@@ -225,7 +231,7 @@ export const handlers = [
                   createdTimestamp: "1",
                 },
               ],
-              total: 1,
+              total: 3,
               limit: 1,
             })
           );

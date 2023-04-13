@@ -1,12 +1,8 @@
 import { createStandaloneToast } from "@chakra-ui/toast";
-import { setLoading } from "features/uiSlice";
-import { store } from "store/store";
 import { baseToast } from "styles/components";
 const { toast } = createStandaloneToast();
 
 const controller = new AbortController();
-const timeoutFetch = setTimeout(() => controller.abort(), 3000);
-let timer: ReturnType<typeof setTimeout>;
 
 const defaultSettings: Partial<RequestConfig> = {
   credentials: process.env.NODE_ENV === "development" ? "include" : "same-origin",
@@ -63,10 +59,7 @@ export const client = async (
   let data;
 
   try {
-    store.dispatch(setLoading(true));
-    clearTimeout(timer); // Debounces loading state
     const response = await fetch(prefix + endpoint, config);
-    clearTimeout(timeoutFetch);
 
     switch (response.headers.get("content-type")) {
       case "application/marc":
@@ -105,8 +98,6 @@ export const client = async (
     }
 
     throw err;
-  } finally {
-    timer = setTimeout(() => store.dispatch(setLoading(false)), 200);
   }
 };
 

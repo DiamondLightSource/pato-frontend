@@ -51,7 +51,7 @@ const MotionPagination = ({
           break;
         case "middle":
           if (total !== 0) {
-            setPage(Math.round(total / 2));
+            setValue(Math.round(total / 2).toString());
           }
           break;
         case "start":
@@ -61,20 +61,23 @@ const MotionPagination = ({
     }
   }, [total, startFrom, page, setPage, value]);
 
-  const editPage = useCallback((event: ReactFocusEvent<HTMLInputElement>) => {
-    let newPage = parseInt(event.target.value);
+  const editPage = useCallback(
+    (event: ReactFocusEvent<HTMLInputElement>) => {
+      let newPage = parseInt(event.target.value);
 
-    if (newPage > total) {
-      newPage = total;
-    }
-    if (newPage < 1) {
-      newPage = 1;
-    }
+      if (newPage > total) {
+        newPage = total;
+      }
+      if (newPage < 1) {
+        newPage = 1;
+      }
 
-    if (!isNaN(newPage)) {
-      setPage(newPage);
-    }
-  },[setPage, total]);
+      if (!isNaN(newPage)) {
+        setPage(newPage);
+      }
+    },
+    [setPage, total]
+  );
 
   if (value === undefined) {
     return <Skeleton h='20px' w={size === "xs" ? "210px" : "295px"} />;
