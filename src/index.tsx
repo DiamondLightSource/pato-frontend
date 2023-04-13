@@ -1,7 +1,5 @@
 import React, { Suspense } from "react";
 import { createRoot } from "react-dom/client";
-import { Provider } from "react-redux";
-import { store } from "store/store";
 import { ChakraProvider, createStandaloneToast, extendTheme } from "@chakra-ui/react";
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import { Root } from "routes/Root";
@@ -19,18 +17,23 @@ import {
   proposalHeaders,
   sessionHeaders,
 } from "utils/config/table";
-import { getUser } from "utils/loaders/user";
-import { getListingData, getSessionData } from "utils/loaders/listings";
+import { getUser } from "loaders/user";
+import { listingLoader } from "loaders/listings";
 import { parseDate } from "utils/generic";
-import { getSpaData } from "utils/loaders/spa";
-import { getTomogramData } from "utils/loaders/tomogram";
+import { spaLoader } from "loaders/spa";
+import { tomogramLoader } from "loaders/tomogram";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { sessionLoader } from "loaders/sessions";
+
 const Calendar = React.lazy(() => import("routes/Calendar"));
 
 const { ToastContainer } = createStandaloneToast();
 const container = document.getElementById("root")!;
 const root = createRoot(container);
+const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: 1.08e7 } } });
 
-if (process.env.REACT_APP_DEMO === "true") {
+if (process.env.REACT_APP_DEPLOY_TYPE === "demo") {
   const { worker } = require("./mocks/browser");
   worker.start();
 }
@@ -86,13 +89,13 @@ const router = createBrowserRouter([
     path: "/",
     element: <Root />,
     errorElement: <Error />,
-    loader: getUser,
+    loader: (getUser),
     shouldRevalidate: () => false,
     children: [
       {
         path: "/",
         element: <Home />,
-        loader: getSessionData,
+        loader: sessionLoader(queryClient),
       },
       {
         path: "/proposals",
@@ -103,7 +106,7 @@ const router = createBrowserRouter([
             makePathCallback={(item) => [item.proposalCode, item.proposalNumber].join("")}
           />
         ),
-        loader: ({ request, params }) => getListingData(request, params, "proposals"),
+        loader: ({ request, params }) => listingLoader(queryClient)(request, params, "proposals"),
         shouldRevalidate: ({ currentUrl, nextUrl }) => checkListingChanged(currentUrl, nextUrl),
       },
       {
@@ -127,7 +130,7 @@ const router = createBrowserRouter([
             makePathCallback={(item) => item.visit_number.toString()}
           />
         ),
-        loader: ({ request, params }) => getListingData(request, params, "sessions", processSessionData),
+        loader: ({ request, params }) => listingLoader(queryClient)(request, params, "sessions", processSessionData),
         shouldRevalidate: ({ currentUrl, nextUrl }) => checkListingChanged(currentUrl, nextUrl),
       },
       {
@@ -143,7 +146,7 @@ const router = createBrowserRouter([
             makePathCallback={handleGroupClicked}
           />
         ),
-        loader: ({ request, params }) => getListingData(request, params, "dataGroups"),
+        loader: ({ request, params }) => listingLoader(queryClient)(request, params, "dataGroups"),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/collections",
@@ -154,7 +157,7 @@ const router = createBrowserRouter([
             makePathCallback={handleCollectionClicked}
           />
         ),
-        loader: ({ request, params }) => getListingData(request, params, "dataCollections"),
+        loader: ({ request, params }) => listingLoader(queryClient)(request, params, "dataCollections"),
         shouldRevalidate: ({ currentUrl, nextUrl }) => checkListingChanged(currentUrl, nextUrl),
       },
       {
@@ -164,12 +167,12 @@ const router = createBrowserRouter([
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/tomograms/:collectionIndex",
         element: <TomogramPage />,
-        loader: ({ params, request }) => getTomogramData(params, request),
+        loader: ({ params, request }) => tomogramLoader(queryClient)(params, request),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/spa/",
         element: <SpaPage />,
-        loader: ({ params }) => getSpaData(params),
+        loader: ({ params }) => spaLoader(queryClient)(params),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/",
@@ -182,10 +185,11 @@ const router = createBrowserRouter([
 root.render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
-      <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
         <ToastContainer />
-      </Provider>
+        {process.env.NODE_ENV === "development" && <ReactQueryDevtools initialIsOpen={false} />}
+      </QueryClientProvider>
     </ChakraProvider>
   </React.StrictMode>
 );

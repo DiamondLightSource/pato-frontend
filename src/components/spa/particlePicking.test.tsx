@@ -1,11 +1,10 @@
 import { ParticlePicking } from "components/spa/particlePicking";
 import { renderWithProviders } from "utils/test-utils";
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { server } from "mocks/server";
 import { rest } from "msw";
 
 describe("Particle Picking", () => {
-  window.URL.createObjectURL = jest.fn();
   it("should display last page as default", () => {
     renderWithProviders(<ParticlePicking autoProcId={1} page={undefined} total={150} />);
     expect(screen.getByLabelText("Current Page")).toHaveValue("150");
@@ -46,5 +45,16 @@ describe("Particle Picking", () => {
     renderWithProviders(<ParticlePicking autoProcId={2} page={12} total={150} />);
 
     await screen.findByText("Relative Ice Thickness");
+  });
+
+  it("should use inner total if current page is uncoupled from motion correction", async () => {
+    renderWithProviders(<ParticlePicking autoProcId={2} page={12} total={150} />);
+
+    await waitFor(() => expect(screen.getByLabelText("Total Pages")).toHaveTextContent("150"));
+
+    const checkbox = await screen.findByLabelText("Lock Pages with Motion Correction");
+    fireEvent.click(checkbox);
+
+    await waitFor(() => expect(screen.getByLabelText("Total Pages")).toHaveTextContent("3"));
   });
 });

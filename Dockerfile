@@ -3,10 +3,12 @@ FROM docker.io/library/node:18-alpine as build
 WORKDIR /usr/src/app
 COPY package.json yarn.lock .
 
+ARG DEPLOY_TYPE="production"
 ARG API_ENDPOINT="http://localhost:8000/"
 ARG AUTH_ENDPOINT="http://localhost:8050/"
 ARG VERSION=0.3.0
 
+ENV REACT_APP_DEPLOY_TYPE=${DEPLOY_TYPE}
 ENV REACT_APP_API_ENDPOINT=${API_ENDPOINT}
 ENV REACT_APP_AUTH_ENDPOINT=${AUTH_ENDPOINT}
 ENV REACT_APP_VERSION=${VERSION}

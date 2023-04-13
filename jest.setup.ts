@@ -1,13 +1,21 @@
 import "@testing-library/jest-dom";
 
 import { server } from "./src/mocks/server";
+import { queryClient } from "./src/utils/test-utils";
 import "whatwg-fetch";
 
 process.env.REACT_APP_API_ENDPOINT = "http://localhost/";
 
+beforeAll(() => {});
 beforeEach(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+afterEach(() => {
+  server.resetHandlers();
+  queryClient.clear();
+});
+afterAll(() => {
+  server.close();
+  jest.restoreAllMocks();
+});
 
 class ResizeObserver {
   observe() {}
@@ -16,11 +24,4 @@ class ResizeObserver {
 }
 
 global.ResizeObserver = ResizeObserver;
-global.window.scrollTo = () => {};
 global.structuredClone = (val: Record<string, any>) => JSON.parse(JSON.stringify(val));
-global.URL.createObjectURL = (url: Blob | MediaSource) => "blob://test";
-
-jest.mock("./src/store/store");
-jest.mock("molstar/lib/mol-canvas3d/canvas3d");
-jest.mock("molstar/lib/mol-plugin/context");
-jest.mock("molstar/lib/mol-plugin/spec");

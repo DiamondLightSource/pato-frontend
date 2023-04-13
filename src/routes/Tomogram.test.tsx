@@ -1,10 +1,10 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { renderWithRoute } from "utils/test-utils";
 import { TomogramPage } from "routes/Tomogram";
-import { getTomogramData } from "utils/loaders/tomogram";
+import { TomogramResponse } from "loaders/tomogram";
 import { CollectionData } from "schema/interfaces";
 
-type LoaderReturn = Awaited<ReturnType<typeof getTomogramData>>;
+type LoaderReturn = Awaited<TomogramResponse>;
 
 const searchMap = new Map();
 
@@ -66,6 +66,7 @@ describe("Tomogram Page", () => {
     await screen.findByText("Reprocessing");
   });
   */
+  afterAll(() => jest.restoreAllMocks());
 
   it("should change page when next page button is clicked", async () => {
     renderWithRoute(<TomogramPage />, () => validData);
