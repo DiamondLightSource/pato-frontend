@@ -15,6 +15,9 @@ const basicProcJob: BaseProcessingJobProps["procJob"] = {
 };
 
 describe("Tomogram", () => {
+  beforeAll(() => jest.spyOn(global, "scrollTo").mockImplementation(() => {}));
+  afterAll(() => jest.restoreAllMocks());
+
   it("should only display motion correction if tomogram is not fully processed", async () => {
     server.use(
       rest.get("http://localhost/autoProc/:autoProcId/tomogram", (req, res, ctx) =>
