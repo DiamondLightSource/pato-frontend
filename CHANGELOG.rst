@@ -16,6 +16,21 @@ v0.10.0 (11/04/2023)
 - Breadcrumbs moved to just under navigation bar
 - Homepage no longer has horizontal overflow
 
+v0.9.3 (06/04/2023)
+++++++++++
+
+**Changed**
+
+- Uses strict-mode for cookies in production
+
+++++++++++
+v0.9.2 (06/04/2023)
+++++++++++
+
+**Changed**
+
+- API endpoints can be configured to be generated based on the current origin
+
 ++++++++++
 v0.9.1 (04/04/2023)
 ++++++++++

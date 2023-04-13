@@ -5,7 +5,7 @@ const { toast } = createStandaloneToast();
 const controller = new AbortController();
 
 const defaultSettings: Partial<RequestConfig> = {
-  credentials: process.env.NODE_ENV === "development" ? "include" : "strict",
+  credentials: process.env.NODE_ENV === "development" ? "include" : "same-origin",
 };
 
 interface RequestConfig {
