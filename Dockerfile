@@ -4,10 +4,10 @@ WORKDIR /usr/src/app
 COPY package.json yarn.lock .
 
 ARG DEPLOY_TYPE="production"
-ARG API_ENDPOINT="http://localhost:8000/"
-ARG AUTH_ENDPOINT="http://localhost:8050/"
+ARG API_ENDPOINT="/api/"
+ARG AUTH_ENDPOINT="/auth/"
 ARG REACT_APP_STAGING_HOST="ebic-pato-staging.diamond.ac.uk"
-ARG VERSION=0.3.
+ARG VERSION=0.10.0
 ARG REACT_APP_DEV_CONTACT="guilherme.de-freitas@diamond.ac.uk"
 
 ENV REACT_APP_DEPLOY_TYPE=${DEPLOY_TYPE}

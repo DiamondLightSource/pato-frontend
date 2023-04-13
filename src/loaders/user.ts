@@ -10,15 +10,15 @@ const getUser = async () => {
   searchParams.delete("code");
 
   if (code) {
-    window.location.search = searchParams.toString();
     await client.authGet(`token?redirect_uri=${url}&code=${code}`);
+    if (searchParams.toString() !== "") {
+      window.location.search = searchParams.toString();
+    }
   }
 
   try {
     const response = await client.authGet("user");
-    return response.status === 200
-      ? { fedid: response.data.fedid, name: response.data.givenName }
-      : null;
+    return response.status === 200 ? { fedid: response.data.fedid, name: response.data.givenName } : null;
   } catch (NetworkError) {
     return user;
   }

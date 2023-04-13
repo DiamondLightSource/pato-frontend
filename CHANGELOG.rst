@@ -3,7 +3,17 @@ Changelog
 ==========
 
 ++++++++++
-v0.10.0 (11/04/2023)
+v0.10.1 (14/04/2023)
+++++++++++
+
+**Changed**
+
+- Fixes auth redirection on Chrome, no orphan search parameters included
+- Performance and memory usage improvements to Molstar
+- Fixes empty white horizontal bar below footer on staging environments
+
+++++++++++
+v0.10.0 (13/04/2023)
 ++++++++++
 
 **Added**
@@ -16,6 +26,7 @@ v0.10.0 (11/04/2023)
 - Breadcrumbs moved to just under navigation bar
 - Homepage no longer has horizontal overflow
 
++++++++++
 v0.9.3 (06/04/2023)
 ++++++++++
 
