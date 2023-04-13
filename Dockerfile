@@ -6,7 +6,9 @@ COPY package.json yarn.lock .
 ARG DEPLOY_TYPE="production"
 ARG API_ENDPOINT="http://localhost:8000/"
 ARG AUTH_ENDPOINT="http://localhost:8050/"
-ARG VERSION=0.3.0
+ARG REACT_APP_STAGING_HOST="ebic-pato-staging.diamond.ac.uk"
+ARG VERSION=0.3.
+ARG REACT_APP_DEV_CONTACT="guilherme.de-freitas@diamond.ac.uk"
 
 ENV REACT_APP_DEPLOY_TYPE=${DEPLOY_TYPE}
 ENV REACT_APP_API_ENDPOINT=${API_ENDPOINT}
