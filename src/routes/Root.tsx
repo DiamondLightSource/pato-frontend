@@ -1,12 +1,4 @@
-import {
-  Box,
-  Divider,
-  HStack,
-  Tag,
-  VStack,
-  Text,
-  Link,
-} from "@chakra-ui/react";
+import { Box, Divider, HStack, Tag, VStack, Text, Link } from "@chakra-ui/react";
 import { Outlet, useLoaderData } from "react-router-dom";
 import { Footer } from "components/navigation/footer";
 import { Navbar } from "components/navigation/navbar";
@@ -18,38 +10,23 @@ const deployType = () => {
     return "dev";
   }
 
-  return process.env.REACT_APP_STAGING_HOST === window.location.host
-    ? "beta"
-    : "production";
+  return process.env.REACT_APP_STAGING_HOST === window.location.host ? "beta" : "production";
 };
 
-const PhaseBanner = ({
-  deployType,
-}: {
-  deployType: "dev" | "production" | "beta";
-}) => {
+const PhaseBanner = ({ deployType }: { deployType: "dev" | "production" | "beta" }) => {
   if (deployType === "production") {
     return null;
   }
 
   return (
-    <VStack h='3em' mb='2px'>
+    <VStack mx='7.3vw' h='3em' mb='2px'>
       <HStack w='100%'>
-        <Tag
-          fontWeight='600'
-          bg={deployType === "dev" ? "purple" : "diamond.700"}
-          color='diamond.50'
-          borderRadius='0'
-        >
+        <Tag fontWeight='600' bg={deployType === "dev" ? "purple" : "diamond.700"} color='diamond.50' borderRadius='0'>
           {deployType.toUpperCase()}
         </Tag>
         <Text>
-          This version of the service is still in testing, report any issues to
-          the{" "}
-          <Link
-            color='diamond.700'
-            href={"mailto:" + process.env.REACT_APP_DEV_CONTACT}
-          >
+          This version of the service is still in testing, report any issues to the{" "}
+          <Link color='diamond.700' href={"mailto:" + process.env.REACT_APP_DEV_CONTACT}>
             developers.
           </Link>
         </Text>
@@ -65,8 +42,8 @@ const Root = () => {
   return (
     <div className='rootContainer'>
       <Navbar user={loaderData} />
+      <PhaseBanner deployType={deployType()} />
       <Box className='main'>
-        <PhaseBanner deployType={deployType()} />
         <Outlet />
       </Box>
       <Footer />
