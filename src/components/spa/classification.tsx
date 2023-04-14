@@ -1,4 +1,16 @@
-import { Spacer, HStack, Divider, Grid, Heading, Skeleton, Box, Select, Card, CardBody } from "@chakra-ui/react";
+import {
+  Spacer,
+  HStack,
+  Divider,
+  Grid,
+  Heading,
+  Skeleton,
+  Box,
+  Select,
+  Card,
+  CardBody,
+  Checkbox,
+} from "@chakra-ui/react";
 import { ImageCard } from "components/visualisation/image";
 import { InfoGroup } from "components/visualisation/infogroup";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -83,11 +95,20 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
 
   return (
     <Box>
-      <HStack>
+      <HStack gap={2}>
         <Heading variant='collection'>{type.toUpperCase()} Classification</Heading>
+        <Checkbox size='sm'>Only Show Selected</Checkbox>
         <Spacer />
-        <Heading size='xs'>Sort by</Heading>
-        <Select bg='white' onChange={(e) => setSortType(e.target.value as SortTypes)} size='xs' w='180px'>
+        <Heading id='sortLabel' size='xs'>
+          Sort by
+        </Heading>
+        <Select
+          aria-labelledby='sortlabel'
+          bg='white'
+          onChange={(e) => setSortType(e.target.value as SortTypes)}
+          size='xs'
+          w='180px'
+        >
           {sortValues.map((item) => (
             <option key={item.key} value={item.key}>
               {item.label}
@@ -108,6 +129,7 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
           {classificationData.map((item, i) =>
             type === "2d" ? (
               <ImageCard
+                borderColor='green'
                 height='14vh'
                 showModal={false}
                 key={item.particleClassificationId}
@@ -118,6 +140,7 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
               />
             ) : (
               <Card
+                borderColor='green'
                 data-testid={`class-${i}`}
                 onClick={() => setSelectedClass(i)}
                 key={i}
