@@ -28,7 +28,7 @@ describe("Particle Picking", () => {
 
   it("should display message when no particle picking data exists", async () => {
     server.use(
-      rest.get("http://localhost/autoProc/:procId/particlePicker", (req, res, ctx) => res.once(ctx.status(404)))
+      rest.get("http://localhost/autoProc/:procId/particlePicker", (req, res, ctx) => res(ctx.status(404)))
     );
     renderWithProviders(<ParticlePicking autoProcId={3} page={12} total={150} />);
 

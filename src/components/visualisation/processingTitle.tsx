@@ -21,7 +21,7 @@ const jobStatusColour: Record<string, string> = {
 };
 
 const TwoLineTitle = ({ title, value }: TwoLineTitleProps) => (
-  <>
+  
     <VStack spacing='0'>
       <Text w='100%'>
         <b>{title}</b>
@@ -30,8 +30,6 @@ const TwoLineTitle = ({ title, value }: TwoLineTitleProps) => (
         {value}
       </Text>
     </VStack>
-    <Spacer />
-  </>
 );
 
 const ProcessingTitle = ({ procJob, autoProc, status }: ProcTitleProps) => (
@@ -44,7 +42,7 @@ const ProcessingTitle = ({ procJob, autoProc, status }: ProcTitleProps) => (
     w='100%'
     bg='diamond.100'
   >
-    <HStack gap={{ base: 0, xl: 10 }}>
+    <HStack gap={{ base: 0, xl: "5vw" }}>
       <TwoLineTitle title='Processing Job' value={procJob.processingJobId} />
       <TwoLineTitle title='AutoProc. Program' value={autoProc.autoProcProgramId} />
       <TwoLineTitle title='Processing Start' value={parseDate(autoProc.processingStartTime ?? "?")} />

@@ -38,13 +38,17 @@ describe("APNG", () => {
     renderWithProviders(<APNGViewer src='tomograms/1/movie' />);
     await screen.findByLabelText("Frame Image");
 
-    fireEvent.change(screen.getByRole("slider"), { value: 2 });
+    fireEvent.click(screen.getByLabelText("Play"));
 
-    const reverseButton = screen.getByLabelText("Play in Reverse");
-    fireEvent.click(reverseButton);
+    await waitFor(() => {
+      expect(screen.getByLabelText("Current Frame")).toHaveTextContent("2");
+    });
 
-    const playButton = screen.getByLabelText("Play");
-    fireEvent.click(playButton);
+    fireEvent.click(screen.getByLabelText("Play in Reverse"));
+    fireEvent.click(await screen.findByLabelText("Play"));
+
+    await screen.findByLabelText("Pause");
+    await screen.findByLabelText("Play");
 
     await waitFor(() => {
       expect(screen.getByLabelText("Current Frame")).toHaveTextContent("0");
@@ -55,5 +59,15 @@ describe("APNG", () => {
     server.use(rest.get("http://localhost/tomograms/:tomogramId/movie", (req, res, ctx) => res.once(ctx.status(404))));
     renderWithProviders(<APNGViewer src='tomograms/2/movie' />);
     await screen.findByText("No Image Data Available");
+  });
+
+  it("should update button state when paused", async () => {
+    renderWithProviders(<APNGViewer src='tomograms/1/movie' />);
+    await screen.findByLabelText("Frame Image");
+
+    fireEvent.click(screen.getByLabelText("Play"));
+    fireEvent.click(screen.getByLabelText("Pause"));
+
+    expect(screen.getByLabelText("Play")).toBeInTheDocument();
   });
 });

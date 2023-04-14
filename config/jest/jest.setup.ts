@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 
-import { server } from "./src/mocks/server";
-import { queryClient } from "./src/utils/test-utils";
+import { server } from "../../src/mocks/server";
+import { queryClient } from "../../src/utils/test-utils";
 import "whatwg-fetch";
 
 process.env.REACT_APP_API_ENDPOINT = "http://localhost/";
@@ -23,5 +23,6 @@ class ResizeObserver {
   disconnect() {}
 }
 
+global.window.scrollTo = () => {}
 global.ResizeObserver = ResizeObserver;
 global.structuredClone = (val: Record<string, any>) => JSON.parse(JSON.stringify(val));

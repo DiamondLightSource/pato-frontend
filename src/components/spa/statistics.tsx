@@ -44,11 +44,9 @@ const Statistics = ({ dataCollectionId }: SpaProps) => {
           </PlotContainer>
         </Grid>
       ) : [iceThickness, totalMotion, resolution, particleCount].some((i) => i === null) ? (
-        <>
-          <Heading py={3} variant='notFound'>
-            No Frequency Data Available
-          </Heading>
-        </>
+        <Heading py="7vh" variant='notFound'>
+          No Frequency Data Available
+        </Heading>
       ) : (
         <Skeleton h='25vh' />
       )}
