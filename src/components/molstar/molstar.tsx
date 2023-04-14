@@ -113,7 +113,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
           </Button>
         </Tooltip>
         <Tooltip label='Download File'>
-          <Link href={prependApiUrl(mrcUrl)}>
+          <Link href={prependApiUrl(mrcUrl)} target="_blank">
             <Button aria-label='Download File' isDisabled={!isRendered}>
               <Icon as={MdFileDownload} />
             </Button>
