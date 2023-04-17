@@ -58,6 +58,6 @@ describe("Tomogram", () => {
     fireEvent.click(screen.getByRole("button"));
     fireEvent.click(screen.getByRole("button", { name: "View Movie" }));
 
-    await screen.findByLabelText("Play");
+    await screen.findByLabelText("APNG Viewer");
   });
 });
