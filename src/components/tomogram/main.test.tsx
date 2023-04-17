@@ -14,6 +14,13 @@ const basicProcJob: BaseProcessingJobProps["procJob"] = {
   automatic: 1,
 };
 
+jest.mock(
+  "components/visualisation/apng",
+  () =>
+    (props: {width: string, height: string, src: string}) =>
+      <p>APNG Viewer</p>
+);
+
 describe("Tomogram", () => {
   beforeAll(() => jest.spyOn(global, "scrollTo").mockImplementation(() => {}));
   afterAll(() => jest.restoreAllMocks());
