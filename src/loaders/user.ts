@@ -13,7 +13,7 @@ const getUser = async () => {
     await client.authGet(
       `token?redirect_uri=${encodeURIComponent(newUrl.href)}&code=${code}`
     );
-    window.history.replaceState({}, "", newUrl.href);
+    window.location.replace(newUrl.href);
   }
 
   try {

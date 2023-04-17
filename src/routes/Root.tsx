@@ -1,12 +1,4 @@
-import {
-  Box,
-  Divider,
-  HStack,
-  Tag,
-  VStack,
-  Text,
-  Link,
-} from "@chakra-ui/react";
+import { Box, HStack, Tag, Text, Link } from "@chakra-ui/react";
 import { Outlet, useLoaderData } from "react-router-dom";
 import { Footer } from "components/navigation/footer";
 import { Navbar } from "components/navigation/navbar";
@@ -33,29 +25,31 @@ const PhaseBanner = ({
   }
 
   return (
-    <VStack mx='7.3vw' h='3em' mb='2px'>
-      <HStack w='100%'>
-        <Tag
-          fontWeight='600'
-          bg={deployType === "dev" ? "purple" : "diamond.700"}
-          color='diamond.50'
-          borderRadius='0'
+    <HStack
+      mx='7.3vw'
+      borderBottom='1px solid var(--chakra-colors-diamond-100)'
+      py='0.2em'
+      mb='0.8em'
+    >
+      <Tag
+        fontWeight='600'
+        bg={deployType === "dev" ? "purple" : "diamond.700"}
+        color='diamond.50'
+        borderRadius='0'
+      >
+        {deployType.toUpperCase()}
+      </Tag>
+      <Text>
+        This version of the service is still in testing, report any issues to
+        the{" "}
+        <Link
+          color='diamond.700'
+          href={"mailto:" + process.env.REACT_APP_DEV_CONTACT}
         >
-          {deployType.toUpperCase()}
-        </Tag>
-        <Text>
-          This version of the service is still in testing, report any issues to
-          the{" "}
-          <Link
-            color='diamond.700'
-            href={"mailto:" + process.env.REACT_APP_DEV_CONTACT}
-          >
-            developers.
-          </Link>
-        </Text>
-      </HStack>
-      <Divider borderColor='diamond.200' />
-    </VStack>
+          developers.
+        </Link>
+      </Text>
+    </HStack>
   );
 };
 
