@@ -5,7 +5,7 @@ import Calendar from "routes/Calendar";
 const mockNavigate = jest.fn();
 
 jest.mock("react-router-dom", () => ({
-  ...(jest.requireActual("react-router-dom") as any),
+  ...jest.requireActual("react-router-dom"),
   useNavigate: () => mockNavigate,
 }));
 
@@ -32,7 +32,7 @@ describe("Calendar", () => {
     expect(screen.getByText(/\(cm31111-1\)/i)).toBeInTheDocument();
   });
 
-  it("should update query date when month changes", async () => {
+  it("should update query date when month changes", () => {
     const fetchSpy = jest.spyOn(global, "fetch");
 
     renderWithProviders(<Calendar />);

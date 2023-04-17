@@ -17,7 +17,7 @@ describe("User Data", () => {
   it("should return null if unauthorised", async () => {
     server.use(
       rest.get("http://localhost/auth/user", (req, res, ctx) =>
-        res.once(ctx.status(401))
+        res(ctx.status(401))
       )
     );
 
@@ -42,6 +42,8 @@ describe("User Data", () => {
       configurable: true,
     });
 
+    window.location.replace = jest.fn();
+
     server.use(
       rest.get("http://localhost/auth/token", (req, res, ctx) =>
         res.once(ctx.status(200))
@@ -49,6 +51,8 @@ describe("User Data", () => {
     );
 
     await getUser();
-    expect(window.location.href).toBe("http://localhost/?otherVal=1234");
+    expect(window.location.replace).toBeCalledWith(
+      "http://localhost/?otherVal=1234"
+    );
   });
 });

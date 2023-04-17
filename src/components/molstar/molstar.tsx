@@ -1,15 +1,14 @@
 import { DefaultPluginSpec, PluginSpec } from "molstar/lib/mol-plugin/spec";
 import { PluginContext } from "molstar/lib/mol-plugin/context";
 import { PluginConfig } from "molstar/lib/mol-plugin/config";
-import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { StateObjectSelector } from "molstar/lib/mol-state";
 import { PluginStateObject } from "molstar/lib/mol-plugin-state/objects";
 import { StateTransforms } from "molstar/lib/mol-plugin-state/transforms";
 import { createVolumeRepresentationParams } from "molstar/lib/mol-plugin-state/helpers/volume-representation-params";
-import { Box, Button, Divider, Heading, HStack, Icon, Skeleton, Spacer, Tooltip, VStack } from "@chakra-ui/react";
+import { Box, Button, Divider, Heading, HStack, Icon, Link, Skeleton, Spacer, Tooltip, VStack } from "@chakra-ui/react";
 import { Md3DRotation, MdCamera, MdFileDownload, MdYoutubeSearchedFor } from "react-icons/md";
-import { client } from "utils/api/client";
-import { downloadBuffer } from "utils/api/response";
+import { client, prependApiUrl } from "utils/api/client";
 import { Vec3 } from "molstar/lib/mol-math/linear-algebra";
 
 const DefaultSpec: PluginSpec = {
@@ -45,34 +44,17 @@ const resetOrientation = () => {
 
 const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) => {
   const viewerDiv = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [dataTimestamp, setDatatimestamp] = useState("1");
-  const [rawData, setRawData] = useState<ArrayBuffer | null | undefined>();
+  const [isRendered, setIsRendered] = useState<boolean | undefined>(false);
 
-  const downloadMrc = useCallback(() => {
-    downloadBuffer(rawData!, "text/plain; charset=utf-8");
-  }, [rawData]);
+  const mrcUrl = useMemo(() => `autoProc/${autoProcId}/classification/${classId}/image`, [autoProcId, classId]);
 
   useEffect(() => {
-    client.safeGet(`autoProc/${autoProcId}/classification/${classId}/image`).then(async (response) => {
-      if (response.status === 200) {
-        setRawData(response.data);
-        setDatatimestamp(new Date().getTime().toString());
-      } else {
-        setRawData(null);
-      }
-    });
-  }, [autoProcId, classId]);
-
-  useEffect(() => {
-    const init = async () => {
+    const init = async (rawData: ArrayBuffer) => {
+      setIsRendered(true);
       molstar = new PluginContext(DefaultSpec);
 
       await molstar.init();
-
-      if (!molstar.initViewer(canvasRef.current as HTMLCanvasElement, viewerDiv.current as HTMLDivElement)) {
-        return;
-      }
+      molstar.mount(viewerDiv.current!);
 
       const data = await molstar.builders.data.rawData({ data: rawData! }, { state: { isGhost: true } });
       const parsed = await molstar.dataFormats.get("ccp4")!.parse(molstar, data);
@@ -87,29 +69,36 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
         );
 
       await repr.commit();
-    }
+    };
 
-    if (rawData && canvasRef) {
-      init();
-    }
+    setIsRendered(undefined);
+
+    client.safeGet(mrcUrl).then((response) => {
+      if (response.status !== 200) {
+        setIsRendered(false);
+        return;
+      }
+
+      init(response.data);
+    });
 
     return () => {
       // See https://github.com/molstar/molstar/issues/730
       molstar?.dispose();
       molstar = null;
     };
-  }, [rawData, viewerDiv, canvasRef]);
+  }, [mrcUrl, viewerDiv, setIsRendered]);
 
   return (
     <VStack h='100%'>
       <HStack w='100%'>
         <Tooltip label='Reset Zoom'>
-          <Button aria-label='Reset Zoom' isDisabled={!rawData} onClick={() => molstar!.managers.camera.reset()}>
+          <Button aria-label='Reset Zoom' isDisabled={!isRendered} onClick={() => molstar!.managers.camera.reset()}>
             <Icon as={MdYoutubeSearchedFor} />
           </Button>
         </Tooltip>
         <Tooltip label='Reset Original Orientation'>
-          <Button aria-label='Reset Original Orientation' isDisabled={!rawData} onClick={resetOrientation}>
+          <Button aria-label='Reset Original Orientation' isDisabled={!isRendered} onClick={resetOrientation}>
             <Icon as={Md3DRotation} />
           </Button>
         </Tooltip>
@@ -117,31 +106,29 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
         <Tooltip label='Take Screenshot'>
           <Button
             aria-label='Take Screenshot'
-            isDisabled={!rawData}
+            isDisabled={!isRendered}
             onClick={() => molstar?.helpers.viewportScreenshot?.download()}
           >
             <Icon as={MdCamera} />
           </Button>
         </Tooltip>
         <Tooltip label='Download File'>
-          <Button aria-label='Download File' isDisabled={!rawData} onClick={downloadMrc}>
-            <Icon as={MdFileDownload} />
-          </Button>
+          <Link href={prependApiUrl(mrcUrl)} target="_blank">
+            <Button aria-label='Download File' isDisabled={!isRendered}>
+              <Icon as={MdFileDownload} />
+            </Button>
+          </Link>
         </Tooltip>
         <Spacer />
         {children}
       </HStack>
-      <Box flexGrow={5} h='90%' w='100%' ref={viewerDiv}>
-        {rawData ? (
-          <canvas key={dataTimestamp} data-testid='render-canvas' ref={canvasRef} />
-        ) : rawData === null ? (
-          <VStack w='100%' h='100%' bg='diamond.75'>
-            <Heading m='auto' variant='notFound'>
-              No Valid Volume File
-            </Heading>
-          </VStack>
-        ) : (
+      <Box bg='diamond.75' position='relative' display='flex' flexGrow={5} h='90%' w='100%' ref={viewerDiv}>
+        {isRendered ? null : isRendered === undefined ? (
           <Skeleton h='100%' w='100%' />
+        ) : (
+          <Heading display='flex' justifyContent='center' alignSelf='center' w='100%' variant='notFound'>
+            No Valid Volume File
+          </Heading>
         )}
       </Box>
     </VStack>

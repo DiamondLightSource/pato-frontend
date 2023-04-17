@@ -39,7 +39,7 @@ describe("Image", () => {
     });
   });
 
-  it("should display skeleton when image source is undefined", async () => {
+  it("should display skeleton when image source is undefined", () => {
     const onClick = jest.fn();
     renderWithProviders(<ImageCard title='Image Title' src={undefined} showModal={false} onClick={onClick} />);
 
