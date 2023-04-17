@@ -15,9 +15,7 @@ describe("SPA Data", () => {
     server.use(
       rest.get(
         "http://localhost/dataGroups/:groupId/dataCollections",
-        (req, res, ctx) => {
-          return res.once(ctx.status(404), ctx.delay(0));
-        }
+        (req, res, ctx) => res.once(ctx.status(404), ctx.delay(0))
       )
     );
 
@@ -30,9 +28,7 @@ describe("SPA Data", () => {
     server.use(
       rest.get(
         "http://localhost/dataCollections/:collectionId/processingJobs",
-        (req, res, ctx) => {
-          return res.once(ctx.status(404), ctx.delay(0));
-        }
+        (req, res, ctx) => res.once(ctx.status(404), ctx.delay(0))
       )
     );
 
@@ -45,8 +41,8 @@ describe("SPA Data", () => {
     server.use(
       rest.get(
         "http://localhost/dataGroups/:groupId/dataCollections",
-        async (req, res, ctx) => {
-          return res.once(
+        async (req, res, ctx) =>
+          res.once(
             ctx.status(200),
             ctx.json({
               items: [
@@ -57,8 +53,7 @@ describe("SPA Data", () => {
                 },
               ],
             })
-          );
-        }
+          )
       )
     );
 
@@ -71,8 +66,8 @@ describe("SPA Data", () => {
     server.use(
       rest.get(
         "http://localhost/dataGroups/:groupId/dataCollections",
-        async (req, res, ctx) => {
-          return res.once(
+        async (req, res, ctx) =>
+          res.once(
             ctx.status(200),
             ctx.json({
               items: [
@@ -83,8 +78,7 @@ describe("SPA Data", () => {
                 },
               ],
             })
-          );
-        }
+          )
       )
     );
 

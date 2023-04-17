@@ -5,15 +5,19 @@ import { InfoGroup } from "components/visualisation/infogroup";
 describe("InfoGroup", () => {
   it('should display "?" when no value is present', () => {
     renderWithProviders(<InfoGroup info={[{ label: "title" }]} />);
-    const questionMark = screen.getByText("?");
 
-    expect(questionMark).toBeInTheDocument();
+    expect(screen.getByText("?")).toBeInTheDocument();
   });
 
   it("should display value when provided", () => {
     renderWithProviders(<InfoGroup info={[{ label: "title", value: "value" }]} />);
-    const value = screen.getByText("value");
 
-    expect(value).toBeInTheDocument();
+    expect(screen.getByText("value")).toBeInTheDocument();
+  });
+
+  it("shold render skeleton if there is no info", () => {
+    renderWithProviders(<InfoGroup info={[]} />);
+
+    expect(screen.queryByRole("paragraph")).not.toBeInTheDocument();
   });
 });

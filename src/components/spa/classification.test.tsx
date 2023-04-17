@@ -27,7 +27,9 @@ describe("Classification", () => {
     );
 
     renderWithProviders(<Classification autoProcId={5} type='3d' />);
-    const modalButton = await screen.findByText(/Open 3D Visualisation/i);
+    const modalButton = await screen.findByText(/Open 3D Visualisation/i)
+
+    await waitFor(() => expect(modalButton).not.toHaveAttribute("disabled"));
 
     fireEvent.click(modalButton);
     await waitFor(() => expect(screen.getAllByLabelText("Total Pages").length).toBe(2));

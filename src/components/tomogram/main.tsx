@@ -23,7 +23,7 @@ import { ImageCard } from "components/visualisation/image";
 import { InfoGroup } from "components/visualisation/infogroup";
 import { PlotContainer } from "components/visualisation/plotContainer";
 import { Motion } from "components/motion/motion";
-import { Suspense, } from "react";
+import { Suspense } from "react";
 import { client, prependApiUrl } from "utils/api/client";
 import { TomogramData, BasePoint, BaseProcessingJobProps, DataConfig } from "schema/interfaces";
 import { CTF } from "components/ctf/ctf";
@@ -90,8 +90,8 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
   return (
     <AccordionItem isDisabled={false}>
       <ProcessingTitle autoProc={autoProc} procJob={procJob} status={status} />
-      {active && data && (
-        <AccordionPanel p={0}>
+      {active && (
+        <AccordionPanel p={4}>
           {isLoading ? (
             <VStack h='82vh' w='100%' spacing={2}>
               <Skeleton w='100%' h='22vh' />
@@ -99,12 +99,12 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
               <Skeleton w='100%' h='20vh' />
               <Skeleton w='100%' h='20vh' />
             </VStack>
-          ) : data.tomogram === null ? (
-            <Box p={4}>
+          ) : !data || data.tomogram === null ? (
+            <Box>
               <Motion parentId={procJob.dataCollectionId} parentType='dataCollections' />
             </Box>
           ) : (
-            <Grid gap={3} bg='diamond.75' p={4} templateColumns={{ "base": "", "2xl": "repeat(2, 1fr)" }}>
+            <Grid gap={3} bg='diamond.75' templateColumns={{ "base": "", "2xl": "repeat(2, 1fr)" }}>
               <GridItem>
                 <Motion parentType='tomograms' parentId={data.tomogram.tomogramId} />
               </GridItem>

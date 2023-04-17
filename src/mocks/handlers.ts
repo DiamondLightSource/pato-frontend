@@ -217,7 +217,7 @@ export const handlers = [
               limit: 1,
             })
           );
-        case "2":
+        default:
           return res(
             ctx.status(200),
             ctx.delay(0),
@@ -438,6 +438,11 @@ export const handlers = [
           limit: 25,
         })
       )
+  ),
+
+  rest.post(
+    "http://localhost/dataCollections/1/tomograms/reprocessing",
+    (req, res, ctx) => res(ctx.status(202), ctx.json({ processingJobId: 1 }))
   ),
 
   rest.get("http://localhost/proposals", (req, res, ctx) => {

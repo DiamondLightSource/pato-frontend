@@ -80,7 +80,7 @@ describe("Pagination", () => {
     expect(screen.getByText("Page 2 out of 16")).toBeInTheDocument();
   });
 
-  it("should call callback when page changes", async () => {
+  it("should call callback when page changes", () => {
     const mockCallback = jest.fn();
     renderWithProviders(<Pagination total={160} onPageChange={mockCallback} />);
 
@@ -90,7 +90,7 @@ describe("Pagination", () => {
     expect(mockCallback).toBeCalledWith(2);
   });
 
-  it("should call items per page changes", async () => {
+  it("should call items per page changes", () => {
     const mockCallback = jest.fn();
     renderWithProviders(<Pagination total={160} onItemCountChange={mockCallback} />);
 
@@ -99,7 +99,7 @@ describe("Pagination", () => {
     expect(mockCallback).toBeCalledWith(5);
   });
 
-  it("should reset page when page count changes if current page is greater than page count", async () => {
+  it("should reset page when page count changes if current page is greater than page count", () => {
     const mockCallback = jest.fn();
     const { rerender } = renderWithProviders(<Pagination total={160} onPageChange={mockCallback} />);
 
