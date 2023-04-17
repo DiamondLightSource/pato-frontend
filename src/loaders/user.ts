@@ -4,21 +4,23 @@ import { client } from "utils/api/client";
 const getUser = async () => {
   let user: AuthState | null = null;
 
-  const url = encodeURIComponent(window.location.href);
-  const searchParams = new URL(window.location.href).searchParams;
-  const code = searchParams.get("code");
-  searchParams.delete("code");
+  const newUrl = new URL(window.location.href);
+  const code = newUrl.searchParams.get("code");
 
   if (code) {
-    await client.authGet(`token?redirect_uri=${url}&code=${code}`);
-    if (searchParams.toString() !== "") {
-      window.location.search = searchParams.toString();
-    }
+    newUrl.searchParams.delete("code");
+
+    await client.authGet(
+      `token?redirect_uri=${encodeURIComponent(newUrl.href)}&code=${code}`
+    );
+    window.history.replaceState({}, "", newUrl.href);
   }
 
   try {
     const response = await client.authGet("user");
-    return response.status === 200 ? { fedid: response.data.fedid, name: response.data.givenName } : null;
+    return response.status === 200
+      ? { fedid: response.data.fedid, name: response.data.givenName }
+      : null;
   } catch (NetworkError) {
     return user;
   }
