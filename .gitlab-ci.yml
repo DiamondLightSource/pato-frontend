@@ -69,7 +69,7 @@ sync-github:
   script:
     - rm -rf .git README.rst .gitlab-ci.yml nginx
     - cd .. && git clone https://$CI_GITHUB_USER:$CI_GITHUB_TOKEN@github.com/diamondLightSource/pato-frontend.git github-upstream 
-    - rsync -r pato-frontend/ github-upstream
+    - rsync -r --delete pato-frontend/ github-upstream
     - cd github-upstream
     - git config --local user.name "Guilherme de Freitas"
     - git config --local user.email guilherme.de-freitas@diamond.ac.uk
