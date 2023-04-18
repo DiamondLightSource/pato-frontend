@@ -27,13 +27,13 @@ import parseAPNG, { Frame } from "apng-js";
 import { client } from "utils/api/client";
 import { MdFastForward, MdFastRewind, MdPause, MdPlayArrow } from "react-icons/md";
 
-interface ImageProps {
+export interface ApngProps {
   width?: ResponsiveValue<string | number | "auto">;
   height?: ResponsiveValue<string | number | "auto">;
   src: string;
 }
 
-const APNGViewer = ({ src, width = "100%", height = "64vh" }: ImageProps) => {
+const APNGViewer = ({ src, width = "100%", height = "64vh" }: ApngProps) => {
   const [frames, setFrames] = useState<Frame[] | null>();
   const [currentFrame, setCurrentFrame] = useState<string>();
   const [frameIndex, setFrameIndex] = useState(0);
