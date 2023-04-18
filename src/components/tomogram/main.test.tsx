@@ -4,6 +4,7 @@ import { server } from "mocks/server";
 import { renderWithAccordion } from "utils/test-utils";
 import { Tomogram } from "components/tomogram/main";
 import { BaseProcessingJobProps } from "schema/interfaces";
+import { ApngProps } from "components/visualisation/apng";
 
 const basicProcJob: BaseProcessingJobProps["procJob"] = {
   processingJobId: 1,
@@ -13,6 +14,13 @@ const basicProcJob: BaseProcessingJobProps["procJob"] = {
   recipe: "Test",
   automatic: 1,
 };
+
+jest.mock(
+  "components/visualisation/apng",
+  () =>
+    (props: ApngProps) =>
+      <p>APNG Viewer</p>
+);
 
 describe("Tomogram", () => {
   beforeAll(() => jest.spyOn(global, "scrollTo").mockImplementation(() => {}));
@@ -51,6 +59,6 @@ describe("Tomogram", () => {
     fireEvent.click(screen.getByRole("button"));
     fireEvent.click(screen.getByRole("button", { name: "View Movie" }));
 
-    await screen.findByLabelText("Play");
+    await screen.findByText("Movie");
   });
 });
