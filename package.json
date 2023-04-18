@@ -137,7 +137,7 @@
       "text",
       "cobertura"
     ],
-    "maxWorkers": 1,
+    "maxWorkers": 3,
     "moduleDirectories": [
       "node_modules",
       "src"
