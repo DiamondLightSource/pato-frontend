@@ -10,6 +10,7 @@ import {
   Card,
   CardBody,
   Checkbox,
+  Stack,
 } from "@chakra-ui/react";
 import { ImageCard } from "components/visualisation/image";
 import { InfoGroup } from "components/visualisation/infogroup";
@@ -95,42 +96,45 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
 
   return (
     <Box>
-      <HStack gap={2}>
-        <Heading variant='collection'>{type.toUpperCase()} Classification</Heading>
-        <Checkbox size='sm'>Only Show Selected</Checkbox>
-        <Spacer />
-        <Heading id='sortLabel' size='xs'>
-          Sort by
-        </Heading>
-        <Select
-          aria-labelledby='sortlabel'
-          bg='white'
-          onChange={(e) => setSortType(e.target.value as SortTypes)}
-          size='xs'
-          w='180px'
-        >
-          {sortValues.map((item) => (
-            <option key={item.key} value={item.key}>
-              {item.label}
-            </option>
-          ))}
-        </Select>
+      <Stack direction={{ base: "column", md: "row" }} gap={2}>
+        <HStack gap={5}>
+          <Heading variant='collection'>{type.toUpperCase()} Classification</Heading>
+          <Checkbox size='sm'>Only Show Selected</Checkbox>
+        </HStack>
+        <Spacer display={{ base: "none", md: "inline-block" }} />
+        <HStack gap={3}>
+          <Heading id='sortLabel' size='xs'>
+            Sort by
+          </Heading>
+          <Select
+            aria-labelledby='sortlabel'
+            bg='white'
+            onChange={(e) => setSortType(e.target.value as SortTypes)}
+            size='xs'
+            w='180px'
+          >
+            {sortValues.map((item) => (
+              <option key={item.key} value={item.key}>
+                {item.label}
+              </option>
+            ))}
+          </Select>
+        </HStack>
         <MotionPagination startFrom='start' page={classPage} onChange={handleClassificationChange} total={pageAmount} />
-      </HStack>
+      </Stack>
       <Divider />
       {classificationData !== undefined ? (
         <Grid
-          py={2}
-          marginBottom={type === "2d" ? 6 : 0}
-          templateColumns='repeat(8, 1fr)'
-          h={type === "2d" ? "14vh" : "auto"}
-          gap={2}
+          pt="2"
+          mb="3"
+          templateColumns={{base: 'repeat(4, 1fr)', md: 'repeat(8, 1fr)'}}
+          gap="2"
         >
           {classificationData.map((item, i) =>
             type === "2d" ? (
               <ImageCard
                 borderColor='green'
-                height='14vh'
+                h={{base: 'auto', md: '14vh'}}
                 showModal={false}
                 key={item.particleClassificationId}
                 src={item.imageUrl}
@@ -156,7 +160,7 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
           )}
         </Grid>
       ) : (
-        <Skeleton h='23vh' marginBottom={1} />
+        <Skeleton h='23vh' mb={1} />
       )}
       {selectedClassInfo.info && <InfoGroup height='auto' cols={5} info={selectedClassInfo.info as Info[]} />}
       {classificationData && type === "3d" && (

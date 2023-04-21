@@ -91,7 +91,7 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
     <AccordionItem isDisabled={false}>
       <ProcessingTitle autoProc={autoProc} procJob={procJob} status={status} />
       {active && (
-        <AccordionPanel p={4}>
+        <AccordionPanel bg='diamond.75' p={4}>
           {isLoading ? (
             <VStack h='82vh' w='100%' spacing={2}>
               <Skeleton w='100%' h='22vh' />
@@ -104,15 +104,15 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
               <Motion parentId={procJob.dataCollectionId} parentType='dataCollections' />
             </Box>
           ) : (
-            <Grid gap={3} bg='diamond.75' templateColumns={{ "base": "", "2xl": "repeat(2, 1fr)" }}>
+            <Grid gap={3} templateColumns={{ "base": "", "2xl": "repeat(2, 1fr)" }}>
               <GridItem>
                 <Motion parentType='tomograms' parentId={data.tomogram.tomogramId} />
               </GridItem>
               <GridItem>
                 <Heading variant='collection'>Alignment</Heading>
                 <Divider />
-                <Grid py={2} templateColumns='repeat(3, 1fr)' gap={2}>
-                  <GridItem height='20vh'>
+                <Grid py={2} templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }} gap={2}>
+                  <GridItem height='20vh' colSpan={{ base: 2, md: 1 }}>
                     <InfoGroup info={data.tomogram.info} />
                   </GridItem>
                   <GridItem height='20vh'>
@@ -126,7 +126,7 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
                   <GridItem height='20vh'>
                     <ImageCard src={data.xyProj} title='XY Projection' />
                   </GridItem>
-                  <GridItem colSpan={{ base: 3, md: 1 }} minW='100%' height='22vh'>
+                  <GridItem colSpan={{ base: 2, md: 1 }} minW='100%' height='22vh'>
                     <PlotContainer title='Shift Plot'>
                       <Scatter data={data.shiftPlot} />
                     </PlotContainer>
