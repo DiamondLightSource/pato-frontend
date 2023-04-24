@@ -17,9 +17,7 @@ export const parseData = (rawData: Record<string, any>, config: DataConfig) => {
   for (const item of config.include) {
     const unit = item.unit ?? "";
     if (Array.isArray(item.name)) {
-      const values = item.name
-        .map((key) => prettifyValue(rawData[key], unit))
-        .join(" - ");
+      const values = item.name.map((key) => prettifyValue(rawData[key], unit)).join(" - ");
       data.info.push({
         label: item.label ?? pascalToSpace(item.name[0]),
         value: values,
@@ -41,8 +39,7 @@ export const parseData = (rawData: Record<string, any>, config: DataConfig) => {
   return data;
 };
 
-const prettifyValue = (value: number | string, unit: string) =>
-  value ? `${value} ${unit}` : "?";
+const prettifyValue = (value: number | string, unit: string) => (value ? `${value} ${unit}` : "?");
 
 const pascalToSpace = (input: string) => {
   return input.replace(/([A-Z])/g, " $1").replace(/^./, function (str) {
@@ -54,10 +51,7 @@ export function isObject(item: any) {
   return item && typeof item === "object" && !Array.isArray(item);
 }
 
-export const mergeDeep = (
-  target: Record<string, any>,
-  source: Record<string, any>
-) => {
+export const mergeDeep = (target: Record<string, any>, source: Record<string, any>) => {
   let output = structuredClone(target);
   if (isObject(target) && isObject(source)) {
     Object.keys(source).forEach((key) => {

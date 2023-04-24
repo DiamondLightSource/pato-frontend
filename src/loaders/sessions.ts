@@ -42,5 +42,4 @@ const query = {
 };
 
 export const sessionLoader = (queryClient: QueryClient) => async () =>
-  (await queryClient.getQueryData(query.queryKey)) ??
-  (await queryClient.fetchQuery(query));
+  (await queryClient.getQueryData(query.queryKey)) ?? (await queryClient.fetchQuery(query));

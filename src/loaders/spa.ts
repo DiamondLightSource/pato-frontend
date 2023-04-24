@@ -57,9 +57,7 @@ export interface SpaResponse {
 }
 
 const getSpaData = async (groupId: string) => {
-  const response = await client.safeGet(
-    includePage(`dataGroups/${groupId}/dataCollections`, 1, 1)
-  );
+  const response = await client.safeGet(includePage(`dataGroups/${groupId}/dataCollections`, 1, 1));
   const returnData = {
     collection: {
       info: [],
@@ -70,16 +68,9 @@ const getSpaData = async (groupId: string) => {
     jobs: null,
   };
 
-  if (
-    response.status === 200 &&
-    response.data.items &&
-    response.data.items[0].fileTemplate
-  ) {
+  if (response.status === 200 && response.data.items && response.data.items[0].fileTemplate) {
     const data = response.data.items[0] as DataCollection;
-    const parsedCollectionData = parseData(
-      data,
-      spaCollectionConfig
-    ) as SpaCollectionData;
+    const parsedCollectionData = parseData(data, spaCollectionConfig) as SpaCollectionData;
 
     parsedCollectionData.info.unshift({
       label: "Acquisition Software",
@@ -121,9 +112,8 @@ const queryBuilder = (groupId: string = "0") => ({
   staleTime: 60000,
 });
 
-export const spaLoader =
-  (queryClient: QueryClient) => async (params: Params) => {
-    const query = queryBuilder(params.groupId);
-    return ((await queryClient.getQueryData(query.queryKey)) ??
-      (await queryClient.fetchQuery(query))) as SpaResponse;
-  };
+export const spaLoader = (queryClient: QueryClient) => async (params: Params) => {
+  const query = queryBuilder(params.groupId);
+  return ((await queryClient.getQueryData(query.queryKey)) ??
+    (await queryClient.fetchQuery(query))) as SpaResponse;
+};

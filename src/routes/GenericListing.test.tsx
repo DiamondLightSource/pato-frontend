@@ -88,11 +88,7 @@ describe("GenericListing", () => {
   it("should call navigation callback when row is clicked", async () => {
     const mockCallback = jest.fn();
     renderWithRoute(
-      <GenericListing
-        heading='data'
-        makePathCallback={mockCallback}
-        headers={proposalHeaders}
-      />,
+      <GenericListing heading='data' makePathCallback={mockCallback} headers={proposalHeaders} />,
       () => ({ data: [{ proposalNumber: 31111 }] })
     );
 

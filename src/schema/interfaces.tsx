@@ -118,8 +118,7 @@ export interface CompleteScatterPlotOptions {
   };
 }
 
-export interface ScatterPlotOptions
-  extends DeepPartial<CompleteScatterPlotOptions> {}
+export interface ScatterPlotOptions extends DeepPartial<CompleteScatterPlotOptions> {}
 
 export interface CompleteBoxOptions {
   y: PlotAxisOptions;
