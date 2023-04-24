@@ -84,9 +84,9 @@ client.safeGet = async (endpoint: string, customConfig = {}) => {
 
   if (resp.status === 401 && !window.location.href.includes("code=")) {
     const url = encodeURIComponent(window.location.href);
-    window.location.href = `${getPrefix(
-      process.env.REACT_APP_AUTH_ENDPOINT
-    )}authorise?redirect_uri=${url}&responseType=code`;
+    window.location.assign(
+      `${getPrefix(process.env.REACT_APP_AUTH_ENDPOINT)}authorise?redirect_uri=${url}&responseType=code`
+    );
   }
 
   return resp;

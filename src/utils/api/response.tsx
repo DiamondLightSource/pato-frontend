@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { BarStats } from "schema/interfaces";
 import { client } from "utils/api/client";
-import { Response } from "utils/api/client";
 
 const setHistogram = (
   endpoint: string,
@@ -26,8 +25,4 @@ const setHistogram = (
   });
 };
 
-const handleFileData = (response: Response) => {
-  return response.status === 200 ? response.data as Blob : null
-}
-
-export { setHistogram, handleFileData };
+export { setHistogram };
