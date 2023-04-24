@@ -90,7 +90,6 @@ describe("Tomogram Page", () => {
     await screen.findByText("Reprocessing");
   });
   */
-  afterAll(() => jest.unmock("react-router-dom"));
 
   it("should change page when next page button is clicked", async () => {
     const { router } = renderWithRoute(<TomogramPage />, () => validData);
