@@ -80,13 +80,14 @@ const resetOrientation = (isSlice = false) => {
 
 const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) => {
   const viewerDiv = useRef<HTMLDivElement>(null);
+  const [isRendered, setIsRendered] = useState<boolean | undefined>(false);
   const [sliceIndex, setSliceIndex] = useState<number>();
   const [sliceCount, setSliceCount] = useState(0);
   const [showSlice, setShowSlice] = useState(false);
 
   const [volumeData, setVolumeData] = useState<Volume>();
   const [repr, setRepr] = useState<StateObjectSelector>();
-  const [rawData, setRawData] = useState<ArrayBuffer | null | undefined>();
+  const [rawData, setRawData] = useState<ArrayBuffer | null>();
 
   const mrcUrl = useMemo(() => `autoProc/${autoProcId}/classification/${classId}/image`, [autoProcId, classId]);
 
@@ -100,7 +101,12 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
 
   useEffect(() => {
     client.safeGet(mrcUrl).then((response) => {
-      setRawData(response.status === 200 ? response.data : null);
+      if (response.status !== 200) {
+        setRawData(null);
+        setIsRendered(false);
+      } else {
+        setRawData(response.data);
+      }
     });
   }, [mrcUrl]);
 
@@ -124,6 +130,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
 
   useEffect(() => {
     const init = async (rawData: ArrayBuffer) => {
+      setIsRendered(true);
       molstar = new PluginContext(showSlice ? DefaultSliceSpec : Default3DSpec);
 
       await molstar.init();
@@ -162,7 +169,12 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
       setRepr(newRepr.selector);
       setVolumeData(volume.data);
       resetOrientation(true);
+
+      console.log(molstar!.helpers.viewportScreenshot!.imagePass); //getImageDataUri())
+      molstar?.helpers.viewportScreenshot?.download();
     };
+
+    setIsRendered(undefined);
 
     if (rawData) {
       init(rawData);
@@ -170,7 +182,6 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
 
     return () => {
       setRepr(undefined);
-      setRawData(undefined);
       molstar?.dispose();
       molstar = null;
     };
@@ -180,14 +191,14 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
     <VStack h='100%'>
       <HStack w='100%'>
         <Tooltip label='Reset Zoom'>
-          <Button aria-label='Reset Zoom' isDisabled={!rawData} onClick={() => molstar!.managers.camera.reset()}>
+          <Button aria-label='Reset Zoom' isDisabled={!isRendered} onClick={() => molstar!.managers.camera.reset()}>
             <Icon as={MdYoutubeSearchedFor} />
           </Button>
         </Tooltip>
         <Tooltip label='Reset Original Orientation'>
           <Button
             aria-label='Reset Original Orientation'
-            isDisabled={!rawData || showSlice}
+            isDisabled={!isRendered || showSlice}
             onClick={() => resetOrientation}
           >
             <Icon as={Md3DRotation} />
@@ -197,7 +208,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
         <Tooltip label='Take Screenshot'>
           <Button
             aria-label='Take Screenshot'
-            isDisabled={!rawData}
+            isDisabled={!isRendered}
             onClick={() => molstar?.helpers.viewportScreenshot?.download()}
           >
             <Icon as={MdCamera} />
@@ -205,7 +216,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
         </Tooltip>
         <Tooltip label='Download File'>
           <Link href={prependApiUrl(mrcUrl)} target='_blank'>
-            <Button aria-label='Download File' isDisabled={!rawData}>
+            <Button aria-label='Download File' isDisabled={!isRendered}>
               <Icon as={MdFileDownload} />
             </Button>
           </Link>
@@ -215,7 +226,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
       </HStack>
       <HStack h='90%' w='100%'>
         <Box bg='diamond.75' position='relative' display='flex' flexGrow={5} h='100%' ref={viewerDiv}>
-          {rawData ? null : rawData === undefined ? (
+          {isRendered ? null : isRendered === undefined ? (
             <Skeleton h='100%' w='100%' />
           ) : (
             <Heading display='flex' justifyContent='center' alignSelf='center' w='100%' variant='notFound'>
@@ -229,7 +240,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
             orientation='vertical'
             aria-label='Slice Slider'
             onChange={handleSliceIndexChanged}
-            defaultValue={sliceCount / 2}
+            defaultValue={sliceCount}
             max={sliceCount}
           >
             <SliderTrack bg='diamond.200'>
