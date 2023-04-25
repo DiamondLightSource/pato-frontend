@@ -2,12 +2,7 @@ import type { RenderOptions } from "@testing-library/react";
 
 import React, { PropsWithChildren } from "react";
 import { render } from "@testing-library/react";
-import {
-  createMemoryRouter,
-  LoaderFunction,
-  MemoryRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createMemoryRouter, LoaderFunction, MemoryRouter, RouterProvider } from "react-router-dom";
 import { Accordion } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -28,9 +23,7 @@ const renderWithProviders = (
 
     return (
       <MemoryRouter initialEntries={[route]}>
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
+        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
       </MemoryRouter>
     );
   };
@@ -42,28 +35,28 @@ const renderWithAccordion = (ui: React.ReactElement) => {
   return renderWithProviders(<Accordion>{ui}</Accordion>);
 };
 
-const renderWithRoute = (
-  ui: React.ReactElement,
-  loader: LoaderFunction,
-  route = "/"
-) => {
-  const router = createMemoryRouter([
+const renderWithRoute = (ui: React.ReactElement, loader: LoaderFunction, route = "/") => {
+  const router = createMemoryRouter(
+    [
+      {
+        path: "*",
+        element: ui,
+        loader: loader,
+      },
+    ],
     {
-      path: "*",
-      element: ui,
-      loader: loader,
-    },
-  ]);
-  return render(
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+      initialEntries: [route],
+    }
   );
+
+  return {
+    router,
+    render: render(
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    ),
+  };
 };
 
-export {
-  renderWithProviders,
-  renderWithAccordion,
-  renderWithRoute,
-  queryClient,
-};
+export { renderWithProviders, renderWithAccordion, renderWithRoute, queryClient };

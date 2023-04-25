@@ -4,13 +4,6 @@ import {
   Button,
   Heading,
   GridItem,
-  useDisclosure,
-  ModalContent,
-  Modal,
-  ModalCloseButton,
-  ModalOverlay,
-  ModalHeader,
-  ModalBody,
   AccordionItem,
   AccordionPanel,
   Skeleton,
@@ -23,7 +16,7 @@ import { ImageCard } from "components/visualisation/image";
 import { InfoGroup } from "components/visualisation/infogroup";
 import { PlotContainer } from "components/visualisation/plotContainer";
 import { Motion } from "components/motion/motion";
-import { Suspense } from "react";
+import { useCallback } from "react";
 import { client, prependApiUrl } from "utils/api/client";
 import { TomogramData, BasePoint, BaseProcessingJobProps, DataConfig } from "schema/interfaces";
 import { CTF } from "components/ctf/ctf";
@@ -31,11 +24,8 @@ import { Scatter } from "components/plots/scatter";
 import { components } from "schema/main";
 import { ProcessingTitle } from "components/visualisation/processingTitle";
 import { parseData } from "utils/generic";
-import React from "react";
 import { MdOpenInNew } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
-
-const APNGViewer = React.lazy(() => import("components/visualisation/apng"));
 
 const tomogramConfig: DataConfig = {
   include: [
@@ -57,11 +47,23 @@ interface FullTomogramData {
   shiftPlot: BasePoint[];
 }
 
-const fetchTomogramData = async (autoProcProgramId: number) => {
-  let data: FullTomogramData = { tomogram: null, centralSlice: "", xyProj: "", xzProj: "", shiftPlot: [] };
-  const response = await client.safeGet(`autoProc/${autoProcProgramId}/tomogram`);
-  if (response.status === 200) {
-    const tomogram = response.data as components["schemas"]["TomogramResponse"];
+type TomogramResponse = components["schemas"]["TomogramResponse"];
+
+export interface TomogramProps extends BaseProcessingJobProps {
+  tomogram: TomogramResponse | null;
+  onTomogramOpened: (tomogramId: number) => void;
+}
+
+const fetchTomogramData = async (tomogram: TomogramResponse | null) => {
+  let data: FullTomogramData = {
+    tomogram: null,
+    centralSlice: "",
+    xyProj: "",
+    xzProj: "",
+    shiftPlot: [],
+  };
+
+  if (tomogram) {
     const fileData = await client.safeGet(`tomograms/${tomogram.tomogramId}/shiftPlot`);
 
     data = {
@@ -80,12 +82,15 @@ const fetchTomogramData = async (autoProcProgramId: number) => {
   return data;
 };
 
-const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJobProps) => {
-  const { isOpen, onClose, onOpen } = useDisclosure();
+const Tomogram = ({ autoProc, procJob, tomogram, status, onTomogramOpened, active = false }: TomogramProps) => {
   const { data, isLoading } = useQuery({
     queryKey: ["tomogramAutoProc", autoProc.autoProcProgramId],
-    queryFn: async () => await fetchTomogramData(autoProc.autoProcProgramId),
+    queryFn: async () => await fetchTomogramData(tomogram),
   });
+
+  const handleOpenTomogram = useCallback(() => {
+    onTomogramOpened(data!.tomogram!.tomogramId);
+  }, [data, onTomogramOpened]);
 
   return (
     <AccordionItem isDisabled={false}>
@@ -117,7 +122,7 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
                   </GridItem>
                   <GridItem height='20vh'>
                     <ImageCard height='85%' title='Central Slice' src={data.centralSlice} />
-                    <Button w='100%' mt='1%' height='13%' alignSelf='end' size='sm' onClick={onOpen}>
+                    <Button w='100%' mt='1%' height='13%' alignSelf='end' size='sm' onClick={handleOpenTomogram}>
                       View Movie
                       <Spacer />
                       <Icon as={MdOpenInNew}></Icon>
@@ -142,20 +147,6 @@ const Tomogram = ({ autoProc, procJob, status, active = false }: BaseProcessingJ
             </Grid>
           )}
         </AccordionPanel>
-      )}
-      {data && data.tomogram && isOpen && (
-        <Modal size='xl' isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent minW={{ base: "95vh", md: "65vh" }}>
-            <ModalHeader paddingBottom={0}>Movie</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody h={{ base: "90vh", md: "60vh" }}>
-              <Suspense>
-                <APNGViewer src={`tomograms/${data.tomogram.tomogramId}/movie`} />
-              </Suspense>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
       )}
     </AccordionItem>
   );

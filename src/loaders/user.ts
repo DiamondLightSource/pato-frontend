@@ -10,9 +10,7 @@ const getUser = async () => {
   if (code) {
     newUrl.searchParams.delete("code");
 
-    await client.authGet(
-      `token?redirect_uri=${encodeURIComponent(newUrl.href)}&code=${code}`
-    );
+    await client.authGet(`token?redirect_uri=${encodeURIComponent(newUrl.href)}&code=${code}`);
     window.location.replace(newUrl.href);
   }
 

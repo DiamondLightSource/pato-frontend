@@ -52,7 +52,7 @@ const ProcessingTitle = ({ procJob, autoProc, status }: ProcTitleProps) => (
     <HStack>
       <Tag colorScheme={jobStatusColour[status]}>{status}</Tag>
       <Spacer />
-      <AccordionButton width='auto'>
+      <AccordionButton aria-label="Show Content" width='auto'>
         <AccordionIcon />
       </AccordionButton>
     </HStack>

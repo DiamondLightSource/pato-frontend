@@ -7,20 +7,13 @@ import { parseData } from "utils/generic";
 import { components } from "schema/main";
 import { QueryClient } from "@tanstack/react-query";
 
-type ProcessingJob = components["schemas"]["ProcessingJobResponse"];
-
-interface TomogramData {
-  collection: CollectionData;
-  total: number;
-  page: number;
-  jobs: ProcessingJob[] | null;
-}
+type TomogramFullResponse = components["schemas"]["TomogramFullResponse"];
 
 export interface TomogramResponse {
   collection: CollectionData;
   total: number;
   page: number;
-  jobs: ProcessingJob[] | null;
+  tomograms: TomogramFullResponse[] | null;
 }
 
 const getTomogramData = async (
@@ -29,7 +22,7 @@ const getTomogramData = async (
   onlyTomograms: boolean,
   request: Request
 ) => {
-  const returnData: TomogramData = {
+  const returnData: TomogramResponse = {
     collection: {
       info: [],
       comments: "",
@@ -38,7 +31,7 @@ const getTomogramData = async (
     } as CollectionData,
     total: 1,
     page: 1,
-    jobs: null,
+    tomograms: null,
   };
 
   const collectionResponse = await client.safeGet(
@@ -55,10 +48,7 @@ const getTomogramData = async (
 
   if (collectionIndex > collectionResponse.data.total) {
     return redirect(
-      `${request.url
-        .split("/")
-        .slice(0, -1)
-        .join("/")}/1?onlyTomograms=${onlyTomograms}`
+      `${request.url.split("/").slice(0, -1).join("/")}/1?onlyTomograms=${onlyTomograms}`
     );
   }
 
@@ -74,29 +64,23 @@ const getTomogramData = async (
       collectionConfig
     ) as CollectionData;
 
-    const jobsResponse = await client.safeGet(
-      `dataCollections/${collectionResponse.data.items[0].dataCollectionId}/processingJobs?limit=3`
+    const tomogramsResponse = await client.safeGet(
+      `dataCollections/${collectionResponse.data.items[0].dataCollectionId}/tomograms?limit=3`
     );
-    if (jobsResponse.status === 200 && jobsResponse.data) {
-      const items = jobsResponse.data.items;
-      returnData.jobs = items;
+    if (tomogramsResponse.status === 200 && tomogramsResponse.data) {
+      const items = tomogramsResponse.data.items;
+      returnData.tomograms = items;
     }
   }
 
   return returnData;
 };
 
-const queryBuilder = (
-  groupId: string = "0",
-  collectionIndex: string = "1",
-  request: Request
-) => {
-  const onlyTomograms =
-    new URL(request.url).searchParams.get("onlyTomograms") === "true";
+const queryBuilder = (groupId: string = "0", collectionIndex: string = "1", request: Request) => {
+  const onlyTomograms = new URL(request.url).searchParams.get("onlyTomograms") === "true";
   return {
     queryKey: ["tomogramAutoProc", groupId, collectionIndex, onlyTomograms],
-    queryFn: () =>
-      getTomogramData(groupId, collectionIndex, onlyTomograms, request),
+    queryFn: () => getTomogramData(groupId, collectionIndex, onlyTomograms, request),
     staleTime: 60000,
   };
 };

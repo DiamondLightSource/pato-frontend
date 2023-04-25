@@ -1,10 +1,9 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import { server } from "mocks/server";
 import { renderWithAccordion } from "utils/test-utils";
 import { Tomogram } from "components/tomogram/main";
 import { BaseProcessingJobProps } from "schema/interfaces";
-import { ApngProps } from "components/visualisation/apng";
 
 const basicProcJob: BaseProcessingJobProps["procJob"] = {
   processingJobId: 1,
@@ -15,12 +14,7 @@ const basicProcJob: BaseProcessingJobProps["procJob"] = {
   automatic: 1,
 };
 
-jest.mock(
-  "components/visualisation/apng",
-  () =>
-    (props: ApngProps) =>
-      <p>APNG Viewer</p>
-);
+const basicTomogram = { tomogramId: 1, dataCollectionId: 1, volumeFile: "", stackFile: "" }
 
 describe("Tomogram", () => {
   beforeAll(() => jest.spyOn(global, "scrollTo").mockImplementation(() => {}));
@@ -34,7 +28,14 @@ describe("Tomogram", () => {
     );
 
     renderWithAccordion(
-      <Tomogram active={true} autoProc={{ autoProcProgramId: 1 }} procJob={basicProcJob} status={"Queued"} />
+      <Tomogram
+        active={true}
+        autoProc={{ autoProcProgramId: 1 }}
+        procJob={basicProcJob}
+        tomogram={null}
+        status={"Queued"}
+        onTomogramOpened={() => {}}
+      />
     );
 
     await screen.findByText("Motion Correction/CTF");
@@ -43,15 +44,31 @@ describe("Tomogram", () => {
 
   it("should display tomogram if response is a valid tomogram", async () => {
     renderWithAccordion(
-      <Tomogram active={true} autoProc={{ autoProcProgramId: 1 }} procJob={basicProcJob} status={"Queued"} />
+      <Tomogram
+        active={true}
+        autoProc={{ autoProcProgramId: 1 }}
+        procJob={basicProcJob}
+        tomogram={basicTomogram}
+        status={"Queued"}
+        onTomogramOpened={() => {}}
+      />
     );
 
     await screen.findByText("Alignment");
   });
 
-  it("should open movie when button clicked", async () => {
+  it("should fire callback when open movie button clicked", async () => {
+    const openCallback = jest.fn();
+
     renderWithAccordion(
-      <Tomogram active={true} autoProc={{ autoProcProgramId: 1 }} procJob={basicProcJob} status={"Queued"} />
+      <Tomogram
+        active={true}
+        autoProc={{ autoProcProgramId: 1 }}
+        procJob={basicProcJob}
+        tomogram={basicTomogram}
+        status={"Queued"}
+        onTomogramOpened={openCallback}
+      />
     );
 
     await screen.findByText("Alignment");
@@ -59,6 +76,6 @@ describe("Tomogram", () => {
     fireEvent.click(screen.getByRole("button"));
     fireEvent.click(screen.getByRole("button", { name: "View Movie" }));
 
-    await screen.findByText("Movie");
+    await waitFor(() => expect(openCallback).toBeCalled())
   });
 });
