@@ -76,3 +76,12 @@ export const parseDate = (dateString: string | undefined) => {
 
   return timeFormatter.format(date);
 };
+
+export const debounce = (fn: Function, ms = 300) => {
+  let timer: NodeJS.Timeout;
+
+  return (...args: any[]) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), ms);
+  };
+};

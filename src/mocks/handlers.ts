@@ -64,10 +64,6 @@ export const handlers = [
     res(ctx.status(200), ctx.delay(0), ctx.json(getMotionData(req.params.id.toString())))
   ),
 
-  rest.get("http://localhost/tomograms/:id/motion", (req, res, ctx) =>
-    res(ctx.status(200), ctx.delay(0), ctx.json(getMotionData(req.params.id.toString())))
-  ),
-
   rest.get("http://localhost/autoProc/:id/motion", (req, res, ctx) => {
     return res(ctx.status(200), ctx.delay(0), ctx.json(getMotionData(req.params.id.toString())));
   }),

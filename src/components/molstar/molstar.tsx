@@ -22,11 +22,14 @@ import {
   SliderTrack,
   Spacer,
   Tooltip,
+  Text,
   VStack,
 } from "@chakra-ui/react";
 import { Md3DRotation, MdCamera, MdFileDownload, MdYoutubeSearchedFor } from "react-icons/md";
 import { client, prependApiUrl } from "utils/api/client";
 import { Vec3 } from "molstar/lib/mol-math/linear-algebra";
+import { debounce } from "utils/generic";
+import { Volume } from "molstar/lib/mol-model/volume";
 
 const Default3DSpec: PluginSpec = {
   ...DefaultPluginSpec(),
@@ -38,11 +41,8 @@ const DefaultSliceSpec: PluginSpec = {
   canvas3d: {
     trackball: {
       rotateSpeed: 0,
-      autoAdjustMinMaxDistance: {
-        name: "on",
-        params: { minDistanceFactor: 0.1, maxDistanceFactor: 1.8, maxDistanceMin: 190, minDistancePadding: 1 },
-      },
     },
+    cameraResetDurationMs: 0,
     camera: {
       helper: {
         axes: {},
@@ -63,7 +63,7 @@ interface MolstarWrapperProps {
 
 // This is tested inside the Molstar internals, and there is no benefit to a complex mock for this
 /* c8 ignore start */
-const resetOrientation = () => {
+const resetOrientation = (isSlice = false) => {
   // Resets to original orientation (XY plane, Z=0)
 
   molstar!.canvas3d!.requestCameraReset({
@@ -71,8 +71,8 @@ const resetOrientation = () => {
       camera.getInvariantFocus(
         scene.boundingSphereVisible.center,
         scene.boundingSphereVisible.radius,
-        Vec3.unitY,
-        Vec3.negUnitZ
+        isSlice ? Vec3.unitZ : Vec3.unitY,
+        isSlice ? Vec3.negUnitY : Vec3.negUnitZ
       ),
   });
 };
@@ -80,13 +80,23 @@ const resetOrientation = () => {
 
 const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) => {
   const viewerDiv = useRef<HTMLDivElement>(null);
-  const [isRendered, setIsRendered] = useState<boolean | undefined>(false);
-  const [sliceIndex, setSliceIndex] = useState(0);
+  const [sliceIndex, setSliceIndex] = useState<number>();
   const [sliceCount, setSliceCount] = useState(0);
   const [showSlice, setShowSlice] = useState(false);
-  const [rawData, setRawData] = useState();
+
+  const [volumeData, setVolumeData] = useState<Volume>();
+  const [repr, setRepr] = useState<StateObjectSelector>();
+  const [rawData, setRawData] = useState<ArrayBuffer | null | undefined>();
 
   const mrcUrl = useMemo(() => `autoProc/${autoProcId}/classification/${classId}/image`, [autoProcId, classId]);
+
+  const handleSliceIndexChanged = useMemo(
+    () =>
+      debounce((index: number) => {
+        setSliceIndex(index);
+      }, 200),
+    []
+  );
 
   useEffect(() => {
     client.safeGet(mrcUrl).then((response) => {
@@ -95,8 +105,25 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
   }, [mrcUrl]);
 
   useEffect(() => {
+    if (repr && molstar && showSlice && volumeData && sliceIndex) {
+      molstar
+        .build()
+        .to(repr)
+        .update(
+          createVolumeRepresentationParams(molstar, volumeData, {
+            type: "slice",
+            typeParams: { dimension: { name: "y", params: sliceIndex } },
+          })
+        )
+        .commit();
+
+      molstar!.managers.camera.reset();
+      resetOrientation(true);
+    }
+  }, [sliceIndex, showSlice, repr, volumeData]);
+
+  useEffect(() => {
     const init = async (rawData: ArrayBuffer) => {
-      setIsRendered(true);
       molstar = new PluginContext(showSlice ? DefaultSliceSpec : Default3DSpec);
 
       await molstar.init();
@@ -106,7 +133,11 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
       const parsed = await molstar.dataFormats.get("ccp4")!.parse(molstar, data);
       const volume: StateObjectSelector<PluginStateObject.Volume.Data> = parsed.volumes?.[0] ?? parsed.volume;
 
-      setSliceCount(volume.data!.grid.cells.space.dimensions[1]);
+      const newSliceCount = volume.data!.grid.cells.space.dimensions[1];
+      const newSliceIndex = Math.abs(newSliceCount / 2);
+
+      setSliceCount(newSliceCount);
+      setSliceIndex(newSliceIndex);
 
       const newRepr = molstar
         .build()
@@ -119,7 +150,8 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
             showSlice
               ? {
                   type: "slice",
-                  typeParams: { dimension: { name: "y", params: sliceIndex } },
+                  typeParams: { dimension: { name: "y", params: newSliceIndex } },
+                  // Get central slice as default
                 }
               : undefined
           )
@@ -127,48 +159,37 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
 
       await newRepr.commit();
 
-      molstar!.canvas3d!.requestCameraReset({
-        snapshot: (scene, camera) =>
-          camera.getInvariantFocus(
-            scene.boundingSphereVisible.center, //scene.boundingSphereVisible.center,
-            scene.boundingSphereVisible.radius,
-            Vec3.unitZ,
-            Vec3.negUnitY
-          ),
-      });
+      setRepr(newRepr.selector);
+      setVolumeData(volume.data);
+      resetOrientation(true);
     };
-
-    setIsRendered(undefined);
 
     if (rawData) {
       init(rawData);
     }
 
     return () => {
-      // See https://github.com/molstar/molstar/issues/730
+      setRepr(undefined);
+      setRawData(undefined);
       molstar?.dispose();
       molstar = null;
     };
-  }, [viewerDiv, sliceIndex, rawData, showSlice]);
+  }, [viewerDiv, rawData, showSlice]);
 
   return (
     <VStack h='100%'>
       <HStack w='100%'>
-        <ButtonGroup isAttached>
-          <Button isDisabled={!showSlice} onClick={() => setShowSlice(false)}>
-            3D
-          </Button>
-          <Button isDisabled={showSlice} onClick={() => setShowSlice(true)}>
-            Slice
-          </Button>
-        </ButtonGroup>
         <Tooltip label='Reset Zoom'>
-          <Button aria-label='Reset Zoom' isDisabled={!isRendered} onClick={() => molstar!.managers.camera.reset()}>
+          <Button aria-label='Reset Zoom' isDisabled={!rawData} onClick={() => molstar!.managers.camera.reset()}>
             <Icon as={MdYoutubeSearchedFor} />
           </Button>
         </Tooltip>
         <Tooltip label='Reset Original Orientation'>
-          <Button aria-label='Reset Original Orientation' isDisabled={!isRendered} onClick={resetOrientation}>
+          <Button
+            aria-label='Reset Original Orientation'
+            isDisabled={!rawData || showSlice}
+            onClick={() => resetOrientation}
+          >
             <Icon as={Md3DRotation} />
           </Button>
         </Tooltip>
@@ -176,7 +197,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
         <Tooltip label='Take Screenshot'>
           <Button
             aria-label='Take Screenshot'
-            isDisabled={!isRendered}
+            isDisabled={!rawData}
             onClick={() => molstar?.helpers.viewportScreenshot?.download()}
           >
             <Icon as={MdCamera} />
@@ -184,7 +205,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
         </Tooltip>
         <Tooltip label='Download File'>
           <Link href={prependApiUrl(mrcUrl)} target='_blank'>
-            <Button aria-label='Download File' isDisabled={!isRendered}>
+            <Button aria-label='Download File' isDisabled={!rawData}>
               <Icon as={MdFileDownload} />
             </Button>
           </Link>
@@ -194,7 +215,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
       </HStack>
       <HStack h='90%' w='100%'>
         <Box bg='diamond.75' position='relative' display='flex' flexGrow={5} h='100%' ref={viewerDiv}>
-          {isRendered ? null : isRendered === undefined ? (
+          {rawData ? null : rawData === undefined ? (
             <Skeleton h='100%' w='100%' />
           ) : (
             <Heading display='flex' justifyContent='center' alignSelf='center' w='100%' variant='notFound'>
@@ -202,20 +223,36 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
             </Heading>
           )}
         </Box>
-        <Slider
-          isDisabled={sliceCount < 1 || !showSlice}
-          orientation='vertical'
-          aria-label='slider-ex-2'
-          onChangeEnd={setSliceIndex}
-          colorScheme='pink'
-          defaultValue={0}
-          max={sliceCount}
-        >
-          <SliderTrack bg='diamond.200'>
-            <SliderFilledTrack bg='diamond.600' />
-          </SliderTrack>
-          <SliderThumb borderColor='diamond.300' />
-        </Slider>
+        {sliceCount && (
+          <Slider
+            isDisabled={sliceCount < 1 || !showSlice}
+            orientation='vertical'
+            aria-label='Slice Slider'
+            onChange={handleSliceIndexChanged}
+            defaultValue={sliceCount / 2}
+            max={sliceCount}
+          >
+            <SliderTrack bg='diamond.200'>
+              <SliderFilledTrack bg='diamond.600' />
+            </SliderTrack>
+            <SliderThumb borderColor='diamond.300' />
+          </Slider>
+        )}
+      </HStack>
+      <Spacer />
+      <HStack w='100%'>
+        <ButtonGroup isAttached>
+          <Button isDisabled={!showSlice} onClick={() => setShowSlice(false)}>
+            3D
+          </Button>
+          <Button isDisabled={showSlice} onClick={() => setShowSlice(true)}>
+            Slice
+          </Button>
+        </ButtonGroup>
+        <Spacer />
+        <Text>
+          <b>Slices:</b> {sliceCount}
+        </Text>
       </HStack>
     </VStack>
   );
