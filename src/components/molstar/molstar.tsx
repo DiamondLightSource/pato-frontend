@@ -6,14 +6,49 @@ import { StateObjectSelector } from "molstar/lib/mol-state";
 import { PluginStateObject } from "molstar/lib/mol-plugin-state/objects";
 import { StateTransforms } from "molstar/lib/mol-plugin-state/transforms";
 import { createVolumeRepresentationParams } from "molstar/lib/mol-plugin-state/helpers/volume-representation-params";
-import { Box, Button, Divider, Heading, HStack, Icon, Link, Skeleton, Spacer, Tooltip, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Divider,
+  Heading,
+  HStack,
+  Icon,
+  Link,
+  Skeleton,
+  Slider,
+  SliderFilledTrack,
+  SliderThumb,
+  SliderTrack,
+  Spacer,
+  Tooltip,
+  VStack,
+} from "@chakra-ui/react";
 import { Md3DRotation, MdCamera, MdFileDownload, MdYoutubeSearchedFor } from "react-icons/md";
 import { client, prependApiUrl } from "utils/api/client";
 import { Vec3 } from "molstar/lib/mol-math/linear-algebra";
 
-const DefaultSpec: PluginSpec = {
+const Default3DSpec: PluginSpec = {
   ...DefaultPluginSpec(),
   config: [[PluginConfig.VolumeStreaming.Enabled, false]],
+};
+
+const DefaultSliceSpec: PluginSpec = {
+  ...Default3DSpec,
+  canvas3d: {
+    trackball: {
+      rotateSpeed: 0,
+      autoAdjustMinMaxDistance: {
+        name: "on",
+        params: { minDistanceFactor: 0.1, maxDistanceFactor: 1.8, maxDistanceMin: 190, minDistancePadding: 1 },
+      },
+    },
+    camera: {
+      helper: {
+        axes: {},
+      },
+    },
+  },
 };
 
 let molstar: PluginContext | null = null;
@@ -30,6 +65,7 @@ interface MolstarWrapperProps {
 /* c8 ignore start */
 const resetOrientation = () => {
   // Resets to original orientation (XY plane, Z=0)
+
   molstar!.canvas3d!.requestCameraReset({
     snapshot: (scene, camera) =>
       camera.getInvariantFocus(
@@ -45,13 +81,23 @@ const resetOrientation = () => {
 const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) => {
   const viewerDiv = useRef<HTMLDivElement>(null);
   const [isRendered, setIsRendered] = useState<boolean | undefined>(false);
+  const [sliceIndex, setSliceIndex] = useState(0);
+  const [sliceCount, setSliceCount] = useState(0);
+  const [showSlice, setShowSlice] = useState(false);
+  const [rawData, setRawData] = useState();
 
   const mrcUrl = useMemo(() => `autoProc/${autoProcId}/classification/${classId}/image`, [autoProcId, classId]);
 
   useEffect(() => {
+    client.safeGet(mrcUrl).then((response) => {
+      setRawData(response.status === 200 ? response.data : null);
+    });
+  }, [mrcUrl]);
+
+  useEffect(() => {
     const init = async (rawData: ArrayBuffer) => {
       setIsRendered(true);
-      molstar = new PluginContext(DefaultSpec);
+      molstar = new PluginContext(showSlice ? DefaultSliceSpec : Default3DSpec);
 
       await molstar.init();
       molstar.mount(viewerDiv.current!);
@@ -60,38 +106,62 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
       const parsed = await molstar.dataFormats.get("ccp4")!.parse(molstar, data);
       const volume: StateObjectSelector<PluginStateObject.Volume.Data> = parsed.volumes?.[0] ?? parsed.volume;
 
-      const repr = molstar
+      setSliceCount(volume.data!.grid.cells.space.dimensions[1]);
+
+      const newRepr = molstar
         .build()
         .to(volume)
         .apply(
           StateTransforms.Representation.VolumeRepresentation3D,
-          createVolumeRepresentationParams(molstar, volume.data!)
+          createVolumeRepresentationParams(
+            molstar,
+            volume.data!,
+            showSlice
+              ? {
+                  type: "slice",
+                  typeParams: { dimension: { name: "y", params: sliceIndex } },
+                }
+              : undefined
+          )
         );
 
-      await repr.commit();
+      await newRepr.commit();
+
+      molstar!.canvas3d!.requestCameraReset({
+        snapshot: (scene, camera) =>
+          camera.getInvariantFocus(
+            scene.boundingSphereVisible.center, //scene.boundingSphereVisible.center,
+            scene.boundingSphereVisible.radius,
+            Vec3.unitZ,
+            Vec3.negUnitY
+          ),
+      });
     };
 
     setIsRendered(undefined);
 
-    client.safeGet(mrcUrl).then((response) => {
-      if (response.status !== 200) {
-        setIsRendered(false);
-        return;
-      }
-
-      init(response.data);
-    });
+    if (rawData) {
+      init(rawData);
+    }
 
     return () => {
       // See https://github.com/molstar/molstar/issues/730
       molstar?.dispose();
       molstar = null;
     };
-  }, [mrcUrl, viewerDiv, setIsRendered]);
+  }, [viewerDiv, sliceIndex, rawData, showSlice]);
 
   return (
     <VStack h='100%'>
       <HStack w='100%'>
+        <ButtonGroup isAttached>
+          <Button isDisabled={!showSlice} onClick={() => setShowSlice(false)}>
+            3D
+          </Button>
+          <Button isDisabled={showSlice} onClick={() => setShowSlice(true)}>
+            Slice
+          </Button>
+        </ButtonGroup>
         <Tooltip label='Reset Zoom'>
           <Button aria-label='Reset Zoom' isDisabled={!isRendered} onClick={() => molstar!.managers.camera.reset()}>
             <Icon as={MdYoutubeSearchedFor} />
@@ -113,7 +183,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
           </Button>
         </Tooltip>
         <Tooltip label='Download File'>
-          <Link href={prependApiUrl(mrcUrl)} target="_blank">
+          <Link href={prependApiUrl(mrcUrl)} target='_blank'>
             <Button aria-label='Download File' isDisabled={!isRendered}>
               <Icon as={MdFileDownload} />
             </Button>
@@ -122,15 +192,31 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
         <Spacer />
         {children}
       </HStack>
-      <Box bg='diamond.75' position='relative' display='flex' flexGrow={5} h='90%' w='100%' ref={viewerDiv}>
-        {isRendered ? null : isRendered === undefined ? (
-          <Skeleton h='100%' w='100%' />
-        ) : (
-          <Heading display='flex' justifyContent='center' alignSelf='center' w='100%' variant='notFound'>
-            No Valid Volume File
-          </Heading>
-        )}
-      </Box>
+      <HStack h='90%' w='100%'>
+        <Box bg='diamond.75' position='relative' display='flex' flexGrow={5} h='100%' ref={viewerDiv}>
+          {isRendered ? null : isRendered === undefined ? (
+            <Skeleton h='100%' w='100%' />
+          ) : (
+            <Heading display='flex' justifyContent='center' alignSelf='center' w='100%' variant='notFound'>
+              No Valid Volume File
+            </Heading>
+          )}
+        </Box>
+        <Slider
+          isDisabled={sliceCount < 1 || !showSlice}
+          orientation='vertical'
+          aria-label='slider-ex-2'
+          onChangeEnd={setSliceIndex}
+          colorScheme='pink'
+          defaultValue={0}
+          max={sliceCount}
+        >
+          <SliderTrack bg='diamond.200'>
+            <SliderFilledTrack bg='diamond.600' />
+          </SliderTrack>
+          <SliderThumb borderColor='diamond.300' />
+        </Slider>
+      </HStack>
     </VStack>
   );
 };
