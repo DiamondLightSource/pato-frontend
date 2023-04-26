@@ -64,7 +64,7 @@ interface MolstarWrapperProps {
 // This is tested inside the Molstar internals, and there is no benefit to a complex mock for this
 /* c8 ignore start */
 const resetOrientation = (isSlice = false) => {
-  // Resets to original orientation (XY plane, Z=0)
+  // Resets to original orientation (depends on view type)
 
   molstar!.canvas3d!.requestCameraReset({
     snapshot: (scene, camera) =>
@@ -168,7 +168,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
 
       setRepr(newRepr.selector);
       setVolumeData(volume.data);
-      resetOrientation(true);
+      resetOrientation(showSlice);
     };
 
     setIsRendered(undefined);
@@ -196,7 +196,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
           <Button
             aria-label='Reset Original Orientation'
             isDisabled={!isRendered || showSlice}
-            onClick={() => resetOrientation}
+            onClick={() => resetOrientation()}
           >
             <Icon as={Md3DRotation} />
           </Button>
