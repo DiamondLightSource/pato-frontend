@@ -1,4 +1,4 @@
-import { Spacer, HStack, Divider, Heading, Checkbox, VStack, Grid, Skeleton } from "@chakra-ui/react";
+import { Spacer,  Divider, Heading, Checkbox, VStack, Grid, Skeleton, Stack } from "@chakra-ui/react";
 import { ImageCard } from "components/visualisation/image";
 import { InfoGroup } from "components/visualisation/infogroup";
 import { MotionPagination } from "components/motion/pagination";
@@ -100,7 +100,7 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
 
   return (
     <div>
-      <HStack>
+      <Stack direction={{base: "column", md: "row"}}>
         <Heading variant='collection'>Particle Picking</Heading>
         <Spacer />
         <Checkbox
@@ -112,7 +112,7 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
           Match Selected Motion Correction Page
         </Checkbox>
         <MotionPagination disabled={lockPage} total={innerTotal} onChange={handlePageChanged} page={innerPage} />
-      </HStack>
+      </Stack>
       <Divider />
       {data && data.particlePicker ? (
         <Grid py={2} templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }} gap={2}>
