@@ -111,7 +111,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
   }, [mrcUrl]);
 
   useEffect(() => {
-    if (repr && molstar && showSlice && volumeData && sliceIndex) {
+    if (repr && molstar && showSlice && volumeData && sliceIndex !== undefined) {
       molstar
         .build()
         .to(repr)
