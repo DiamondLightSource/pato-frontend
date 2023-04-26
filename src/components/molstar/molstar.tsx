@@ -169,9 +169,6 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
       setRepr(newRepr.selector);
       setVolumeData(volume.data);
       resetOrientation(true);
-
-      console.log(molstar!.helpers.viewportScreenshot!.imagePass); //getImageDataUri())
-      molstar?.helpers.viewportScreenshot?.download();
     };
 
     setIsRendered(undefined);
