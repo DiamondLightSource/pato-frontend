@@ -237,7 +237,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
             orientation='vertical'
             aria-label='Slice Slider'
             onChange={handleSliceIndexChanged}
-            defaultValue={sliceCount}
+            defaultValue={sliceCount/2}
             max={sliceCount}
           >
             <SliderTrack bg='diamond.200'>
