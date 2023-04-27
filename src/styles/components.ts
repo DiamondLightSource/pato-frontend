@@ -73,8 +73,9 @@ const CardBody = defineStyleConfig({
   },
 });
 
-const { definePartsStyle, defineMultiStyleConfig } =
-  createMultiStyleConfigHelpers(cardAnatomy.keys);
+const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(
+  cardAnatomy.keys
+);
 
 const baseCardStyle = definePartsStyle({
   container: {
@@ -172,10 +173,8 @@ const Heading = defineStyleConfig({
   },
 });
 
-const {
-  definePartsStyle: defineTabsStyle,
-  defineMultiStyleConfig: defineTabsConfig,
-} = createMultiStyleConfigHelpers(tabsAnatomy.keys);
+const { definePartsStyle: defineTabsStyle, defineMultiStyleConfig: defineTabsConfig } =
+  createMultiStyleConfigHelpers(tabsAnatomy.keys);
 
 const baseTabsStyle = defineTabsStyle({
   tab: {

@@ -7,19 +7,14 @@ const request = new Request("http://localhost/proposals/");
 
 describe("Listing Data", () => {
   it("should return data for listing if available", async () => {
-    const data = await listingLoader(queryClient)(
-      request,
-      { groupId: "1" },
-      "proposals"
-    );
+    const data = await listingLoader(queryClient)(request, { groupId: "1" }, "proposals");
 
     expect(data.data[0].proposalNumber).toBe("31111");
     expect(data.total).toBe(300);
   });
 
   it("should process data if callback function is given", async () => {
-    const reprocess = (data: Record<string, any>[]) =>
-      data.map((_, i) => ({ key: i }));
+    const reprocess = (data: Record<string, any>[]) => data.map((_, i) => ({ key: i }));
     const data = await listingLoader(queryClient)(
       request,
       { groupId: "1" },
@@ -32,11 +27,7 @@ describe("Listing Data", () => {
   });
 
   it("should return data as null if no data is available", async () => {
-    const data = await listingLoader(queryClient)(
-      request,
-      {},
-      "invalidEndpoint"
-    );
+    const data = await listingLoader(queryClient)(request, {}, "invalidEndpoint");
 
     expect(data.data).toBe(null);
     expect(data.total).toBe(0);
@@ -54,11 +45,7 @@ describe("Listing Data", () => {
     );
 
     const requestSearch = new Request("http://localhost/proposals?search=test");
-    const data = await listingLoader(queryClient)(
-      requestSearch,
-      {},
-      "searchTest"
-    );
+    const data = await listingLoader(queryClient)(requestSearch, {}, "searchTest");
 
     expect(data.data[0]).toMatchObject({ value: "test" });
   });

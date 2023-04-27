@@ -46,6 +46,7 @@ const APNGViewer = ({ src, width = "100%", height = "64vh" }: ApngProps) => {
   const playIncrement = useMemo(() => (playForward ? 1 : -1), [playForward]);
 
   useEffect(() => {
+    setCurrentFrame(undefined);
     client.safeGet(src).then((response) => {
       if (response.status !== 200) {
         setFrames(null);
