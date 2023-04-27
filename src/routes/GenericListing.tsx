@@ -1,11 +1,6 @@
 import { Divider, Heading, HStack, Spacer, Box } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-import {
-  createSearchParams,
-  useLoaderData,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { createSearchParams, useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
 import { Pagination } from "components/navigation/pagination";
 import { Table } from "components/visualisation/table";
 import { DebouncedInput } from "components/input/debounced";
@@ -16,10 +11,7 @@ interface TableProps {
     label: string;
   }[];
   heading: string;
-  makePathCallback?: (
-    item: Record<string, string | number>,
-    index: number
-  ) => string;
+  makePathCallback?: (item: Record<string, string | number>, index: number) => string;
 }
 
 interface TableData {
@@ -31,9 +23,7 @@ const GenericListing = ({ headers, heading, makePathCallback }: TableProps) => {
   const data = useLoaderData() as TableData;
   const [searchParams] = useSearchParams();
   const [page, setPage] = useState(parseInt(searchParams.get("page") || "1"));
-  const [itemsPerPage, setItemsPerPage] = useState(
-    parseInt(searchParams.get("items") || "20")
-  );
+  const [itemsPerPage, setItemsPerPage] = useState(parseInt(searchParams.get("items") || "20"));
   const [search, setSearch] = useState(searchParams.get("search") || "");
 
   const navigate = useNavigate();
@@ -87,12 +77,7 @@ const GenericListing = ({ headers, heading, makePathCallback }: TableProps) => {
         />
       </HStack>
       <Divider mb={4} />
-      <Table
-        data={data.data}
-        headers={headers}
-        label={heading}
-        onClick={handleRowClicked}
-      />
+      <Table data={data.data} headers={headers} label={heading} onClick={handleRowClicked} />
       <Divider />
       <Pagination
         value={page}

@@ -38,13 +38,7 @@ const Error = () => {
           <Heading color='diamond.800'>{heading}</Heading>
           <Text color='diamond.300'>{message}</Text>
           {details && (
-            <Code
-              fontFamily='monospace'
-              w='50%'
-              h='30%'
-              overflow='visible'
-              p={3}
-            >
+            <Code fontFamily='monospace' w='50%' h='30%' overflow='visible' p={3}>
               {details}
             </Code>
           )}

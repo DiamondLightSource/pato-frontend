@@ -1,6 +1,6 @@
 {
   "name": "pato-frontend",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "private": true,
   "dependencies": {
     "@chakra-ui/react": "^2.5.5",
@@ -33,7 +33,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "REACT_APP_AUTH_ENDPOINT=auth/ jest --logHeapUsage",
-    "format": "prettier --jsx-single-quote --write src/**/*.{ts,tsx,css}",
+    "format": "prettier --jsx-single-quote --print-width 100 --write src/**/*.{ts,tsx,css}",
     "demo": "REACT_APP_DEPLOY_TYPE=demo HTTPS=false REACT_APP_AUTH_ENDPOINT=http://localhost/auth/ REACT_APP_API_ENDPOINT=http://localhost/ react-app-rewired start"
   },
   "eslintConfig": {

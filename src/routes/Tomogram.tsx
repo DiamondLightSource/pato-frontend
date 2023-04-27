@@ -22,41 +22,32 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
-import {
-  useLoaderData,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { useLoaderData, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Tomogram } from "components/tomogram/main";
-import { CollectionData } from "schema/interfaces";
 import { MotionPagination } from "components/motion/pagination";
 import { InfoGroup } from "components/visualisation/infogroup";
 import { MdList, MdRedo } from "react-icons/md";
-import { components } from "schema/main";
 import React from "react";
+import { TomogramResponse } from "loaders/tomogram";
 
-const TomogramReprocessing = React.lazy(
-  () => import("components/tomogram/reprocessing")
-);
-type ProcessingJob = components["schemas"]["ProcessingJobResponse"];
+const TomogramReprocessing = React.lazy(() => import("components/tomogram/reprocessing"));
+const APNGViewer = React.lazy(() => import("components/visualisation/apng"));
 
 const TomogramPage = () => {
   const params = useParams();
-  const loaderData = useLoaderData() as {
-    collection: CollectionData;
-    total: number;
-    page: number;
-    jobs: ProcessingJob[] | null;
-  };
-  const [searchParams, setSearchParams] = useSearchParams();
-  const onlyTomograms = useMemo(
-    () => searchParams.get("onlyTomograms") === "true",
-    [searchParams]
-  );
-  const [accordionIndex, setAccordionIndex] = useState<number | number[]>(0);
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const loaderData = useLoaderData() as TomogramResponse;
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [accordionIndex, setAccordionIndex] = useState<number | number[]>(0);
+  const [openTomogram, setOpenTomogram] = useState<number | null>(null);
+
+  const onlyTomograms = useMemo(() => searchParams.get("onlyTomograms") === "true", [searchParams]);
+  const currentIndex = useMemo(() => parseInt(params.collectionIndex ?? "1"), [params]);
+  const tomogramMovieSrc = useMemo(() => `tomograms/${openTomogram}/movie`, [openTomogram]);
 
   const updateCollection = useCallback(
     (page: number) => {
@@ -76,25 +67,36 @@ const TomogramPage = () => {
     document.title = `PATo » Tomograms » ${params.collectionIndex}`;
   }, [params]);
 
+  useEffect(() => {
+    setOpenTomogram((prevState) =>
+      prevState !== null && loaderData.tomograms && loaderData.tomograms[0].Tomogram
+        ? loaderData.tomograms[0].Tomogram.tomogramId
+        : null
+    );
+  }, [loaderData]);
+
   // TODO: Enable this once reprocessing is released
-  const buttonDisabled = useMemo(() => {
-    return true;
-    if (loaderData.jobs === null || !loaderData.collection.dataCollectionId) {
+  const buttonDisabled = useMemo(
+    () => {
+      return true;
+      /*if (loaderData.tomograms === null || !loaderData.collection.dataCollectionId) {
       return true;
     }
 
     return false;
 
-    /*
-
-    const totalSucceeded = loaderData.jobs.reduce((total, job) => total + (job.status === "Success" ? 1 : 0), 0);
+    const totalSucceeded = loaderdata.tomograms.reduce((total, job) => total + (job.status === "Success" ? 1 : 0), 0);
 
     if (totalSucceeded > 2 || totalSucceeded === 0) {
       return true;
     }
 
     return false;*/
-  }, [loaderData.jobs]);
+    },
+    [
+      /*loaderData.tomograms*/
+    ]
+  );
 
   return (
     <Box>
@@ -137,9 +139,8 @@ const TomogramPage = () => {
           </Stack>
           <HStack w='100%'>
             <Heading color='diamond.300' size='sm'>
-              Proposal <Code>{params.propId}</Code>, visit{" "}
-              <Code>{params.visitId}</Code>, data collection group{" "}
-              <Code>{params.groupId}</Code>
+              Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data
+              collection group <Code>{params.groupId}</Code>
             </Heading>
             <Spacer />
             <Checkbox
@@ -155,26 +156,22 @@ const TomogramPage = () => {
       </HStack>
       <InfoGroup cols={3} info={loaderData.collection.info} />
       <Divider my={2} />
-      {loaderData.jobs ? (
-        <Accordion
-          onChange={setAccordionIndex}
-          index={accordionIndex}
-          allowToggle
-        >
-          {loaderData.jobs.map((job, i) => (
+      {loaderData.tomograms ? (
+        <Accordion onChange={setAccordionIndex} index={accordionIndex} allowToggle>
+          {loaderData.tomograms.map((job, i) => (
             <Tomogram
               key={job.AutoProcProgram.autoProcProgramId}
               autoProc={job.AutoProcProgram}
               procJob={job.ProcessingJob}
+              tomogram={job.Tomogram || null}
               status={job.status}
               active={accordionIndex === i}
+              onTomogramOpened={setOpenTomogram}
             />
           ))}
         </Accordion>
       ) : (
-        <Heading variant='notFound'>
-          No Jobs Available for This Data Collection
-        </Heading>
+        <Heading variant='notFound'>No Jobs Available for This Data Collection</Heading>
       )}
 
       {loaderData.collection.dataCollectionId && (
@@ -193,6 +190,30 @@ const TomogramPage = () => {
                   pixelSize={loaderData.collection.pixelSizeOnImage}
                   onClose={onClose}
                 />
+              </Suspense>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
+
+      {openTomogram && (
+        <Modal size='xl' isOpen onClose={() => setOpenTomogram(null)}>
+          <ModalOverlay />
+          <ModalContent minW={{ base: "95vh", md: "65vh" }}>
+            <ModalHeader paddingBottom={0}>Movie</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody h={{ base: "90vh", md: "60vh" }}>
+              <HStack>
+                <Spacer />
+                <MotionPagination
+                  size='md'
+                  onChange={updateCollection}
+                  page={currentIndex}
+                  total={loaderData.total}
+                />
+              </HStack>
+              <Suspense>
+                <APNGViewer src={tomogramMovieSrc} />
               </Suspense>
             </ModalBody>
           </ModalContent>

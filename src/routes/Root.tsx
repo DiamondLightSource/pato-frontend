@@ -10,16 +10,10 @@ const deployType = () => {
     return "dev";
   }
 
-  return process.env.REACT_APP_STAGING_HOST === window.location.host
-    ? "beta"
-    : "production";
+  return process.env.REACT_APP_STAGING_HOST === window.location.host ? "beta" : "production";
 };
 
-const PhaseBanner = ({
-  deployType,
-}: {
-  deployType: "dev" | "production" | "beta";
-}) => {
+const PhaseBanner = ({ deployType }: { deployType: "dev" | "production" | "beta" }) => {
   if (deployType === "production") {
     return null;
   }
@@ -40,12 +34,8 @@ const PhaseBanner = ({
         {deployType.toUpperCase()}
       </Tag>
       <Text>
-        This version of the service is still in testing, report any issues to
-        the{" "}
-        <Link
-          color='diamond.700'
-          href={"mailto:" + process.env.REACT_APP_DEV_CONTACT}
-        >
+        This version of the service is still in testing, report any issues to the{" "}
+        <Link color='diamond.700' href={"mailto:" + process.env.REACT_APP_DEV_CONTACT}>
           developers.
         </Link>
       </Text>

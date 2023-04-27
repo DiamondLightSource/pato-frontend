@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v0.11.0 (24/04/2023)
+++++++++++
+
+**Added**
+
+- User can page through tomograms in the movie modal
+
+++++++++++
 v0.10.1 (14/04/2023)
 ++++++++++
 

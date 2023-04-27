@@ -26,12 +26,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { Suspense, useCallback, useEffect, useState } from "react";
-import {
-  useLoaderData,
-  useLocation,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import { useLoaderData, useLocation, useNavigate, useParams } from "react-router-dom";
 import { components } from "schema/main";
 import { SPA } from "components/spa/main";
 import { MdFolder } from "react-icons/md";
@@ -50,9 +45,7 @@ const SpaPage = () => {
     collection: SpaCollectionData;
     jobs: ProcessingJob[] | null;
   };
-  const [processingJobToEdit, setProcessingJobToEdit] = useState<number | null>(
-    null
-  );
+  const [processingJobToEdit, setProcessingJobToEdit] = useState<number | null>(null);
   const [accordionIndex, setAccordionIndex] = useState<number | number[]>(0);
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -106,18 +99,14 @@ const SpaPage = () => {
           </HStack>
           <HStack w='100%'>
             <Heading color='diamond.300' size='sm'>
-              Proposal <Code>{params.propId}</Code>, visit{" "}
-              <Code>{params.visitId}</Code>, data collection group{" "}
-              <Code>{params.groupId}</Code>, data collection{" "}
+              Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data
+              collection group <Code>{params.groupId}</Code>, data collection{" "}
               <Code>{loaderData.collection.dataCollectionId}</Code>
             </Heading>
             <Spacer />
             <Tag bg='diamond.100'>
               <Icon as={MdFolder} />
-              <Text
-                px={3}
-                fontSize={12}
-              >{`.../${loaderData.collection.fileTemplate}`}</Text>
+              <Text px={3} fontSize={12}>{`.../${loaderData.collection.fileTemplate}`}</Text>
             </Tag>
           </HStack>
         </VStack>
@@ -133,11 +122,7 @@ const SpaPage = () => {
         <TabPanels>
           <TabPanel>
             {loaderData.jobs && loaderData.jobs.length > 0 ? (
-              <Accordion
-                onChange={setAccordionIndex}
-                index={accordionIndex}
-                allowToggle
-              >
+              <Accordion onChange={setAccordionIndex} index={accordionIndex} allowToggle>
                 {loaderData.jobs.map((job, i) => (
                   /* isExpanded is not to be trusted */
                   <SPA
@@ -156,9 +141,8 @@ const SpaPage = () => {
                   No Single Particle Analysis Data Available
                 </Heading>
                 <Heading w='50%' pb={5} variant='notFoundSubtitle'>
-                  ...or you may not have permission to view data in this
-                  collection. If this was shared with you through a link, check
-                  with the person that sent it.
+                  ...or you may not have permission to view data in this collection. If this was
+                  shared with you through a link, check with the person that sent it.
                 </Heading>
               </VStack>
             )}
@@ -166,9 +150,7 @@ const SpaPage = () => {
           <TabPanel>
             {loaderData.collection.dataCollectionId ? (
               <Suspense>
-                <Statistics
-                  dataCollectionId={loaderData.collection.dataCollectionId}
-                />
+                <Statistics dataCollectionId={loaderData.collection.dataCollectionId} />
               </Suspense>
             ) : null}
           </TabPanel>
