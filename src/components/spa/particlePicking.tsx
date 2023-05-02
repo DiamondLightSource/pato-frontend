@@ -13,7 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 
 type ParticlePickingSchema = components["schemas"]["ParticlePicker"];
 
-interface ParticleProps extends SpaProps {
+export interface ParticleProps extends SpaProps {
   /* Total number of available items */
   total: number;
   /* Page for parent motion correction, used if page match lock is set */

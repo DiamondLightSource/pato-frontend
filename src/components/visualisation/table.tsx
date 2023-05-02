@@ -1,7 +1,7 @@
 import { Box, Heading, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useCallback } from "react";
 
-interface TableProps {
+export interface TableProps {
   /** Table data */
   data: Record<string, any>[] | null;
   /** Table headers and mapping to record keys */

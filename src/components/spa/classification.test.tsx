@@ -5,7 +5,7 @@ import { rest } from "msw";
 import { server } from "mocks/server";
 import { ReactNode } from "react";
 
-interface MolstarWrapperProps {
+export interface MolstarWrapperProps {
   classId: number;
   autoProcId: number;
   children?: ReactNode;

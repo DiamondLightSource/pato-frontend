@@ -18,19 +18,19 @@ export interface Option {
   value: string;
 }
 
-interface FormItemProps {
+export interface FormItemProps {
   unit?: string;
   label: string;
   children: ReactNode;
   helperText?: string;
 }
 
-interface DropDownProps {
+export interface DropDownProps {
   values: Option[];
   name: string;
 }
 
-interface NumberInputProps {
+export interface NumberInputProps {
   name: string;
   precision?: number;
   defaultValue: number;

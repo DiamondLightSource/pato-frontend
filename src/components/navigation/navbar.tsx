@@ -64,7 +64,7 @@ const NavLinks = () => (
   </>
 );
 
-interface NavbarProps {
+export interface NavbarProps {
   user?: AuthState | null;
 }
 
