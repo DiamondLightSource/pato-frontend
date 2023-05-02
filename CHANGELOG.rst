@@ -3,12 +3,17 @@ Changelog
 ==========
 
 ++++++++++
-v0.11.0 (24/04/2023)
+v0.11.0 (02/05/2023)
 ++++++++++
 
 **Added**
 
 - User can page through tomograms in the movie modal
+- Molstar viewer also displays slices
+
+**Changed**
+
+- Data collections use a single column in narrow displays
 
 ++++++++++
 v0.10.1 (14/04/2023)
