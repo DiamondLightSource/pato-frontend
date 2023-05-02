@@ -19,6 +19,7 @@ import {
   ModalHeader,
   ModalOverlay,
   useDisclosure,
+  Stack,
 } from "@chakra-ui/react";
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useLoaderData, useNavigate, useParams, useSearchParams } from "react-router-dom";
@@ -101,31 +102,41 @@ const TomogramPage = () => {
     <Box>
       <HStack marginBottom={2}>
         <VStack w='100%'>
-          <HStack w='100%'>
-            <Heading>{loaderData.collection.comments}</Heading>
-            <Tag colorScheme='teal'>Tomogram</Tag>
+          <Stack w='100%' direction={{ base: "column", md: "row" }}>
+            <HStack>
+              <Heading>{loaderData.collection.comments}</Heading>
+              <Tag colorScheme='teal'>Tomogram</Tag>
+            </HStack>
             <Spacer />
-            <Tooltip label='Run Reprocessing'>
-              <Button aria-label='Run Reprocessing' onClick={onOpen} isDisabled={buttonDisabled}>
-                <Icon as={MdRedo} />
-              </Button>
-            </Tooltip>
-            <Tooltip label='List Collections'>
-              <Button
-                aria-label='List Collections'
-                onClick={() => navigate("../../collections", { relative: "path" })}
-              >
-                <Icon as={MdList} />
-              </Button>
-            </Tooltip>
-            <Divider orientation='vertical' h={10} />
-            <MotionPagination
-              size='md'
-              onChange={updateCollection}
-              page={currentIndex}
-              total={loaderData.total}
-            />
-          </HStack>
+            <HStack>
+              <Tooltip label='Run Reprocessing'>
+                <Button
+                  aria-label='Run Reprocessing'
+                  onClick={onOpen}
+                  isDisabled={buttonDisabled}
+                >
+                  <Icon as={MdRedo} />
+                </Button>
+              </Tooltip>
+              <Tooltip label='List Collections'>
+                <Button
+                  aria-label='List Collections'
+                  onClick={() =>
+                    navigate("../../collections", { relative: "path" })
+                  }
+                >
+                  <Icon as={MdList} />
+                </Button>
+              </Tooltip>
+              <Divider orientation='vertical' h={10} />
+              <MotionPagination
+                size='md'
+                onChange={updateCollection}
+                page={currentIndex}
+                total={loaderData.total}
+              />
+            </HStack>
+          </Stack>
           <HStack w='100%'>
             <Heading color='diamond.300' size='sm'>
               Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data

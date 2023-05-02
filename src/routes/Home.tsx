@@ -6,6 +6,7 @@ import {
   Heading,
   HStack,
   Link,
+  Stack,
   Stat,
   StatHelpText,
   StatLabel,
@@ -30,11 +31,16 @@ const SessionRow = ({ sessions, title }: SessionRowProps) => (
       {title}
     </Heading>
     <Divider borderColor='diamond.300' />
-    <HStack w='100%' spacing='0.5%' py='0.8em'>
+    <Stack
+      direction={{ base: "column", md: "row" }}
+      w='100%'
+      spacing='0.5%'
+      py='0.8em'
+    >
       {sessions && sessions.length > 0 ? (
         sessions.map((session) => (
           <Link
-            w='19.6%'
+            w={{ base: "100%", md: "19.6%" }}
             key={session.sessionId}
             _hover={{ textDecor: "none" }}
             as={LinkRouter}
@@ -75,7 +81,7 @@ const SessionRow = ({ sessions, title }: SessionRowProps) => (
           </Heading>
         </GridItem>
       )}
-    </HStack>
+    </Stack>
   </VStack>
 );
 
