@@ -32,6 +32,14 @@ const Text = defineStyleConfig({
 });
 
 const Checkbox = defineStyleConfig({
+  sizes: {
+    sm: {
+      control: {
+        height: "16px",
+        width: "16px",
+      },
+    },
+  },
   baseStyle: {
     control: {
       backgroundColor: "#FFF",
@@ -73,22 +81,24 @@ const CardBody = defineStyleConfig({
   },
 });
 
-const { definePartsStyle, defineMultiStyleConfig } =
-  createMultiStyleConfigHelpers(cardAnatomy.keys);
+const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(
+  cardAnatomy.keys
+);
 
 const baseCardStyle = definePartsStyle({
   container: {
     p: 1,
     borderWidth: "1px",
     borderRadius: "lg",
+    borderColor: "diamond.200",
     _hover: {
       borderColor: "diamond.400",
       cursor: "pointer",
     },
     _selected: {
       bg: "diamond.100",
-      borderBottom: "3px solid",
-      borderColor: "diamond.400",
+      fontWeight: "600",
+      borderBottomWidth: "3px",
     },
   },
   header: {
@@ -172,10 +182,8 @@ const Heading = defineStyleConfig({
   },
 });
 
-const {
-  definePartsStyle: defineTabsStyle,
-  defineMultiStyleConfig: defineTabsConfig,
-} = createMultiStyleConfigHelpers(tabsAnatomy.keys);
+const { definePartsStyle: defineTabsStyle, defineMultiStyleConfig: defineTabsConfig } =
+  createMultiStyleConfigHelpers(tabsAnatomy.keys);
 
 const baseTabsStyle = defineTabsStyle({
   tab: {

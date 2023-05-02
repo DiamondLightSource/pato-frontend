@@ -3,16 +3,10 @@ import { renderWithRoute } from "utils/test-utils";
 import { GenericListing } from "routes/GenericListing";
 import { proposalHeaders } from "utils/config/table";
 
-const mockNavigate = jest.fn();
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: () => mockNavigate,
-}));
-
 describe("GenericListing", () => {
   afterAll(() => jest.resetAllMocks());
   it("should include search in request", async () => {
-    renderWithRoute(
+    const { router } = renderWithRoute(
       <GenericListing
         heading='Test'
         makePathCallback={(item) => item.test.toString()}
@@ -26,15 +20,12 @@ describe("GenericListing", () => {
     fireEvent.blur(search);
 
     await waitFor(() =>
-      expect(mockNavigate).toBeCalledWith(
-        { pathname: ".", search: "?search=cm31111&page=1&items=20" },
-        { replace: true }
-      )
+      expect(router.state.navigation.location?.search).toBe("?search=cm31111&page=1&items=20")
     );
   });
 
   it("should perform request again when page changes", async () => {
-    renderWithRoute(
+    const { router } = renderWithRoute(
       <GenericListing
         heading='Test'
         makePathCallback={(item) => item.test.toString()}
@@ -47,10 +38,7 @@ describe("GenericListing", () => {
     fireEvent.click(nextPage);
 
     await waitFor(() =>
-      expect(mockNavigate).toBeCalledWith(
-        { pathname: ".", search: "?search=&page=4&items=20" },
-        { replace: true }
-      )
+      expect(router.state.navigation.location?.search).toBe("?search=&page=4&items=20")
     );
   });
 
@@ -86,13 +74,9 @@ describe("GenericListing", () => {
   });
 
   it("should call navigation callback when row is clicked", async () => {
-    const mockCallback = jest.fn();
-    renderWithRoute(
-      <GenericListing
-        heading='data'
-        makePathCallback={mockCallback}
-        headers={proposalHeaders}
-      />,
+    const mockCallback = jest.fn().mockReturnValue("somethingElse");
+    const { router } = renderWithRoute(
+      <GenericListing heading='data' makePathCallback={mockCallback} headers={proposalHeaders} />,
       () => ({ data: [{ proposalNumber: 31111 }] })
     );
 
@@ -100,5 +84,7 @@ describe("GenericListing", () => {
     fireEvent.click(row);
 
     expect(mockCallback).toBeCalled();
+
+    await waitFor(() => expect(router.state.navigation.location?.pathname).toBe("/somethingElse"));
   });
 });

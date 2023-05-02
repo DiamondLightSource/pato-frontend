@@ -1,4 +1,4 @@
-import { ResponsiveValue } from "@chakra-ui/react";
+import { CardProps, ResponsiveValue } from "@chakra-ui/react";
 import { components, paths } from "schema/main";
 
 type AutoProcSchema = components["schemas"]["AutoProcProgram"];
@@ -63,7 +63,7 @@ export interface Info {
   wide?: boolean;
 }
 
-export interface BaseCardProp {
+export interface BaseCardProp extends CardProps {
   /** Image width */
   width?: ResponsiveValue<string | number | "auto">;
   /** Image height */
@@ -118,8 +118,7 @@ export interface CompleteScatterPlotOptions {
   };
 }
 
-export interface ScatterPlotOptions
-  extends DeepPartial<CompleteScatterPlotOptions> {}
+export interface ScatterPlotOptions extends DeepPartial<CompleteScatterPlotOptions> {}
 
 export interface CompleteBoxOptions {
   y: PlotAxisOptions;

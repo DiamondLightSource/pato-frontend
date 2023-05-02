@@ -1,13 +1,11 @@
 import { Button, HStack, InputRightAddon, InputGroup, Input, Skeleton } from "@chakra-ui/react";
 import { useEffect, useState, FocusEvent as ReactFocusEvent, useCallback } from "react";
 
-type ChangeCallback = (page: number) => void;
-
 interface MotionPaginationProps {
   total: number;
   size?: "xs" | "md";
   page?: number;
-  onChange?: ChangeCallback;
+  onChange?: (page: number) => void;
   startFrom?: "start" | "middle" | "end";
   disabled?: boolean;
 }

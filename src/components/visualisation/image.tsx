@@ -24,11 +24,12 @@ interface ImageProps extends BaseCardProp {
 const ImageCard = ({
   title,
   src,
-  width = "100%",
-  height = "100%",
   showModal = true,
   active = false,
   onClick,
+  height = "100%",
+  width = "100%",
+  ...cardProps
 }: ImageProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: isZoomed, onToggle: onZoomToggle } = useDisclosure();
@@ -48,7 +49,15 @@ const ImageCard = ({
   };
 
   return (
-    <Card cursor='pointer' onClick={onClickContainer} aria-selected={active} w={width} h={height} overflow='hidden'>
+    <Card
+      cursor='pointer'
+      onClick={onClickContainer}
+      aria-selected={active}
+      overflow='hidden'
+      h={height}
+      w={width}
+      {...cardProps}
+    >
       <CardHeader>
         <Heading aria-label='Image Title' size='sm'>
           {title}
@@ -76,7 +85,7 @@ const ImageCard = ({
               {title}
             </ModalHeader>
             <ModalCloseButton color='diamond.200' m='-10px' />
-            <Box overflow='hidden' w='40vw' h='80vh'>
+            <Box overflow='hidden' w={{base: "90vw", md: "70vw"}} h='80vh'>
               {isZoomed ? (
                 <Image
                   data-testid='zoomed-in-image'

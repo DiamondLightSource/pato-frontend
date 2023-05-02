@@ -331,7 +331,7 @@ export interface components {
       /** Classnumber */
       classNumber: number;
       /** Classimagefullpath */
-      classImageFullPath: string;
+      classImageFullPath?: string;
       /** Particlesperclass */
       particlesPerClass?: number;
       /** Rotationaccuracy */
@@ -816,10 +816,10 @@ export interface components {
       /** Limit */
       limit: number;
     };
-    /** Paged[TomogramResponse] */
-    Paged_TomogramResponse_: {
+    /** Paged[TomogramFullResponse] */
+    Paged_TomogramFullResponse_: {
       /** Items */
-      items: components["schemas"]["TomogramResponse"][];
+      items: components["schemas"]["TomogramFullResponse"][];
       /** Total */
       total: number;
       /** Page */
@@ -1056,14 +1056,18 @@ export interface components {
       /** Residualerror */
       residualError?: number;
     };
+    /** TomogramFullResponse */
+    TomogramFullResponse: {
+      AutoProcProgram: components["schemas"]["AutoProcProgram"];
+      ProcessingJob: components["schemas"]["ProcessingJob"];
+      /** Status */
+      status: string;
+      Tomogram?: components["schemas"]["TomogramResponse"];
+    };
     /** TomogramResponse */
     TomogramResponse: {
       /** Tomogramid */
       tomogramId: number;
-      /** Datacollectionid */
-      dataCollectionId: number;
-      /** Autoprocprogramid */
-      autoProcProgramId?: number;
       /** Volumefile */
       volumeFile: string;
       /** Stackfile */
@@ -1086,6 +1090,8 @@ export interface components {
       tiltAngleOffset?: number;
       /** Zshift */
       zShift?: number;
+      /** Refinedtiltaxis */
+      refinedTiltAxis?: number;
     };
     /** ValidationError */
     ValidationError: {
@@ -1407,7 +1413,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Paged_TomogramResponse_"];
+          "application/json": components["schemas"]["Paged_TomogramFullResponse_"];
         };
       };
       /** @description Validation Error */
@@ -1726,12 +1732,6 @@ export interface operations {
      * @description Get tomogram
      */
     parameters: {
-      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-      /** @description Number of results to show */
-      query?: {
-        page?: number;
-        limit?: number;
-      };
       path: {
         autoProcId: number;
       };

@@ -248,17 +248,17 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
       </Stack>
       <Divider />
       {data && data.motion ? (
-        <Grid py={2} templateColumns='repeat(4, 1fr)' gap={2}>
-          <GridItem h='25vh' colSpan={{ base: 2, md: 1 }}>
+        <Grid py={2} templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }} gap={2}>
+          <GridItem h={{ base: "15vh", md: "25vh" }} colSpan={{ base: 2, md: 1 }}>
             <InfoGroup info={data.motion.info} />
           </GridItem>
-          <GridItem h='25vh' colSpan={{ base: 2, md: 1 }}>
+          <GridItem h={{ base: "20vh", md: "25vh" }}>
             <ImageCard src={data.micrograph} title='Micrograph Snapshot' height='100%' />
           </GridItem>
-          <GridItem h='25vh' colSpan={{ base: 2, md: 1 }}>
+          <GridItem h={{ base: "20vh", md: "25vh" }}>
             <ImageCard src={data.fft} title='FFT Theoretical' height='100%' />
           </GridItem>
-          <GridItem h='25vh' colSpan={{ base: 2, md: 1 }}>
+          <GridItem h={{ base: "20vh", md: "25vh" }} colSpan={{ base: 2, md: 1 }}>
             <PlotContainer title='Drift'>
               <Scatter options={driftPlotOptions} data={data.drift} />
             </PlotContainer>

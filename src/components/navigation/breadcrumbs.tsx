@@ -6,9 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 const Breadcrumbs = () => {
   const location = useLocation();
 
-  const pathCrumbs = location.pathname.split("/").filter((name) => {
-    return name !== "";
-  });
+  const pathCrumbs = location.pathname.split("/").filter((name) => name !== "");
 
   if (pathCrumbs.length === 0) return null;
 
@@ -35,12 +33,7 @@ const Breadcrumbs = () => {
         partialPath.pop();
         return (
           <BreadcrumbItem key={pathname}>
-            <BreadcrumbLink
-              preventScrollReset={true}
-              as={Link}
-              to={partialPath.join("/")}
-              relative='path'
-            >
+            <BreadcrumbLink preventScrollReset={true} as={Link} to={partialPath.join("/")} relative='path'>
               {pathname}
             </BreadcrumbLink>
           </BreadcrumbItem>
