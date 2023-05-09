@@ -70,7 +70,7 @@ export interface NavbarProps {
 
 const Navbar = ({ user }: NavbarProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const loadingRemaining = useIsFetching();
+  const isFetching = useIsFetching();
 
   return (
     <Box position='sticky' top='0' zIndex={1} w='100%'>
@@ -152,7 +152,7 @@ const Navbar = ({ user }: NavbarProps) => {
         </Flex>
       </Flex>
       <Breadcrumbs />
-      {!isOpen && loadingRemaining !== 0 ? (
+      {!isOpen && isFetching !== 0 ? (
         <Progress h='0.5em' isIndeterminate size='sm' />
       ) : (
         <Box bg='rgba(0,0,0,0)' h='0.5em' />

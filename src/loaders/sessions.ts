@@ -1,6 +1,7 @@
 import { QueryClient } from "@tanstack/react-query";
 import { components } from "schema/main";
 import { client } from "utils/api/client";
+import { beamlineToMicroscope } from "utils/config/table";
 import { parseDate } from "utils/generic";
 
 type Session = components["schemas"]["SessionResponse"];
@@ -43,3 +44,15 @@ const query = {
 
 export const sessionLoader = (queryClient: QueryClient) => async () =>
   (await queryClient.getQueryData(query.queryKey)) ?? (await queryClient.fetchQuery(query));
+
+export const processSessionData = (data: Record<string, string | number>[]) =>
+  data.map((item: Record<string, string | number>) => {
+    let newItem = Object.assign({}, item, {
+      startDate: parseDate(item.startDate as string),
+      endDate: parseDate(item.endDate as string),
+    });
+    const beamLineName = item.beamLineName as string;
+    const humanName = beamlineToMicroscope[beamLineName];
+    newItem["microscopeName"] = humanName ? `${humanName} (${beamLineName})` : beamLineName;
+    return newItem;
+  });

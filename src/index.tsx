@@ -1,30 +1,22 @@
 import React, { Suspense } from "react";
 import { createRoot } from "react-dom/client";
-import { ChakraProvider, createStandaloneToast, extendTheme } from "@chakra-ui/react";
+import { ChakraProvider, createStandaloneToast } from "@chakra-ui/react";
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import { Root } from "routes/Root";
 import { GenericListing } from "routes/GenericListing";
 import { TomogramPage } from "routes/Tomogram";
 import { SpaPage } from "routes/SPA";
 import { Error } from "routes/Error";
-import { Accordion, Button, Text, Heading, Table, Card, Tabs, Checkbox, Code } from "styles/components";
-import { colours } from "styles/colours";
 import { Home } from "routes/Home";
-import {
-  beamlineToMicroscope,
-  collectionHeaders,
-  groupsHeaders,
-  proposalHeaders,
-  sessionHeaders,
-} from "utils/config/table";
+import { collectionHeaders, groupsHeaders, proposalHeaders, sessionHeaders } from "utils/config/table";
 import { getUser } from "loaders/user";
-import { listingLoader } from "loaders/listings";
-import { parseDate } from "utils/generic";
+import { checkListingChanged, handleCollectionClicked, handleGroupClicked, listingLoader } from "loaders/listings";
 import { spaLoader } from "loaders/spa";
 import { tomogramLoader } from "loaders/tomogram";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { sessionLoader } from "loaders/sessions";
+import { processSessionData, sessionLoader } from "loaders/sessions";
+import { theme } from "styles/main";
 
 const Calendar = React.lazy(() => import("routes/Calendar"));
 
@@ -38,58 +30,12 @@ if (process.env.REACT_APP_DEPLOY_TYPE === "demo") {
   worker.start();
 }
 
-const theme = extendTheme({
-  colors: colours,
-  components: { Accordion, Checkbox, Button, Text, Heading, Table, Card, Tabs, Code },
-  breakpoints: {
-    "sm": "30em",
-    "md": "48em",
-    "lg": "62em",
-    "xl": "80em",
-    "2xl": "150em",
-  },
-});
-
-const checkListingChanged = (current: URL, next: URL) =>
-  (current.searchParams.get("items") !== null || current.searchParams.get("page") !== null) &&
-  current.href !== next.href;
-
-const handleGroupClicked = (item: Record<string, string | number>) => {
-  // Temporary workaround
-  if (item.experimentType === "tomo") {
-    return `${item.dataCollectionGroupId}/tomograms`;
-  }
-
-  switch (item.experimentTypeName) {
-    case "Single Particle":
-      return `${item.dataCollectionGroupId}/spa`;
-    case "Tomogram":
-      return `${item.dataCollectionGroupId}/tomograms/1`;
-    default:
-      return `${item.dataCollectionGroupId}/spa`;
-  }
-};
-
-const handleCollectionClicked = (item: Record<string, string | number>) => `../tomograms/${item.index}`;
-
-const processSessionData = (data: Record<string, string | number>[]) =>
-  data.map((item: Record<string, string | number>) => {
-    let newItem = Object.assign({}, item, {
-      startDate: parseDate(item.startDate as string),
-      endDate: parseDate(item.endDate as string),
-    });
-    const beamLineName = item.beamLineName as string;
-    const humanName = beamlineToMicroscope[beamLineName];
-    newItem["microscopeName"] = humanName ? `${humanName} (${beamLineName})` : beamLineName;
-    return newItem;
-  });
-
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
     errorElement: <Error />,
-    loader: (getUser),
+    loader: getUser,
     shouldRevalidate: () => false,
     children: [
       {
