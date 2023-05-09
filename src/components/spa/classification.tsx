@@ -22,11 +22,20 @@ import { parseData } from "utils/generic";
 import { classificationConfig } from "utils/config/parse";
 import { Info, ClassificationProps, SortTypes } from "schema/interfaces";
 import { MolstarModal } from "components/molstar/molstarModal";
+import { useQuery } from "@tanstack/react-query";
 
 type ClassificationSchema = components["schemas"]["Classification"];
 interface FullClassification extends ClassificationSchema {
   imageUrl: string;
 }
+
+const getBorderColour = (selected?: boolean | null) => {
+  if (selected === false) {
+    return "red";
+  }
+
+  return selected ? "green" : "diamond.200";
+};
 
 const sortValues = [
   { key: "particles", label: "Particles per Class" },
@@ -34,63 +43,68 @@ const sortValues = [
   { key: "resolution", label: "Estimated Resolution" },
 ];
 
-const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
-  const [classificationData, setClassificationData] = useState<FullClassification[] | undefined | null>(undefined);
-  const [classCount, setClassCount] = useState(0);
-  const [classPage, setClassPage] = useState(0);
-  const [sortType, setSortType] = useState<SortTypes>("particles");
-  const [selectedClass, setSelectedClass] = useState(0);
-
-  const handleClassificationChange = useCallback(
-    (page: number) => {
-      setClassPage(page);
-      client
-        .safeGet(`autoProc/${autoProcId}/classification?limit=8&page=${page - 1}&sortBy=${sortType}&classType=${type}`)
-        .then(async (response) => {
-          if (response.status === 200 && response.data.items) {
-            setClassCount(response.data.total);
-            let classes = response.data.items;
-            if (type === "2d") {
-              classes = classes.map((item: FullClassification) => ({
-                ...item,
-                imageUrl: prependApiUrl(
-                  `autoProc/${item.programId}/classification/${item.particleClassificationId}/image`
-                ),
-              }));
-            }
-            setClassificationData(classes);
-          } else {
-            setClassificationData(null);
-          }
-        });
-    },
-    [autoProcId, sortType, type]
+const fetchClassData = async (
+  type: "2d" | "3d",
+  autoProcId: number,
+  sortType: SortTypes,
+  filterUnselected: boolean,
+  page: number
+) => {
+  const response = await client.safeGet(
+    `autoProc/${autoProcId}/classification?limit=8&page=${
+      page - 1
+    }&sortBy=${sortType}&classType=${type}&filterUnselected=${filterUnselected}`
   );
 
-  const pageAmount = useMemo(() => Math.ceil(classCount / 8), [classCount]);
+  if (response.status !== 200 || !response.data.items) {
+    return { data: null, total: 0 };
+  }
+
+  let classes = response.data.items;
+  if (type === "2d") {
+    classes = classes.map((item: FullClassification) => ({
+      ...item,
+      imageUrl: prependApiUrl(`autoProc/${item.programId}/classification/${item.particleClassificationId}/image`),
+    }));
+  }
+
+  return { data: classes as FullClassification[], total: response.data.total as number };
+};
+
+const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
+  const [pageAmount, setPageAmount] = useState(0);
+  const [classPage, setClassPage] = useState(1);
+  const [sortType, setSortType] = useState<SortTypes>("particles");
+  const [selectedClass, setSelectedClass] = useState(0);
+  const [filterUnselected, setFilterUnselected] = useState(false);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["classification", type, autoProcId, sortType, filterUnselected, classPage],
+    queryFn: async () => await fetchClassData(type, autoProcId, sortType, filterUnselected, classPage),
+  });
+
+  useEffect(() => {
+    if (!isLoading) {
+      setPageAmount(Math.ceil((data ? data.total : 0) / 8));
+    }
+  }, [data, isLoading]);
 
   const handle3dClassPageChange = useCallback((page: number) => {
     setClassPage(Math.floor((page - 1) / 8) + 1);
     setSelectedClass((page - 1) % 8);
   }, []);
 
-  const classIndex = useMemo(() => {
-    return (classPage - 1) * 8 + selectedClass + 1;
-  }, [classPage, selectedClass]);
-
-  useEffect(() => {
-    handleClassificationChange(1);
-  }, [handleClassificationChange]);
+  const classIndex = useMemo(() => (classPage - 1) * 8 + selectedClass + 1, [classPage, selectedClass]);
 
   const selectedClassInfo = useMemo(() => {
-    if (classificationData && classificationData[selectedClass]) {
-      return parseData(classificationData[selectedClass], classificationConfig);
+    if (data && data.data && data.data[selectedClass]) {
+      return parseData(data.data[selectedClass], classificationConfig);
     }
 
     return {};
-  }, [selectedClass, classificationData]);
+  }, [selectedClass, data]);
 
-  if (classificationData === null) {
+  if (data && data.data === null) {
     return null;
   }
 
@@ -99,7 +113,9 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
       <Stack direction={{ base: "column", md: "row" }} gap={2}>
         <HStack gap={5}>
           <Heading variant='collection'>{type.toUpperCase()} Classification</Heading>
-          <Checkbox size='sm'>Only Show Selected</Checkbox>
+          <Checkbox onChange={() => setFilterUnselected(!filterUnselected)} checked={filterUnselected} size='sm'>
+            Only Show Selected
+          </Checkbox>
         </HStack>
         <Spacer display={{ base: "none", md: "inline-block" }} />
         <HStack gap={3}>
@@ -120,21 +136,16 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
             ))}
           </Select>
         </HStack>
-        <MotionPagination startFrom='start' page={classPage} onChange={handleClassificationChange} total={pageAmount} />
+        <MotionPagination startFrom='start' page={classPage} onChange={setClassPage} total={pageAmount} />
       </Stack>
       <Divider />
-      {classificationData !== undefined ? (
-        <Grid
-          pt="2"
-          mb="3"
-          templateColumns={{base: 'repeat(4, 1fr)', md: 'repeat(8, 1fr)'}}
-          gap="2"
-        >
-          {classificationData.map((item, i) =>
+      {data ? (
+        <Grid pt='2' mb='3' templateColumns={{ base: "repeat(4, 1fr)", md: "repeat(8, 1fr)" }} gap='2'>
+          {data.data.map((item, i) =>
             type === "2d" ? (
               <ImageCard
-                borderColor='green'
-                h={{base: 'auto', md: '14vh'}}
+                borderColor={getBorderColour(item.selected)}
+                h={{ base: "auto", md: "14vh" }}
                 showModal={false}
                 key={item.particleClassificationId}
                 src={item.imageUrl}
@@ -163,12 +174,12 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
         <Skeleton h='23vh' mb={1} />
       )}
       {selectedClassInfo.info && <InfoGroup height='auto' cols={5} info={selectedClassInfo.info as Info[]} />}
-      {classificationData && type === "3d" && (
+      {data && type === "3d" && (
         <MolstarModal
           onChange={handle3dClassPageChange}
           autoProcId={autoProcId}
           page={classIndex}
-          pageCount={classCount}
+          pageCount={data.total}
           classId={selectedClassInfo.particleClassificationId}
         />
       )}

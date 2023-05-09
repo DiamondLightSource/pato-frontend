@@ -1,6 +1,16 @@
 import { extendTheme } from "@chakra-ui/react";
 import { colours } from "styles/colours";
-import { Accordion, Button, Checkbox, Heading, Table, Card, Tabs, Code } from "styles/components";
+import {
+  Accordion,
+  Button,
+  Checkbox,
+  Heading,
+  Table,
+  Card,
+  Tabs,
+  Code,
+  Text,
+} from "styles/components";
 
 export const theme = extendTheme({
   colors: colours,

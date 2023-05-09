@@ -279,59 +279,42 @@ export const handlers = [
   ),
 
   rest.get("http://localhost/autoProc/:procId/classification", (req, res, ctx) => {
+    let items = [
+      {
+        particleClassificationId: 1,
+        classDistribution: 999,
+        classNumber: 1,
+        particlesPerClass: 1,
+        batchNumber: 155,
+        symmetry: "C1",
+        type: "2D",
+        selected: false,
+      },
+      {
+        particleClassificationId: 2,
+        batchNumber: 355,
+        classNumber: 1,
+        particlesPerClass: 1,
+        symmetry: "C1",
+        type: "2D",
+        selected: true,
+      },
+    ];
+
     if (req.url.searchParams.get("sortBy") === "class") {
-      return res(
-        ctx.status(200),
-        ctx.delay(0),
-        ctx.json({
-          items: [
-            {
-              particleClassificationId: 1,
-              classDistribution: 999,
-              classNumber: 1,
-              particlesPerClass: 1,
-              batchNumber: 155,
-              symmetry: "C1",
-              type: "2D",
-            },
-            {
-              particleClassificationId: 2,
-              batchNumber: 355,
-              classNumber: 1,
-              particlesPerClass: 1,
-              symmetry: "C1",
-              type: "2D",
-            },
-          ],
-          total: 2,
-          limit: 8,
-        })
-      );
+      items = items.sort((a, b) => (a.classDistribution! > b.classDistribution! ? -1 : 1));
+    }
+
+    if (req.url.searchParams.get("filterUnselected") === "true") {
+      items = items.filter((i) => i.selected !== false);
     }
 
     return res(
       ctx.status(200),
       ctx.delay(0),
       ctx.json({
-        items: [
-          {
-            particleClassificationId: 1,
-            classNumber: 1,
-            particlesPerClass: 1,
-            batchNumber: 155,
-            symmetry: "C1",
-            type: "2D",
-          },
-          {
-            particleClassificationId: 2,
-            batchNumber: 355,
-            classNumber: 1,
-            particlesPerClass: 1,
-            symmetry: "C1",
-            type: "2D",
-          },
-        ],
-        total: 2,
+        items: items,
+        total: items.length,
         limit: 8,
       })
     );
