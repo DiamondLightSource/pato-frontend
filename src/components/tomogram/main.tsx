@@ -117,26 +117,26 @@ const Tomogram = ({ autoProc, procJob, tomogram, status, onTomogramOpened, activ
                 <Heading variant='collection'>Alignment</Heading>
                 <Divider />
                 <Grid py={2} templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }} gap={2}>
-                  <GridItem height='20vh' colSpan={{ base: 2, md: 1 }}>
+                  <GridItem h='20vh' colSpan={{ base: 2, md: 1 }}>
                     <InfoGroup info={data.tomogram.info} />
                   </GridItem>
-                  <GridItem height='20vh'>
-                    <ImageCard height='85%' title='Central Slice' src={data.centralSlice} />
-                    <Button w='100%' mt='1%' height='13%' alignSelf='end' size='sm' onClick={handleOpenTomogram}>
+                  <GridItem h='20vh'>
+                    <ImageCard h='85%' title='Central Slice' src={data.centralSlice} />
+                    <Button w='100%' mt='1%' h='13%' alignSelf='end' size='sm' onClick={handleOpenTomogram}>
                       View Movie
                       <Spacer />
                       <Icon as={MdOpenInNew}></Icon>
                     </Button>
                   </GridItem>
-                  <GridItem height='20vh'>
+                  <GridItem h='20vh'>
                     <ImageCard src={data.xyProj} title='XY Projection' />
                   </GridItem>
-                  <GridItem colSpan={{ base: 2, md: 1 }} minW='100%' height='22vh'>
+                  <GridItem colSpan={{ base: 2, md: 1 }} minW='100%' h='22vh'>
                     <PlotContainer title='Shift Plot'>
                       <Scatter data={data.shiftPlot} />
                     </PlotContainer>
                   </GridItem>
-                  <GridItem colSpan={2} height='22vh'>
+                  <GridItem colSpan={2} h='22vh'>
                     <ImageCard src={data.xzProj} title='XZ Projection' />
                   </GridItem>
                 </Grid>

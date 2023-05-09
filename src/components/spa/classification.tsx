@@ -30,11 +30,14 @@ interface FullClassification extends ClassificationSchema {
 }
 
 const getBorderColour = (selected?: boolean | null) => {
-  if (selected === false) {
-    return "red";
+  switch (selected) {
+    case false:
+      return "red";
+    case true:
+      return "green";
+    default:
+      return "diamond.200";
   }
-
-  return selected ? "green" : "diamond.200";
 };
 
 const sortValues = [
