@@ -61,7 +61,7 @@ export const checkListingChanged = (current: URL, next: URL) =>
 export const handleGroupClicked = (item: Record<string, string | number>) => {
   // Temporary workaround
   if (item.experimentType === "tomo") {
-    return `${item.dataCollectionGroupId}/tomograms`;
+    return `${item.dataCollectionGroupId}/tomograms/1`;
   }
 
   switch (item.experimentTypeName) {

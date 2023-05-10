@@ -1,4 +1,4 @@
-import { listingLoader } from "loaders/listings";
+import { handleGroupClicked, listingLoader } from "loaders/listings";
 import { server } from "mocks/server";
 import { rest } from "msw";
 import { queryClient } from "utils/test-utils";
@@ -48,5 +48,23 @@ describe("Listing Data", () => {
     const data = await listingLoader(queryClient)(requestSearch, {}, "searchTest");
 
     expect(data.data[0]).toMatchObject({ value: "test" });
+  });
+
+  it("should get proper redirect URL for tomograms", () => {
+    expect(handleGroupClicked({ experimentTypeName: "Tomogram", dataCollectionGroupId: 1 })).toBe(
+      "1/tomograms/1"
+    );
+  });
+
+  it("should get proper redirect URL for SPA", () => {
+    expect(
+      handleGroupClicked({ experimentTypeName: "Single Particle", dataCollectionGroupId: 1 })
+    ).toBe("1/spa");
+  });
+
+  it("should default to SPA redirect URL", () => {
+    expect(handleGroupClicked({ experimentTypeName: "invalid", dataCollectionGroupId: 1 })).toBe(
+      "1/spa"
+    );
   });
 });
