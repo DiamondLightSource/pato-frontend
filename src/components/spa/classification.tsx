@@ -50,13 +50,13 @@ const fetchClassData = async (
   type: "2d" | "3d",
   autoProcId: number,
   sortType: SortTypes,
-  filterUnselected: boolean,
+  excludeUnselected: boolean,
   page: number
 ) => {
   const response = await client.safeGet(
     `autoProc/${autoProcId}/classification?limit=8&page=${
       page - 1
-    }&sortBy=${sortType}&classType=${type}&filterUnselected=${filterUnselected}`
+    }&sortBy=${sortType}&classType=${type}&excludeUnselected=${excludeUnselected}`
   );
 
   if (response.status !== 200 || !response.data.items) {
@@ -79,11 +79,11 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
   const [classPage, setClassPage] = useState(1);
   const [sortType, setSortType] = useState<SortTypes>("particles");
   const [selectedClass, setSelectedClass] = useState(0);
-  const [filterUnselected, setFilterUnselected] = useState(false);
+  const [excludeUnselected, setExcludeUnselected] = useState(false);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["classification", type, autoProcId, sortType, filterUnselected, classPage],
-    queryFn: async () => await fetchClassData(type, autoProcId, sortType, filterUnselected, classPage),
+    queryKey: ["classification", type, autoProcId, sortType, excludeUnselected, classPage],
+    queryFn: async () => await fetchClassData(type, autoProcId, sortType, excludeUnselected, classPage),
   });
 
   useEffect(() => {
@@ -116,7 +116,7 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
       <Stack direction={{ base: "column", md: "row" }} gap={2}>
         <HStack gap={5}>
           <Heading variant='collection'>{type.toUpperCase()} Classification</Heading>
-          <Checkbox onChange={() => setFilterUnselected(!filterUnselected)} checked={filterUnselected} size='sm'>
+          <Checkbox onChange={() => setExcludeUnselected(!excludeUnselected)} checked={excludeUnselected} size='sm'>
             Only Show Selected
           </Checkbox>
         </HStack>
