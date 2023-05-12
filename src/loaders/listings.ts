@@ -53,3 +53,26 @@ export const listingLoader =
 
     return { data: null, total: 0 };
   };
+
+export const checkListingChanged = (current: URL, next: URL) =>
+  (current.searchParams.get("items") !== null || current.searchParams.get("page") !== null) &&
+  current.href !== next.href;
+
+export const handleGroupClicked = (item: Record<string, string | number>) => {
+  // Temporary workaround
+  if (item.experimentType === "tomo") {
+    return `${item.dataCollectionGroupId}/tomograms`;
+  }
+
+  switch (item.experimentTypeName) {
+    case "Single Particle":
+      return `${item.dataCollectionGroupId}/spa`;
+    case "Tomogram":
+      return `${item.dataCollectionGroupId}/tomograms/1`;
+    default:
+      return `${item.dataCollectionGroupId}/spa`;
+  }
+};
+
+export const handleCollectionClicked = (item: Record<string, string | number>) =>
+  `../tomograms/${item.index}`;

@@ -5,7 +5,7 @@ import { Form } from "components/form/form";
 import { FormItem, NumericInput } from "components/form/input";
 import { baseToast } from "styles/components";
 
-interface ReprocessingProps {
+export interface ReprocessingProps {
   pixelSize?: number;
   collectionId: number;
   onClose?: () => void;

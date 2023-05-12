@@ -11,7 +11,7 @@ import { CtfData } from "schema/interfaces";
 import { Scatter } from "components/plots/scatter";
 import { useQuery } from "@tanstack/react-query";
 
-interface CTFProps {
+export interface CTFProps {
   parentType: "autoProc" | "tomograms";
   parentId: number;
   /** Event fired when one of the graphs is clicked */

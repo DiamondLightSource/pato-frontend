@@ -46,7 +46,7 @@ interface MotionData {
   info: Info[];
 }
 
-interface MotionProps {
+export interface MotionProps {
   /** ID for the parent of the motion correction. Could be a tomogram or something else in the future. */
   parentId: number;
   /** Whether parent is a tomogram or data collection */
