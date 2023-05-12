@@ -305,7 +305,7 @@ export const handlers = [
       items = items.sort((a, b) => (a.classDistribution! > b.classDistribution! ? -1 : 1));
     }
 
-    if (req.url.searchParams.get("filterUnselected") === "true") {
+    if (req.url.searchParams.get("excludeUnselected") === "true") {
       items = items.filter((i) => i.selected !== false);
     }
 
