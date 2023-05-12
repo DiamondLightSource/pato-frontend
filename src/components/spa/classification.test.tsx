@@ -83,11 +83,11 @@ describe("Classification", () => {
   it("should display visualisation button for 3D", async () => {
     renderWithProviders(<Classification autoProcId={1} type='3d' />);
 
-    await screen.findByText("Open 3D Visualisation", {}, { timeout: 3000 });
+    await screen.findByText("Open 3D Visualisation");
   });
 
   it("should update information when new class is selected (3d)", async () => {
-    await renderWithProviders(<Classification autoProcId={1} type='3d' />);
+    renderWithProviders(<Classification autoProcId={1} type='3d' />);
 
     await waitFor(() => {
       expect(screen.getByLabelText("Batch Number Value")).toHaveTextContent("155");
@@ -96,5 +96,14 @@ describe("Classification", () => {
     fireEvent.click(screen.getByTestId("class-1"));
 
     await waitFor(() => expect(screen.getByLabelText("Batch Number Value")).toHaveTextContent("355"));
+  });
+
+  it("should filter out unselected classes when option is selected", async () => {
+    renderWithProviders(<Classification autoProcId={1} />);
+
+    fireEvent.click(screen.getByRole("checkbox"));
+
+    await screen.findByText("355-1 (1)");
+    await waitFor(() => expect(screen.queryByText("155-1 (1)")).not.toBeInTheDocument());
   });
 });
