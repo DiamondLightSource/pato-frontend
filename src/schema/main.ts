@@ -344,6 +344,8 @@ export interface components {
       overallFourierCompleteness: number;
       /** Classdistribution */
       classDistribution?: number;
+      /** Selected */
+      selected?: boolean;
     };
     /** CtfImageNumber */
     CtfImageNumber: {

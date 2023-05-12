@@ -9,14 +9,14 @@ describe("Breadcrumbs", () => {
   });
 
   it("should be displayed on all non-home pages", () => {
-    renderWithProviders(<Breadcrumbs />, { route: "/test" });
+    renderWithProviders(<Breadcrumbs />, undefined, ["/test"]);
     const breadcrumb = screen.getByText("test");
 
     expect(breadcrumb).toBeInTheDocument();
   });
 
   it("should display longer routes", () => {
-    renderWithProviders(<Breadcrumbs />, { route: "/test/page" });
+    renderWithProviders(<Breadcrumbs />, undefined, ["/test/page"]);
     const breadcrumb = screen.getByText("test");
     const breadcrumb2 = screen.getByText("page");
 

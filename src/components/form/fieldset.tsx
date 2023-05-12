@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-interface FieldSetProps {
+export interface FieldSetProps {
   title: string;
   children?: ReactNode;
 }

@@ -1,4 +1,4 @@
-import { Spacer,  Divider, Heading, Checkbox, VStack, Grid, Skeleton, Stack } from "@chakra-ui/react";
+import { Spacer, Divider, Heading, Checkbox, VStack, Grid, Skeleton, Stack } from "@chakra-ui/react";
 import { ImageCard } from "components/visualisation/image";
 import { InfoGroup } from "components/visualisation/infogroup";
 import { MotionPagination } from "components/motion/pagination";
@@ -13,7 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 
 type ParticlePickingSchema = components["schemas"]["ParticlePicker"];
 
-interface ParticleProps extends SpaProps {
+export interface ParticleProps extends SpaProps {
   /* Total number of available items */
   total: number;
   /* Page for parent motion correction, used if page match lock is set */
@@ -36,9 +36,14 @@ interface FullParticleData {
   iceThickness: BoxPlotStats[];
 }
 
-const convertToBoxPlot = (data: components["schemas"]["RelativeIceThickness"], label: string): BoxPlotStats => {
-  return { min: data.minimum, max: data.maximum, median: data.median, q1: data.q1, q3: data.q3, label };
-};
+const convertToBoxPlot = (data: components["schemas"]["RelativeIceThickness"], label: string): BoxPlotStats => ({
+  min: data.minimum,
+  max: data.maximum,
+  median: data.median,
+  q1: data.q1,
+  q3: data.q3,
+  label,
+});
 
 const fetchParticlePickingData = async (autoProcId: number, page: number) => {
   let data: FullParticleData = { particlePicker: null, total: null, summary: "", iceThickness: [] };
@@ -100,7 +105,7 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
 
   return (
     <div>
-      <Stack direction={{base: "column", md: "row"}}>
+      <Stack direction={{ base: "column", md: "row" }}>
         <Heading variant='collection'>Particle Picking</Heading>
         <Spacer />
         <Checkbox

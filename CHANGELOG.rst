@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v0.12.0 (16/05/2023)
+++++++++++
+
+**Added**
+
+- User can now filter out unselected classes; selected classes are displayed in green, unselected in red
+
+++++++++++
 v0.11.0 (02/05/2023)
 ++++++++++
 
