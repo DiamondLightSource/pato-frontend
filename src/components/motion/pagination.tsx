@@ -1,7 +1,7 @@
 import { Button, HStack, InputRightAddon, InputGroup, Input, Skeleton } from "@chakra-ui/react";
 import { useEffect, useState, FocusEvent as ReactFocusEvent, useCallback } from "react";
 
-interface MotionPaginationProps {
+export interface MotionPaginationProps {
   total: number;
   size?: "xs" | "md";
   page?: number;

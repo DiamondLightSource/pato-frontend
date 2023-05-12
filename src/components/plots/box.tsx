@@ -55,13 +55,9 @@ const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
       return newConfig as CompleteScatterPlotOptions;
     }, [data, options]);
 
-    const xMax = useMemo(() => {
-      return width - defaultMargin.left - defaultMargin.right;
-    }, [width]);
+    const xMax = useMemo(() => width - defaultMargin.left - defaultMargin.right, [width]);
 
-    const yMax = useMemo(() => {
-      return height - defaultMargin.top - defaultMargin.bottom;
-    }, [height]);
+    const yMax = useMemo(() => height - defaultMargin.top - defaultMargin.bottom, [height]);
 
     const yScale = useMemo(
       () =>
@@ -85,9 +81,7 @@ const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
     );
 
     const checkBoundaries = useCallback(
-      (d: BoxPlotStats) => {
-        return config.y.domain.min < min(d) && config.y.domain.max > max(d);
-      },
+      (d: BoxPlotStats) => config.y.domain.min < min(d) && config.y.domain.max > max(d),
       [config]
     );
 
@@ -95,7 +89,7 @@ const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
     const constrainedWidth = Math.min(40, boxWidth);
 
     if (data.length === 0) {
-      return <NoData/>
+      return <NoData />;
     }
 
     return (

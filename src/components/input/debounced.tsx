@@ -2,7 +2,7 @@ import { Input, InputProps } from "@chakra-ui/react";
 import { FormEvent } from "react";
 import { debounce } from "utils/generic";
 
-interface DebounceProps extends InputProps {
+export interface DebounceProps extends InputProps {
   onChangeEnd: (text: string) => void;
 }
 

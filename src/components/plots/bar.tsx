@@ -59,21 +59,13 @@ const BarChart = withTooltip<BarProps, BarStats>(
       return newConfig as CompleteScatterPlotOptions;
     }, [data, options]);
 
-    const xMax = useMemo(() => {
-      return width - defaultMargin.left - defaultMargin.right;
-    }, [width]);
+    const xMax = useMemo(() => width - defaultMargin.left - defaultMargin.right, [width]);
 
-    const yMax = useMemo(() => {
-      return height - defaultMargin.top - defaultMargin.bottom;
-    }, [height]);
+    const yMax = useMemo(() => height - defaultMargin.top - defaultMargin.bottom, [height]);
 
-    const groupWidth = useMemo(() => {
-      return xMax / data.length;
-    }, [xMax, data]);
+    const groupWidth = useMemo(() => xMax / data.length, [xMax, data]);
 
-    const widestBarGroup = useMemo(() => {
-      return data.sort((d) => d.length)[0];
-    }, [data]);
+    const widestBarGroup = useMemo(() => data.sort((d) => d.length)[0], [data]);
 
     const yScale = useMemo(
       () =>
@@ -85,9 +77,7 @@ const BarChart = withTooltip<BarProps, BarStats>(
       [yMax, config]
     );
 
-    const lateralPadding = useMemo(() => {
-      return (groupWidth * padding) / data.length;
-    }, [data, groupWidth, padding]);
+    const lateralPadding = useMemo(() => (groupWidth * padding) / data.length, [data, groupWidth, padding]);
 
     const xScale = useMemo(
       () =>

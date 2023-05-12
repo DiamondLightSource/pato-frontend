@@ -1,7 +1,7 @@
 import { Divider, Box, Button, HStack, Spacer } from "@chakra-ui/react";
 import { FormEvent, ReactNode, useCallback } from "react";
 
-interface FormProps {
+export interface FormProps {
   children?: ReactNode;
   onSubmit?: (data: Record<string, any>) => void;
   onClose?: () => void;
