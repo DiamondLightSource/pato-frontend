@@ -1,4 +1,9 @@
-import { defineStyleConfig, ToastProps, defineStyle, createMultiStyleConfigHelpers } from "@chakra-ui/react";
+import {
+  defineStyleConfig,
+  ToastProps,
+  defineStyle,
+  createMultiStyleConfigHelpers,
+} from "@chakra-ui/react";
 import { cardAnatomy, tabsAnatomy } from "@chakra-ui/anatomy";
 
 const baseToast: ToastProps = {
@@ -79,7 +84,9 @@ const CardBody = defineStyleConfig({
   },
 });
 
-const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(cardAnatomy.keys);
+const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(
+  cardAnatomy.keys
+);
 
 const baseCardStyle = definePartsStyle({
   container: {
@@ -178,9 +185,8 @@ const Heading = defineStyleConfig({
   },
 });
 
-const { definePartsStyle: defineTabsStyle, defineMultiStyleConfig: defineTabsConfig } = createMultiStyleConfigHelpers(
-  tabsAnatomy.keys
-);
+const { definePartsStyle: defineTabsStyle, defineMultiStyleConfig: defineTabsConfig } =
+  createMultiStyleConfigHelpers(tabsAnatomy.keys);
 
 const baseTabsStyle = defineTabsStyle({
   tab: {
@@ -220,4 +226,17 @@ const Code = defineStyleConfig({
   },
 });
 
-export { Accordion, Button, Table, Text, Heading, Card, CardHeader, CardBody, Tabs, baseToast, Checkbox, Code };
+export {
+  Accordion,
+  Button,
+  Table,
+  Text,
+  Heading,
+  Card,
+  CardHeader,
+  CardBody,
+  Tabs,
+  baseToast,
+  Checkbox,
+  Code,
+};
