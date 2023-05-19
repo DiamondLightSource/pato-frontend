@@ -93,4 +93,16 @@ describe("Motion", () => {
 
     expect(screen.getByLabelText("Current Page")).not.toHaveAttribute("value", "2");
   });
+
+  it("should not display refined tilt angle for SPA", async () => {
+    renderWithProviders(<Motion parentType='dataCollections' parentId={2} />);
+
+    await screen.findByText(/box size:/i);
+    expect(screen.queryByText(/refined tilt angle:/i)).not.toBeInTheDocument();
+  });
+
+  it("should display refined tilt angle for tomograms", async () => {
+    renderWithProviders(<Motion parentType='tomograms' parentId={4} />);
+    await screen.findByText(/refined tilt angle:/i);
+  });
 });

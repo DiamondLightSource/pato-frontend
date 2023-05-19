@@ -61,7 +61,6 @@ export interface MotionProps {
 
 const motionConfig = {
   include: [
-    { name: "refinedTiltAngle", unit: "°" },
     { name: "createdTimeStamp", label: "Movie Timestamp" },
     { name: "firstFrame" },
     { name: "lastFrame" },
@@ -139,10 +138,16 @@ const fetchMotionData = async (
     return data;
   }
 
+  // Refined tilt angle is irrelevant to SPA
+  const extendedMotionConfig =
+    parentType === "tomograms"
+      ? { ...motionConfig, include: [...motionConfig.include, { name: "refinedTiltAngle", unit: "°" }] }
+      : motionConfig;
+
   data = {
     ...data,
     total: response.data.total,
-    motion: parseData(flattenMovieData(response.data), motionConfig) as MotionData,
+    motion: parseData(flattenMovieData(response.data), extendedMotionConfig) as MotionData,
   };
 
   const movie = response.data.items[0].Movie;
