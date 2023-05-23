@@ -23,7 +23,6 @@ export const classificationConfig: DataConfig = {
     { name: "translationAccuracy", unit: "Å" },
     { name: "estimatedResolution" },
     { name: "overallFourierCompleteness" },
-    { name: "resolution" },
     { name: "numberOfParticles" },
   ],
   root: ["particleClassificationId"]

@@ -3,6 +3,13 @@ Changelog
 ==========
 
 ++++++++++
+v0.12.1 (23/05/2023)
+++++++++++
+
+**Removed**
+- Unused columns (resolution in 2D classification, refined tilt angle in SPA)
+
+++++++++++
 v0.12.0 (16/05/2023)
 ++++++++++
 
