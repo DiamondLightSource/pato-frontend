@@ -11,6 +11,11 @@ import {
   Spacer,
   Icon,
   Box,
+  HStack,
+  Card,
+  CardHeader,
+  CardBody,
+  Text
 } from "@chakra-ui/react";
 import { ImageCard } from "components/visualisation/image";
 import { InfoGroup } from "components/visualisation/infogroup";
@@ -120,15 +125,35 @@ const Tomogram = ({ autoProc, procJob, tomogram, status, onTomogramOpened, activ
                   <GridItem h='20vh' colSpan={{ base: 2, md: 1 }}>
                     <InfoGroup info={data.tomogram.info} />
                   </GridItem>
-                  <GridItem h='20vh'>
-                    <ImageCard h='85%' title='Central Slice' src={data.centralSlice} />
-                    <Button w='100%' mt='1%' h='13%' alignSelf='end' size='sm' onClick={handleOpenTomogram}>
-                      View Movie
-                      <Spacer />
-                      <Icon as={MdOpenInNew}></Icon>
-                    </Button>
+                  <GridItem colSpan={{ base: 2, md: 1 }} h='20vh'>
+                    <Card h='100%'>
+                      <CardHeader>
+                        <HStack>
+                          <Heading size='sm'>Central Slice</Heading>
+                          <Spacer />
+                          <Button h="25px" size='sm' onClick={handleOpenTomogram}>
+                            View Movie
+                            <Spacer />
+                            <Icon ml="10px" as={MdOpenInNew}></Icon>
+                          </Button>
+                        </HStack>
+                      </CardHeader>
+                      <CardBody pt={0}>
+                        <HStack mx="auto" w="auto" h="100%">
+                          <VStack w="50%" h="100%">
+                          <ImageCard p={0} borderColor='transparent' src={`{data.centralSlice}?denoised=true`} />
+                          <Text fontSize={13}>Denoised</Text>
+                          </VStack>
+                          <Divider orientation="vertical"/>
+                          <VStack w="50%" h="100%">
+                          <ImageCard p={0} borderColor='transparent' src={data.centralSlice} />
+                          <Text fontSize={13}>Not Denoised</Text>
+                          </VStack>
+                        </HStack>
+                      </CardBody>
+                    </Card>
                   </GridItem>
-                  <GridItem h='20vh'>
+                  <GridItem colSpan={{ base: 2, md: 1 }} h='20vh'>
                     <ImageCard src={data.xyProj} title='XY Projection' />
                   </GridItem>
                   <GridItem colSpan={{ base: 2, md: 1 }} minW='100%' h='22vh'>
