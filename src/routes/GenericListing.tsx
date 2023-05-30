@@ -17,6 +17,7 @@ export interface TableProps {
 interface TableData {
   data: Array<Record<string, number | string>> | null;
   total: number;
+  limit: number;
 }
 
 const GenericListing = ({ headers, heading, makePathCallback }: TableProps) => {
@@ -80,6 +81,7 @@ const GenericListing = ({ headers, heading, makePathCallback }: TableProps) => {
       <Table data={data.data} headers={headers} label={heading} onClick={handleRowClicked} />
       <Divider />
       <Pagination
+        limit={data.limit}
         value={page}
         onPageChange={setPage}
         onItemCountChange={setItemsPerPage}

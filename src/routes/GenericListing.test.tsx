@@ -73,6 +73,18 @@ describe("GenericListing", () => {
     await screen.findByText("Page 1 out of 15");
   });
 
+  it("should use item limit from URL when available", async () => {
+    renderWithRoute(
+      <GenericListing
+        heading='data'
+        headers={proposalHeaders}
+      />,
+      () => ({ data: [], total: 300, limit: 30 })
+    );
+
+    await screen.findByDisplayValue("30");
+  });
+
   it("should call navigation callback when row is clicked", async () => {
     const mockCallback = jest.fn().mockReturnValue("somethingElse");
     const { router } = renderWithRoute(
