@@ -74,13 +74,11 @@ describe("GenericListing", () => {
   });
 
   it("should use item limit from URL when available", async () => {
-    renderWithRoute(
-      <GenericListing
-        heading='data'
-        headers={proposalHeaders}
-      />,
-      () => ({ data: [], total: 300, limit: 30 })
-    );
+    renderWithRoute(<GenericListing heading='data' headers={proposalHeaders} />, () => ({
+      data: [],
+      total: 300,
+      limit: 30,
+    }));
 
     await screen.findByDisplayValue("30");
   });

@@ -56,7 +56,7 @@ const APNGContainer = ({ width = "100%", height = "64vh", children }: ApngContai
   }, [frameIndex, playing, frametime, frameLength, playIncrement, playForward]);
 
   return (
-    <Box h={height} w={width} p={4}>
+    <Box h={height} w={width} px={4} pt={4} pb="0">
       <HStack h='90%'>
         {(Array.isArray(children) ? children : [children]).map((child, i) =>
         <Box key={i} h='100%' w='100%'>

@@ -48,7 +48,7 @@ export const listingLoader =
       return {
         data: processData ? processData(data.items) : data.items,
         total: data.total,
-        limit: data.limit
+        limit: data.limit,
       };
     }
 
