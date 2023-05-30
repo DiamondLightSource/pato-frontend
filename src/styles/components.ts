@@ -127,7 +127,7 @@ const Button = defineStyleConfig({
     variant: "default",
   },
   baseStyle: {
-    borderBottom: "2px solid rgba(0,0,0,0.2)"
+    borderBottom: "2px solid rgba(0,0,0,0.2)",
   },
   variants: {
     default: {

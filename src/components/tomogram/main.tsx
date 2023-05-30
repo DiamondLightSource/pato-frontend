@@ -141,7 +141,7 @@ const Tomogram = ({ autoProc, procJob, tomogram, status, onTomogramOpened, activ
                       <CardBody pt={0}>
                         <HStack mx="auto" w="auto" h="100%">
                           <VStack w="50%" h="100%">
-                          <ImageCard p={0} borderColor='transparent' src={`{data.centralSlice}?denoised=true`} />
+                          <ImageCard p={0} borderColor='transparent' src={`${data.centralSlice}?denoised=true`} />
                           <Text fontSize={13}>Denoised</Text>
                           </VStack>
                           <Divider orientation="vertical"/>

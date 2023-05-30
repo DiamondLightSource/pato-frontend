@@ -1,6 +1,6 @@
 {
   "name": "pato-frontend",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "private": true,
   "dependencies": {
     "@chakra-ui/react": "^2.5.5",
@@ -136,7 +136,7 @@
       "text",
       "cobertura"
     ],
-    "maxWorkers": 2,
+    "maxWorkers": 3,
     "moduleDirectories": [
       "node_modules",
       "src"
