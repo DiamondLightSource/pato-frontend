@@ -135,7 +135,7 @@ describe("Tomogram Movie Modal", () => {
     await screen.findByText("Tilt Align 1");
     fireEvent.click(await screen.findByTestId(/view movie/i));
 
-    await screen.findByText("tomograms/1/movie");
+    await screen.findAllByText("tomograms/1/movie");
 
     fireEvent.click(screen.getByRole("button", { name: /next page/i }));
 
@@ -149,11 +149,11 @@ describe("Tomogram Movie Modal", () => {
     await screen.findByText("Tilt Align 1");
     fireEvent.click(await screen.findByTestId(/view movie/i));
 
-    await screen.findByText("tomograms/1/movie");
+    await screen.findAllByText("tomograms/1/movie");
 
     fireEvent.click(screen.getByRole("button", { name: /next page/i }));
 
-    await screen.findByText("tomograms/2/movie");
+    await screen.findAllByText("tomograms/2/movie");
   });
 
   it("should close modal if most recent processing job is not a processed tomogram", async () => {
@@ -163,7 +163,7 @@ describe("Tomogram Movie Modal", () => {
     await screen.findByText("Tilt Align 1");
     fireEvent.click(await screen.findByTestId(/view movie/i));
 
-    await screen.findByText("tomograms/1/movie");
+    await screen.findAllByText("tomograms/1/movie");
 
     fireEvent.click(screen.getByRole("button", { name: /next page/i }));
 
