@@ -3,6 +3,21 @@ Changelog
 ==========
 
 ++++++++++
+v0.12.1 (23/05/2023)
+++++++++++
+
+**Removed**
+- Unused columns (resolution in 2D classification, refined tilt angle in SPA)
+
+++++++++++
+v0.12.0 (16/05/2023)
+++++++++++
+
+**Added**
+
+- User can now filter out unselected classes; selected classes are displayed in green, unselected in red
+
+++++++++++
 v0.11.0 (02/05/2023)
 ++++++++++
 

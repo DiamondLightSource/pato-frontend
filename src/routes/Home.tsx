@@ -31,12 +31,7 @@ const SessionRow = ({ sessions, title }: SessionRowProps) => (
       {title}
     </Heading>
     <Divider borderColor='diamond.300' />
-    <Stack
-      direction={{ base: "column", md: "row" }}
-      w='100%'
-      spacing='0.5%'
-      py='0.8em'
-    >
+    <Stack direction={{ base: "column", md: "row" }} w='100%' spacing='0.5%' py='0.8em'>
       {sessions && sessions.length > 0 ? (
         sessions.map((session) => (
           <Link

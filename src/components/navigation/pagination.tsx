@@ -4,7 +4,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 type PageChangeCallback = (page: number) => void;
 type ItemChangeCallback = (items: number) => void;
 
-interface PaginationProps {
+export interface PaginationProps {
   /** Total number of items to paginate */
   total: number;
   /** Array with all available "items per page" amounts */

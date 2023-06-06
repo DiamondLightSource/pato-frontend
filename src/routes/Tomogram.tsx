@@ -110,20 +110,14 @@ const TomogramPage = () => {
             <Spacer />
             <HStack>
               <Tooltip label='Run Reprocessing'>
-                <Button
-                  aria-label='Run Reprocessing'
-                  onClick={onOpen}
-                  isDisabled={buttonDisabled}
-                >
+                <Button aria-label='Run Reprocessing' onClick={onOpen} isDisabled={buttonDisabled}>
                   <Icon as={MdRedo} />
                 </Button>
               </Tooltip>
               <Tooltip label='List Collections'>
                 <Button
                   aria-label='List Collections'
-                  onClick={() =>
-                    navigate("../../collections", { relative: "path" })
-                  }
+                  onClick={() => navigate("../../collections", { relative: "path" })}
                 >
                   <Icon as={MdList} />
                 </Button>

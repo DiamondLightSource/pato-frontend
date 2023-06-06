@@ -30,16 +30,16 @@ const Statistics = ({ dataCollectionId }: SpaProps) => {
       <Divider />
       {iceThickness && totalMotion && resolution && particleCount ? (
         <Grid py={2} templateColumns={{base: "", md: 'repeat(4, 1fr)'}} gap={2}>
-          <PlotContainer title='Relative Ice Thickness' height='25vh'>
+          <PlotContainer title='Relative Ice Thickness' h='25vh'>
             <BarChart data={[iceThickness]} padding={0} options={{ x: { label: "10^4" } }} />
           </PlotContainer>
-          <PlotContainer title='Total Motion' height='25vh'>
+          <PlotContainer title='Total Motion' h='25vh'>
             <BarChart data={[totalMotion]} padding={0} options={{ x: { label: "10^1" } }} />
           </PlotContainer>
-          <PlotContainer title='Estimated Resolution' height='25vh'>
+          <PlotContainer title='Estimated Resolution' h='25vh'>
             <BarChart data={[resolution]} padding={0} />
           </PlotContainer>
-          <PlotContainer title='Particle Count' height='25vh'>
+          <PlotContainer title='Particle Count' h='25vh'>
             <BarChart data={[particleCount]} padding={0} options={{ x: { label: "10^1" } }} />
           </PlotContainer>
         </Grid>

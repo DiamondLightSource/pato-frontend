@@ -2,12 +2,12 @@ import { Spacer, VStack, Text, Tag, AccordionButton, HStack, AccordionIcon, Stac
 import { components } from "schema/main";
 import { parseDate } from "utils/generic";
 
-interface TwoLineTitleProps {
+export interface TwoLineTitleProps {
   title: string;
   value: string | number;
 }
 
-interface ProcTitleProps {
+export interface ProcTitleProps {
   autoProc: components["schemas"]["AutoProcProgram"];
   procJob: components["schemas"]["ProcessingJob"];
   status: string;
@@ -21,7 +21,6 @@ const jobStatusColour: Record<string, string> = {
 };
 
 const TwoLineTitle = ({ title, value }: TwoLineTitleProps) => (
-  
     <VStack spacing='0'>
       <Text w='100%'>
         <b>{title}</b>

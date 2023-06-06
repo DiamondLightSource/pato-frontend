@@ -10,7 +10,7 @@ import FullCalendar from "@fullcalendar/react";
 
 type SessionSchema = components["schemas"]["SessionResponse"];
 
-interface EventProps {
+export interface EventProps {
   info: EventApi;
 }
 

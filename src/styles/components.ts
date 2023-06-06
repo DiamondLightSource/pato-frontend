@@ -34,6 +34,9 @@ const Text = defineStyleConfig({
 const Checkbox = defineStyleConfig({
   sizes: {
     sm: {
+      label: {
+        height: "16px",
+      },
       control: {
         height: "16px",
         width: "16px",

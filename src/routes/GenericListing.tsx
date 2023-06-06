@@ -5,7 +5,7 @@ import { Pagination } from "components/navigation/pagination";
 import { Table } from "components/visualisation/table";
 import { DebouncedInput } from "components/input/debounced";
 
-interface TableProps {
+export interface TableProps {
   headers: {
     key: string;
     label: string;
