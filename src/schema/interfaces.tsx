@@ -71,7 +71,7 @@ export interface BaseCardProp extends CardProps {
   /** Display pop-up modal with full size image */
   showModal?: boolean;
   /** Title for the card */
-  title: string;
+  title?: string;
   /** Event fired when container is clicked. Does not fire if showModal is set */
   onClick?: () => void;
   /** Whether or not current item is active */

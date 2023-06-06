@@ -99,6 +99,18 @@ describe("Pagination", () => {
     expect(mockCallback).toBeCalledWith(5);
   });
 
+  it("should limit item count to prop-passed value", () => {
+    const mockCallback = jest.fn();
+    renderWithProviders(<Pagination total={160} limit={30} onItemCountChange={mockCallback} />);
+    expect(screen.getByRole("combobox")).toHaveValue("30");
+  });
+
+  it("should default to option in the middle if item limit is not in dropdown", () => {
+    const mockCallback = jest.fn();
+    renderWithProviders(<Pagination total={160} limit={920} onItemCountChange={mockCallback} />);
+    expect(screen.getByRole("combobox")).toHaveValue("20");
+  });
+
   it("should reset page when page count changes if current page is greater than page count", () => {
     const mockCallback = jest.fn();
     const { rerender } = renderWithProviders(<Pagination total={160} onPageChange={mockCallback} />);

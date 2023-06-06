@@ -13,6 +13,8 @@ export interface PaginationProps {
   preselected?: number;
   /** External bind for current page */
   value?: number;
+  /** Number of items to display per page */
+  limit?: number;
   /** Callback for page change events */
   onPageChange?: PageChangeCallback;
   /** Callback for item count change event */
@@ -22,13 +24,17 @@ export interface PaginationProps {
 const Pagination = ({
   total,
   possibleItemsPerPage = [5, 10, 15, 20, 30, 50, 100],
-  preselected = 3,
+  limit = 20,
   value,
   onPageChange,
   onItemCountChange,
 }: PaginationProps) => {
   const [page, setPage] = useState(value || 1);
-  const [itemsPerPage, setItemsPerPage] = useState(possibleItemsPerPage[preselected]);
+  // Use limit set in instance, unless it does not exist in the list of possible items per page.
+  // Default to middle.
+  const [itemsPerPage, setItemsPerPage] = useState(
+    possibleItemsPerPage.includes(limit) ? limit : possibleItemsPerPage[Math.floor(possibleItemsPerPage.length / 2)]
+  );
   const [pageAmount, setPageAmount] = useState(1);
 
   useEffect(() => {
@@ -64,7 +70,7 @@ const Pagination = ({
 
   return (
     <Box py={2}>
-      <Stack w="100%" direction={{base: 'column', md: "row"}}>
+      <Stack w='100%' direction={{ base: "column", md: "row" }}>
         <HStack>
           <Button aria-label='First Page' size='sm' variant='pgNotSelected' onClick={() => setPage(1)}>
             &lt;&lt;
@@ -113,8 +119,8 @@ const Pagination = ({
             &gt;&gt;
           </Button>
         </HStack>
-        <Divider display={{base: "none", md: "initial"}} orientation='vertical' h='30px' />
-        <HStack flexGrow="1">
+        <Divider display={{ base: "none", md: "initial" }} orientation='vertical' h='30px' />
+        <HStack flexGrow='1'>
           <Text id='item-count-label'>
             <b>Items per Page:</b>
           </Text>
@@ -123,7 +129,7 @@ const Pagination = ({
             bg='diamond.50'
             w='max-content'
             size='sm'
-            defaultValue={possibleItemsPerPage[preselected]}
+            defaultValue={itemsPerPage}
             onChange={updateItemsPerPage}
             flexShrink='1'
           >

@@ -3,6 +3,18 @@ Changelog
 ==========
 
 ++++++++++
+v0.13.0 (31/05/2023)
+++++++++++
+
+**Added**
+
+- Denoised central slices and tomograms are now displayed
+
+**Changed**
+
+- Fixed limit in URL being ignored
+
+++++++++++
 v0.12.1 (23/05/2023)
 ++++++++++
 

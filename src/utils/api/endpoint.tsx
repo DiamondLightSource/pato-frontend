@@ -7,7 +7,7 @@ export const buildEndpoint = (endpoint: string, params: Params, limit: number, p
   let builtEndpoint = includePage(endpoint, limit, page);
   switch (endpoint) {
     case "sessions":
-      return `${builtEndpoint}&proposal=${params.propId}&countCollections=true`;
+      return `${builtEndpoint}&proposal=${params.propId}`;
     case "dataGroups":
       return `${builtEndpoint}&proposal=${params.propId}&session=${params.visitId}`;
     case "dataCollections":

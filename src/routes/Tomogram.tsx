@@ -29,6 +29,7 @@ import { InfoGroup } from "components/visualisation/infogroup";
 import { MdList, MdRedo } from "react-icons/md";
 import React from "react";
 import { TomogramResponse } from "loaders/tomogram";
+import APNGContainer from "components/visualisation/apngContainer";
 
 const TomogramReprocessing = React.lazy(() => import("components/tomogram/reprocessing"));
 const APNGViewer = React.lazy(() => import("components/visualisation/apng"));
@@ -191,7 +192,7 @@ const TomogramPage = () => {
       )}
 
       {openTomogram && (
-        <Modal size='xl' isOpen onClose={() => setOpenTomogram(null)}>
+        <Modal size='6xl' isOpen onClose={() => setOpenTomogram(null)}>
           <ModalOverlay />
           <ModalContent minW={{ base: "95vh", md: "65vh" }}>
             <ModalHeader paddingBottom={0}>Movie</ModalHeader>
@@ -207,7 +208,10 @@ const TomogramPage = () => {
                 />
               </HStack>
               <Suspense>
-                <APNGViewer src={tomogramMovieSrc} />
+                <APNGContainer>
+                  <APNGViewer title='Denoised' src={`${tomogramMovieSrc}?denoised=true`} />
+                  <APNGViewer title='Not Denoised' src={tomogramMovieSrc} />
+                </APNGContainer>
               </Suspense>
             </ModalBody>
           </ModalContent>

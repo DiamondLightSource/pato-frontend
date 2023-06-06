@@ -48,10 +48,11 @@ export const listingLoader =
       return {
         data: processData ? processData(data.items) : data.items,
         total: data.total,
+        limit: data.limit,
       };
     }
 
-    return { data: null, total: 0 };
+    return { data: null, total: 0, limit: 20 };
   };
 
 export const checkListingChanged = (current: URL, next: URL) =>

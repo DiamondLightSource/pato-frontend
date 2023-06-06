@@ -56,14 +56,15 @@ const ImageCard = ({
       overflow='hidden'
       h={height}
       w={width}
+      pb={7}
       {...cardProps}
     >
-      <CardHeader>
+      {title && <CardHeader>
         <Heading aria-label='Image Title' size='sm'>
           {title}
         </Heading>
-      </CardHeader>
-      <CardBody pt={0}>
+      </CardHeader>}
+      <CardBody pt={0} pb={0}>
         {src === undefined ? (
           <Skeleton data-testid='image-loader' h='100%' />
         ) : (
@@ -73,7 +74,6 @@ const ImageCard = ({
             src={src}
             margin='auto'
             maxH='100%'
-            pb={2}
             alt={title}
             fallbackSrc='/images/no-image.png'
           />
