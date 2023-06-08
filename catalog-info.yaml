@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: pato-frontend
+  title: PATo Frontend
+  description: A web application that displays single particle analysis and tomography data based on the PATo API
+  annotations:
+    github.com/project-slug: DiamondLightSource/pato-frontend
+spec:
+  type: website
+  lifecycle: production
+  system: developer-portal
+  owner: group:lims
+  consumesApis:
+    - pato-api
