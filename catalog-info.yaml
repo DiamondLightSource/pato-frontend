@@ -9,7 +9,7 @@ metadata:
 spec:
   type: website
   lifecycle: production
-  system: developer-portal
+  system: pato
   owner: group:lims
   consumesApis:
     - pato-api
