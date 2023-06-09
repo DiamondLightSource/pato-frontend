@@ -133,9 +133,7 @@ const Pagination = ({
             onChange={updateItemsPerPage}
             flexShrink='1'
           >
-            {possibleItemsPerPage.map((perPage, i) => {
-              return <option key={`option${perPage}`}>{perPage}</option>;
-            })}
+            {possibleItemsPerPage.map((perPage) => <option key={`option-${perPage}`}>{perPage}</option>)}
           </Select>
           <Spacer />
           <Text color='gray.600'>

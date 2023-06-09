@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useRef } from "react";
+import React, { useMemo, useCallback, useRef, useState, useEffect } from "react";
 import { Group } from "@visx/group";
 import { Circle } from "@visx/shape";
 import { scaleLinear } from "@visx/scale";
@@ -16,11 +16,13 @@ import { NoData } from "components/visualisation/noData";
 const x = (d: BasePoint) => d.x;
 const y = (d: BasePoint) => d.y;
 
-export type DotsProps = {
+export type ScatterProps = {
   width?: number;
   height?: number;
   options?: ScatterPlotOptions;
   data: BasePoint[];
+  /* Threshold (as a fraction of data range) for eliminating data points */
+  decimationThreshold?: number;
   onPointClicked?: (x: number, y: number) => void;
 };
 
@@ -30,7 +32,7 @@ const defaultPlotOptions: ScatterPlotOptions = {
   points: { dotRadius: 2 },
 };
 
-const Scatter = withTooltip<DotsProps, BasePoint>(
+const Scatter = withTooltip<ScatterProps, BasePoint>(
   ({
     width = 100,
     height = 100,
@@ -42,10 +44,13 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
     tooltipTop,
     options,
     onPointClicked,
+    decimationThreshold,
     data,
-  }: DotsProps & WithTooltipProvidedProps<BasePoint>) => {
+  }: ScatterProps & WithTooltipProvidedProps<BasePoint>) => {
     const svgRef = useRef<SVGSVGElement>(null);
+    const [decimatedData, setDecimatedData] = useState(data);
 
+    // Voronoi neighbour radius
     const neighborRadius = 4;
 
     const config: CompleteScatterPlotOptions = useMemo(() => {
@@ -66,6 +71,17 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
 
       return newConfig as CompleteScatterPlotOptions;
     }, [data, options]);
+
+    useEffect(() => {
+      if (decimationThreshold && config.x.domain.max && config.y.domain.max) {
+        const absThreshold = (config.y.domain.max - config.y.domain.min) * decimationThreshold;
+        const newData = data.filter((p, i) => (i === 0) || (absThreshold < Math.abs(p.y - data[i-1].y)))
+
+        setDecimatedData(newData);
+      } else {
+        setDecimatedData(data);
+      }
+    }, [data, config, decimationThreshold]);
 
     const checkBoundaries = useCallback(
       (d: BasePoint) => {
@@ -180,7 +196,7 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
             <GridColumns shapeRendering='optimizeSpeed' scale={xScale} width={xMax} height={yMax} stroke='#e0e0e0' />
             <AxisBottom label={config.x.label} top={yMax} scale={xScale} numTicks={5} />
             <AxisLeft label={config.y.label} scale={yScale} numTicks={5} />
-            {data.map(
+            {decimatedData.map(
               (point, i) =>
                 checkBoundaries(point) && (
                   <Circle
