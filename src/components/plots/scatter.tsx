@@ -75,31 +75,35 @@ const Scatter = withTooltip<ScatterProps, BasePoint>(
         return [];
       }
 
-      const boundaryCheckedData: BasePoint[] = [];
-
-      for (let i = 0; i < data.length; i++) {
-        const d = data[i];
-        if (
+      const boundaryCheckedData = data.filter(
+        (d) =>
           config.x.domain.min <= x(d) &&
           config.x.domain.max >= x(d) &&
           config.y.domain.min <= y(d) &&
           config.y.domain.max >= y(d)
-        ) {
-          boundaryCheckedData.push(d);
-        }
-      }
+      );
 
-      if (!decimationThreshold) {
+      if (!decimationThreshold || !width) {
         return boundaryCheckedData;
       }
 
       const yThreshold = (config.y.domain.max - config.y.domain.min) * decimationThreshold;
       const xThreshold = (config.x.domain.max - config.x.domain.min) * decimationThreshold;
 
+      // Calculate optimisation lookahead based 1.5x the dot's diameter
+      const lookahead = Math.ceil(boundaryCheckedData.length/width/(config.points.dotRadius*3));
+
+      // Look ahead to the next n points. If any of them is sufficiently close, ignore the current point
       return boundaryCheckedData.filter(
-        (p, i) => i === 0 || yThreshold < Math.abs(p.y - data[i - 1].y) || xThreshold < Math.abs(p.x - data[i - 1].x)
+        (p, i) => {
+          if(i < lookahead || xThreshold < Math.abs(p.x - data[i - 1].x)) {
+            return true;
+          } 
+          
+          return !boundaryCheckedData.slice(i-lookahead, i).some((d) => yThreshold > Math.abs(p.y - d.y)) 
+        }
       );
-    }, [data, config, decimationThreshold]);
+    }, [data, config, decimationThreshold, width]);
 
     const xMax = useMemo(() => width - defaultMargin.left - defaultMargin.right, [width]);
     const yMax = useMemo(() => height - defaultMargin.top - defaultMargin.bottom, [height]);
@@ -130,8 +134,8 @@ const Scatter = withTooltip<ScatterProps, BasePoint>(
           y: (d) => yScale(y(d)),
           width,
           height,
-        })(data),
-      [width, height, xScale, yScale, data]
+        })(decimatedData),
+      [width, height, xScale, yScale, decimatedData]
     );
 
     const findClosest = useCallback(
@@ -202,19 +206,17 @@ const Scatter = withTooltip<ScatterProps, BasePoint>(
             <GridColumns shapeRendering='optimizeSpeed' scale={xScale} width={xMax} height={yMax} stroke='#e0e0e0' />
             <AxisBottom label={config.x.label} top={yMax} scale={xScale} numTicks={5} />
             <AxisLeft label={config.y.label} scale={yScale} numTicks={5} />
-            {decimatedData.map(
-              (point, i) => (
-                <Circle
-                  data-testid='dot'
-                  key={`point-${data[0]}-${i}`}
-                  className='dot'
-                  cx={xScale(x(point))}
-                  cy={yScale(y(point))}
-                  r={config.points.dotRadius}
-                  fill={tooltipData === point ? "pink" : "#ff5733"}
-                />
-              )
-            )}
+            {decimatedData.map((point, i) => (
+              <Circle
+                data-testid='dot'
+                key={`point-${decimatedData[0]}-${i}`}
+                className='dot'
+                cx={xScale(x(point))}
+                cy={yScale(y(point))}
+                r={config.points.dotRadius}
+                fill={tooltipData === point ? "pink" : "#ff5733"}
+              />
+            ))}
           </Group>
         </svg>
         {tooltipOpen && tooltipData && tooltipLeft != null && tooltipTop != null && (

@@ -45,7 +45,7 @@ const CTF = ({ parentId, parentType, onGraphClicked }: CTFProps) => {
     queryFn: async () => await fetchCtfData(parentType, parentId),
   });
 
-  const threshold = useMemo(() => decimate ? 0.09 : 0, [decimate]);
+  const threshold = useMemo(() => decimate ? 0.04 : 0, [decimate]);
 
   return (
     <>

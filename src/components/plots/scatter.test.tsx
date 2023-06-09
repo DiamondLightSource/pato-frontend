@@ -123,7 +123,7 @@ describe("Scatter Plot", () => {
         options={{ y: { domain: { min: 800, max: 1000 } } }}
         width={1000}
         height={1000}
-        decimationThreshold={0.02}
+        decimationThreshold={0.1}
       />
     );
 
@@ -137,7 +137,7 @@ describe("Scatter Plot", () => {
         options={{ y: { domain: { min: 50, max: 1000 } } }}
         width={1000}
         height={1000}
-        decimationThreshold={0.01}
+        decimationThreshold={0.1}
       />
     );
 
@@ -151,7 +151,7 @@ describe("Scatter Plot", () => {
         options={{ y: { domain: { min: 990, max: 1000 } } }}
         width={1000}
         height={1000}
-        decimationThreshold={0.01}
+        decimationThreshold={0.1}
       />
     );
 
