@@ -115,4 +115,46 @@ describe("Scatter Plot", () => {
 
     expect(callback).toBeCalledWith(522, 999);
   });
+
+  it("should decimate (nearly) overlapping points", () => {
+    renderWithProviders(
+      <Scatter
+        data={[{ x: 1, y: 999 }, { x: 2, y: 998 }, { x: 3, y: 800 }, { x: 100, y: 800 }]}
+        options={{ y: { domain: { min: 800, max: 1000 } } }}
+        width={1000}
+        height={1000}
+        decimationThreshold={0.02}
+      />
+    );
+
+    expect(screen.getAllByTestId("dot").length).toBe(3);
+  });
+
+  it("should not decimate sufficiently distant (on Y axis) points", () => {
+    renderWithProviders(
+      <Scatter
+        data={[{ x: 1, y: 999 }, { x: 2, y: 500 }]}
+        options={{ y: { domain: { min: 50, max: 1000 } } }}
+        width={1000}
+        height={1000}
+        decimationThreshold={0.01}
+      />
+    );
+
+    expect(screen.getAllByTestId("dot").length).toBe(2);
+  });
+
+  it("should not decimate sufficiently distant (on X axis) points", () => {
+    renderWithProviders(
+      <Scatter
+        data={[{ x: 1, y: 999 }, { x: 100, y: 999 }]}
+        options={{ y: { domain: { min: 990, max: 1000 } } }}
+        width={1000}
+        height={1000}
+        decimationThreshold={0.01}
+      />
+    );
+
+    expect(screen.getAllByTestId("dot").length).toBe(2);
+  });
 });

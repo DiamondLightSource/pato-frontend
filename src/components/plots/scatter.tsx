@@ -74,8 +74,12 @@ const Scatter = withTooltip<ScatterProps, BasePoint>(
 
     useEffect(() => {
       if (decimationThreshold && config.x.domain.max && config.y.domain.max) {
-        const absThreshold = (config.y.domain.max - config.y.domain.min) * decimationThreshold;
-        const newData = data.filter((p, i) => (i === 0) || (absThreshold < Math.abs(p.y - data[i-1].y)))
+        const yThreshold = (config.y.domain.max - config.y.domain.min) * decimationThreshold;
+        const xThreshold = (config.x.domain.max - config.x.domain.min) * decimationThreshold;
+        const newData = data.filter(
+          (p, i) =>
+            i === 0 || yThreshold < Math.abs(p.y - data[i - 1].y) || xThreshold < Math.abs(p.x - data[i - 1].x)
+        );
 
         setDecimatedData(newData);
       } else {

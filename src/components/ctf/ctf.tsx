@@ -38,7 +38,7 @@ const fetchCtfData = async (parentType: "autoProc" | "tomograms", parentId: numb
 
 const CTF = ({ parentId, parentType, onGraphClicked }: CTFProps) => {
   const resolutionOptions = parentType === "autoProc" ? resolutionSpaPlotOptions : resolutionPlotOptions;
-  const [decimate, setDecimate] = useState(true);
+  const [decimate, setDecimate] = useState(false);
 
   const { data, isLoading } = useQuery({
     queryKey: ["ctf", parentType, parentId],
