@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useRef, useState, useEffect } from "react";
+import React, { useMemo, useCallback, useRef } from "react";
 import { Group } from "@visx/group";
 import { Circle } from "@visx/shape";
 import { scaleLinear } from "@visx/scale";
@@ -48,8 +48,6 @@ const Scatter = withTooltip<ScatterProps, BasePoint>(
     data,
   }: ScatterProps & WithTooltipProvidedProps<BasePoint>) => {
     const svgRef = useRef<SVGSVGElement>(null);
-    const [decimatedData, setDecimatedData] = useState(data);
-
     // Voronoi neighbour radius
     const neighborRadius = 4;
 
@@ -72,32 +70,36 @@ const Scatter = withTooltip<ScatterProps, BasePoint>(
       return newConfig as CompleteScatterPlotOptions;
     }, [data, options]);
 
-    useEffect(() => {
-      if (decimationThreshold && config.x.domain.max && config.y.domain.max) {
-        const yThreshold = (config.y.domain.max - config.y.domain.min) * decimationThreshold;
-        const xThreshold = (config.x.domain.max - config.x.domain.min) * decimationThreshold;
-        const newData = data.filter(
-          (p, i) =>
-            i === 0 || yThreshold < Math.abs(p.y - data[i - 1].y) || xThreshold < Math.abs(p.x - data[i - 1].x)
-        );
-
-        setDecimatedData(newData);
-      } else {
-        setDecimatedData(data);
+    const decimatedData = useMemo(() => {
+      if (!config.x.domain.max) {
+        return [];
       }
-    }, [data, config, decimationThreshold]);
 
-    const checkBoundaries = useCallback(
-      (d: BasePoint) => {
-        return (
+      const boundaryCheckedData: BasePoint[] = [];
+
+      for (let i = 0; i < data.length; i++) {
+        const d = data[i];
+        if (
           config.x.domain.min <= x(d) &&
           config.x.domain.max >= x(d) &&
           config.y.domain.min <= y(d) &&
           config.y.domain.max >= y(d)
-        );
-      },
-      [config]
-    );
+        ) {
+          boundaryCheckedData.push(d);
+        }
+      }
+
+      if (!decimationThreshold) {
+        return boundaryCheckedData;
+      }
+
+      const yThreshold = (config.y.domain.max - config.y.domain.min) * decimationThreshold;
+      const xThreshold = (config.x.domain.max - config.x.domain.min) * decimationThreshold;
+
+      return boundaryCheckedData.filter(
+        (p, i) => i === 0 || yThreshold < Math.abs(p.y - data[i - 1].y) || xThreshold < Math.abs(p.x - data[i - 1].x)
+      );
+    }, [data, config, decimationThreshold]);
 
     const xMax = useMemo(() => width - defaultMargin.left - defaultMargin.right, [width]);
     const yMax = useMemo(() => height - defaultMargin.top - defaultMargin.bottom, [height]);
@@ -201,18 +203,17 @@ const Scatter = withTooltip<ScatterProps, BasePoint>(
             <AxisBottom label={config.x.label} top={yMax} scale={xScale} numTicks={5} />
             <AxisLeft label={config.y.label} scale={yScale} numTicks={5} />
             {decimatedData.map(
-              (point, i) =>
-                checkBoundaries(point) && (
-                  <Circle
-                    data-testid='dot'
-                    key={`point-${data[0]}-${i}`}
-                    className='dot'
-                    cx={xScale(x(point))}
-                    cy={yScale(y(point))}
-                    r={config.points.dotRadius}
-                    fill={tooltipData === point ? "pink" : "#ff5733"}
-                  />
-                )
+              (point, i) => (
+                <Circle
+                  data-testid='dot'
+                  key={`point-${data[0]}-${i}`}
+                  className='dot'
+                  cx={xScale(x(point))}
+                  cy={yScale(y(point))}
+                  r={config.points.dotRadius}
+                  fill={tooltipData === point ? "pink" : "#ff5733"}
+                />
+              )
             )}
           </Group>
         </svg>
