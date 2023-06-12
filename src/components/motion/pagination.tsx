@@ -49,7 +49,7 @@ const MotionPagination = ({
           break;
         case "middle":
           if (total !== 0) {
-            setValue(Math.round(total / 2).toString());
+            setValue(Math.floor(total / 2).toString());
           }
           break;
         case "start":
