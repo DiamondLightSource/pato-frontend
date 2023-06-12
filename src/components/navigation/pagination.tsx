@@ -67,7 +67,7 @@ const Pagination = ({
     setPage((prevPage) => (prevPage > newPageAmount ? 1 : prevPage));
     setPageAmount(newPageAmount);
   }, [total, itemsPerPage, setPage]);
-
+  
   return (
     <Box py={2}>
       <Stack w='100%' direction={{ base: "column", md: "row" }}>
