@@ -80,13 +80,15 @@ const GenericListing = ({ headers, heading, makePathCallback }: TableProps) => {
       <Divider mb={4} />
       <Table data={data.data} headers={headers} label={heading} onClick={handleRowClicked} />
       <Divider />
-      <Pagination
-        limit={data.limit}
-        value={page}
-        onPageChange={setPage}
-        onItemCountChange={setItemsPerPage}
-        total={data.total}
-      />
+      {data.total ? (
+        <Pagination
+          limit={data.limit}
+          value={page}
+          onPageChange={setPage}
+          onItemCountChange={setItemsPerPage}
+          total={data.total}
+        />
+      ) : null}
     </Box>
   );
 };

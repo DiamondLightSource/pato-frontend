@@ -16,11 +16,13 @@ import { NoData } from "components/visualisation/noData";
 const x = (d: BasePoint) => d.x;
 const y = (d: BasePoint) => d.y;
 
-export type DotsProps = {
+export type ScatterProps = {
   width?: number;
   height?: number;
   options?: ScatterPlotOptions;
   data: BasePoint[];
+  /* Threshold (as a fraction of data range) for eliminating data points */
+  decimationThreshold?: number;
   onPointClicked?: (x: number, y: number) => void;
 };
 
@@ -30,7 +32,7 @@ const defaultPlotOptions: ScatterPlotOptions = {
   points: { dotRadius: 2 },
 };
 
-const Scatter = withTooltip<DotsProps, BasePoint>(
+const Scatter = withTooltip<ScatterProps, BasePoint>(
   ({
     width = 100,
     height = 100,
@@ -42,10 +44,11 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
     tooltipTop,
     options,
     onPointClicked,
+    decimationThreshold,
     data,
-  }: DotsProps & WithTooltipProvidedProps<BasePoint>) => {
+  }: ScatterProps & WithTooltipProvidedProps<BasePoint>) => {
     const svgRef = useRef<SVGSVGElement>(null);
-
+    // Voronoi neighbour radius
     const neighborRadius = 4;
 
     const config: CompleteScatterPlotOptions = useMemo(() => {
@@ -67,17 +70,46 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
       return newConfig as CompleteScatterPlotOptions;
     }, [data, options]);
 
-    const checkBoundaries = useCallback(
-      (d: BasePoint) => {
-        return (
+    const decimatedData = useMemo(() => {
+      if (!config.x.domain.max) {
+        return [];
+      }
+
+      const boundaryCheckedData = data.filter(
+        (d) =>
           config.x.domain.min <= x(d) &&
           config.x.domain.max >= x(d) &&
           config.y.domain.min <= y(d) &&
           config.y.domain.max >= y(d)
-        );
-      },
-      [config]
-    );
+      );
+
+      if (!decimationThreshold || !width) {
+        return boundaryCheckedData;
+      }
+
+      const yThreshold = (config.y.domain.max - config.y.domain.min) * decimationThreshold;
+      const xThreshold = (config.x.domain.max - config.x.domain.min) * decimationThreshold;
+
+      // Calculate optimisation lookahead based 1.5x the dot's diameter
+      const lookahead = Math.ceil(boundaryCheckedData.length/width/(config.points.dotRadius*3));
+
+      // Look ahead to the next n points. If any of them is sufficiently close, ignore the current point
+
+      /* 
+      * TODO: Right now this is plenty fast (n=14k, t=3ms), but I think there is a way to optimise this by using direct
+      * array access rather than slicing. I need to benchmark this to make sure, however, because JS might be weird
+      * with memory references sometimes.
+      */
+      return boundaryCheckedData.filter(
+        (p, i) => {
+          if(i < lookahead || xThreshold < Math.abs(p.x - data[i - 1].x)) {
+            return true;
+          } 
+          
+          return !boundaryCheckedData.slice(i-lookahead, i).some((d) => yThreshold > Math.abs(p.y - d.y)) 
+        }
+      );
+    }, [data, config, decimationThreshold, width]);
 
     const xMax = useMemo(() => width - defaultMargin.left - defaultMargin.right, [width]);
     const yMax = useMemo(() => height - defaultMargin.top - defaultMargin.bottom, [height]);
@@ -108,8 +140,8 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
           y: (d) => yScale(y(d)),
           width,
           height,
-        })(data),
-      [width, height, xScale, yScale, data]
+        })(decimatedData),
+      [width, height, xScale, yScale, decimatedData]
     );
 
     const findClosest = useCallback(
@@ -180,20 +212,17 @@ const Scatter = withTooltip<DotsProps, BasePoint>(
             <GridColumns shapeRendering='optimizeSpeed' scale={xScale} width={xMax} height={yMax} stroke='#e0e0e0' />
             <AxisBottom label={config.x.label} top={yMax} scale={xScale} numTicks={5} />
             <AxisLeft label={config.y.label} scale={yScale} numTicks={5} />
-            {data.map(
-              (point, i) =>
-                checkBoundaries(point) && (
-                  <Circle
-                    data-testid='dot'
-                    key={`point-${data[0]}-${i}`}
-                    className='dot'
-                    cx={xScale(x(point))}
-                    cy={yScale(y(point))}
-                    r={config.points.dotRadius}
-                    fill={tooltipData === point ? "pink" : "#ff5733"}
-                  />
-                )
-            )}
+            {decimatedData.map((point, i) => (
+              <Circle
+                data-testid='dot'
+                key={`point-${decimatedData[0]}-${i}`}
+                className='dot'
+                cx={xScale(x(point))}
+                cy={yScale(y(point))}
+                r={config.points.dotRadius}
+                fill={tooltipData === point ? "pink" : "#ff5733"}
+              />
+            ))}
           </Group>
         </svg>
         {tooltipOpen && tooltipData && tooltipLeft != null && tooltipTop != null && (

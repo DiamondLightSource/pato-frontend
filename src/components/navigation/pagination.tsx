@@ -67,7 +67,7 @@ const Pagination = ({
     setPage((prevPage) => (prevPage > newPageAmount ? 1 : prevPage));
     setPageAmount(newPageAmount);
   }, [total, itemsPerPage, setPage]);
-
+  
   return (
     <Box py={2}>
       <Stack w='100%' direction={{ base: "column", md: "row" }}>
@@ -133,9 +133,7 @@ const Pagination = ({
             onChange={updateItemsPerPage}
             flexShrink='1'
           >
-            {possibleItemsPerPage.map((perPage, i) => {
-              return <option key={`option${perPage}`}>{perPage}</option>;
-            })}
+            {possibleItemsPerPage.map((perPage) => <option key={`option-${perPage}`}>{perPage}</option>)}
           </Select>
           <Spacer />
           <Text color='gray.600'>

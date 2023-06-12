@@ -83,6 +83,17 @@ describe("GenericListing", () => {
     await screen.findByDisplayValue("30");
   });
 
+  it("should not show pagination component if no items are available", async () => {
+    renderWithRoute(<GenericListing heading='data' headers={proposalHeaders} />, () => ({
+      data: [],
+      total: 0,
+      limit: 30,
+    }));
+
+    await screen.findByText(/no data found/i);
+    expect(screen.queryByText(/items per page/i)).not.toBeInTheDocument();
+  });
+
   it("should call navigation callback when row is clicked", async () => {
     const mockCallback = jest.fn().mockReturnValue("somethingElse");
     const { router } = renderWithRoute(

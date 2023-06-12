@@ -3,6 +3,19 @@ Changelog
 ==========
 
 ++++++++++
+v0.14.0 (13/06/2023)
+++++++++++
+
+**Added**
+
+- Data decimation for scatter plots
+
+**Changed**
+
+- Fixes starting page for motion correction
+- Hides pagination if no items are available in generic table pages
+
+++++++++++
 v0.13.0 (31/05/2023)
 ++++++++++
 
