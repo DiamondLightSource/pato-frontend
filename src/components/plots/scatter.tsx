@@ -94,6 +94,12 @@ const Scatter = withTooltip<ScatterProps, BasePoint>(
       const lookahead = Math.ceil(boundaryCheckedData.length/width/(config.points.dotRadius*3));
 
       // Look ahead to the next n points. If any of them is sufficiently close, ignore the current point
+
+      /* 
+      * TODO: Right now this is plenty fast (n=14k, t=3ms), but I think there is a way to optimise this by using direct
+      * array access rather than slicing. I need to benchmark this to make sure, however, because JS might be weird
+      * with memory references sometimes.
+      */
       return boundaryCheckedData.filter(
         (p, i) => {
           if(i < lookahead || xThreshold < Math.abs(p.x - data[i - 1].x)) {
