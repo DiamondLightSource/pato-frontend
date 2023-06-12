@@ -125,10 +125,12 @@ const fetchMotionData = async (
   parentId: number,
   page: number | undefined
 ) => {
-  let fullEndpoint = `${parentType}/${parentId}/motion?limit=1&page=${page ? page - 1 : 0}`;
+  let fullEndpoint = `${parentType}/${parentId}/motion?limit=1`;
 
   if (parentType === "tomograms" && page === undefined) {
     fullEndpoint += "&getMiddle=true";
+  } else {
+    fullEndpoint += `&page=${page ? page - 1 : -1}`;
   }
 
   const response = await client.safeGet(fullEndpoint);

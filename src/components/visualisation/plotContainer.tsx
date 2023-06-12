@@ -1,4 +1,5 @@
 import {
+  BoxProps,
   Card,
   CardBody,
   CardHeader,
@@ -16,10 +17,12 @@ import {
 import { ParentSize } from "@visx/responsive";
 import { BaseCardProp } from "schema/interfaces";
 import { cloneElement, ReactElement } from "react";
+import { ScatterProps } from "components/plots/scatter";
+import { BarProps } from "components/plots/bar";
 
 export interface PlotContainerProps extends BaseCardProp {
   /** Child plot */
-  children: ReactElement;
+  children: ReactElement<ScatterProps|BarProps|BoxProps>;
 }
 
 const PlotContainer = ({
@@ -46,7 +49,7 @@ const PlotContainer = ({
             <ModalHeader>{title}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <ParentSize>{({ width, height }) => cloneElement(children, { width, height })}</ParentSize>
+              <ParentSize>{({ width, height }) => cloneElement(children, { width, height, decimationThreshold: undefined })}</ParentSize>
             </ModalBody>
             <ModalFooter></ModalFooter>
           </ModalContent>
