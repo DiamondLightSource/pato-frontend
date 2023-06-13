@@ -109,8 +109,8 @@ const Navbar = ({ user }: NavbarProps) => {
             <Menu>
               <MenuButton
                 aria-label='User Avatar'
-                borderRadius={12}
                 as={Button}
+                border="none"
                 variant={"link"}
                 cursor={"pointer"}
                 minW={0}
