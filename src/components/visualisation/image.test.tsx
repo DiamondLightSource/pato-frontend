@@ -29,7 +29,9 @@ describe("Image", () => {
 
   it("should fire callback when clicked", async () => {
     const onClick = jest.fn();
-    renderWithProviders(<ImageCard title='Image Title' src='' showModal={false} onClick={onClick} />);
+    renderWithProviders(
+      <ImageCard title='Image Title' src='' showModal={false} onClick={onClick} />
+    );
 
     const title = screen.getByRole("heading", { name: "Image Title" });
     fireEvent.click(title);
@@ -41,7 +43,9 @@ describe("Image", () => {
 
   it("should display skeleton when image source is undefined", () => {
     const onClick = jest.fn();
-    renderWithProviders(<ImageCard title='Image Title' src={undefined} showModal={false} onClick={onClick} />);
+    renderWithProviders(
+      <ImageCard title='Image Title' src={undefined} showModal={false} onClick={onClick} />
+    );
 
     expect(screen.getByTestId("image-loader")).toBeInTheDocument();
   });

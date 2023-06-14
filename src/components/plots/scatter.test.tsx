@@ -56,7 +56,9 @@ describe("Scatter Plot", () => {
 
     fireEvent.mouseLeave(graph);
 
-    await waitFor(() => expect(screen.queryByLabelText("X")).not.toBeInTheDocument(), { timeout: 3000 });
+    await waitFor(() => expect(screen.queryByLabelText("X")).not.toBeInTheDocument(), {
+      timeout: 3000,
+    });
   });
 
   it("should use X axis provided by the configuration", () => {
@@ -108,7 +110,9 @@ describe("Scatter Plot", () => {
 
   it("should fire event when point is clicked", () => {
     const callback = jest.fn();
-    renderWithProviders(<Scatter data={[{ x: 522, y: 999 }]} width={100} height={100} onPointClicked={callback} />);
+    renderWithProviders(
+      <Scatter data={[{ x: 522, y: 999 }]} width={100} height={100} onPointClicked={callback} />
+    );
 
     const graph = screen.getByLabelText("Graph");
     fireEvent.click(graph, { clientX: 65, clientY: 35 });
@@ -119,8 +123,12 @@ describe("Scatter Plot", () => {
   it("should decimate (nearly) overlapping points", () => {
     renderWithProviders(
       <Scatter
-        data={[{ x: 1, y: 999 }, { x: 2, y: 998 }, { x: 3, y: 800 }, { x: 100, y: 800 }]}
-        options={{ y: { domain: { min: 800, max: 1000 } } }}
+        data={[
+          { x: 1, y: 999 },
+          { x: 2, y: 998 },
+          { x: 3, y: 800 },
+          { x: 100, y: 800 },
+        ]}
         width={1000}
         height={1000}
         decimationThreshold={0.1}
@@ -133,7 +141,10 @@ describe("Scatter Plot", () => {
   it("should not decimate sufficiently distant (on Y axis) points", () => {
     renderWithProviders(
       <Scatter
-        data={[{ x: 1, y: 999 }, { x: 2, y: 500 }]}
+        data={[
+          { x: 1, y: 999 },
+          { x: 2, y: 500 },
+        ]}
         options={{ y: { domain: { min: 50, max: 1000 } } }}
         width={1000}
         height={1000}
@@ -147,7 +158,10 @@ describe("Scatter Plot", () => {
   it("should not decimate sufficiently distant (on X axis) points", () => {
     renderWithProviders(
       <Scatter
-        data={[{ x: 1, y: 999 }, { x: 100, y: 999 }]}
+        data={[
+          { x: 1, y: 999 },
+          { x: 100, y: 999 },
+        ]}
         options={{ y: { domain: { min: 990, max: 1000 } } }}
         width={1000}
         height={1000}

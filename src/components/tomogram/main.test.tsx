@@ -14,7 +14,7 @@ const basicProcJob: BaseProcessingJobProps["procJob"] = {
   automatic: 1,
 };
 
-const basicTomogram = { tomogramId: 1, dataCollectionId: 1, volumeFile: "", stackFile: "" }
+const basicTomogram = { tomogramId: 1, dataCollectionId: 1, volumeFile: "", stackFile: "" };
 
 describe("Tomogram", () => {
   beforeAll(() => jest.spyOn(global, "scrollTo").mockImplementation(() => {}));
@@ -76,6 +76,6 @@ describe("Tomogram", () => {
     fireEvent.click(screen.getByRole("button"));
     fireEvent.click(screen.getByRole("button", { name: "View Movie" }));
 
-    await waitFor(() => expect(openCallback).toBeCalled())
+    await waitFor(() => expect(openCallback).toBeCalled());
   });
 });

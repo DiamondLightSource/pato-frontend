@@ -25,5 +25,5 @@ export const classificationConfig: DataConfig = {
     { name: "overallFourierCompleteness" },
     { name: "numberOfParticles" },
   ],
-  root: ["particleClassificationId"]
+  root: ["particleClassificationId"],
 };

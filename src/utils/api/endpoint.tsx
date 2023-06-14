@@ -3,7 +3,12 @@ import { Params } from "react-router-dom";
 export const includePage = (endpoint: string, limit: number, page: number) =>
   `${endpoint}${endpoint.includes("?") ? "&" : "?"}page=${page - 1}&limit=${limit}`;
 
-export const buildEndpoint = (endpoint: string, params: Params, limit: number, page: number): string => {
+export const buildEndpoint = (
+  endpoint: string,
+  params: Params,
+  limit: number,
+  page: number
+): string => {
   let builtEndpoint = includePage(endpoint, limit, page);
   switch (endpoint) {
     case "sessions":

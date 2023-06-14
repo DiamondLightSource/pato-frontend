@@ -113,7 +113,12 @@ const MotionPagination = ({
       >
         &gt;
       </Button>
-      <Button aria-label='Last Page' size={size} isDisabled={disabled} onClick={() => setPage(total)}>
+      <Button
+        aria-label='Last Page'
+        size={size}
+        isDisabled={disabled}
+        onClick={() => setPage(total)}
+      >
         &gt;&gt;
       </Button>
     </HStack>

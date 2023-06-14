@@ -68,7 +68,11 @@ const RelionReprocessing = ({ procJobId }: RelionProps) => {
                   </Text>
                 </VStack>
                 <VStack spacing='0'>
-                  <Checkbox w='100%' onChange={() => setCalculateAuto(!calculateAuto)} name='phasePlate'>
+                  <Checkbox
+                    w='100%'
+                    onChange={() => setCalculateAuto(!calculateAuto)}
+                    name='phasePlate'
+                  >
                     Calculate for Me
                   </Checkbox>
                   <Text paddingLeft='2.1em' fontSize='xs' color='diamond.300'>
@@ -88,7 +92,11 @@ const RelionReprocessing = ({ procJobId }: RelionProps) => {
               <FormItem label='Box Size' helperText='Box size before binning' unit='Pixels'>
                 <NumericInput disabled={calculateAuto} name='boxSize' defaultValue={204} />
               </FormItem>
-              <FormItem label='Downsample Box Size' helperText='Box size after binning' unit='Pixels'>
+              <FormItem
+                label='Downsample Box Size'
+                helperText='Box size after binning'
+                unit='Pixels'
+              >
                 <NumericInput disabled={calculateAuto} name='downBoxSize' defaultValue={48} />
               </FormItem>
             </VStack>

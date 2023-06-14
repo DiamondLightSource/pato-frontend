@@ -71,7 +71,7 @@ const Scatter = withTooltip<ScatterProps, BasePoint>(
     }, [data, options]);
 
     const decimatedData = useMemo(() => {
-      if (!config.x.domain.max) {
+      if (config.x.domain.max === undefined) {
         return [];
       }
 
@@ -91,24 +91,24 @@ const Scatter = withTooltip<ScatterProps, BasePoint>(
       const xThreshold = (config.x.domain.max - config.x.domain.min) * decimationThreshold;
 
       // Calculate optimisation lookahead based 1.5x the dot's diameter
-      const lookahead = Math.ceil(boundaryCheckedData.length/width/(config.points.dotRadius*3));
+      const lookahead = Math.ceil(
+        boundaryCheckedData.length / width / (config.points.dotRadius * 3)
+      );
 
       // Look ahead to the next n points. If any of them is sufficiently close, ignore the current point
-
-      /* 
-      * TODO: Right now this is plenty fast (n=14k, t=3ms), but I think there is a way to optimise this by using direct
-      * array access rather than slicing. I need to benchmark this to make sure, however, because JS might be weird
-      * with memory references sometimes.
-      */
-      return boundaryCheckedData.filter(
-        (p, i) => {
-          if(i < lookahead || xThreshold < Math.abs(p.x - data[i - 1].x)) {
-            return true;
-          } 
-          
-          return !boundaryCheckedData.slice(i-lookahead, i).some((d) => yThreshold > Math.abs(p.y - d.y)) 
+      return boundaryCheckedData.filter((p, i) => {
+        if (i < lookahead || xThreshold < Math.abs(p.x - data[i - 1].x)) {
+          return true;
         }
-      );
+
+        for (let j = lookahead; j > 0; j--) {
+          if (yThreshold > Math.abs(p.y - boundaryCheckedData[i - j].y)) {
+            return false;
+          }
+        }
+
+        return true;
+      });
     }, [data, config, decimationThreshold, width]);
 
     const xMax = useMemo(() => width - defaultMargin.left - defaultMargin.right, [width]);
@@ -149,7 +149,11 @@ const Scatter = withTooltip<ScatterProps, BasePoint>(
         if (!svgRef.current) return;
         const point = localPoint(svgRef.current, event);
         if (!point) return;
-        return voronoiLayout.find(point.x - defaultMargin.left, point.y - defaultMargin.top, neighborRadius);
+        return voronoiLayout.find(
+          point.x - defaultMargin.left,
+          point.y - defaultMargin.top,
+          neighborRadius
+        );
       },
       [voronoiLayout]
     );
@@ -208,8 +212,20 @@ const Scatter = withTooltip<ScatterProps, BasePoint>(
             onClick={handleMouseClick}
           />
           <Group pointerEvents='none' left={defaultMargin.left} top={defaultMargin.top}>
-            <GridRows shapeRendering='optimizeSpeed' scale={yScale} width={xMax} height={yMax} stroke='#e0e0e0' />
-            <GridColumns shapeRendering='optimizeSpeed' scale={xScale} width={xMax} height={yMax} stroke='#e0e0e0' />
+            <GridRows
+              shapeRendering='optimizeSpeed'
+              scale={yScale}
+              width={xMax}
+              height={yMax}
+              stroke='#e0e0e0'
+            />
+            <GridColumns
+              shapeRendering='optimizeSpeed'
+              scale={xScale}
+              width={xMax}
+              height={yMax}
+              stroke='#e0e0e0'
+            />
             <AxisBottom label={config.x.label} top={yMax} scale={xScale} numTicks={5} />
             <AxisLeft label={config.y.label} scale={yScale} numTicks={5} />
             {decimatedData.map((point, i) => (

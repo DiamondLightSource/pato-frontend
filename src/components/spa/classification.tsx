@@ -67,7 +67,9 @@ const fetchClassData = async (
   if (type === "2d") {
     classes = classes.map((item: FullClassification) => ({
       ...item,
-      imageUrl: prependApiUrl(`autoProc/${item.programId}/classification/${item.particleClassificationId}/image`),
+      imageUrl: prependApiUrl(
+        `autoProc/${item.programId}/classification/${item.particleClassificationId}/image`
+      ),
     }));
   }
 
@@ -83,7 +85,8 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
 
   const { data, isLoading } = useQuery({
     queryKey: ["classification", type, autoProcId, sortType, excludeUnselected, classPage],
-    queryFn: async () => await fetchClassData(type, autoProcId, sortType, excludeUnselected, classPage),
+    queryFn: async () =>
+      await fetchClassData(type, autoProcId, sortType, excludeUnselected, classPage),
   });
 
   useEffect(() => {
@@ -97,7 +100,10 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
     setSelectedClass((page - 1) % 8);
   }, []);
 
-  const classIndex = useMemo(() => (classPage - 1) * 8 + selectedClass + 1, [classPage, selectedClass]);
+  const classIndex = useMemo(
+    () => (classPage - 1) * 8 + selectedClass + 1,
+    [classPage, selectedClass]
+  );
 
   const selectedClassInfo = useMemo(() => {
     if (data && data.data && data.data[selectedClass]) {
@@ -116,7 +122,11 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
       <Stack direction={{ base: "column", md: "row" }} gap={2}>
         <HStack gap={5}>
           <Heading variant='collection'>{type.toUpperCase()} Classification</Heading>
-          <Checkbox onChange={() => setExcludeUnselected(!excludeUnselected)} checked={excludeUnselected} size='sm'>
+          <Checkbox
+            onChange={() => setExcludeUnselected(!excludeUnselected)}
+            checked={excludeUnselected}
+            size='sm'
+          >
             Only Show Selected
           </Checkbox>
         </HStack>
@@ -139,11 +149,21 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
             ))}
           </Select>
         </HStack>
-        <MotionPagination startFrom='start' page={classPage} onChange={setClassPage} total={pageAmount} />
+        <MotionPagination
+          startFrom='start'
+          page={classPage}
+          onChange={setClassPage}
+          total={pageAmount}
+        />
       </Stack>
       <Divider />
       {data ? (
-        <Grid pt='2' mb='3' templateColumns={{ base: "repeat(4, 1fr)", md: "repeat(8, 1fr)" }} gap='2'>
+        <Grid
+          pt='2'
+          mb='3'
+          templateColumns={{ base: "repeat(4, 1fr)", md: "repeat(8, 1fr)" }}
+          gap='2'
+        >
           {data.data.map((item, i) =>
             type === "2d" ? (
               <ImageCard
@@ -176,7 +196,9 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
       ) : (
         <Skeleton h='23vh' mb={1} />
       )}
-      {selectedClassInfo.info && <InfoGroup height='auto' cols={5} info={selectedClassInfo.info as Info[]} />}
+      {selectedClassInfo.info && (
+        <InfoGroup height='auto' cols={5} info={selectedClassInfo.info as Info[]} />
+      )}
       {data && type === "3d" && (
         <MolstarModal
           onChange={handle3dClassPageChange}

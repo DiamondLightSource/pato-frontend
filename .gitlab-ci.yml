@@ -4,12 +4,13 @@ stages:
   - test
   - build
 
-install-job:
+build-job:
   stage: test
   tags:
     - argus
   script:
     - yarn install
+    - yarn build
   rules:
     - if: $CI_COMMIT_MESSAGE !~ /\[WIP\].*/
 
