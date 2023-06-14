@@ -1,7 +1,6 @@
 FROM docker.io/library/node:18-alpine as build
 
 WORKDIR /usr/src/app
-COPY package.json yarn.lock .
 
 ARG DEPLOY_TYPE="production"
 ARG API_ENDPOINT="http://localhost:8000/"
@@ -17,6 +16,10 @@ ENV REACT_APP_VERSION=${VERSION}
 ENV REACT_APP_STAGING_HOST=${STAGING_HOST}
 ENV REACT_APP_DEV_CONTACT=${DEV_CONTACT}
 ENV REACT_APP_AUTH_TYPE="oidc"
+
+# Cache this layer unless dependencies change
+COPY package.json yarn.lock .yarnrc.yml .
+COPY ./.yarn ./.yarn
 
 RUN yarn install --immutable --immutable-cache --check-cache
 

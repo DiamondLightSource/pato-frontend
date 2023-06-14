@@ -19,7 +19,11 @@ const Statistics = ({ dataCollectionId }: SpaProps) => {
   useEffect(() => {
     const endpointPrefix = `dataCollections/${dataCollectionId}`;
     setHistogram(`${endpointPrefix}/totalMotion?dataBin=10&minimum=10`, setTotalMotion, 10);
-    setHistogram(`${endpointPrefix}/iceThickness?dataBin=10000&minimum=100000`, setIceThickness, 10000);
+    setHistogram(
+      `${endpointPrefix}/iceThickness?dataBin=10000&minimum=100000`,
+      setIceThickness,
+      10000
+    );
     setHistogram(`${endpointPrefix}/resolution?dataBin=2&minimum=0`, setResolution, 1);
     setHistogram(`${endpointPrefix}/particles?dataBin=70&minimum=10`, setParticleCount, 10);
   }, [dataCollectionId]);
@@ -29,7 +33,7 @@ const Statistics = ({ dataCollectionId }: SpaProps) => {
       <Heading variant='collection'>Frequency</Heading>
       <Divider />
       {iceThickness && totalMotion && resolution && particleCount ? (
-        <Grid py={2} templateColumns={{base: "", md: 'repeat(4, 1fr)'}} gap={2}>
+        <Grid py={2} templateColumns={{ base: "", md: "repeat(4, 1fr)" }} gap={2}>
           <PlotContainer title='Relative Ice Thickness' h='25vh'>
             <BarChart data={[iceThickness]} padding={0} options={{ x: { label: "10^4" } }} />
           </PlotContainer>
@@ -44,7 +48,7 @@ const Statistics = ({ dataCollectionId }: SpaProps) => {
           </PlotContainer>
         </Grid>
       ) : [iceThickness, totalMotion, resolution, particleCount].some((i) => i === null) ? (
-        <Heading py="7vh" variant='notFound'>
+        <Heading py='7vh' variant='notFound'>
           No Frequency Data Available
         </Heading>
       ) : (

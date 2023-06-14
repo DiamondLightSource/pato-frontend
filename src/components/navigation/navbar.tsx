@@ -110,7 +110,7 @@ const Navbar = ({ user }: NavbarProps) => {
               <MenuButton
                 aria-label='User Avatar'
                 as={Button}
-                border="none"
+                border='none'
                 variant={"link"}
                 cursor={"pointer"}
                 minW={0}
@@ -132,7 +132,9 @@ const Navbar = ({ user }: NavbarProps) => {
               </MenuButton>
               <MenuList>
                 <MenuItem aria-label='Logout'>
-                  <Link href={`${process.env.REACT_APP_AUTH_ENDPOINT}logout?redirect_uri=${window.location.href}`}>
+                  <Link
+                    href={`${process.env.REACT_APP_AUTH_ENDPOINT}logout?redirect_uri=${window.location.href}`}
+                  >
                     Logout
                   </Link>
                 </MenuItem>
@@ -140,7 +142,9 @@ const Navbar = ({ user }: NavbarProps) => {
             </Menu>
           ) : (
             <Link
-              href={`${process.env.REACT_APP_AUTH_ENDPOINT}authorise?redirect_uri=${encodeURIComponent(
+              href={`${
+                process.env.REACT_APP_AUTH_ENDPOINT
+              }authorise?redirect_uri=${encodeURIComponent(
                 window.location.href
               )}&responseType=code`}
             >

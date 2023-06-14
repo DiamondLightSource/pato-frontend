@@ -44,7 +44,9 @@ const ImageCard = ({
 
   const zoom = (event: MouseEvent<HTMLImageElement, globalThis.MouseEvent>) => {
     const { x, y, height, width } = event.currentTarget.getBoundingClientRect();
-    setZoomCords(`translate(${(-(event.clientX - x) / width) * 50}%, ${(-(event.clientY - y) / height) * 50}%)`);
+    setZoomCords(
+      `translate(${(-(event.clientX - x) / width) * 50}%, ${(-(event.clientY - y) / height) * 50}%)`
+    );
     onZoomToggle();
   };
 
@@ -59,11 +61,13 @@ const ImageCard = ({
       pb={7}
       {...cardProps}
     >
-      {title && <CardHeader>
-        <Heading aria-label='Image Title' size='sm'>
-          {title}
-        </Heading>
-      </CardHeader>}
+      {title && (
+        <CardHeader>
+          <Heading aria-label='Image Title' size='sm'>
+            {title}
+          </Heading>
+        </CardHeader>
+      )}
       <CardBody pt={0} pb={0}>
         {src === undefined ? (
           <Skeleton data-testid='image-loader' h='100%' />
@@ -85,7 +89,7 @@ const ImageCard = ({
               {title}
             </ModalHeader>
             <ModalCloseButton color='diamond.200' m='-10px' />
-            <Box overflow='hidden' w={{base: "90vw", md: "70vw"}} h='80vh'>
+            <Box overflow='hidden' w={{ base: "90vw", md: "70vw" }} h='80vh'>
               {isZoomed ? (
                 <Image
                   data-testid='zoomed-in-image'

@@ -37,7 +37,8 @@ const fetchCtfData = async (parentType: "autoProc" | "tomograms", parentId: numb
 };
 
 const CTF = ({ parentId, parentType, onGraphClicked }: CTFProps) => {
-  const resolutionOptions = parentType === "autoProc" ? resolutionSpaPlotOptions : resolutionPlotOptions;
+  const resolutionOptions =
+    parentType === "autoProc" ? resolutionSpaPlotOptions : resolutionPlotOptions;
   const [decimate, setDecimate] = useState(true);
 
   const { data, isLoading } = useQuery({
@@ -45,14 +46,16 @@ const CTF = ({ parentId, parentType, onGraphClicked }: CTFProps) => {
     queryFn: async () => await fetchCtfData(parentType, parentId),
   });
 
-  const threshold = useMemo(() => decimate ? 0.04 : 0, [decimate]);
+  const threshold = useMemo(() => (decimate ? 0.04 : 0), [decimate]);
 
   return (
     <>
-    <HStack>
-      <Heading variant='collection'>Summary</Heading>
-      <Spacer/>
-      <Checkbox size="sm" onChange={() => setDecimate(!decimate)} isChecked={decimate}>Decimate Data</Checkbox>
+      <HStack>
+        <Heading variant='collection'>Summary</Heading>
+        <Spacer />
+        <Checkbox size='sm' onChange={() => setDecimate(!decimate)} isChecked={decimate}>
+          Decimate Data
+        </Checkbox>
       </HStack>
       <Divider />
       {isLoading ? (
@@ -65,13 +68,28 @@ const CTF = ({ parentId, parentType, onGraphClicked }: CTFProps) => {
           h={{ base: "50vh", md: "20vh" }}
         >
           <PlotContainer title='Astigmatism'>
-            <Scatter decimationThreshold={threshold} onPointClicked={onGraphClicked} data={data!.astigmatism} options={astigmatismPlotOptions} />
+            <Scatter
+              decimationThreshold={threshold}
+              onPointClicked={onGraphClicked}
+              data={data!.astigmatism}
+              options={astigmatismPlotOptions}
+            />
           </PlotContainer>
           <PlotContainer title='Defocus'>
-            <Scatter decimationThreshold={threshold} onPointClicked={onGraphClicked} data={data!.defocus} options={defocusPlotOptions} />
+            <Scatter
+              decimationThreshold={threshold}
+              onPointClicked={onGraphClicked}
+              data={data!.defocus}
+              options={defocusPlotOptions}
+            />
           </PlotContainer>
           <PlotContainer title='Resolution'>
-            <Scatter decimationThreshold={threshold} onPointClicked={onGraphClicked} data={data!.resolution} options={resolutionOptions} />
+            <Scatter
+              decimationThreshold={threshold}
+              onPointClicked={onGraphClicked}
+              data={data!.resolution}
+              options={resolutionOptions}
+            />
           </PlotContainer>
         </Stack>
       )}

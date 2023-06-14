@@ -7,19 +7,32 @@ global.URL.createObjectURL = jest.fn(() => "http://localhost/noimage.png");
 
 describe("APNG Container", () => {
   it("should render single APNG child", async () => {
-    renderWithProviders(<APNGContainer><APNGViewer src='tomograms/1/movie' /></APNGContainer>);
+    renderWithProviders(
+      <APNGContainer>
+        <APNGViewer src='tomograms/1/movie' />
+      </APNGContainer>
+    );
     await screen.findByLabelText("Frame Image");
   });
 
   it("should render multiple APNG children", async () => {
-    renderWithProviders(<APNGContainer><APNGViewer src='tomograms/1/movie' /><APNGViewer src='tomograms/1/movie' /></APNGContainer>);
+    renderWithProviders(
+      <APNGContainer>
+        <APNGViewer src='tomograms/1/movie' />
+        <APNGViewer src='tomograms/1/movie' />
+      </APNGContainer>
+    );
     const apngs = await screen.findAllByLabelText("Frame Image");
 
     expect(apngs).toHaveLength(2);
   });
 
   it("should stop at last frame when playing", async () => {
-    renderWithProviders(<APNGContainer><APNGViewer src='tomograms/1/movie' /></APNGContainer>);
+    renderWithProviders(
+      <APNGContainer>
+        <APNGViewer src='tomograms/1/movie' />
+      </APNGContainer>
+    );
     await screen.findByLabelText("Frame Image");
 
     const playButton = screen.getByLabelText("Play");
@@ -33,7 +46,11 @@ describe("APNG Container", () => {
   });
 
   it("should stop at first frame when playing in reverse", async () => {
-    renderWithProviders(<APNGContainer><APNGViewer src='tomograms/1/movie' /></APNGContainer>);
+    renderWithProviders(
+      <APNGContainer>
+        <APNGViewer src='tomograms/1/movie' />
+      </APNGContainer>
+    );
     await screen.findByLabelText("Frame Image");
 
     fireEvent.click(screen.getByLabelText("Play"));
@@ -54,7 +71,11 @@ describe("APNG Container", () => {
   });
 
   it("should update button state when paused", async () => {
-    renderWithProviders(<APNGContainer><APNGViewer src='tomograms/1/movie' /></APNGContainer>);
+    renderWithProviders(
+      <APNGContainer>
+        <APNGViewer src='tomograms/1/movie' />
+      </APNGContainer>
+    );
     await screen.findByLabelText("Frame Image");
 
     fireEvent.click(screen.getByLabelText("Play"));
@@ -64,7 +85,11 @@ describe("APNG Container", () => {
   });
 
   it("should display correct frame count", async () => {
-    renderWithProviders(<APNGContainer><APNGViewer src='tomograms/1/movie' /></APNGContainer>);
+    renderWithProviders(
+      <APNGContainer>
+        <APNGViewer src='tomograms/1/movie' />
+      </APNGContainer>
+    );
     await screen.findByLabelText("Frame Image");
 
     const slider = screen.getByRole("slider");

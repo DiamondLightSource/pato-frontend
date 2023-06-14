@@ -5,7 +5,11 @@ import { Box } from "components/plots/box";
 describe("Box Plot", () => {
   it("should render graph", () => {
     renderWithProviders(
-      <Box data={[{ min: 1, max: 10, median: 5, q1: 3, q3: 6, label: "test" }]} width={100} height={100} />
+      <Box
+        data={[{ min: 1, max: 10, median: 5, q1: 3, q3: 6, label: "test" }]}
+        width={100}
+        height={100}
+      />
     );
     expect(screen.getAllByText("test").length).toBe(2);
   });
@@ -38,7 +42,11 @@ describe("Box Plot", () => {
 
   it("should display tooltip when box is hovered", async () => {
     renderWithProviders(
-      <Box data={[{ min: 1, max: 10, median: 5, q1: 3, q3: 6, label: "test" }]} width={100} height={100} />
+      <Box
+        data={[{ min: 1, max: 10, median: 5, q1: 3, q3: 6, label: "test" }]}
+        width={100}
+        height={100}
+      />
     );
     const box = screen.getByLabelText("Box");
     fireEvent.mouseOver(box);
@@ -48,7 +56,11 @@ describe("Box Plot", () => {
 
   it("should hide tooltip when mouse leaves box", async () => {
     renderWithProviders(
-      <Box data={[{ min: 1, max: 10, median: 5, q1: 3, q3: 6, label: "test" }]} width={100} height={100} />
+      <Box
+        data={[{ min: 1, max: 10, median: 5, q1: 3, q3: 6, label: "test" }]}
+        width={100}
+        height={100}
+      />
     );
     const box = screen.getByLabelText("Box");
     fireEvent.mouseOver(box);

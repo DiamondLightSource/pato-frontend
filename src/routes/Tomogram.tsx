@@ -209,8 +209,8 @@ const TomogramPage = () => {
               </HStack>
               <Suspense>
                 <APNGContainer>
-                  <APNGViewer title='Denoised' src={`${tomogramMovieSrc}?denoised=true`} />
-                  <APNGViewer title='Not Denoised' src={tomogramMovieSrc} />
+                  <APNGViewer caption='Denoised' src={`${tomogramMovieSrc}?denoised=true`} />
+                  <APNGViewer caption='Not Denoised' src={tomogramMovieSrc} />
                 </APNGContainer>
               </Suspense>
             </ModalBody>

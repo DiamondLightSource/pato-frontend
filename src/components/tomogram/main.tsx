@@ -15,7 +15,7 @@ import {
   Card,
   CardHeader,
   CardBody,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import { ImageCard } from "components/visualisation/image";
 import { InfoGroup } from "components/visualisation/infogroup";
@@ -87,7 +87,14 @@ const fetchTomogramData = async (tomogram: TomogramResponse | null) => {
   return data;
 };
 
-const Tomogram = ({ autoProc, procJob, tomogram, status, onTomogramOpened, active = false }: TomogramProps) => {
+const Tomogram = ({
+  autoProc,
+  procJob,
+  tomogram,
+  status,
+  onTomogramOpened,
+  active = false,
+}: TomogramProps) => {
   const { data, isLoading } = useQuery({
     queryKey: ["tomogramAutoProc", autoProc.autoProcProgramId],
     queryFn: async () => await fetchTomogramData(tomogram),
@@ -114,14 +121,18 @@ const Tomogram = ({ autoProc, procJob, tomogram, status, onTomogramOpened, activ
               <Motion parentId={procJob.dataCollectionId} parentType='dataCollections' />
             </Box>
           ) : (
-            <Grid gap={3} templateColumns={{ "base": "", "2xl": "repeat(2, 1fr)" }}>
+            <Grid gap={3} templateColumns={{ base: "", "2xl": "repeat(2, 1fr)" }}>
               <GridItem>
                 <Motion parentType='tomograms' parentId={data.tomogram.tomogramId} />
               </GridItem>
               <GridItem>
                 <Heading variant='collection'>Alignment</Heading>
                 <Divider />
-                <Grid py={2} templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }} gap={2}>
+                <Grid
+                  py={2}
+                  templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}
+                  gap={2}
+                >
                   <GridItem h='20vh' colSpan={{ base: 2, md: 1 }}>
                     <InfoGroup info={data.tomogram.info} />
                   </GridItem>
@@ -131,23 +142,27 @@ const Tomogram = ({ autoProc, procJob, tomogram, status, onTomogramOpened, activ
                         <HStack>
                           <Heading size='sm'>Central Slice</Heading>
                           <Spacer />
-                          <Button h="25px" size='sm' onClick={handleOpenTomogram}>
+                          <Button h='25px' size='sm' onClick={handleOpenTomogram}>
                             View Movie
                             <Spacer />
-                            <Icon ml="10px" as={MdOpenInNew}></Icon>
+                            <Icon ml='10px' as={MdOpenInNew}></Icon>
                           </Button>
                         </HStack>
                       </CardHeader>
                       <CardBody pt={0}>
-                        <HStack mx="auto" w="auto" h="100%">
-                          <VStack w="50%" h="100%">
-                          <ImageCard p={0} borderColor='transparent' src={`${data.centralSlice}?denoised=true`} />
-                          <Text fontSize={13}>Denoised</Text>
+                        <HStack mx='auto' w='auto' h='100%'>
+                          <VStack w='50%' h='100%'>
+                            <ImageCard
+                              p={0}
+                              borderColor='transparent'
+                              src={`${data.centralSlice}?denoised=true`}
+                            />
+                            <Text fontSize={13}>Denoised</Text>
                           </VStack>
-                          <Divider orientation="vertical"/>
-                          <VStack w="50%" h="100%">
-                          <ImageCard p={0} borderColor='transparent' src={data.centralSlice} />
-                          <Text fontSize={13}>Not Denoised</Text>
+                          <Divider orientation='vertical' />
+                          <VStack w='50%' h='100%'>
+                            <ImageCard p={0} borderColor='transparent' src={data.centralSlice} />
+                            <Text fontSize={13}>Not Denoised</Text>
                           </VStack>
                         </HStack>
                       </CardBody>

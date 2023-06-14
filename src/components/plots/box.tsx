@@ -125,7 +125,7 @@ const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
                       median={median(d)}
                       boxProps={{
                         "aria-label": "Box",
-                        "onMouseOver": () => {
+                        onMouseOver: () => {
                           showTooltip({
                             tooltipTop: yScale(median(d)),
                             tooltipLeft: xScale(label(d))!,
@@ -134,7 +134,7 @@ const Box = withTooltip<BoxPlotProps, BoxPlotStats>(
                             },
                           });
                         },
-                        "onMouseLeave": hideTooltip,
+                        onMouseLeave: hideTooltip,
                       }}
                       medianProps={{
                         style: {

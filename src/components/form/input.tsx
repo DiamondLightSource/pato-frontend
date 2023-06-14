@@ -62,7 +62,12 @@ const Dropdown = ({ values, name }: DropDownProps) => (
   </Select>
 );
 
-const NumericInput = ({ name, precision = 0, disabled = false, defaultValue }: NumberInputProps) => (
+const NumericInput = ({
+  name,
+  precision = 0,
+  disabled = false,
+  defaultValue,
+}: NumberInputProps) => (
   <NumberInput isDisabled={disabled} size='sm' precision={precision} defaultValue={defaultValue}>
     <NumberInputField bg='white' name={name} />
     <NumberInputStepper>
