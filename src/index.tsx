@@ -8,9 +8,19 @@ import { TomogramPage } from "routes/Tomogram";
 import { SpaPage } from "routes/SPA";
 import { Error } from "routes/Error";
 import { Home } from "routes/Home";
-import { collectionHeaders, groupsHeaders, proposalHeaders, sessionHeaders } from "utils/config/table";
+import {
+  collectionHeaders,
+  groupsHeaders,
+  proposalHeaders,
+  sessionHeaders,
+} from "utils/config/table";
 import { getUser } from "loaders/user";
-import { checkListingChanged, handleCollectionClicked, handleGroupClicked, listingLoader } from "loaders/listings";
+import {
+  checkListingChanged,
+  handleCollectionClicked,
+  handleGroupClicked,
+  listingLoader,
+} from "loaders/listings";
 import { spaLoader } from "loaders/spa";
 import { tomogramLoader } from "loaders/tomogram";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -76,7 +86,8 @@ const router = createBrowserRouter([
             makePathCallback={(item) => item.visit_number.toString()}
           />
         ),
-        loader: ({ request, params }) => listingLoader(queryClient)(request, params, "sessions", processSessionData),
+        loader: ({ request, params }) =>
+          listingLoader(queryClient)(request, params, "sessions", processSessionData),
         shouldRevalidate: ({ currentUrl, nextUrl }) => checkListingChanged(currentUrl, nextUrl),
       },
       {
@@ -103,7 +114,8 @@ const router = createBrowserRouter([
             makePathCallback={handleCollectionClicked}
           />
         ),
-        loader: ({ request, params }) => listingLoader(queryClient)(request, params, "dataCollections"),
+        loader: ({ request, params }) =>
+          listingLoader(queryClient)(request, params, "dataCollections"),
         shouldRevalidate: ({ currentUrl, nextUrl }) => checkListingChanged(currentUrl, nextUrl),
       },
       {

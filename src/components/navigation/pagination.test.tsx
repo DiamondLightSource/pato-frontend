@@ -113,7 +113,9 @@ describe("Pagination", () => {
 
   it("should reset page when page count changes if current page is greater than page count", () => {
     const mockCallback = jest.fn();
-    const { rerender } = renderWithProviders(<Pagination total={160} onPageChange={mockCallback} />);
+    const { rerender } = renderWithProviders(
+      <Pagination total={160} onPageChange={mockCallback} />
+    );
 
     const input = screen.getByLabelText("Next Page");
     fireEvent.click(input);

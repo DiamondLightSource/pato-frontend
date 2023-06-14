@@ -11,7 +11,9 @@ const setHistogram = (
     if (response.status === 200 && response.data.items) {
       const histogram: BarStats[] = [];
       for (const bin of response.data.items) {
-        const label = isNaN(bin.x) ? `${bin.x.charAt(0)}${parseFloat(bin.x.substring(1)) / div}` : bin.x / div;
+        const label = isNaN(bin.x)
+          ? `${bin.x.charAt(0)}${parseFloat(bin.x.substring(1)) / div}`
+          : bin.x / div;
         histogram.push({
           label: label.toString(),
           y: bin.y,

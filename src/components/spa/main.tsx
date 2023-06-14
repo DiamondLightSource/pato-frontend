@@ -16,9 +16,13 @@ const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
       <ProcessingTitle autoProc={autoProc} procJob={procJob} status={status} />
       <AccordionPanel p={4} bg='diamond.75'>
         {active && (
-          <Grid gap={3} templateColumns={{ "base": "", "2xl": "repeat(2, 1fr)" }}>
+          <Grid gap={3} templateColumns={{ base: "", "2xl": "repeat(2, 1fr)" }}>
             <GridItem>
-              <CTF onGraphClicked={setPage} parentId={autoProc.autoProcProgramId} parentType='autoProc' />
+              <CTF
+                onGraphClicked={setPage}
+                parentId={autoProc.autoProcProgramId}
+                parentType='autoProc'
+              />
             </GridItem>
             <Motion
               page={page}

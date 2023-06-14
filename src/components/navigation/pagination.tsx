@@ -33,7 +33,9 @@ const Pagination = ({
   // Use limit set in instance, unless it does not exist in the list of possible items per page.
   // Default to middle.
   const [itemsPerPage, setItemsPerPage] = useState(
-    possibleItemsPerPage.includes(limit) ? limit : possibleItemsPerPage[Math.floor(possibleItemsPerPage.length / 2)]
+    possibleItemsPerPage.includes(limit)
+      ? limit
+      : possibleItemsPerPage[Math.floor(possibleItemsPerPage.length / 2)]
   );
   const [pageAmount, setPageAmount] = useState(1);
 
@@ -67,12 +69,17 @@ const Pagination = ({
     setPage((prevPage) => (prevPage > newPageAmount ? 1 : prevPage));
     setPageAmount(newPageAmount);
   }, [total, itemsPerPage, setPage]);
-  
+
   return (
     <Box py={2}>
       <Stack w='100%' direction={{ base: "column", md: "row" }}>
         <HStack>
-          <Button aria-label='First Page' size='sm' variant='pgNotSelected' onClick={() => setPage(1)}>
+          <Button
+            aria-label='First Page'
+            size='sm'
+            variant='pgNotSelected'
+            onClick={() => setPage(1)}
+          >
             &lt;&lt;
           </Button>
           <Button
@@ -115,7 +122,12 @@ const Pagination = ({
           >
             &gt;
           </Button>
-          <Button aria-label='Last Page' size='sm' variant='pgNotSelected' onClick={() => setPage(pageAmount)}>
+          <Button
+            aria-label='Last Page'
+            size='sm'
+            variant='pgNotSelected'
+            onClick={() => setPage(pageAmount)}
+          >
             &gt;&gt;
           </Button>
         </HStack>
@@ -133,7 +145,9 @@ const Pagination = ({
             onChange={updateItemsPerPage}
             flexShrink='1'
           >
-            {possibleItemsPerPage.map((perPage) => <option key={`option-${perPage}`}>{perPage}</option>)}
+            {possibleItemsPerPage.map((perPage) => (
+              <option key={`option-${perPage}`}>{perPage}</option>
+            ))}
           </Select>
           <Spacer />
           <Text color='gray.600'>

@@ -26,9 +26,13 @@ describe("Motion", () => {
 
   it("should call callback when page changes", async () => {
     const motionChanged = jest.fn();
-    renderWithProviders(<Motion parentType='tomograms' onPageChanged={motionChanged} parentId={3} />);
+    renderWithProviders(
+      <Motion parentType='tomograms' onPageChanged={motionChanged} parentId={3} />
+    );
 
-    await waitFor(() => expect(screen.getByLabelText("Current Page")).toHaveAttribute("value", "10"));
+    await waitFor(() =>
+      expect(screen.getByLabelText("Current Page")).toHaveAttribute("value", "10")
+    );
     fireEvent.click(screen.getByLabelText("Next Page"));
 
     await waitFor(() => expect(motionChanged).toBeCalledWith(11));
@@ -36,7 +40,9 @@ describe("Motion", () => {
 
   it("should calculate number of dark images appropriately", async () => {
     const motionChanged = jest.fn();
-    renderWithProviders(<Motion parentType='tomograms' onPageChanged={motionChanged} parentId={1} />);
+    renderWithProviders(
+      <Motion parentType='tomograms' onPageChanged={motionChanged} parentId={1} />
+    );
 
     await screen.findByText("Dark Images: 10");
   });
@@ -44,14 +50,22 @@ describe("Motion", () => {
   it("should change page internally if no external control is used", async () => {
     renderWithProviders(<Motion parentType='tomograms' parentId={3} />);
 
-    await waitFor(() => expect(screen.getByLabelText("Current Page")).toHaveAttribute("value", "10"));
+    await waitFor(() =>
+      expect(screen.getByLabelText("Current Page")).toHaveAttribute("value", "10")
+    );
     fireEvent.click(screen.getByLabelText("Next Page"));
 
-    await waitFor(() => expect(screen.getByLabelText("Current Page")).toHaveAttribute("value", "11"));
+    await waitFor(() =>
+      expect(screen.getByLabelText("Current Page")).toHaveAttribute("value", "11")
+    );
   });
 
   it("should display message when no data is available", async () => {
-    server.use(rest.get("http://localhost/dataCollections/:id/motion", (req, res, ctx) => res.once(ctx.status(404))));
+    server.use(
+      rest.get("http://localhost/dataCollections/:id/motion", (req, res, ctx) =>
+        res.once(ctx.status(404))
+      )
+    );
     renderWithProviders(<Motion parentType='dataCollections' parentId={9} />);
 
     await waitFor(() => screen.findByText("No Motion Correction Data Available"));
@@ -59,7 +73,9 @@ describe("Motion", () => {
 
   it("should call callback when total number of items changes", async () => {
     const totalChanged = jest.fn();
-    renderWithProviders(<Motion parentType='tomograms' onTotalChanged={totalChanged} parentId={3} />);
+    renderWithProviders(
+      <Motion parentType='tomograms' onTotalChanged={totalChanged} parentId={3} />
+    );
 
     await waitFor(() => expect(totalChanged).toBeCalledWith(20));
   });
@@ -70,23 +86,37 @@ describe("Motion", () => {
   });
 
   it("should update current page if external control variable changes", async () => {
-    const { rerender } = renderWithProviders(<Motion parentType='tomograms' parentId={4} page={1} />);
-    await waitFor(() => expect(screen.getByLabelText("Current Page")).toHaveAttribute("value", "1"));
+    const { rerender } = renderWithProviders(
+      <Motion parentType='tomograms' parentId={4} page={1} />
+    );
+    await waitFor(() =>
+      expect(screen.getByLabelText("Current Page")).toHaveAttribute("value", "1")
+    );
 
     rerender(<Motion parentType='tomograms' parentId={4} page={2} />);
-    await waitFor(() => expect(screen.getByLabelText("Current Page")).toHaveAttribute("value", "2"));
+    await waitFor(() =>
+      expect(screen.getByLabelText("Current Page")).toHaveAttribute("value", "2")
+    );
   });
 
   it("should render even if drift is not available", async () => {
-    server.use(rest.get("http://localhost/movies/:id/drift", (req, res, ctx) => res(ctx.delay(0), ctx.status(404))));
+    server.use(
+      rest.get("http://localhost/movies/:id/drift", (req, res, ctx) =>
+        res(ctx.delay(0), ctx.status(404))
+      )
+    );
     renderWithProviders(<Motion parentType='tomograms' parentId={1} page={1} />);
     await screen.findByText("Refined Tilt Angle:");
   });
 
   it("should not update page if current page is controlled externally", async () => {
     const motionCallback = jest.fn();
-    renderWithProviders(<Motion parentType='tomograms' parentId={4} page={1} onPageChanged={motionCallback} />);
-    await waitFor(() => expect(screen.getByLabelText("Current Page")).toHaveAttribute("value", "1"));
+    renderWithProviders(
+      <Motion parentType='tomograms' parentId={4} page={1} onPageChanged={motionCallback} />
+    );
+    await waitFor(() =>
+      expect(screen.getByLabelText("Current Page")).toHaveAttribute("value", "1")
+    );
 
     fireEvent.click(screen.getByLabelText("Next Page"));
     await waitFor(() => expect(motionCallback).toBeCalled());

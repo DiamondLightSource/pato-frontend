@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.0.0 (20/06/2023)
+++++++++++
+
+**Changed**
+
+- Improved data decimation algorithm
+
+++++++++++
 v0.14.0 (13/06/2023)
 ++++++++++
 

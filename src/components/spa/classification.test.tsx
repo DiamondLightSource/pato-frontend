@@ -21,13 +21,14 @@ jest.mock(
 describe("Classification", () => {
   it("should match selected class to 3D visualisation modal page", async () => {
     server.use(
-      rest.get("http://localhost/autoProc/:autoProcId/classification/:classId/image", (req, res, ctx) =>
-        res.once(ctx.status(404), ctx.delay(0))
+      rest.get(
+        "http://localhost/autoProc/:autoProcId/classification/:classId/image",
+        (req, res, ctx) => res.once(ctx.status(404), ctx.delay(0))
       )
     );
 
     renderWithProviders(<Classification autoProcId={5} type='3d' />);
-    const modalButton = await screen.findByText(/Open 3D Visualisation/i)
+    const modalButton = await screen.findByText(/Open 3D Visualisation/i);
 
     await waitFor(() => expect(modalButton).not.toHaveAttribute("disabled"));
 
@@ -36,7 +37,9 @@ describe("Classification", () => {
 
     await waitFor(() => expect(screen.getAllByLabelText("Total Pages")[1]).toHaveTextContent("2"));
     fireEvent.click((await screen.findAllByLabelText("Next Page"))[1]);
-    await waitFor(() => expect(screen.getByLabelText("Batch Number Value")).toHaveTextContent("355"));
+    await waitFor(() =>
+      expect(screen.getByLabelText("Batch Number Value")).toHaveTextContent("355")
+    );
   });
 
   it("should display first page as default", async () => {
@@ -59,7 +62,9 @@ describe("Classification", () => {
     const newClass = screen.getAllByLabelText("Image Title")[1];
     fireEvent.click(newClass);
 
-    await waitFor(() => expect(screen.getByLabelText("Batch Number Value")).toHaveTextContent("355"));
+    await waitFor(() =>
+      expect(screen.getByLabelText("Batch Number Value")).toHaveTextContent("355")
+    );
   });
 
   it("should update query when different sort type is selected", async () => {
@@ -73,7 +78,9 @@ describe("Classification", () => {
 
   it("should not display row when classification data is not available", async () => {
     server.use(
-      rest.get("http://localhost/autoProc/:procId/classification", (req, res, ctx) => res.once(ctx.status(404)))
+      rest.get("http://localhost/autoProc/:procId/classification", (req, res, ctx) =>
+        res.once(ctx.status(404))
+      )
     );
     renderWithProviders(<Classification autoProcId={2} />);
 
@@ -95,7 +102,9 @@ describe("Classification", () => {
 
     fireEvent.click(screen.getByTestId("class-1"));
 
-    await waitFor(() => expect(screen.getByLabelText("Batch Number Value")).toHaveTextContent("355"));
+    await waitFor(() =>
+      expect(screen.getByLabelText("Batch Number Value")).toHaveTextContent("355")
+    );
   });
 
   it("should filter out unselected classes when option is selected", async () => {
