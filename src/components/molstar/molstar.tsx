@@ -89,7 +89,10 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
   const [repr, setRepr] = useState<StateObjectSelector>();
   const [rawData, setRawData] = useState<ArrayBuffer | null>();
 
-  const mrcUrl = useMemo(() => `autoProc/${autoProcId}/classification/${classId}/image`, [autoProcId, classId]);
+  const mrcUrl = useMemo(
+    () => `autoProc/${autoProcId}/classification/${classId}/image`,
+    [autoProcId, classId]
+  );
 
   const handleSliceIndexChanged = useMemo(
     () =>
@@ -136,9 +139,13 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
       await molstar.init();
       molstar.mount(viewerDiv.current!);
 
-      const data = await molstar.builders.data.rawData({ data: rawData! }, { state: { isGhost: true } });
+      const data = await molstar.builders.data.rawData(
+        { data: rawData! },
+        { state: { isGhost: true } }
+      );
       const parsed = await molstar.dataFormats.get("ccp4")!.parse(molstar, data);
-      const volume: StateObjectSelector<PluginStateObject.Volume.Data> = parsed.volumes?.[0] ?? parsed.volume;
+      const volume: StateObjectSelector<PluginStateObject.Volume.Data> =
+        parsed.volumes?.[0] ?? parsed.volume;
 
       const newSliceCount = volume.data!.grid.cells.space.dimensions[1];
       const newSliceIndex = Math.abs(newSliceCount / 2);
@@ -188,7 +195,11 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
     <VStack h='100%'>
       <HStack w='100%'>
         <Tooltip label='Reset Zoom'>
-          <Button aria-label='Reset Zoom' isDisabled={!isRendered} onClick={() => molstar!.managers.camera.reset()}>
+          <Button
+            aria-label='Reset Zoom'
+            isDisabled={!isRendered}
+            onClick={() => molstar!.managers.camera.reset()}
+          >
             <Icon as={MdYoutubeSearchedFor} />
           </Button>
         </Tooltip>
@@ -222,11 +233,24 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
         {children}
       </HStack>
       <HStack h='90%' w='100%'>
-        <Box bg='diamond.75' position='relative' display='flex' flexGrow={5} h='100%' ref={viewerDiv}>
+        <Box
+          bg='diamond.75'
+          position='relative'
+          display='flex'
+          flexGrow={5}
+          h='100%'
+          ref={viewerDiv}
+        >
           {isRendered ? null : isRendered === undefined ? (
             <Skeleton h='100%' w='100%' />
           ) : (
-            <Heading display='flex' justifyContent='center' alignSelf='center' w='100%' variant='notFound'>
+            <Heading
+              display='flex'
+              justifyContent='center'
+              alignSelf='center'
+              w='100%'
+              variant='notFound'
+            >
               No Valid Volume File
             </Heading>
           )}
@@ -237,7 +261,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
             orientation='vertical'
             aria-label='Slice Slider'
             onChange={handleSliceIndexChanged}
-            defaultValue={sliceCount/2}
+            defaultValue={sliceCount / 2}
             max={sliceCount}
           >
             <SliderTrack bg='diamond.200'>

@@ -44,7 +44,7 @@ const BarChart = withTooltip<BarProps, BarStats>(
     data,
   }: BarProps & WithTooltipProvidedProps<BarStats>) => {
     if (data.length === 0) {
-      return <NoData/>
+      return <NoData />;
     }
 
     const config: CompleteScatterPlotOptions = useMemo(() => {
@@ -77,7 +77,10 @@ const BarChart = withTooltip<BarProps, BarStats>(
       [yMax, config]
     );
 
-    const lateralPadding = useMemo(() => (groupWidth * padding) / data.length, [data, groupWidth, padding]);
+    const lateralPadding = useMemo(
+      () => (groupWidth * padding) / data.length,
+      [data, groupWidth, padding]
+    );
 
     const xScale = useMemo(
       () =>
@@ -109,7 +112,13 @@ const BarChart = withTooltip<BarProps, BarStats>(
               const leftPos = groupWidth * i + lateralPadding;
               return (
                 <Group left={leftPos} key={i}>
-                  <AxisBottom label={config.x.label} top={yMax} left={0} scale={xScale} tickValues={d.map(label)} />
+                  <AxisBottom
+                    label={config.x.label}
+                    top={yMax}
+                    left={0}
+                    scale={xScale}
+                    tickValues={d.map(label)}
+                  />
                   {d.map((bar: BarStats, j) => {
                     const barWidth = xScale.bandwidth();
                     const barHeight = config.y.domain.max < y(bar) ? yMax : yMax - yScale(y(bar));
@@ -118,7 +127,7 @@ const BarChart = withTooltip<BarProps, BarStats>(
                         data-testid={`${i}-${label(bar)}`}
                         key={label(bar)}
                         fill={getFillColour(i)}
-                        stroke="#FFF"
+                        stroke='#FFF'
                         height={barHeight}
                         width={barWidth}
                         y={yMax - barHeight}

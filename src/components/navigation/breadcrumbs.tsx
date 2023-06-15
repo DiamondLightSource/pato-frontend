@@ -33,7 +33,12 @@ const Breadcrumbs = () => {
         partialPath.pop();
         return (
           <BreadcrumbItem key={pathname}>
-            <BreadcrumbLink preventScrollReset={true} as={Link} to={partialPath.join("/")} relative='path'>
+            <BreadcrumbLink
+              preventScrollReset={true}
+              as={Link}
+              to={partialPath.join("/")}
+              relative='path'
+            >
               {pathname}
             </BreadcrumbLink>
           </BreadcrumbItem>

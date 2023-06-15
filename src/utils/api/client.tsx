@@ -50,7 +50,11 @@ export const client = async (
   if (body != null) {
     if (!(body instanceof FormData)) {
       config.body = JSON.stringify(body);
-      config.headers = { ...config.headers, "Accept": "application/json", "Content-Type": "application/json" };
+      config.headers = {
+        ...config.headers,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      };
     } else {
       config.body = body;
     }
@@ -85,7 +89,9 @@ client.safeGet = async (endpoint: string, customConfig = {}) => {
   if (resp.status === 401 && !window.location.href.includes("code=")) {
     const url = encodeURIComponent(window.location.href);
     window.location.assign(
-      `${getPrefix(process.env.REACT_APP_AUTH_ENDPOINT)}authorise?redirect_uri=${url}&responseType=code`
+      `${getPrefix(
+        process.env.REACT_APP_AUTH_ENDPOINT
+      )}authorise?redirect_uri=${url}&responseType=code`
     );
   }
 
@@ -116,4 +122,5 @@ client.post = async (endpoint: string, body: Record<any, any> | FormData, custom
   return await client(endpoint, { ...customConfig }, body);
 };
 
-export const prependApiUrl = (url: string) => `${getPrefix(process.env.REACT_APP_API_ENDPOINT)}${url}`;
+export const prependApiUrl = (url: string) =>
+  `${getPrefix(process.env.REACT_APP_API_ENDPOINT)}${url}`;

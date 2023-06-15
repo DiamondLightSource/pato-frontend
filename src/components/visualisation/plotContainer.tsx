@@ -22,7 +22,7 @@ import { BarProps } from "components/plots/bar";
 
 export interface PlotContainerProps extends BaseCardProp {
   /** Child plot */
-  children: ReactElement<ScatterProps|BarProps|BoxProps>;
+  children: ReactElement<ScatterProps | BarProps | BoxProps>;
 }
 
 const PlotContainer = ({
@@ -49,7 +49,11 @@ const PlotContainer = ({
             <ModalHeader>{title}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <ParentSize>{({ width, height }) => cloneElement(children, { width, height, decimationThreshold: undefined })}</ParentSize>
+              <ParentSize>
+                {({ width, height }) =>
+                  cloneElement(children, { width, height, decimationThreshold: undefined })
+                }
+              </ParentSize>
             </ModalBody>
             <ModalFooter></ModalFooter>
           </ModalContent>

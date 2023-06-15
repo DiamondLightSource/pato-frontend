@@ -4,13 +4,17 @@ import parseAPNG, { Frame } from "apng-js";
 import { client } from "utils/api/client";
 
 export interface ApngProps {
+  /* Current selected frame */
   frameIndex?: number;
+  /* Callback function for frame count changes */
   onFrameCountChanged?: (frameCount: number) => void;
-  title?: string;
+  /* Caption for the viewer */
+  caption?: string;
+  /* Image source URL */
   src: string;
 }
 
-const APNGViewer = ({ src, onFrameCountChanged, frameIndex = 0, title }: ApngProps) => {
+const APNGViewer = ({ src, onFrameCountChanged, frameIndex = 0, caption }: ApngProps) => {
   const [frames, setFrames] = useState<Frame[] | null>();
   const [currentFrame, setCurrentFrame] = useState<string>();
 
@@ -44,10 +48,10 @@ const APNGViewer = ({ src, onFrameCountChanged, frameIndex = 0, title }: ApngPro
   }, [frames, frameIndex]);
 
   return (
-    <VStack h='100%' w='100%' spacing='0' bg="diamond.100">
+    <VStack h='100%' w='100%' spacing='0' bg='diamond.100'>
       {currentFrame ? (
         <Image
-          alt={title || "APNG Image"}
+          alt={caption || "APNG Image"}
           aria-label='Frame Image'
           objectFit='contain'
           maxW='100%'
@@ -55,15 +59,15 @@ const APNGViewer = ({ src, onFrameCountChanged, frameIndex = 0, title }: ApngPro
           src={currentFrame}
         />
       ) : frames === null ? (
-        <Heading  alignItems='center' display='flex' h="100%" variant='notFound'>
+        <Heading alignItems='center' display='flex' h='100%' variant='notFound'>
           No Image Data Available
         </Heading>
       ) : (
         <Skeleton h='100%' w='100%' />
       )}
-      {title && (
+      {caption && (
         <Heading py={2} textAlign='center' w='100%' bg='diamond.75' size='sm'>
-          {title}
+          {caption}
         </Heading>
       )}
     </VStack>
