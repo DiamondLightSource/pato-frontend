@@ -26,7 +26,7 @@ RUN yarn install --immutable --check-cache
 COPY . ./
 RUN yarn build
 
-FROM docker.io/nginxinc/nginx-unprivileged:latest
+FROM docker.io/nginxinc/nginx-unprivileged:stable-bullseye-perl
 COPY --from=build /usr/src/app/build /usr/share/nginx/html
 COPY nginx/conf.d /etc/nginx/nginx.conf
 
