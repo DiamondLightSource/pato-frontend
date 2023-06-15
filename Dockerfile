@@ -21,7 +21,7 @@ ENV REACT_APP_AUTH_TYPE="oidc"
 COPY package.json yarn.lock .yarnrc.yml .
 COPY ./.yarn ./.yarn
 
-RUN yarn install --immutable --immutable-cache --check-cache
+RUN yarn install --immutable --check-cache
 
 COPY . ./
 RUN yarn build
