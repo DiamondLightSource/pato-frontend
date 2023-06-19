@@ -34,18 +34,28 @@ const Text = defineStyleConfig({
 const Checkbox = defineStyleConfig({
   sizes: {
     sm: {
-      label: {
-        height: "16px",
-      },
       control: {
         height: "16px",
         width: "16px",
+      },
+      icon: {
+        height: "16px",
+        fontSize: "10px",
+      },
+      label: {
+        fontSize: "14px",
+        height: "16px",
       },
     },
   },
   baseStyle: {
     control: {
+      borderColor: "diamond.600",
       backgroundColor: "#FFF",
+      _checked: {
+        backgroundColor: "diamond.600",
+        borderColor: "diamond.600",
+      },
     },
   },
 });

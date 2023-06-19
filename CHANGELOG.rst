@@ -9,6 +9,7 @@ v1.0.0 (20/06/2023)
 **Changed**
 
 - Improved data decimation algorithm
+- Fixes decimation case where points are needlessly omitted
 
 ++++++++++
 v0.14.0 (13/06/2023)

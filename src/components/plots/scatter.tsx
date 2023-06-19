@@ -90,10 +90,14 @@ const Scatter = withTooltip<ScatterProps, BasePoint>(
       const yThreshold = (config.y.domain.max - config.y.domain.min) * decimationThreshold;
       const xThreshold = (config.x.domain.max - config.x.domain.min) * decimationThreshold;
 
-      // Calculate optimisation lookahead based 1.5x the dot's diameter
-      const lookahead = Math.ceil(
+      // Calculate optimisation lookahead window
+      const lookahead = Math.floor(
         boundaryCheckedData.length / width / (config.points.dotRadius * 3)
       );
+
+      if (lookahead === 0) {
+        return boundaryCheckedData;
+      }
 
       // Look ahead to the next n points. If any of them is sufficiently close, ignore the current point
       return boundaryCheckedData.filter((p, i) => {
