@@ -76,7 +76,7 @@ describe("Classification", () => {
     });
   });
 
-  it("should not display row when classification data is not available", async () => {
+  it("should display message when classification data is not available", async () => {
     server.use(
       rest.get("http://localhost/autoProc/:procId/classification", (req, res, ctx) =>
         res.once(ctx.status(404))
@@ -84,7 +84,7 @@ describe("Classification", () => {
     );
     renderWithProviders(<Classification autoProcId={2} />);
 
-    await waitFor(() => expect(screen.queryByText("2D Classification")).not.toBeInTheDocument());
+    await screen.findByText("No Classes Found");
   });
 
   it("should display visualisation button for 3D", async () => {
