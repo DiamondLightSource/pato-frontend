@@ -113,10 +113,6 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
     return {};
   }, [selectedClass, data]);
 
-  if (data && data.data === null) {
-    return null;
-  }
-
   return (
     <Box>
       <Stack direction={{ base: "column", md: "row" }} gap={2}>
@@ -157,7 +153,9 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
         />
       </Stack>
       <Divider />
-      {data ? (
+      {isLoading ? (
+        <Skeleton h='23vh' mb={1} />
+      ) : data && data.data ? (
         <Grid
           pt='2'
           mb='3'
@@ -178,7 +176,7 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
               />
             ) : (
               <Card
-                borderColor='green'
+                borderColor={getBorderColour(item.selected)}
                 data-testid={`class-${i}`}
                 onClick={() => setSelectedClass(i)}
                 key={i}
@@ -194,7 +192,9 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
           )}
         </Grid>
       ) : (
-        <Skeleton h='23vh' mb={1} />
+        <Heading py='5vh' variant='notFound'>
+          No Classes Found
+        </Heading>
       )}
       {selectedClassInfo.info && (
         <InfoGroup height='auto' cols={5} info={selectedClassInfo.info as Info[]} />
