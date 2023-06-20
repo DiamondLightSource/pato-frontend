@@ -1,4 +1,4 @@
-import { Checkbox, Divider, HStack, Heading, Skeleton, Spacer, Stack } from "@chakra-ui/react";
+import { Checkbox, Divider, HStack, Heading, Skeleton, Spacer, Stack, Box } from "@chakra-ui/react";
 import {
   astigmatismPlotOptions,
   defocusPlotOptions,
@@ -49,7 +49,7 @@ const CTF = ({ parentId, parentType, onGraphClicked }: CTFProps) => {
   const threshold = useMemo(() => (decimate ? 0.04 : 0), [decimate]);
 
   return (
-    <>
+    <Box minW='0'>
       <HStack>
         <Heading variant='collection'>Summary</Heading>
         <Spacer />
@@ -93,7 +93,7 @@ const CTF = ({ parentId, parentType, onGraphClicked }: CTFProps) => {
           </PlotContainer>
         </Stack>
       )}
-    </>
+    </Box>
   );
 };
 

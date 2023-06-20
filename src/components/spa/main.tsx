@@ -1,4 +1,4 @@
-import { AccordionItem, AccordionPanel, Grid, GridItem } from "@chakra-ui/react";
+import { AccordionItem, AccordionPanel, Grid } from "@chakra-ui/react";
 import { Motion } from "components/motion/motion";
 import { useState } from "react";
 import { Classification } from "components/spa/classification";
@@ -16,14 +16,12 @@ const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
       <ProcessingTitle autoProc={autoProc} procJob={procJob} status={status} />
       <AccordionPanel p={4} bg='diamond.75'>
         {active && (
-          <Grid gap={3} templateColumns={{ base: "", "2xl": "repeat(2, 1fr)" }}>
-            <GridItem>
-              <CTF
-                onGraphClicked={setPage}
-                parentId={autoProc.autoProcProgramId}
-                parentType='autoProc'
-              />
-            </GridItem>
+          <Grid gap={3} templateColumns={{ base: "1", "2xl": "repeat(2, 1fr)" }}>
+            <CTF
+              onGraphClicked={setPage}
+              parentId={autoProc.autoProcProgramId}
+              parentType='autoProc'
+            />
             <Motion
               page={page}
               onPageChanged={setPage}
