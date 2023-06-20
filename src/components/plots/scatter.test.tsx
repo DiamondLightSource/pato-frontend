@@ -129,8 +129,9 @@ describe("Scatter Plot", () => {
           { x: 3, y: 800 },
           { x: 100, y: 800 },
         ]}
-        width={1000}
-        height={1000}
+        width={4}
+        height={4}
+        options={{ points: { dotRadius: 0.3 } }}
         decimationThreshold={0.1}
       />
     );
@@ -145,9 +146,9 @@ describe("Scatter Plot", () => {
           { x: 1, y: 999 },
           { x: 2, y: 500 },
         ]}
-        options={{ y: { domain: { min: 50, max: 1000 } } }}
-        width={1000}
-        height={1000}
+        options={{ y: { domain: { min: 50, max: 1000 } }, points: { dotRadius: 0.3 } }}
+        width={2}
+        height={2}
         decimationThreshold={0.1}
       />
     );
@@ -162,9 +163,43 @@ describe("Scatter Plot", () => {
           { x: 1, y: 999 },
           { x: 100, y: 999 },
         ]}
-        options={{ y: { domain: { min: 990, max: 1000 } } }}
+        options={{ y: { domain: { min: 990, max: 1000 } }, points: { dotRadius: 0.3 } }}
         width={1000}
         height={1000}
+        decimationThreshold={0.1}
+      />
+    );
+
+    expect(screen.getAllByTestId("dot").length).toBe(2);
+  });
+
+  it("should not run decimation if there are not enough points", () => {
+    renderWithProviders(
+      <Scatter
+        data={[
+          { x: 1, y: 999 },
+          { x: 2, y: 500 },
+        ]}
+        options={{ y: { domain: { min: 50, max: 1000 } }, points: { dotRadius: 0.3 } }}
+        width={2}
+        height={2}
+        decimationThreshold={0.1}
+      />
+    );
+
+    expect(screen.getAllByTestId("dot").length).toBe(2);
+  });
+
+  it("should not decimate points if graph width is enough to render all points", () => {
+    renderWithProviders(
+      <Scatter
+        data={[
+          { x: 1, y: 999 },
+          { x: 2, y: 999 },
+        ]}
+        width={300}
+        height={300}
+        options={{ points: { dotRadius: 0.3 } }}
         decimationThreshold={0.1}
       />
     );
