@@ -27,6 +27,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { processSessionData, sessionLoader } from "loaders/sessions";
 import { theme } from "styles/main";
+import FeedbackForm from "routes/Report";
 
 const Calendar = React.lazy(() => import("routes/Calendar"));
 
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
             <Calendar />
           </Suspense>
         ),
+      },
+      {
+        path: "/feedback",
+        element: <FeedbackForm />,
       },
       {
         path: "/proposals/:propid",

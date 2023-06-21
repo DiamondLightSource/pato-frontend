@@ -1,13 +1,14 @@
-import { Divider, Box, Button, HStack, Spacer } from "@chakra-ui/react";
+import { Divider, Box, Button, HStack, Spacer, BoxProps } from "@chakra-ui/react";
 import { FormEvent, ReactNode, useCallback } from "react";
 
-export interface FormProps {
+export interface FormProps extends BoxProps {
   children?: ReactNode;
   onSubmit?: (data: Record<string, any>) => void;
   onClose?: () => void;
 }
 
-const Form = ({ onSubmit, children, onClose = () => {} }: FormProps) => {
+const Form = (props: FormProps) => {
+  const { children, onSubmit, onClose } = props;
   const handleSubmit = useCallback(
     (form: FormEvent<HTMLFormElement>) => {
       form.preventDefault();
@@ -29,13 +30,11 @@ const Form = ({ onSubmit, children, onClose = () => {} }: FormProps) => {
   );
 
   return (
-    <Box>
+    <Box {...props}>
       <form onSubmit={handleSubmit}>
-        <Box p={3} bg='diamond.75'>
-          {children}
-        </Box>
+        <Box py={2}>{children}</Box>
         <Divider />
-        <HStack px={4} py={2} spacing={3}>
+        <HStack py={2} spacing={3}>
           <Spacer />
           <Button variant='outline' onClick={onClose}>
             Cancel

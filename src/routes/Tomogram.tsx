@@ -79,7 +79,7 @@ const TomogramPage = () => {
   // TODO: Enable this once reprocessing is released
   const buttonDisabled = useMemo(
     () => {
-      return true;
+      return false;
       /*if (loaderData.tomograms === null || !loaderData.collection.dataCollectionId) {
       return true;
     }
