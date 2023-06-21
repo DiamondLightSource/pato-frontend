@@ -1,14 +1,13 @@
 import { Divider, Box, Button, HStack, Spacer, BoxProps } from "@chakra-ui/react";
-import { FormEvent, ReactNode, useCallback } from "react";
+import { ReactNode } from "react";
 
 export interface FormProps extends BoxProps {
   children?: ReactNode;
-  onSubmit?: (data: Record<string, any>) => void;
   onClose?: () => void;
 }
 
 const Form = (props: FormProps) => {
-  const { children, onSubmit, onClose } = props;
+  const { children, onClose } = props;
 
   return (
     <Box {...props}>

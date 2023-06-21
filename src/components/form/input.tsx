@@ -7,10 +7,12 @@ import {
   HStack,
   NumberIncrementStepper,
   NumberInputStepper,
-  NumberInputField,
-  NumberInput,
   NumberDecrementStepper,
   FormHelperText,
+  SelectProps,
+  FormErrorMessage,
+  FormControlProps,
+  Spacer,
 } from "@chakra-ui/react";
 
 export interface Option {
@@ -18,27 +20,20 @@ export interface Option {
   value: string;
 }
 
-export interface FormItemProps {
+export interface FormItemProps extends FormControlProps {
   unit?: string;
   label: string;
   children: ReactNode;
   helperText?: string;
+  error?: string;
 }
 
-export interface DropDownProps {
+export interface DropDownProps extends SelectProps {
   values: Option[];
-  name: string;
-}
-
-export interface NumberInputProps {
-  name: string;
-  precision?: number;
-  defaultValue: number;
-  disabled?: boolean;
 }
 
 const FormItem = (props: FormItemProps) => (
-  <FormControl>
+  <FormControl isInvalid={!!props.error}>
     <FormLabel marginBottom={0}>
       <HStack>
         <Text>{props.label}</Text>
@@ -47,34 +42,28 @@ const FormItem = (props: FormItemProps) => (
             ({props.unit})
           </Text>
         )}
+    <Spacer/>
       </HStack>
     </FormLabel>
+    <FormErrorMessage fontWeight="600">{props.error}</FormErrorMessage>
     {props.children}
-    {props.helperText && <FormHelperText fontSize='xs'>{props.helperText}</FormHelperText>}
+    {props.helperText && <FormHelperText fontSize='sm'>{props.helperText}</FormHelperText>}
   </FormControl>
 );
 
-const Dropdown = ({ values, name }: DropDownProps) => (
-  <Select bg='white' size='sm' name={name}>
-    {values.map((item) => (
+const Dropdown = (props: DropDownProps) => (
+  <Select bg='white' size='sm' {...props}>
+    {props.values.map((item) => (
       <option key={item.key}>{item.value}</option>
     ))}
   </Select>
 );
 
-const NumericInput = ({
-  name,
-  precision = 0,
-  disabled = false,
-  defaultValue,
-}: NumberInputProps) => (
-  <NumberInput isDisabled={disabled} size='sm' precision={precision} defaultValue={defaultValue}>
-    <NumberInputField bg='white' name={name} />
-    <NumberInputStepper>
-      <NumberIncrementStepper />
-      <NumberDecrementStepper />
-    </NumberInputStepper>
-  </NumberInput>
+const NumericStepper = () => (
+  <NumberInputStepper>
+    <NumberIncrementStepper />
+    <NumberDecrementStepper />
+  </NumberInputStepper>
 );
 
-export { FormItem, NumericInput, Dropdown };
+export { FormItem, NumericStepper, Dropdown };

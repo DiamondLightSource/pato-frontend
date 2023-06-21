@@ -2,38 +2,66 @@ import {
   Divider,
   Heading,
   HStack,
-  Text,
   Box,
   Input,
   VStack,
   Textarea,
   UnorderedList,
   ListItem,
+  Text,
 } from "@chakra-ui/react";
 import { Form } from "components/form/form";
 import { FormItem } from "components/form/input";
-import { useCallback } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+
+export interface FeedbackValues {
+  fullName: string;
+  email: string;
+  comments?: string;
+}
+
+// This is not up to RFC822, but this doesn't need to be thorough 
+const emailRegex = /.+@.+\..+/g
 
 const FeedbackForm = () => {
-  const handleSubmit = useCallback((info: Record<string, any>) => {
-    const data = {...info, userAgent: navigator.userAgent};
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<FeedbackValues>();
+
+  useEffect(() => {
+    console.log(errors);
+  }, [errors]);
+
+  const onSubmit = handleSubmit((info) => {
+    const data = { ...info, userAgent: navigator.userAgent };
     console.log(data);
-  }, []);
+  });
   return (
     <Box h='100%'>
-      <Heading>Report Feedback</Heading>
+      <Heading>Feedback</Heading>
       <Divider mb={4} />
       <HStack spacing={16} alignItems='start' flexWrap='wrap'>
-        <Form onSubmit={handleSubmit} p='0' flexGrow='1' flexBasis='300px'>
+        <Form onSubmit={onSubmit} p='0' flexGrow='1' flexBasis='300px'>
           <VStack gap={6}>
-            <FormItem label='Full Name' unit="required" >
-              <Input name='fullName' variant='hi-contrast' />
+            <FormItem label='Full Name' unit='required' error={errors.fullName && errors.fullName.message}>
+              <Input
+                borderColor={errors.fullName && "red"}
+                {...register("fullName", { required: "Field is required" })}
+                variant='hi-contrast'
+              />
             </FormItem>
-            <FormItem label='Email' unit="required" helperText='Address used for responses'>
-              <Input name='email' variant='hi-contrast' />
+            <FormItem label='Email' unit='required' helperText='Address used for responses' error={errors.email && errors.email.message}>
+              <Input
+                borderColor={errors.email && "red"}
+                {...register("email", { required: "Field is required", pattern: {value: emailRegex, message: "Invalid email address"} })}
+                variant='hi-contrast'
+              />
             </FormItem>
             <FormItem label='Comments' helperText='General comments, such as issue details and suggestions'>
-              <Textarea name='comments' variant='hi-contrast' />
+              <Textarea borderColor={errors.comments && "red"} {...register("comments")} variant='hi-contrast' />
             </FormItem>
           </VStack>
         </Form>
@@ -43,13 +71,15 @@ const FeedbackForm = () => {
           borderLeft='4px solid var(--chakra-colors-diamond-800)'
           paddingLeft='1em'
           alignItems='start'
+          minW='200px'
         >
-          <Heading size='lg'>Data Privacy</Heading>
-          <Text minW='200px'>Alongside the information provided in the form, the following details are included:</Text>
-          <UnorderedList>
+          <Heading size='lg'>Additional Data</Heading>
+          <Text >Alongside the information provided in the form, the following details are included:</Text>
+          <UnorderedList marginLeft="50px" my="10px">
             <ListItem>Operating System</ListItem>
             <ListItem>Browser</ListItem>
           </UnorderedList>
+          <Text>This data is used to track issues more effectively, and is not retained for extended periods of time.</Text>
         </VStack>
       </HStack>
     </Box>

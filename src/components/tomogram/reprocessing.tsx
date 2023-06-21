@@ -1,9 +1,14 @@
-import { createStandaloneToast, Grid } from "@chakra-ui/react";
-import { useCallback } from "react";
+import {
+  createStandaloneToast,
+  Grid,
+  NumberInput,
+  NumberInputField,
+} from "@chakra-ui/react";
 import { client } from "utils/api/client";
 import { Form } from "components/form/form";
-import { FormItem, NumericInput } from "components/form/input";
+import { FormItem, NumericStepper } from "components/form/input";
 import { baseToast } from "styles/components";
+import { useForm } from "react-hook-form";
 
 export interface ReprocessingProps {
   pixelSize?: number;
@@ -11,44 +16,56 @@ export interface ReprocessingProps {
   onClose?: () => void;
 }
 
+export interface TomogramReprocessingValues {
+  pixelSize: number,
+  tiltOffset: number
+}
+
 const TomogramReprocessing = ({ pixelSize, collectionId, onClose }: ReprocessingProps) => {
   const { toast } = createStandaloneToast();
+  const {
+    handleSubmit,
+    register,
+  } = useForm<TomogramReprocessingValues>();
 
-  const handleSubmit = useCallback(
-    (formData: Record<string, any>) => {
-      client
-        .post(`dataCollections/${collectionId}/tomograms/reprocessing`, formData)
-        .then((response) => {
-          if (response.status !== 202) {
-            toast({
-              ...baseToast,
-              title: "Error while initiating pipeline",
-              description: response.data.detail,
-              status: "error",
-            });
-          } else {
-            toast({
-              ...baseToast,
-              title: "Reprocessing succesfully initiated!",
-            });
+  const onSubmit = handleSubmit(
+    (formData) => {
+      client.post(`dataCollections/${collectionId}/tomograms/reprocessing`, formData).then((response) => {
+        if (response.status !== 202) {
+          toast({
+            ...baseToast,
+            title: "Error while initiating pipeline",
+            description: response.data.detail,
+            status: "error",
+          });
+        } else {
+          toast({
+            ...baseToast,
+            title: "Reprocessing succesfully initiated!",
+          });
 
-            if (onClose) {
-              onClose();
-            }
+          if (onClose) {
+            onClose();
           }
-        });
-    },
-    [collectionId, toast, onClose]
+        }
+      });
+    }
   );
 
   return (
-    <Form onClose={onClose} onSubmit={handleSubmit}>
+    <Form onClose={onClose} onSubmit={onSubmit} m={3}>
       <Grid py={2} templateColumns='repeat(2, 1fr)' gap={2}>
         <FormItem label='Pixel Size' unit='Å'>
-          <NumericInput name='pixelSize' precision={0} defaultValue={pixelSize ?? 1} />
+          <NumberInput size='sm' precision={0} defaultValue={pixelSize ?? 1}>
+            <NumberInputField bg='white' {...register("pixelSize", { required: true })} />
+            <NumericStepper/>
+          </NumberInput>
         </FormItem>
         <FormItem label='Tilt Offset' unit='°'>
-          <NumericInput name='tiltOffset' precision={2} defaultValue={1} />
+          <NumberInput size='sm' precision={2} defaultValue={1}>
+            <NumberInputField bg='white' {...register("tiltOffset", { required: true })} />
+            <NumericStepper/>
+          </NumberInput>
         </FormItem>
       </Grid>
     </Form>
