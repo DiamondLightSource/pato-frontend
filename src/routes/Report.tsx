@@ -12,29 +12,40 @@ import {
 } from "@chakra-ui/react";
 import { Form } from "components/form/form";
 import { FormItem } from "components/form/input";
+import { useCallback } from "react";
 
 const FeedbackForm = () => {
+  const handleSubmit = useCallback((info: Record<string, any>) => {
+    const data = {...info, userAgent: navigator.userAgent};
+    console.log(data);
+  }, []);
   return (
     <Box h='100%'>
-      <Heading>Report Issue</Heading>
+      <Heading>Report Feedback</Heading>
       <Divider mb={4} />
-      <HStack>
-        <Form p='0' w='50%'>
+      <HStack spacing={16} alignItems='start' flexWrap='wrap'>
+        <Form onSubmit={handleSubmit} p='0' flexGrow='1' flexBasis='300px'>
           <VStack gap={6}>
-            <FormItem label='Full Name'>
-              <Input variant='hi-contrast' />
+            <FormItem label='Full Name' unit="required" >
+              <Input name='fullName' variant='hi-contrast' />
             </FormItem>
-            <FormItem label='Email' helperText='Address used for responses'>
-              <Input variant='hi-contrast' />
+            <FormItem label='Email' unit="required" helperText='Address used for responses'>
+              <Input name='email' variant='hi-contrast' />
             </FormItem>
-            <FormItem label='Comments' helperText='Issue details, '>
-              <Textarea variant='hi-contrast' />
+            <FormItem label='Comments' helperText='General comments, such as issue details and suggestions'>
+              <Textarea name='comments' variant='hi-contrast' />
             </FormItem>
           </VStack>
         </Form>
-        <VStack paddingLeft='2em' w='50%' alignItems='start'>
-          <Heading size='lg'>What can we see?</Heading>
-          <Text>All information is used for issue tracing purposes</Text>
+        <VStack
+          flexBasis='min-content'
+          flexGrow='1'
+          borderLeft='4px solid var(--chakra-colors-diamond-800)'
+          paddingLeft='1em'
+          alignItems='start'
+        >
+          <Heading size='lg'>Data Privacy</Heading>
+          <Text minW='200px'>Alongside the information provided in the form, the following details are included:</Text>
           <UnorderedList>
             <ListItem>Operating System</ListItem>
             <ListItem>Browser</ListItem>
