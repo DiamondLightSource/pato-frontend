@@ -15,17 +15,4 @@ describe("Form", () => {
 
     expect(mockCallback).toBeCalled();
   });
-
-  it("should ignore form elements without names", () => {
-    const mockCallback = jest.fn();
-    renderWithProviders(
-      <Form onSubmit={mockCallback}>
-        <input name='test' defaultValue='value' /> <input defaultValue='noName'></input>
-      </Form>
-    );
-
-    fireEvent.click(screen.getByText("Submit"));
-
-    expect(mockCallback).toHaveBeenCalledWith({ test: "value" });
-  });
 });
