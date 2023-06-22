@@ -7,7 +7,7 @@ import {
   NumberInput,
   NumberInputField,
 } from "@chakra-ui/react";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { FieldSet } from "components/form/fieldset";
 import { Form } from "components/form/form";
 import { Dropdown, FormItem, NumericStepper } from "components/form/input";
@@ -31,7 +31,8 @@ const motionCorrectionBinningValues = [
 
 const RelionReprocessing = ({ procJobId }: RelionProps) => {
   // WIP, do not use yet!
-  const [calculateAuto, setCalculateAuto] = useState(false);
+  //const [calculateAuto, setCalculateAuto] = useState(false);
+  const calculateAuto = true;
 
   const { handleSubmit, register } = useForm();
 
