@@ -31,7 +31,7 @@ import { components } from "schema/main";
 import { SPA } from "components/spa/main";
 import { MdFolder } from "react-icons/md";
 import { InfoGroup } from "components/visualisation/infogroup";
-import { RelionReprocessing } from "components/spa/relion";
+import { RelionReprocessing } from "components/spa/reprocessing";
 import { MdRedo } from "react-icons/md";
 import { SpaCollectionData } from "schema/interfaces";
 import React from "react";
