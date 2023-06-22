@@ -1,4 +1,12 @@
-import { Text, Checkbox, VStack, Grid, GridItem, NumberInput, NumberInputField } from "@chakra-ui/react";
+import {
+  Text,
+  Checkbox,
+  VStack,
+  Grid,
+  GridItem,
+  NumberInput,
+  NumberInputField,
+} from "@chakra-ui/react";
 import { useCallback, useState } from "react";
 import { FieldSet } from "components/form/fieldset";
 import { Form } from "components/form/form";
@@ -48,7 +56,10 @@ const RelionReprocessing = ({ procJobId }: RelionProps) => {
                 <Dropdown {...register("sphericalAberration")} values={sphericalAberrationValues} />
               </FormItem>
               <FormItem label='Motion Correction Binning'>
-                <Dropdown {...register("motionCorBinning")} values={motionCorrectionBinningValues} />
+                <Dropdown
+                  {...register("motionCorBinning")}
+                  values={motionCorrectionBinningValues}
+                />
               </FormItem>
               <FormItem label='Pixel Size' unit='Å/pixel'>
                 <NumberInput size='sm' precision={3} defaultValue={0.831}>
@@ -110,7 +121,11 @@ const RelionReprocessing = ({ procJobId }: RelionProps) => {
                   <NumericStepper />
                 </NumberInput>
               </FormItem>
-              <FormItem label='Downsample Box Size' helperText='Box size after binning' unit='Pixels'>
+              <FormItem
+                label='Downsample Box Size'
+                helperText='Box size after binning'
+                unit='Pixels'
+              >
                 <NumberInput size='sm' isDisabled={calculateAuto} defaultValue={48}>
                   <NumberInputField bg='white' {...register("downBoxSize")} />
                   <NumericStepper />

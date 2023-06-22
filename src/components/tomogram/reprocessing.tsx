@@ -1,9 +1,4 @@
-import {
-  createStandaloneToast,
-  Grid,
-  NumberInput,
-  NumberInputField,
-} from "@chakra-ui/react";
+import { createStandaloneToast, Grid, NumberInput, NumberInputField } from "@chakra-ui/react";
 import { client } from "utils/api/client";
 import { Form } from "components/form/form";
 import { FormItem, NumericStepper } from "components/form/input";
@@ -17,20 +12,18 @@ export interface ReprocessingProps {
 }
 
 export interface TomogramReprocessingValues {
-  pixelSize: number,
-  tiltOffset: number
+  pixelSize: number;
+  tiltOffset: number;
 }
 
 const TomogramReprocessing = ({ pixelSize, collectionId, onClose }: ReprocessingProps) => {
   const { toast } = createStandaloneToast();
-  const {
-    handleSubmit,
-    register,
-  } = useForm<TomogramReprocessingValues>();
+  const { handleSubmit, register } = useForm<TomogramReprocessingValues>();
 
-  const onSubmit = handleSubmit(
-    (formData) => {
-      client.post(`dataCollections/${collectionId}/tomograms/reprocessing`, formData).then((response) => {
+  const onSubmit = handleSubmit((formData) => {
+    client
+      .post(`dataCollections/${collectionId}/tomograms/reprocessing`, formData)
+      .then((response) => {
         if (response.status !== 202) {
           toast({
             ...baseToast,
@@ -49,8 +42,7 @@ const TomogramReprocessing = ({ pixelSize, collectionId, onClose }: Reprocessing
           }
         }
       });
-    }
-  );
+  });
 
   return (
     <Form onClose={onClose} onSubmit={onSubmit} m={3}>
@@ -58,13 +50,13 @@ const TomogramReprocessing = ({ pixelSize, collectionId, onClose }: Reprocessing
         <FormItem label='Pixel Size' unit='Å'>
           <NumberInput size='sm' precision={0} defaultValue={pixelSize ?? 1}>
             <NumberInputField bg='white' {...register("pixelSize", { required: true })} />
-            <NumericStepper/>
+            <NumericStepper />
           </NumberInput>
         </FormItem>
         <FormItem label='Tilt Offset' unit='°'>
           <NumberInput size='sm' precision={2} defaultValue={1}>
             <NumberInputField bg='white' {...register("tiltOffset", { required: true })} />
-            <NumericStepper/>
+            <NumericStepper />
           </NumberInput>
         </FormItem>
       </Grid>

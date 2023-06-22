@@ -27,7 +27,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { processSessionData, sessionLoader } from "loaders/sessions";
 import { theme } from "styles/main";
-import FeedbackForm from "routes/Report";
+import FeedbackForm from "routes/Feedback";
 
 const Calendar = React.lazy(() => import("routes/Calendar"));
 

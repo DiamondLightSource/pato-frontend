@@ -13,8 +13,10 @@ const Footer = () => (
         Diamond Light Source{" "}
       </Link>
     </Text>
-    <Spacer/>
-    <Link as={LinkRouter} to="/feedback" color='diamond.400'>Feedback</Link>
+    <Spacer />
+    <Link as={LinkRouter} to='/feedback' color='diamond.400'>
+      Feedback
+    </Link>
   </HStack>
 );
 

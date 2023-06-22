@@ -42,10 +42,10 @@ const FormItem = (props: FormItemProps) => (
             ({props.unit})
           </Text>
         )}
-    <Spacer/>
+        <Spacer />
       </HStack>
     </FormLabel>
-    <FormErrorMessage fontWeight="600">{props.error}</FormErrorMessage>
+    <FormErrorMessage fontWeight='600'>{props.error}</FormErrorMessage>
     {props.children}
     {props.helperText && <FormHelperText fontSize='sm'>{props.helperText}</FormHelperText>}
   </FormControl>
