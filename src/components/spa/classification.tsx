@@ -132,6 +132,7 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
             Sort by
           </Heading>
           <Select
+            isDisabled={!data || data.total < 1}
             aria-labelledby='sortlabel'
             bg='white'
             onChange={(e) => setSortType(e.target.value as SortTypes)}
@@ -144,69 +145,72 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
               </option>
             ))}
           </Select>
+          <MotionPagination
+            disabled={!data || data.total < 1}
+            startFrom='start'
+            page={classPage}
+            onChange={setClassPage}
+            total={pageAmount}
+          />
         </HStack>
-        <MotionPagination
-          startFrom='start'
-          page={classPage}
-          onChange={setClassPage}
-          total={pageAmount}
-        />
       </Stack>
       <Divider />
       {isLoading ? (
         <Skeleton h='23vh' mb={1} />
       ) : data && data.data ? (
-        <Grid
-          pt='2'
-          mb='3'
-          templateColumns={{ base: "repeat(4, 1fr)", md: "repeat(8, 1fr)" }}
-          gap='2'
-        >
-          {data.data.map((item, i) =>
-            type === "2d" ? (
-              <ImageCard
-                borderColor={getBorderColour(item.selected)}
-                h={{ base: "auto", md: "14vh" }}
-                showModal={false}
-                key={item.particleClassificationId}
-                src={item.imageUrl}
-                title={`${item.batchNumber}-${item.classNumber} (${item.particlesPerClass})`}
-                active={selectedClass === i}
-                onClick={() => setSelectedClass(i)}
-              />
-            ) : (
-              <Card
-                borderColor={getBorderColour(item.selected)}
-                data-testid={`class-${i}`}
-                onClick={() => setSelectedClass(i)}
-                key={i}
-                aria-selected={selectedClass === i}
-              >
-                <CardBody py={2}>
-                  <Heading size='sm'>
-                    {item.batchNumber}-{item.classNumber} ({item.particlesPerClass})
-                  </Heading>
-                </CardBody>
-              </Card>
-            )
+        <>
+          <Grid
+            pt='2'
+            mb='3'
+            templateColumns={{ base: "repeat(4, 1fr)", md: "repeat(8, 1fr)" }}
+            gap='2'
+          >
+            {data.data.map((item, i) =>
+              type === "2d" ? (
+                <ImageCard
+                  borderColor={getBorderColour(item.selected)}
+                  h={{ base: "auto", md: "14vh" }}
+                  showModal={false}
+                  key={item.particleClassificationId}
+                  src={item.imageUrl}
+                  title={`${item.batchNumber}-${item.classNumber} (${item.particlesPerClass})`}
+                  active={selectedClass === i}
+                  onClick={() => setSelectedClass(i)}
+                />
+              ) : (
+                <Card
+                  borderColor={getBorderColour(item.selected)}
+                  data-testid={`class-${i}`}
+                  onClick={() => setSelectedClass(i)}
+                  key={i}
+                  aria-selected={selectedClass === i}
+                >
+                  <CardBody py={2}>
+                    <Heading size='sm'>
+                      {item.batchNumber}-{item.classNumber} ({item.particlesPerClass})
+                    </Heading>
+                  </CardBody>
+                </Card>
+              )
+            )}
+          </Grid>
+          {selectedClassInfo.info && (
+            <InfoGroup height='auto' cols={5} info={selectedClassInfo.info as Info[]} />
           )}
-        </Grid>
+          {type === "3d" && (
+            <MolstarModal
+              onChange={handle3dClassPageChange}
+              autoProcId={autoProcId}
+              page={classIndex}
+              pageCount={data.total}
+              classId={selectedClassInfo.particleClassificationId}
+            />
+          )}
+        </>
       ) : (
         <Heading py='5vh' variant='notFound'>
           No Classes Found
         </Heading>
-      )}
-      {selectedClassInfo.info && (
-        <InfoGroup height='auto' cols={5} info={selectedClassInfo.info as Info[]} />
-      )}
-      {data && type === "3d" && (
-        <MolstarModal
-          onChange={handle3dClassPageChange}
-          autoProcId={autoProcId}
-          page={classIndex}
-          pageCount={data.total}
-          classId={selectedClassInfo.particleClassificationId}
-        />
       )}
     </Box>
   );
