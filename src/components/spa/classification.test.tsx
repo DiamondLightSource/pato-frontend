@@ -87,6 +87,18 @@ describe("Classification", () => {
     await screen.findByText("No Classes Found");
   });
 
+  it("should disable controls when no data is available", async () => {
+    server.use(
+      rest.get("http://localhost/autoProc/:procId/classification", (req, res, ctx) =>
+        res.once(ctx.status(404))
+      )
+    );
+    renderWithProviders(<Classification autoProcId={2} />);
+
+    await screen.findByText("No Classes Found");
+    expect(screen.getByRole("combobox")).toHaveAttribute("disabled");
+  });
+
   it("should display visualisation button for 3D", async () => {
     renderWithProviders(<Classification autoProcId={1} type='3d' />);
 

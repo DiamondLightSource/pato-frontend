@@ -11,6 +11,7 @@ import {
   NumberInput,
   NumberDecrementStepper,
   FormHelperText,
+  FormControlProps,
 } from "@chakra-ui/react";
 
 export interface Option {
@@ -18,7 +19,7 @@ export interface Option {
   value: string;
 }
 
-export interface FormItemProps {
+export interface FormItemProps extends FormControlProps {
   unit?: string;
   label: string;
   children: ReactNode;
@@ -37,20 +38,20 @@ export interface NumberInputProps {
   disabled?: boolean;
 }
 
-const FormItem = ({ unit, label, helperText, children }: FormItemProps) => (
-  <FormControl>
+const FormItem = (props: FormItemProps) => (
+  <FormControl {...props}>
     <FormLabel marginBottom={0}>
       <HStack>
-        <Text>{label}</Text>
-        {unit && (
+        <Text>{props.label}</Text>
+        {props.unit && (
           <Text fontSize={12} color='diamond.300'>
-            ({unit})
+            ({props.unit})
           </Text>
         )}
       </HStack>
     </FormLabel>
-    {children}
-    {helperText && <FormHelperText fontSize='xs'>{helperText}</FormHelperText>}
+    {props.children}
+    {props.helperText && <FormHelperText fontSize='xs'>{props.helperText}</FormHelperText>}
   </FormControl>
 );
 

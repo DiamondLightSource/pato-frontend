@@ -4,7 +4,7 @@ import {
   defineStyle,
   createMultiStyleConfigHelpers,
 } from "@chakra-ui/react";
-import { cardAnatomy, tabsAnatomy } from "@chakra-ui/anatomy";
+import { cardAnatomy, tabsAnatomy, inputAnatomy } from "@chakra-ui/anatomy";
 
 const baseToast: ToastProps = {
   id: "main-toast",
@@ -197,6 +197,21 @@ const Heading = defineStyleConfig({
   },
 });
 
+const { definePartsStyle: defineInputStyle, defineMultiStyleConfig: defineInputConfig } =
+  createMultiStyleConfigHelpers(inputAnatomy.keys);
+
+const hiContrastInput = defineInputStyle({
+  field: {
+    borderWidth: "1px",
+    borderColor: "diamond.800",
+    borderRadius: 0,
+  },
+});
+
+const Input = defineInputConfig({
+  variants: { "hi-contrast": hiContrastInput },
+});
+
 const { definePartsStyle: defineTabsStyle, defineMultiStyleConfig: defineTabsConfig } =
   createMultiStyleConfigHelpers(tabsAnatomy.keys);
 
@@ -238,6 +253,10 @@ const Code = defineStyleConfig({
   },
 });
 
+const Textarea = defineStyleConfig({
+  variants: { "hi-contrast": hiContrastInput.field },
+});
+
 export {
   Accordion,
   Button,
@@ -251,4 +270,6 @@ export {
   baseToast,
   Checkbox,
   Code,
+  Input,
+  Textarea,
 };
