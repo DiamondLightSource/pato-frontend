@@ -122,10 +122,8 @@ const Tomogram = ({
             </Box>
           ) : (
             <Grid gap={3} templateColumns={{ base: "", "2xl": "repeat(2, 1fr)" }}>
-              <GridItem>
-                <Motion parentType='tomograms' parentId={data.tomogram.tomogramId} />
-              </GridItem>
-              <GridItem>
+              <Motion parentType='tomograms' parentId={data.tomogram.tomogramId} />
+              <Box minW='0'>
                 <Heading variant='collection'>Alignment</Heading>
                 <Divider />
                 <Grid
@@ -180,10 +178,8 @@ const Tomogram = ({
                     <ImageCard src={data.xzProj} title='XZ Projection' />
                   </GridItem>
                 </Grid>
-              </GridItem>
-              <GridItem>
-                <CTF parentId={data.tomogram.tomogramId} parentType='tomograms' />
-              </GridItem>
+              </Box>
+              <CTF parentId={data.tomogram.tomogramId} parentType='tomograms' />
             </Grid>
           )}
         </AccordionPanel>

@@ -10,11 +10,25 @@ import {
   Tabs,
   Code,
   Text,
+  Input,
+  Textarea,
 } from "styles/components";
 
 export const theme = extendTheme({
   colors: colours,
-  components: { Accordion, Checkbox, Button, Text, Heading, Table, Card, Tabs, Code },
+  components: {
+    Accordion,
+    Checkbox,
+    Button,
+    Text,
+    Heading,
+    Table,
+    Card,
+    Tabs,
+    Code,
+    Input,
+    Textarea,
+  },
   breakpoints: {
     sm: "30em",
     md: "48em",
