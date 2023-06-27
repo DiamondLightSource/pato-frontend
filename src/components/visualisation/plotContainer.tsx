@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 
 import { ParentSize } from "@visx/responsive";
-import { BaseCardProp } from "schema/interfaces";
+import { BaseCardProp } from "diamond-components";
 import { cloneElement, ReactElement } from "react";
 import { ScatterProps, BarProps } from "diamond-components";
 

@@ -1,12 +1,11 @@
 import { Box, HStack, Tag, Text, Link, Progress } from "@chakra-ui/react";
 import { Outlet, useLoaderData } from "react-router-dom";
 import { Footer } from "components/navigation/footer";
-import { AuthState } from "schema/interfaces";
-import "styles/main.css";
 import { Breadcrumbs } from "components/navigation/breadcrumbs";
 import { useIsFetching } from "@tanstack/react-query";
-import { LinkDescriptor, Navbar, User } from "diamond-components";
+import { LinkDescriptor, Navbar, User, AuthState } from "diamond-components";
 import { useMemo } from "react";
+import "styles/main.css";
 
 const handleLogin = () =>
   window.location.assign(

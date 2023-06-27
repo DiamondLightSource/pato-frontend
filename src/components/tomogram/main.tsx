@@ -21,14 +21,14 @@ import { PlotContainer } from "components/visualisation/plotContainer";
 import { Motion } from "components/motion/motion";
 import { useCallback } from "react";
 import { client, prependApiUrl } from "utils/api/client";
-import { TomogramData, BasePoint, BaseProcessingJobProps, DataConfig } from "schema/interfaces";
+import { TomogramData, BaseProcessingJobProps, DataConfig } from "schema/interfaces";
 import { CTF } from "components/ctf/ctf";
 import { components } from "schema/main";
 import { ProcessingTitle } from "components/visualisation/processingTitle";
 import { parseData } from "utils/generic";
 import { MdOpenInNew } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
-import { ScatterPlot, InfoGroup, ImageCard } from "diamond-components";
+import { ScatterPlot, InfoGroup, ImageCard, BasePoint } from "diamond-components";
 
 const tomogramConfig: DataConfig = {
   include: [
@@ -85,14 +85,7 @@ const fetchTomogramData = async (tomogram: TomogramResponse | null) => {
   return data;
 };
 
-const Tomogram = ({
-  autoProc,
-  procJob,
-  tomogram,
-  status,
-  onTomogramOpened,
-  active = false,
-}: TomogramProps) => {
+const Tomogram = ({ autoProc, procJob, tomogram, status, onTomogramOpened, active = false }: TomogramProps) => {
   const { data, isLoading } = useQuery({
     queryKey: ["tomogramAutoProc", autoProc.autoProcProgramId],
     queryFn: async () => await fetchTomogramData(tomogram),
@@ -119,16 +112,12 @@ const Tomogram = ({
               <Motion parentId={procJob.dataCollectionId} parentType='dataCollections' />
             </Box>
           ) : (
-            <Grid gap={3} templateColumns={{ base: "", "2xl": "repeat(2, 1fr)" }}>
+            <Grid gap={3} templateColumns={{ "base": "", "2xl": "repeat(2, 1fr)" }}>
               <Motion parentType='tomograms' parentId={data.tomogram.tomogramId} />
               <Box minW='0'>
                 <Heading variant='collection'>Alignment</Heading>
                 <Divider />
-                <Grid
-                  py={2}
-                  templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}
-                  gap={2}
-                >
+                <Grid py={2} templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }} gap={2}>
                   <GridItem h='20vh' colSpan={{ base: 2, md: 1 }}>
                     <InfoGroup info={data.tomogram.info} />
                   </GridItem>
@@ -148,11 +137,7 @@ const Tomogram = ({
                       <CardBody pt={0}>
                         <HStack mx='auto' w='auto' h='100%'>
                           <VStack w='50%' h='100%'>
-                            <ImageCard
-                              p={0}
-                              borderColor='transparent'
-                              src={`${data.centralSlice}?denoised=true`}
-                            />
+                            <ImageCard p={0} borderColor='transparent' src={`${data.centralSlice}?denoised=true`} />
                             <Text fontSize={13}>Denoised</Text>
                           </VStack>
                           <Divider orientation='vertical' />

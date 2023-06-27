@@ -25,9 +25,8 @@ import { MdComment } from "react-icons/md";
 import { client, prependApiUrl } from "utils/api/client";
 import { parseData } from "utils/generic";
 import { driftPlotOptions } from "utils/config/plot";
-import { BasePoint, Info } from "schema/interfaces";
 import { useQuery } from "@tanstack/react-query";
-import { Flipper, ScatterPlot, InfoGroup, ImageCard } from "diamond-components";
+import { Flipper, ScatterPlot, InfoGroup, ImageCard, BasePoint, Info } from "diamond-components";
 
 interface MotionData {
   /** Total number of tilt alignment images available */
@@ -161,9 +160,7 @@ const fetchMotionData = async (
       fft: prependApiUrl(`movies/${movie.movieId}/fft`),
     };
 
-    const fileData = await client.safeGet(
-      `movies/${movie.movieId}/drift?fromDb=${parentType === "autoProc"}`
-    );
+    const fileData = await client.safeGet(`movies/${movie.movieId}/drift?fromDb=${parentType === "autoProc"}`);
 
     if (fileData.status === 200) {
       data.drift = fileData.data.items;
@@ -195,8 +192,7 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
     return `Dark Images: ${data.motion.rawTotal - data.total}`;
   }, [data]);
   const hasComments = useMemo(
-    () =>
-      data && data.motion && (data.motion.comments_CTF || data.motion.comments_MotionCorrection),
+    () => data && data.motion && (data.motion.comments_CTF || data.motion.comments_MotionCorrection),
     [data]
   );
 
@@ -245,9 +241,7 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
           <Tooltip id='comment' label='View Comments'>
             <Button data-testid='comment' isDisabled={!hasComments} size='xs' onClick={onOpen}>
               <MdComment />
-              {hasComments && (
-                <Circle size='3' position='absolute' top='-1' left='-1' bg='red'></Circle>
-              )}
+              {hasComments && <Circle size='3' position='absolute' top='-1' left='-1' bg='red'></Circle>}
             </Button>
           </Tooltip>
           <Flipper

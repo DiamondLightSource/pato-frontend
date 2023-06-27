@@ -17,10 +17,10 @@ import { client, prependApiUrl } from "utils/api/client";
 import { components } from "schema/main";
 import { parseData } from "utils/generic";
 import { classificationConfig } from "utils/config/parse";
-import { Info, ClassificationProps, SortTypes } from "schema/interfaces";
+import { ClassificationProps, SortTypes } from "schema/interfaces";
 import { MolstarModal } from "components/molstar/molstarModal";
 import { useQuery } from "@tanstack/react-query";
-import { Flipper, InfoGroup, ImageCard } from "diamond-components";
+import { Flipper, InfoGroup, ImageCard, Info } from "diamond-components";
 
 type ClassificationSchema = components["schemas"]["Classification"];
 interface FullClassification extends ClassificationSchema {

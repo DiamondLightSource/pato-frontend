@@ -1,4 +1,10 @@
 import { DataConfig } from "schema/interfaces";
+
+const timeFormatter = new Intl.DateTimeFormat("en-GB", {
+  dateStyle: "short",
+  timeStyle: "short",
+});
+
 /**
  * Parses incoming raw data and processes it into labels and values for `InfoGroup` components, also returning raw values in the root of the returned object
  *
@@ -7,11 +13,6 @@ import { DataConfig } from "schema/interfaces";
  *
  * @returns An object containing an array of `InfoGroup` labels and values, alongside raw values (when passed in the configuration)
  */
-const timeFormatter = new Intl.DateTimeFormat("en-GB", {
-  dateStyle: "short",
-  timeStyle: "short",
-});
-
 export const parseData = (rawData: Record<string, any>, config: DataConfig) => {
   const data: Record<string, any> = { info: [] };
   for (const item of config.include) {
