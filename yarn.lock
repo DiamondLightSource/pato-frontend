@@ -7691,9 +7691,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"diamond-components@npm:^0.2.12":
-  version: 0.2.12
-  resolution: "diamond-components@npm:0.2.12"
+"diamond-components@npm:^0.2.13":
+  version: 0.2.13
+  resolution: "diamond-components@npm:0.2.13"
   dependencies:
     "@visx/axis": ^3.1.0
     "@visx/event": ^3.0.1
@@ -7714,7 +7714,7 @@ __metadata:
     react: ^18.2.0
     react-dom: ^18.2.0
     react-icons: ^4.6.0
-  checksum: 7d72d89ea2ad0fe55e83370944fd217ca30286295d8e5162d633e89926863364688a283929cc25144f08d85cb083aba3c51e1c62a8b3e77356efcaf68667e905
+  checksum: 3e8c5334f0b9bbaad8d88f9e49fc49fcfc8beed9309817ddb1c68acae2e58d1760116f12c3f65c67169655bfa364f6a234f957fddee626bf61781035e9f72082
   languageName: node
   linkType: hard
 
@@ -12393,7 +12393,7 @@ __metadata:
     case-sensitive-paths-webpack-plugin: ^2.4.0
     css-loader: ^6.8.1
     css-minimizer-webpack-plugin: ^5.0.1
-    diamond-components: ^0.2.12
+    diamond-components: ^0.2.13
     dotenv: ^16.3.1
     dotenv-expand: ^10.0.0
     eslint: ^8.43.0
