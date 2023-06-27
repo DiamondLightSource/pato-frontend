@@ -8,17 +8,14 @@ import {
   Skeleton,
   Stack,
 } from "@chakra-ui/react";
-import { ImageCard } from "components/visualisation/image";
-import { InfoGroup } from "components/visualisation/infogroup";
-import { MotionPagination } from "components/motion/pagination";
 import { useCallback, useEffect, useState } from "react";
 import { client, prependApiUrl } from "utils/api/client";
 import { parseData } from "utils/generic";
 import { components } from "schema/main";
 import { DataConfig, SpaProps, Info, BoxPlotStats } from "schema/interfaces";
 import { PlotContainer } from "components/visualisation/plotContainer";
-import { Box } from "components/plots/box";
 import { useQuery } from "@tanstack/react-query";
+import { Flipper, BoxPlot, InfoGroup, ImageCard } from "diamond-components";
 
 type ParticlePickingSchema = components["schemas"]["ParticlePicker"];
 
@@ -134,7 +131,7 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
         >
           Match Selected Motion Correction Page
         </Checkbox>
-        <MotionPagination
+        <Flipper
           disabled={lockPage}
           total={innerTotal}
           onChange={handlePageChanged}
@@ -146,7 +143,7 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
         <Grid py={2} templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }} gap={2}>
           <InfoGroup cols={1} info={data.particlePicker} />
           <PlotContainer title='Relative Ice Thickness' height='25vh'>
-            <Box
+            <BoxPlot
               data={data.iceThickness}
               options={{ y: { domain: { min: 120000, max: 160000 } } }}
             />

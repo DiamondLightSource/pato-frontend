@@ -32,28 +32,28 @@ export interface DropDownProps extends SelectProps {
   values: Option[];
 }
 
-const FormItem = (props: FormItemProps) => (
-  <FormControl isInvalid={!!props.error}>
+const FormItem = ({ unit, label, children, helperText, error, ...props }: FormItemProps) => (
+  <FormControl isInvalid={!!error} {...props}>
     <FormLabel marginBottom={0}>
       <HStack>
-        <Text>{props.label}</Text>
-        {props.unit && (
+        <Text>{label}</Text>
+        {unit && (
           <Text fontSize={12} color='diamond.300'>
-            ({props.unit})
+            ({unit})
           </Text>
         )}
         <Spacer />
       </HStack>
     </FormLabel>
-    <FormErrorMessage fontWeight='600'>{props.error}</FormErrorMessage>
-    {props.children}
-    {props.helperText && <FormHelperText fontSize='sm'>{props.helperText}</FormHelperText>}
+    <FormErrorMessage fontWeight='600'>{error}</FormErrorMessage>
+    {children}
+    {helperText && <FormHelperText fontSize='sm'>{helperText}</FormHelperText>}
   </FormControl>
 );
 
-const Dropdown = (props: DropDownProps) => (
+const Dropdown = ({ values, ...props }: DropDownProps) => (
   <Select bg='white' size='sm' {...props}>
-    {props.values.map((item) => (
+    {values.map((item) => (
       <option key={item.key}>{item.value}</option>
     ))}
   </Select>

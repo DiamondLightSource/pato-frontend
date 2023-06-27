@@ -8,9 +8,9 @@ import {
 import { PlotContainer } from "components/visualisation/plotContainer";
 import { client } from "utils/api/client";
 import { CtfData } from "schema/interfaces";
-import { Scatter } from "components/plots/scatter";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
+import { ScatterPlot } from "diamond-components";
 
 export interface CTFProps {
   parentType: "autoProc" | "tomograms";
@@ -68,7 +68,7 @@ const CTF = ({ parentId, parentType, onGraphClicked }: CTFProps) => {
           h={{ base: "50vh", md: "20vh" }}
         >
           <PlotContainer title='Astigmatism'>
-            <Scatter
+            <ScatterPlot
               decimationThreshold={threshold}
               onPointClicked={onGraphClicked}
               data={data!.astigmatism}
@@ -76,7 +76,7 @@ const CTF = ({ parentId, parentType, onGraphClicked }: CTFProps) => {
             />
           </PlotContainer>
           <PlotContainer title='Defocus'>
-            <Scatter
+            <ScatterPlot
               decimationThreshold={threshold}
               onPointClicked={onGraphClicked}
               data={data!.defocus}
@@ -84,7 +84,7 @@ const CTF = ({ parentId, parentType, onGraphClicked }: CTFProps) => {
             />
           </PlotContainer>
           <PlotContainer title='Resolution'>
-            <Scatter
+            <ScatterPlot
               decimationThreshold={threshold}
               onPointClicked={onGraphClicked}
               data={data!.resolution}

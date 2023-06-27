@@ -19,18 +19,15 @@ import {
   Tooltip,
   Stack,
 } from "@chakra-ui/react";
-import { ImageCard } from "components/visualisation/image";
-import { InfoGroup } from "components/visualisation/infogroup";
 import { PlotContainer } from "components/visualisation/plotContainer";
-import { MotionPagination } from "components/motion/pagination";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { MdComment } from "react-icons/md";
 import { client, prependApiUrl } from "utils/api/client";
 import { parseData } from "utils/generic";
 import { driftPlotOptions } from "utils/config/plot";
 import { BasePoint, Info } from "schema/interfaces";
-import { Scatter } from "components/plots/scatter";
 import { useQuery } from "@tanstack/react-query";
+import { Flipper, ScatterPlot, InfoGroup, ImageCard } from "diamond-components";
 
 interface MotionData {
   /** Total number of tilt alignment images available */
@@ -253,7 +250,7 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
               )}
             </Button>
           </Tooltip>
-          <MotionPagination
+          <Flipper
             startFrom={parentType === "tomograms" ? "middle" : "end"}
             total={actualTotal}
             onChange={handlePageChanged}
@@ -275,7 +272,7 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
           </GridItem>
           <GridItem h={{ base: "20vh", md: "25vh" }} colSpan={{ base: 2, md: 1 }}>
             <PlotContainer title='Drift'>
-              <Scatter options={driftPlotOptions} data={data.drift} />
+              <ScatterPlot options={driftPlotOptions} data={data.drift} />
             </PlotContainer>
           </GridItem>
           <Drawer isOpen={isOpen} placement='right' onClose={onClose}>

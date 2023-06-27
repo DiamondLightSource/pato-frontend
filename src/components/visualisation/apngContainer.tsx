@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { cloneElement, useEffect, useMemo, useRef, useState } from "react";
 import { MdFastForward, MdFastRewind, MdPause, MdPlayArrow } from "react-icons/md";
-import { ApngProps } from "./apng";
+import { ApngProps } from "diamond-components";
 
 export interface ApngContainerProps {
   width?: ResponsiveValue<string | number | "auto">;

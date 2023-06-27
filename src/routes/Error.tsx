@@ -32,7 +32,7 @@ const Error = () => {
 
   return (
     <div className='rootContainer'>
-      <Navbar logo={"/images/diamondgs.png"}/>
+      <Navbar logo={"/images/diamondgs.png"} />
       <Box marginTop={12} className='main'>
         <VStack h='100%' justifyContent='center'>
           <Heading color='diamond.800'>{heading}</Heading>

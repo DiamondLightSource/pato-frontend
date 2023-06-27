@@ -12,17 +12,15 @@ import {
   Checkbox,
   Stack,
 } from "@chakra-ui/react";
-import { ImageCard } from "components/visualisation/image";
-import { InfoGroup } from "components/visualisation/infogroup";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { client, prependApiUrl } from "utils/api/client";
-import { MotionPagination } from "components/motion/pagination";
 import { components } from "schema/main";
 import { parseData } from "utils/generic";
 import { classificationConfig } from "utils/config/parse";
 import { Info, ClassificationProps, SortTypes } from "schema/interfaces";
 import { MolstarModal } from "components/molstar/molstarModal";
 import { useQuery } from "@tanstack/react-query";
+import { Flipper, InfoGroup, ImageCard } from "diamond-components";
 
 type ClassificationSchema = components["schemas"]["Classification"];
 interface FullClassification extends ClassificationSchema {
@@ -145,12 +143,7 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
             ))}
           </Select>
         </HStack>
-        <MotionPagination
-          startFrom='start'
-          page={classPage}
-          onChange={setClassPage}
-          total={pageAmount}
-        />
+        <Flipper startFrom='start' page={classPage} onChange={setClassPage} total={pageAmount} />
       </Stack>
       <Divider />
       {isLoading ? (

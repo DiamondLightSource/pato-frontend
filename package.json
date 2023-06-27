@@ -11,7 +11,7 @@
     "@fullcalendar/react": "^6.1.8",
     "@fullcalendar/timegrid": "^6.1.8",
     "@tanstack/react-query": "^4.29.18",
-    "diamond-components": "^0.2.6",
+    "diamond-components": "^0.2.12",
     "framer-motion": "^10.12.17",
     "molstar": "^3.37.1",
     "react": "^18.2.0",
@@ -58,7 +58,6 @@
     "@types/node": "^18.16.18",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
-    "babel-jest": "^29.5.0",
     "babel-loader": "^9.1.2",
     "babel-plugin-named-asset-import": "^0.3.8",
     "babel-preset-react-app": "^10.0.1",
@@ -143,7 +142,7 @@
       "<rootDir>/config/jest/jest.setup.ts"
     ],
     "transform": {
-      "^.+\\.js": "babel-jest"
+      "^.+\\.js": "ts-jest"
     },
     "transformIgnorePatterns": [
       "node_modules/(?!(molstar)/)"
