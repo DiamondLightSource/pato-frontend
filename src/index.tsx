@@ -75,6 +75,10 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "/feedback",
+        element: <FeedbackForm />,
+      },
+      {
         path: "/proposals/:propid",
         element: <Navigate to='sessions' replace />,
       },

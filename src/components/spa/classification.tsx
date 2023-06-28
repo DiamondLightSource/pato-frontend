@@ -143,7 +143,7 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
               </option>
             ))}
           </Select>
-          <MotionPagination
+          <Flipper
             disabled={!data || data.total < 1}
             startFrom='start'
             page={classPage}
@@ -151,7 +151,6 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
             total={pageAmount}
           />
         </HStack>
-        <Flipper startFrom='start' page={classPage} onChange={setClassPage} total={pageAmount} />
       </Stack>
       <Divider />
       {isLoading ? (
