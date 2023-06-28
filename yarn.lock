@@ -4229,33 +4229,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:4.29.17":
-  version: 4.29.17
-  resolution: "@tanstack/query-core@npm:4.29.17"
-  checksum: 0440d58a566fc3d6791a27eae439f497acc0142cb629ca0fb6e536f9c0a29d150b816ae33c9375411582da0b849a2ef141ef3b2284b8b313d5a4d6671b2548a3
+"@tanstack/query-core@npm:4.29.19":
+  version: 4.29.19
+  resolution: "@tanstack/query-core@npm:4.29.19"
+  checksum: 91a79dbebebc139d118542a5fe83fb54a6f6448bbe1563db1a0bed0c6d44e1d023613efde3c4ac747c72d067110013ac56f90611bf8affc390eda1ac3f99066e
   languageName: node
   linkType: hard
 
-"@tanstack/react-query-devtools@npm:^4.29.18":
-  version: 4.29.18
-  resolution: "@tanstack/react-query-devtools@npm:4.29.18"
+"@tanstack/react-query-devtools@npm:^4.29.19":
+  version: 4.29.19
+  resolution: "@tanstack/react-query-devtools@npm:4.29.19"
   dependencies:
     "@tanstack/match-sorter-utils": ^8.7.0
     superjson: ^1.10.0
     use-sync-external-store: ^1.2.0
   peerDependencies:
-    "@tanstack/react-query": 4.29.18
+    "@tanstack/react-query": 4.29.19
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: ea3a691cd4b24d143098802ded1bd2dbb9088da7bc7d6e81446219e768a951ac110dc5ead820c696183ed5f94ea7bbb18f51adaf9d7146a6a628479873a9d25f
+  checksum: f077028c109da225b8e8e907a8fb4ad47d3049f6f5d16e5613adb135c531abf62c8975384edbb4d502bb064c98c3c513ee4f3df7c686198e644808311145e79c
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^4.29.18":
-  version: 4.29.18
-  resolution: "@tanstack/react-query@npm:4.29.18"
+"@tanstack/react-query@npm:^4.29.19":
+  version: 4.29.19
+  resolution: "@tanstack/react-query@npm:4.29.19"
   dependencies:
-    "@tanstack/query-core": 4.29.17
+    "@tanstack/query-core": 4.29.19
     use-sync-external-store: ^1.2.0
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -4266,7 +4266,7 @@ __metadata:
       optional: true
     react-native:
       optional: true
-  checksum: 6b585569e695c074f722f03db636299f82495a893206923329ddbc74a9f273b0cf0e10b9e560dc15dcd5927c4259b57db6a79173880ed7f29688bbdda5368b9e
+  checksum: 2780ac35b4d1dabcd3e708b95891376e7e609109270d40442b33f4747c508c23e46bcadc692f997f81d38f62b5ab31f8e42bc9a785dfa4afe0c390adb6f37e52
   languageName: node
   linkType: hard
 
@@ -4759,7 +4759,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
+"@types/node@npm:*, @types/node@npm:^20.3.2":
   version: 20.3.2
   resolution: "@types/node@npm:20.3.2"
   checksum: 5929ce2b9b12b1e2a2304a0921a953c72a81f5753ad39ac43b99ce6312fbb2b4fb5bc6b60d64a2550704e3223cd5de1299467d36085ac69888899db978f2653a
@@ -4770,13 +4770,6 @@ __metadata:
   version: 16.18.37
   resolution: "@types/node@npm:16.18.37"
   checksum: ac9549a48ded76f99185e0bdd3f52af202229688d0000af250ce4060e22991cb0e2f950c5de25125ef6221cb092ebdf195eb2e9edfc0a49623252c73be2fa0e0
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^18.16.18":
-  version: 18.16.18
-  resolution: "@types/node@npm:18.16.18"
-  checksum: d32d8a0a04cd3f5ecb361bcb42f3a07623881ac90d680e06bf626defb3c663a94860d11690babe607cfe67265eceeb8a59ba5fe40c0e49f5a1b01e0088640469
   languageName: node
   linkType: hard
 
@@ -7691,9 +7684,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"diamond-components@npm:^0.2.14":
-  version: 0.2.14
-  resolution: "diamond-components@npm:0.2.14"
+"diamond-components@npm:^0.2.15":
+  version: 0.2.15
+  resolution: "diamond-components@npm:0.2.15"
   dependencies:
     "@visx/axis": ^3.1.0
     "@visx/event": ^3.0.1
@@ -7714,7 +7707,7 @@ __metadata:
     react: ^18.2.0
     react-dom: ^18.2.0
     react-icons: ^4.6.0
-  checksum: 7118b230568149329a162ec6ff5f05a2bc15058e14faf0f690de0d0cd578030ca5cdf417c9087a88aad1cf7cf74b683fe990130b403bf613d5d5b076e7fe8a65
+  checksum: 7a70e693db5680320155dcb4b643d284dce50387f8eff68d0c4baf5e0eaac84ec0b403d84675ad417f468a5da053e3ddb57ca6d6fc97fc580f7a6a2a88214bd4
   languageName: node
   linkType: hard
 
@@ -12375,13 +12368,13 @@ __metadata:
     "@fullcalendar/timegrid": ^6.1.8
     "@pmmmwh/react-refresh-webpack-plugin": ^0.5.10
     "@svgr/webpack": ^8.0.1
-    "@tanstack/react-query": ^4.29.18
-    "@tanstack/react-query-devtools": ^4.29.18
+    "@tanstack/react-query": ^4.29.19
+    "@tanstack/react-query-devtools": ^4.29.19
     "@testing-library/jest-dom": ^5.16.5
     "@testing-library/react": ^14.0.0
     "@testing-library/user-event": ^14.4.3
     "@types/jest": ^29.5.2
-    "@types/node": ^18.16.18
+    "@types/node": ^20.3.2
     "@types/react": ^18.2.14
     "@types/react-dom": ^18.2.6
     babel-loader: ^9.1.2
@@ -12393,7 +12386,7 @@ __metadata:
     case-sensitive-paths-webpack-plugin: ^2.4.0
     css-loader: ^6.8.1
     css-minimizer-webpack-plugin: ^5.0.1
-    diamond-components: ^0.2.14
+    diamond-components: ^0.2.15
     dotenv: ^16.3.1
     dotenv-expand: ^10.0.0
     eslint: ^8.43.0
@@ -12421,11 +12414,11 @@ __metadata:
     react-app-polyfill: ^3.0.0
     react-dev-utils: ^12.0.1
     react-dom: ^18.2.0
-    react-hook-form: ^7.45.0
+    react-hook-form: ^7.45.1
     react-icons: ^4.10.1
     react-refresh: ^0.14.0
     react-router-dom: ^6.14.0
-    resolve: ^1.22.2
+    resolve: ^1.22.3
     resolve-url-loader: ^5.0.0
     sass-loader: ^13.3.2
     semver: ^7.5.3
@@ -12434,7 +12427,7 @@ __metadata:
     terser-webpack-plugin: ^5.3.9
     ts-jest: ^29.1.0
     ts-node: ^10.9.1
-    typescript: ^5.1.3
+    typescript: ^5.1.5
     webpack: ^5.88.0
     webpack-dev-server: ^4.15.1
     webpack-manifest-plugin: ^5.0.0
@@ -13642,12 +13635,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^7.45.0":
-  version: 7.45.0
-  resolution: "react-hook-form@npm:7.45.0"
+"react-hook-form@npm:^7.45.1":
+  version: 7.45.1
+  resolution: "react-hook-form@npm:7.45.1"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18
-  checksum: 3e35253f0efb0f77f5036c74f85cbdd425adb2fad20a14fc692d573fe552b3d9b7e7ac22193cd767f265fa292c33383d8721cfbdcc5ae41910a35a1ba3655f66
+  checksum: 3abe1dcf449a3d438b4e5403d93d1502f6dab05afd5c5215f0fc88a32f3d06e7f4b77bee75479359c22a418af6ea0f52711478c73773cb5fd0f43da50669aa17
   languageName: node
   linkType: hard
 
@@ -14037,7 +14030,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@npm:^1.14.2, resolve@npm:^1.19.0, resolve@npm:^1.20.0, resolve@npm:^1.22.1, resolve@npm:^1.22.2":
+"resolve@npm:^1.14.2, resolve@npm:^1.19.0, resolve@npm:^1.20.0, resolve@npm:^1.22.1, resolve@npm:^1.22.3":
   version: 1.22.3
   resolution: "resolve@npm:1.22.3"
   dependencies:
@@ -14063,7 +14056,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@patch:resolve@^1.14.2#~builtin<compat/resolve>, resolve@patch:resolve@^1.19.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.2#~builtin<compat/resolve>":
+"resolve@patch:resolve@^1.14.2#~builtin<compat/resolve>, resolve@patch:resolve@^1.19.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.3#~builtin<compat/resolve>":
   version: 1.22.3
   resolution: "resolve@patch:resolve@npm%3A1.22.3#~builtin<compat/resolve>::version=1.22.3&hash=c3c19d"
   dependencies:
@@ -15522,23 +15515,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.1.3":
-  version: 5.1.3
-  resolution: "typescript@npm:5.1.3"
+"typescript@npm:^5.1.5":
+  version: 5.1.5
+  resolution: "typescript@npm:5.1.5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: d9d51862d98efa46534f2800a1071a613751b1585dc78884807d0c179bcd93d6e9d4012a508e276742f5f33c480adefc52ffcafaf9e0e00ab641a14cde9a31c7
+  checksum: 0eef8699e05ae767096924dbed633c340b4d36e953bb8ed87fb12e9dd9dcea5055ceac7182c614a556dbd346a8a82df799d330e1e286ae66e17c84e1710f6a6f
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^5.1.3#~builtin<compat/typescript>":
-  version: 5.1.3
-  resolution: "typescript@patch:typescript@npm%3A5.1.3#~builtin<compat/typescript>::version=5.1.3&hash=5da071"
+"typescript@patch:typescript@^5.1.5#~builtin<compat/typescript>":
+  version: 5.1.5
+  resolution: "typescript@patch:typescript@npm%3A5.1.5#~builtin<compat/typescript>::version=5.1.5&hash=5da071"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 6f0a9dca6bf4ce9dcaf4e282aade55ef4c56ecb5fb98d0a4a5c0113398815aea66d871b5611e83353e5953a19ed9ef103cf5a76ac0f276d550d1e7cd5344f61e
+  checksum: 12ff5d14888805f24479e54bc8a3f83647107a6345f6c29dffcd429fb345be55f584a37e262cca58a0105203e41d4cb4e31b1b9096c9abeca0e2ace8eb00935e
   languageName: node
   linkType: hard
 

@@ -81,7 +81,7 @@ const GenericListing = ({ headers, heading, makePathCallback }: TableProps) => {
       {data.total ? (
         <Pagination
           limit={data.limit}
-          value={page}
+          page={page}
           onPageChange={setPage}
           onItemCountChange={setItemsPerPage}
           total={data.total}

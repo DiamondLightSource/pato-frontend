@@ -14,9 +14,11 @@ const Footer = () => (
       </Link>
     </Text>
     <Spacer />
-    <Link as={LinkRouter} to='/feedback' color='diamond.400'>
-      Feedback
-    </Link>
+    {process.env.REACT_APP_ENABLE_FEEDBACK === "true" && (
+      <Link as={LinkRouter} to='/feedback' color='diamond.400'>
+        Feedback
+      </Link>
+    )}
   </HStack>
 );
 
