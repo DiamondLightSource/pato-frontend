@@ -18,11 +18,13 @@ const Form = ({ children, onClose, onSubmit, ...props }: FormProps) => {
     [onSubmit]
   );
   return (
-    <Box {...props}>
+    <Box>
       <form onSubmit={handleSubmit}>
-        <Box py={2}>{children}</Box>
+        <Box p={3} bg='diamond.75'>
+          {children}
+        </Box>
         <Divider />
-        <HStack py={2} spacing={3}>
+        <HStack px={4} py={2} spacing={3}>
           <Spacer />
           <Button variant='outline' onClick={onClose}>
             Cancel

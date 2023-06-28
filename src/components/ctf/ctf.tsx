@@ -59,13 +59,13 @@ const CTF = ({ parentId, parentType, onGraphClicked }: CTFProps) => {
       </HStack>
       <Divider />
       {isLoading ? (
-        <Skeleton h='20vh' />
+        <Skeleton h='300px' />
       ) : (
         <Stack
           w='100%'
           py={2}
           direction={{ base: "column", md: "row" }}
-          h={{ base: "50vh", md: "20vh" }}
+          h={{ base: "50vh", md: "300px" }}
         >
           <PlotContainer title='Astigmatism'>
             <ScatterPlot
