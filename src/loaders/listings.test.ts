@@ -1,4 +1,4 @@
-import { handleGroupClicked, listingLoader } from "loaders/listings";
+import { checkListingChanged, handleGroupClicked, listingLoader } from "loaders/listings";
 import { server } from "mocks/server";
 import { rest } from "msw";
 import { queryClient } from "utils/test-utils";
@@ -66,5 +66,22 @@ describe("Listing Data", () => {
     expect(handleGroupClicked({ experimentTypeName: "invalid", dataCollectionGroupId: 1 })).toBe(
       "1/spa"
     );
+  });
+
+  it("should not fire loader again if URLs are the same", () => {
+    const oldUrl = new URL("http://localhost/proposals");
+    expect(checkListingChanged(oldUrl, oldUrl)).toBe(false);
+  });
+
+  it("should not fire loader if old URL has no search params", () => {
+    const oldUrl = new URL("http://localhost/proposals");
+    const newUrl = new URL("http://localhost/proposals?page=90&limit=20");
+    expect(checkListingChanged(oldUrl, newUrl)).toBe(false);
+  });
+
+  it("should fire loader if search params are different", () => {
+    const oldUrl = new URL("http://localhost/proposals?page=89&limit=20");
+    const newUrl = new URL("http://localhost/proposals?page=90&limit=20");
+    expect(checkListingChanged(oldUrl, newUrl)).toBe(true);
   });
 });

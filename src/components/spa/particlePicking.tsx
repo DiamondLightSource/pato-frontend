@@ -1,4 +1,13 @@
-import { Spacer, Divider, Heading, Checkbox, VStack, Grid, Skeleton, Stack } from "@chakra-ui/react";
+import {
+  Spacer,
+  Divider,
+  Heading,
+  Checkbox,
+  VStack,
+  Grid,
+  Skeleton,
+  Stack,
+} from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { client, prependApiUrl } from "utils/api/client";
 import { parseData } from "utils/generic";
@@ -33,7 +42,10 @@ interface FullParticleData {
   iceThickness: BoxPlotStats[];
 }
 
-const convertToBoxPlot = (data: components["schemas"]["RelativeIceThickness"], label: string): BoxPlotStats => ({
+const convertToBoxPlot = (
+  data: components["schemas"]["RelativeIceThickness"],
+  label: string
+): BoxPlotStats => ({
   min: data.minimum,
   max: data.maximum,
   median: data.median,
@@ -44,7 +56,9 @@ const convertToBoxPlot = (data: components["schemas"]["RelativeIceThickness"], l
 
 const fetchParticlePickingData = async (autoProcId: number, page: number) => {
   let data: FullParticleData = { particlePicker: null, total: null, summary: "", iceThickness: [] };
-  const response = await client.safeGet(`autoProc/${autoProcId}/particlePicker?page=${page - 1}&limit=1`);
+  const response = await client.safeGet(
+    `autoProc/${autoProcId}/particlePicker?page=${page - 1}&limit=1`
+  );
 
   if (response.status === 200 && response.data.items.length > 0) {
     const responseData = response.data.items[0] as ParticlePickingSchema;
@@ -53,10 +67,14 @@ const fetchParticlePickingData = async (autoProcId: number, page: number) => {
         iceThickness: [],
         particlePicker: parseData(responseData, particleConfig).info as Info[],
         total: response.data.total,
-        summary: prependApiUrl(`autoProc/${autoProcId}/particlePicker/${responseData.particlePickerId}/image`),
+        summary: prependApiUrl(
+          `autoProc/${autoProcId}/particlePicker/${responseData.particlePickerId}/image`
+        ),
       };
 
-      const fileData = await client.safeGet(`movies/${responseData.movieId}/iceThickness?getAverages=true`);
+      const fileData = await client.safeGet(
+        `movies/${responseData.movieId}/iceThickness?getAverages=true`
+      );
 
       if (fileData.status === 200) {
         data.iceThickness = [
@@ -113,14 +131,22 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
         >
           Match Selected Motion Correction Page
         </Checkbox>
-        <Flipper disabled={lockPage} total={innerTotal} onChange={handlePageChanged} page={innerPage} />
+        <Flipper
+          disabled={lockPage}
+          total={innerTotal}
+          onChange={handlePageChanged}
+          page={innerPage}
+        />
       </Stack>
       <Divider />
       {data && data.particlePicker ? (
         <Grid py={2} templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }} gap={2}>
           <InfoGroup cols={1} info={data.particlePicker} />
           <PlotContainer title='Relative Ice Thickness' height='25vh'>
-            <BoxPlot data={data.iceThickness} options={{ y: { domain: { min: 120000, max: 160000 } } }} />
+            <BoxPlot
+              data={data.iceThickness}
+              options={{ y: { domain: { min: 120000, max: 160000 } } }}
+            />
           </PlotContainer>
           <ImageCard h='25vh' src={data.summary} title='Summary' />
         </Grid>
@@ -131,7 +157,9 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
           <Heading paddingTop={10} variant='notFound'>
             No Particle Picking Data Found
           </Heading>
-          <Heading variant='notFoundSubtitle'>This page does not contain any particle picking information.</Heading>
+          <Heading variant='notFoundSubtitle'>
+            This page does not contain any particle picking information.
+          </Heading>
         </VStack>
       )}
     </div>

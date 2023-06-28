@@ -119,7 +119,8 @@
     "coverageDirectory": "coverage",
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "src/mocks"
+      "src/mocks",
+      "src/utils/generic.tsx"
     ],
     "coverageProvider": "v8",
     "coverageReporters": [

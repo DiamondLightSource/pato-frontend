@@ -42,6 +42,13 @@ export const parseData = (rawData: Record<string, any>, config: DataConfig) => {
 
 const prettifyValue = (value: number | string, unit: string) => (value ? `${value} ${unit}` : "?");
 
+/**
+ * Converts a pascal case string to a "human" space separated string
+ *
+ * @param input Input pascal-case string
+ *
+ * @returns Space separated string
+ */
 const pascalToSpace = (input: string) => {
   return input.replace(/([A-Z])/g, " $1").replace(/^./, function (str) {
     return str.toUpperCase();
@@ -52,6 +59,14 @@ export function isObject(item: any) {
   return item && typeof item === "object" && !Array.isArray(item);
 }
 
+/**
+ * Merges two objects recursively, overwriting values in target if they exist in source, whilst maintaining all other attributes that are not mentioned in source
+ *
+ * @param target Base record
+ * @param source New record, that overwrites values from target
+ *
+ * @returns New record, merge of target and source
+ */
 export const mergeDeep = (target: Record<string, any>, source: Record<string, any>) => {
   let output = structuredClone(target);
   if (isObject(target) && isObject(source)) {
@@ -67,6 +82,13 @@ export const mergeDeep = (target: Record<string, any>, source: Record<string, an
   return output;
 };
 
+/**
+ * Rewrites ISO 8601 dates with timezones as regular GB localised date strings
+ *
+ * @param dateString Original date string
+ *
+ * @returns Shortened, GB localised date string
+ */
 export const parseDate = (dateString: string | undefined) => {
   const safeDate = dateString ?? "";
   const date = Date.parse(safeDate);

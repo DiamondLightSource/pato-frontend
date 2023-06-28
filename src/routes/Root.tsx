@@ -19,14 +19,6 @@ const handleLogout = () =>
     `${process.env.REACT_APP_AUTH_ENDPOINT}logout?redirect_uri=${window.location.href}`
   );
 
-const deployType = () => {
-  if (process.env.NODE_ENV === "development") {
-    return "dev";
-  }
-
-  return process.env.REACT_APP_STAGING_HOST === window.location.host ? "beta" : "production";
-};
-
 const links: LinkDescriptor[] = [
   { route: "/proposals", label: "Proposals" },
   { route: "/calendar", label: "Calendar" },
@@ -67,6 +59,13 @@ const Root = () => {
   const isFetching = useIsFetching();
 
   const parsedLinks = useMemo(() => (loaderData ? links : []), [loaderData]);
+  const deployType = useMemo(() => {
+    if (process.env.NODE_ENV === "development") {
+      return "dev";
+    }
+
+    return process.env.REACT_APP_STAGING_HOST === window.location.host ? "beta" : "production";
+  }, []);
 
   return (
     <div className='rootContainer'>
@@ -81,7 +80,7 @@ const Root = () => {
           <Box bg='rgba(0,0,0,0)' h='0.5em' />
         )}
       </Box>
-      <PhaseBanner deployType={deployType()} />
+      <PhaseBanner deployType={deployType} />
       <Box className='main'>
         <Outlet />
       </Box>

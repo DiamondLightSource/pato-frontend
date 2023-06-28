@@ -85,7 +85,14 @@ const fetchTomogramData = async (tomogram: TomogramResponse | null) => {
   return data;
 };
 
-const Tomogram = ({ autoProc, procJob, tomogram, status, onTomogramOpened, active = false }: TomogramProps) => {
+const Tomogram = ({
+  autoProc,
+  procJob,
+  tomogram,
+  status,
+  onTomogramOpened,
+  active = false,
+}: TomogramProps) => {
   const { data, isLoading } = useQuery({
     queryKey: ["tomogramAutoProc", autoProc.autoProcProgramId],
     queryFn: async () => await fetchTomogramData(tomogram),
@@ -112,12 +119,16 @@ const Tomogram = ({ autoProc, procJob, tomogram, status, onTomogramOpened, activ
               <Motion parentId={procJob.dataCollectionId} parentType='dataCollections' />
             </Box>
           ) : (
-            <Grid gap={3} templateColumns={{ "base": "", "2xl": "repeat(2, 1fr)" }}>
+            <Grid gap={3} templateColumns={{ base: "", "2xl": "repeat(2, 1fr)" }}>
               <Motion parentType='tomograms' parentId={data.tomogram.tomogramId} />
               <Box minW='0'>
                 <Heading variant='collection'>Alignment</Heading>
                 <Divider />
-                <Grid py={2} templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }} gap={2}>
+                <Grid
+                  py={2}
+                  templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}
+                  gap={2}
+                >
                   <GridItem h='20vh' colSpan={{ base: 2, md: 1 }}>
                     <InfoGroup info={data.tomogram.info} />
                   </GridItem>
@@ -137,7 +148,11 @@ const Tomogram = ({ autoProc, procJob, tomogram, status, onTomogramOpened, activ
                       <CardBody pt={0}>
                         <HStack mx='auto' w='auto' h='100%'>
                           <VStack w='50%' h='100%'>
-                            <ImageCard p={0} borderColor='transparent' src={`${data.centralSlice}?denoised=true`} />
+                            <ImageCard
+                              p={0}
+                              borderColor='transparent'
+                              src={`${data.centralSlice}?denoised=true`}
+                            />
                             <Text fontSize={13}>Denoised</Text>
                           </VStack>
                           <Divider orientation='vertical' />
