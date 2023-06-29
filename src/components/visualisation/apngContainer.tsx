@@ -6,7 +6,6 @@ import {
   SliderThumb,
   HStack,
   Spacer,
-  ResponsiveValue,
   Text,
   Button,
   Icon,
@@ -17,18 +16,22 @@ import {
   NumberInput,
   Divider,
   ButtonGroup,
+  BoxProps,
 } from "@chakra-ui/react";
 import { cloneElement, useEffect, useMemo, useRef, useState } from "react";
 import { MdFastForward, MdFastRewind, MdPause, MdPlayArrow } from "react-icons/md";
-import { ApngProps } from "./apng";
+import { ApngProps } from "diamond-components";
 
-export interface ApngContainerProps {
-  width?: ResponsiveValue<string | number | "auto">;
-  height?: ResponsiveValue<string | number | "auto">;
+export interface ApngContainerProps extends BoxProps {
   children: React.ReactElement<ApngProps> | React.ReactElement<ApngProps>[];
 }
 
-const APNGContainer = ({ width = "100%", height = "64vh", children }: ApngContainerProps) => {
+const APNGContainer = ({
+  width = "100%",
+  height = "64vh",
+  children,
+  ...props
+}: ApngContainerProps) => {
   const [frameLength, setFrameLength] = useState<number>();
   const [frameIndex, setFrameIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
@@ -56,7 +59,7 @@ const APNGContainer = ({ width = "100%", height = "64vh", children }: ApngContai
   }, [frameIndex, playing, frametime, frameLength, playIncrement, playForward]);
 
   return (
-    <Box h={height} w={width} px={4} pt={4} pb='0'>
+    <Box h={height} w={width} px={4} pt={4} pb='0' {...props}>
       <HStack h='90%'>
         {(Array.isArray(children) ? children : [children]).map((child, i) => (
           <Box key={i} h='100%' w='100%'>
