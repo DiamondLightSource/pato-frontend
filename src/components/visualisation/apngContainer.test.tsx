@@ -1,7 +1,21 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { renderWithProviders } from "utils/test-utils";
-import APNGViewer from "components/visualisation/apng";
 import APNGContainer from "./apngContainer";
+import { APNGViewer, ApngProps } from "diamond-components";
+import { useEffect } from "react";
+
+jest.mock("diamond-components", () => ({
+  ...jest.requireActual("diamond-components"),
+  APNGViewer: ({ onFrameCountChanged, src }: ApngProps) => {
+    useEffect(() => {
+      if (onFrameCountChanged) {
+        onFrameCountChanged(3);
+      }
+    }, [onFrameCountChanged]);
+
+    return <p>{src}</p>;
+  },
+}));
 
 global.URL.createObjectURL = jest.fn(() => "http://localhost/noimage.png");
 
@@ -12,7 +26,7 @@ describe("APNG Container", () => {
         <APNGViewer src='tomograms/1/movie' />
       </APNGContainer>
     );
-    await screen.findByLabelText("Frame Image");
+    await screen.findByText("tomograms/1/movie");
   });
 
   it("should render multiple APNG children", async () => {
@@ -22,7 +36,7 @@ describe("APNG Container", () => {
         <APNGViewer src='tomograms/1/movie' />
       </APNGContainer>
     );
-    const apngs = await screen.findAllByLabelText("Frame Image");
+    const apngs = await screen.findAllByText("tomograms/1/movie");
 
     expect(apngs).toHaveLength(2);
   });
@@ -33,7 +47,7 @@ describe("APNG Container", () => {
         <APNGViewer src='tomograms/1/movie' />
       </APNGContainer>
     );
-    await screen.findByLabelText("Frame Image");
+    await screen.findByText("tomograms/1/movie");
 
     const playButton = screen.getByLabelText("Play");
     fireEvent.click(playButton);
@@ -51,7 +65,7 @@ describe("APNG Container", () => {
         <APNGViewer src='tomograms/1/movie' />
       </APNGContainer>
     );
-    await screen.findByLabelText("Frame Image");
+    await screen.findByText("tomograms/1/movie");
 
     fireEvent.click(screen.getByLabelText("Play"));
 
@@ -76,7 +90,7 @@ describe("APNG Container", () => {
         <APNGViewer src='tomograms/1/movie' />
       </APNGContainer>
     );
-    await screen.findByLabelText("Frame Image");
+    await screen.findByText("tomograms/1/movie");
 
     fireEvent.click(screen.getByLabelText("Play"));
     fireEvent.click(screen.getByLabelText("Pause"));
@@ -90,7 +104,7 @@ describe("APNG Container", () => {
         <APNGViewer src='tomograms/1/movie' />
       </APNGContainer>
     );
-    await screen.findByLabelText("Frame Image");
+    await screen.findByText("tomograms/1/movie");
 
     const slider = screen.getByRole("slider");
     expect(slider).toHaveAttribute("aria-valuemax", "3");

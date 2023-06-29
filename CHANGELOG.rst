@@ -3,11 +3,35 @@ Changelog
 ==========
 
 ++++++++++
+v1.1.0 (04/07/2023)
+++++++++++
+
+**Added**
+
+- Feedback page
+
+**Changed**
+
+- Common components moved to external library
+- Pagination is not hidden when no pages are available
+
+++++++++++
 v1.0.1 (27/06/2023)
 ++++++++++
 
 **Changed**
 
+- Row components do not "spill" over boundaries of parent box when reducing page width
+
+++++++++++
+v1.0.0 (20/06/2023)
+++++++++++
+
+**Changed**
+
+- Improved data decimation algorithm
+- Fixes decimation case where points are needlessly omitted
+- Displays message rather than ommitting whole classification row if no data is available
 - Row components do not "spill" over boundaries of parent box when reducing page width
 
 ++++++++++

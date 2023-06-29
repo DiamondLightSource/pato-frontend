@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { BarStats } from "schema/interfaces";
+import { BarStats } from "diamond-components";
 import { client } from "utils/api/client";
 
 const setHistogram = (

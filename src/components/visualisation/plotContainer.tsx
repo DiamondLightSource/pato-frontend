@@ -15,10 +15,9 @@ import {
 } from "@chakra-ui/react";
 
 import { ParentSize } from "@visx/responsive";
-import { BaseCardProp } from "schema/interfaces";
+import { BaseCardProp } from "diamond-components";
 import { cloneElement, ReactElement } from "react";
-import { ScatterProps } from "components/plots/scatter";
-import { BarProps } from "components/plots/bar";
+import { ScatterProps, BarProps } from "diamond-components";
 
 export interface PlotContainerProps extends BaseCardProp {
   /** Child plot */

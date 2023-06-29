@@ -91,7 +91,7 @@ describe("GenericListing", () => {
     }));
 
     await screen.findByText(/no data found/i);
-    expect(screen.queryByText(/items per page/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/page 1 out of 0/i)).not.toBeInTheDocument();
   });
 
   it("should call navigation callback when row is clicked", async () => {

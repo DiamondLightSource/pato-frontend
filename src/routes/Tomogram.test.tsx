@@ -3,7 +3,7 @@ import { renderWithRoute } from "utils/test-utils";
 import { TomogramPage } from "routes/Tomogram";
 import { TomogramResponse } from "loaders/tomogram";
 import { CollectionData } from "schema/interfaces";
-import { ApngProps } from "components/visualisation/apng";
+import { ApngProps } from "diamond-components";
 import { TomogramProps } from "components/tomogram/main";
 import { AccordionItem } from "@chakra-ui/react";
 
@@ -12,7 +12,11 @@ type LoaderReturn = Awaited<TomogramResponse>;
 const searchMap = new Map();
 searchMap.set("onlyTomograms", false);
 
-jest.mock("components/visualisation/apng", () => (props: ApngProps) => <p>{props.src}</p>);
+jest.mock("diamond-components", () => ({
+  ...jest.requireActual("diamond-components"),
+  APNGViewer: (props: ApngProps) => <p>{props.src}</p>,
+}));
+
 jest.mock("components/tomogram/main", () => ({
   Tomogram: (props: TomogramProps) => (
     <AccordionItem>

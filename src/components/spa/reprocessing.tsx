@@ -1,8 +1,17 @@
-import { Text, Checkbox, VStack, Grid, GridItem } from "@chakra-ui/react";
-import { useCallback, useState } from "react";
+import {
+  Text,
+  Checkbox,
+  VStack,
+  Grid,
+  GridItem,
+  NumberInput,
+  NumberInputField,
+} from "@chakra-ui/react";
+import { useCallback } from "react";
 import { FieldSet } from "components/form/fieldset";
 import { Form } from "components/form/form";
-import { Dropdown, FormItem, NumericInput } from "components/form/input";
+import { Dropdown, FormItem, NumericStepper } from "components/form/input";
+import { useForm } from "react-hook-form";
 
 interface RelionProps {
   procJobId: number;
@@ -21,14 +30,18 @@ const motionCorrectionBinningValues = [
 ];
 
 const RelionReprocessing = ({ procJobId }: RelionProps) => {
-  const [calculateAuto, setCalculateAuto] = useState(false);
+  // WIP, do not use yet!
+  //const [calculateAuto, setCalculateAuto] = useState(false);
+  const calculateAuto = true;
 
-  const handleSubmit = useCallback((formData: Record<string, any>) => {
+  const { handleSubmit, register } = useForm();
+
+  const onSubmit = useCallback((formData: Record<string, any>) => {
     console.log(formData);
   }, []);
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit(onSubmit)}>
       <Grid py={2} templateColumns='repeat(2, 1fr)' gap={2}>
         <GridItem>
           <FieldSet title='Experiment'>
@@ -41,16 +54,25 @@ const RelionReprocessing = ({ procJobId }: RelionProps) => {
                 <Dropdown name='voltage' values={voltageValues} />
               </FormItem>
               <FormItem label='Spherical Aberration' unit='mm'>
-                <Dropdown name='sphericalAberration' values={sphericalAberrationValues} />
+                <Dropdown {...register("sphericalAberration")} values={sphericalAberrationValues} />
               </FormItem>
               <FormItem label='Motion Correction Binning'>
-                <Dropdown name='motionCorBinning' values={motionCorrectionBinningValues} />
+                <Dropdown
+                  {...register("motionCorBinning")}
+                  values={motionCorrectionBinningValues}
+                />
               </FormItem>
               <FormItem label='Pixel Size' unit='Å/pixel'>
-                <NumericInput name='pixelSize' precision={3} defaultValue={0.831} />
+                <NumberInput size='sm' precision={3} defaultValue={0.831}>
+                  <NumberInputField bg='white' {...register("pixelSize", { required: true })} />
+                  <NumericStepper />
+                </NumberInput>
               </FormItem>
               <FormItem label='Dose per Frame' unit='e⁻/Å²'>
-                <NumericInput name='pixelSize' precision={3} defaultValue={1} />
+                <NumberInput size='sm' precision={3} defaultValue={1}>
+                  <NumberInputField bg='white' {...register("dosePerFrame", { required: true })} />
+                  <NumericStepper />
+                </NumberInput>
               </FormItem>
             </VStack>
           </FieldSet>
@@ -60,7 +82,7 @@ const RelionReprocessing = ({ procJobId }: RelionProps) => {
             <VStack spacing={4}>
               <Grid w='100%' py={2} templateColumns='repeat(2, 1fr)' gap={4}>
                 <VStack spacing='0'>
-                  <Checkbox w='100%' name='gainRef'>
+                  <Checkbox w='100%' {...register("gainRef")}>
                     Use crYOLO
                   </Checkbox>
                   <Text paddingLeft='2.1em' fontSize='xs' color='diamond.300'>
@@ -68,11 +90,7 @@ const RelionReprocessing = ({ procJobId }: RelionProps) => {
                   </Text>
                 </VStack>
                 <VStack spacing='0'>
-                  <Checkbox
-                    w='100%'
-                    onChange={() => setCalculateAuto(!calculateAuto)}
-                    name='phasePlate'
-                  >
+                  <Checkbox w='100%' {...register("phasePlate")}>
                     Calculate for Me
                   </Checkbox>
                   <Text paddingLeft='2.1em' fontSize='xs' color='diamond.300'>
@@ -81,23 +99,38 @@ const RelionReprocessing = ({ procJobId }: RelionProps) => {
                 </VStack>
               </Grid>
               <FormItem label='Minimum Diameter' unit='Å'>
-                <NumericInput name='minimumDiameter' defaultValue={100} />
+                <NumberInput size='sm' isDisabled={calculateAuto} defaultValue={100}>
+                  <NumberInputField bg='white' {...register("minimumDiameter")} />
+                  <NumericStepper />
+                </NumberInput>
               </FormItem>
               <FormItem label='Maximum Diameter' unit='Å'>
-                <NumericInput name='maximumDiameter' defaultValue={140} />
+                <NumberInput size='sm' isDisabled={calculateAuto} defaultValue={140}>
+                  <NumberInputField bg='white' {...register("maximumDiameter")} />
+                  <NumericStepper />
+                </NumberInput>
               </FormItem>
               <FormItem label='Mask Diameter' unit='Å'>
-                <NumericInput disabled={calculateAuto} name='maskDiameter' defaultValue={154} />
+                <NumberInput size='sm' isDisabled={calculateAuto} defaultValue={154}>
+                  <NumberInputField bg='white' {...register("maskDiameter")} />
+                  <NumericStepper />
+                </NumberInput>
               </FormItem>
               <FormItem label='Box Size' helperText='Box size before binning' unit='Pixels'>
-                <NumericInput disabled={calculateAuto} name='boxSize' defaultValue={204} />
+                <NumberInput size='sm' isDisabled={calculateAuto} defaultValue={204}>
+                  <NumberInputField bg='white' {...register("boxSize")} />
+                  <NumericStepper />
+                </NumberInput>
               </FormItem>
               <FormItem
                 label='Downsample Box Size'
                 helperText='Box size after binning'
                 unit='Pixels'
               >
-                <NumericInput disabled={calculateAuto} name='downBoxSize' defaultValue={48} />
+                <NumberInput size='sm' isDisabled={calculateAuto} defaultValue={48}>
+                  <NumberInputField bg='white' {...register("downBoxSize")} />
+                  <NumericStepper />
+                </NumberInput>
               </FormItem>
             </VStack>
           </FieldSet>
@@ -105,21 +138,21 @@ const RelionReprocessing = ({ procJobId }: RelionProps) => {
         <GridItem>
           <FieldSet title='Classification'>
             <Grid py={2} templateColumns='repeat(2, 1fr)' gap={2}>
-              <Checkbox defaultChecked={true} name='2dClassification'>
+              <Checkbox defaultChecked={true} {...register("2dClassification")}>
                 Do 2D Classification
               </Checkbox>
-              <Checkbox defaultChecked={true} name='3dClassification'>
+              <Checkbox defaultChecked={true} {...register("3dClassification")}>
                 Do 3D Classification
               </Checkbox>
-              <Checkbox name='bestFSC'>Best Initial Model from FSC</Checkbox>
+              <Checkbox {...register("bestFSC")}>Best Initial Model from FSC</Checkbox>
             </Grid>
           </FieldSet>
         </GridItem>
         <GridItem>
           <FieldSet title='Miscellaneous'>
             <Grid py={2} templateColumns='repeat(2, 1fr)' gap={2}>
-              <Checkbox name='secondPass'>Do Second Pass</Checkbox>
-              <Checkbox name='stopAfterCTF'>Stop After CTF Estimation</Checkbox>
+              <Checkbox {...register("secondPass")}>Do Second Pass</Checkbox>
+              <Checkbox {...register("stopAfterCTF")}>Stop After CTF Estimation</Checkbox>
             </Grid>
           </FieldSet>
         </GridItem>

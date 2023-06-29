@@ -1,6 +1,6 @@
 import { fireEvent, screen } from "@testing-library/react";
 import { renderWithProviders } from "utils/test-utils";
-import { Dropdown, FormItem, NumericInput } from "components/form/input";
+import { Dropdown, FormItem } from "components/form/input";
 
 describe("Form", () => {
   it("should render provided combobox options", () => {
@@ -37,11 +37,5 @@ describe("Form", () => {
     );
 
     expect(screen.getByText("Helper Text")).toBeInTheDocument();
-  });
-
-  it("should render default value in numeric input", () => {
-    renderWithProviders(<NumericInput defaultValue={900} precision={3} name='test' />);
-
-    expect(screen.getByDisplayValue("900.000")).toBeInTheDocument();
   });
 });
