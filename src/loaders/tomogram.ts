@@ -10,9 +10,11 @@ import { QueryClient } from "@tanstack/react-query";
 type TomogramFullResponse = components["schemas"]["TomogramFullResponse"];
 
 export interface TomogramResponse {
+  /** Data collection */
   collection: CollectionData;
   total: number;
   page: number;
+  /** Tomograms belonging to data collection (one per autoproc program) */
   tomograms: TomogramFullResponse[] | null;
 }
 

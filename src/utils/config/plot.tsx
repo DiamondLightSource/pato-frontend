@@ -1,4 +1,4 @@
-import { ScatterPlotOptions } from "schema/interfaces";
+import { ScatterPlotOptions } from "diamond-components";
 
 export const driftPlotOptions: ScatterPlotOptions = {
   x: {

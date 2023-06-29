@@ -12,9 +12,9 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { Suspense } from "react";
-import { MotionPagination } from "components/motion/pagination";
 import React from "react";
 import { MdOpenInNew } from "react-icons/md";
+import { Flipper } from "diamond-components";
 const MolstarWrapper = React.lazy(() => import("components/molstar/molstar"));
 
 export interface MolstarModalProps {
@@ -46,7 +46,7 @@ const MolstarModal = ({ autoProcId, classId, page, pageCount, onChange }: Molsta
             {isOpen && (
               <Suspense>
                 <MolstarWrapper autoProcId={autoProcId} classId={classId}>
-                  <MotionPagination size='md' total={pageCount} page={page} onChange={onChange} />
+                  <Flipper size='md' total={pageCount} page={page} onChange={onChange} />
                 </MolstarWrapper>
               </Suspense>
             )}

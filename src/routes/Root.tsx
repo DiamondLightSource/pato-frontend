@@ -1,17 +1,28 @@
-import { Box, HStack, Tag, Text, Link } from "@chakra-ui/react";
+import { Box, HStack, Tag, Text, Link, Progress } from "@chakra-ui/react";
 import { Outlet, useLoaderData } from "react-router-dom";
 import { Footer } from "components/navigation/footer";
-import { Navbar } from "components/navigation/navbar";
-import { AuthState } from "schema/interfaces";
+import { Breadcrumbs } from "components/navigation/breadcrumbs";
+import { useIsFetching } from "@tanstack/react-query";
+import { LinkDescriptor, Navbar, User, AuthState } from "diamond-components";
+import { useMemo } from "react";
 import "styles/main.css";
 
-const deployType = () => {
-  if (process.env.NODE_ENV === "development") {
-    return "dev";
-  }
+const handleLogin = () =>
+  window.location.assign(
+    `${process.env.REACT_APP_AUTH_ENDPOINT}authorise?redirect_uri=${encodeURIComponent(
+      window.location.href
+    )}&responseType=code`
+  );
 
-  return process.env.REACT_APP_STAGING_HOST === window.location.host ? "beta" : "production";
-};
+const handleLogout = () =>
+  window.location.assign(
+    `${process.env.REACT_APP_AUTH_ENDPOINT}logout?redirect_uri=${window.location.href}`
+  );
+
+const links: LinkDescriptor[] = [
+  { route: "/proposals", label: "Proposals" },
+  { route: "/calendar", label: "Calendar" },
+];
 
 const PhaseBanner = ({ deployType }: { deployType: "dev" | "production" | "beta" }) => {
   if (deployType === "production") {
@@ -45,11 +56,31 @@ const PhaseBanner = ({ deployType }: { deployType: "dev" | "production" | "beta"
 
 const Root = () => {
   const loaderData = useLoaderData() as AuthState | null;
+  const isFetching = useIsFetching();
+
+  const parsedLinks = useMemo(() => (loaderData ? links : []), [loaderData]);
+  const deployType = useMemo(() => {
+    if (process.env.NODE_ENV === "development") {
+      return "dev";
+    }
+
+    return process.env.REACT_APP_STAGING_HOST === window.location.host ? "beta" : "production";
+  }, []);
 
   return (
     <div className='rootContainer'>
-      <Navbar user={loaderData} />
-      <PhaseBanner deployType={deployType()} />
+      <Box>
+        <Navbar links={parsedLinks} logo='/images/diamondgs.png'>
+          <User user={loaderData} onLogin={handleLogin} onLogout={handleLogout} />
+        </Navbar>
+        <Breadcrumbs />
+        {isFetching !== 0 ? (
+          <Progress h='0.5em' isIndeterminate size='sm' />
+        ) : (
+          <Box bg='rgba(0,0,0,0)' h='0.5em' />
+        )}
+      </Box>
+      <PhaseBanner deployType={deployType} />
       <Box className='main'>
         <Outlet />
       </Box>

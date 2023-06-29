@@ -1,9 +1,7 @@
 import { Divider, Heading, HStack, Spacer, Box } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { createSearchParams, useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
-import { Pagination } from "components/navigation/pagination";
-import { Table } from "components/visualisation/table";
-import { DebouncedInput } from "components/input/debounced";
+import { Pagination, DebouncedInput, Table } from "diamond-components";
 
 export interface TableProps {
   headers: {
@@ -69,9 +67,9 @@ const GenericListing = ({ headers, heading, makePathCallback }: TableProps) => {
         <Heading>{heading}</Heading>
         <Spacer />
         <DebouncedInput
+          onChangeEnd={handleSearch}
           borderColor='gray.600'
           bg='diamond.50'
-          onChangeEnd={handleSearch}
           w={{ base: "auto", md: "20%" }}
           size='sm'
           placeholder='Search...'
@@ -80,15 +78,13 @@ const GenericListing = ({ headers, heading, makePathCallback }: TableProps) => {
       <Divider mb={4} />
       <Table data={data.data} headers={headers} label={heading} onClick={handleRowClicked} />
       <Divider />
-      {data.total ? (
-        <Pagination
-          limit={data.limit}
-          value={page}
-          onPageChange={setPage}
-          onItemCountChange={setItemsPerPage}
-          total={data.total}
-        />
-      ) : null}
+      <Pagination
+        limit={data.limit}
+        page={page}
+        onPageChange={setPage}
+        onItemCountChange={setItemsPerPage}
+        total={data.total}
+      />
     </Box>
   );
 };

@@ -17,20 +17,18 @@ import {
   CardBody,
   Text,
 } from "@chakra-ui/react";
-import { ImageCard } from "components/visualisation/image";
-import { InfoGroup } from "components/visualisation/infogroup";
 import { PlotContainer } from "components/visualisation/plotContainer";
 import { Motion } from "components/motion/motion";
 import { useCallback } from "react";
 import { client, prependApiUrl } from "utils/api/client";
-import { TomogramData, BasePoint, BaseProcessingJobProps, DataConfig } from "schema/interfaces";
+import { TomogramData, BaseProcessingJobProps, DataConfig } from "schema/interfaces";
 import { CTF } from "components/ctf/ctf";
-import { Scatter } from "components/plots/scatter";
 import { components } from "schema/main";
 import { ProcessingTitle } from "components/visualisation/processingTitle";
 import { parseData } from "utils/generic";
 import { MdOpenInNew } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
+import { ScatterPlot, InfoGroup, ImageCard, BasePoint } from "diamond-components";
 
 const tomogramConfig: DataConfig = {
   include: [
@@ -171,7 +169,7 @@ const Tomogram = ({
                   </GridItem>
                   <GridItem colSpan={{ base: 2, md: 1 }} minW='100%' h='22vh'>
                     <PlotContainer title='Shift Plot'>
-                      <Scatter data={data.shiftPlot} />
+                      <ScatterPlot data={data.shiftPlot} />
                     </PlotContainer>
                   </GridItem>
                   <GridItem colSpan={2} h='22vh'>

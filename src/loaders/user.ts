@@ -1,4 +1,4 @@
-import { AuthState } from "schema/interfaces";
+import { AuthState } from "diamond-components";
 import { client } from "utils/api/client";
 
 const getUser = async () => {

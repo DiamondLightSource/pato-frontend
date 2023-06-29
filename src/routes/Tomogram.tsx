@@ -24,15 +24,13 @@ import {
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useLoaderData, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Tomogram } from "components/tomogram/main";
-import { MotionPagination } from "components/motion/pagination";
-import { InfoGroup } from "components/visualisation/infogroup";
 import { MdList, MdRedo } from "react-icons/md";
 import React from "react";
 import { TomogramResponse } from "loaders/tomogram";
 import APNGContainer from "components/visualisation/apngContainer";
+import { Flipper, InfoGroup, APNGViewer } from "diamond-components";
 
 const TomogramReprocessing = React.lazy(() => import("components/tomogram/reprocessing"));
-const APNGViewer = React.lazy(() => import("components/visualisation/apng"));
 
 const TomogramPage = () => {
   const params = useParams();
@@ -124,7 +122,7 @@ const TomogramPage = () => {
                 </Button>
               </Tooltip>
               <Divider orientation='vertical' h={10} />
-              <MotionPagination
+              <Flipper
                 size='md'
                 onChange={updateCollection}
                 page={currentIndex}
@@ -200,7 +198,7 @@ const TomogramPage = () => {
             <ModalBody h={{ base: "90vh", md: "60vh" }}>
               <HStack>
                 <Spacer />
-                <MotionPagination
+                <Flipper
                   size='md'
                   onChange={updateCollection}
                   page={currentIndex}

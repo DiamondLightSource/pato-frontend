@@ -206,20 +206,6 @@ export const handlers = [
     }
   }),
 
-  rest.get("http://localhost/tomograms/:tomogramId/movie", (req, res, ctx) => {
-    const apng =
-      "iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAMAAAC6sdbXAAAACGFjVEwAAAADAAAAAM7tusAAAAAMUExURQMDAwAAAJKSkv8AAGIb5p4AAAABdFJOUwBA5thmAAAAGmZjVEwAAAAAAAAABQAAAAUAAAAAAAAAAAAUAGQAANMipokAAAAOSURBVAjXY2AEAQYcJAABlQAaPUDJKQAAABpmY1RMAAAAAQAAAAUAAAAFAAAAAAAAAAAAFABkAABIUUxdAAAAEmZkQVQAAAACCNdjYAYBBhwkAASDAEy9AgcTAAAAGmZjVEwAAAADAAAABQAAAAUAAAAAAAAAAAAUAGQAAKXHn7QAAAASZmRBVAAAAAQI12NgAgEGHCQAAwwAMyEXezIAAAAbdEVYdFNvZnR3YXJlAEFQTkcgQXNzZW1ibGVyIDIuN8Hj04gAAAAASUVORK5CYII=";
-    const buffer = Buffer.from(apng, "base64");
-
-    return res(
-      ctx.status(200),
-      ctx.set("Content-Type", "image/png"),
-      ctx.body(buffer),
-      ctx.delay(0),
-      ctx.set("Content-Length", buffer.length.toString())
-    );
-  }),
-
   rest.get("http://localhost/movies/:movieId/iceThickness", (req, res, ctx) => {
     const dummy = { minimum: 1, maximum: 10, median: 5, q1: 3, q3: 6 };
     return res(ctx.status(200), ctx.delay(0), ctx.json({ current: dummy, avg: dummy }));

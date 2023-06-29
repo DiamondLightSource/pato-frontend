@@ -36,7 +36,7 @@ const spaCollectionConfig: DataConfig = {
       { name: "detectorMode" },
     ],
   ],
-  root: [...(collectionConfig.root ?? []), "fileTemplate", "imageDirectory"],
+  root: [...collectionConfig.root!, "fileTemplate", "imageDirectory"],
 };
 
 const getAcquisitionSoftware = (fileTemplate: string) => {

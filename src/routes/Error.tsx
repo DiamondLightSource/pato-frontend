@@ -2,7 +2,7 @@ import { Heading, Link, VStack, Box, Text, Code } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouteError } from "react-router-dom";
 import { Footer } from "components/navigation/footer";
-import { Navbar } from "components/navigation/navbar";
+import { Navbar } from "diamond-components";
 
 interface ErrorType {
   status: number;
@@ -32,7 +32,7 @@ const Error = () => {
 
   return (
     <div className='rootContainer'>
-      <Navbar />
+      <Navbar logo={"/images/diamondgs.png"} />
       <Box marginTop={12} className='main'>
         <VStack h='100%' justifyContent='center'>
           <Heading color='diamond.800'>{heading}</Heading>
