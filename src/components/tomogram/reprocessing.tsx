@@ -22,7 +22,7 @@ const TomogramReprocessing = ({ pixelSize, collectionId, onClose }: Reprocessing
 
   const onSubmit = handleSubmit((formData) => {
     client
-      .post(`dataCollections/${collectionId}/tomograms/reprocessing`, formData)
+      .post(`dataCollections/${collectionId}/reprocessing/tomograms`, formData)
       .then((response) => {
         if (response.status !== 202) {
           toast({
@@ -49,13 +49,13 @@ const TomogramReprocessing = ({ pixelSize, collectionId, onClose }: Reprocessing
       <Grid py={2} templateColumns='repeat(2, 1fr)' gap={2}>
         <FormItem label='Pixel Size' unit='Å'>
           <NumberInput size='sm' precision={0} defaultValue={pixelSize ?? 1}>
-            <NumberInputField bg='white' {...register("pixelSize", { required: true })} />
+            <NumberInputField {...register("pixelSize", { required: true })} />
             <NumericStepper />
           </NumberInput>
         </FormItem>
         <FormItem label='Tilt Offset' unit='°'>
           <NumberInput size='sm' precision={2} defaultValue={1}>
-            <NumberInputField bg='white' {...register("tiltOffset", { required: true })} />
+            <NumberInputField {...register("tiltOffset", { required: true })} />
             <NumericStepper />
           </NumberInput>
         </FormItem>

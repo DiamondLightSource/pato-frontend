@@ -11,7 +11,7 @@ jest.mock("@chakra-ui/react", () => ({
   createStandaloneToast: () => ({ toast: mockToast }),
 }));
 
-describe("Tomogram Reprocessing", () => {
+describe("SPA Reprocessing", () => {
   it("should not close when not successful", async () => {
     const reprocessingCallback = jest.fn();
     server.use(

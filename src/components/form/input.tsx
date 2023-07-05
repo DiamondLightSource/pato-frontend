@@ -3,13 +3,11 @@ import {
   Text,
   FormControl,
   FormLabel,
-  Select,
   HStack,
   NumberIncrementStepper,
   NumberInputStepper,
   NumberDecrementStepper,
   FormHelperText,
-  SelectProps,
   FormErrorMessage,
   FormControlProps,
   Spacer,
@@ -28,7 +26,7 @@ export interface FormItemProps extends FormControlProps {
   error?: string;
 }
 
-export interface DropDownProps extends SelectProps {
+export interface DropDownProps {
   values: Option[];
 }
 
@@ -51,12 +49,14 @@ const FormItem = ({ unit, label, children, helperText, error, ...props }: FormIt
   </FormControl>
 );
 
-const Dropdown = ({ values, ...props }: DropDownProps) => (
-  <Select bg='white' size='sm' {...props}>
+const Options = ({ values }: DropDownProps) => (
+  <>
     {values.map((item) => (
-      <option key={item.key}>{item.value}</option>
+      <option key={item.key} value={item.key}>
+        {item.value}
+      </option>
     ))}
-  </Select>
+  </>
 );
 
 const NumericStepper = () => (
@@ -66,4 +66,4 @@ const NumericStepper = () => (
   </NumberInputStepper>
 );
 
-export { FormItem, NumericStepper, Dropdown };
+export { FormItem, NumericStepper, Options };

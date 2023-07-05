@@ -89,12 +89,19 @@ export interface paths {
      */
     get: operations["get_tomograms_dataCollections__collectionId__tomograms_get"];
   };
-  "/dataCollections/{collectionId}/tomograms/reprocessing": {
+  "/dataCollections/{collectionId}/reprocessing/tomograms": {
     /**
-     * Initiate Reprocessing
+     * Initiate Tomogram Reprocessing
      * @description Initiate data reprocessing
      */
-    post: operations["initiate_reprocessing_dataCollections__collectionId__tomograms_reprocessing_post"];
+    post: operations["initiate_tomogram_reprocessing_dataCollections__collectionId__reprocessing_tomograms_post"];
+  };
+  "/dataCollections/{collectionId}/reprocessing/spa": {
+    /**
+     * Initiate Spa Reprocessing
+     * @description Initiate data reprocessing
+     */
+    post: operations["initiate_spa_reprocessing_dataCollections__collectionId__reprocessing_spa_post"];
   };
   "/dataCollections/{collectionId}/processingJobs": {
     /**
@@ -236,6 +243,20 @@ export interface paths {
      * @description Get particle count histogram
      */
     get: operations["get_particle_count_autoProc__autoProcId__particles_get"];
+  };
+  "/feedback": {
+    /**
+     * Post Feedback
+     * @description Post user feedback to configured email address
+     */
+    post: operations["post_feedback_feedback_post"];
+  };
+  "/processingJob/{processingJobId}/parameters": {
+    /**
+     * Initiate Tomogram Reprocessing
+     * @description Get processing job parameters
+     */
+    get: operations["initiate_tomogram_reprocessing_processingJob__processingJobId__parameters_get"];
   };
 }
 
@@ -628,6 +649,17 @@ export interface components {
       /** Y */
       y: number;
     };
+    /** FeedbackForm */
+    FeedbackForm: {
+      /** Fullname */
+      fullName: string;
+      /** Email */
+      email: string;
+      /** Comments */
+      comments: string;
+      /** Useragent */
+      userAgent: string;
+    };
     /** FullMovie */
     FullMovie: {
       CTF: components["schemas"]["CTF"];
@@ -915,13 +947,6 @@ export interface components {
       /** Maximum */
       maximum: number;
     };
-    /** ReprocessingParameters */
-    ReprocessingParameters: {
-      /** Pixelsize */
-      pixelSize: number;
-      /** Tiltoffset */
-      tiltOffset: number;
-    };
     /** ReprocessingResponse */
     ReprocessingResponse: {
       /** Processingjobid */
@@ -933,6 +958,91 @@ export interface components {
      * @enum {string}
      */
     RotationAxisEnum: "Omega" | "Kappa" | "Phi";
+    /** SPAReprocessingParameters */
+    SPAReprocessingParameters: {
+      /**
+       * Voltage
+       * @default 300
+       * @enum {integer}
+       */
+      voltage?: 200 | 300;
+      /**
+       * Sphericalaberration
+       * @default 2.7
+       */
+      sphericalAberration?: number;
+      /**
+       * Phaseplateused
+       * @default false
+       */
+      phasePlateUsed?: boolean;
+      /** Pixelsize */
+      pixelSize: number;
+      /**
+       * Motioncorrectionbinning
+       * @default 1
+       * @enum {integer}
+       */
+      motionCorrectionBinning?: 1 | 2;
+      /** Doseperframe */
+      dosePerFrame: number;
+      /**
+       * Stopafterctfestimation
+       * @default false
+       */
+      stopAfterCtfEstimation?: boolean;
+      /**
+       * Usecryolo
+       * @description Use crYOLO with autopick. Academic users only.
+       * @default false
+       */
+      useCryolo?: boolean;
+      /**
+       * Doclass3D
+       * @default true
+       */
+      doClass3D?: boolean;
+      /**
+       * Doclass2D
+       * @default true
+       */
+      doClass2D?: boolean;
+      /** Maskdiameter */
+      maskDiameter: number;
+      /** Boxsize */
+      boxSize: number;
+      /** Downsampleboxsize */
+      downsampleBoxSize: number;
+      /**
+       * Performcalculation
+       * @default true
+       */
+      performCalculation?: boolean;
+      /**
+       * Usefsccriterion
+       * @default false
+       */
+      useFscCriterion?: boolean;
+      /**
+       * Perform2Dsecondpass
+       * @default true
+       */
+      perform2DSecondPass?: boolean;
+      /**
+       * Perform3Dsecondpass
+       * @default false
+       */
+      perform3DSecondPass?: boolean;
+      /** Minimumdiameter */
+      minimumDiameter?: number;
+      /** Maximumdiameter */
+      maximumDiameter?: number;
+      /**
+       * Gainreferencefile
+       * @default gain.mrc
+       */
+      gainReferenceFile?: string;
+    };
     /** SessionResponse */
     SessionResponse: {
       /**
@@ -1025,7 +1135,7 @@ export interface components {
        */
       archived: number;
       /** Collectiongroups */
-      collectionGroups: number;
+      collectionGroups?: number;
       /** Datacollectiongroupid */
       dataCollectionGroupId?: number;
     };
@@ -1065,6 +1175,13 @@ export interface components {
       /** Status */
       status: string;
       Tomogram?: components["schemas"]["TomogramResponse"];
+    };
+    /** TomogramReprocessingParameters */
+    TomogramReprocessingParameters: {
+      /** Pixelsize */
+      pixelSize: number;
+      /** Tiltoffset */
+      tiltOffset: number;
     };
     /** TomogramResponse */
     TomogramResponse: {
@@ -1130,6 +1247,7 @@ export interface operations {
         maxEndDate?: string;
         minStartDate?: string;
         maxStartDate?: string;
+        countCollections?: boolean;
         page?: number;
         limit?: number;
       };
@@ -1180,9 +1298,11 @@ export interface operations {
      * @description Get motion correction data for the given tomogram
      */
     parameters: {
+      /** @description Get index closest to the middle. Limit is set to 1, page is ignored */
       /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
       /** @description Number of results to show */
       query?: {
+        getMiddle?: Record<string, never>;
         page?: number;
         limit?: number;
       };
@@ -1211,6 +1331,9 @@ export interface operations {
      * @description Get tomogram central slice image
      */
     parameters: {
+      query?: {
+        denoised?: Record<string, never>;
+      };
       path: {
         tomogramId: number;
       };
@@ -1232,6 +1355,9 @@ export interface operations {
      * @description Get tomogram movie image
      */
     parameters: {
+      query?: {
+        denoised?: Record<string, never>;
+      };
       path: {
         tomogramId: number;
       };
@@ -1426,9 +1552,9 @@ export interface operations {
       };
     };
   };
-  initiate_reprocessing_dataCollections__collectionId__tomograms_reprocessing_post: {
+  initiate_tomogram_reprocessing_dataCollections__collectionId__reprocessing_tomograms_post: {
     /**
-     * Initiate Reprocessing
+     * Initiate Tomogram Reprocessing
      * @description Initiate data reprocessing
      */
     parameters: {
@@ -1438,7 +1564,37 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["ReprocessingParameters"];
+        "application/json": components["schemas"]["TomogramReprocessingParameters"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        content: {
+          "application/json": components["schemas"]["ReprocessingResponse"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  initiate_spa_reprocessing_dataCollections__collectionId__reprocessing_spa_post: {
+    /**
+     * Initiate Spa Reprocessing
+     * @description Initiate data reprocessing
+     */
+    parameters: {
+      path: {
+        collectionId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SPAReprocessingParameters"];
       };
     };
     responses: {
@@ -1853,6 +2009,7 @@ export interface operations {
       query?: {
         sortBy?: "class" | "particles" | "resolution";
         classType?: "2d" | "3d";
+        excludeUnselected?: boolean;
         page?: number;
         limit?: number;
       };
@@ -2025,6 +2182,58 @@ export interface operations {
       200: {
         content: {
           "application/json": Record<string, never>;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  post_feedback_feedback_post: {
+    /**
+     * Post Feedback
+     * @description Post user feedback to configured email address
+     */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["FeedbackForm"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": Record<string, never>;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  initiate_tomogram_reprocessing_processingJob__processingJobId__parameters_get: {
+    /**
+     * Initiate Tomogram Reprocessing
+     * @description Get processing job parameters
+     */
+    parameters: {
+      path: {
+        processingJobId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": {
+            [key: string]: string | undefined;
+          };
         };
       };
       /** @description Validation Error */
