@@ -18,10 +18,12 @@ import { useForm } from "react-hook-form";
 import { client } from "utils/api/client";
 import { baseToast } from "diamond-components";
 import { components } from "schema/main";
+import { required } from "utils/validation";
 
 interface RelionProps {
   collectionId: number;
   defaultValues: Partial<components["schemas"]["SPAReprocessingParameters"]>;
+  onClose: () => void;
 }
 
 const voltageValues = [
@@ -36,11 +38,15 @@ const motionCorrectionBinningValues = [
   { key: 2, value: "2" },
 ];
 
-const RelionReprocessing = ({ collectionId, defaultValues }: RelionProps) => {
-  const [calculateAuto, setCalculateAuto] = useState(false);
-  const [stopAfterCTF, setStopAfterCTF] = useState(false);
+const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProps) => {
+  const [calculateAuto, setCalculateAuto] = useState(!!defaultValues.performCalculation);
+  const [stopAfterCTF, setStopAfterCTF] = useState(!!defaultValues.stopAfterCtfEstimation);
 
-  const { handleSubmit, register } = useForm({ defaultValues });
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm({ defaultValues });
   const { toast } = createStandaloneToast();
 
   const onSubmit = handleSubmit((formData) => {
@@ -57,12 +63,19 @@ const RelionReprocessing = ({ collectionId, defaultValues }: RelionProps) => {
           ...baseToast,
           title: "Reprocessing succesfully initiated!",
         });
+
+        if (onClose) {
+          onClose();
+        }
       }
     });
   });
 
-  // Thought about moving this to a generator function, but there are so many edge cases,
-  // behaviours and different fields that it wouldn't make much sense.
+  /*
+   * TODO: Thought about moving this to a generator function, but there are so many edge cases,
+   * behaviours and different fields that it wouldn't make much sense.
+   * Possibly in the future?
+   */
   return (
     <Form onSubmit={onSubmit}>
       <Grid py={2} templateColumns='repeat(2, 1fr)' gap={2}>
@@ -72,33 +85,33 @@ const RelionReprocessing = ({ collectionId, defaultValues }: RelionProps) => {
               <Grid w='100%' py={2} templateColumns='repeat(2, 1fr)' gap={4}>
                 <Checkbox {...register("phasePlateUsed")}>Phase Plate Used</Checkbox>
               </Grid>
-              <FormItem label='Gain Reference File'>
+              <FormItem label='Gain Reference File' error={errors.gainReferenceFile}>
                 <Input size='sm' defaultValue='gain.mrc' {...register("gainReferenceFile")} />
               </FormItem>
-              <FormItem label='Voltage' unit='kV'>
+              <FormItem label='Voltage' unit='kV' error={errors.voltage}>
                 <Select size='sm' {...register("voltage", { valueAsNumber: true })}>
                   <Options values={voltageValues} />
                 </Select>
               </FormItem>
-              <FormItem label='Spherical Aberration' unit='mm'>
+              <FormItem label='Spherical Aberration' unit='mm' error={errors.sphericalAberration}>
                 <Select size='sm' {...register("sphericalAberration", { valueAsNumber: true })}>
                   <Options values={sphericalAberrationValues} />
                 </Select>
               </FormItem>
-              <FormItem label='Motion Correction Binning'>
+              <FormItem label='Motion Correction Binning' error={errors.motionCorrectionBinning}>
                 <Select size='sm' {...register("motionCorrectionBinning", { valueAsNumber: true })}>
                   <Options values={motionCorrectionBinningValues}></Options>
                 </Select>
               </FormItem>
-              <FormItem label='Pixel Size' unit='Å/pixel'>
+              <FormItem label='Pixel Size' unit='Å/pixel' error={errors.pixelSize}>
                 <NumberInput size='sm' precision={3}>
-                  <NumberInputField {...register("pixelSize", { required: true })} />
+                  <NumberInputField {...register("pixelSize", { required })} />
                   <NumericStepper />
                 </NumberInput>
               </FormItem>
-              <FormItem label='Dose per Frame' unit='e⁻/Å²'>
+              <FormItem label='Dose per Frame' unit='e⁻/Å²' error={errors.dosePerFrame}>
                 <NumberInput size='sm' precision={3}>
-                  <NumberInputField {...register("dosePerFrame", { required: true })} />
+                  <NumberInputField {...register("dosePerFrame", { required })} />
                   <NumericStepper />
                 </NumberInput>
               </FormItem>
@@ -132,25 +145,30 @@ const RelionReprocessing = ({ collectionId, defaultValues }: RelionProps) => {
                   </Text>
                 </VStack>
               </Grid>
-              <FormItem label='Minimum Diameter' unit='Å'>
+              <FormItem label='Minimum Diameter' unit='Å' error={errors.minimumDiameter}>
                 <NumberInput size='sm'>
                   <NumberInputField {...register("minimumDiameter")} />
                   <NumericStepper />
                 </NumberInput>
               </FormItem>
-              <FormItem label='Maximum Diameter' unit='Å'>
+              <FormItem label='Maximum Diameter' unit='Å' error={errors.maximumDiameter}>
                 <NumberInput size='sm'>
                   <NumberInputField {...register("maximumDiameter")} />
                   <NumericStepper />
                 </NumberInput>
               </FormItem>
-              <FormItem label='Mask Diameter' unit='Å'>
+              <FormItem label='Mask Diameter' unit='Å' error={errors.maskDiameter}>
                 <NumberInput size='sm' isDisabled={calculateAuto}>
                   <NumberInputField {...register("maskDiameter")} />
                   <NumericStepper />
                 </NumberInput>
               </FormItem>
-              <FormItem label='Box Size' helperText='Box size before binning' unit='Pixels'>
+              <FormItem
+                label='Box Size'
+                helperText='Box size before binning'
+                unit='Pixels'
+                error={errors.boxSize}
+              >
                 <NumberInput size='sm' isDisabled={calculateAuto}>
                   <NumberInputField {...register("boxSize")} />
                   <NumericStepper />
@@ -160,6 +178,7 @@ const RelionReprocessing = ({ collectionId, defaultValues }: RelionProps) => {
                 label='Downsample Box Size'
                 helperText='Box size after binning'
                 unit='Pixels'
+                error={errors.downsampleBoxSize}
               >
                 <NumberInput size='sm' isDisabled={calculateAuto}>
                   <NumberInputField {...register("downsampleBoxSize")} />

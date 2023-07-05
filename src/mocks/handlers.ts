@@ -370,7 +370,7 @@ export const handlers = [
     )
   ),
 
-  rest.post("http://localhost/dataCollections/1/reprocessing/tomograms", (req, res, ctx) =>
+  rest.post("http://localhost/dataCollections/:collectionId/reprocessing/:type", (req, res, ctx) =>
     res(ctx.status(202), ctx.json({ processingJobId: 1 }))
   ),
 

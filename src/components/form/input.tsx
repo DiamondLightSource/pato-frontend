@@ -12,6 +12,7 @@ import {
   FormControlProps,
   Spacer,
 } from "@chakra-ui/react";
+import { FieldError } from "react-hook-form";
 
 export interface Option {
   key: string | number;
@@ -23,7 +24,7 @@ export interface FormItemProps extends FormControlProps {
   label: string;
   children: ReactNode;
   helperText?: string;
-  error?: string;
+  error?: FieldError;
 }
 
 export interface DropDownProps {
@@ -43,7 +44,7 @@ const FormItem = ({ unit, label, children, helperText, error, ...props }: FormIt
         <Spacer />
       </HStack>
     </FormLabel>
-    <FormErrorMessage fontWeight='600'>{error}</FormErrorMessage>
+    <FormErrorMessage fontWeight='600'>{error && error.message}</FormErrorMessage>
     {children}
     {helperText && <FormHelperText fontSize='sm'>{helperText}</FormHelperText>}
   </FormControl>

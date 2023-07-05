@@ -154,7 +154,8 @@ const SpaPage = () => {
             <ModalBody p={0}>
               <RelionReprocessing
                 collectionId={loaderData.collection.dataCollectionId}
-                defaultValues={loaderData.jobParameters}
+                defaultValues={{ ...loaderData.jobParameters, stopAfterCtfEstimation: true }}
+                onClose={onClose}
               />
             </ModalBody>
           </ModalContent>
