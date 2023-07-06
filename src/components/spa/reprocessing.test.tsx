@@ -78,7 +78,7 @@ describe("SPA Reprocessing", () => {
     await waitFor(() => expect(reprocessingCallback).not.toBeCalled());
   });
 
-  it("should disable manual fields when stopping after CTF estimation", async () => {
+  it("should disable manual fields when stopping after CTF estimation", () => {
     const reprocessingCallback = jest.fn();
     renderWithProviders(
       <RelionReprocessing
@@ -90,5 +90,57 @@ describe("SPA Reprocessing", () => {
 
     expect(screen.getByRole("group", { name: /particle picking/i })).toHaveAttribute("disabled");
     expect(screen.getByRole("group", { name: /experiment/i })).not.toHaveAttribute("disabled");
+  });
+
+  it("should disable some manual fields when enabling auto calculation", () => {
+    const reprocessingCallback = jest.fn();
+    renderWithProviders(
+      <RelionReprocessing
+        collectionId={1}
+        defaultValues={{ performCalculation: true }}
+        onClose={reprocessingCallback}
+      />
+    );
+
+    expect(screen.getByRole("spinbutton", { name: "Box Size (Pixels)" })).toHaveAttribute(
+      "disabled"
+    );
+    expect(screen.getByRole("spinbutton", { name: /mask diameter \(å\)/i })).toHaveAttribute(
+      "disabled"
+    );
+    expect(
+      screen.getByRole("spinbutton", { name: /downsample box size \(pixels\)/i })
+    ).toHaveAttribute("disabled");
+  });
+
+  it("should disable manual fields when stopping after CTF estimation (on checkbox interaction)", () => {
+    const reprocessingCallback = jest.fn();
+    renderWithProviders(
+      <RelionReprocessing collectionId={1} defaultValues={{}} onClose={reprocessingCallback} />
+    );
+
+    fireEvent.click(screen.getByLabelText("Stop After CTF Estimation"));
+
+    expect(screen.getByRole("group", { name: /particle picking/i })).toHaveAttribute("disabled");
+    expect(screen.getByRole("group", { name: /experiment/i })).not.toHaveAttribute("disabled");
+  });
+
+  it("should disable some manual fields when enabling auto calculation (on checkbox interaction)", () => {
+    const reprocessingCallback = jest.fn();
+    renderWithProviders(
+      <RelionReprocessing collectionId={1} defaultValues={{}} onClose={reprocessingCallback} />
+    );
+
+    fireEvent.click(screen.getByLabelText("Calculate for Me"));
+
+    expect(screen.getByRole("spinbutton", { name: "Box Size (Pixels)" })).toHaveAttribute(
+      "disabled"
+    );
+    expect(screen.getByRole("spinbutton", { name: /mask diameter \(å\)/i })).toHaveAttribute(
+      "disabled"
+    );
+    expect(
+      screen.getByRole("spinbutton", { name: /downsample box size \(pixels\)/i })
+    ).toHaveAttribute("disabled");
   });
 });

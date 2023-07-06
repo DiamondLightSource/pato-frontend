@@ -102,20 +102,22 @@ const getSpaData = async (groupId: string) => {
 
         const parameters = response.data as Record<string, string>;
         const legibleParameters: Record<string, string | boolean> = {};
-        for (const [key, value] of Object.entries(parameters)) {
-          const config = spaReprocessingFieldConfig[key];
-          if (config) {
-            let newValue: string | boolean = value;
+        if (response.status === 200) {
+          for (const [key, value] of Object.entries(parameters)) {
+            const config = spaReprocessingFieldConfig[key];
+            if (config) {
+              let newValue: string | boolean = value;
 
-            if (config.alias === "gainReferenceFile") {
-              newValue = value.split("/").pop()!;
+              if (config.alias === "gainReferenceFile") {
+                newValue = value.split("/").pop()!;
+              } else {
+                newValue = config.isBool ? value === "1" : value;
+              }
+
+              legibleParameters[config.alias] = newValue;
             } else {
-              newValue = config.isBool ? value === "1" : value;
+              legibleParameters[key] = value;
             }
-
-            legibleParameters[config.alias] = newValue;
-          } else {
-            legibleParameters[key] = value;
           }
         }
 
