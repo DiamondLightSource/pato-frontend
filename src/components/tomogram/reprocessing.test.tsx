@@ -15,7 +15,7 @@ describe("Tomogram Reprocessing", () => {
   it("should not close when not successful", async () => {
     const reprocessingCallback = jest.fn();
     server.use(
-      rest.post("http://localhost/dataCollections/1/tomograms/reprocessing", (req, res, ctx) =>
+      rest.post("http://localhost/dataCollections/1/reprocessing/tomograms", (req, res, ctx) =>
         res.once(ctx.status(500), ctx.json({ detail: "some error message" }), ctx.delay(0))
       )
     );

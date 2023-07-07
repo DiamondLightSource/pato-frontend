@@ -117,7 +117,7 @@ const APNGContainer = ({
           min={1}
           max={200}
         >
-          <NumberInputField bg='white' />
+          <NumberInputField />
           <NumberInputStepper>
             <NumberIncrementStepper />
             <NumberDecrementStepper />

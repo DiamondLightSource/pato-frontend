@@ -42,7 +42,6 @@ export interface BaseProcessingJobProps {
   autoProc: AutoProcSchema;
   procJob: ProcessingJobSchema;
   status: string;
-  onReprocessingClicked?: (procJobId: number) => void;
   active: boolean;
 }
 

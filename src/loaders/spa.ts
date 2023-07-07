@@ -4,11 +4,12 @@ import { DataConfig, SpaCollectionData } from "schema/interfaces";
 import { components } from "schema/main";
 import { client } from "utils/api/client";
 import { buildEndpoint, includePage } from "utils/api/endpoint";
-import { collectionConfig } from "utils/config/parse";
+import { collectionConfig, spaReprocessingFieldConfig } from "utils/config/parse";
 import { parseData } from "utils/generic";
 
 type DataCollection = components["schemas"]["DataCollectionSummary"];
 type ProcessingJob = components["schemas"]["ProcessingJobResponse"];
+type ReprocessingParameters = Partial<components["schemas"]["SPAReprocessingParameters"]>;
 
 const spaCollectionConfig: DataConfig = {
   include: [
@@ -54,6 +55,7 @@ const getAcquisitionSoftware = (fileTemplate: string) => {
 export interface SpaResponse {
   collection: SpaCollectionData;
   jobs: ProcessingJob[] | null;
+  jobParameters: ReprocessingParameters;
 }
 
 const getSpaData = async (groupId: string) => {
@@ -95,9 +97,34 @@ const getSpaData = async (groupId: string) => {
       );
 
       if (jobsResponse.status === 200 && jobsResponse.data.items) {
+        const processingJobId = jobsResponse.data.items[0].ProcessingJob.processingJobId;
+        const response = await client.get(`processingJob/${processingJobId}/parameters`);
+
+        const parameters = response.data as Record<string, string>;
+        const legibleParameters: Record<string, string | boolean> = {};
+        if (response.status === 200) {
+          for (const [key, value] of Object.entries(parameters)) {
+            const config = spaReprocessingFieldConfig[key];
+            if (config) {
+              let newValue: string | boolean = value;
+
+              if (config.alias === "gainReferenceFile") {
+                newValue = value.split("/").pop()!;
+              } else {
+                newValue = config.isBool ? value === "1" : value;
+              }
+
+              legibleParameters[config.alias] = newValue;
+            } else {
+              legibleParameters[key] = value;
+            }
+          }
+        }
+
         return {
           collection: parsedCollectionData,
           jobs: jobsResponse.data.items,
+          jobParameters: legibleParameters,
         };
       }
     }

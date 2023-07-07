@@ -132,7 +132,6 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
           <Select
             isDisabled={!data || data.total < 1}
             aria-labelledby='sortlabel'
-            bg='white'
             onChange={(e) => setSortType(e.target.value as SortTypes)}
             size='xs'
             w='180px'
