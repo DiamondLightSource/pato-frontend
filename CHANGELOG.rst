@@ -10,6 +10,10 @@ v1.2.0 (11/07/2023)
 
 - SPA reprocessing (enabled)
 
+**Changed**
+
+- Page changes for motion correction and tomograms are now debounced
+
 ++++++++++
 v1.1.0 (04/07/2023)
 ++++++++++
