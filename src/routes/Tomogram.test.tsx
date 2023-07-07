@@ -101,7 +101,7 @@ describe("Tomogram Page", () => {
     await screen.findByText("Tilt Align 1");
     fireEvent.click(await screen.findByLabelText("Next Page"));
 
-    await waitFor(() => expect(router.state.navigation.location?.pathname).toBe("/2"));
+    await waitFor(() => expect(router.state.location.pathname).toBe("/2"));
 
     /*await waitFor(() =>
       expect(mockNavigate).toBeCalledWith({ pathname: "../2", search: "onlyTomograms=false" }, { relative: "path" })
