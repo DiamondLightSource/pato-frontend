@@ -11,7 +11,7 @@
     "@fullcalendar/react": "^6.1.8",
     "@fullcalendar/timegrid": "^6.1.8",
     "@tanstack/react-query": "^4.29.19",
-    "diamond-components": "^0.2.23",
+    "diamond-components": "^0.2.24",
     "framer-motion": "^10.12.18",
     "molstar": "^3.37.1",
     "react": "^18.2.0",
