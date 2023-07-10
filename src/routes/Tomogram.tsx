@@ -29,6 +29,7 @@ import React from "react";
 import { TomogramResponse } from "loaders/tomogram";
 import APNGContainer from "components/visualisation/apngContainer";
 import { Flipper, InfoGroup, APNGViewer } from "diamond-components";
+import { prependApiUrl } from "utils/api/client";
 
 const TomogramReprocessing = React.lazy(() => import("components/tomogram/reprocessing"));
 
@@ -46,14 +47,11 @@ const TomogramPage = () => {
 
   const onlyTomograms = useMemo(() => searchParams.get("onlyTomograms") === "true", [searchParams]);
   const currentIndex = useMemo(() => parseInt(params.collectionIndex ?? "1"), [params]);
-  const tomogramMovieSrc = useMemo(() => `tomograms/${openTomogram}/movie`, [openTomogram]);
+  const tomogramMovieSrc = useMemo(() => prependApiUrl(`tomograms/${openTomogram}/movie`), [openTomogram]);
 
-  const updateCollection = useCallback(
+  const handleCollectionChanged = useCallback(
     (page: number) => {
-      navigate(
-        { pathname: `../${page}`, search: `onlyTomograms=${onlyTomograms}` },
-        { relative: "path" }
-      );
+      navigate({ pathname: `../${page}`, search: `onlyTomograms=${onlyTomograms}` }, { relative: "path" });
     },
     [navigate, onlyTomograms]
   );
@@ -122,18 +120,13 @@ const TomogramPage = () => {
                 </Button>
               </Tooltip>
               <Divider orientation='vertical' h={10} />
-              <Flipper
-                size='md'
-                onChange={updateCollection}
-                page={currentIndex}
-                total={loaderData.total}
-              />
+              <Flipper size='md' onChangeEnd={handleCollectionChanged} defaultPage={currentIndex} total={loaderData.total} />
             </HStack>
           </Stack>
           <HStack w='100%'>
             <Heading color='diamond.300' size='sm'>
-              Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data
-              collection group <Code>{params.groupId}</Code>
+              Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data collection group{" "}
+              <Code>{params.groupId}</Code>
             </Heading>
             <Spacer />
             <Checkbox
@@ -200,8 +193,8 @@ const TomogramPage = () => {
                 <Spacer />
                 <Flipper
                   size='md'
-                  onChange={updateCollection}
-                  page={currentIndex}
+                  onChangeEnd={handleCollectionChanged}
+                  defaultPage={currentIndex}
                   total={loaderData.total}
                 />
               </HStack>

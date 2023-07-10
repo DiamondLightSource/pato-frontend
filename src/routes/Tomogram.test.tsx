@@ -6,6 +6,7 @@ import { CollectionData } from "schema/interfaces";
 import { ApngProps } from "diamond-components";
 import { TomogramProps } from "components/tomogram/main";
 import { AccordionItem } from "@chakra-ui/react";
+import { prependApiUrl } from "utils/api/client";
 
 type LoaderReturn = Awaited<TomogramResponse>;
 
@@ -100,7 +101,7 @@ describe("Tomogram Page", () => {
     await screen.findByText("Tilt Align 1");
     fireEvent.click(await screen.findByLabelText("Next Page"));
 
-    await waitFor(() => expect(router.state.navigation.location?.pathname).toBe("/2"));
+    await waitFor(() => expect(router.state.location.pathname).toBe("/2"));
 
     /*await waitFor(() =>
       expect(mockNavigate).toBeCalledWith({ pathname: "../2", search: "onlyTomograms=false" }, { relative: "path" })
@@ -139,11 +140,9 @@ describe("Tomogram Movie Modal", () => {
     await screen.findByText("Tilt Align 1");
     fireEvent.click(await screen.findByTestId(/view movie/i));
 
-    await screen.findAllByText("tomograms/1/movie");
-
     fireEvent.click(screen.getByRole("button", { name: /next page/i }));
 
-    await waitFor(() => expect(router.state.navigation.location?.pathname).toBe("/2"));
+    await waitFor(() => expect(router.state.location.pathname).toBe("/2"));
   });
 
   it("should display next tomogram movie if modal is open and next page is clicked", async () => {
@@ -153,11 +152,11 @@ describe("Tomogram Movie Modal", () => {
     await screen.findByText("Tilt Align 1");
     fireEvent.click(await screen.findByTestId(/view movie/i));
 
-    await screen.findAllByText("tomograms/1/movie");
+    await screen.findAllByText(prependApiUrl("tomograms/1/movie"));
 
     fireEvent.click(screen.getByRole("button", { name: /next page/i }));
 
-    await screen.findAllByText("tomograms/2/movie");
+    await screen.findAllByText(prependApiUrl("tomograms/2/movie"));
   });
 
   it("should close modal if most recent processing job is not a processed tomogram", async () => {
@@ -167,7 +166,7 @@ describe("Tomogram Movie Modal", () => {
     await screen.findByText("Tilt Align 1");
     fireEvent.click(await screen.findByTestId(/view movie/i));
 
-    await screen.findAllByText("tomograms/1/movie");
+    await screen.findAllByText(prependApiUrl("tomograms/1/movie"));
 
     fireEvent.click(screen.getByRole("button", { name: /next page/i }));
 
