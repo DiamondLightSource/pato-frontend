@@ -40,7 +40,11 @@ const spaCollectionConfig: DataConfig = {
   root: [...collectionConfig.root!, "fileTemplate", "imageDirectory"],
 };
 
-const getAcquisitionSoftware = (fileTemplate: string) => {
+const getAcquisitionSoftware = (fileTemplate: string | null) => {
+  if (!fileTemplate) {
+    return "";
+  }
+
   if (fileTemplate.includes("GridSquare_")) {
     return "EPU";
   }
@@ -70,7 +74,7 @@ const getSpaData = async (groupId: string) => {
     jobs: null,
   };
 
-  if (response.status === 200 && response.data.items && response.data.items[0].fileTemplate) {
+  if (response.status === 200 && response.data.items) {
     const data = response.data.items[0] as DataCollection;
     const parsedCollectionData = parseData(data, spaCollectionConfig) as SpaCollectionData;
 

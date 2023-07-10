@@ -90,10 +90,12 @@ const SpaPage = () => {
               <Code>{loaderData.collection.dataCollectionId}</Code>
             </Heading>
             <Spacer />
-            <Tag bg='diamond.100'>
-              <Icon as={MdFolder} />
-              <Text px={3} fontSize={12}>{`.../${loaderData.collection.fileTemplate}`}</Text>
-            </Tag>
+            {loaderData.collection.fileTemplate && (
+              <Tag bg='diamond.100'>
+                <Icon as={MdFolder} />
+                <Text px={3} fontSize={12}>{`.../${loaderData.collection.fileTemplate}`}</Text>
+              </Tag>
+            )}
           </HStack>
         </VStack>
       </HStack>
