@@ -13,6 +13,7 @@ v1.2.0 (11/07/2023)
 **Changed**
 
 - Page changes for motion correction and tomograms are now debounced
+- Fixes data collections with no file templates not appearing
 
 ++++++++++
 v1.1.0 (04/07/2023)
