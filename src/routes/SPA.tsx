@@ -27,39 +27,25 @@ import {
 } from "@chakra-ui/react";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { useLoaderData, useLocation, useNavigate, useParams } from "react-router-dom";
-import { components } from "schema/main";
 import { SPA } from "components/spa/main";
 import { MdFolder } from "react-icons/md";
 import { RelionReprocessing } from "components/spa/reprocessing";
 import { MdRedo } from "react-icons/md";
-import { SpaCollectionData } from "schema/interfaces";
 import React from "react";
 import { InfoGroup } from "diamond-components";
+import { SpaResponse } from "loaders/spa";
 
 const Statistics = React.lazy(() => import("components/spa/statistics"));
-type ProcessingJob = components["schemas"]["ProcessingJobResponse"];
 
 const SpaPage = () => {
   const params = useParams();
-  const loaderData = useLoaderData() as {
-    collection: SpaCollectionData;
-    jobs: ProcessingJob[] | null;
-  };
-  const [processingJobToEdit, setProcessingJobToEdit] = useState<number | null>(null);
+  const loaderData = useLoaderData() as SpaResponse;
   const [accordionIndex, setAccordionIndex] = useState<number | number[]>(0);
   const [tabIndex, setTabIndex] = useState(0);
 
   const navigate = useNavigate();
   const location = useLocation();
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const handleProcessingClicked = useCallback(
-    (procJobId: number) => {
-      setProcessingJobToEdit(procJobId);
-      onOpen();
-    },
-    [onOpen, setProcessingJobToEdit]
-  );
 
   useEffect(() => {
     if (location.hash === "#statistics") {
@@ -92,7 +78,7 @@ const SpaPage = () => {
             <Tag colorScheme='orange'>SPA</Tag>
             <Spacer />
             <Tooltip label='Run Reprocessing'>
-              <Button isDisabled>
+              <Button onClick={onOpen}>
                 <Icon as={MdRedo} />
               </Button>
             </Tooltip>
@@ -104,10 +90,12 @@ const SpaPage = () => {
               <Code>{loaderData.collection.dataCollectionId}</Code>
             </Heading>
             <Spacer />
-            <Tag bg='diamond.100'>
-              <Icon as={MdFolder} />
-              <Text px={3} fontSize={12}>{`.../${loaderData.collection.fileTemplate}`}</Text>
-            </Tag>
+            {loaderData.collection.fileTemplate && (
+              <Tag bg='diamond.100'>
+                <Icon as={MdFolder} />
+                <Text px={3} fontSize={12}>{`.../${loaderData.collection.fileTemplate}`}</Text>
+              </Tag>
+            )}
           </HStack>
         </VStack>
       </HStack>
@@ -131,7 +119,6 @@ const SpaPage = () => {
                     autoProc={job.AutoProcProgram}
                     procJob={job.ProcessingJob}
                     status={job.status}
-                    onReprocessingClicked={handleProcessingClicked}
                   />
                 ))}
               </Accordion>
@@ -157,7 +144,7 @@ const SpaPage = () => {
         </TabPanels>
       </Tabs>
 
-      {processingJobToEdit && (
+      {loaderData.collection.dataCollectionId && loaderData.jobs && (
         <Modal size='6xl' isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
@@ -167,7 +154,11 @@ const SpaPage = () => {
             </ModalHeader>
             <Divider />
             <ModalBody p={0}>
-              <RelionReprocessing procJobId={processingJobToEdit} />
+              <RelionReprocessing
+                collectionId={loaderData.collection.dataCollectionId}
+                defaultValues={{ ...loaderData.jobParameters }}
+                onClose={onClose}
+              />
             </ModalBody>
           </ModalContent>
         </Modal>

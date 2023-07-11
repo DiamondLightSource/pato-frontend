@@ -370,8 +370,12 @@ export const handlers = [
     )
   ),
 
-  rest.post("http://localhost/dataCollections/1/tomograms/reprocessing", (req, res, ctx) =>
+  rest.post("http://localhost/dataCollections/:collectionId/reprocessing/:type", (req, res, ctx) =>
     res(ctx.status(202), ctx.json({ processingJobId: 1 }))
+  ),
+
+  rest.get("http://localhost/processingJob/:procJobId/parameters", (req, res, ctx) =>
+    res(ctx.status(200), ctx.json({ do_class3d: "1", do_class2d: "0", Cs: "1" }))
   ),
 
   rest.get("http://localhost/proposals", (req, res, ctx) => {

@@ -23,7 +23,6 @@ const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
               parentType='autoProc'
             />
             <Motion
-              page={page}
               onPageChanged={setPage}
               onTotalChanged={setTotal}
               parentType='autoProc'

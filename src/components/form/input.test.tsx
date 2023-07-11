@@ -1,22 +1,24 @@
 import { fireEvent, screen } from "@testing-library/react";
 import { renderWithProviders } from "utils/test-utils";
-import { Dropdown, FormItem } from "components/form/input";
+import { FormItem, Options } from "components/form/input";
+import { Select } from "@chakra-ui/react";
 
 describe("Form", () => {
   it("should render provided combobox options", () => {
     renderWithProviders(
-      <Dropdown
-        name='dropdown'
-        values={[
-          { key: "test", value: "label" },
-          { key: "test2", value: "label2" },
-        ]}
-      ></Dropdown>
+      <Select>
+        <Options
+          values={[
+            { key: "test", value: "label" },
+            { key: "test2", value: "label2" },
+          ]}
+        ></Options>
+      </Select>
     );
 
-    expect(screen.getByDisplayValue("label")).toBeInTheDocument();
+    expect(screen.getByText("label")).toBeInTheDocument();
     fireEvent.change(screen.getByRole("combobox"), { target: { value: "label2" } });
-    expect(screen.getByDisplayValue("label2")).toBeInTheDocument();
+    expect(screen.getByText("label2")).toBeInTheDocument();
   });
 
   it("should render unit properly in form item", () => {

@@ -3,17 +3,16 @@ import {
   Text,
   FormControl,
   FormLabel,
-  Select,
   HStack,
   NumberIncrementStepper,
   NumberInputStepper,
   NumberDecrementStepper,
   FormHelperText,
-  SelectProps,
   FormErrorMessage,
   FormControlProps,
   Spacer,
 } from "@chakra-ui/react";
+import { FieldError } from "react-hook-form";
 
 export interface Option {
   key: string | number;
@@ -25,10 +24,10 @@ export interface FormItemProps extends FormControlProps {
   label: string;
   children: ReactNode;
   helperText?: string;
-  error?: string;
+  error?: FieldError;
 }
 
-export interface DropDownProps extends SelectProps {
+export interface DropDownProps {
   values: Option[];
 }
 
@@ -45,18 +44,20 @@ const FormItem = ({ unit, label, children, helperText, error, ...props }: FormIt
         <Spacer />
       </HStack>
     </FormLabel>
-    <FormErrorMessage fontWeight='600'>{error}</FormErrorMessage>
+    <FormErrorMessage fontWeight='600'>{error && error.message}</FormErrorMessage>
     {children}
     {helperText && <FormHelperText fontSize='sm'>{helperText}</FormHelperText>}
   </FormControl>
 );
 
-const Dropdown = ({ values, ...props }: DropDownProps) => (
-  <Select bg='white' size='sm' {...props}>
+const Options = ({ values }: DropDownProps) => (
+  <>
     {values.map((item) => (
-      <option key={item.key}>{item.value}</option>
+      <option key={item.key} value={item.key}>
+        {item.value}
+      </option>
     ))}
-  </Select>
+  </>
 );
 
 const NumericStepper = () => (
@@ -66,4 +67,4 @@ const NumericStepper = () => (
   </NumberInputStepper>
 );
 
-export { FormItem, NumericStepper, Dropdown };
+export { FormItem, NumericStepper, Options };

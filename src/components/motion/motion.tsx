@@ -26,7 +26,15 @@ import { client, prependApiUrl } from "utils/api/client";
 import { parseData } from "utils/generic";
 import { driftPlotOptions } from "utils/config/plot";
 import { useQuery } from "@tanstack/react-query";
-import { Flipper, ScatterPlot, InfoGroup, ImageCard, BasePoint, Info } from "diamond-components";
+import {
+  Flipper,
+  ScatterPlot,
+  InfoGroup,
+  ImageCard,
+  BasePoint,
+  Info,
+  FlipperProps,
+} from "diamond-components";
 
 interface MotionData {
   /** Total number of tilt alignment images available */
@@ -218,6 +226,19 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
     [onPageChanged, page]
   );
 
+  const flipperProps = useMemo(() => {
+    let base: FlipperProps = {
+      startFrom: parentType === "tomograms" ? "middle" : "end",
+      total: actualTotal,
+    };
+
+    if (page) {
+      return { ...base, page, onChange: handlePageChanged };
+    }
+
+    return { ...base, defaultPage: page, onChangeEnd: handlePageChanged };
+  }, [actualTotal, handlePageChanged, page, parentType]);
+
   useEffect(() => {
     if (data && data.motion) {
       const total = data.total || data.motion.rawTotal;
@@ -249,12 +270,7 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
               )}
             </Button>
           </Tooltip>
-          <Flipper
-            startFrom={parentType === "tomograms" ? "middle" : "end"}
-            total={actualTotal}
-            onChange={handlePageChanged}
-            page={innerPage}
-          />
+          <Flipper {...flipperProps} />
         </HStack>
       </Stack>
       <Divider />
