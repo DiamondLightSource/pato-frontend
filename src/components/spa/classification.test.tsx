@@ -49,7 +49,7 @@ describe("Classification", () => {
       expect(screen.getByLabelText("Batch Number Value")).toHaveTextContent("155");
     });
 
-    expect(screen.getByLabelText("Current Page")).toHaveValue("1");
+    expect(await screen.findByLabelText("Current Page")).toHaveValue("1");
   });
 
   it("should update information when new class is selected (2d)", async () => {
@@ -87,7 +87,7 @@ describe("Classification", () => {
     await screen.findByText("No Classes Found");
   });
 
-  it("should disable controls when no data is available", async () => {
+  it("should disable sorting controls when no data is available", async () => {
     server.use(
       rest.get("http://localhost/autoProc/:procId/classification", (req, res, ctx) =>
         res.once(ctx.status(404))
@@ -103,6 +103,20 @@ describe("Classification", () => {
     renderWithProviders(<Classification autoProcId={1} type='3d' />);
 
     await screen.findByText("Open 3D Visualisation");
+  });
+
+  it("should display pagination control when no data is available, albeit disabled", async () => {
+    server.use(
+      rest.get("http://localhost/autoProc/:procId/classification", (req, res, ctx) =>
+        res.once(ctx.status(404))
+      )
+    );
+
+    renderWithProviders(<Classification autoProcId={1} type='3d' />);
+
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: /next page/i })).toHaveAttribute("disabled")
+    );
   });
 
   it("should update information when new class is selected (3d)", async () => {

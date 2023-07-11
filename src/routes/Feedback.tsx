@@ -17,6 +17,7 @@ import { FormItem } from "components/form/input";
 import { useForm } from "react-hook-form";
 import { baseToast } from "diamond-components";
 import { client } from "utils/api/client";
+import { required } from "utils/validation";
 
 export interface FeedbackValues {
   fullName: string;
@@ -61,14 +62,10 @@ const FeedbackForm = () => {
       <HStack spacing={16} alignItems='start' flexWrap='wrap'>
         <Form onSubmit={onSubmit} p='0' flexGrow='1' flexBasis='300px'>
           <VStack gap={6}>
-            <FormItem
-              label='Full Name'
-              unit='required'
-              error={errors.fullName && errors.fullName.message}
-            >
+            <FormItem label='Full Name' unit='required' error={errors.fullName}>
               <Input
                 borderColor={errors.fullName && "red"}
-                {...register("fullName", { required: "Field is required" })}
+                {...register("fullName", { required })}
                 variant='hi-contrast'
               />
             </FormItem>
@@ -76,7 +73,7 @@ const FeedbackForm = () => {
               label='Email'
               unit='required'
               helperText='Address used for responses'
-              error={errors.email && errors.email.message}
+              error={errors.email}
             >
               <Input
                 borderColor={errors.email && "red"}
@@ -91,11 +88,11 @@ const FeedbackForm = () => {
               label='Comments'
               unit='required'
               helperText='General comments, such as issue details and suggestions'
-              error={errors.comments && errors.comments.message}
+              error={errors.comments}
             >
               <Textarea
                 borderColor={errors.comments && "red"}
-                {...register("comments", { required: "Field is required" })}
+                {...register("comments", { required })}
                 variant='hi-contrast'
               />
             </FormItem>

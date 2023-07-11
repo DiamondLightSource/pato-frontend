@@ -29,6 +29,7 @@ import React from "react";
 import { TomogramResponse } from "loaders/tomogram";
 import APNGContainer from "components/visualisation/apngContainer";
 import { Flipper, InfoGroup, APNGViewer } from "diamond-components";
+import { prependApiUrl } from "utils/api/client";
 
 const TomogramReprocessing = React.lazy(() => import("components/tomogram/reprocessing"));
 
@@ -46,9 +47,12 @@ const TomogramPage = () => {
 
   const onlyTomograms = useMemo(() => searchParams.get("onlyTomograms") === "true", [searchParams]);
   const currentIndex = useMemo(() => parseInt(params.collectionIndex ?? "1"), [params]);
-  const tomogramMovieSrc = useMemo(() => `tomograms/${openTomogram}/movie`, [openTomogram]);
+  const tomogramMovieSrc = useMemo(
+    () => prependApiUrl(`tomograms/${openTomogram}/movie`),
+    [openTomogram]
+  );
 
-  const updateCollection = useCallback(
+  const handleCollectionChanged = useCallback(
     (page: number) => {
       navigate(
         { pathname: `../${page}`, search: `onlyTomograms=${onlyTomograms}` },
@@ -124,8 +128,8 @@ const TomogramPage = () => {
               <Divider orientation='vertical' h={10} />
               <Flipper
                 size='md'
-                onChange={updateCollection}
-                page={currentIndex}
+                onChangeEnd={handleCollectionChanged}
+                defaultPage={currentIndex}
                 total={loaderData.total}
               />
             </HStack>
@@ -200,8 +204,8 @@ const TomogramPage = () => {
                 <Spacer />
                 <Flipper
                   size='md'
-                  onChange={updateCollection}
-                  page={currentIndex}
+                  onChangeEnd={handleCollectionChanged}
+                  defaultPage={currentIndex}
                   total={loaderData.total}
                 />
               </HStack>

@@ -6,15 +6,24 @@ import {
   GridItem,
   NumberInput,
   NumberInputField,
+  Select,
+  createStandaloneToast,
+  Input,
 } from "@chakra-ui/react";
-import { useCallback } from "react";
+import { useState } from "react";
 import { FieldSet } from "components/form/fieldset";
 import { Form } from "components/form/form";
-import { Dropdown, FormItem, NumericStepper } from "components/form/input";
+import { FormItem, NumericStepper, Options } from "components/form/input";
 import { useForm } from "react-hook-form";
+import { client } from "utils/api/client";
+import { baseToast } from "diamond-components";
+import { components } from "schema/main";
+import { required } from "utils/validation";
 
 interface RelionProps {
-  procJobId: number;
+  collectionId: number;
+  defaultValues: Partial<components["schemas"]["SPAReprocessingParameters"]>;
+  onClose: () => void;
 }
 
 const voltageValues = [
@@ -29,48 +38,80 @@ const motionCorrectionBinningValues = [
   { key: 2, value: "2" },
 ];
 
-const RelionReprocessing = ({ procJobId }: RelionProps) => {
-  // WIP, do not use yet!
-  //const [calculateAuto, setCalculateAuto] = useState(false);
-  const calculateAuto = true;
+const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProps) => {
+  const [calculateAuto, setCalculateAuto] = useState(!!defaultValues.performCalculation);
+  const [stopAfterCTF, setStopAfterCTF] = useState(!!defaultValues.stopAfterCtfEstimation);
 
-  const { handleSubmit, register } = useForm();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm({ defaultValues });
+  const { toast } = createStandaloneToast();
 
-  const onSubmit = useCallback((formData: Record<string, any>) => {
-    console.log(formData);
-  }, []);
+  const onSubmit = handleSubmit((formData) => {
+    client.post(`dataCollections/${collectionId}/reprocessing/spa`, formData).then((response) => {
+      if (response.status !== 202) {
+        toast({
+          ...baseToast,
+          title: "Error while initiating pipeline",
+          description: "Report this error to a local contact or developer",
+          status: "error",
+        });
+      } else {
+        toast({
+          ...baseToast,
+          title: "Reprocessing succesfully initiated!",
+        });
 
+        if (onClose) {
+          onClose();
+        }
+      }
+    });
+  });
+
+  /*
+   * TODO: Thought about moving this to a generator function, but there are so many edge cases,
+   * behaviours and different fields that it wouldn't make much sense.
+   * Possibly in the future?
+   */
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={onSubmit}>
       <Grid py={2} templateColumns='repeat(2, 1fr)' gap={2}>
         <GridItem>
           <FieldSet title='Experiment'>
             <VStack spacing={4}>
               <Grid w='100%' py={2} templateColumns='repeat(2, 1fr)' gap={4}>
-                <Checkbox name='gainRef'>Gain Reference File</Checkbox>
-                <Checkbox name='phasePlate'>Phase Plate Used</Checkbox>
+                <Checkbox {...register("phasePlateUsed")}>Phase Plate Used</Checkbox>
               </Grid>
-              <FormItem label='Voltage' unit='kV'>
-                <Dropdown name='voltage' values={voltageValues} />
+              <FormItem label='Gain Reference File' error={errors.gainReferenceFile}>
+                <Input size='sm' defaultValue='gain.mrc' {...register("gainReferenceFile")} />
               </FormItem>
-              <FormItem label='Spherical Aberration' unit='mm'>
-                <Dropdown {...register("sphericalAberration")} values={sphericalAberrationValues} />
+              <FormItem label='Voltage' unit='kV' error={errors.voltage}>
+                <Select size='sm' {...register("voltage", { valueAsNumber: true })}>
+                  <Options values={voltageValues} />
+                </Select>
               </FormItem>
-              <FormItem label='Motion Correction Binning'>
-                <Dropdown
-                  {...register("motionCorBinning")}
-                  values={motionCorrectionBinningValues}
-                />
+              <FormItem label='Spherical Aberration' unit='mm' error={errors.sphericalAberration}>
+                <Select size='sm' {...register("sphericalAberration", { valueAsNumber: true })}>
+                  <Options values={sphericalAberrationValues} />
+                </Select>
               </FormItem>
-              <FormItem label='Pixel Size' unit='Å/pixel'>
-                <NumberInput size='sm' precision={3} defaultValue={0.831}>
-                  <NumberInputField bg='white' {...register("pixelSize", { required: true })} />
+              <FormItem label='Motion Correction Binning' error={errors.motionCorrectionBinning}>
+                <Select size='sm' {...register("motionCorrectionBinning", { valueAsNumber: true })}>
+                  <Options values={motionCorrectionBinningValues}></Options>
+                </Select>
+              </FormItem>
+              <FormItem label='Pixel Size' unit='Å/pixel' error={errors.pixelSize}>
+                <NumberInput size='sm' precision={3}>
+                  <NumberInputField {...register("pixelSize", { required })} />
                   <NumericStepper />
                 </NumberInput>
               </FormItem>
-              <FormItem label='Dose per Frame' unit='e⁻/Å²'>
-                <NumberInput size='sm' precision={3} defaultValue={1}>
-                  <NumberInputField bg='white' {...register("dosePerFrame", { required: true })} />
+              <FormItem label='Dose per Frame' unit='e⁻/Å²' error={errors.dosePerFrame}>
+                <NumberInput size='sm' precision={3}>
+                  <NumberInputField {...register("dosePerFrame", { required })} />
                   <NumericStepper />
                 </NumberInput>
               </FormItem>
@@ -78,11 +119,11 @@ const RelionReprocessing = ({ procJobId }: RelionProps) => {
           </FieldSet>
         </GridItem>
         <GridItem>
-          <FieldSet title='Particle Picking'>
+          <FieldSet title='Particle Picking' isDisabled={stopAfterCTF}>
             <VStack spacing={4}>
               <Grid w='100%' py={2} templateColumns='repeat(2, 1fr)' gap={4}>
                 <VStack spacing='0'>
-                  <Checkbox w='100%' {...register("gainRef")}>
+                  <Checkbox isDisabled={stopAfterCTF} w='100%' {...register("useCryolo")}>
                     Use crYOLO
                   </Checkbox>
                   <Text paddingLeft='2.1em' fontSize='xs' color='diamond.300'>
@@ -90,7 +131,13 @@ const RelionReprocessing = ({ procJobId }: RelionProps) => {
                   </Text>
                 </VStack>
                 <VStack spacing='0'>
-                  <Checkbox w='100%' {...register("phasePlate")}>
+                  <Checkbox
+                    isDisabled={stopAfterCTF}
+                    w='100%'
+                    {...register("performCalculation", {
+                      onChange: (e) => setCalculateAuto(e.target.checked),
+                    })}
+                  >
                     Calculate for Me
                   </Checkbox>
                   <Text paddingLeft='2.1em' fontSize='xs' color='diamond.300'>
@@ -98,27 +145,32 @@ const RelionReprocessing = ({ procJobId }: RelionProps) => {
                   </Text>
                 </VStack>
               </Grid>
-              <FormItem label='Minimum Diameter' unit='Å'>
-                <NumberInput size='sm' isDisabled={calculateAuto} defaultValue={100}>
-                  <NumberInputField bg='white' {...register("minimumDiameter")} />
+              <FormItem label='Minimum Diameter' unit='Å' error={errors.minimumDiameter}>
+                <NumberInput size='sm'>
+                  <NumberInputField {...register("minimumDiameter")} />
                   <NumericStepper />
                 </NumberInput>
               </FormItem>
-              <FormItem label='Maximum Diameter' unit='Å'>
-                <NumberInput size='sm' isDisabled={calculateAuto} defaultValue={140}>
-                  <NumberInputField bg='white' {...register("maximumDiameter")} />
+              <FormItem label='Maximum Diameter' unit='Å' error={errors.maximumDiameter}>
+                <NumberInput size='sm'>
+                  <NumberInputField {...register("maximumDiameter")} />
                   <NumericStepper />
                 </NumberInput>
               </FormItem>
-              <FormItem label='Mask Diameter' unit='Å'>
-                <NumberInput size='sm' isDisabled={calculateAuto} defaultValue={154}>
-                  <NumberInputField bg='white' {...register("maskDiameter")} />
+              <FormItem label='Mask Diameter' unit='Å' error={errors.maskDiameter}>
+                <NumberInput size='sm' isDisabled={calculateAuto}>
+                  <NumberInputField {...register("maskDiameter")} />
                   <NumericStepper />
                 </NumberInput>
               </FormItem>
-              <FormItem label='Box Size' helperText='Box size before binning' unit='Pixels'>
-                <NumberInput size='sm' isDisabled={calculateAuto} defaultValue={204}>
-                  <NumberInputField bg='white' {...register("boxSize")} />
+              <FormItem
+                label='Box Size'
+                helperText='Box size before binning'
+                unit='Pixels'
+                error={errors.boxSize}
+              >
+                <NumberInput size='sm' isDisabled={calculateAuto}>
+                  <NumberInputField {...register("boxSize")} />
                   <NumericStepper />
                 </NumberInput>
               </FormItem>
@@ -126,9 +178,10 @@ const RelionReprocessing = ({ procJobId }: RelionProps) => {
                 label='Downsample Box Size'
                 helperText='Box size after binning'
                 unit='Pixels'
+                error={errors.downsampleBoxSize}
               >
-                <NumberInput size='sm' isDisabled={calculateAuto} defaultValue={48}>
-                  <NumberInputField bg='white' {...register("downBoxSize")} />
+                <NumberInput size='sm' isDisabled={calculateAuto}>
+                  <NumberInputField {...register("downsampleBoxSize")} />
                   <NumericStepper />
                 </NumberInput>
               </FormItem>
@@ -138,21 +191,34 @@ const RelionReprocessing = ({ procJobId }: RelionProps) => {
         <GridItem>
           <FieldSet title='Classification'>
             <Grid py={2} templateColumns='repeat(2, 1fr)' gap={2}>
-              <Checkbox defaultChecked={true} {...register("2dClassification")}>
-                Do 2D Classification
+              <Checkbox isDisabled={stopAfterCTF} {...register("doClass2D")}>
+                2D Classification
               </Checkbox>
-              <Checkbox defaultChecked={true} {...register("3dClassification")}>
-                Do 3D Classification
+              <Checkbox isDisabled={stopAfterCTF} {...register("doClass3D")}>
+                3D Classification
               </Checkbox>
-              <Checkbox {...register("bestFSC")}>Best Initial Model from FSC</Checkbox>
+              <Checkbox isDisabled={stopAfterCTF} {...register("useFscCriterion")}>
+                Best Initial Model from FSC
+              </Checkbox>
             </Grid>
           </FieldSet>
         </GridItem>
         <GridItem>
           <FieldSet title='Miscellaneous'>
             <Grid py={2} templateColumns='repeat(2, 1fr)' gap={2}>
-              <Checkbox {...register("secondPass")}>Do Second Pass</Checkbox>
-              <Checkbox {...register("stopAfterCTF")}>Stop After CTF Estimation</Checkbox>
+              <Checkbox isDisabled={stopAfterCTF} {...register("perform2DSecondPass")}>
+                Second Pass (2D Classification)
+              </Checkbox>
+              <Checkbox isDisabled={stopAfterCTF} {...register("perform3DSecondPass")}>
+                Second Pass (3D Classification)
+              </Checkbox>
+              <Checkbox
+                {...register("stopAfterCtfEstimation", {
+                  onChange: (e) => setStopAfterCTF(e.target.checked),
+                })}
+              >
+                Stop After CTF Estimation
+              </Checkbox>
             </Grid>
           </FieldSet>
         </GridItem>

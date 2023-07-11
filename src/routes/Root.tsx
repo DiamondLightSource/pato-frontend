@@ -1,5 +1,5 @@
 import { Box, HStack, Tag, Text, Link, Progress } from "@chakra-ui/react";
-import { Outlet, useLoaderData } from "react-router-dom";
+import { Outlet, useLoaderData, Link as LinkRouter } from "react-router-dom";
 import { Footer } from "components/navigation/footer";
 import { Breadcrumbs } from "components/navigation/breadcrumbs";
 import { useIsFetching } from "@tanstack/react-query";
@@ -70,7 +70,7 @@ const Root = () => {
   return (
     <div className='rootContainer'>
       <Box>
-        <Navbar links={parsedLinks} logo='/images/diamondgs.png'>
+        <Navbar links={parsedLinks} logo='/images/diamondgs.png' as={LinkRouter}>
           <User user={loaderData} onLogin={handleLogin} onLogout={handleLogout} />
         </Navbar>
         <Breadcrumbs />
