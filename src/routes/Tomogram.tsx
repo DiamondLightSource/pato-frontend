@@ -47,11 +47,17 @@ const TomogramPage = () => {
 
   const onlyTomograms = useMemo(() => searchParams.get("onlyTomograms") === "true", [searchParams]);
   const currentIndex = useMemo(() => parseInt(params.collectionIndex ?? "1"), [params]);
-  const tomogramMovieSrc = useMemo(() => prependApiUrl(`tomograms/${openTomogram}/movie`), [openTomogram]);
+  const tomogramMovieSrc = useMemo(
+    () => prependApiUrl(`tomograms/${openTomogram}/movie`),
+    [openTomogram]
+  );
 
   const handleCollectionChanged = useCallback(
     (page: number) => {
-      navigate({ pathname: `../${page}`, search: `onlyTomograms=${onlyTomograms}` }, { relative: "path" });
+      navigate(
+        { pathname: `../${page}`, search: `onlyTomograms=${onlyTomograms}` },
+        { relative: "path" }
+      );
     },
     [navigate, onlyTomograms]
   );
@@ -120,13 +126,18 @@ const TomogramPage = () => {
                 </Button>
               </Tooltip>
               <Divider orientation='vertical' h={10} />
-              <Flipper size='md' onChangeEnd={handleCollectionChanged} defaultPage={currentIndex} total={loaderData.total} />
+              <Flipper
+                size='md'
+                onChangeEnd={handleCollectionChanged}
+                defaultPage={currentIndex}
+                total={loaderData.total}
+              />
             </HStack>
           </Stack>
           <HStack w='100%'>
             <Heading color='diamond.300' size='sm'>
-              Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data collection group{" "}
-              <Code>{params.groupId}</Code>
+              Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data
+              collection group <Code>{params.groupId}</Code>
             </Heading>
             <Spacer />
             <Checkbox
