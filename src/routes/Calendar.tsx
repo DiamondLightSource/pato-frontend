@@ -1,5 +1,5 @@
 import { Box, Divider, Heading, HStack, Text } from "@chakra-ui/react";
-import { EventClickArg, EventApi, EventInput, DatesSetArg } from "@fullcalendar/core";
+import { EventClickArg, EventInput, DatesSetArg, EventContentArg } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { useCallback, useEffect, useState } from "react";
 import { client } from "utils/api/client";
@@ -10,37 +10,33 @@ import FullCalendar from "@fullcalendar/react";
 
 type SessionSchema = components["schemas"]["SessionResponse"];
 
-export interface EventProps {
-  info: EventApi;
-}
-
-const EventItem = ({ info }: EventProps) => {
-  return (
-    <Box data-testid={`event-${info.title}`} cursor='pointer' w='100%'>
-      <HStack alignItems='stretch' textOverflow='ellipsis' spacing={1} width='100%'>
-        <Box w='2px' bg='diamond.600' />
-        <Text fontWeight={600} color='diamond.600'>
-          {info.start!.toLocaleTimeString("en-gb", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </Text>
-        <Text>{info.title}</Text>
-        <Text textOverflow='ellipsis' overflowX='hidden' opacity='0.7'>
-          ({info.extendedProps.parentProposal}-{info.extendedProps.visitNumber})
-        </Text>
-      </HStack>
-      <Divider />
-    </Box>
-  );
-};
+const EventItem = ({ event }: EventContentArg) => (
+  <Box data-testid={`event-${event.title}`} cursor='pointer' w='100%'>
+    <HStack alignItems='stretch' textOverflow='ellipsis' spacing={1} width='100%'>
+      <Box w='2px' bg='diamond.600' />
+      <Text fontWeight={600} color='diamond.600'>
+        {event.start!.toLocaleTimeString("en-gb", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
+      </Text>
+      <Text>{event.title}</Text>
+      <Text textOverflow='ellipsis' overflowX='hidden' opacity='0.7'>
+        ({event.extendedProps.parentProposal}-{event.extendedProps.visitNumber})
+      </Text>
+    </HStack>
+    <Divider />
+  </Box>
+);
 
 const Calendar = () => {
   const navigate = useNavigate();
 
   const eventClick = useCallback(
     (e: EventClickArg) => {
-      navigate(`/proposals/${e.event.extendedProps.proposalId}/sessions/${e.event.id}`);
+      navigate(
+        `/proposals/${e.event.extendedProps.parentProposal}/sessions/${e.event.extendedProps.visitNumber}`
+      );
     },
     [navigate]
   );
@@ -102,10 +98,10 @@ const Calendar = () => {
           }}
           datesSet={updateDates}
           events={events}
-          eventContent={(info) => <EventItem info={info.event} />}
+          eventContent={EventItem}
           dayMaxEventRows={true}
           dayMaxEvents={true}
-          eventClick={(e) => eventClick(e)}
+          eventClick={eventClick}
         />
       </Box>
     </div>
