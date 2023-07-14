@@ -53,6 +53,6 @@ describe("Calendar", () => {
     const eventLink = (await screen.findByTestId("event-m01")).parentElement!;
 
     fireEvent.click(eventLink);
-    expect(mockNavigate).toHaveBeenCalledWith("/proposals/999/sessions/1");
+    expect(mockNavigate).toHaveBeenCalledWith("/proposals/cm31111/sessions/1");
   });
 });
