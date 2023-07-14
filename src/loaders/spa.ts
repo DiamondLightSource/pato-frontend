@@ -59,7 +59,7 @@ const getAcquisitionSoftware = (fileTemplate: string | null) => {
 export interface SpaResponse {
   collection: SpaCollectionData;
   jobs: ProcessingJob[] | null;
-  jobParameters: ReprocessingParameters;
+  jobParameters: { items: ReprocessingParameters; allowReprocessing: boolean };
 }
 
 const getSpaData = async (groupId: string) => {
