@@ -78,7 +78,7 @@ const SpaPage = () => {
             <Tag colorScheme='orange'>SPA</Tag>
             <Spacer />
             <Tooltip label='Run Reprocessing'>
-              <Button onClick={onOpen}>
+              <Button isDisabled={!loaderData.jobParameters.allowReprocessing} onClick={onOpen}>
                 <Icon as={MdRedo} />
               </Button>
             </Tooltip>
@@ -156,7 +156,7 @@ const SpaPage = () => {
             <ModalBody p={0}>
               <RelionReprocessing
                 collectionId={loaderData.collection.dataCollectionId}
-                defaultValues={{ ...loaderData.jobParameters }}
+                defaultValues={{ ...loaderData.jobParameters.items }}
                 onClose={onClose}
               />
             </ModalBody>
