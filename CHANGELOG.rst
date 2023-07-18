@@ -3,6 +3,15 @@ Changelog
 ==========
 
 ++++++++++
+v1.2.1 (13/07/2023)
+++++++++++
+
+**Changed**
+
+- Fix broken calendar links
+- Disable reprocessing inactive visits
+
+++++++++++
 v1.2.0 (11/07/2023)
 ++++++++++
 
