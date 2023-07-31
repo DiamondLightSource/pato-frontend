@@ -14,7 +14,7 @@ import {
 import { Suspense } from "react";
 import React from "react";
 import { MdOpenInNew } from "react-icons/md";
-import { Flipper } from "diamond-components";
+import { Flipper } from "@diamondlightsource/ui-components";
 const MolstarWrapper = React.lazy(() => import("components/molstar/molstar"));
 
 export interface MolstarModalProps {

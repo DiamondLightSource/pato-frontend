@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { cloneElement, useEffect, useMemo, useRef, useState } from "react";
 import { MdFastForward, MdFastRewind, MdPause, MdPlayArrow } from "react-icons/md";
-import { ApngProps } from "diamond-components";
+import { ApngProps } from "@diamondlightsource/ui-components";
 
 export interface ApngContainerProps extends BoxProps {
   children: React.ReactElement<ApngProps> | React.ReactElement<ApngProps>[];

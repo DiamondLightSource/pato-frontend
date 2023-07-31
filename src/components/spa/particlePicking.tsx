@@ -15,7 +15,7 @@ import { components } from "schema/main";
 import { DataConfig, SpaProps } from "schema/interfaces";
 import { PlotContainer } from "components/visualisation/plotContainer";
 import { useQuery } from "@tanstack/react-query";
-import { Flipper, BoxPlot, InfoGroup, ImageCard, Info, BoxPlotStats } from "diamond-components";
+import { Flipper, BoxPlot, InfoGroup, ImageCard, Info, BoxPlotStats } from "@diamondlightsource/ui-components";
 
 type ParticlePickingSchema = components["schemas"]["ParticlePicker"];
 

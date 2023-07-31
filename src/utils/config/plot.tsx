@@ -1,4 +1,4 @@
-import { ScatterPlotOptions } from "diamond-components";
+import { ScatterPlotOptions } from "@diamondlightsource/ui-components";
 
 export const driftPlotOptions: ScatterPlotOptions = {
   x: {
