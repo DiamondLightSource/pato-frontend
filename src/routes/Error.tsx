@@ -2,7 +2,7 @@ import { Heading, Link, VStack, Box, Text, Code } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouteError } from "react-router-dom";
 import { Footer } from "components/navigation/footer";
-import { Navbar } from "diamond-components";
+import { Navbar } from "@diamondlightsource/ui-components";
 
 interface ErrorType {
   status: number;

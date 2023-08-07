@@ -16,7 +16,7 @@ import { Form } from "components/form/form";
 import { FormItem, NumericStepper, Options } from "components/form/input";
 import { useForm } from "react-hook-form";
 import { client } from "utils/api/client";
-import { baseToast } from "diamond-components";
+import { baseToast } from "@diamondlightsource/ui-components";
 import { components } from "schema/main";
 import { required } from "utils/validation";
 

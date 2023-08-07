@@ -2,7 +2,7 @@ import { createStandaloneToast, Grid, NumberInput, NumberInputField } from "@cha
 import { client } from "utils/api/client";
 import { Form } from "components/form/form";
 import { FormItem, NumericStepper } from "components/form/input";
-import { baseToast } from "diamond-components";
+import { baseToast } from "@diamondlightsource/ui-components";
 import { useForm } from "react-hook-form";
 
 export interface ReprocessingProps {

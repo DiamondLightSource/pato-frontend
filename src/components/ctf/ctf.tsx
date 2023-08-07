@@ -10,7 +10,7 @@ import { client } from "utils/api/client";
 import { CtfData } from "schema/interfaces";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { ScatterPlot } from "diamond-components";
+import { ScatterPlot } from "@diamondlightsource/ui-components";
 
 export interface CTFProps {
   parentType: "autoProc" | "tomograms";

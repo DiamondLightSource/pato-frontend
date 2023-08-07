@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@chakra-ui/react": "^2.7.1",
+    "@diamondlightsource/ui-components": "^1.0.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fullcalendar/core": "^6.1.8",
@@ -11,7 +12,6 @@
     "@fullcalendar/react": "^6.1.8",
     "@fullcalendar/timegrid": "^6.1.8",
     "@tanstack/react-query": "^4.29.19",
-    "diamond-components": "^0.2.25",
     "framer-motion": "^10.12.18",
     "molstar": "^3.37.1",
     "react": "^18.2.0",
