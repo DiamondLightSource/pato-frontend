@@ -1,4 +1,4 @@
-import { AuthState } from "diamond-components";
+import { AuthState } from "@diamondlightsource/ui-components";
 import { client } from "utils/api/client";
 
 const getUser = async () => {

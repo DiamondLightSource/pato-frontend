@@ -1,5 +1,5 @@
 import { createStandaloneToast } from "@chakra-ui/toast";
-import { baseToast } from "diamond-components";
+import { baseToast } from "@diamondlightsource/ui-components";
 const { toast } = createStandaloneToast();
 
 const controller = new AbortController();

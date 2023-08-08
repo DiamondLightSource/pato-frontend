@@ -3,7 +3,7 @@ import { Outlet, useLoaderData, Link as LinkRouter } from "react-router-dom";
 import { Footer } from "components/navigation/footer";
 import { Breadcrumbs } from "components/navigation/breadcrumbs";
 import { useIsFetching } from "@tanstack/react-query";
-import { LinkDescriptor, Navbar, User, AuthState } from "diamond-components";
+import { LinkDescriptor, Navbar, User, AuthState } from "@diamondlightsource/ui-components";
 import { useMemo } from "react";
 import "styles/main.css";
 

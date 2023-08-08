@@ -1,11 +1,11 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { renderWithProviders } from "utils/test-utils";
 import APNGContainer from "./apngContainer";
-import { APNGViewer, ApngProps } from "diamond-components";
+import { APNGViewer, ApngProps } from "@diamondlightsource/ui-components";
 import { useEffect } from "react";
 
-jest.mock("diamond-components", () => ({
-  ...jest.requireActual("diamond-components"),
+jest.mock("@diamondlightsource/ui-components", () => ({
+  ...jest.requireActual("@diamondlightsource/ui-components"),
   APNGViewer: ({ onFrameCountChanged, src }: ApngProps) => {
     useEffect(() => {
       if (onFrameCountChanged) {

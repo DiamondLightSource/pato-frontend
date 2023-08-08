@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.2.2 (31/07/2023)
+++++++++++
+
+**Changed**
+
+- Logout button interactive area spans entire width of menu
+
+++++++++++
 v1.2.1 (13/07/2023)
 ++++++++++
 
