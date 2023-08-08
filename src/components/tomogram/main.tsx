@@ -28,7 +28,7 @@ import { ProcessingTitle } from "components/visualisation/processingTitle";
 import { parseData } from "utils/generic";
 import { MdOpenInNew } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
-import { ScatterPlot, InfoGroup, ImageCard, BasePoint } from "diamond-components";
+import { ScatterPlot, InfoGroup, ImageCard, BasePoint } from "@diamondlightsource/ui-components";
 
 const tomogramConfig: DataConfig = {
   include: [

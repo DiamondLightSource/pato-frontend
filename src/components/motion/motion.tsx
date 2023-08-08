@@ -34,7 +34,7 @@ import {
   BasePoint,
   Info,
   FlipperProps,
-} from "diamond-components";
+} from "@diamondlightsource/ui-components";
 
 interface MotionData {
   /** Total number of tilt alignment images available */

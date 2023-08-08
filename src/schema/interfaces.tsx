@@ -1,4 +1,4 @@
-import { Info, BasePoint } from "diamond-components";
+import { Info, BasePoint } from "@diamondlightsource/ui-components";
 import { components, paths } from "schema/main";
 
 type AutoProcSchema = components["schemas"]["AutoProcProgram"];

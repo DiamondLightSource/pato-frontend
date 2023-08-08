@@ -32,7 +32,7 @@ import { MdFolder } from "react-icons/md";
 import { RelionReprocessing } from "components/spa/reprocessing";
 import { MdRedo } from "react-icons/md";
 import React from "react";
-import { InfoGroup } from "diamond-components";
+import { InfoGroup } from "@diamondlightsource/ui-components";
 import { SpaResponse } from "loaders/spa";
 
 const Statistics = React.lazy(() => import("components/spa/statistics"));

@@ -20,7 +20,7 @@ import { classificationConfig } from "utils/config/parse";
 import { ClassificationProps, SortTypes } from "schema/interfaces";
 import { MolstarModal } from "components/molstar/molstarModal";
 import { useQuery } from "@tanstack/react-query";
-import { Flipper, InfoGroup, ImageCard, Info } from "diamond-components";
+import { Flipper, InfoGroup, ImageCard, Info } from "@diamondlightsource/ui-components";
 
 type ClassificationSchema = components["schemas"]["Classification"];
 interface FullClassification extends ClassificationSchema {

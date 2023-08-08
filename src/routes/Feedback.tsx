@@ -15,7 +15,7 @@ import {
 import { Form } from "components/form/form";
 import { FormItem } from "components/form/input";
 import { useForm } from "react-hook-form";
-import { baseToast } from "diamond-components";
+import { baseToast } from "@diamondlightsource/ui-components";
 import { client } from "utils/api/client";
 import { required } from "utils/validation";
 

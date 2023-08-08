@@ -1,7 +1,7 @@
 import { Divider, Heading, HStack, Spacer, Box } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { createSearchParams, useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
-import { Pagination, DebouncedInput, Table } from "diamond-components";
+import { Pagination, DebouncedInput, Table } from "@diamondlightsource/ui-components";
 
 export interface TableProps {
   headers: {

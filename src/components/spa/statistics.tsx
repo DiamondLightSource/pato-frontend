@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { PlotContainer } from "components/visualisation/plotContainer";
 import { Box, Divider, Grid, Heading, Skeleton } from "@chakra-ui/react";
 import { setHistogram } from "utils/api/response";
-import { BarChart, BarStats } from "diamond-components";
+import { BarChart, BarStats } from "@diamondlightsource/ui-components";
 
 interface SpaProps {
   /* Parent data collection ID*/
