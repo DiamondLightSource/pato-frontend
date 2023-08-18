@@ -35,6 +35,7 @@ import {
   Info,
   FlipperProps,
 } from "@diamondlightsource/ui-components";
+import { components } from "schema/main";
 
 interface MotionData {
   /** Total number of tilt alignment images available */
@@ -153,10 +154,17 @@ const fetchMotionData = async (
         }
       : motionConfig;
 
+  const responseData: components["schemas"]["Paged_FullMovie_"] = response.data;
+
+  // Estimated defocus is provided in angstroms
+  responseData.items[0].CTF.estimatedDefocus = parseFloat(
+    (responseData.items[0].CTF.estimatedDefocus * 0.0001).toFixed(3)
+  );
+
   data = {
     ...data,
     total: response.data.total,
-    motion: parseData(flattenMovieData(response.data), extendedMotionConfig) as MotionData,
+    motion: parseData(flattenMovieData(responseData), extendedMotionConfig) as MotionData,
   };
 
   const movie = response.data.items[0].Movie;
