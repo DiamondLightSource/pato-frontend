@@ -3,6 +3,15 @@ Changelog
 ==========
 
 ++++++++++
+v1.2.3 (17/08/2023)
+++++++++++
+
+**Changed**
+
+- Pixel size unit is now nanometres
+- Estimated defocus converted from angstroms to micrometres
+
+++++++++++
 v1.2.2 (31/07/2023)
 ++++++++++
 
