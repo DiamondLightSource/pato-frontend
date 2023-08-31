@@ -157,7 +157,7 @@ const TomogramPage = () => {
         <Accordion onChange={setAccordionIndex} index={accordionIndex} allowToggle>
           {loaderData.tomograms.map((job, i) => (
             <Tomogram
-              key={job.AutoProcProgram.autoProcProgramId}
+              key={`${job.AutoProcProgram.autoProcProgramId}-${i}`}
               autoProc={job.AutoProcProgram}
               procJob={job.ProcessingJob}
               tomogram={job.Tomogram || null}
