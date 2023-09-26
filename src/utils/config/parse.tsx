@@ -28,6 +28,12 @@ export const classificationConfig: DataConfig = {
   root: ["particleClassificationId"],
 };
 
+export const recipeTagMap: Record<string, string> = {
+  "em-spa-preprocess": "Preprocessing",
+  "em-spa-class2d": "2D Classification",
+  "em-spa-class3d": "3D Classification",
+};
+
 interface FieldEntry {
   alias: string;
   isBool?: boolean;

@@ -125,9 +125,14 @@ const getSpaData = async (groupId: string) => {
           }
         }
 
+        // Ignore extraction step
+        const jobsList: ProcessingJob[] = jobsResponse.data.items.filter(
+          (job: ProcessingJob) => job.ProcessingJob.recipe !== "em-spa-extract"
+        );
+
         return {
           collection: parsedCollectionData,
-          jobs: jobsResponse.data.items,
+          jobs: jobsList,
           jobParameters: legibleParameters,
         };
       }

@@ -42,4 +42,29 @@ describe("Processing Title", () => {
     expect(screen.getByText("date1")).toBeInTheDocument();
     expect(screen.getByText("date2")).toBeInTheDocument();
   });
+
+  it("should display processing job tag if tag is mapped", async () => {
+    const newProcJob = {
+      ...procJob,
+      recipe: "em-spa-class2d",
+    };
+
+    renderWithAccordion(
+      <AccordionItem>
+        <ProcessingTitle procJob={newProcJob} autoProc={autoProcJob} status='Success' />
+      </AccordionItem>
+    );
+
+    expect(screen.getByText(/2d classification/i)).toBeInTheDocument();
+  });
+
+  it("should not display processing job tag if tag is not mapped", async () => {
+    renderWithAccordion(
+      <AccordionItem>
+        <ProcessingTitle procJob={procJob} autoProc={autoProcJob} status='Success' />
+      </AccordionItem>
+    );
+
+    expect(screen.queryByText("recipe")).not.toBeInTheDocument();
+  });
 });
