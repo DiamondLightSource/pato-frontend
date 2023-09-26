@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.3.0 (26/09/2023)
+++++++++++
+
+**Added**
+
+- Adds processing job step to SPA processing job list
+
+++++++++++
 v1.2.5 (12/09/2023)
 ++++++++++
 
