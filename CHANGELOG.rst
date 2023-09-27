@@ -3,6 +3,30 @@ Changelog
 ==========
 
 ++++++++++
+v1.3.0 (26/09/2023)
+++++++++++
+
+**Added**
+
+- Adds processing job step to SPA processing job list
+
+++++++++++
+v1.2.5 (12/09/2023)
+++++++++++
+
+**Changed**
+
+- Build process improvements
+
+++++++++++
+v1.2.4 (30/08/2023)
+++++++++++
+
+**Changed**
+
+- Fix stale images when tomograms have repeating autoprocessing program IDs
+
+++++++++++
 v1.2.3 (17/08/2023)
 ++++++++++
 

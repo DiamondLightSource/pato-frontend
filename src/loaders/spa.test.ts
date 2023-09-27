@@ -35,6 +35,29 @@ describe("SPA Data", () => {
     expect(data.jobs).toBe(null);
   });
 
+  it("should filter out extraction processing jobs", async () => {
+    server.use(
+      rest.get("http://localhost/dataCollections/:collectionId/processingJobs", (req, res, ctx) =>
+        res.once(
+          ctx.status(200),
+          ctx.json({
+            items: [
+              {
+                AutoProcProgram: { autoProcProgramId: 1 },
+                ProcessingJob: { recipe: "em-spa-extract" },
+                status: "Success",
+              },
+            ],
+          }),
+          ctx.delay(0)
+        )
+      )
+    );
+
+    const data = await spaLoader(queryClient)({ groupId: "1" });
+    expect(data.jobs).toEqual([]);
+  });
+
   it("should display acquisition software as SerialEM depending on fileTemplate", async () => {
     server.use(
       rest.get("http://localhost/dataGroups/:groupId/dataCollections", async (req, res, ctx) =>
