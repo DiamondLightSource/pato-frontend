@@ -9,6 +9,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { components } from "schema/main";
+import { recipeTagMap } from "utils/config/parse";
 import { parseDate } from "utils/generic";
 
 export interface TwoLineTitleProps {
@@ -40,6 +41,14 @@ const TwoLineTitle = ({ title, value }: TwoLineTitleProps) => (
   </VStack>
 );
 
+const RecipeTag = ({ recipe }: { recipe: string }) => {
+  if (!(recipe in recipeTagMap)) {
+    return null;
+  }
+
+  return <Tag colorScheme='blue'>{recipeTagMap[recipe]}</Tag>;
+};
+
 const ProcessingTitle = ({ procJob, autoProc, status }: ProcTitleProps) => (
   <Stack
     direction={{ base: "column", md: "row" }}
@@ -61,6 +70,7 @@ const ProcessingTitle = ({ procJob, autoProc, status }: ProcTitleProps) => (
     </HStack>
     <Spacer />
     <HStack>
+      <RecipeTag recipe={procJob.recipe} />
       <Tag colorScheme={jobStatusColour[status]}>{status}</Tag>
       <Spacer />
       <AccordionButton aria-label='Show Content' width='auto'>
