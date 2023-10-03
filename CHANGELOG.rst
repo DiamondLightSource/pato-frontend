@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.3.1 (03/10/2023)
+++++++++++
+
+**Removed**
+
+- Unused fields :code:`numberOfImages`, :code:`frameLength`, :code:`frameDose`
+
+++++++++++
 v1.3.0 (26/09/2023)
 ++++++++++
 
