@@ -16,9 +16,7 @@ const spaCollectionConfig: DataConfig = {
     ...collectionConfig.include,
     ...[
       { name: "totalExposedDose", label: "Total Dose", unit: "e⁻/Å²" },
-      { name: "numberOfImages", label: "Number of Movies" },
       { name: "exposureTime", label: "Total Exposure Time", unit: "seconds" },
-      { name: "frameLength", unit: "seconds" },
       { name: "phasePlate", label: "Phase Plate Used" },
       { name: "c2lens", label: "C2 Lens", unit: "%" },
       { name: "c2aperture", label: "C2 Aperture", unit: "μm" },
@@ -28,7 +26,6 @@ const spaCollectionConfig: DataConfig = {
         unit: "μm",
         label: "Illuminated Area",
       },
-      { name: "frameDose", unit: "e⁻/Å²" },
       {
         name: "slitGapHorizontal",
         label: "Energy Filter / Slit Width",
