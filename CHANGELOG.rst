@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.3.2 (26/10/2023)
+++++++++++
+
+**Removed**
+
+- Unused query parameter in drift plot request
+
+++++++++++
 v1.3.1 (03/10/2023)
 ++++++++++
 
