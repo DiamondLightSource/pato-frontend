@@ -177,7 +177,7 @@ const fetchMotionData = async (
     };
 
     const fileData = await client.safeGet(
-      `movies/${movie.movieId}/drift?fromDb=${parentType === "autoProc"}`
+      `movies/${movie.movieId}/drift`
     );
 
     if (fileData.status === 200) {
