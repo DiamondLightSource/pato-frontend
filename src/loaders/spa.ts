@@ -18,7 +18,6 @@ const spaCollectionConfig: DataConfig = {
       { name: "totalExposedDose", label: "Total Dose", unit: "e⁻/Å²" },
       { name: "exposureTime", label: "Total Exposure Time", unit: "seconds" },
       { name: "phasePlate", label: "Phase Plate Used" },
-      { name: "c2lens", label: "C2 Lens", unit: "%" },
       { name: "c2aperture", label: "C2 Aperture", unit: "μm" },
       { name: "magnification" },
       {
@@ -31,7 +30,6 @@ const spaCollectionConfig: DataConfig = {
         label: "Energy Filter / Slit Width",
         unit: "eV",
       },
-      { name: "detectorMode" },
     ],
   ],
   root: [...collectionConfig.root!, "fileTemplate", "imageDirectory"],
@@ -73,6 +71,7 @@ const getSpaData = async (groupId: string) => {
 
   if (response.status === 200 && response.data.items) {
     const data = response.data.items[0] as DataCollection;
+
     const parsedCollectionData = parseData(data, spaCollectionConfig) as SpaCollectionData;
 
     parsedCollectionData.info.unshift({
