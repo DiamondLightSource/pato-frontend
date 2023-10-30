@@ -13,8 +13,8 @@ export const classificationConfig: DataConfig = {
   include: [
     { name: "type" },
     { name: "batchNumber" },
-    { name: "classesPerBatch" },
-    { name: "particlesPerBatch" },
+    { name: "numberOfClassesPerBatch", label: "Classes per Batch" },
+    { name: "numberOfParticlesPerBatch", label: "Particles per Batch" },
     { name: "symmetry" },
     { name: "classNumber" },
     { name: "classDistribution" },
@@ -23,7 +23,6 @@ export const classificationConfig: DataConfig = {
     { name: "translationAccuracy", unit: "Å" },
     { name: "estimatedResolution" },
     { name: "overallFourierCompleteness" },
-    { name: "numberOfParticles" },
   ],
   root: ["particleClassificationId"],
 };
