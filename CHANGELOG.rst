@@ -3,6 +3,18 @@ Changelog
 ==========
 
 ++++++++++
+v1.3.3 (30/10/2023)
+++++++++++
+
+**Changed**
+
+- Fixes display values for particles per batch, classes per batch
+
+**Removed**
+
+- Unused fields :code:`detector mode`, :code:`c2 lens`, :code:`first frame`, :code:`last frame`, :code:`refined magnification`, :code:`number of particles`
+
+++++++++++
 v1.3.2 (26/10/2023)
 ++++++++++
 
