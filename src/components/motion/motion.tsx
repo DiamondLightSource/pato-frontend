@@ -67,9 +67,6 @@ export interface MotionProps {
 const motionConfig = {
   include: [
     { name: "createdTimeStamp", label: "Movie Timestamp" },
-    { name: "firstFrame" },
-    { name: "lastFrame" },
-    { name: "refinedMagnification" },
     { name: "dosePerFrame", unit: "e⁻/Å²" },
     { name: "totalMotion", unit: "Å" },
     { name: "averageMotionPerFrame", label: "Average Motion/Frame", unit: "Å" },
@@ -176,9 +173,7 @@ const fetchMotionData = async (
       fft: prependApiUrl(`movies/${movie.movieId}/fft`),
     };
 
-    const fileData = await client.safeGet(
-      `movies/${movie.movieId}/drift`
-    );
+    const fileData = await client.safeGet(`movies/${movie.movieId}/drift`);
 
     if (fileData.status === 200) {
       data.drift = fileData.data.items;
