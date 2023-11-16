@@ -122,9 +122,35 @@ const getSpaData = async (groupId: string) => {
         }
 
         // Ignore extraction step
-        const jobsList: ProcessingJob[] = jobsResponse.data.items.filter(
+        let jobsList: ProcessingJob[] = jobsResponse.data.items.filter(
           (job: ProcessingJob) => job.ProcessingJob.recipe !== "em-spa-extract"
         );
+
+        /*
+         * Sort items by recipe first, alphabetically, except for 3D classification jobs.
+         * If a job is a 3D classification job, it should be displayed last.
+         * 
+         * If two jobs have the same recipe, the processing job ID takes precedence.
+         */
+        jobsList.sort((a, b) => {
+          if (a.ProcessingJob.recipe !== b.ProcessingJob.recipe) {
+            if (a.ProcessingJob.recipe === "em-spa-class3d") {
+              return 1;
+            }
+
+            if (b.ProcessingJob.recipe === "em-spa-class3d") {
+              return -1;
+            }
+
+            return a.ProcessingJob.recipe > b.ProcessingJob.recipe ? -1 : 1;
+          }
+
+          if (a.ProcessingJob.processingJobId !== b.ProcessingJob.processingJobId) {
+            return a.ProcessingJob.processingJobId > b.ProcessingJob.processingJobId ? 1 : -1;
+          }
+
+          return 0;
+        });
 
         return {
           collection: parsedCollectionData,
