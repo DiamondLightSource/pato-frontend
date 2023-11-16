@@ -3,6 +3,16 @@ Changelog
 ==========
 
 ++++++++++
+v1.3.4 (16/11/2023)
+++++++++++
+
+**Changed**
+
+- Data collection groups page now displays image directory
+- Image directory is displayed in data collections rather than file templates
+- 3D classification in SPA pages is displayed last
+
+++++++++++
 v1.3.3 (30/10/2023)
 ++++++++++
 
