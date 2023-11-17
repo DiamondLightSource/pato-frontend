@@ -8,22 +8,21 @@ import { ProcessingTitle } from "components/visualisation/processingTitle";
 import { BaseProcessingJobProps } from "schema/interfaces";
 import { recipeTagMap } from "utils/config/parse";
 
-const checkRecipe = (target: string, procJob: BaseProcessingJobProps["procJob"]) => {
-  return (
-    target === procJob.recipe ||
-    !(procJob.recipe, Object.keys(recipeTagMap).includes(procJob.recipe))
-  );
-};
+const checkRecipe = (target: string, procJob: BaseProcessingJobProps["procJob"]) =>
+  target === procJob.recipe ||
+  !(procJob.recipe, Object.keys(recipeTagMap).includes(procJob.recipe));
 
 const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState<number | undefined>();
 
-  const toDisplay = useMemo(() => {
-    return ["em-spa-preprocess", "em-spa-class2d", "em-spa-class3d"].map((target) =>
-      checkRecipe(target, procJob)
-    );
-  }, [procJob]);
+  const toDisplay = useMemo(
+    () =>
+      ["em-spa-preprocess", "em-spa-class2d", "em-spa-class3d"].map((target) =>
+        checkRecipe(target, procJob)
+      ),
+    [procJob]
+  );
 
   return (
     <AccordionItem>
