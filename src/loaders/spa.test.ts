@@ -58,6 +58,174 @@ describe("SPA Data", () => {
     expect(data.jobs).toEqual([]);
   });
 
+  it("should always show 3D classification last", async () => {
+    server.use(
+      rest.get("http://localhost/dataCollections/:collectionId/processingJobs", (req, res, ctx) =>
+        res.once(
+          ctx.status(200),
+          ctx.json({
+            items: [
+              {
+                AutoProcProgram: { autoProcProgramId: 1 },
+                ProcessingJob: { recipe: "em-spa-preprocess" },
+                status: "Success",
+              },
+              {
+                AutoProcProgram: { autoProcProgramId: 2 },
+                ProcessingJob: { recipe: "em-spa-class3d" },
+                status: "Success",
+              },
+              {
+                AutoProcProgram: { autoProcProgramId: 3 },
+                ProcessingJob: { recipe: "em-spa-class2d" },
+                status: "Success",
+              },
+            ],
+          }),
+          ctx.delay(0)
+        )
+      )
+    );
+
+    const data = await spaLoader(queryClient)({ groupId: "1" });
+    expect(data.jobs![2]).toMatchObject({ ProcessingJob: { recipe: "em-spa-class3d" } });
+  });
+
+  it("should keep similar step types together", async () => {
+    server.use(
+      rest.get("http://localhost/dataCollections/:collectionId/processingJobs", (req, res, ctx) =>
+        res.once(
+          ctx.status(200),
+          ctx.json({
+            items: [
+              {
+                AutoProcProgram: { autoProcProgramId: 1 },
+                ProcessingJob: { recipe: "em-spa-preprocess" },
+                status: "Success",
+              },
+              {
+                AutoProcProgram: { autoProcProgramId: 2 },
+                ProcessingJob: { recipe: "em-spa-class3d" },
+                status: "Success",
+              },
+              {
+                AutoProcProgram: { autoProcProgramId: 1 },
+                ProcessingJob: { recipe: "em-spa-preprocess" },
+                status: "Success",
+              },
+              {
+                AutoProcProgram: { autoProcProgramId: 3 },
+                ProcessingJob: { recipe: "em-spa-class2d" },
+                status: "Success",
+              },
+            ],
+          }),
+          ctx.delay(0)
+        )
+      )
+    );
+
+    const data = await spaLoader(queryClient)({ groupId: "1" });
+    expect(data.jobs).toMatchObject([
+      { ProcessingJob: { recipe: "em-spa-preprocess" } },
+      { ProcessingJob: { recipe: "em-spa-preprocess" } },
+      { ProcessingJob: { recipe: "em-spa-class2d" } },
+      { ProcessingJob: { recipe: "em-spa-class3d" } },
+    ]);
+  });
+
+  it("should sort by processing job when there are multiple instances of the same step type", async () => {
+    server.use(
+      rest.get("http://localhost/dataCollections/:collectionId/processingJobs", (req, res, ctx) =>
+        res.once(
+          ctx.status(200),
+          ctx.json({
+            items: [
+              {
+                AutoProcProgram: { autoProcProgramId: 1 },
+                ProcessingJob: { recipe: "em-spa-preprocess", processingJobId: 10 },
+                status: "Success",
+              },
+              {
+                AutoProcProgram: { autoProcProgramId: 2 },
+                ProcessingJob: { recipe: "em-spa-class3d" },
+                status: "Success",
+              },
+              {
+                AutoProcProgram: { autoProcProgramId: 1 },
+                ProcessingJob: { recipe: "em-spa-preprocess", processingJobId: 5 },
+                status: "Success",
+              },
+              {
+                AutoProcProgram: { autoProcProgramId: 3 },
+                ProcessingJob: { recipe: "em-spa-class2d" },
+                status: "Success",
+              },
+            ],
+          }),
+          ctx.delay(0)
+        )
+      )
+    );
+
+    const data = await spaLoader(queryClient)({ groupId: "1" });
+    expect(data.jobs).toMatchObject([
+      { ProcessingJob: { recipe: "em-spa-preprocess", processingJobId: 5 } },
+      { ProcessingJob: { recipe: "em-spa-preprocess", processingJobId: 10 } },
+      { ProcessingJob: { recipe: "em-spa-class2d" } },
+      { ProcessingJob: { recipe: "em-spa-class3d" } },
+    ]);
+  });
+
+  it("should sort by processing job ID in the case of multiple 3D classification jobs", async () => {
+    server.use(
+      rest.get("http://localhost/dataCollections/:collectionId/processingJobs", (req, res, ctx) =>
+        res.once(
+          ctx.status(200),
+          ctx.json({
+            items: [
+              {
+                AutoProcProgram: { autoProcProgramId: 1 },
+                ProcessingJob: { recipe: "em-spa-preprocess", processingJobId: 10 },
+                status: "Success",
+              },
+              {
+                AutoProcProgram: { autoProcProgramId: 2 },
+                ProcessingJob: { recipe: "em-spa-class3d", processingJobId: 8 },
+                status: "Success",
+              },
+              {
+                AutoProcProgram: { autoProcProgramId: 2 },
+                ProcessingJob: { recipe: "em-spa-class3d", processingJobId: 7 },
+                status: "Success",
+              },
+              {
+                AutoProcProgram: { autoProcProgramId: 1 },
+                ProcessingJob: { recipe: "em-spa-preprocess", processingJobId: 5 },
+                status: "Success",
+              },
+              {
+                AutoProcProgram: { autoProcProgramId: 3 },
+                ProcessingJob: { recipe: "em-spa-class2d" },
+                status: "Success",
+              },
+            ],
+          }),
+          ctx.delay(0)
+        )
+      )
+    );
+
+    const data = await spaLoader(queryClient)({ groupId: "1" });
+    expect(data.jobs).toMatchObject([
+      { ProcessingJob: { recipe: "em-spa-preprocess", processingJobId: 5 } },
+      { ProcessingJob: { recipe: "em-spa-preprocess", processingJobId: 10 } },
+      { ProcessingJob: { recipe: "em-spa-class2d" } },
+      { ProcessingJob: { recipe: "em-spa-class3d", processingJobId: 7 } },
+      { ProcessingJob: { recipe: "em-spa-class3d", processingJobId: 8 } },
+    ]);
+  });
+
   it("should display acquisition software as SerialEM depending on fileTemplate", async () => {
     server.use(
       rest.get("http://localhost/dataGroups/:groupId/dataCollections", async (req, res, ctx) =>
