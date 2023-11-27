@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.3.5 (27/11/2023)
+++++++++++
+
+**Changed**
+
+- Pixel size on image is now displayed in angstroms instead of nanometres
+
+++++++++++
 v1.3.4 (16/11/2023)
 ++++++++++
 

@@ -2,7 +2,7 @@ import { DataConfig } from "schema/interfaces";
 
 export const collectionConfig: DataConfig = {
   include: [
-    { name: "pixelSizeOnImage", unit: "nm" },
+    { name: "pixelSizeOnImage", unit: "Å" },
     { name: "voltage", unit: "kV" },
     { name: ["imageSizeX", "imageSizeY"], unit: "pixels", label: "Image Size" },
   ],
