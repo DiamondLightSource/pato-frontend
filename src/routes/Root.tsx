@@ -1,9 +1,14 @@
 import { Box, HStack, Tag, Text, Link, Progress } from "@chakra-ui/react";
-import { Outlet, useLoaderData, Link as LinkRouter } from "react-router-dom";
+import { Outlet, useLoaderData, Link as LinkRouter, useLocation } from "react-router-dom";
 import { Footer } from "components/navigation/footer";
-import { Breadcrumbs } from "components/navigation/breadcrumbs";
 import { useIsFetching } from "@tanstack/react-query";
-import { LinkDescriptor, Navbar, User, AuthState } from "@diamondlightsource/ui-components";
+import {
+  LinkDescriptor,
+  Navbar,
+  User,
+  AuthState,
+  Breadcrumbs,
+} from "@diamondlightsource/ui-components";
 import { useMemo } from "react";
 import "styles/main.css";
 
@@ -57,6 +62,7 @@ const PhaseBanner = ({ deployType }: { deployType: "dev" | "production" | "beta"
 const Root = () => {
   const loaderData = useLoaderData() as AuthState | null;
   const isFetching = useIsFetching();
+  const location = useLocation();
 
   const parsedLinks = useMemo(() => (loaderData ? links : []), [loaderData]);
   const deployType = useMemo(() => {
@@ -73,7 +79,7 @@ const Root = () => {
         <Navbar links={parsedLinks} logo='/images/diamondgs.png' as={LinkRouter}>
           <User user={loaderData} onLogin={handleLogin} onLogout={handleLogout} />
         </Navbar>
-        <Breadcrumbs />
+        <Breadcrumbs path={location.pathname} />
         {isFetching !== 0 ? (
           <Progress h='0.5em' isIndeterminate size='sm' />
         ) : (

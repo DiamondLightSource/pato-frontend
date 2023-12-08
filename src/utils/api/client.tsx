@@ -47,7 +47,7 @@ export const client = async (
     ...defaultSettings,
   };
 
-  if (body != null) {
+  if (body !== null) {
     if (!(body instanceof FormData)) {
       config.body = JSON.stringify(body);
       config.headers = {

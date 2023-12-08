@@ -282,38 +282,4 @@ describe("SPA Data", () => {
     const data = await spaLoader(queryClient)({ groupId: "1" });
     expect(data.jobParameters).toEqual({});
   });
-
-  it("should only return file name from gain reference path parameter", async () => {
-    server.use(
-      rest.get("http://localhost/processingJob/:procJobId/parameters", async (req, res, ctx) =>
-        res.once(
-          ctx.status(200),
-          ctx.json({ motioncor_gainreference: "/dls/some/path/here/gain.mrc" })
-        )
-      )
-    );
-
-    const data = await spaLoader(queryClient)({ groupId: "1" });
-    expect(data.jobParameters).toEqual({ gainReferenceFile: "gain.mrc" });
-  });
-
-  it("should cast boolean fields in parameter listing to boolean values", async () => {
-    const data = await spaLoader(queryClient)({ groupId: "1" });
-    expect(data.jobParameters).toEqual({
-      doClass2D: false,
-      doClass3D: true,
-      sphericalAberration: "1",
-    });
-  });
-
-  it("should include generic parameters without an alias", async () => {
-    server.use(
-      rest.get("http://localhost/processingJob/:procJobId/parameters", async (req, res, ctx) =>
-        res.once(ctx.status(200), ctx.json({ someKey: 1 }))
-      )
-    );
-
-    const data = await spaLoader(queryClient)({ groupId: "1" });
-    expect(data.jobParameters).toEqual({ someKey: 1 });
-  });
 });

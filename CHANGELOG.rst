@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.4.0 (12/12/2023)
+++++++++++
+
+**Added**
+
+- Job parameter overview for processing jobs
+
+++++++++++
 v1.3.5 (27/11/2023)
 ++++++++++
 
