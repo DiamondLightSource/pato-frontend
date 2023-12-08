@@ -129,7 +129,7 @@ const getSpaData = async (groupId: string) => {
         /*
          * Sort items by recipe first, alphabetically, except for 3D classification jobs.
          * If a job is a 3D classification job, it should be displayed last.
-         * 
+         *
          * If two jobs have the same recipe, the processing job ID takes precedence.
          */
         jobsList.sort((a, b) => {

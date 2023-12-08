@@ -28,6 +28,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { processSessionData, sessionLoader } from "loaders/sessions";
 import { theme } from "@diamondlightsource/ui-components";
 import FeedbackForm from "routes/Feedback";
+import { SessionPage } from "routes/Session";
 
 const Calendar = React.lazy(() => import("routes/Calendar"));
 
@@ -96,19 +97,19 @@ const router = createBrowserRouter([
         shouldRevalidate: ({ currentUrl, nextUrl }) => checkListingChanged(currentUrl, nextUrl),
       },
       {
-        path: "/proposals/:propid/sessions/:visitId",
-        element: <Navigate to='groups' replace />,
-      },
-      {
-        path: "/proposals/:propId/sessions/:visitId/groups",
+        path: "/proposals/:propId/sessions/:visitId",
         element: (
-          <GenericListing
+          <SessionPage
             headers={groupsHeaders}
             heading='Data Collection Groups'
             makePathCallback={handleGroupClicked}
           />
         ),
         loader: ({ request, params }) => listingLoader(queryClient)(request, params, "dataGroups"),
+      },
+      {
+        path: "/proposals/:propId/sessions/:visitId/groups",
+        element: <Navigate to='..' replace relative='path' />,
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/collections",

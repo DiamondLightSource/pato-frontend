@@ -54,27 +54,3 @@ export const listingLoader =
 
     return { data: null, total: 0, limit: 20 };
   };
-
-// Avoid refetch when page is initially loaded with no URL params
-export const checkListingChanged = (current: URL, next: URL) =>
-  (current.searchParams.get("items") !== null || current.searchParams.get("page") !== null) &&
-  current.href !== next.href;
-
-export const handleGroupClicked = (item: Record<string, string | number>) => {
-  // Temporary workaround
-  if (item.experimentType === "tomo") {
-    return `groups/${item.dataCollectionGroupId}/tomograms/1`;
-  }
-
-  switch (item.experimentTypeName) {
-    case "Single Particle":
-      return `groups/${item.dataCollectionGroupId}/spa`;
-    case "Tomogram":
-      return `groups/${item.dataCollectionGroupId}/tomograms/1`;
-    default:
-      return `groups/${item.dataCollectionGroupId}/spa`;
-  }
-};
-
-export const handleCollectionClicked = (item: Record<string, string | number>) =>
-  `../tomograms/${item.index}`;
