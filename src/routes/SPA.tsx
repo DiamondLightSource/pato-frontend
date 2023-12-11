@@ -34,7 +34,6 @@ import { MdRedo } from "react-icons/md";
 import React from "react";
 import { InfoGroup } from "@diamondlightsource/ui-components";
 import { SpaResponse } from "loaders/spa";
-import { CollectionTitle } from "components/visualisation/collectionTitle";
 
 const Statistics = React.lazy(() => import("components/spa/statistics"));
 
@@ -75,7 +74,8 @@ const SpaPage = () => {
       <HStack marginBottom={2}>
         <VStack w='100%'>
           <HStack w='100%'>
-            <CollectionTitle type='SPA' colorScheme='orange' />
+            <Heading>Data Collection</Heading>
+            <Tag colorScheme='orange'>SPA</Tag>
             <Spacer />
             <Tooltip label='Run Reprocessing'>
               <Button isDisabled={!loaderData.jobParameters.allowReprocessing} onClick={onOpen}>

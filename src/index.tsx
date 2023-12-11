@@ -28,7 +28,6 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { processSessionData, sessionLoader } from "loaders/sessions";
 import { theme } from "@diamondlightsource/ui-components";
 import FeedbackForm from "routes/Feedback";
-import { AboutPage } from "routes/About";
 
 const Calendar = React.lazy(() => import("routes/Calendar"));
 
@@ -54,10 +53,6 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home />,
         loader: sessionLoader(queryClient),
-      },
-      {
-        path: "/about",
-        element: <AboutPage />,
       },
       {
         path: "/proposals",
