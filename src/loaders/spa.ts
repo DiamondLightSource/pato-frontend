@@ -4,7 +4,8 @@ import { DataConfig, SpaCollectionData } from "schema/interfaces";
 import { components } from "schema/main";
 import { client } from "utils/api/client";
 import { buildEndpoint, includePage } from "utils/api/endpoint";
-import { collectionConfig, spaReprocessingFieldConfig } from "utils/config/parse";
+import { parseJobParameters } from "utils/api/response";
+import { collectionConfig } from "utils/config/parse";
 import { parseData } from "utils/generic";
 
 type DataCollection = components["schemas"]["DataCollectionSummary"];
@@ -100,26 +101,8 @@ const getSpaData = async (groupId: string) => {
         const processingJobId = jobsResponse.data.items[0].ProcessingJob.processingJobId;
         const response = await client.get(`processingJob/${processingJobId}/parameters`);
 
-        const parameters = response.data as Record<string, string>;
-        const legibleParameters: Record<string, string | boolean> = {};
-        if (response.status === 200) {
-          for (const [key, value] of Object.entries(parameters)) {
-            const config = spaReprocessingFieldConfig[key];
-            if (config) {
-              let newValue: string | boolean = value;
-
-              if (config.alias === "gainReferenceFile") {
-                newValue = value.split("/").pop()!;
-              } else {
-                newValue = config.isBool ? value === "1" : value;
-              }
-
-              legibleParameters[config.alias] = newValue;
-            } else {
-              legibleParameters[key] = value;
-            }
-          }
-        }
+        let legibleParameters =
+          response.status === 200 ? parseJobParameters(response.data.items) : {};
 
         // Ignore extraction step
         let jobsList: ProcessingJob[] = jobsResponse.data.items.filter(
