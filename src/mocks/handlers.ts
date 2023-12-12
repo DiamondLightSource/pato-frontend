@@ -375,7 +375,7 @@ export const handlers = [
   ),
 
   rest.get("http://localhost/processingJob/:procJobId/parameters", (req, res, ctx) =>
-    res(ctx.status(200), ctx.json({ do_class3d: "1", do_class2d: "0", Cs: "1" }))
+    res(ctx.status(200), ctx.json({ items: { do_class3d: "1", do_class2d: "0", Cs: "1" } }))
   ),
 
   rest.get("http://localhost/proposals", (req, res, ctx) => {

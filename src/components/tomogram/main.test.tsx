@@ -73,9 +73,9 @@ describe("Tomogram", () => {
 
     await screen.findByText("Alignment");
 
-    fireEvent.click(screen.getByRole("button"));
+    fireEvent.click(screen.getByLabelText("Show Content"));
     fireEvent.click(screen.getByRole("button", { name: "View Movie" }));
 
-    await waitFor(() => expect(openCallback).toBeCalled());
+    await waitFor(() => expect(openCallback).toHaveBeenCalled());
   });
 });
