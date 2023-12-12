@@ -3,6 +3,11 @@ import { components, paths } from "schema/main";
 
 type AutoProcSchema = components["schemas"]["AutoProcProgram"];
 type ProcessingJobSchema = components["schemas"]["ProcessingJob"];
+export type SessionResponse = components["schemas"]["SessionResponse"];
+
+export interface ParsedSessionReponse extends SessionResponse {
+  microscopeName: string;
+}
 
 export interface DataConfig {
   include: { name: string | string[]; unit?: string; label?: string }[];

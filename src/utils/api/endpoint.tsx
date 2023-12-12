@@ -1,15 +1,22 @@
 import { Params } from "react-router-dom";
 
-export const includePage = (endpoint: string, limit: number, page: number) =>
-  `${endpoint}${endpoint.includes("?") ? "&" : "?"}page=${page - 1}&limit=${limit}`;
+export const includePage = (endpoint: string, limit: number, page: number, search?: string) => {
+  let newEndpoint = `${endpoint}${endpoint.includes("?") ? "&" : "?"}page=${page - 1}&limit=${limit}`;
+  if (search) {
+    newEndpoint += `&search=${search}`
+  }
+
+  return newEndpoint
+};
 
 export const buildEndpoint = (
   endpoint: string,
   params: Params,
   limit: number,
-  page: number
+  page: number,
+  search?: string
 ): string => {
-  let builtEndpoint = includePage(endpoint, limit, page);
+  let builtEndpoint = includePage(endpoint, limit, page, search);
   switch (endpoint) {
     case "sessions":
       return `${builtEndpoint}&proposal=${params.propId}&countCollections=true`;

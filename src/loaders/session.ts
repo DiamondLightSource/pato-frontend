@@ -1,56 +1,74 @@
 import { QueryClient } from "@tanstack/react-query";
 import { Params } from "react-router-dom";
+import { components } from "schema/main";
 import { client } from "utils/api/client";
 import { buildEndpoint } from "utils/api/endpoint";
+import { parseSessionData } from "utils/api/response";
 
-type ProcessDataCallback = (data: Record<string, any>[]) => Record<string, any>[];
+type PagedGroups = components["schemas"]["Paged_DataCollectionGroupSummaryResponse_"];
+type SessionResponse = components["schemas"]["SessionResponse"];
 
-const listingQueryBuilder = (request: Request, params: Params<string>, endpoint: string) => {
+export interface SessionDataResponse extends PagedGroups {
+  session: SessionResponse | null;
+}
+
+const sessionQueryBuilder = (request: Request, params: Params<string>) => {
   const searchParams = new URL(request.url).searchParams;
   const search = searchParams.get("search") || "";
   const items = searchParams.get("items") || "20";
   const page = searchParams.get("page") || "1";
 
-  let builtEndpoint = buildEndpoint(`${endpoint}`, params, parseInt(items), parseInt(page));
-  if (search) {
-    builtEndpoint += `&search=${search}`;
-  }
-
   return {
-    queryKey: [endpoint, search, items, page, params],
-    queryFn: async () => getListingData(builtEndpoint),
+    queryKey: ["dataGroups", search, items, page, params],
+    queryFn: async () => getListingData(params, items, page, search),
     staleTime: 60000,
   };
 };
 
-const getListingData = async (endpoint: string) => {
-  const response = await client.safeGet(endpoint);
+const getListingData = async (
+  params: Params<string>,
+  items: string ,
+  page: string,
+  search: string
+) => {
+  const builtEndpoint = buildEndpoint("dataGroups", params, parseInt(items), parseInt(page), search);
 
-  if (response.status === 200) {
-    return response.data;
+  const response = await client.safeGet(builtEndpoint);
+  const sessionResponse = await client.safeGet(
+    `proposals/${params.propId}/sessions/${params.visitId}`
+  );
+
+  if (response.status !== 200 || sessionResponse.status !== 200) {
+    return null;
   }
 
-  return null;
+  return { ...(response.data as PagedGroups), session: parseSessionData(sessionResponse.data )  };
 };
 
-export const listingLoader =
-  (queryClient: QueryClient) =>
-  async (
-    request: Request,
-    params: Params<string>,
-    endpoint: string,
-    processData?: ProcessDataCallback
-  ) => {
-    const query = listingQueryBuilder(request, params, endpoint);
-    const data = queryClient.getQueryData(query.queryKey) ?? (await queryClient.fetchQuery(query));
+export const sessionPageLoader =
+  (queryClient: QueryClient) => async (request: Request, params: Params<string>) => {
+    const query = sessionQueryBuilder(request, params);
+    const data: SessionDataResponse =
+      queryClient.getQueryData(query.queryKey) ?? (await queryClient.fetchQuery(query));
 
-    if (data && data.items !== undefined) {
-      return {
-        data: processData ? processData(data.items) : data.items,
-        total: data.total,
-        limit: data.limit,
-      };
+    if (data) {
+      return data;
     }
 
-    return { data: null, total: 0, limit: 20 };
+    return { items: null, total: 0, limit: 20, session: null };
+  };
+
+  export const handleGroupClicked = (item: Record<string, string | number>) => {
+    if (item.experimentType === "tomo") {
+      return `groups/${item.dataCollectionGroupId}/tomograms/1`;
+    }
+  
+    switch (item.experimentTypeName) {
+      case "Single Particle":
+        return `groups/${item.dataCollectionGroupId}/spa`;
+      case "Tomogram":
+        return `groups/${item.dataCollectionGroupId}/tomograms/1`;
+      default:
+        return `groups/${item.dataCollectionGroupId}/spa`;
+    }
   };

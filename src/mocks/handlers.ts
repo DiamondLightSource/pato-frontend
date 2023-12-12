@@ -310,6 +310,10 @@ export const handlers = [
     res(ctx.status(404), ctx.delay(0))
   ),
 
+  rest.get("http://localhost/proposals/:propId/sessions/:visitId", (req, res, ctx) =>
+    res(ctx.status(200), ctx.json({beamLineName: "m01", sessionId: 1}), ctx.delay(0))
+  ),
+
   rest.get("http://localhost/unauthorisedEndpoint", (req, res, ctx) => res(ctx.status(401))),
 
   rest.get("http://localhost/sessions", (req, res, ctx) =>

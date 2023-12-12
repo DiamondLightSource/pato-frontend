@@ -10,7 +10,6 @@ import { Error } from "routes/Error";
 import { Home } from "routes/Home";
 import {
   collectionHeaders,
-  groupsHeaders,
   proposalHeaders,
   sessionHeaders,
 } from "utils/config/table";
@@ -18,7 +17,6 @@ import { getUser } from "loaders/user";
 import {
   checkListingChanged,
   handleCollectionClicked,
-  handleGroupClicked,
   listingLoader,
 } from "loaders/listings";
 import { spaLoader } from "loaders/spa";
@@ -29,6 +27,8 @@ import { processSessionData, sessionLoader } from "loaders/sessions";
 import { theme } from "@diamondlightsource/ui-components";
 import FeedbackForm from "routes/Feedback";
 import { SessionPage } from "routes/Session";
+import { sessionPageLoader } from "loaders/session";
+import { SessionResponse } from "schema/interfaces";
 
 const Calendar = React.lazy(() => import("routes/Calendar"));
 
@@ -93,19 +93,16 @@ const router = createBrowserRouter([
           />
         ),
         loader: ({ request, params }) =>
-          listingLoader(queryClient)(request, params, "sessions", processSessionData),
+          listingLoader<SessionResponse>(queryClient)(request, params, "sessions", processSessionData),
         shouldRevalidate: ({ currentUrl, nextUrl }) => checkListingChanged(currentUrl, nextUrl),
       },
       {
         path: "/proposals/:propId/sessions/:visitId",
         element: (
           <SessionPage
-            headers={groupsHeaders}
-            heading='Data Collection Groups'
-            makePathCallback={handleGroupClicked}
           />
         ),
-        loader: ({ request, params }) => listingLoader(queryClient)(request, params, "dataGroups"),
+        loader: ({ request, params }) => sessionPageLoader(queryClient)(request, params),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups",
