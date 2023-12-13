@@ -1,0 +1,8 @@
+.about-text p {
+  padding: 1em 0;
+}
+
+.about-text {
+  max-width: 900px;
+  padding-bottom: 4em;
+}

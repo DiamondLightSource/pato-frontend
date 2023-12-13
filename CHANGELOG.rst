@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.5.0 (12/12/2023)
+++++++++++
+
+**Added**
+
+- About page for processing information
+
+++++++++++
 v1.4.0 (12/12/2023)
 ++++++++++
 

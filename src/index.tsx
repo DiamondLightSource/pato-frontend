@@ -28,9 +28,9 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { processSessionData, sessionLoader } from "loaders/sessions";
 import { theme } from "@diamondlightsource/ui-components";
 import FeedbackForm from "routes/Feedback";
-import { AboutPage } from "routes/About";
 
 const Calendar = React.lazy(() => import("routes/Calendar"));
+const About = React.lazy(() => import("routes/About"));
 
 const { ToastContainer } = createStandaloneToast();
 const container = document.getElementById("root")!;
@@ -57,7 +57,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/about",
-        element: <AboutPage />,
+        element: (
+          <Suspense>
+            <About />
+          </Suspense>
+        ),
       },
       {
         path: "/proposals",
