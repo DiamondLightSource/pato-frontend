@@ -49,7 +49,7 @@ const AboutPage = () => (
       </Text>
     </section>
     <section id='tomogram'>
-      <Heading>Tomogram</Heading>
+      <Heading>Tomography</Heading>
       <Text>Motion correction is performed with MotionCor2. CTF estimation uses CTFFind4.</Text>
 
       <Text>
