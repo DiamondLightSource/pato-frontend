@@ -102,7 +102,12 @@ const getSpaData = async (groupId: string) => {
         const response = await client.get(`processingJob/${processingJobId}/parameters`);
 
         let legibleParameters =
-          response.status === 200 ? parseJobParameters(response.data.items) : {};
+          response.status === 200
+            ? {
+                allowReprocessing: response.data.allowReprocessing,
+                ...parseJobParameters(response.data.items),
+              }
+            : {};
 
         // Ignore extraction step
         let jobsList: ProcessingJob[] = jobsResponse.data.items.filter(

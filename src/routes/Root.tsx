@@ -3,11 +3,12 @@ import { Outlet, useLoaderData, Link as LinkRouter, useLocation } from "react-ro
 import { Footer } from "components/navigation/footer";
 import { useIsFetching } from "@tanstack/react-query";
 import {
-  LinkDescriptor,
   Navbar,
   User,
   AuthState,
   Breadcrumbs,
+  NavLinks,
+  NavLink,
 } from "@diamondlightsource/ui-components";
 import { useMemo } from "react";
 import "styles/main.css";
@@ -23,11 +24,6 @@ const handleLogout = () =>
   window.location.assign(
     `${process.env.REACT_APP_AUTH_ENDPOINT}logout?redirect_uri=${window.location.href}`
   );
-
-const links: LinkDescriptor[] = [
-  { route: "/proposals", label: "Proposals" },
-  { route: "/calendar", label: "Calendar" },
-];
 
 const PhaseBanner = ({ deployType }: { deployType: "dev" | "production" | "beta" }) => {
   if (deployType === "production") {
@@ -64,7 +60,6 @@ const Root = () => {
   const isFetching = useIsFetching();
   const location = useLocation();
 
-  const parsedLinks = useMemo(() => (loaderData ? links : []), [loaderData]);
   const deployType = useMemo(() => {
     if (process.env.NODE_ENV === "development") {
       return "dev";
@@ -76,8 +71,18 @@ const Root = () => {
   return (
     <div className='rootContainer'>
       <Box>
-        <Navbar links={parsedLinks} logo='/images/diamondgs.png' as={LinkRouter}>
-          <User user={loaderData} onLogin={handleLogin} onLogout={handleLogout} />
+        <Navbar logo='/images/diamondgs.png'>
+          <>
+            <NavLinks>
+              <NavLink as={LinkRouter} href='/proposals'>
+                Proposals
+              </NavLink>
+              <NavLink as={LinkRouter} href='/calendar'>
+                Calendar
+              </NavLink>
+            </NavLinks>
+            <User user={loaderData} onLogin={handleLogin} onLogout={handleLogout} />
+          </>
         </Navbar>
         <Breadcrumbs path={location.pathname} />
         {isFetching !== 0 ? (

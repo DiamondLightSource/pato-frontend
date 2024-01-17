@@ -78,28 +78,26 @@ const TomogramPage = () => {
     );
   }, [loaderData]);
 
-  // TODO: Enable this once reprocessing is released
-  const buttonDisabled = useMemo(
-    () => {
-      return true;
-      /*if (loaderData.tomograms === null || !loaderData.collection.dataCollectionId) {
+  const buttonDisabled = useMemo(() => {
+    if (
+      loaderData.tomograms === null ||
+      !loaderData.collection.dataCollectionId ||
+      !loaderData.allowReprocessing
+    ) {
       return true;
     }
 
-    return false;
-
-    const totalSucceeded = loaderdata.tomograms.reduce((total, job) => total + (job.status === "Success" ? 1 : 0), 0);
+    const totalSucceeded = loaderData.tomograms.reduce(
+      (total, job) => total + (job.status === "Success" ? 1 : 0),
+      0
+    );
 
     if (totalSucceeded > 2 || totalSucceeded === 0) {
       return true;
     }
 
-    return false;*/
-    },
-    [
-      /*loaderData.tomograms*/
-    ]
-  );
+    return false;
+  }, [loaderData]);
 
   return (
     <Box>
