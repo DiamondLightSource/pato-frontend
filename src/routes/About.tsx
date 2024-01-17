@@ -3,7 +3,7 @@ import { Heading, Link, Text, VStack } from "@chakra-ui/react";
 import "styles/about.css";
 
 const AboutPage = () => (
-  <VStack alignItems='start' className='about-text' mt="1em">
+  <VStack alignItems='start' className='about-text' mt='1em'>
     <section id='about'>
       <Heading>About</Heading>
       <Text>

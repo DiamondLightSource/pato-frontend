@@ -19,7 +19,12 @@ export interface TomogramResponse {
   allowReprocessing: boolean;
 }
 
-const getTomogramData = async (groupId: string, collectionIndex: string, onlyTomograms: boolean, request: Request) => {
+const getTomogramData = async (
+  groupId: string,
+  collectionIndex: string,
+  onlyTomograms: boolean,
+  request: Request
+) => {
   const returnData: TomogramResponse = {
     collection: {
       info: [],
@@ -34,7 +39,11 @@ const getTomogramData = async (groupId: string, collectionIndex: string, onlyTom
   };
 
   const collectionResponse = await client.safeGet(
-    includePage(`dataGroups/${groupId}/dataCollections?onlyTomograms=${onlyTomograms}`, 1, parseInt(collectionIndex))
+    includePage(
+      `dataGroups/${groupId}/dataCollections?onlyTomograms=${onlyTomograms}`,
+      1,
+      parseInt(collectionIndex)
+    )
   );
 
   if (collectionResponse.status !== 200) {
@@ -42,13 +51,22 @@ const getTomogramData = async (groupId: string, collectionIndex: string, onlyTom
   }
 
   if (collectionIndex > collectionResponse.data.total) {
-    return redirect(`${request.url.split("/").slice(0, -1).join("/")}/1?onlyTomograms=${onlyTomograms}`);
+    return redirect(
+      `${request.url.split("/").slice(0, -1).join("/")}/1?onlyTomograms=${onlyTomograms}`
+    );
   }
 
-  if (collectionResponse.status === 200 && collectionResponse.data.total && collectionResponse.data.items) {
+  if (
+    collectionResponse.status === 200 &&
+    collectionResponse.data.total &&
+    collectionResponse.data.items
+  ) {
     returnData.total = collectionResponse.data.total;
 
-    returnData.collection = parseData(collectionResponse.data.items[0], collectionConfig) as CollectionData;
+    returnData.collection = parseData(
+      collectionResponse.data.items[0],
+      collectionConfig
+    ) as CollectionData;
 
     const tomogramsResponse = await client.safeGet(
       `dataCollections/${collectionResponse.data.items[0].dataCollectionId}/tomograms?limit=3`
@@ -78,8 +96,9 @@ const queryBuilder = (groupId: string = "0", collectionIndex: string = "1", requ
   };
 };
 
-export const tomogramLoader = (queryClient: QueryClient) => async (params: Params, request: Request) => {
-  const query = queryBuilder(params.groupId, params.collectionIndex, request);
-  return ((await queryClient.getQueryData(query.queryKey)) ??
-    (await queryClient.fetchQuery(query))) as TomogramResponse;
-};
+export const tomogramLoader =
+  (queryClient: QueryClient) => async (params: Params, request: Request) => {
+    const query = queryBuilder(params.groupId, params.collectionIndex, request);
+    return ((await queryClient.getQueryData(query.queryKey)) ??
+      (await queryClient.fetchQuery(query))) as TomogramResponse;
+  };

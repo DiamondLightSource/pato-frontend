@@ -21,7 +21,9 @@ const handleLogin = () =>
   );
 
 const handleLogout = () =>
-  window.location.assign(`${process.env.REACT_APP_AUTH_ENDPOINT}logout?redirect_uri=${window.location.href}`);
+  window.location.assign(
+    `${process.env.REACT_APP_AUTH_ENDPOINT}logout?redirect_uri=${window.location.href}`
+  );
 
 const PhaseBanner = ({ deployType }: { deployType: "dev" | "production" | "beta" }) => {
   if (deployType === "production") {
@@ -29,8 +31,18 @@ const PhaseBanner = ({ deployType }: { deployType: "dev" | "production" | "beta"
   }
 
   return (
-    <HStack mx='7.3vw' borderBottom='1px solid var(--chakra-colors-diamond-100)' py='0.2em' mb='0.8em'>
-      <Tag fontWeight='600' bg={deployType === "dev" ? "purple" : "diamond.700"} color='diamond.50' borderRadius='0'>
+    <HStack
+      mx='7.3vw'
+      borderBottom='1px solid var(--chakra-colors-diamond-100)'
+      py='0.2em'
+      mb='0.8em'
+    >
+      <Tag
+        fontWeight='600'
+        bg={deployType === "dev" ? "purple" : "diamond.700"}
+        color='diamond.50'
+        borderRadius='0'
+      >
         {deployType.toUpperCase()}
       </Tag>
       <Text>
@@ -73,7 +85,11 @@ const Root = () => {
           </>
         </Navbar>
         <Breadcrumbs path={location.pathname} />
-        {isFetching !== 0 ? <Progress h='0.5em' isIndeterminate size='sm' /> : <Box bg='rgba(0,0,0,0)' h='0.5em' />}
+        {isFetching !== 0 ? (
+          <Progress h='0.5em' isIndeterminate size='sm' />
+        ) : (
+          <Box bg='rgba(0,0,0,0)' h='0.5em' />
+        )}
       </Box>
       <PhaseBanner deployType={deployType} />
       <Box className='main'>

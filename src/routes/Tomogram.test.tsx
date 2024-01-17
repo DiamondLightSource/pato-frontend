@@ -84,7 +84,9 @@ describe("Tomogram Page", () => {
   it("should allow reprocessing if collection has tomogram", async () => {
     renderWithRoute(<TomogramPage />, () => validData);
     await screen.findByText("Tilt Align 1");
-    expect(screen.getByRole("button", { name: /run reprocessing/i })).not.toHaveAttribute("disabled");
+    expect(screen.getByRole("button", { name: /run reprocessing/i })).not.toHaveAttribute(
+      "disabled"
+    );
   });
 
   it("should display reprocessing modal when button is clicked", async () => {
@@ -108,7 +110,9 @@ describe("Tomogram Page", () => {
     await screen.findByText("Tilt Align 1");
     fireEvent.click(screen.getByTestId("filter-tomograms"));
 
-    await waitFor(() => expect(router.state.navigation.location?.search).toBe("?onlyTomograms=true"));
+    await waitFor(() =>
+      expect(router.state.navigation.location?.search).toBe("?onlyTomograms=true")
+    );
   });
 
   it("should not allow reprocessing if collection doesn't have a tomogram", async () => {
@@ -150,7 +154,9 @@ describe("Tomogram Movie Modal", () => {
   });
 
   it("should display next tomogram movie if modal is open and next page is clicked", async () => {
-    renderWithRoute(<TomogramPage />, ({ request }) => (request.url.includes("2") ? secondValidData : validData));
+    renderWithRoute(<TomogramPage />, ({ request }) =>
+      request.url.includes("2") ? secondValidData : validData
+    );
     await screen.findByText("Tilt Align 1");
     fireEvent.click(await screen.findByTestId(/view movie/i));
 
@@ -162,7 +168,9 @@ describe("Tomogram Movie Modal", () => {
   });
 
   it("should close modal if most recent processing job is not a processed tomogram", async () => {
-    renderWithRoute(<TomogramPage />, ({ request }) => (request.url.includes("2") ? noTomogramData : validData));
+    renderWithRoute(<TomogramPage />, ({ request }) =>
+      request.url.includes("2") ? noTomogramData : validData
+    );
     await screen.findByText("Tilt Align 1");
     fireEvent.click(await screen.findByTestId(/view movie/i));
 
