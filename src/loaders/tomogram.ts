@@ -16,6 +16,7 @@ export interface TomogramResponse {
   page: number;
   /** Tomograms belonging to data collection (one per autoproc program) */
   tomograms: TomogramFullResponse[] | null;
+  allowReprocessing: boolean;
 }
 
 const getTomogramData = async (
@@ -34,6 +35,7 @@ const getTomogramData = async (
     total: 1,
     page: 1,
     tomograms: null,
+    allowReprocessing: false,
   };
 
   const collectionResponse = await client.safeGet(
@@ -69,7 +71,14 @@ const getTomogramData = async (
     const tomogramsResponse = await client.safeGet(
       `dataCollections/${collectionResponse.data.items[0].dataCollectionId}/tomograms?limit=3`
     );
+
     if (tomogramsResponse.status === 200 && tomogramsResponse.data) {
+      const paramsResponse = await client.safeGet(
+        `processingJob/${tomogramsResponse.data.items[0].ProcessingJob.processingJobId}/parameters`
+      );
+
+      returnData.allowReprocessing = paramsResponse.data.allowReprocessing;
+
       const items = tomogramsResponse.data.items;
       returnData.tomograms = items;
     }
