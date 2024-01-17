@@ -47,17 +47,11 @@ const TomogramPage = () => {
 
   const onlyTomograms = useMemo(() => searchParams.get("onlyTomograms") === "true", [searchParams]);
   const currentIndex = useMemo(() => parseInt(params.collectionIndex ?? "1"), [params]);
-  const tomogramMovieSrc = useMemo(
-    () => prependApiUrl(`tomograms/${openTomogram}/movie`),
-    [openTomogram]
-  );
+  const tomogramMovieSrc = useMemo(() => prependApiUrl(`tomograms/${openTomogram}/movie`), [openTomogram]);
 
   const handleCollectionChanged = useCallback(
     (page: number) => {
-      navigate(
-        { pathname: `../${page}`, search: `onlyTomograms=${onlyTomograms}` },
-        { relative: "path" }
-      );
+      navigate({ pathname: `../${page}`, search: `onlyTomograms=${onlyTomograms}` }, { relative: "path" });
     },
     [navigate, onlyTomograms]
   );
@@ -78,39 +72,26 @@ const TomogramPage = () => {
     );
   }, [loaderData]);
 
-  // TODO: Enable this once reprocessing is released
-  const buttonDisabled = useMemo(
-    () => {
-      return true;
-      /*if (loaderData.tomograms === null || !loaderData.collection.dataCollectionId) {
+  const buttonDisabled = useMemo(() => {
+    if (loaderData.tomograms === null || !loaderData.collection.dataCollectionId || !loaderData.allowReprocessing) {
       return true;
     }
 
-    return false;
-
-    const totalSucceeded = loaderdata.tomograms.reduce((total, job) => total + (job.status === "Success" ? 1 : 0), 0);
+    const totalSucceeded = loaderData.tomograms.reduce((total, job) => total + (job.status === "Success" ? 1 : 0), 0);
 
     if (totalSucceeded > 2 || totalSucceeded === 0) {
       return true;
     }
 
-    return false;*/
-    },
-    [
-      /*loaderData.tomograms*/
-    ]
-  );
+    return false;
+  }, [loaderData]);
 
   return (
     <Box>
       <HStack marginBottom={2}>
         <VStack w='100%'>
           <Stack w='100%' direction={{ base: "column", md: "row" }}>
-            <CollectionTitle
-              title={loaderData.collection.comments}
-              colorScheme='teal'
-              type='Tomogram'
-            />
+            <CollectionTitle title={loaderData.collection.comments} colorScheme='teal' type='Tomogram' />
             <Spacer />
             <HStack>
               <Tooltip label='Run Reprocessing'>
@@ -137,8 +118,8 @@ const TomogramPage = () => {
           </Stack>
           <HStack w='100%'>
             <Heading color='diamond.300' size='sm'>
-              Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data
-              collection group <Code>{params.groupId}</Code>
+              Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data collection group{" "}
+              <Code>{params.groupId}</Code>
             </Heading>
             <Spacer />
             <Checkbox

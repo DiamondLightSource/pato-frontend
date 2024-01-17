@@ -3,11 +3,12 @@ import { Outlet, useLoaderData, Link as LinkRouter, useLocation } from "react-ro
 import { Footer } from "components/navigation/footer";
 import { useIsFetching } from "@tanstack/react-query";
 import {
-  LinkDescriptor,
   Navbar,
   User,
   AuthState,
   Breadcrumbs,
+  NavLinks,
+  NavLink,
 } from "@diamondlightsource/ui-components";
 import { useMemo } from "react";
 import "styles/main.css";
@@ -20,14 +21,7 @@ const handleLogin = () =>
   );
 
 const handleLogout = () =>
-  window.location.assign(
-    `${process.env.REACT_APP_AUTH_ENDPOINT}logout?redirect_uri=${window.location.href}`
-  );
-
-const links: LinkDescriptor[] = [
-  { route: "/proposals", label: "Proposals" },
-  { route: "/calendar", label: "Calendar" },
-];
+  window.location.assign(`${process.env.REACT_APP_AUTH_ENDPOINT}logout?redirect_uri=${window.location.href}`);
 
 const PhaseBanner = ({ deployType }: { deployType: "dev" | "production" | "beta" }) => {
   if (deployType === "production") {
@@ -35,18 +29,8 @@ const PhaseBanner = ({ deployType }: { deployType: "dev" | "production" | "beta"
   }
 
   return (
-    <HStack
-      mx='7.3vw'
-      borderBottom='1px solid var(--chakra-colors-diamond-100)'
-      py='0.2em'
-      mb='0.8em'
-    >
-      <Tag
-        fontWeight='600'
-        bg={deployType === "dev" ? "purple" : "diamond.700"}
-        color='diamond.50'
-        borderRadius='0'
-      >
+    <HStack mx='7.3vw' borderBottom='1px solid var(--chakra-colors-diamond-100)' py='0.2em' mb='0.8em'>
+      <Tag fontWeight='600' bg={deployType === "dev" ? "purple" : "diamond.700"} color='diamond.50' borderRadius='0'>
         {deployType.toUpperCase()}
       </Tag>
       <Text>
@@ -64,7 +48,6 @@ const Root = () => {
   const isFetching = useIsFetching();
   const location = useLocation();
 
-  const parsedLinks = useMemo(() => (loaderData ? links : []), [loaderData]);
   const deployType = useMemo(() => {
     if (process.env.NODE_ENV === "development") {
       return "dev";
@@ -76,15 +59,21 @@ const Root = () => {
   return (
     <div className='rootContainer'>
       <Box>
-        <Navbar links={parsedLinks} logo='/images/diamondgs.png' as={LinkRouter}>
-          <User user={loaderData} onLogin={handleLogin} onLogout={handleLogout} />
+        <Navbar logo='/images/diamondgs.png'>
+          <>
+            <NavLinks>
+              <NavLink as={LinkRouter} href='/proposals'>
+                Proposals
+              </NavLink>
+              <NavLink as={LinkRouter} href='/calendar'>
+                Calendar
+              </NavLink>
+            </NavLinks>
+            <User user={loaderData} onLogin={handleLogin} onLogout={handleLogout} />
+          </>
         </Navbar>
         <Breadcrumbs path={location.pathname} />
-        {isFetching !== 0 ? (
-          <Progress h='0.5em' isIndeterminate size='sm' />
-        ) : (
-          <Box bg='rgba(0,0,0,0)' h='0.5em' />
-        )}
+        {isFetching !== 0 ? <Progress h='0.5em' isIndeterminate size='sm' /> : <Box bg='rgba(0,0,0,0)' h='0.5em' />}
       </Box>
       <PhaseBanner deployType={deployType} />
       <Box className='main'>

@@ -41,9 +41,10 @@ const validData = {
       Tomogram: { tomogramId: 1 },
       ProcessingJob: { processingJobId: 123 },
       AutoProcProgram: { autoProcProgramId: 1 },
-      status: "Successful",
+      status: "Success",
     },
   ],
+  allowReprocessing: true,
 } as LoaderReturn;
 
 const secondValidData = {
@@ -76,17 +77,16 @@ const invalidJob = {
   total: 1,
   page: 1,
   tomograms: null,
+  allowReprocessing: true,
 } as LoaderReturn;
 
 describe("Tomogram Page", () => {
-  /*
   it("should allow reprocessing if collection has tomogram", async () => {
     renderWithRoute(<TomogramPage />, () => validData);
     await screen.findByText("Tilt Align 1");
     expect(screen.getByRole("button", { name: /run reprocessing/i })).not.toHaveAttribute("disabled");
   });
 
-  
   it("should display reprocessing modal when button is clicked", async () => {
     renderWithRoute(<TomogramPage />, () => validData);
     await screen.findByText("Tilt Align 1");
@@ -94,7 +94,6 @@ describe("Tomogram Page", () => {
 
     await screen.findByText("Reprocessing");
   });
-  */
 
   it("should change page when next page button is clicked", async () => {
     const { router } = renderWithRoute(<TomogramPage />, () => validData);
@@ -102,10 +101,6 @@ describe("Tomogram Page", () => {
     fireEvent.click(await screen.findByLabelText("Next Page"));
 
     await waitFor(() => expect(router.state.location.pathname).toBe("/2"));
-
-    /*await waitFor(() =>
-      expect(mockNavigate).toBeCalledWith({ pathname: "../2", search: "onlyTomograms=false" }, { relative: "path" })
-    );*/
   });
 
   it("should change search parameters when tomogram filter updates", async () => {
@@ -113,11 +108,7 @@ describe("Tomogram Page", () => {
     await screen.findByText("Tilt Align 1");
     fireEvent.click(screen.getByTestId("filter-tomograms"));
 
-    await waitFor(() =>
-      expect(router.state.navigation.location?.search).toBe("?onlyTomograms=true")
-    );
-
-    //await waitFor(() => expect(mockParams).toBeCalledWith({ onlyTomograms: "true" }));
+    await waitFor(() => expect(router.state.navigation.location?.search).toBe("?onlyTomograms=true"));
   });
 
   it("should not allow reprocessing if collection doesn't have a tomogram", async () => {
@@ -126,12 +117,25 @@ describe("Tomogram Page", () => {
     expect(screen.getByRole("button", { name: /run reprocessing/i })).toHaveAttribute("disabled");
   });
 
-  /*
   it("should not allow reprocessing if collection has more than 2 processed tomograms", async () => {
+    const threeTomogramData = structuredClone(validData);
+
+    threeTomogramData.tomograms = Array(3).fill(validData.tomograms![0]);
+    renderWithRoute(<TomogramPage />, () => threeTomogramData);
+
+    await screen.findByText("Tilt Align 1");
+    expect(screen.getByRole("button", { name: /run reprocessing/i })).toHaveAttribute("disabled");
   });
-  
+
   it("should not allow reprocessing if collection has no processed tomograms", async () => {
-  });*/
+    const failedTomogram = structuredClone(validData);
+
+    failedTomogram.tomograms![0].status = "Failed";
+    renderWithRoute(<TomogramPage />, () => failedTomogram);
+
+    await screen.findByText("Tilt Align 1");
+    expect(screen.getByRole("button", { name: /run reprocessing/i })).toHaveAttribute("disabled");
+  });
 });
 
 describe("Tomogram Movie Modal", () => {
@@ -146,9 +150,7 @@ describe("Tomogram Movie Modal", () => {
   });
 
   it("should display next tomogram movie if modal is open and next page is clicked", async () => {
-    renderWithRoute(<TomogramPage />, ({ request }) =>
-      request.url.includes("2") ? secondValidData : validData
-    );
+    renderWithRoute(<TomogramPage />, ({ request }) => (request.url.includes("2") ? secondValidData : validData));
     await screen.findByText("Tilt Align 1");
     fireEvent.click(await screen.findByTestId(/view movie/i));
 
@@ -160,9 +162,7 @@ describe("Tomogram Movie Modal", () => {
   });
 
   it("should close modal if most recent processing job is not a processed tomogram", async () => {
-    renderWithRoute(<TomogramPage />, ({ request }) =>
-      request.url.includes("2") ? noTomogramData : validData
-    );
+    renderWithRoute(<TomogramPage />, ({ request }) => (request.url.includes("2") ? noTomogramData : validData));
     await screen.findByText("Tilt Align 1");
     fireEvent.click(await screen.findByTestId(/view movie/i));
 

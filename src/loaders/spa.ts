@@ -89,12 +89,7 @@ const getSpaData = async (groupId: string) => {
 
     if (parsedCollectionData.dataCollectionId) {
       const jobsResponse = await client.safeGet(
-        buildEndpoint(
-          "processingJobs",
-          { collectionId: parsedCollectionData.dataCollectionId.toString() },
-          25,
-          1
-        )
+        buildEndpoint("processingJobs", { collectionId: parsedCollectionData.dataCollectionId.toString() }, 25, 1)
       );
 
       if (jobsResponse.status === 200 && jobsResponse.data.items) {
@@ -102,7 +97,9 @@ const getSpaData = async (groupId: string) => {
         const response = await client.get(`processingJob/${processingJobId}/parameters`);
 
         let legibleParameters =
-          response.status === 200 ? parseJobParameters(response.data.items) : {};
+          response.status === 200
+            ? { allowReprocessing: response.data.allowReprocessing, ...parseJobParameters(response.data.items) }
+            : {};
 
         // Ignore extraction step
         let jobsList: ProcessingJob[] = jobsResponse.data.items.filter(
@@ -155,6 +152,5 @@ const queryBuilder = (groupId: string = "0") => ({
 
 export const spaLoader = (queryClient: QueryClient) => async (params: Params) => {
   const query = queryBuilder(params.groupId);
-  return ((await queryClient.getQueryData(query.queryKey)) ??
-    (await queryClient.fetchQuery(query))) as SpaResponse;
+  return ((await queryClient.getQueryData(query.queryKey)) ?? (await queryClient.fetchQuery(query))) as SpaResponse;
 };
