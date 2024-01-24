@@ -29,8 +29,8 @@ describe("SPA Reprocessing", () => {
     );
 
     fireEvent.click(screen.getByText("Submit"));
-    await waitFor(() => expect(mockToast).toBeCalled());
-    expect(reprocessingCallback).not.toBeCalled();
+    await waitFor(() => expect(mockToast).toHaveBeenCalled());
+    expect(reprocessingCallback).not.toHaveBeenCalled();
   });
 
   it("should call close callback when successful", async () => {
@@ -51,7 +51,22 @@ describe("SPA Reprocessing", () => {
     });
 
     fireEvent.click(screen.getByText("Submit"));
-    await waitFor(() => expect(reprocessingCallback).toBeCalled());
+    await waitFor(() => expect(reprocessingCallback).toHaveBeenCalled());
+  });
+
+  it("should display errors if not stopping after CTF estimation and diameters are not set", async () => {
+    const reprocessingCallback = jest.fn();
+    renderWithProviders(
+      <RelionReprocessing
+        defaultValues={{ dosePerFrame: 1, pixelSize: 1 }}
+        collectionId={1}
+        onClose={reprocessingCallback}
+      />
+    );
+
+    fireEvent.click(screen.getByText("Submit"));
+    const errors = await screen.findAllByText("Field is required");
+    expect(errors).toHaveLength(2);
   });
 
   it("should use provided default values", () => {
@@ -75,7 +90,7 @@ describe("SPA Reprocessing", () => {
 
     fireEvent.click(screen.getByText("Submit"));
     await screen.findAllByText("Field is required");
-    await waitFor(() => expect(reprocessingCallback).not.toBeCalled());
+    await waitFor(() => expect(reprocessingCallback).not.toHaveBeenCalled());
   });
 
   it("should disable manual fields when stopping after CTF estimation", () => {

@@ -45,11 +45,19 @@ const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProp
   const {
     handleSubmit,
     register,
+    setError,
     formState: { errors },
   } = useForm({ defaultValues });
   const { toast } = createStandaloneToast();
 
   const onSubmit = handleSubmit((formData) => {
+    if (!formData.stopAfterCtfEstimation) {
+      if (!(formData.minimumDiameter && formData.maximumDiameter)) {
+        setError("maximumDiameter", { type: "required", ...required });
+        setError("minimumDiameter", { type: "required", ...required });
+      }
+    }
+
     client.post(`dataCollections/${collectionId}/reprocessing/spa`, formData).then((response) => {
       if (response.status !== 202) {
         toast({
