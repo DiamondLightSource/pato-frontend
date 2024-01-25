@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.5.2 (24/01/2024)
+++++++++++
+
+**Changed**
+
+- SPA reprocessing form now performs checks for maximum and minimum diameter when not stopping after CTF estimation
+
+++++++++++
 v1.5.1 (17/01/2024)
 ++++++++++
 
