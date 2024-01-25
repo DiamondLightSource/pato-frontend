@@ -23,14 +23,14 @@ describe("SPA Reprocessing", () => {
     renderWithProviders(
       <RelionReprocessing
         collectionId={1}
-        defaultValues={{ dosePerFrame: 1, pixelSize: 1 }}
+        defaultValues={{ dosePerFrame: 1, pixelSize: 1, maximumDiameter: 1, minimumDiameter: 1 }}
         onClose={reprocessingCallback}
       />
     );
 
     fireEvent.click(screen.getByText("Submit"));
-    await waitFor(() => expect(mockToast).toBeCalled());
-    expect(reprocessingCallback).not.toBeCalled();
+    await waitFor(() => expect(mockToast).toHaveBeenCalled());
+    expect(reprocessingCallback).not.toHaveBeenCalled();
   });
 
   it("should call close callback when successful", async () => {
@@ -49,9 +49,48 @@ describe("SPA Reprocessing", () => {
     fireEvent.change(screen.getByRole("spinbutton", { name: "Dose per Frame (e⁻/Å²)" }), {
       target: { value: 2 },
     });
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Minimum Diameter (Å)" }), {
+      target: { value: 2 },
+    });
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Maximum Diameter (Å)" }), {
+      target: { value: 2 },
+    });
 
     fireEvent.click(screen.getByText("Submit"));
-    await waitFor(() => expect(reprocessingCallback).toBeCalled());
+    await waitFor(() => expect(reprocessingCallback).toHaveBeenCalled());
+  });
+
+  it("should display errors if not stopping after CTF estimation and diameters are not set", async () => {
+    const reprocessingCallback = jest.fn();
+    renderWithProviders(
+      <RelionReprocessing
+        defaultValues={{ dosePerFrame: 1, pixelSize: 1 }}
+        collectionId={1}
+        onClose={reprocessingCallback}
+      />
+    );
+
+    fireEvent.click(screen.getByText("Submit"));
+    const errors = await screen.findAllByText("Field is required");
+    expect(errors).toHaveLength(2);
+  });
+
+  it("should clear errors if stopping after CTF estimation", async () => {
+    const reprocessingCallback = jest.fn();
+    renderWithProviders(
+      <RelionReprocessing
+        defaultValues={{ dosePerFrame: 1, pixelSize: 1 }}
+        collectionId={1}
+        onClose={reprocessingCallback}
+      />
+    );
+
+    fireEvent.click(screen.getByText("Submit"));
+    const errors = await screen.findAllByText("Field is required");
+    expect(errors).toHaveLength(2);
+
+    fireEvent.click(screen.getByRole("checkbox", {name: "Stop After CTF Estimation"}))
+    await waitFor(() => expect(screen.queryByText("Field is required")).not.toBeInTheDocument());
   });
 
   it("should use provided default values", () => {
@@ -75,7 +114,7 @@ describe("SPA Reprocessing", () => {
 
     fireEvent.click(screen.getByText("Submit"));
     await screen.findAllByText("Field is required");
-    await waitFor(() => expect(reprocessingCallback).not.toBeCalled());
+    await waitFor(() => expect(reprocessingCallback).not.toHaveBeenCalled());
   });
 
   it("should disable manual fields when stopping after CTF estimation", () => {
