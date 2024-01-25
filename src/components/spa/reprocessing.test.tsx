@@ -89,7 +89,7 @@ describe("SPA Reprocessing", () => {
     const errors = await screen.findAllByText("Field is required");
     expect(errors).toHaveLength(2);
 
-    fireEvent.click(screen.getByRole("checkbox", {name: "Stop After CTF Estimation"}))
+    fireEvent.click(screen.getByRole("checkbox", { name: "Stop After CTF Estimation" }));
     await waitFor(() => expect(screen.queryByText("Field is required")).not.toBeInTheDocument());
   });
 

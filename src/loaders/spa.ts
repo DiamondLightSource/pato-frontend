@@ -60,7 +60,9 @@ export interface SpaResponse {
 
 const getSpaData = async (groupId: string) => {
   const response = await client.safeGet(includePage(`dataGroups/${groupId}/dataCollections`, 1, 1));
-  const returnData = {
+
+  // Tick autocalculation by default
+  const returnData: SpaResponse = {
     collection: {
       info: [],
       comments: "",
@@ -68,6 +70,7 @@ const getSpaData = async (groupId: string) => {
       imageDirectory: "?",
     } as SpaCollectionData,
     jobs: null,
+    jobParameters: { items: { performCalculation: true }, allowReprocessing: false },
   };
 
   if (response.status === 200 && response.data.items) {
@@ -101,13 +104,15 @@ const getSpaData = async (groupId: string) => {
         const processingJobId = jobsResponse.data.items[0].ProcessingJob.processingJobId;
         const response = await client.get(`processingJob/${processingJobId}/parameters`);
 
-        let legibleParameters =
-          response.status === 200
-            ? {
-                allowReprocessing: response.data.allowReprocessing,
-                ...parseJobParameters(response.data.items),
-              }
-            : {};
+        if (response.status === 200) {
+          returnData.jobParameters = {
+            allowReprocessing: response.data.allowReprocessing,
+            items: {
+              ...returnData.jobParameters.items,
+              ...parseJobParameters(response.data.items),
+            },
+          };
+        }
 
         // Ignore extraction step
         let jobsList: ProcessingJob[] = jobsResponse.data.items.filter(
@@ -140,11 +145,7 @@ const getSpaData = async (groupId: string) => {
           return 0;
         });
 
-        return {
-          collection: parsedCollectionData,
-          jobs: jobsList,
-          jobParameters: legibleParameters,
-        };
+        returnData.jobs = jobsList;
       }
     }
   }
