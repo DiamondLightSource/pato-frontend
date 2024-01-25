@@ -10,7 +10,7 @@ import {
   createStandaloneToast,
   Input,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { FieldSet } from "components/form/fieldset";
 import { Form } from "components/form/form";
 import { FormItem, NumericStepper, Options } from "components/form/input";
@@ -38,6 +38,9 @@ const motionCorrectionBinningValues = [
   { key: 2, value: "2" },
 ];
 
+const requiredWhenNotStoppingAfterCTF = (value: number | undefined, formData: RelionProps["defaultValues"]) =>
+  !formData.stopAfterCtfEstimation && !value ? "Field is required" : true;
+
 const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProps) => {
   const [calculateAuto, setCalculateAuto] = useState(!!defaultValues.performCalculation);
   const [stopAfterCTF, setStopAfterCTF] = useState(!!defaultValues.stopAfterCtfEstimation);
@@ -45,9 +48,22 @@ const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProp
   const {
     handleSubmit,
     register,
+    clearErrors,
     formState: { errors },
   } = useForm({ defaultValues });
   const { toast } = createStandaloneToast();
+
+  const onStopAfterCTFChange = useCallback(
+    (value: boolean) => {
+      if (value) {
+        clearErrors("maximumDiameter");
+        clearErrors("minimumDiameter");
+      }
+
+      setStopAfterCTF(value);
+    },
+    [clearErrors]
+  );
 
   const onSubmit = handleSubmit((formData) => {
     client.post(`dataCollections/${collectionId}/reprocessing/spa`, formData).then((response) => {
@@ -147,13 +163,13 @@ const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProp
               </Grid>
               <FormItem label='Minimum Diameter' unit='Å' error={errors.minimumDiameter}>
                 <NumberInput size='sm'>
-                  <NumberInputField {...register("minimumDiameter")} />
+                  <NumberInputField {...register("minimumDiameter", { validate: requiredWhenNotStoppingAfterCTF })} />
                   <NumericStepper />
                 </NumberInput>
               </FormItem>
               <FormItem label='Maximum Diameter' unit='Å' error={errors.maximumDiameter}>
                 <NumberInput size='sm'>
-                  <NumberInputField {...register("maximumDiameter")} />
+                  <NumberInputField {...register("maximumDiameter", { validate: requiredWhenNotStoppingAfterCTF })} />
                   <NumericStepper />
                 </NumberInput>
               </FormItem>
@@ -163,12 +179,7 @@ const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProp
                   <NumericStepper />
                 </NumberInput>
               </FormItem>
-              <FormItem
-                label='Box Size'
-                helperText='Box size before binning'
-                unit='Pixels'
-                error={errors.boxSize}
-              >
+              <FormItem label='Box Size' helperText='Box size before binning' unit='Pixels' error={errors.boxSize}>
                 <NumberInput size='sm' isDisabled={calculateAuto}>
                   <NumberInputField {...register("boxSize")} />
                   <NumericStepper />
@@ -214,7 +225,7 @@ const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProp
               </Checkbox>
               <Checkbox
                 {...register("stopAfterCtfEstimation", {
-                  onChange: (e) => setStopAfterCTF(e.target.checked),
+                  onChange: (e) => onStopAfterCTFChange(e.target.checked),
                 })}
               >
                 Stop After CTF Estimation
