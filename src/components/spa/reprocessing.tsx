@@ -38,8 +38,10 @@ const motionCorrectionBinningValues = [
   { key: 2, value: "2" },
 ];
 
-const requiredWhenNotStoppingAfterCTF = (value: number | undefined, formData: RelionProps["defaultValues"]) =>
-  !formData.stopAfterCtfEstimation && !value ? "Field is required" : true;
+const requiredWhenNotStoppingAfterCTF = (
+  value: number | undefined,
+  formData: RelionProps["defaultValues"]
+) => (!formData.stopAfterCtfEstimation && !value ? "Field is required" : true);
 
 const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProps) => {
   const [calculateAuto, setCalculateAuto] = useState(!!defaultValues.performCalculation);
@@ -163,13 +165,17 @@ const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProp
               </Grid>
               <FormItem label='Minimum Diameter' unit='Å' error={errors.minimumDiameter}>
                 <NumberInput size='sm'>
-                  <NumberInputField {...register("minimumDiameter", { validate: requiredWhenNotStoppingAfterCTF })} />
+                  <NumberInputField
+                    {...register("minimumDiameter", { validate: requiredWhenNotStoppingAfterCTF })}
+                  />
                   <NumericStepper />
                 </NumberInput>
               </FormItem>
               <FormItem label='Maximum Diameter' unit='Å' error={errors.maximumDiameter}>
                 <NumberInput size='sm'>
-                  <NumberInputField {...register("maximumDiameter", { validate: requiredWhenNotStoppingAfterCTF })} />
+                  <NumberInputField
+                    {...register("maximumDiameter", { validate: requiredWhenNotStoppingAfterCTF })}
+                  />
                   <NumericStepper />
                 </NumberInput>
               </FormItem>
@@ -179,7 +185,12 @@ const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProp
                   <NumericStepper />
                 </NumberInput>
               </FormItem>
-              <FormItem label='Box Size' helperText='Box size before binning' unit='Pixels' error={errors.boxSize}>
+              <FormItem
+                label='Box Size'
+                helperText='Box size before binning'
+                unit='Pixels'
+                error={errors.boxSize}
+              >
                 <NumberInput size='sm' isDisabled={calculateAuto}>
                   <NumberInputField {...register("boxSize")} />
                   <NumericStepper />

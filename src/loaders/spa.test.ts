@@ -280,6 +280,17 @@ describe("SPA Data", () => {
     );
 
     const data = await spaLoader(queryClient)({ groupId: "1" });
-    expect(data.jobParameters).toEqual({});
+    expect(data.jobParameters.items).toEqual({ performCalculation: true });
+  });
+
+  it("should set autoprocessing to true by default", async () => {
+    server.use(
+      rest.get("http://localhost/processingJob/:procJobId/parameters", async (req, res, ctx) =>
+        res.once(ctx.status(200), ctx.json({ items: {}, allowReprocessing: true }))
+      )
+    );
+
+    const data = await spaLoader(queryClient)({ groupId: "1" });
+    expect(data.jobParameters.items.performCalculation).toEqual(true);
   });
 });
