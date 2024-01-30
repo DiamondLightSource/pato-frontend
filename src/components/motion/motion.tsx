@@ -64,10 +64,15 @@ export interface MotionProps {
   page?: number;
 }
 
+// The order actually matters, outputs should be closer to the top
 const motionConfig = {
   include: [
     { name: "createdTimeStamp", label: "Movie Timestamp" },
     { name: "dosePerFrame", unit: "e⁻/Å²" },
+    { name: "estimatedResolution", unit: "Å" },
+    { name: "estimatedDefocus", unit: "μm" },
+    { name: "ccValue", label: "CC Value" },
+    { name: "astigmatismAngle", unit: "°" },
     { name: "totalMotion", unit: "Å" },
     { name: "averageMotionPerFrame", label: "Average Motion/Frame", unit: "Å" },
     { name: "imageNumber" },
@@ -78,10 +83,6 @@ const motionConfig = {
     { name: "amplitudeContrast" },
     { name: "defocusStepSize", unit: "Å" },
     { name: "astigmatism", unit: "nm" },
-    { name: "astigmatismAngle", unit: "°" },
-    { name: "estimatedResolution", unit: "Å" },
-    { name: "estimatedDefocus", unit: "μm" },
-    { name: "ccValue", label: "CC Value" },
   ],
   root: [
     "tomogramId",
