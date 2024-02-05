@@ -26,7 +26,7 @@ RUN yarn install --immutable --check-cache
 COPY . ./
 RUN yarn build
 
-FROM docker.io/nginxinc/nginx-unprivileged:bookworm-perl
+FROM docker.io/nginxinc/nginx-unprivileged:alpine3.18-perl
 COPY --from=build /usr/src/app/build /usr/share/nginx/html
 COPY nginx/conf.d /etc/nginx/nginx.conf
 

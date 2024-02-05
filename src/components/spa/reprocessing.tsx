@@ -10,11 +10,11 @@ import {
   createStandaloneToast,
   Input,
 } from "@chakra-ui/react";
-import { useCallback, useState } from "react";
+import { useEffect } from "react";
 import { FieldSet } from "components/form/fieldset";
 import { Form } from "components/form/form";
-import { FormItem, NumericStepper, Options } from "components/form/input";
-import { useForm } from "react-hook-form";
+import { FormItem, Options } from "components/form/input";
+import { useForm, useWatch } from "react-hook-form";
 import { client } from "utils/api/client";
 import { baseToast } from "@diamondlightsource/ui-components";
 import { components } from "schema/main";
@@ -44,32 +44,51 @@ const requiredWhenNotStoppingAfterCTF = (
 ) => (!formData.stopAfterCtfEstimation && !value ? "Field is required" : true);
 
 const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProps) => {
-  const [calculateAuto, setCalculateAuto] = useState(!!defaultValues.performCalculation);
-  const [stopAfterCTF, setStopAfterCTF] = useState(!!defaultValues.stopAfterCtfEstimation);
-
   const {
     handleSubmit,
     register,
+    control,
+    reset,
+    setValue,
     clearErrors,
     formState: { errors },
   } = useForm({ defaultValues });
   const { toast } = createStandaloneToast();
 
-  const onStopAfterCTFChange = useCallback(
-    (value: boolean) => {
-      if (value) {
-        clearErrors("maximumDiameter");
-        clearErrors("minimumDiameter");
+  const particleSize = useWatch({ control, name: ["pixelSize", "maximumDiameter"] });
+  const calculateAuto = useWatch({
+    control,
+    name: "performCalculation",
+    defaultValue: !!defaultValues.performCalculation,
+  });
+  const stopAfterCTF = useWatch({
+    control,
+    name: "stopAfterCtfEstimation",
+    defaultValue: !!defaultValues.stopAfterCtfEstimation,
+  });
+
+  useEffect(() => {
+    if (particleSize[1] && calculateAuto) {
+      // https://github.com/DiamondLightSource/cryoem-services/blob/main/src/cryoemservices/util/spa_relion_service_options.py#L10
+
+      setValue("maskDiameter", parseFloat((1.1 * particleSize[1]).toFixed(3)));
+      if (particleSize[0] && particleSize[0] > 0) {
+        setValue("boxSize", 2 * Math.ceil((1.2 * (particleSize[1] / particleSize[0])) / 2));
       }
+    }
+  }, [particleSize, setValue, calculateAuto]);
 
-      setStopAfterCTF(value);
-    },
-    [clearErrors]
-  );
-
+  useEffect(() => {
+    if (stopAfterCTF) {
+      clearErrors("maximumDiameter");
+      clearErrors("minimumDiameter");
+    }
+  }, [clearErrors, stopAfterCTF]);
   const onSubmit = handleSubmit((formData) => {
     client.post(`dataCollections/${collectionId}/reprocessing/spa`, formData).then((response) => {
       if (response.status !== 202) {
+        // Autopopulated fields get cleared on submission for some odd reason
+        reset(formData);
         toast({
           ...baseToast,
           title: "Error while initiating pipeline",
@@ -124,13 +143,11 @@ const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProp
               <FormItem label='Pixel Size' unit='Å/pixel' error={errors.pixelSize}>
                 <NumberInput size='sm' precision={3}>
                   <NumberInputField {...register("pixelSize", { required })} />
-                  <NumericStepper />
                 </NumberInput>
               </FormItem>
               <FormItem label='Dose per Frame' unit='e⁻/Å²' error={errors.dosePerFrame}>
                 <NumberInput size='sm' precision={3}>
                   <NumberInputField {...register("dosePerFrame", { required })} />
-                  <NumericStepper />
                 </NumberInput>
               </FormItem>
             </VStack>
@@ -149,13 +166,7 @@ const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProp
                   </Text>
                 </VStack>
                 <VStack spacing='0'>
-                  <Checkbox
-                    isDisabled={stopAfterCTF}
-                    w='100%'
-                    {...register("performCalculation", {
-                      onChange: (e) => setCalculateAuto(e.target.checked),
-                    })}
-                  >
+                  <Checkbox isDisabled={stopAfterCTF} w='100%' {...register("performCalculation")}>
                     Calculate for Me
                   </Checkbox>
                   <Text paddingLeft='2.1em' fontSize='xs' color='diamond.300'>
@@ -168,7 +179,6 @@ const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProp
                   <NumberInputField
                     {...register("minimumDiameter", { validate: requiredWhenNotStoppingAfterCTF })}
                   />
-                  <NumericStepper />
                 </NumberInput>
               </FormItem>
               <FormItem label='Maximum Diameter' unit='Å' error={errors.maximumDiameter}>
@@ -176,13 +186,11 @@ const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProp
                   <NumberInputField
                     {...register("maximumDiameter", { validate: requiredWhenNotStoppingAfterCTF })}
                   />
-                  <NumericStepper />
                 </NumberInput>
               </FormItem>
               <FormItem label='Mask Diameter' unit='Å' error={errors.maskDiameter}>
-                <NumberInput size='sm' isDisabled={calculateAuto}>
-                  <NumberInputField {...register("maskDiameter")} />
-                  <NumericStepper />
+                <NumberInput size='sm'>
+                  <NumberInputField {...register("maskDiameter", { disabled: calculateAuto })} />
                 </NumberInput>
               </FormItem>
               <FormItem
@@ -191,20 +199,8 @@ const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProp
                 unit='Pixels'
                 error={errors.boxSize}
               >
-                <NumberInput size='sm' isDisabled={calculateAuto}>
-                  <NumberInputField {...register("boxSize")} />
-                  <NumericStepper />
-                </NumberInput>
-              </FormItem>
-              <FormItem
-                label='Downsample Box Size'
-                helperText='Box size after binning'
-                unit='Pixels'
-                error={errors.downsampleBoxSize}
-              >
-                <NumberInput size='sm' isDisabled={calculateAuto}>
-                  <NumberInputField {...register("downsampleBoxSize")} />
-                  <NumericStepper />
+                <NumberInput size='sm'>
+                  <NumberInputField {...register("boxSize", { disabled: calculateAuto })} />
                 </NumberInput>
               </FormItem>
             </VStack>
@@ -234,13 +230,7 @@ const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProp
               <Checkbox isDisabled={stopAfterCTF} {...register("perform3DSecondPass")}>
                 Second Pass (3D Classification)
               </Checkbox>
-              <Checkbox
-                {...register("stopAfterCtfEstimation", {
-                  onChange: (e) => onStopAfterCTFChange(e.target.checked),
-                })}
-              >
-                Stop After CTF Estimation
-              </Checkbox>
+              <Checkbox {...register("stopAfterCtfEstimation")}>Stop After CTF Estimation</Checkbox>
             </Grid>
           </FieldSet>
         </GridItem>
