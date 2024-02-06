@@ -68,12 +68,14 @@ const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProp
   });
 
   useEffect(() => {
-    if (particleSize[1] && calculateAuto) {
+    const [pixelSize, maximumDiameter] = particleSize;
+
+    if (maximumDiameter && calculateAuto) {
       // https://github.com/DiamondLightSource/cryoem-services/blob/main/src/cryoemservices/util/spa_relion_service_options.py#L10
 
-      setValue("maskDiameter", parseFloat((1.1 * particleSize[1]).toFixed(3)));
-      if (particleSize[0] && particleSize[0] > 0) {
-        setValue("boxSize", 2 * Math.ceil((1.2 * (particleSize[1] / particleSize[0])) / 2));
+      setValue("maskDiameter", parseFloat((1.1 * maximumDiameter).toFixed(3)));
+      if (pixelSize && pixelSize > 0) {
+        setValue("boxSize", 2 * Math.ceil((1.2 * (maximumDiameter / pixelSize)) / 2));
       }
     }
   }, [particleSize, setValue, calculateAuto]);
