@@ -280,40 +280,17 @@ describe("SPA Data", () => {
     );
 
     const data = await spaLoader(queryClient)({ groupId: "1" });
-    expect(data.jobParameters).toEqual({});
+    expect(data.jobParameters.items).toEqual({ performCalculation: true });
   });
 
-  it("should only return file name from gain reference path parameter", async () => {
+  it("should set autoprocessing to true by default", async () => {
     server.use(
       rest.get("http://localhost/processingJob/:procJobId/parameters", async (req, res, ctx) =>
-        res.once(
-          ctx.status(200),
-          ctx.json({ motioncor_gainreference: "/dls/some/path/here/gain.mrc" })
-        )
+        res.once(ctx.status(200), ctx.json({ items: {}, allowReprocessing: true }))
       )
     );
 
     const data = await spaLoader(queryClient)({ groupId: "1" });
-    expect(data.jobParameters).toEqual({ gainReferenceFile: "gain.mrc" });
-  });
-
-  it("should cast boolean fields in parameter listing to boolean values", async () => {
-    const data = await spaLoader(queryClient)({ groupId: "1" });
-    expect(data.jobParameters).toEqual({
-      doClass2D: false,
-      doClass3D: true,
-      sphericalAberration: "1",
-    });
-  });
-
-  it("should include generic parameters without an alias", async () => {
-    server.use(
-      rest.get("http://localhost/processingJob/:procJobId/parameters", async (req, res, ctx) =>
-        res.once(ctx.status(200), ctx.json({ someKey: 1 }))
-      )
-    );
-
-    const data = await spaLoader(queryClient)({ groupId: "1" });
-    expect(data.jobParameters).toEqual({ someKey: 1 });
+    expect(data.jobParameters.items.performCalculation).toEqual(true);
   });
 });

@@ -1,9 +1,15 @@
 import { Box, HStack, Tag, Text, Link, Progress } from "@chakra-ui/react";
-import { Outlet, useLoaderData, Link as LinkRouter } from "react-router-dom";
+import { Outlet, useLoaderData, Link as LinkRouter, useLocation } from "react-router-dom";
 import { Footer } from "components/navigation/footer";
-import { Breadcrumbs } from "components/navigation/breadcrumbs";
 import { useIsFetching } from "@tanstack/react-query";
-import { LinkDescriptor, Navbar, User, AuthState } from "@diamondlightsource/ui-components";
+import {
+  Navbar,
+  User,
+  AuthState,
+  Breadcrumbs,
+  NavLinks,
+  NavLink,
+} from "@diamondlightsource/ui-components";
 import { useMemo } from "react";
 import "styles/main.css";
 
@@ -18,11 +24,6 @@ const handleLogout = () =>
   window.location.assign(
     `${process.env.REACT_APP_AUTH_ENDPOINT}logout?redirect_uri=${window.location.href}`
   );
-
-const links: LinkDescriptor[] = [
-  { route: "/proposals", label: "Proposals" },
-  { route: "/calendar", label: "Calendar" },
-];
 
 const PhaseBanner = ({ deployType }: { deployType: "dev" | "production" | "beta" }) => {
   if (deployType === "production") {
@@ -57,8 +58,8 @@ const PhaseBanner = ({ deployType }: { deployType: "dev" | "production" | "beta"
 const Root = () => {
   const loaderData = useLoaderData() as AuthState | null;
   const isFetching = useIsFetching();
+  const location = useLocation();
 
-  const parsedLinks = useMemo(() => (loaderData ? links : []), [loaderData]);
   const deployType = useMemo(() => {
     if (process.env.NODE_ENV === "development") {
       return "dev";
@@ -70,10 +71,20 @@ const Root = () => {
   return (
     <div className='rootContainer'>
       <Box>
-        <Navbar links={parsedLinks} logo='/images/diamondgs.png' as={LinkRouter}>
-          <User user={loaderData} onLogin={handleLogin} onLogout={handleLogout} />
+        <Navbar logo='/images/diamondgs.png'>
+          <>
+            <NavLinks>
+              <NavLink as={LinkRouter} href='/proposals'>
+                Proposals
+              </NavLink>
+              <NavLink as={LinkRouter} href='/calendar'>
+                Calendar
+              </NavLink>
+            </NavLinks>
+            <User user={loaderData} onLogin={handleLogin} onLogout={handleLogout} />
+          </>
         </Navbar>
-        <Breadcrumbs />
+        <Breadcrumbs path={location.pathname} />
         {isFetching !== 0 ? (
           <Progress h='0.5em' isIndeterminate size='sm' />
         ) : (

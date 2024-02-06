@@ -7,7 +7,6 @@ import {
   HStack,
   Spacer,
   Checkbox,
-  Tag,
   Icon,
   Button,
   Tooltip,
@@ -30,6 +29,7 @@ import { TomogramResponse } from "loaders/tomogram";
 import APNGContainer from "components/visualisation/apngContainer";
 import { Flipper, InfoGroup, APNGViewer } from "@diamondlightsource/ui-components";
 import { prependApiUrl } from "utils/api/client";
+import { CollectionTitle } from "components/visualisation/collectionTitle";
 
 const TomogramReprocessing = React.lazy(() => import("components/tomogram/reprocessing"));
 
@@ -78,38 +78,37 @@ const TomogramPage = () => {
     );
   }, [loaderData]);
 
-  // TODO: Enable this once reprocessing is released
-  const buttonDisabled = useMemo(
-    () => {
-      return true;
-      /*if (loaderData.tomograms === null || !loaderData.collection.dataCollectionId) {
+  const buttonDisabled = useMemo(() => {
+    if (
+      loaderData.tomograms === null ||
+      !loaderData.collection.dataCollectionId ||
+      !loaderData.allowReprocessing
+    ) {
       return true;
     }
 
-    return false;
-
-    const totalSucceeded = loaderdata.tomograms.reduce((total, job) => total + (job.status === "Success" ? 1 : 0), 0);
+    const totalSucceeded = loaderData.tomograms.reduce(
+      (total, job) => total + (job.status === "Success" ? 1 : 0),
+      0
+    );
 
     if (totalSucceeded > 2 || totalSucceeded === 0) {
       return true;
     }
 
-    return false;*/
-    },
-    [
-      /*loaderData.tomograms*/
-    ]
-  );
+    return false;
+  }, [loaderData]);
 
   return (
     <Box>
       <HStack marginBottom={2}>
         <VStack w='100%'>
           <Stack w='100%' direction={{ base: "column", md: "row" }}>
-            <HStack>
-              <Heading>{loaderData.collection.comments}</Heading>
-              <Tag colorScheme='teal'>Tomogram</Tag>
-            </HStack>
+            <CollectionTitle
+              title={loaderData.collection.comments}
+              colorScheme='teal'
+              type='Tomogram'
+            />
             <Spacer />
             <HStack>
               <Tooltip label='Run Reprocessing'>

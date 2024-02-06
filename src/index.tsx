@@ -31,6 +31,7 @@ import { sessionPageLoader } from "loaders/session";
 import { SessionResponse } from "schema/interfaces";
 
 const Calendar = React.lazy(() => import("routes/Calendar"));
+const About = React.lazy(() => import("routes/About"));
 
 const { ToastContainer } = createStandaloneToast();
 const container = document.getElementById("root")!;
@@ -54,6 +55,14 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home />,
         loader: sessionLoader(queryClient),
+      },
+      {
+        path: "/about",
+        element: (
+          <Suspense>
+            <About />
+          </Suspense>
+        ),
       },
       {
         path: "/proposals",

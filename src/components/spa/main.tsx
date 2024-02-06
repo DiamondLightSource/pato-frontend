@@ -40,6 +40,7 @@ const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
                 <Motion
                   onPageChanged={setPage}
                   onTotalChanged={setTotal}
+                  page={page}
                   parentType='autoProc'
                   parentId={autoProc.autoProcProgramId}
                 />
