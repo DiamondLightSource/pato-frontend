@@ -3,6 +3,18 @@ Changelog
 ==========
 
 ++++++++++
+v1.5.3 (05/02/2024)
+++++++++++
+
+**Changed**
+
+- Box size and mask diameter are now autocalculated based on maximum diameter and pixel size
+
+**Removed**
+
+- Downsample box size field
+
+++++++++++
 v1.5.2 (25/01/2024)
 ++++++++++
 
