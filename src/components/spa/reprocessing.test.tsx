@@ -147,9 +147,6 @@ describe("SPA Reprocessing", () => {
     expect(screen.getByRole("spinbutton", { name: /mask diameter \(å\)/i })).toHaveAttribute(
       "disabled"
     );
-    expect(
-      screen.getByRole("spinbutton", { name: /downsample box size \(pixels\)/i })
-    ).toHaveAttribute("disabled");
   });
 
   it("should disable manual fields when stopping after CTF estimation (on checkbox interaction)", () => {
@@ -164,22 +161,45 @@ describe("SPA Reprocessing", () => {
     expect(screen.getByRole("group", { name: /experiment/i })).not.toHaveAttribute("disabled");
   });
 
-  it("should disable some manual fields when enabling auto calculation (on checkbox interaction)", () => {
+  it("should autocalculate box size and mask diameter", async () => {
     const reprocessingCallback = jest.fn();
     renderWithProviders(
-      <RelionReprocessing collectionId={1} defaultValues={{}} onClose={reprocessingCallback} />
+      <RelionReprocessing
+        collectionId={1}
+        defaultValues={{ performCalculation: true }}
+        onClose={reprocessingCallback}
+      />
     );
 
-    fireEvent.click(screen.getByLabelText("Calculate for Me"));
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Maximum Diameter (Å)" }), {
+      target: { value: "30" },
+    });
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Pixel Size (Å/pixel)" }), {
+      target: { value: "0.8" },
+    });
 
-    expect(screen.getByRole("spinbutton", { name: "Box Size (Pixels)" })).toHaveAttribute(
-      "disabled"
+    await waitFor(() =>
+      expect(screen.getByRole("spinbutton", { name: "Box Size (Pixels)" })).toHaveValue("46")
     );
-    expect(screen.getByRole("spinbutton", { name: /mask diameter \(å\)/i })).toHaveAttribute(
-      "disabled"
+    expect(screen.getByRole("spinbutton", { name: /mask diameter \(å\)/i })).toHaveValue("33");
+  });
+
+  it("should not recalculate box size if pixel size is less or equal to 0", async () => {
+    const reprocessingCallback = jest.fn();
+    renderWithProviders(
+      <RelionReprocessing
+        collectionId={1}
+        defaultValues={{ performCalculation: true, maximumDiameter: 30 }}
+        onClose={reprocessingCallback}
+      />
     );
-    expect(
-      screen.getByRole("spinbutton", { name: /downsample box size \(pixels\)/i })
-    ).toHaveAttribute("disabled");
+
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Pixel Size (Å/pixel)" }), {
+      target: { value: "0" },
+    });
+
+    await waitFor(() =>
+      expect(screen.getByRole("spinbutton", { name: "Box Size (Pixels)" })).toHaveValue("")
+    );
   });
 });

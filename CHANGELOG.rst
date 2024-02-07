@@ -11,6 +11,10 @@ v1.6.0 (07/02/2024)
 - Relion reprocessing form now displays autocalculated values for box size/mask diameter
 - Users can now create data collections from the session page
 
+**Removed**
+
+- Downsample box size field
+
 ++++++++++
 v1.5.2 (25/01/2024)
 ++++++++++
