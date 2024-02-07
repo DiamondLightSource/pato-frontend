@@ -44,4 +44,4 @@ export const sessionLoader = (queryClient: QueryClient) => async () =>
   (await queryClient.getQueryData(query.queryKey)) ?? (await queryClient.fetchQuery(query));
 
 export const processSessionData = (data: Record<string, any>[]) =>
-  data.map((item ) => parseSessionData(item as SessionResponse));
+  data.map((item) => parseSessionData(item as SessionResponse));

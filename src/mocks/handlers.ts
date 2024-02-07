@@ -311,7 +311,7 @@ export const handlers = [
   ),
 
   rest.get("http://localhost/proposals/:propId/sessions/:visitId", (req, res, ctx) =>
-    res(ctx.status(200), ctx.json({beamLineName: "m01", sessionId: 1}), ctx.delay(0))
+    res(ctx.status(200), ctx.json({ beamLineName: "m01", sessionId: 1 }), ctx.delay(0))
   ),
 
   rest.get("http://localhost/unauthorisedEndpoint", (req, res, ctx) => res(ctx.status(401))),
@@ -376,6 +376,11 @@ export const handlers = [
 
   rest.post("http://localhost/dataCollections/:collectionId/reprocessing/:type", (req, res, ctx) =>
     res(ctx.status(202), ctx.json({ processingJobId: 1 }))
+  ),
+
+  rest.post(
+    "http://localhost/proposals/:propId/sessions/:sessionId/dataCollections",
+    (req, res, ctx) => res(ctx.status(201), ctx.json({ dataCollectionId: 1 }))
   ),
 
   rest.get("http://localhost/processingJob/:procJobId/parameters", (req, res, ctx) =>

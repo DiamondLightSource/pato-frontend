@@ -3,7 +3,7 @@ import { Params } from "react-router-dom";
 import { client } from "utils/api/client";
 import { buildEndpoint } from "utils/api/endpoint";
 
-type ProcessDataCallback = (data: Record<string,any>[]) => Record<string, any>[];
+type ProcessDataCallback = (data: Record<string, any>[]) => Record<string, any>[];
 
 const listingQueryBuilder = (request: Request, params: Params<string>, endpoint: string) => {
   const searchParams = new URL(request.url).searchParams;
@@ -11,7 +11,13 @@ const listingQueryBuilder = (request: Request, params: Params<string>, endpoint:
   const items = searchParams.get("items") || "20";
   const page = searchParams.get("page") || "1";
 
-  const builtEndpoint = buildEndpoint(`${endpoint}`, params, parseInt(items), parseInt(page), search);
+  const builtEndpoint = buildEndpoint(
+    `${endpoint}`,
+    params,
+    parseInt(items),
+    parseInt(page),
+    search
+  );
 
   return {
     queryKey: [endpoint, search, items, page, params],
@@ -31,7 +37,7 @@ const getListingData = async (endpoint: string) => {
 };
 
 export const listingLoader =
-  <T extends Record<string,any>>(queryClient: QueryClient) =>
+  <T extends Record<string, any>>(queryClient: QueryClient) =>
   async (
     request: Request,
     params: Params<string>,

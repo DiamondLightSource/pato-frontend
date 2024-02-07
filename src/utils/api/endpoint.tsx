@@ -3,10 +3,10 @@ import { Params } from "react-router-dom";
 export const includePage = (endpoint: string, limit: number, page: number, search?: string) => {
   let newEndpoint = `${endpoint}${endpoint.includes("?") ? "&" : "?"}page=${page - 1}&limit=${limit}`;
   if (search) {
-    newEndpoint += `&search=${search}`
+    newEndpoint += `&search=${search}`;
   }
 
-  return newEndpoint
+  return newEndpoint;
 };
 
 export const buildEndpoint = (

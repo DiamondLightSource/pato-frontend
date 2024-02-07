@@ -8,17 +8,9 @@ import { TomogramPage } from "routes/Tomogram";
 import { SpaPage } from "routes/SPA";
 import { Error } from "routes/Error";
 import { Home } from "routes/Home";
-import {
-  collectionHeaders,
-  proposalHeaders,
-  sessionHeaders,
-} from "utils/config/table";
+import { collectionHeaders, proposalHeaders, sessionHeaders } from "utils/config/table";
 import { getUser } from "loaders/user";
-import {
-  checkListingChanged,
-  handleCollectionClicked,
-  listingLoader,
-} from "loaders/listings";
+import { checkListingChanged, handleCollectionClicked, listingLoader } from "loaders/listings";
 import { spaLoader } from "loaders/spa";
 import { tomogramLoader } from "loaders/tomogram";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -102,15 +94,17 @@ const router = createBrowserRouter([
           />
         ),
         loader: ({ request, params }) =>
-          listingLoader<SessionResponse>(queryClient)(request, params, "sessions", processSessionData),
+          listingLoader<SessionResponse>(queryClient)(
+            request,
+            params,
+            "sessions",
+            processSessionData
+          ),
         shouldRevalidate: ({ currentUrl, nextUrl }) => checkListingChanged(currentUrl, nextUrl),
       },
       {
         path: "/proposals/:propId/sessions/:visitId",
-        element: (
-          <SessionPage
-          />
-        ),
+        element: <SessionPage />,
         loader: ({ request, params }) => sessionPageLoader(queryClient)(request, params),
       },
       {

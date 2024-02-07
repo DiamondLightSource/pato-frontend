@@ -16,7 +16,9 @@ const setHistogram = (
     if (response.status === 200 && response.data.items) {
       const histogram: BarStats[] = [];
       for (const bin of response.data.items) {
-        const label = isNaN(bin.x) ? `${bin.x.charAt(0)}${parseFloat(bin.x.substring(1)) / div}` : bin.x / div;
+        const label = isNaN(bin.x)
+          ? `${bin.x.charAt(0)}${parseFloat(bin.x.substring(1)) / div}`
+          : bin.x / div;
         histogram.push({
           label: label.toString(),
           y: bin.y,
@@ -34,12 +36,12 @@ const parseSessionData = (item: SessionResponse): ParsedSessionReponse => {
   let newItem = Object.assign({}, item, {
     startDate: parseDate(item.startDate as string),
     endDate: parseDate(item.endDate as string),
-    microscopeName: item.beamLineName
+    microscopeName: item.beamLineName,
   });
   const beamLineName = item.beamLineName as string;
   const humanName = beamlineToMicroscope[beamLineName];
 
-  if(humanName) {
+  if (humanName) {
     newItem["microscopeName"] = `${humanName} (${beamLineName})`;
   }
 

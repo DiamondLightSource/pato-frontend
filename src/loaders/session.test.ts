@@ -50,4 +50,4 @@ describe("Group Selection Handler", () => {
       "groups/1/tomograms/1"
     );
   });
-})
+});

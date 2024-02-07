@@ -1,7 +1,34 @@
-import { Divider, Heading, HStack, Spacer, Box, VStack, Stat, StatLabel, StatNumber, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure, Input, Select } from "@chakra-ui/react";
+import {
+  Divider,
+  Heading,
+  HStack,
+  Spacer,
+  Box,
+  VStack,
+  Stat,
+  StatLabel,
+  StatNumber,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+  Input,
+  Select,
+  useToast,
+  ModalProps,
+} from "@chakra-ui/react";
 import { useCallback, useEffect } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
-import { Pagination, DebouncedInput, Table, TwoLineLink } from "@diamondlightsource/ui-components";
+import { useLoaderData, useNavigate, useParams, useRevalidator } from "react-router-dom";
+import {
+  Pagination,
+  DebouncedInput,
+  Table,
+  TwoLineLink,
+  baseToast,
+} from "@diamondlightsource/ui-components";
 import { ParsedSessionReponse } from "schema/interfaces";
 import { handleGroupClicked } from "loaders/session";
 import { groupsHeaders } from "utils/config/table";
@@ -10,6 +37,8 @@ import { Form } from "components/form/form";
 import { FormItem, Options } from "components/form/input";
 import { useForm } from "react-hook-form";
 import { required } from "utils/validation";
+import { client } from "utils/api/client";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface LoaderData {
   items: Record<string, any>[];
@@ -21,21 +50,79 @@ interface LoaderData {
 const fileExtensionValues = [
   { key: ".tif", value: ".tif" },
   { key: ".tiff", value: ".tiff" },
-  { key: ".mrc", value: ".mrc"},
+  { key: ".mrc", value: ".mrc" },
   { key: ".eer", value: ".eer" },
 ];
 
+const DataCollectionCreationForm = (props: Omit<ModalProps, "children">) => {
+  const queryClient = useQueryClient();
+  const { handleSubmit, register } = useForm();
+  const revalidator = useRevalidator();
+  const toast = useToast();
+  const { propId, visitId } = useParams();
+
+  const onSubmit = handleSubmit(async (formData) => {
+    const response = await client.post(
+      `proposals/${propId}/sessions/${visitId}/dataCollections`,
+      formData
+    );
+
+    if (response.status !== 201) {
+      const message =
+        response.status !== 500
+          ? response.data
+          : "Report this error to a local contact or developer";
+      toast({
+        ...baseToast,
+        title: "Error creating data collection",
+        description: message.detail,
+        status: "error",
+      });
+    } else {
+      toast({
+        ...baseToast,
+        title: "Successfully created data collection!",
+      });
+
+      // An alternative way would be to do this in a Router action, and although it works, there is no real benefit,
+      // and we lose access to the component's context
+      queryClient.removeQueries({ queryKey: ["dataGroups"] });
+      revalidator.revalidate();
+      props.onClose();
+    }
+  });
+
+  return (
+    <Modal size='2xl' {...props}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>
+          <Heading size='md'>Create New Data Collection</Heading>
+          <ModalCloseButton />
+        </ModalHeader>
+        <Divider />
+        <ModalBody p={0}>
+          <Form onSubmit={onSubmit}>
+            <FormItem label='Movie File Directory'>
+              <Input size='sm' defaultValue='raw' {...register("fileDirectory", { required })} />
+            </FormItem>
+            <FormItem label='Movie File Name Extension'>
+              <Select size='sm' defaultValue='.tif' {...register("fileExtension")}>
+                <Options values={fileExtensionValues} />
+              </Select>
+            </FormItem>
+          </Form>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
+  );
+};
+
 const SessionPage = () => {
   const data = useLoaderData() as LoaderData;
+
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const { page, setPage, setItemsPerPage, onSearch } = usePaginationSearchParams();
-
-
-  const {
-    handleSubmit,
-    register,
-  } = useForm();
 
   const navigate = useNavigate();
 
@@ -45,10 +132,6 @@ const SessionPage = () => {
     },
     [navigate]
   );
-
-  const onSubmit = handleSubmit((formData) => {
-    console.log(formData)
-  })
 
   useEffect(() => {
     document.title = "PATo » Session";
@@ -73,9 +156,9 @@ const SessionPage = () => {
             <StatNumber>{data.session.microscopeName}</StatNumber>
           </Stat>
         </HStack>
-        <HStack w="100%" gap="1em" alignItems="start" flexWrap="wrap">
-          <VStack flex="1 0 700px">
-            <HStack w='100%' >
+        <HStack w='100%' gap='1em' alignItems='start' flexWrap='wrap'>
+          <VStack flex='1 0 700px'>
+            <HStack w='100%'>
               <Heading size='lg'>Data Collection Groups</Heading>
               <Spacer />
               <DebouncedInput
@@ -114,34 +197,15 @@ const SessionPage = () => {
             <TwoLineLink title='Submit Feedback' href='/feedback' isDisabled={true}>
               Submit session feedback
             </TwoLineLink>
-            <TwoLineLink title='Create New Data Collection' onClick={onOpen}>Create new data collection in session</TwoLineLink>
+            <TwoLineLink title='Create New Data Collection' onClick={onOpen}>
+              Create new data collection in session
+            </TwoLineLink>
           </VStack>
         </HStack>
       </VStack>
-      <Modal size='2xl' isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>
-              <Heading size='md'>Create New Data Collection</Heading>
-              <ModalCloseButton />
-            </ModalHeader>
-            <Divider />
-            <ModalBody p={0}>
-              <Form onSubmit={onSubmit}>
-              <FormItem label="Movie File Directory">
-                <Input size='sm' defaultValue='raw' {...register("fileDirectory", {required})} />
-              </FormItem>
-              <FormItem label='Movie File Name Extension'>
-                <Select size='sm' defaultValue=".tif" {...register("fileNameExtension")}>
-                  <Options values={fileExtensionValues} />
-                </Select>
-              </FormItem>
-              </Form>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
+      <DataCollectionCreationForm onClose={onClose} isOpen={isOpen} />
     </Box>
   );
 };
 
-export { SessionPage };
+export { SessionPage, DataCollectionCreationForm };

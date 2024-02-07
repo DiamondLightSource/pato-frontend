@@ -27,11 +27,17 @@ const sessionQueryBuilder = (request: Request, params: Params<string>) => {
 
 const getListingData = async (
   params: Params<string>,
-  items: string ,
+  items: string,
   page: string,
   search: string
 ) => {
-  const builtEndpoint = buildEndpoint("dataGroups", params, parseInt(items), parseInt(page), search);
+  const builtEndpoint = buildEndpoint(
+    "dataGroups",
+    params,
+    parseInt(items),
+    parseInt(page),
+    search
+  );
 
   const response = await client.safeGet(builtEndpoint);
   const sessionResponse = await client.safeGet(
@@ -42,7 +48,7 @@ const getListingData = async (
     return null;
   }
 
-  return { ...(response.data as PagedGroups), session: parseSessionData(sessionResponse.data )  };
+  return { ...(response.data as PagedGroups), session: parseSessionData(sessionResponse.data) };
 };
 
 export const sessionPageLoader =
@@ -58,17 +64,17 @@ export const sessionPageLoader =
     return { items: null, total: 0, limit: 20, session: null };
   };
 
-  export const handleGroupClicked = (item: Record<string, string | number>) => {
-    if (item.experimentType === "tomo") {
+export const handleGroupClicked = (item: Record<string, string | number>) => {
+  if (item.experimentType === "tomo") {
+    return `groups/${item.dataCollectionGroupId}/tomograms/1`;
+  }
+
+  switch (item.experimentTypeName) {
+    case "Single Particle":
+      return `groups/${item.dataCollectionGroupId}/spa`;
+    case "Tomogram":
       return `groups/${item.dataCollectionGroupId}/tomograms/1`;
-    }
-  
-    switch (item.experimentTypeName) {
-      case "Single Particle":
-        return `groups/${item.dataCollectionGroupId}/spa`;
-      case "Tomogram":
-        return `groups/${item.dataCollectionGroupId}/tomograms/1`;
-      default:
-        return `groups/${item.dataCollectionGroupId}/spa`;
-    }
-  };
+    default:
+      return `groups/${item.dataCollectionGroupId}/spa`;
+  }
+};
