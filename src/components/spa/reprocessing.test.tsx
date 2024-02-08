@@ -136,7 +136,7 @@ describe("SPA Reprocessing", () => {
     renderWithProviders(
       <RelionReprocessing
         collectionId={1}
-        defaultValues={{ performCalculation: true }}
+        defaultValues={{ performCalculation: true, doClass2D: true, doClass3D: true, useCryolo: true }}
         onClose={reprocessingCallback}
       />
     );
