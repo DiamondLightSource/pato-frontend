@@ -159,11 +159,14 @@ describe("Generic Listing", () => {
     const sortBySelect = await screen.findByRole("combobox", { name: "Sort By" });
     fireEvent.change(sortBySelect, { target: { value: "sortKey2" } });
 
-
     const search = await screen.findByPlaceholderText("Search...");
     fireEvent.change(search, { target: { value: "cm31111" } });
     fireEvent.blur(search);
 
-    await waitFor(() => expect(router.state.navigation.location?.search).toBe("?search=cm31111&page=1&items=20&sortBy=sortKey2"));
+    await waitFor(() =>
+      expect(router.state.navigation.location?.search).toBe(
+        "?search=cm31111&page=1&items=20&sortBy=sortKey2"
+      )
+    );
   });
 });

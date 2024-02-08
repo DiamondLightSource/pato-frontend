@@ -226,12 +226,6 @@ const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProp
         <GridItem>
           <FieldSet title='Miscellaneous'>
             <Grid py={2} templateColumns='repeat(2, 1fr)' gap={2}>
-              <Checkbox isDisabled={stopAfterCTF} {...register("perform2DSecondPass")}>
-                Second Pass (2D Classification)
-              </Checkbox>
-              <Checkbox isDisabled={stopAfterCTF} {...register("perform3DSecondPass")}>
-                Second Pass (3D Classification)
-              </Checkbox>
               <Checkbox {...register("stopAfterCtfEstimation")}>Stop After CTF Estimation</Checkbox>
             </Grid>
           </FieldSet>

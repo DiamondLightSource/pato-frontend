@@ -70,7 +70,10 @@ const getSpaData = async (groupId: string) => {
       imageDirectory: "?",
     } as SpaCollectionData,
     jobs: null,
-    jobParameters: { items: { performCalculation: true }, allowReprocessing: false },
+    jobParameters: {
+      items: { performCalculation: true, doClass2D: true, doClass3D: true, useCryolo: true },
+      allowReprocessing: false,
+    },
   };
 
   if (response.status === 200 && response.data.items) {

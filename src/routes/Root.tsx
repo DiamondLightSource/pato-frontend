@@ -74,12 +74,8 @@ const Root = () => {
         <Navbar logo='/images/diamondgs.png'>
           <>
             <NavLinks>
-              <NavLink href='/proposals'>
-                Proposals
-              </NavLink>
-              <NavLink href='/calendar'>
-                Calendar
-              </NavLink>
+              <NavLink href='/proposals'>Proposals</NavLink>
+              <NavLink href='/calendar'>Calendar</NavLink>
             </NavLinks>
             <User user={loaderData} onLogin={handleLogin} onLogout={handleLogout} />
           </>
