@@ -23,6 +23,7 @@ const getTomogramData = async (
   groupId: string,
   collectionIndex: string,
   onlyTomograms: boolean,
+  sortBy: string | null,
   request: Request
 ) => {
   const returnData: TomogramResponse = {
@@ -38,9 +39,15 @@ const getTomogramData = async (
     allowReprocessing: false,
   };
 
+  const searchParams = new URLSearchParams({ onlyTomograms: onlyTomograms.toString() });
+
+  if (sortBy) {
+    searchParams.set("sortBy", sortBy);
+  }
+
   const collectionResponse = await client.safeGet(
     includePage(
-      `dataGroups/${groupId}/dataCollections?onlyTomograms=${onlyTomograms}`,
+      `dataGroups/${groupId}/dataCollections?${searchParams.toString()}`,
       1,
       parseInt(collectionIndex)
     )
@@ -88,10 +95,13 @@ const getTomogramData = async (
 };
 
 const queryBuilder = (groupId: string = "0", collectionIndex: string = "1", request: Request) => {
-  const onlyTomograms = new URL(request.url).searchParams.get("onlyTomograms") === "true";
+  const urlObj = new URL(request.url);
+  const onlyTomograms = urlObj.searchParams.get("onlyTomograms") === "true";
+  const sortBy = urlObj.searchParams.get("sortBy");
+
   return {
-    queryKey: ["tomogramAutoProc", groupId, collectionIndex, onlyTomograms],
-    queryFn: () => getTomogramData(groupId, collectionIndex, onlyTomograms, request),
+    queryKey: ["tomogramAutoProc", groupId, collectionIndex, onlyTomograms, sortBy],
+    queryFn: () => getTomogramData(groupId, collectionIndex, onlyTomograms, sortBy, request),
     staleTime: 60000,
   };
 };
