@@ -166,7 +166,8 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
               type === "2d" ? (
                 <ImageCard
                   borderColor={getBorderColour(item.selected)}
-                  h={{ base: "16vh", xl: "14vh" }}
+                  h="100%"
+                  maxH="200px"
                   showModal={false}
                   key={item.particleClassificationId}
                   src={item.imageUrl}

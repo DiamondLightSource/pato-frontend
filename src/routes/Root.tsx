@@ -1,5 +1,5 @@
 import { Box, HStack, Tag, Text, Link, Progress } from "@chakra-ui/react";
-import { Outlet, useLoaderData, Link as LinkRouter, useLocation } from "react-router-dom";
+import { Outlet, useLoaderData, useLocation } from "react-router-dom";
 import { Footer } from "components/navigation/footer";
 import { useIsFetching } from "@tanstack/react-query";
 import {
@@ -74,10 +74,10 @@ const Root = () => {
         <Navbar logo='/images/diamondgs.png'>
           <>
             <NavLinks>
-              <NavLink as={LinkRouter} href='/proposals'>
+              <NavLink href='/proposals'>
                 Proposals
               </NavLink>
-              <NavLink as={LinkRouter} href='/calendar'>
+              <NavLink href='/calendar'>
                 Calendar
               </NavLink>
             </NavLinks>
