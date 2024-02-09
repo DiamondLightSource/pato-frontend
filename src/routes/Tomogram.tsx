@@ -55,7 +55,10 @@ const TomogramPage = () => {
 
   const handleCollectionChanged = useCallback(
     (page: number) => {
-      navigate({ pathname: `../${page}`, search: window.location.search }, { relative: "path" });
+      navigate(
+        { pathname: `../${page}`, search: window.location.search },
+        { relative: "path", replace: true }
+      );
     },
     [navigate]
   );

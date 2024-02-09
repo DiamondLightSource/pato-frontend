@@ -18,7 +18,7 @@ export const includePage = (
     searchParams.set("sortBy", sortBy);
   }
 
-  let newEndpoint = `${endpoint}${endpoint.includes("?") ? "&" : "?"}${searchParams.toString()}`;
+  let newEndpoint = `${endpoint}${endpoint.includes("?") ? "&" : "?"}${searchParams}`;
 
   return newEndpoint;
 };

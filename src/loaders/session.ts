@@ -44,11 +44,17 @@ const getListingData = async (
     `proposals/${params.propId}/sessions/${params.visitId}`
   );
 
-  if (response.status !== 200 || sessionResponse.status !== 200) {
+  if (sessionResponse.status !== 200) {
     return null;
   }
 
-  return { ...(response.data as PagedGroups), session: parseSessionData(sessionResponse.data) };
+  const session = parseSessionData(sessionResponse.data);
+
+  if (response.status !== 200) {
+    return { total: 0, items: [], limit: 20, session };
+  }
+
+  return { ...(response.data as PagedGroups), session };
 };
 
 export const sessionPageLoader =
