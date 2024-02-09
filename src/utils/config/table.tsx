@@ -27,6 +27,7 @@ export const collectionHeaders = [
   { key: "endTime", label: "End Time" },
   { key: "runStatus", label: "Run Status" },
   { key: "tomograms", label: "Processed Tomograms" },
+  { key: "globalAlignmentQuality", label: "Alignment Quality" },
 ];
 
 export const beamlineToMicroscope: Record<string, string> = {

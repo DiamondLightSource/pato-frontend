@@ -22,7 +22,7 @@ export interface TomogramResponse {
 const getTomogramData = async (
   groupId: string,
   collectionIndex: string,
-  onlyTomograms: boolean,
+  searchParams: URLSearchParams,
   request: Request
 ) => {
   const returnData: TomogramResponse = {
@@ -40,7 +40,7 @@ const getTomogramData = async (
 
   const collectionResponse = await client.safeGet(
     includePage(
-      `dataGroups/${groupId}/dataCollections?onlyTomograms=${onlyTomograms}`,
+      `dataGroups/${groupId}/dataCollections?${searchParams}`,
       1,
       parseInt(collectionIndex)
     )
@@ -51,9 +51,7 @@ const getTomogramData = async (
   }
 
   if (collectionIndex > collectionResponse.data.total) {
-    return redirect(
-      `${request.url.split("/").slice(0, -1).join("/")}/1?onlyTomograms=${onlyTomograms}`
-    );
+    return redirect(`${request.url.split("/").slice(0, -1).join("/")}/1?${searchParams}`);
   }
 
   if (
@@ -88,10 +86,11 @@ const getTomogramData = async (
 };
 
 const queryBuilder = (groupId: string = "0", collectionIndex: string = "1", request: Request) => {
-  const onlyTomograms = new URL(request.url).searchParams.get("onlyTomograms") === "true";
+  const urlObj = new URL(request.url);
+
   return {
-    queryKey: ["tomogramAutoProc", groupId, collectionIndex, onlyTomograms],
-    queryFn: () => getTomogramData(groupId, collectionIndex, onlyTomograms, request),
+    queryKey: ["tomogramAutoProc", groupId, collectionIndex, urlObj.searchParams],
+    queryFn: () => getTomogramData(groupId, collectionIndex, urlObj.searchParams, request),
     staleTime: 60000,
   };
 };

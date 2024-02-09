@@ -10,17 +10,19 @@ const listingQueryBuilder = (request: Request, params: Params<string>, endpoint:
   const search = searchParams.get("search") || "";
   const items = searchParams.get("items") || "20";
   const page = searchParams.get("page") || "1";
+  const sortBy = searchParams.get("sortBy");
 
   const builtEndpoint = buildEndpoint(
     `${endpoint}`,
     params,
     parseInt(items),
     parseInt(page),
-    search
+    search,
+    sortBy
   );
 
   return {
-    queryKey: [endpoint, search, items, page, params],
+    queryKey: [endpoint, search, items, page, sortBy, params],
     queryFn: async () => getListingData(builtEndpoint),
     staleTime: 60000,
   };

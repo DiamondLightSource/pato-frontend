@@ -10,9 +10,6 @@ import { prependApiUrl } from "utils/api/client";
 
 type LoaderReturn = Awaited<TomogramResponse>;
 
-const searchMap = new Map();
-searchMap.set("onlyTomograms", false);
-
 jest.mock("@diamondlightsource/ui-components", () => ({
   ...jest.requireActual("@diamondlightsource/ui-components"),
   APNGViewer: (props: ApngProps) => <p>{props.src}</p>,
@@ -179,5 +176,15 @@ describe("Tomogram Movie Modal", () => {
     fireEvent.click(screen.getByRole("button", { name: /next page/i }));
 
     await waitFor(() => expect(screen.queryByText("tomograms/1/movie")).not.toBeInTheDocument());
+  });
+
+  it("should change search parameters when tomogram sort key updates", async () => {
+    const { router } = renderWithRoute(<TomogramPage />, () => validData);
+    await screen.findByText("Tilt Align 1");
+    fireEvent.click(screen.getByTestId("sort-tomograms"));
+
+    await waitFor(() =>
+      expect(router.state.navigation.location?.search).toBe("?sortBy=globalAlignmentQuality")
+    );
   });
 });

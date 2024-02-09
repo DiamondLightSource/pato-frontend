@@ -118,6 +118,10 @@ const router = createBrowserRouter([
             headers={collectionHeaders}
             heading='Data Collections'
             makePathCallback={handleCollectionClicked}
+            sortOptions={[
+              { key: "dataCollectionId", value: "Data Collection ID" },
+              { key: "globalAlignmentQuality", value: "Alignment Quality" },
+            ]}
           />
         ),
         loader: ({ request, params }) =>

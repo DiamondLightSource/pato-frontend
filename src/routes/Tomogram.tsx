@@ -46,6 +46,7 @@ const TomogramPage = () => {
   const [openTomogram, setOpenTomogram] = useState<number | null>(null);
 
   const onlyTomograms = useMemo(() => searchParams.get("onlyTomograms") === "true", [searchParams]);
+  const sortBy = useMemo(() => searchParams.get("sortBy"), [searchParams]);
   const currentIndex = useMemo(() => parseInt(params.collectionIndex ?? "1"), [params]);
   const tomogramMovieSrc = useMemo(
     () => prependApiUrl(`tomograms/${openTomogram}/movie`),
@@ -55,16 +56,26 @@ const TomogramPage = () => {
   const handleCollectionChanged = useCallback(
     (page: number) => {
       navigate(
-        { pathname: `../${page}`, search: `onlyTomograms=${onlyTomograms}` },
-        { relative: "path" }
+        { pathname: `../${page}`, search: window.location.search },
+        { relative: "path", replace: true }
       );
     },
-    [navigate, onlyTomograms]
+    [navigate]
   );
 
   const updateTomogramFilter = useCallback(() => {
-    setSearchParams({ onlyTomograms: (!onlyTomograms).toString() });
-  }, [setSearchParams, onlyTomograms]);
+    setSearchParams((prev) => ({
+      ...Object.fromEntries(prev),
+      onlyTomograms: (!(prev.get("onlyTomograms") === "true")).toString(),
+    }));
+  }, [setSearchParams]);
+
+  const updateTomogramSort = useCallback(() => {
+    setSearchParams((prev) => ({
+      ...Object.fromEntries(prev),
+      sortBy: prev.get("sortBy") ? "" : "globalAlignmentQuality",
+    }));
+  }, [setSearchParams]);
 
   useEffect(() => {
     document.title = `PATo » Tomograms » ${params.collectionIndex}`;
@@ -144,8 +155,18 @@ const TomogramPage = () => {
               isChecked={onlyTomograms}
               onChange={updateTomogramFilter}
               alignSelf='end'
+              mr='1em'
             >
               Only show processed tomograms
+            </Checkbox>
+
+            <Checkbox
+              data-testid='sort-tomograms'
+              isChecked={!!sortBy}
+              onChange={updateTomogramSort}
+              alignSelf='end'
+            >
+              Sort by quality
             </Checkbox>
           </HStack>
         </VStack>

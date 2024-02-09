@@ -280,7 +280,12 @@ describe("SPA Data", () => {
     );
 
     const data = await spaLoader(queryClient)({ groupId: "1" });
-    expect(data.jobParameters.items).toEqual({ performCalculation: true });
+    expect(data.jobParameters.items).toEqual({
+      performCalculation: true,
+      doClass2D: true,
+      doClass3D: true,
+      useCryolo: true,
+    });
   });
 
   it("should set autoprocessing to true by default", async () => {

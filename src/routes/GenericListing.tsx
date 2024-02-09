@@ -1,8 +1,9 @@
-import { Divider, Heading, HStack, Spacer, Box } from "@chakra-ui/react";
+import { Divider, Heading, HStack, Spacer, Box, Select, Text } from "@chakra-ui/react";
 import { useCallback, useEffect } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { Pagination, DebouncedInput, Table } from "@diamondlightsource/ui-components";
 import { usePaginationSearchParams } from "utils/hooks";
+import { Option, Options } from "components/form/input";
 
 export interface TableProps {
   headers: {
@@ -10,6 +11,8 @@ export interface TableProps {
     label: string;
   }[];
   heading: string;
+  /** Valid sorting values */
+  sortOptions?: Option[];
   makePathCallback?: (item: Record<string, string | number>, index: number) => string;
 }
 
@@ -19,9 +22,10 @@ interface TableData {
   limit: number;
 }
 
-const GenericListing = ({ headers, heading, makePathCallback }: TableProps) => {
+const GenericListing = ({ headers, heading, sortOptions, makePathCallback }: TableProps) => {
   const data = useLoaderData() as TableData;
-  const { page, setPage, setItemsPerPage, onSearch } = usePaginationSearchParams();
+  const { page, sortBy, setPage, setItemsPerPage, setSortBy, onSearch } =
+    usePaginationSearchParams();
 
   const navigate = useNavigate();
 
@@ -43,10 +47,24 @@ const GenericListing = ({ headers, heading, makePathCallback }: TableProps) => {
       <HStack>
         <Heading>{heading}</Heading>
         <Spacer />
+        {sortOptions && (
+          <>
+            <Text id='sort-by-label'>Sort By</Text>
+            <Select
+              defaultValue={sortBy ?? 0}
+              aria-labelledby='sort-by-label'
+              variant='hi-contrast'
+              size='sm'
+              w={{ base: "auto", md: "20%" }}
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              <Options values={sortOptions} />
+            </Select>
+          </>
+        )}
         <DebouncedInput
           onChangeEnd={onSearch}
-          borderColor='gray.600'
-          bg='diamond.50'
+          variant='hi-contrast'
           w={{ base: "auto", md: "20%" }}
           size='sm'
           placeholder='Search...'

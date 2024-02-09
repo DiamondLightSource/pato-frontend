@@ -11,27 +11,32 @@ export const usePaginationSearchParams = () => {
   const [page, setPage] = useState(parseInt(searchParams.get("page") || "1"));
   const [itemsPerPage, setItemsPerPage] = useState(parseInt(searchParams.get("items") || "20"));
   const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [sortBy, setSortBy] = useState(searchParams.get("sortBy"));
 
   const onSearch = useCallback((search: string) => {
     setPage(1);
     setSearch(search);
   }, []);
 
-  useEffect(
-    () =>
-      navigate(
-        {
-          pathname: ".",
-          search: `?${createSearchParams({
-            search: search,
-            page: page.toString(),
-            items: itemsPerPage.toString(),
-          })}`,
-        },
-        { replace: true }
-      ),
-    [search, page, itemsPerPage, navigate]
-  );
+  useEffect(() => {
+    const newSearchParams = createSearchParams({
+      search: search,
+      page: page.toString(),
+      items: itemsPerPage.toString(),
+    });
 
-  return { page, itemsPerPage, search, setPage, setItemsPerPage, onSearch };
+    if (sortBy) {
+      newSearchParams.set("sortBy", sortBy);
+    }
+
+    navigate(
+      {
+        pathname: ".",
+        search: newSearchParams.toString(),
+      },
+      { replace: true }
+    );
+  }, [search, page, itemsPerPage, sortBy, navigate]);
+
+  return { page, itemsPerPage, search, sortBy, setPage, setSortBy, setItemsPerPage, onSearch };
 };
