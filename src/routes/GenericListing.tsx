@@ -1,7 +1,8 @@
 import { Divider, Heading, HStack, Spacer, Box } from "@chakra-ui/react";
-import { useCallback, useEffect, useState } from "react";
-import { createSearchParams, useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
+import { useCallback, useEffect } from "react";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { Pagination, DebouncedInput, Table } from "@diamondlightsource/ui-components";
+import { usePaginationSearchParams } from "utils/hooks";
 
 export interface TableProps {
   headers: {
@@ -20,33 +21,9 @@ interface TableData {
 
 const GenericListing = ({ headers, heading, makePathCallback }: TableProps) => {
   const data = useLoaderData() as TableData;
-  const [searchParams] = useSearchParams();
-  const [page, setPage] = useState(parseInt(searchParams.get("page") || "1"));
-  const [itemsPerPage, setItemsPerPage] = useState(parseInt(searchParams.get("items") || "20"));
-  const [search, setSearch] = useState(searchParams.get("search") || "");
+  const { page, setPage, setItemsPerPage, onSearch } = usePaginationSearchParams();
 
   const navigate = useNavigate();
-
-  const handleSearch = useCallback((search: string) => {
-    setPage(1);
-    setSearch(search);
-  }, []);
-
-  useEffect(
-    () =>
-      navigate(
-        {
-          pathname: ".",
-          search: `?${createSearchParams({
-            search: search,
-            page: page.toString(),
-            items: itemsPerPage.toString(),
-          })}`,
-        },
-        { replace: true }
-      ),
-    [search, page, itemsPerPage, navigate]
-  );
 
   const handleRowClicked = useCallback(
     (item: Record<string, any>, index: number) => {
@@ -67,7 +44,7 @@ const GenericListing = ({ headers, heading, makePathCallback }: TableProps) => {
         <Heading>{heading}</Heading>
         <Spacer />
         <DebouncedInput
-          onChangeEnd={handleSearch}
+          onChangeEnd={onSearch}
           borderColor='gray.600'
           bg='diamond.50'
           w={{ base: "auto", md: "20%" }}

@@ -3,12 +3,13 @@ Changelog
 ==========
 
 ++++++++++
-v1.5.3 (05/02/2024)
+v1.6.0 (07/02/2024)
 ++++++++++
 
-**Changed**
+**Added**
 
-- Box size and mask diameter are now autocalculated based on maximum diameter and pixel size
+- Relion reprocessing form now displays autocalculated values for box size/mask diameter
+- Users can now create data collections from the session page
 
 **Removed**
 

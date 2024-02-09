@@ -3,7 +3,7 @@ import { renderWithRoute } from "utils/test-utils";
 import { GenericListing } from "routes/GenericListing";
 import { proposalHeaders } from "utils/config/table";
 
-describe("GenericListing", () => {
+describe("Generic Listing", () => {
   afterAll(() => jest.resetAllMocks());
   it("should include search in request", async () => {
     const { router } = renderWithRoute(
