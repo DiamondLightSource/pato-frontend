@@ -1,12 +1,10 @@
 import { QueryClient } from "@tanstack/react-query";
-import { components } from "schema/main";
+import { SessionResponse } from "schema/interfaces";
 import { client } from "utils/api/client";
-import { beamlineToMicroscope } from "utils/config/table";
+import { parseSessionData } from "utils/api/response";
 import { parseDate } from "utils/generic";
 
-type Session = components["schemas"]["SessionResponse"];
-
-const fixAllDates = (sessions: Session[]) =>
+const fixAllDates = (sessions: SessionResponse[]) =>
   sessions.map((session) =>
     Object.assign({}, session, {
       startDate: parseDate(session.startDate),
@@ -45,14 +43,5 @@ const query = {
 export const sessionLoader = (queryClient: QueryClient) => async () =>
   (await queryClient.getQueryData(query.queryKey)) ?? (await queryClient.fetchQuery(query));
 
-export const processSessionData = (data: Record<string, string | number>[]) =>
-  data.map((item: Record<string, string | number>) => {
-    let newItem = Object.assign({}, item, {
-      startDate: parseDate(item.startDate as string),
-      endDate: parseDate(item.endDate as string),
-    });
-    const beamLineName = item.beamLineName as string;
-    const humanName = beamlineToMicroscope[beamLineName];
-    newItem["microscopeName"] = humanName ? `${humanName} (${beamLineName})` : beamLineName;
-    return newItem;
-  });
+export const processSessionData = (data: Record<string, any>[]) =>
+  data.map((item) => parseSessionData(item as SessionResponse));

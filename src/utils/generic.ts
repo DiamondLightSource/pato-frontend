@@ -55,33 +55,6 @@ const pascalToSpace = (input: string) => {
   });
 };
 
-export function isObject(item: any) {
-  return item && typeof item === "object" && !Array.isArray(item);
-}
-
-/**
- * Merges two objects recursively, overwriting values in target if they exist in source, whilst maintaining all other attributes that are not mentioned in source
- *
- * @param target Base record
- * @param source New record, that overwrites values from target
- *
- * @returns New record, merge of target and source
- */
-export const mergeDeep = (target: Record<string, any>, source: Record<string, any>) => {
-  let output = structuredClone(target);
-  if (isObject(target) && isObject(source)) {
-    Object.keys(source).forEach((key) => {
-      if (isObject(source[key])) {
-        if (!(key in target)) Object.assign(output, { [key]: source[key] });
-        else output[key] = mergeDeep(target[key], source[key]);
-      } else {
-        Object.assign(output, { [key]: source[key] });
-      }
-    });
-  }
-  return output;
-};
-
 /**
  * Rewrites ISO 8601 dates with timezones as regular GB localised date strings
  *

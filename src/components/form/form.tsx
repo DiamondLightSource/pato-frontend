@@ -20,7 +20,7 @@ const Form = ({ children, onClose, onSubmit, ...props }: FormProps) => {
   return (
     <Box>
       <form onSubmit={handleSubmit}>
-        <Box p={3} bg='diamond.75'>
+        <Box p={3} bg='diamond.50'>
           {children}
         </Box>
         <Divider />

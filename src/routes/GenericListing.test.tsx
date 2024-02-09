@@ -3,7 +3,7 @@ import { renderWithRoute } from "utils/test-utils";
 import { GenericListing } from "routes/GenericListing";
 import { proposalHeaders } from "utils/config/table";
 
-describe("GenericListing", () => {
+describe("Generic Listing", () => {
   afterAll(() => jest.resetAllMocks());
   it("should include search in request", async () => {
     const { router } = renderWithRoute(
@@ -104,8 +104,69 @@ describe("GenericListing", () => {
     const row = await screen.findByText("31111");
     fireEvent.click(row);
 
-    expect(mockCallback).toBeCalled();
+    expect(mockCallback).toHaveBeenCalled();
 
     await waitFor(() => expect(router.state.navigation.location?.pathname).toBe("/somethingElse"));
+  });
+
+  it("should display sorting options if provided", async () => {
+    renderWithRoute(
+      <GenericListing
+        heading='data'
+        headers={proposalHeaders}
+        sortOptions={[{ key: "sortKey", value: "Sort Value" }]}
+      />,
+      () => ({ data: [] })
+    );
+
+    await screen.findByText("Sort By");
+    expect(screen.getByText("Sort Value")).toBeInTheDocument();
+  });
+
+  it("should select sorting option in URL by default", async () => {
+    const mockCallback = jest.fn().mockReturnValue("somethingElse");
+    renderWithRoute(
+      <GenericListing
+        heading='data'
+        makePathCallback={mockCallback}
+        headers={proposalHeaders}
+        sortOptions={[
+          { key: "sortKey", value: "Sort Value" },
+          { key: "sortKey2", value: "Sort Value 2" },
+        ]}
+      />,
+      () => ({ data: [] }),
+      ["/?sortBy=sortKey2"]
+    );
+
+    await screen.findByText("Sort By");
+    expect(screen.getByRole("combobox", { name: "Sort By" })).toHaveValue("sortKey2");
+  });
+
+  it("should include sort key in URL when fields are updated", async () => {
+    const { router } = renderWithRoute(
+      <GenericListing
+        heading='data'
+        headers={proposalHeaders}
+        sortOptions={[
+          { key: "sortKey", value: "Sort Value" },
+          { key: "sortKey2", value: "Sort Value 2" },
+        ]}
+      />,
+      () => ({ data: [] })
+    );
+
+    const sortBySelect = await screen.findByRole("combobox", { name: "Sort By" });
+    fireEvent.change(sortBySelect, { target: { value: "sortKey2" } });
+
+    const search = await screen.findByPlaceholderText("Search...");
+    fireEvent.change(search, { target: { value: "cm31111" } });
+    fireEvent.blur(search);
+
+    await waitFor(() =>
+      expect(router.state.navigation.location?.search).toBe(
+        "?search=cm31111&page=1&items=20&sortBy=sortKey2"
+      )
+    );
   });
 });

@@ -10,14 +10,19 @@ const listingQueryBuilder = (request: Request, params: Params<string>, endpoint:
   const search = searchParams.get("search") || "";
   const items = searchParams.get("items") || "20";
   const page = searchParams.get("page") || "1";
+  const sortBy = searchParams.get("sortBy");
 
-  let builtEndpoint = buildEndpoint(`${endpoint}`, params, parseInt(items), parseInt(page));
-  if (search) {
-    builtEndpoint += `&search=${search}`;
-  }
+  const builtEndpoint = buildEndpoint(
+    `${endpoint}`,
+    params,
+    parseInt(items),
+    parseInt(page),
+    search,
+    sortBy
+  );
 
   return {
-    queryKey: [endpoint, search, items, page, params],
+    queryKey: [endpoint, search, items, page, sortBy, params],
     queryFn: async () => getListingData(builtEndpoint),
     staleTime: 60000,
   };
@@ -34,7 +39,7 @@ const getListingData = async (endpoint: string) => {
 };
 
 export const listingLoader =
-  (queryClient: QueryClient) =>
+  <T extends Record<string, any>>(queryClient: QueryClient) =>
   async (
     request: Request,
     params: Params<string>,
@@ -46,7 +51,7 @@ export const listingLoader =
 
     if (data && data.items !== undefined) {
       return {
-        data: processData ? processData(data.items) : data.items,
+        data: (processData ? processData(data.items) : data.items) as T[],
         total: data.total,
         limit: data.limit,
       };
@@ -59,22 +64,6 @@ export const listingLoader =
 export const checkListingChanged = (current: URL, next: URL) =>
   (current.searchParams.get("items") !== null || current.searchParams.get("page") !== null) &&
   current.href !== next.href;
-
-export const handleGroupClicked = (item: Record<string, string | number>) => {
-  // Temporary workaround
-  if (item.experimentType === "tomo") {
-    return `${item.dataCollectionGroupId}/tomograms/1`;
-  }
-
-  switch (item.experimentTypeName) {
-    case "Single Particle":
-      return `${item.dataCollectionGroupId}/spa`;
-    case "Tomogram":
-      return `${item.dataCollectionGroupId}/tomograms/1`;
-    default:
-      return `${item.dataCollectionGroupId}/spa`;
-  }
-};
 
 export const handleCollectionClicked = (item: Record<string, string | number>) =>
   `../tomograms/${item.index}`;

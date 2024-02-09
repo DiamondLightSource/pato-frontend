@@ -159,14 +159,15 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
           <Grid
             pt='2'
             mb='3'
-            templateColumns={{ base: "repeat(4, 1fr)", md: "repeat(8, 1fr)" }}
+            templateColumns={{ base: "repeat(4, 1fr)", xl: "repeat(8, 1fr)" }}
             gap='2'
           >
             {data.data.map((item, i) =>
               type === "2d" ? (
                 <ImageCard
                   borderColor={getBorderColour(item.selected)}
-                  h={{ base: "auto", md: "14vh" }}
+                  h='100%'
+                  maxH='200px'
                   showModal={false}
                   key={item.particleClassificationId}
                   src={item.imageUrl}

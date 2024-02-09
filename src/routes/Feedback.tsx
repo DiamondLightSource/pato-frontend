@@ -42,7 +42,7 @@ const FeedbackForm = () => {
   const { toast } = createStandaloneToast();
 
   const onSubmit = handleSubmit((info) => {
-    const data = { ...info, userAgent: navigator.userAgent };
+    const data = { ...info };
     client
       .post("feedback", data)
       .then((response) => {

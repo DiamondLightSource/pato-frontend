@@ -1,6 +1,10 @@
 import { Dispatch, SetStateAction } from "react";
 import { BarStats } from "@diamondlightsource/ui-components";
 import { client } from "utils/api/client";
+import { parseDate } from "utils/generic";
+import { beamlineToMicroscope } from "utils/config/table";
+import { ParsedSessionReponse, SessionResponse } from "schema/interfaces";
+
 import { spaReprocessingFieldConfig } from "utils/config/parse";
 
 const setHistogram = (
@@ -26,6 +30,22 @@ const setHistogram = (
       setState(null);
     }
   });
+};
+
+const parseSessionData = (item: SessionResponse): ParsedSessionReponse => {
+  let newItem = Object.assign({}, item, {
+    startDate: parseDate(item.startDate as string),
+    endDate: parseDate(item.endDate as string),
+    microscopeName: item.beamLineName,
+  });
+  const beamLineName = item.beamLineName as string;
+  const humanName = beamlineToMicroscope[beamLineName];
+
+  if (humanName) {
+    newItem["microscopeName"] = `${humanName} (${beamLineName})`;
+  }
+
+  return newItem;
 };
 
 /**
@@ -58,4 +78,4 @@ const parseJobParameters = (jobParams: Record<string, string | boolean>) => {
   return legibleParameters;
 };
 
-export { setHistogram, parseJobParameters };
+export { setHistogram, parseJobParameters, parseSessionData };

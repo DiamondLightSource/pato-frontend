@@ -3,6 +3,26 @@ Changelog
 ==========
 
 ++++++++++
+v1.6.0 (07/02/2024)
+++++++++++
+
+**Changed**
+
+- Border is shrunk on smaller screens
+- Cryolo, 2D classification, 3D classification enabled in reprocessing by default
+
+**Added**
+
+- Relion reprocessing form now displays autocalculated values for box size/mask diameter
+- Users can now create data collections from the session page
+- Users can now sort data collections by global alignment quality
+
+**Removed**
+
+- Downsample box size field
+- Second pass fields
+
+++++++++++
 v1.5.2 (25/01/2024)
 ++++++++++
 

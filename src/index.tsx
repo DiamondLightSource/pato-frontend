@@ -8,19 +8,9 @@ import { TomogramPage } from "routes/Tomogram";
 import { SpaPage } from "routes/SPA";
 import { Error } from "routes/Error";
 import { Home } from "routes/Home";
-import {
-  collectionHeaders,
-  groupsHeaders,
-  proposalHeaders,
-  sessionHeaders,
-} from "utils/config/table";
+import { collectionHeaders, proposalHeaders, sessionHeaders } from "utils/config/table";
 import { getUser } from "loaders/user";
-import {
-  checkListingChanged,
-  handleCollectionClicked,
-  handleGroupClicked,
-  listingLoader,
-} from "loaders/listings";
+import { checkListingChanged, handleCollectionClicked, listingLoader } from "loaders/listings";
 import { spaLoader } from "loaders/spa";
 import { tomogramLoader } from "loaders/tomogram";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -28,6 +18,9 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { processSessionData, sessionLoader } from "loaders/sessions";
 import { theme } from "@diamondlightsource/ui-components";
 import FeedbackForm from "routes/Feedback";
+import { SessionPage } from "routes/Session";
+import { sessionPageLoader } from "loaders/session";
+import { SessionResponse } from "schema/interfaces";
 
 const Calendar = React.lazy(() => import("routes/Calendar"));
 const About = React.lazy(() => import("routes/About"));
@@ -101,23 +94,22 @@ const router = createBrowserRouter([
           />
         ),
         loader: ({ request, params }) =>
-          listingLoader(queryClient)(request, params, "sessions", processSessionData),
+          listingLoader<SessionResponse>(queryClient)(
+            request,
+            params,
+            "sessions",
+            processSessionData
+          ),
         shouldRevalidate: ({ currentUrl, nextUrl }) => checkListingChanged(currentUrl, nextUrl),
       },
       {
-        path: "/proposals/:propid/sessions/:visitId",
-        element: <Navigate to='groups' replace />,
+        path: "/proposals/:propId/sessions/:visitId",
+        element: <SessionPage />,
+        loader: ({ request, params }) => sessionPageLoader(queryClient)(request, params),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups",
-        element: (
-          <GenericListing
-            headers={groupsHeaders}
-            heading='Data Collection Groups'
-            makePathCallback={handleGroupClicked}
-          />
-        ),
-        loader: ({ request, params }) => listingLoader(queryClient)(request, params, "dataGroups"),
+        element: <Navigate to='..' replace relative='path' />,
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/collections",
@@ -126,6 +118,10 @@ const router = createBrowserRouter([
             headers={collectionHeaders}
             heading='Data Collections'
             makePathCallback={handleCollectionClicked}
+            sortOptions={[
+              { key: "dataCollectionId", value: "Data Collection ID" },
+              { key: "globalAlignmentQuality", value: "Alignment Quality" },
+            ]}
           />
         ),
         loader: ({ request, params }) =>

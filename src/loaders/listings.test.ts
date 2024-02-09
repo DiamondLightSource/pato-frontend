@@ -1,4 +1,4 @@
-import { checkListingChanged, handleGroupClicked, listingLoader } from "loaders/listings";
+import { checkListingChanged, listingLoader } from "loaders/listings";
 import { server } from "mocks/server";
 import { rest } from "msw";
 import { queryClient } from "utils/test-utils";
@@ -9,7 +9,7 @@ describe("Listing Data", () => {
   it("should return data for listing if available", async () => {
     const data = await listingLoader(queryClient)(request, { groupId: "1" }, "proposals");
 
-    expect(data.data[0].proposalNumber).toBe("31111");
+    expect(data.data![0].proposalNumber).toBe("31111");
     expect(data.total).toBe(300);
   });
 
@@ -22,7 +22,7 @@ describe("Listing Data", () => {
       reprocess
     );
 
-    expect(data.data[0].key).toBe(0);
+    expect(data.data![0].key).toBe(0);
     expect(data.total).toBe(300);
   });
 
@@ -47,25 +47,7 @@ describe("Listing Data", () => {
     const requestSearch = new Request("http://localhost/proposals?search=test");
     const data = await listingLoader(queryClient)(requestSearch, {}, "searchTest");
 
-    expect(data.data[0]).toMatchObject({ value: "test" });
-  });
-
-  it("should get proper redirect URL for tomograms", () => {
-    expect(handleGroupClicked({ experimentTypeName: "Tomogram", dataCollectionGroupId: 1 })).toBe(
-      "1/tomograms/1"
-    );
-  });
-
-  it("should get proper redirect URL for SPA", () => {
-    expect(
-      handleGroupClicked({ experimentTypeName: "Single Particle", dataCollectionGroupId: 1 })
-    ).toBe("1/spa");
-  });
-
-  it("should default to SPA redirect URL", () => {
-    expect(handleGroupClicked({ experimentTypeName: "invalid", dataCollectionGroupId: 1 })).toBe(
-      "1/spa"
-    );
+    expect(data.data![0]).toMatchObject({ value: "test" });
   });
 
   it("should not fire loader again if URLs are the same", () => {
