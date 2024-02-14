@@ -102,7 +102,7 @@ const DataCollectionCreationForm = (props: Omit<ModalProps, "children">) => {
         </ModalHeader>
         <Divider />
         <ModalBody p={0}>
-          <Form onSubmit={onSubmit}>
+          <Form onSubmit={onSubmit} onClose={props.onClose}>
             <FormItem label='Movie File Directory'>
               <Input size='sm' defaultValue='raw' {...register("fileDirectory", { required })} />
             </FormItem>

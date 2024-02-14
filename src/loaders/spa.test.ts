@@ -272,6 +272,12 @@ describe("SPA Data", () => {
     expect(data.collection.info[0].value).toBe("");
   });
 
+  it("should return reprocessing decision from server", async () => {
+
+    const data = await spaLoader(queryClient)({ groupId: "1" });
+    expect(data.allowReprocessing).toBe(true);
+  });
+
   it("should return empty parameter list if backend returns 404", async () => {
     server.use(
       rest.get("http://localhost/processingJob/:procJobId/parameters", async (req, res, ctx) =>
@@ -291,7 +297,7 @@ describe("SPA Data", () => {
   it("should set autoprocessing to true by default", async () => {
     server.use(
       rest.get("http://localhost/processingJob/:procJobId/parameters", async (req, res, ctx) =>
-        res.once(ctx.status(200), ctx.json({ items: {}, allowReprocessing: true }))
+        res.once(ctx.status(200), ctx.json({ items: {} }))
       )
     );
 
