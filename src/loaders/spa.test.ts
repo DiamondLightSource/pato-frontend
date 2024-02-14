@@ -273,12 +273,6 @@ describe("SPA Data", () => {
   });
 
   it("should return reprocessing decision from server", async () => {
-    server.use(
-      rest.get(
-        "http://localhost/proposals/:propId/sessions/:sessionId/reprocessingEnabled",
-        async (req, res, ctx) => res.once(ctx.status(200), ctx.json({ allowReprocessing: true }))
-      )
-    );
 
     const data = await spaLoader(queryClient)({ groupId: "1" });
     expect(data.allowReprocessing).toBe(true);
