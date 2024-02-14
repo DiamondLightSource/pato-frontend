@@ -21,6 +21,8 @@ export interface TomogramResponse {
 
 const getTomogramData = async (
   groupId: string,
+  propId: string,
+  sessionId: string,
   collectionIndex: string,
   searchParams: URLSearchParams,
   request: Request
@@ -45,6 +47,14 @@ const getTomogramData = async (
       parseInt(collectionIndex)
     )
   );
+
+  const reprocessingResponse = await client.safeGet(
+    `proposals/${propId}/sessions/${sessionId}/reprocessingEnabled`
+  );
+
+  if (reprocessingResponse.status === 200) {
+    returnData.allowReprocessing = reprocessingResponse.data.allowReprocessing;
+  }
 
   if (collectionResponse.status !== 200) {
     return returnData;
@@ -71,12 +81,6 @@ const getTomogramData = async (
     );
 
     if (tomogramsResponse.status === 200 && tomogramsResponse.data) {
-      const paramsResponse = await client.safeGet(
-        `processingJob/${tomogramsResponse.data.items[0].ProcessingJob.processingJobId}/parameters`
-      );
-
-      returnData.allowReprocessing = paramsResponse.data.allowReprocessing;
-
       const items = tomogramsResponse.data.items;
       returnData.tomograms = items;
     }
@@ -85,19 +89,34 @@ const getTomogramData = async (
   return returnData;
 };
 
-const queryBuilder = (groupId: string = "0", collectionIndex: string = "1", request: Request) => {
+const queryBuilder = (
+  groupId: string = "0",
+  propId: string,
+  sessionId: string,
+  collectionIndex: string = "1",
+  request: Request
+) => {
   const urlObj = new URL(request.url);
 
+  // Since the groupId is already unique, and implicates a single parent session, proposal/session data
+  // does not need to be included in query keys
   return {
     queryKey: ["tomogramAutoProc", groupId, collectionIndex, urlObj.searchParams],
-    queryFn: () => getTomogramData(groupId, collectionIndex, urlObj.searchParams, request),
+    queryFn: () =>
+      getTomogramData(groupId, propId, sessionId, collectionIndex, urlObj.searchParams, request),
     staleTime: 60000,
   };
 };
 
 export const tomogramLoader =
   (queryClient: QueryClient) => async (params: Params, request: Request) => {
-    const query = queryBuilder(params.groupId, params.collectionIndex, request);
+    const query = queryBuilder(
+      params.groupId,
+      params.propId!,
+      params.visitId!,
+      params.collectionIndex,
+      request
+    );
     return ((await queryClient.getQueryData(query.queryKey)) ??
       (await queryClient.fetchQuery(query))) as TomogramResponse;
   };

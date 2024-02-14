@@ -356,6 +356,17 @@ export const handlers = [
     )
   ),
 
+  rest.get(
+    "http://localhost/proposals/:propId/sessions/:visitId/reprocessingEnabled",
+    (req, res, ctx) =>
+      res(
+        ctx.status(200),
+        ctx.json({
+          allowReprocessing: true,
+        })
+      )
+  ),
+
   rest.get("http://localhost/dataGroups/:groupId/dataCollections", (req, res, ctx) =>
     res(
       ctx.status(200),

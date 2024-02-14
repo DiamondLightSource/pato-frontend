@@ -55,10 +55,11 @@ const getAcquisitionSoftware = (fileTemplate: string | null) => {
 export interface SpaResponse {
   collection: SpaCollectionData;
   jobs: ProcessingJob[] | null;
-  jobParameters: { items: ReprocessingParameters; allowReprocessing: boolean };
+  allowReprocessing: boolean;
+  jobParameters: { items: ReprocessingParameters };
 }
 
-const getSpaData = async (groupId: string) => {
+const getSpaData = async (groupId: string, propId: string, sessionId: string) => {
   const response = await client.safeGet(includePage(`dataGroups/${groupId}/dataCollections`, 1, 1));
 
   // Tick autocalculation by default
@@ -70,13 +71,21 @@ const getSpaData = async (groupId: string) => {
       imageDirectory: "?",
     } as SpaCollectionData,
     jobs: null,
+    allowReprocessing: false,
     jobParameters: {
       items: { performCalculation: true, doClass2D: true, doClass3D: true, useCryolo: true },
-      allowReprocessing: false,
     },
   };
 
   if (response.status === 200 && response.data.items) {
+    const allowReprocessingResponse = await client.safeGet(
+      `proposals/${propId}/sessions/${sessionId}/reprocessingEnabled`
+    );
+
+    if (allowReprocessingResponse.status === 200) {
+      returnData.allowReprocessing = allowReprocessingResponse.data.allowReprocessing;
+    }
+
     const data = response.data.items[0] as DataCollection;
 
     const parsedCollectionData = parseData(data, spaCollectionConfig) as SpaCollectionData;
@@ -109,7 +118,6 @@ const getSpaData = async (groupId: string) => {
 
         if (response.status === 200) {
           returnData.jobParameters = {
-            allowReprocessing: response.data.allowReprocessing,
             items: {
               ...returnData.jobParameters.items,
               ...parseJobParameters(response.data.items),
@@ -156,14 +164,16 @@ const getSpaData = async (groupId: string) => {
   return returnData;
 };
 
-const queryBuilder = (groupId: string = "0") => ({
+const queryBuilder = (groupId: string = "0", propId: string, sessionId: string) => ({
+  // Since the groupId is already unique, and implicates a single parent session, proposal/session data
+  // does not need to be included in query keys
   queryKey: ["spaAutoProc", groupId],
-  queryFn: () => getSpaData(groupId),
+  queryFn: () => getSpaData(groupId, propId, sessionId),
   staleTime: 60000,
 });
 
 export const spaLoader = (queryClient: QueryClient) => async (params: Params) => {
-  const query = queryBuilder(params.groupId);
+  const query = queryBuilder(params.groupId, params.propId!, params.visitId!);
   return ((await queryClient.getQueryData(query.queryKey)) ??
     (await queryClient.fetchQuery(query))) as SpaResponse;
 };
