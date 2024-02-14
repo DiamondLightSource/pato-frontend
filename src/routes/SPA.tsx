@@ -78,7 +78,7 @@ const SpaPage = () => {
             <CollectionTitle type='SPA' colorScheme='orange' />
             <Spacer />
             <Tooltip label='Run Reprocessing'>
-              <Button isDisabled={!loaderData.jobParameters.allowReprocessing} onClick={onOpen}>
+              <Button isDisabled={!loaderData.allowReprocessing} onClick={onOpen}>
                 <Icon as={MdRedo} />
               </Button>
             </Tooltip>

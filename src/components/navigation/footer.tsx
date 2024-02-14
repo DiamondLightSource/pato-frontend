@@ -1,6 +1,8 @@
 import { Spacer, HStack, Link, Text } from "@chakra-ui/react";
 import { Link as LinkRouter } from "react-router-dom";
 
+const currentYear = new Date().getFullYear();
+
 const Footer = () => (
   <HStack
     px={{ base: 4, md: "7.5vw" }}
@@ -15,8 +17,9 @@ const Footer = () => (
       <Link color='diamond.400' href='https://github.com/DiamondLightSource/pato-frontend/'>
         {process.env.REACT_APP_VERSION}
       </Link>{" "}
-      | © 2023{" "}
+      | © {currentYear}
       <Link color='diamond.400' href='https://diamond.ac.uk'>
+        {" "}
         Diamond Light Source{" "}
       </Link>
     </Text>

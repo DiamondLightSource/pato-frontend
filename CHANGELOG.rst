@@ -3,6 +3,16 @@ Changelog
 ==========
 
 ++++++++++
+v1.6.1 (13/02/2024)
+++++++++++
+
+**Fixed**
+
+- Cancel button on data collection creation modal
+- Reprocessing check is done on a session level
+- Year on footer has been updated
+
+++++++++++
 v1.6.0 (07/02/2024)
 ++++++++++
 

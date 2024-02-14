@@ -75,4 +75,13 @@ describe("Tomogram Data", () => {
     );
     expect(data).toBeInstanceOf(Response);
   });
+
+  it("should return reprocessing decision from server", async () => {
+    const data = await tomogramLoader(queryClient)(
+      { groupId: "1", propId: "cm1", visitId: "1" },
+      request
+    );
+
+    expect(data.allowReprocessing).toBe(true);
+  });
 });
