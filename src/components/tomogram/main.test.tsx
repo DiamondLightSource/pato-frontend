@@ -78,4 +78,19 @@ describe("Tomogram", () => {
 
     await waitFor(() => expect(openCallback).toHaveBeenCalled());
   });
+
+  it("should render if autoprocessing program is null", async () => {
+    renderWithAccordion(
+      <Tomogram
+        active={true}
+        autoProc={null}
+        procJob={basicProcJob}
+        tomogram={null}
+        status={"Queued"}
+        onTomogramOpened={() => {}}
+      />
+    );
+
+    await screen.findByText("Motion Correction/CTF");
+  });
 });

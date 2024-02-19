@@ -21,7 +21,7 @@ import { PlotContainer } from "components/visualisation/plotContainer";
 import { Motion } from "components/motion/motion";
 import { useCallback } from "react";
 import { client, prependApiUrl } from "utils/api/client";
-import { TomogramData, BaseProcessingJobProps, DataConfig } from "schema/interfaces";
+import { TomogramData, BaseProcessingJobProps, DataConfig, AutoProcSchema } from "schema/interfaces";
 import { CTF } from "components/ctf/ctf";
 import { components } from "schema/main";
 import { ProcessingTitle } from "components/visualisation/processingTitle";
@@ -52,8 +52,9 @@ interface FullTomogramData {
 
 type TomogramResponse = components["schemas"]["TomogramResponse"];
 
-export interface TomogramProps extends BaseProcessingJobProps {
+export interface TomogramProps extends Omit<BaseProcessingJobProps, "autoProc"> {
   tomogram: TomogramResponse | null;
+  autoProc: AutoProcSchema | null;
   onTomogramOpened: (tomogramId: number) => void;
 }
 
@@ -94,7 +95,7 @@ const Tomogram = ({
   active = false,
 }: TomogramProps) => {
   const { data, isLoading } = useQuery({
-    queryKey: ["tomogramAutoProc", autoProc.autoProcProgramId],
+    queryKey: ["tomogramAutoProc", procJob.processingJobId],
     queryFn: async () => await fetchTomogramData(tomogram),
   });
 
