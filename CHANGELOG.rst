@@ -10,6 +10,10 @@ v1.6.2 (19/02/2024)
 
 - Improve performance of session homepage
 
+**Fixed**
+
+- Fixed modal not opening in data collections without processing jobs
+
 ++++++++++
 v1.6.1 (13/02/2024)
 ++++++++++
