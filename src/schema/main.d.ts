@@ -1999,6 +1999,7 @@ export interface components {
       q3: number;
       /** Maximum */
       maximum: number;
+      stddev: number | null;
     };
     /** ReprocessingResponse */
     ReprocessingResponse: {
