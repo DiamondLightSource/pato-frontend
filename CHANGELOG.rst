@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.6.2 (19/02/2024)
+++++++++++
+
+**Changed**
+
+- Improve performance of session homepage
+
+++++++++++
 v1.6.1 (13/02/2024)
 ++++++++++
 
