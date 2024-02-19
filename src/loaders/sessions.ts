@@ -19,8 +19,8 @@ const getSessionData = async () => {
   const currentDateStr = currentDate.toISOString();
   const responses = await Promise.all(
     [
-      `sessions?limit=5&page=0&search=m&minStartDate=${daysAgoDate.toISOString()}&maxStartDate=${currentDateStr}`,
-      `sessions?limit=5&page=0&search=m&minEndDate=${currentDateStr}&maxStartDate=${currentDateStr}`,
+      `sessions?limit=5&page=0&minStartDate=${daysAgoDate.toISOString()}&maxStartDate=${currentDateStr}`,
+      `sessions?limit=5&page=0&minEndDate=${currentDateStr}&maxStartDate=${currentDateStr}`,
     ].map((url) => client.get(url).then((r) => r))
   );
 
