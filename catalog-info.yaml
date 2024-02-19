@@ -11,5 +11,7 @@ spec:
   lifecycle: production
   system: pato
   owner: group:lims
+  dependsOn:
+    - component:web-ui-components
   consumesApis:
     - pato-api
