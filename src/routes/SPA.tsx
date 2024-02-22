@@ -144,7 +144,7 @@ const SpaPage = () => {
         </TabPanels>
       </Tabs>
 
-      {loaderData.collection.dataCollectionId && loaderData.jobs && (
+      {loaderData.collection.dataCollectionId && (
         <Modal size='6xl' isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
