@@ -59,4 +59,11 @@ describe("Particle Picking", () => {
 
     await waitFor(() => expect(screen.getByLabelText("Total Pages")).toHaveTextContent("3"));
   });
+
+  it("should use standard deviation to base graph domain", async () => {
+    renderWithProviders(<ParticlePicking autoProcId={2} page={12} total={150} />);
+
+    await screen.findByText("7.0");
+    await screen.findByText("3.0");
+  });
 });
