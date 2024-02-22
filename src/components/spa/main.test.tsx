@@ -72,4 +72,17 @@ describe("SPA Processing Job Row", () => {
     expect(screen.queryByText(/2d classification/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/3d classification/i)).not.toBeInTheDocument();
   });
+
+  it("should display message if autoprocessing program is null", () => {
+    renderWithAccordion(
+      <SPA
+        autoProc={null}
+        procJob={{ ...procJob, recipe: "em-spa-preprocess" }}
+        active={true}
+        status='Success'
+      />
+    );
+
+    expect(screen.getByText(/no data can be displayed/i)).toBeInTheDocument();
+  });
 });

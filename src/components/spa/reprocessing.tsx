@@ -19,6 +19,8 @@ import { client } from "utils/api/client";
 import { baseToast } from "@diamondlightsource/ui-components";
 import { components } from "schema/main";
 import { required } from "utils/validation";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRevalidator } from "react-router-dom";
 
 interface RelionProps {
   collectionId: number;
@@ -54,6 +56,8 @@ const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProp
     formState: { errors },
   } = useForm({ defaultValues });
   const { toast } = createStandaloneToast();
+  const queryClient = useQueryClient();
+  const revalidator = useRevalidator();
 
   const particleSize = useWatch({ control, name: ["pixelSize", "maximumDiameter"] });
   const calculateAuto = useWatch({
@@ -102,6 +106,8 @@ const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProp
           ...baseToast,
           title: "Reprocessing succesfully initiated!",
         });
+        queryClient.removeQueries({ queryKey: ["spaAutoProc"] });
+        revalidator.revalidate();
 
         if (onClose) {
           onClose();

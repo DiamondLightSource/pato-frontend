@@ -74,7 +74,10 @@ const ProcessingTitle = ({ procJob, autoProc, status }: ProcTitleProps) => {
           title='Processing Start'
           value={parseDate(autoProc?.processingStartTime ?? "?")}
         />
-        <TwoLineTitle title='Processing End' value={parseDate(autoProc?.processingEndTime ?? "?")} />
+        <TwoLineTitle
+          title='Processing End'
+          value={parseDate(autoProc?.processingEndTime ?? "?")}
+        />
       </HStack>
       <Spacer />
       <HStack>
