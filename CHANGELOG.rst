@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.7.0 (22/02/2024)
+++++++++++
+
+**Added**
+
+- Particle count summary graph in SPA data collection page
+
+++++++++++
 v1.6.2 (19/02/2024)
 ++++++++++
 
