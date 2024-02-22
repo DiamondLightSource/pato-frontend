@@ -149,6 +149,7 @@ export const handlers = [
             estimatedResolution: 1,
             estimatedDefocus: 1,
             astigmatism: 1,
+            numberOfParticles: 5,
           },
         ],
       })
