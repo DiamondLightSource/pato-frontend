@@ -67,4 +67,14 @@ describe("Processing Title", () => {
 
     expect(screen.queryByText("recipe")).not.toBeInTheDocument();
   });
+
+  it("should display question marks if autoprocessing program is null", async () => {
+    renderWithAccordion(
+      <AccordionItem>
+        <ProcessingTitle procJob={procJob} autoProc={null} status='Success' />
+      </AccordionItem>
+    );
+
+    expect(screen.getAllByText("?")).toHaveLength(3);
+  });
 });

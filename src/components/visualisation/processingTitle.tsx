@@ -12,10 +12,10 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { FaSlidersH } from "react-icons/fa";
-import { components } from "schema/main";
 import { recipeTagMap } from "utils/config/parse";
 import { parseDate } from "utils/generic";
 import { JobParamsDrawer } from "./jobParams";
+import { AutoProcSchema, ProcessingJobSchema } from "schema/interfaces";
 
 export interface TwoLineTitleProps {
   title: string;
@@ -23,8 +23,8 @@ export interface TwoLineTitleProps {
 }
 
 export interface ProcTitleProps {
-  autoProc: components["schemas"]["AutoProcProgram"];
-  procJob: components["schemas"]["ProcessingJob"];
+  autoProc: AutoProcSchema | null;
+  procJob: ProcessingJobSchema;
   status: string;
 }
 
@@ -69,12 +69,12 @@ const ProcessingTitle = ({ procJob, autoProc, status }: ProcTitleProps) => {
     >
       <HStack gap={{ base: 0, xl: "5vw" }}>
         <TwoLineTitle title='Processing Job' value={procJob.processingJobId} />
-        <TwoLineTitle title='AutoProc. Program' value={autoProc.autoProcProgramId} />
+        <TwoLineTitle title='AutoProc. Program' value={autoProc?.autoProcProgramId ?? "?"} />
         <TwoLineTitle
           title='Processing Start'
-          value={parseDate(autoProc.processingStartTime ?? "?")}
+          value={parseDate(autoProc?.processingStartTime ?? "?")}
         />
-        <TwoLineTitle title='Processing End' value={parseDate(autoProc.processingEndTime ?? "?")} />
+        <TwoLineTitle title='Processing End' value={parseDate(autoProc?.processingEndTime ?? "?")} />
       </HStack>
       <Spacer />
       <HStack>
