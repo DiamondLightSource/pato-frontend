@@ -13,7 +13,7 @@ describe("Session Data", () => {
     expect(data.session).toMatchObject({ beamLineName: "m01" });
   });
 
-  it("should return null if a request fails", async () => {
+  it("should return null if session request fails", async () => {
     server.use(
       rest.get("http://localhost/proposals/:propId/sessions/:visitId", (req, res, ctx) =>
         res(ctx.status(404), ctx.delay(0))
@@ -23,6 +23,15 @@ describe("Session Data", () => {
 
     expect(data.items).toBe(null);
     expect(data.session).toBe(null);
+  });
+
+  it("should return empty list if data collection groups request fails", async () => {
+    server.use(
+      rest.get("http://localhost/dataGroups", (req, res, ctx) => res(ctx.status(404), ctx.delay(0)))
+    );
+    const data = await sessionPageLoader(queryClient)(request, { propId: "1", visitId: "1" });
+
+    expect(data.items).toEqual([]);
   });
 });
 

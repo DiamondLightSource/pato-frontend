@@ -1,7 +1,7 @@
 import { waitFor, screen, fireEvent } from "@testing-library/react";
 import { rest } from "msw";
 import { server } from "mocks/server";
-import { renderWithProviders } from "utils/test-utils";
+import { renderWithRoute } from "utils/test-utils";
 import TomogramReprocessing from "components/tomogram/reprocessing";
 
 const mockToast = jest.fn();
@@ -20,23 +20,23 @@ describe("Tomogram Reprocessing", () => {
       )
     );
 
-    renderWithProviders(<TomogramReprocessing collectionId={1} onClose={reprocessingCallback} />);
+    renderWithRoute(<TomogramReprocessing collectionId={1} onClose={reprocessingCallback} />);
 
     fireEvent.click(screen.getByText("Submit"));
-    await waitFor(() => expect(mockToast).toBeCalled());
-    expect(reprocessingCallback).not.toBeCalled();
+    await waitFor(() => expect(mockToast).toHaveBeenCalled());
+    expect(reprocessingCallback).not.toHaveBeenCalled();
   });
 
   it("should call close callback when successful", async () => {
     const reprocessingCallback = jest.fn();
-    renderWithProviders(<TomogramReprocessing collectionId={1} onClose={reprocessingCallback} />);
+    renderWithRoute(<TomogramReprocessing collectionId={1} onClose={reprocessingCallback} />);
 
     fireEvent.click(screen.getByText("Submit"));
-    await waitFor(() => expect(reprocessingCallback).toBeCalled());
+    await waitFor(() => expect(reprocessingCallback).toHaveBeenCalled());
   });
 
   it("should use default pixel size if provided", () => {
-    renderWithProviders(<TomogramReprocessing pixelSize={5} collectionId={1} onClose={() => {}} />);
+    renderWithRoute(<TomogramReprocessing pixelSize={5} collectionId={1} onClose={() => {}} />);
 
     expect(screen.getByDisplayValue("5")).toBeInTheDocument();
   });

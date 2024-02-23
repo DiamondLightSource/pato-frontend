@@ -8,7 +8,7 @@ describe("SPA Data", () => {
     const data = await spaLoader(queryClient)({ groupId: "1" });
     expect(data.collection.dataCollectionId).toBe(9775784);
     expect(data.collection.info[0].value).toBe("EPU");
-    expect(data.jobs![0].AutoProcProgram.autoProcProgramId).toBe(1);
+    expect(data.jobs![0].AutoProcProgram!.autoProcProgramId).toBe(1);
   });
 
   it("should return base object if no data collection is available", async () => {
@@ -249,6 +249,29 @@ describe("SPA Data", () => {
     expect(data.collection.info[0].value).toBe("SerialEM");
   });
 
+  it("should set file template to empty string if null", async () => {
+    server.use(
+      rest.get("http://localhost/dataGroups/:groupId/dataCollections", async (req, res, ctx) =>
+        res.once(
+          ctx.status(200),
+          ctx.json({
+            items: [
+              {
+                dataCollectionId: 9775784,
+                SESSIONID: 27489608,
+                fileTemplate: null,
+              },
+            ],
+          })
+        )
+      )
+    );
+
+    const data = await spaLoader(queryClient)({ groupId: "1" });
+    expect(data.collection.dataCollectionId).toBe(9775784);
+    expect(data.collection.info[0].value).toBe("");
+  });
+
   it("should return empty acquisition software if fileTemplate is non-standard", async () => {
     server.use(
       rest.get("http://localhost/dataGroups/:groupId/dataCollections", async (req, res, ctx) =>
@@ -273,7 +296,6 @@ describe("SPA Data", () => {
   });
 
   it("should return reprocessing decision from server", async () => {
-
     const data = await spaLoader(queryClient)({ groupId: "1" });
     expect(data.allowReprocessing).toBe(true);
   });

@@ -9,6 +9,7 @@ v1.6.2 (19/02/2024)
 **Changed**
 
 - Improve performance of session homepage
+- Tomogram/SPA pages get reloaded if new processing job is created
 
 **Fixed**
 

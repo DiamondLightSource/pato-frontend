@@ -1,4 +1,4 @@
-import { AccordionItem, AccordionPanel, Grid } from "@chakra-ui/react";
+import { AccordionItem, AccordionPanel, Grid, Text } from "@chakra-ui/react";
 import { Motion } from "components/motion/motion";
 import { useMemo, useState } from "react";
 import { Classification } from "components/spa/classification";
@@ -28,32 +28,43 @@ const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
     <AccordionItem>
       <ProcessingTitle autoProc={autoProc} procJob={procJob} status={status} />
       <AccordionPanel p={4} bg='diamond.75'>
-        {active && (
-          <Grid gap={3} templateColumns={{ base: "1", "2xl": "repeat(2, 1fr)" }}>
-            {toDisplay[0] && (
-              <>
-                <CTF
-                  onGraphClicked={setPage}
-                  parentId={autoProc.autoProcProgramId}
-                  parentType='autoProc'
-                />
-                <Motion
-                  onPageChanged={setPage}
-                  onTotalChanged={setTotal}
-                  page={page}
-                  parentType='autoProc'
-                  parentId={autoProc.autoProcProgramId}
-                />
-                <ParticlePicking
-                  autoProcId={autoProc.autoProcProgramId}
-                  page={page}
-                  total={total}
-                />
-              </>
+        {autoProc ? (
+          <>
+            {active && (
+              <Grid gap={3} templateColumns={{ base: "1", "2xl": "repeat(2, 1fr)" }}>
+                {toDisplay[0] && (
+                  <>
+                    <CTF
+                      onGraphClicked={setPage}
+                      parentId={autoProc.autoProcProgramId}
+                      parentType='autoProc'
+                    />
+                    <Motion
+                      onPageChanged={setPage}
+                      onTotalChanged={setTotal}
+                      page={page}
+                      parentType='autoProc'
+                      parentId={autoProc.autoProcProgramId}
+                    />
+                    <ParticlePicking
+                      autoProcId={autoProc.autoProcProgramId}
+                      page={page}
+                      total={total}
+                    />
+                  </>
+                )}
+                {toDisplay[1] && <Classification autoProcId={autoProc.autoProcProgramId} />}
+                {toDisplay[2] && (
+                  <Classification autoProcId={autoProc.autoProcProgramId} type='3d' />
+                )}
+              </Grid>
             )}
-            {toDisplay[1] && <Classification autoProcId={autoProc.autoProcProgramId} />}
-            {toDisplay[2] && <Classification autoProcId={autoProc.autoProcProgramId} type='3d' />}
-          </Grid>
+          </>
+        ) : (
+          <Text>
+            This processing job has no autoprocessing program associated with it. No data can be
+            displayed.
+          </Text>
         )}
       </AccordionPanel>
     </AccordionItem>

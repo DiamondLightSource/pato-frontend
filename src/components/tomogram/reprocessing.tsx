@@ -4,6 +4,8 @@ import { Form } from "components/form/form";
 import { FormItem, NumericStepper } from "components/form/input";
 import { baseToast } from "@diamondlightsource/ui-components";
 import { useForm } from "react-hook-form";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRevalidator } from "react-router-dom";
 
 export interface ReprocessingProps {
   pixelSize?: number;
@@ -17,6 +19,8 @@ export interface TomogramReprocessingValues {
 }
 
 const TomogramReprocessing = ({ pixelSize, collectionId, onClose }: ReprocessingProps) => {
+  const queryClient = useQueryClient();
+  const revalidator = useRevalidator();
   const { toast } = createStandaloneToast();
   const { handleSubmit, register } = useForm<TomogramReprocessingValues>();
 
@@ -36,6 +40,8 @@ const TomogramReprocessing = ({ pixelSize, collectionId, onClose }: Reprocessing
             ...baseToast,
             title: "Reprocessing succesfully initiated!",
           });
+          queryClient.removeQueries({ queryKey: ["tomogramAutoProc"] });
+          revalidator.revalidate();
 
           if (onClose) {
             onClose();
