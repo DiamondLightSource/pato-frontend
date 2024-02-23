@@ -1932,7 +1932,7 @@ export interface components {
          * Format: date-time
          */
         recordTimeStamp?: string;
-      };
+      } | null;
       /** ProcessingJob */
       ProcessingJob: {
         /** Processingjobid */

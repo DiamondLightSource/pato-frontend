@@ -77,7 +77,7 @@ const getTomogramData = async (
     ) as CollectionData;
 
     const tomogramsResponse = await client.safeGet(
-      `dataCollections/${collectionResponse.data.items[0].dataCollectionId}/tomograms?limit=3`
+      `dataCollections/${collectionResponse.data.items[0].dataCollectionId}/tomograms`
     );
 
     if (tomogramsResponse.status === 200 && tomogramsResponse.data) {
