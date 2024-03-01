@@ -9,6 +9,8 @@ v1.7.0 (22/02/2024)
 **Added**
 
 - Particle count summary graph in SPA data collection page
+- Note detailing pixel size on classifications
+- Graph domain for ice thickness
 
 ++++++++++
 v1.6.2 (19/02/2024)
