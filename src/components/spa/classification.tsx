@@ -11,6 +11,8 @@ import {
   CardBody,
   Checkbox,
   Stack,
+  AlertIcon,
+  Alert,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { client, prependApiUrl } from "utils/api/client";
@@ -152,6 +154,10 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
         </HStack>
       </Stack>
       <Divider />
+      <Alert my='10px' status='info' colorScheme='gray' variant='left-accent'>
+        <AlertIcon />
+        Before classification, particle images are binned such that Nyquist is approximately 8.5Å.
+      </Alert>
       {isLoading ? (
         <Skeleton h='23vh' mb={1} />
       ) : data && data.data ? (

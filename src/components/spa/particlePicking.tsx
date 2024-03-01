@@ -46,7 +46,7 @@ interface FullParticleData {
   particlePicker: Info[] | null;
   total: number | null;
   summary: string;
-  iceThickness: BoxPlotStats[];
+  iceThickness: { data: BoxPlotStats[]; domain: { min: number; max: number } };
 }
 
 const convertToBoxPlot = (
@@ -62,7 +62,14 @@ const convertToBoxPlot = (
 });
 
 const fetchParticlePickingData = async (autoProcId: number, page: number) => {
-  let data: FullParticleData = { particlePicker: null, total: null, summary: "", iceThickness: [] };
+  const baseDomain = { min: 120000, max: 160000 };
+
+  let data: FullParticleData = {
+    particlePicker: null,
+    total: null,
+    summary: "",
+    iceThickness: { data: [], domain: baseDomain },
+  };
   const response = await client.safeGet(
     `autoProc/${autoProcId}/particlePicker?page=${page - 1}&limit=1`
   );
@@ -71,7 +78,7 @@ const fetchParticlePickingData = async (autoProcId: number, page: number) => {
     const responseData = response.data.items[0] as ParticlePickingSchema;
     if (responseData.particlePickerId) {
       data = {
-        iceThickness: [],
+        iceThickness: { data: [], domain: baseDomain },
         particlePicker: parseData(responseData, particleConfig).info as Info[],
         total: response.data.total,
         summary: prependApiUrl(
@@ -84,10 +91,18 @@ const fetchParticlePickingData = async (autoProcId: number, page: number) => {
       );
 
       if (fileData.status === 200) {
-        data.iceThickness = [
-          convertToBoxPlot(fileData.data.current, "Current Image"),
-          convertToBoxPlot(fileData.data.avg, "Average"),
-        ];
+        const boundary = fileData.data.avg.stddev;
+
+        // 'Mean' as in the mean of all medians
+        const mean = fileData.data.avg.median;
+
+        data.iceThickness = {
+          data: [
+            convertToBoxPlot(fileData.data.current, "Current Image"),
+            convertToBoxPlot(fileData.data.avg, "Average"),
+          ],
+          domain: { min: mean - boundary, max: mean + boundary },
+        };
       }
     }
   }
@@ -151,8 +166,8 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
           <InfoGroup cols={1} info={data.particlePicker} />
           <PlotContainer title='Relative Ice Thickness' height='25vh'>
             <BoxPlot
-              data={data.iceThickness}
-              options={{ y: { domain: { min: 120000, max: 160000 } } }}
+              data={data.iceThickness.data}
+              options={{ y: { domain: data.iceThickness.domain } }}
             />
           </PlotContainer>
           <ImageCard h='25vh' src={data.summary} title='Summary' />
