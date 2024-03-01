@@ -25,6 +25,7 @@ export interface CtfData {
   resolution: BasePoint[];
   astigmatism: BasePoint[];
   defocus: BasePoint[];
+  particleCount?: BasePoint[];
 }
 
 export interface TomogramData {
