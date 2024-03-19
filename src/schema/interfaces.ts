@@ -25,6 +25,7 @@ export interface CtfData {
   resolution: BasePoint[];
   astigmatism: BasePoint[];
   defocus: BasePoint[];
+  particleCount?: BasePoint[];
 }
 
 export interface TomogramData {
@@ -44,7 +45,7 @@ export interface ClassificationProps extends SpaProps {
 }
 
 export interface BaseProcessingJobProps {
-  autoProc: AutoProcSchema;
+  autoProc: AutoProcSchema | null;
   procJob: ProcessingJobSchema;
   status: string;
   active: boolean;

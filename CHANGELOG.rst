@@ -3,13 +3,14 @@ Changelog
 ==========
 
 ++++++++++
-v1.6.3 (19/03/2024)
+v1.7.0 (22/02/2024)
 ++++++++++
 
-**Fixed**
+**Added**
 
-- Processing job parameters are still displayed if backend returns 404
-- Box size/mask diameter are both sent to the backend if form is prepopulated and unchanged
+- Particle count summary graph in SPA data collection page
+- Note detailing pixel size on classifications
+- Graph domain for ice thickness
 
 ++++++++++
 v1.6.2 (19/02/2024)
@@ -18,6 +19,7 @@ v1.6.2 (19/02/2024)
 **Changed**
 
 - Improve performance of session homepage
+- Tomogram/SPA pages get reloaded if new processing job is created
 
 **Fixed**
 

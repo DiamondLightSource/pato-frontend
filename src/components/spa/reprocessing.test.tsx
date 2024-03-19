@@ -1,7 +1,7 @@
 import { waitFor, screen, fireEvent } from "@testing-library/react";
 import { rest } from "msw";
 import { server } from "mocks/server";
-import { renderWithProviders } from "utils/test-utils";
+import { renderWithRoute } from "utils/test-utils";
 import { RelionReprocessing } from "./reprocessing";
 
 const mockToast = jest.fn();
@@ -20,7 +20,7 @@ describe("SPA Reprocessing", () => {
       )
     );
 
-    renderWithProviders(
+    renderWithRoute(
       <RelionReprocessing
         collectionId={1}
         defaultValues={{ dosePerFrame: 1, pixelSize: 1, maximumDiameter: 1, minimumDiameter: 1 }}
@@ -35,7 +35,7 @@ describe("SPA Reprocessing", () => {
 
   it("should call close callback when successful", async () => {
     const reprocessingCallback = jest.fn();
-    renderWithProviders(
+    renderWithRoute(
       <RelionReprocessing
         defaultValues={{ dosePerFrame: 1, pixelSize: 1 }}
         collectionId={1}
@@ -62,7 +62,7 @@ describe("SPA Reprocessing", () => {
 
   it("should display errors if not stopping after CTF estimation and diameters are not set", async () => {
     const reprocessingCallback = jest.fn();
-    renderWithProviders(
+    renderWithRoute(
       <RelionReprocessing
         defaultValues={{ dosePerFrame: 1, pixelSize: 1 }}
         collectionId={1}
@@ -77,7 +77,7 @@ describe("SPA Reprocessing", () => {
 
   it("should clear errors if stopping after CTF estimation", async () => {
     const reprocessingCallback = jest.fn();
-    renderWithProviders(
+    renderWithRoute(
       <RelionReprocessing
         defaultValues={{ dosePerFrame: 1, pixelSize: 1 }}
         collectionId={1}
@@ -94,7 +94,7 @@ describe("SPA Reprocessing", () => {
   });
 
   it("should use provided default values", () => {
-    renderWithProviders(
+    renderWithRoute(
       <RelionReprocessing
         collectionId={1}
         defaultValues={{ voltage: 200, pixelSize: 30, phasePlateUsed: true }}
@@ -108,7 +108,7 @@ describe("SPA Reprocessing", () => {
 
   it("should error instead of submitting if not all required fields are set", async () => {
     const reprocessingCallback = jest.fn();
-    renderWithProviders(
+    renderWithRoute(
       <RelionReprocessing collectionId={1} defaultValues={{}} onClose={reprocessingCallback} />
     );
 
@@ -119,7 +119,7 @@ describe("SPA Reprocessing", () => {
 
   it("should disable manual fields when stopping after CTF estimation", () => {
     const reprocessingCallback = jest.fn();
-    renderWithProviders(
+    renderWithRoute(
       <RelionReprocessing
         collectionId={1}
         defaultValues={{ stopAfterCtfEstimation: true }}
@@ -133,7 +133,7 @@ describe("SPA Reprocessing", () => {
 
   it("should disable some manual fields when enabling auto calculation", () => {
     const reprocessingCallback = jest.fn();
-    renderWithProviders(
+    renderWithRoute(
       <RelionReprocessing
         collectionId={1}
         defaultValues={{
@@ -156,7 +156,7 @@ describe("SPA Reprocessing", () => {
 
   it("should disable manual fields when stopping after CTF estimation (on checkbox interaction)", () => {
     const reprocessingCallback = jest.fn();
-    renderWithProviders(
+    renderWithRoute(
       <RelionReprocessing collectionId={1} defaultValues={{}} onClose={reprocessingCallback} />
     );
 
@@ -168,7 +168,7 @@ describe("SPA Reprocessing", () => {
 
   it("should autocalculate box size and mask diameter", async () => {
     const reprocessingCallback = jest.fn();
-    renderWithProviders(
+    renderWithRoute(
       <RelionReprocessing
         collectionId={1}
         defaultValues={{ performCalculation: true }}
@@ -191,7 +191,7 @@ describe("SPA Reprocessing", () => {
 
   it("should not recalculate box size if pixel size is less or equal to 0", async () => {
     const reprocessingCallback = jest.fn();
-    renderWithProviders(
+    renderWithRoute(
       <RelionReprocessing
         collectionId={1}
         defaultValues={{ performCalculation: true, maximumDiameter: 30 }}

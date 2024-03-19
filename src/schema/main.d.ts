@@ -1932,7 +1932,7 @@ export interface components {
          * Format: date-time
          */
         recordTimeStamp?: string;
-      };
+      } | null;
       /** ProcessingJob */
       ProcessingJob: {
         /** Processingjobid */
@@ -1999,6 +1999,7 @@ export interface components {
       q3: number;
       /** Maximum */
       maximum: number;
+      stddev: number | null;
     };
     /** ReprocessingResponse */
     ReprocessingResponse: {
