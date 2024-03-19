@@ -3,6 +3,15 @@ Changelog
 ==========
 
 ++++++++++
+v1.6.3 (19/03/2024)
+++++++++++
+
+**Fixed**
+
+- Processing job parameters are still displayed if backend returns 404
+- Box size/mask diameter are both sent to the backend if form is prepopulated and unchanged
+
+++++++++++
 v1.6.2 (19/02/2024)
 ++++++++++
 

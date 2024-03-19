@@ -192,7 +192,7 @@ const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProp
               </FormItem>
               <FormItem label='Mask Diameter' unit='Å' error={errors.maskDiameter}>
                 <NumberInput size='sm'>
-                  <NumberInputField {...register("maskDiameter", { disabled: calculateAuto })} />
+                  <NumberInputField readOnly={calculateAuto} {...register("maskDiameter")} />
                 </NumberInput>
               </FormItem>
               <FormItem
@@ -202,7 +202,7 @@ const RelionReprocessing = ({ collectionId, defaultValues, onClose }: RelionProp
                 error={errors.boxSize}
               >
                 <NumberInput size='sm'>
-                  <NumberInputField {...register("boxSize", { disabled: calculateAuto })} />
+                  <NumberInputField readOnly={calculateAuto} {...register("boxSize")} />
                 </NumberInput>
               </FormItem>
             </VStack>

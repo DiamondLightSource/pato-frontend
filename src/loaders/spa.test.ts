@@ -273,7 +273,6 @@ describe("SPA Data", () => {
   });
 
   it("should return reprocessing decision from server", async () => {
-
     const data = await spaLoader(queryClient)({ groupId: "1" });
     expect(data.allowReprocessing).toBe(true);
   });
