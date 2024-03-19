@@ -147,10 +147,10 @@ describe("SPA Reprocessing", () => {
     );
 
     expect(screen.getByRole("spinbutton", { name: "Box Size (Pixels)" })).toHaveAttribute(
-      "disabled"
+      "readonly"
     );
     expect(screen.getByRole("spinbutton", { name: /mask diameter \(å\)/i })).toHaveAttribute(
-      "disabled"
+      "readonly"
     );
   });
 
