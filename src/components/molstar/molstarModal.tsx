@@ -1,6 +1,5 @@
 import {
   Spacer,
-  HStack,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -30,13 +29,10 @@ const MolstarModal = ({ autoProcId, classId, page, pageCount, onChange }: Molsta
 
   return (
     <>
-      <HStack mt={2}>
-        <Spacer />
-        <Button w='30%' onClick={onOpen}>
-          Open 3D Visualisation <Spacer />
-          <Icon as={MdOpenInNew}></Icon>
-        </Button>
-      </HStack>
+      <Button onClick={onOpen} width='30em'>
+        Open 3D Visualisation <Spacer />
+        <Icon as={MdOpenInNew}></Icon>
+      </Button>
       <Modal size='2xl' isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent h='70%' minW={{ base: "95vh", md: "65vh" }}>
