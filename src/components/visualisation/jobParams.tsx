@@ -23,7 +23,7 @@ export interface JobParamDrawerProps {
 
 const fetchCtfData = async (procJobId: number) => {
   const response = await client.safeGet(`processingJob/${procJobId}/parameters`);
-  return response.data.items as components["schemas"]["ProcessingJobParameters"]["items"];
+  return (response.data.items ?? {}) as components["schemas"]["ProcessingJobParameters"]["items"];
 };
 
 const JobParamsDrawer = ({ procJobId, onClose }: JobParamDrawerProps) => {
