@@ -101,7 +101,7 @@ const queryBuilder = (
   // Since the groupId is already unique, and implicates a single parent session, proposal/session data
   // does not need to be included in query keys
   return {
-    queryKey: ["tomogramAutoProc", groupId, collectionIndex, urlObj.searchParams],
+    queryKey: ["tomogramAutoProc", groupId, collectionIndex, urlObj.searchParams.toString()],
     queryFn: () =>
       getTomogramData(groupId, propId, sessionId, collectionIndex, urlObj.searchParams, request),
     staleTime: 60000,

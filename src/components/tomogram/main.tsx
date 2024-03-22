@@ -129,10 +129,10 @@ const Tomogram = ({
                   templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}
                   gap={2}
                 >
-                  <GridItem h='20vh' colSpan={{ base: 2, md: 1 }}>
+                  <GridItem h='20vh' minH='300px' colSpan={{ base: 2, md: 1 }}>
                     <InfoGroup info={data.tomogram.info} />
                   </GridItem>
-                  <GridItem colSpan={{ base: 2, md: 1 }} h='20vh'>
+                  <GridItem colSpan={{ base: 2, md: 1 }} h='20vh' minH='300px'>
                     <Card h='100%'>
                       <CardHeader>
                         <HStack>
@@ -164,15 +164,15 @@ const Tomogram = ({
                       </CardBody>
                     </Card>
                   </GridItem>
-                  <GridItem colSpan={{ base: 2, md: 1 }} h='20vh'>
+                  <GridItem colSpan={{ base: 2, md: 1 }} h='20vh' minH='300px'>
                     <ImageCard src={data.xyProj} title='XY Projection' />
                   </GridItem>
-                  <GridItem colSpan={{ base: 2, md: 1 }} minW='100%' h='22vh'>
+                  <GridItem colSpan={{ base: 2, md: 1 }} minW='100%' h='22vh' minH='200px'>
                     <PlotContainer title='Shift Plot'>
                       <ScatterPlot data={data.shiftPlot} />
                     </PlotContainer>
                   </GridItem>
-                  <GridItem colSpan={2} h='22vh'>
+                  <GridItem colSpan={2} h='22vh' minH='200px'>
                     <ImageCard src={data.xzProj} title='XZ Projection' />
                   </GridItem>
                 </Grid>
