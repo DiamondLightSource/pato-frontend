@@ -13,6 +13,7 @@ import {
   Stack,
   AlertIcon,
   Alert,
+  VStack,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { client, prependApiUrl } from "utils/api/client";
@@ -113,6 +114,14 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
     return {};
   }, [selectedClass, data]);
 
+  const angDistImageUrl = useMemo(
+    () =>
+      prependApiUrl(
+        `autoProc/${autoProcId}/classification/${selectedClassInfo.particleClassificationId}/angleDistribution`
+      ),
+    [autoProcId, selectedClassInfo]
+  );
+
   return (
     <Box>
       <Stack direction={{ base: "column", md: "row" }} gap={2}>
@@ -198,18 +207,37 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
               )
             )}
           </Grid>
-          {selectedClassInfo.info && (
-            <InfoGroup height='auto' cols={5} info={selectedClassInfo.info as Info[]} />
-          )}
-          {type === "3d" && (
-            <MolstarModal
-              onChange={handle3dClassPageChange}
-              autoProcId={autoProcId}
-              page={classIndex}
-              pageCount={data.total}
-              classId={selectedClassInfo.particleClassificationId}
-            />
-          )}
+          <HStack my='1em' w='100%' alignItems='stretch' flexWrap='wrap'>
+            <VStack flex='1 0 500px' alignItems='start'>
+              {selectedClassInfo.info && (
+                <Box w='100%' flex='1 0 0'>
+                  <InfoGroup
+                    height='auto'
+                    cols={type === "3d" ? 3 : 5}
+                    info={selectedClassInfo.info as Info[]}
+                  />
+                </Box>
+              )}
+              {type === "3d" && (
+                <MolstarModal
+                  onChange={handle3dClassPageChange}
+                  autoProcId={autoProcId}
+                  page={classIndex}
+                  pageCount={data.total}
+                  classId={selectedClassInfo.particleClassificationId}
+                />
+              )}
+            </VStack>
+            {type === "3d" && (
+              <ImageCard
+                flex='0 0 500px'
+                title='Angle Distribution'
+                src={angDistImageUrl}
+                height='300px'
+                width='500px'
+              ></ImageCard>
+            )}
+          </HStack>
         </>
       ) : (
         <Heading py='5vh' variant='notFound'>
