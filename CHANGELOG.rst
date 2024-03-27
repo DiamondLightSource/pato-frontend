@@ -3,6 +3,19 @@ Changelog
 ==========
 
 ++++++++++
+v1.8.0 (20/03/2024)
+++++++++++
+
+**Added**
+
+- Display angle distribution plot alongside 3D classification data
+
+**Fixed**
+
+- Tomogram page is now updated when sorting/filter options change
+- Central slice is now larger in smaller screens
+
+++++++++++
 v1.7.1 (19/03/2024)
 ++++++++++
 

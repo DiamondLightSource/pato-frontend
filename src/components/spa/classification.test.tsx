@@ -141,4 +141,40 @@ describe("Classification", () => {
     await screen.findByText("355-1 (1)");
     await waitFor(() => expect(screen.queryByText("155-1 (1)")).not.toBeInTheDocument());
   });
+
+  it("should display angle distribution if type is 3d", async () => {
+    renderWithProviders(<Classification autoProcId={1} type='3d' />);
+
+    await screen.findByText("355-1 (1)");
+    expect(screen.getByText("Angle Distribution")).toBeInTheDocument();
+  });
+
+  it("should display classification boxes even if selection status is unknown", async () => {
+    server.use(
+      rest.get("http://localhost/autoProc/:procId/classification", (req, res, ctx) =>
+        res.once(
+          ctx.status(200),
+          ctx.json({
+            items: [
+              {
+                particleClassificationId: 2,
+                batchNumber: 355,
+                classNumber: 1,
+                particlesPerClass: 1,
+                symmetry: "C1",
+                type: "2D",
+                selected: null,
+              },
+            ],
+            total: 1,
+            limit: 8,
+          })
+        )
+      )
+    );
+
+    renderWithProviders(<Classification autoProcId={1} />);
+
+    await screen.findByText("355-1 (1)");
+  });
 });
