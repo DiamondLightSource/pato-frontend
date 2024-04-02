@@ -5,6 +5,9 @@ import { proposalHeaders } from "utils/config/table";
 
 const mockUseNavigate = jest.fn();
 
+// I need to do this because navigations trigger wacky rerenders of the component, and often times, it gets
+// soft-stuck between states, requiring me to "prod" it with dummy events to get it going. Insofar, this seems
+// like the most elegant fix to this.
 jest.mock("react-router-dom", () => ({
   ...(jest.requireActual("react-router-dom") as any),
   useNavigate: () => mockUseNavigate,
