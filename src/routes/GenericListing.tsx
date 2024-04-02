@@ -24,7 +24,7 @@ interface TableData {
 
 const GenericListing = ({ headers, heading, sortOptions, makePathCallback }: TableProps) => {
   const data = useLoaderData() as TableData;
-  const { page, sortBy, setPage, setItemsPerPage, setSortBy, onSearch } =
+  const { search, page, sortBy, setPage, setItemsPerPage, setSortBy, onSearch } =
     usePaginationSearchParams();
 
   const navigate = useNavigate();
@@ -68,6 +68,7 @@ const GenericListing = ({ headers, heading, sortOptions, makePathCallback }: Tab
           w={{ base: "auto", md: "20%" }}
           size='sm'
           placeholder='Search...'
+          defaultValue={search}
         />
       </HStack>
       <Divider mb={4} />
