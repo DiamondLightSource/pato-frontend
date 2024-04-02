@@ -126,10 +126,7 @@ describe("Generic Listing", () => {
 
     expect(mockCallback).toHaveBeenCalled();
 
-    expect(mockUseNavigate).toHaveBeenCalledWith(
-      expect.objectContaining({ pathname: "somethingElse" }),
-      expect.anything()
-    );
+    expect(mockUseNavigate).toHaveBeenCalledWith("somethingElse", expect.anything());
   });
 
   it("should display sorting options if provided", async () => {
