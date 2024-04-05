@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import { renderWithProviders } from "utils/test-utils";
-import {Footer} from "./footer";
+import { Footer } from "./footer";
 
 describe("No Data Indicator", () => {
   it("should render version", async () => {

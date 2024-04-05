@@ -4,7 +4,7 @@ import { Error } from "./Error";
 import { useRouteError } from "react-router-dom";
 import { Mock } from "vitest";
 
-const mockRouteError = vi.fn()
+const mockRouteError = vi.fn();
 
 vi.mock("react-router-dom", async (importOriginal) => {
   const actual = await importOriginal<any>();
@@ -17,16 +17,16 @@ vi.mock("react-router-dom", async (importOriginal) => {
 describe("Error", () => {
   afterEach(() => {
     mockRouteError.mockClear();
-  })
+  });
 
   it("should render page not found error if status is 404", async () => {
-    (useRouteError as Mock).mockReturnValue({status: 404})
+    (useRouteError as Mock).mockReturnValue({ status: 404 });
     renderWithProviders(<Error />);
     expect(screen.getByText("Page not found")).toBeInTheDocument();
   });
 
   it("should render error if status is not 404", async () => {
-    (useRouteError as Mock).mockReturnValue("Some Error Here")
+    (useRouteError as Mock).mockReturnValue("Some Error Here");
     renderWithProviders(<Error />);
     expect(screen.getByText("Some Error Here")).toBeInTheDocument();
   });

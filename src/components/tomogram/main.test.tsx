@@ -17,8 +17,12 @@ const basicProcJob: BaseProcessingJobProps["procJob"] = {
 const basicTomogram = { tomogramId: 1, dataCollectionId: 1, volumeFile: "", stackFile: "" };
 
 describe("Tomogram", () => {
-  beforeAll(() => vi.spyOn(global, "scrollTo").mockImplementation(() => {}));
-  afterAll(() => vi.restoreAllMocks());
+  beforeAll(() => {
+    vi.spyOn(global, "scrollTo").mockImplementation(() => {});
+  });
+  afterAll(() => {
+    vi.restoreAllMocks();
+  });
 
   it("should only display motion correction if tomogram is not fully processed", async () => {
     server.use(

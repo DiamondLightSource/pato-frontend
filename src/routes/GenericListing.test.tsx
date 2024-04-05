@@ -88,9 +88,11 @@ describe("Generic Listing", () => {
     const search = await screen.findByPlaceholderText("Search...");
     fireEvent.click(screen.getByLabelText("Next Page"));
 
-    expect(mockUseNavigate).toHaveBeenCalledWith(
-      expect.objectContaining({ search: "page=2" }),
-      expect.anything()
+    await waitFor(() =>
+      expect(mockUseNavigate).toHaveBeenCalledWith(
+        expect.objectContaining({ search: "page=2" }),
+        expect.anything()
+      )
     );
 
     fireEvent.change(search, { target: { value: "cm3111" } });
