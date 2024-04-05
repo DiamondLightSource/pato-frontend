@@ -13,11 +13,12 @@ vi.mock("react-router-dom", async (importOriginal) => {
 });
 
 describe("Calendar", () => {
-  beforeAll(() => {
-    vi.useFakeTimers().setSystemTime(new Date("2023-01-01"));
+  beforeEach(() => {
+    // https://github.com/testing-library/react-hooks-testing-library/issues/631#issuecomment-1606561416
+    vi.useFakeTimers({ toFake: ["Date"], now: new Date("2023-01-01") });
   });
 
-  afterAll(() => {
+  afterEach(() => {
     vi.useRealTimers();
     vi.restoreAllMocks();
   });
@@ -30,7 +31,7 @@ describe("Calendar", () => {
   it("should display sessions in calendar days correctly", async () => {
     renderWithProviders(<Calendar />);
 
-    await screen.findByText(/m01/i);
+    await screen.findByText(/m01/i, {});
     expect(screen.getByText(/\(cm31111-1\)/i)).toBeInTheDocument();
   });
 

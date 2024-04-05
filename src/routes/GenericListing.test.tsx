@@ -20,6 +20,9 @@ describe("Generic Listing", () => {
   afterAll(() => {
     vi.resetAllMocks();
   });
+  afterEach(() => {
+    mockUseNavigate.mockClear();
+  });
   it("should include search in request", async () => {
     renderWithRoute(
       <GenericListing

@@ -27,7 +27,8 @@ export default defineConfig({
         "src/styles",
         // Types
         "src/schema",
-        "src/index.ts",
+        "src/index.tsx",
+        "src/routes/Root.tsx"
       ],
     },
   },
