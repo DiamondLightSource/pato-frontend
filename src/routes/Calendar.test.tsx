@@ -2,38 +2,40 @@ import { fireEvent, screen } from "@testing-library/react";
 import { renderWithProviders } from "utils/test-utils";
 import Calendar from "routes/Calendar";
 
-const mockNavigate = jest.fn();
+const mockNavigate = vi.fn();
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: () => mockNavigate,
-}));
+vi.mock("react-router-dom", async (importOriginal) => {
+  const actual = await importOriginal<any>();
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 describe("Calendar", () => {
   beforeAll(() => {
-    jest.useFakeTimers().setSystemTime(new Date("2023-01-01"));
+    vi.useFakeTimers().setSystemTime(new Date("2023-01-01"));
   });
 
   afterAll(() => {
-    jest.useRealTimers();
-    jest.restoreAllMocks();
+    vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it("should load current month by default", async () => {
     renderWithProviders(<Calendar />);
-
-    await screen.findByText("January 2023");
+    screen.getByRole("heading", { name: /january 2023/i });
   });
 
   it("should display sessions in calendar days correctly", async () => {
     renderWithProviders(<Calendar />);
 
-    await screen.findByText("m01");
+    await screen.findByText(/m01/i);
     expect(screen.getByText(/\(cm31111-1\)/i)).toBeInTheDocument();
   });
 
   it("should update query date when month changes", () => {
-    const fetchSpy = jest.spyOn(global, "fetch");
+    const fetchSpy = vi.spyOn(global, "fetch");
 
     renderWithProviders(<Calendar />);
 
@@ -49,7 +51,6 @@ describe("Calendar", () => {
   it("should redirect to data collection group when event is clicked", async () => {
     renderWithProviders(<Calendar />);
 
-    // eslint-disable-next-line testing-library/no-node-access
     const eventLink = (await screen.findByTestId("event-m01")).parentElement!;
 
     fireEvent.click(eventLink);

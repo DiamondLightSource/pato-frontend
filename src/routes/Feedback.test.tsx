@@ -3,13 +3,7 @@ import { rest } from "msw";
 import { server } from "mocks/server";
 import { renderWithProviders } from "utils/test-utils";
 import FeedbackForm from "./Feedback";
-
-const mockToast = jest.fn();
-
-jest.mock("@chakra-ui/react", () => ({
-  ...jest.requireActual("@chakra-ui/react"),
-  createStandaloneToast: () => ({ toast: mockToast }),
-}));
+import { mockToast } from "../../vitest.setup";
 
 describe("Feedback", () => {
   it("should display toast when not successful", async () => {

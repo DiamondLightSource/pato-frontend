@@ -10,24 +10,27 @@ import FullCalendar from "@fullcalendar/react";
 
 type SessionSchema = components["schemas"]["SessionResponse"];
 
-const EventItem = ({ event }: EventContentArg) => (
-  <Box data-testid={`event-${event.title}`} cursor='pointer' w='100%'>
-    <HStack alignItems='stretch' textOverflow='ellipsis' spacing={1} width='100%'>
-      <Box w='2px' bg='diamond.600' />
-      <Text fontWeight={600} color='diamond.600'>
-        {event.start!.toLocaleTimeString("en-gb", {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
-      </Text>
-      <Text>{event.title}</Text>
-      <Text textOverflow='ellipsis' overflowX='hidden' opacity='0.7'>
-        ({event.extendedProps.parentProposal}-{event.extendedProps.visitNumber})
-      </Text>
-    </HStack>
-    <Divider />
-  </Box>
-);
+const EventItem = ({ event }: EventContentArg) => {
+  console.log(event.title, event.start!.toLocaleTimeString("en-gb"));
+  return (
+    <Box data-testid={`event-${event.title}`} cursor='pointer' w='100%'>
+      <HStack alignItems='stretch' textOverflow='ellipsis' spacing={1} width='100%'>
+        <Box w='2px' bg='diamond.600' />
+        <Text fontWeight={600} color='diamond.600'>
+          {event.start!.toLocaleTimeString("en-gb", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </Text>
+        <Text>{event.title}</Text>
+        <Text textOverflow='ellipsis' overflowX='hidden' opacity='0.7'>
+          ({event.extendedProps.parentProposal}-{event.extendedProps.visitNumber})
+        </Text>
+      </HStack>
+      <Divider />
+    </Box>
+  );
+};
 
 const Calendar = () => {
   const navigate = useNavigate();
@@ -64,6 +67,7 @@ const Calendar = () => {
         `sessions?minStartDate=${calendarDates.start}&maxStartDate=${calendarDates.end}&search=m&limit=250`
       )
       .then((response) => {
+        console.log(response.data);
         const events: EventInput[] = response.data.items
           .filter((event: SessionSchema) => event.startDate !== null)
           .map((event: SessionSchema) => ({

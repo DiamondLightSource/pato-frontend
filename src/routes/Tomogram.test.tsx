@@ -10,12 +10,15 @@ import { prependApiUrl } from "utils/api/client";
 
 type LoaderReturn = Awaited<TomogramResponse>;
 
-jest.mock("@diamondlightsource/ui-components", () => ({
-  ...jest.requireActual("@diamondlightsource/ui-components"),
-  APNGViewer: (props: ApngProps) => <p>{props.src}</p>,
-}));
+vi.mock("@diamondlightsource/ui-components", async (importOriginal) => {
+  const actual = await importOriginal<any>();
+  return {
+    ...actual,
+    APNGViewer: (props: ApngProps) => <p>{props.src}</p>,
+  };
+});
 
-jest.mock("components/tomogram/main", () => ({
+vi.mock("components/tomogram/main", () => ({
   Tomogram: (props: TomogramProps) => (
     <AccordionItem>
       <button onClick={() => props.onTomogramOpened(1)} data-testid='view movie' />
