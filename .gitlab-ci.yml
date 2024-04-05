@@ -26,7 +26,7 @@ unit-test-job:
     - yarn install
   script:
     # Tests cannot run concurrently, see https://github.com/mswjs/msw/issues/474
-    - yarn run test --verbose --runInBand
+    - yarn run test
   rules:
     - if: $CI_COMMIT_MESSAGE !~ /\[WIP\].*/
   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
