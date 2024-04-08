@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.8.0 (08/04/2024)
+++++++++++
+
+**Changed**
+
+- Temporary workaround, hide SPA refinement step
+
+++++++++++
 v1.8.0 (20/03/2024)
 ++++++++++
 
