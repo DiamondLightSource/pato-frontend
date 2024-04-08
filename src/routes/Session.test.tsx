@@ -3,19 +3,17 @@ import { renderWithRoute } from "utils/test-utils";
 import { DataCollectionCreationForm, SessionPage } from "./Session";
 import { server } from "mocks/server";
 import { rest } from "msw";
+import { mockToast } from "../../vitest.setup";
 
-const mockNavigate = jest.fn();
-const mockToast = jest.fn();
+const mockNavigate = vi.fn();
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: () => mockNavigate,
-}));
-
-jest.mock("@chakra-ui/react", () => ({
-  ...jest.requireActual("@chakra-ui/react"),
-  useToast: () => mockToast,
-}));
+vi.mock("react-router-dom", async (importOriginal) => {
+  const actual = await importOriginal<any>();
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 describe("Session Page", () => {
   it("should render session metadata headers", async () => {
@@ -64,7 +62,7 @@ describe("Data Collection Creation", () => {
   });
 
   it("should display toast and close modal if successful", async () => {
-    const onCloseMock = jest.fn();
+    const onCloseMock = vi.fn();
 
     renderWithRoute(<DataCollectionCreationForm onClose={onCloseMock} isOpen={true} />);
 

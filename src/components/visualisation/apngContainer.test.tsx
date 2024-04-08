@@ -4,20 +4,23 @@ import APNGContainer from "./apngContainer";
 import { APNGViewer, ApngProps } from "@diamondlightsource/ui-components";
 import { useEffect } from "react";
 
-jest.mock("@diamondlightsource/ui-components", () => ({
-  ...jest.requireActual("@diamondlightsource/ui-components"),
-  APNGViewer: ({ onFrameCountChanged, src }: ApngProps) => {
-    useEffect(() => {
-      if (onFrameCountChanged) {
-        onFrameCountChanged(3);
-      }
-    }, [onFrameCountChanged]);
+vi.mock("@diamondlightsource/ui-components", async (importOriginal) => {
+  const actual = await importOriginal<any>();
+  return {
+    ...actual,
+    APNGViewer: ({ onFrameCountChanged, src }: ApngProps) => {
+      useEffect(() => {
+        if (onFrameCountChanged) {
+          onFrameCountChanged(3);
+        }
+      }, [onFrameCountChanged]);
 
-    return <p>{src}</p>;
-  },
-}));
+      return <p>{src}</p>;
+    },
+  };
+});
 
-global.URL.createObjectURL = jest.fn(() => "http://localhost/noimage.png");
+global.URL.createObjectURL = vi.fn(() => "http://localhost/noimage.png");
 
 describe("APNG Container", () => {
   it("should render single APNG child", async () => {

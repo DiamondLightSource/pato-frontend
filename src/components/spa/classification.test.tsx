@@ -11,12 +11,9 @@ export interface MolstarWrapperProps {
   children?: ReactNode;
 }
 
-jest.mock(
-  "components/molstar/molstar",
-  () =>
-    ({ classId, autoProcId, children }: MolstarWrapperProps) =>
-      children
-);
+vi.mock("components/molstar/molstar", () => ({
+  default: ({ classId, autoProcId, children }: MolstarWrapperProps) => children,
+}));
 
 describe("Classification", () => {
   it("should match selected class to 3D visualisation modal page", async () => {

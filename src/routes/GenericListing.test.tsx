@@ -3,18 +3,26 @@ import { renderWithRoute } from "utils/test-utils";
 import { GenericListing } from "routes/GenericListing";
 import { proposalHeaders } from "utils/config/table";
 
-const mockUseNavigate = jest.fn();
+const mockUseNavigate = vi.fn();
 
 // I need to do this because navigations trigger wacky rerenders of the component, and often times, it gets
 // soft-stuck between states, requiring me to "prod" it with dummy events to get it going. Insofar, this seems
 // like the most elegant fix to this.
-jest.mock("react-router-dom", () => ({
-  ...(jest.requireActual("react-router-dom") as any),
-  useNavigate: () => mockUseNavigate,
-}));
+vi.mock("react-router-dom", async (importOriginal) => {
+  const actual = await importOriginal<any>();
+  return {
+    ...actual,
+    useNavigate: () => mockUseNavigate,
+  };
+});
 
 describe("Generic Listing", () => {
-  afterAll(() => jest.resetAllMocks());
+  afterAll(() => {
+    vi.resetAllMocks();
+  });
+  afterEach(() => {
+    mockUseNavigate.mockClear();
+  });
   it("should include search in request", async () => {
     renderWithRoute(
       <GenericListing
@@ -80,9 +88,11 @@ describe("Generic Listing", () => {
     const search = await screen.findByPlaceholderText("Search...");
     fireEvent.click(screen.getByLabelText("Next Page"));
 
-    expect(mockUseNavigate).toHaveBeenCalledWith(
-      expect.objectContaining({ search: "page=2" }),
-      expect.anything()
+    await waitFor(() =>
+      expect(mockUseNavigate).toHaveBeenCalledWith(
+        expect.objectContaining({ search: "page=2" }),
+        expect.anything()
+      )
     );
 
     fireEvent.change(search, { target: { value: "cm3111" } });
@@ -118,7 +128,7 @@ describe("Generic Listing", () => {
   });
 
   it("should call navigation callback when row is clicked", async () => {
-    const mockCallback = jest.fn().mockReturnValue("somethingElse");
+    const mockCallback = vi.fn().mockReturnValue("somethingElse");
     renderWithRoute(
       <GenericListing heading='data' makePathCallback={mockCallback} headers={proposalHeaders} />,
       () => ({ data: [{ proposalNumber: 31111 }] })

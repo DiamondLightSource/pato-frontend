@@ -28,7 +28,6 @@ const EventItem = ({ event }: EventContentArg) => (
     <Divider />
   </Box>
 );
-
 const Calendar = () => {
   const navigate = useNavigate();
 
