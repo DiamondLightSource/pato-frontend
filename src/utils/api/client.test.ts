@@ -10,7 +10,7 @@ describe("Client Helper Functions", () => {
 
   it("should prefix current location to URLs if API endpoint starts with /", () => {
     process.env.REACT_APP_API_ENDPOINT = "/api/";
-    expect(prependApiUrl("test")).toBe("http://localhost/api/test");
+    expect(prependApiUrl("test")).toBe("http://localhost:3000/api/test");
   });
 
   it("should prefix full URL to requests when applicable", () => {
@@ -24,7 +24,7 @@ describe("Client Main Class", () => {
     const originalLocation = window.location;
 
     Object.defineProperty(window, "location", {
-      value: { ...originalLocation, assign: jest.fn() },
+      value: { ...originalLocation, assign: vi.fn() },
       configurable: true,
     });
 
@@ -32,7 +32,7 @@ describe("Client Main Class", () => {
 
     await waitFor(() =>
       expect(window.location.assign).toBeCalledWith(
-        "auth/authorise?redirect_uri=http%3A%2F%2Flocalhost%2F&responseType=code"
+        "http://localhost/auth/authorise?redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F&responseType=code"
       )
     );
   });

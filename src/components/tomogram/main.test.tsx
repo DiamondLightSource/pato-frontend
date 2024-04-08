@@ -17,8 +17,12 @@ const basicProcJob: BaseProcessingJobProps["procJob"] = {
 const basicTomogram = { tomogramId: 1, dataCollectionId: 1, volumeFile: "", stackFile: "" };
 
 describe("Tomogram", () => {
-  beforeAll(() => jest.spyOn(global, "scrollTo").mockImplementation(() => {}));
-  afterAll(() => jest.restoreAllMocks());
+  beforeAll(() => {
+    vi.spyOn(global, "scrollTo").mockImplementation(() => {});
+  });
+  afterAll(() => {
+    vi.restoreAllMocks();
+  });
 
   it("should only display motion correction if tomogram is not fully processed", async () => {
     server.use(
@@ -58,7 +62,7 @@ describe("Tomogram", () => {
   });
 
   it("should fire callback when open movie button clicked", async () => {
-    const openCallback = jest.fn();
+    const openCallback = vi.fn();
 
     renderWithAccordion(
       <Tomogram
@@ -74,7 +78,7 @@ describe("Tomogram", () => {
     await screen.findByText("Alignment");
 
     fireEvent.click(screen.getByLabelText("Show Content"));
-    fireEvent.click(screen.getByRole("button", { name: "View Movie" }));
+    fireEvent.click(await screen.findByRole("button", { name: "View Movie" }));
 
     await waitFor(() => expect(openCallback).toHaveBeenCalled());
   });

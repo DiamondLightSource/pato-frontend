@@ -38,7 +38,7 @@ describe("User Data", () => {
       configurable: true,
     });
 
-    window.location.replace = jest.fn();
+    window.location.replace = vi.fn();
 
     server.use(
       rest.get("http://localhost/auth/token", (req, res, ctx) => res.once(ctx.status(200)))

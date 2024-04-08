@@ -1,42 +1,63 @@
-import { useCallback, useEffect, useState } from "react";
-import { createSearchParams, useNavigate, useSearchParams } from "react-router-dom";
+import { useCallback, useMemo } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 /**
  * Hook providing pagination values and handlers
  */
 export const usePaginationSearchParams = () => {
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const [page, setPage] = useState(parseInt(searchParams.get("page") || "1"));
-  const [itemsPerPage, setItemsPerPage] = useState(parseInt(searchParams.get("items") || "20"));
-  const [search, setSearch] = useState(searchParams.get("search") || "");
-  const [sortBy, setSortBy] = useState(searchParams.get("sortBy"));
+  const [searchParams] = useSearchParams();
 
-  const onSearch = useCallback((search: string) => {
-    setPage(1);
-    setSearch(search);
-  }, []);
+  const page = useMemo(() => parseInt(searchParams.get("page") || "1"), [searchParams]);
+  const itemsPerPage = useMemo(() => parseInt(searchParams.get("items") || "20"), [searchParams]);
+  const search = useMemo(() => searchParams.get("search") || "", [searchParams]);
+  const sortBy = useMemo(() => searchParams.get("sortBy"), [searchParams]);
 
-  useEffect(() => {
-    const newSearchParams = createSearchParams({
-      search: search,
-      page: page.toString(),
-      items: itemsPerPage.toString(),
-    });
+  const updateSearchParams = useCallback(
+    (newValues: Record<string, string>) => {
+      const newSearchParams = new URLSearchParams({
+        ...Object.fromEntries(searchParams.entries()),
+        ...newValues,
+      });
+      navigate(
+        {
+          pathname: ".",
+          search: newSearchParams.toString(),
+        },
+        { replace: true }
+      );
+    },
+    [navigate, searchParams]
+  );
 
-    if (sortBy) {
-      newSearchParams.set("sortBy", sortBy);
-    }
+  const onSearch = useCallback(
+    (search: string) => {
+      updateSearchParams({ page: "1", search: search });
+    },
+    [updateSearchParams]
+  );
 
-    navigate(
-      {
-        pathname: ".",
-        search: newSearchParams.toString(),
-      },
-      { replace: true }
-    );
-  }, [search, page, itemsPerPage, sortBy, navigate]);
+  const setSortBy = useCallback(
+    (value: string) => {
+      updateSearchParams({ sortBy: value });
+    },
+    [updateSearchParams]
+  );
+
+  const setPage = useCallback(
+    (value: number) => {
+      updateSearchParams({ page: value.toString() });
+    },
+    [updateSearchParams]
+  );
+
+  const setItemsPerPage = useCallback(
+    (value: number) => {
+      updateSearchParams({ items: value.toString() });
+    },
+    [updateSearchParams]
+  );
 
   return { page, itemsPerPage, search, sortBy, setPage, setSortBy, setItemsPerPage, onSearch };
 };

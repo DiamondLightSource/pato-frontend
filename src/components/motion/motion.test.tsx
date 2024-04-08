@@ -25,7 +25,7 @@ describe("Motion", () => {
   });
 
   it("should call callback when page changes", async () => {
-    const motionChanged = jest.fn();
+    const motionChanged = vi.fn();
     renderWithProviders(
       <Motion parentType='tomograms' onPageChanged={motionChanged} parentId={3} />
     );
@@ -39,7 +39,7 @@ describe("Motion", () => {
   });
 
   it("should calculate number of dark images appropriately", async () => {
-    const motionChanged = jest.fn();
+    const motionChanged = vi.fn();
     renderWithProviders(
       <Motion parentType='tomograms' onPageChanged={motionChanged} parentId={1} />
     );
@@ -72,7 +72,7 @@ describe("Motion", () => {
   });
 
   it("should call callback when total number of items changes", async () => {
-    const totalChanged = jest.fn();
+    const totalChanged = vi.fn();
     renderWithProviders(
       <Motion parentType='tomograms' onTotalChanged={totalChanged} parentId={3} />
     );
@@ -110,7 +110,7 @@ describe("Motion", () => {
   });
 
   it("should not update page if current page is controlled externally", async () => {
-    const motionCallback = jest.fn();
+    const motionCallback = vi.fn();
     renderWithProviders(
       <Motion parentType='tomograms' parentId={4} page={1} onPageChanged={motionCallback} />
     );
