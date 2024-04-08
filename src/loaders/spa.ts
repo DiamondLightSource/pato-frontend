@@ -127,7 +127,8 @@ const getSpaData = async (groupId: string, propId: string, sessionId: string) =>
 
         // Ignore extraction step
         let jobsList: ProcessingJob[] = jobsResponse.data.items.filter(
-          (job: ProcessingJob) => job.ProcessingJob.recipe !== "em-spa-extract"
+          (job: ProcessingJob) =>
+            !["em-spa-extract", "em-spa-refine"].includes(job.ProcessingJob.recipe)
         );
 
         /*

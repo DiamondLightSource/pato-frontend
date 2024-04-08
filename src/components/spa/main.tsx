@@ -10,10 +10,8 @@ import { recipeTagMap } from "utils/config/parse";
 
 // This refinement step blacklist should be TEMPORARY and will be removed when a proper data view exists
 const checkRecipe = (target: string, procJob: BaseProcessingJobProps["procJob"]) =>
-  procJob.recipe !== "em-spa-refine" &&
-  (target === procJob.recipe ||
-    !(procJob.recipe, Object.keys(recipeTagMap).includes(procJob.recipe)));
-
+  target === procJob.recipe ||
+  !(procJob.recipe, Object.keys(recipeTagMap).includes(procJob.recipe));
 
 const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
   const [total, setTotal] = useState(0);
