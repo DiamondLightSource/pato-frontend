@@ -341,6 +341,19 @@ export const handlers = [
     )
   ),
 
+  rest.get("http://localhost/autoProc/:autoProcId/bFactorFit", (req, res, ctx) =>
+    res(
+      ctx.status(200),
+      ctx.delay(0),
+      ctx.json([
+        {
+          resolution: 1,
+          numberOfParticles: 1,
+        },
+      ])
+    )
+  ),
+
   rest.get("http://localhost/dataGroups", (req, res, ctx) =>
     res(
       ctx.status(200),

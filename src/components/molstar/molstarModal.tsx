@@ -19,8 +19,8 @@ const MolstarWrapper = React.lazy(() => import("components/molstar/molstar"));
 export interface MolstarModalProps {
   autoProcId: number;
   classId: number;
-  page: number;
-  pageCount: number;
+  page?: number;
+  pageCount?: number;
   onChange?: (page: number) => void;
 }
 
@@ -42,7 +42,9 @@ const MolstarModal = ({ autoProcId, classId, page, pageCount, onChange }: Molsta
             {isOpen && (
               <Suspense>
                 <MolstarWrapper autoProcId={autoProcId} classId={classId}>
-                  <Flipper size='md' total={pageCount} page={page} onChange={onChange} />
+                  {pageCount && (
+                    <Flipper size='md' total={pageCount} page={page} onChange={onChange} />
+                  )}
                 </MolstarWrapper>
               </Suspense>
             )}

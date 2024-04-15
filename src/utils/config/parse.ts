@@ -31,6 +31,7 @@ export const recipeTagMap: Record<string, string> = {
   "em-spa-preprocess": "Preprocessing",
   "em-spa-class2d": "2D Classification",
   "em-spa-class3d": "3D Classification",
+  "em-spa-refine": "Refinement",
 };
 
 interface FieldEntry {

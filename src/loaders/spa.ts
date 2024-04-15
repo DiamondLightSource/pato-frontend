@@ -59,6 +59,8 @@ export interface SpaResponse {
   jobParameters: { items: ReprocessingParameters };
 }
 
+const recipeOrder = ["em-spa-preprocess", "em-spa-class2d", "em-spa-class3d", "em-spa-refine"];
+
 const getSpaData = async (groupId: string, propId: string, sessionId: string) => {
   const response = await client.safeGet(includePage(`dataGroups/${groupId}/dataCollections`, 1, 1));
 
@@ -127,8 +129,7 @@ const getSpaData = async (groupId: string, propId: string, sessionId: string) =>
 
         // Ignore extraction step
         let jobsList: ProcessingJob[] = jobsResponse.data.items.filter(
-          (job: ProcessingJob) =>
-            !["em-spa-extract", "em-spa-refine"].includes(job.ProcessingJob.recipe)
+          (job: ProcessingJob) => !["em-spa-extract"].includes(job.ProcessingJob.recipe)
         );
 
         /*
@@ -139,15 +140,10 @@ const getSpaData = async (groupId: string, propId: string, sessionId: string) =>
          */
         jobsList.sort((a, b) => {
           if (a.ProcessingJob.recipe !== b.ProcessingJob.recipe) {
-            if (a.ProcessingJob.recipe === "em-spa-class3d") {
-              return 1;
-            }
-
-            if (b.ProcessingJob.recipe === "em-spa-class3d") {
-              return -1;
-            }
-
-            return a.ProcessingJob.recipe > b.ProcessingJob.recipe ? -1 : 1;
+            return recipeOrder.indexOf(a.ProcessingJob.recipe) >
+              recipeOrder.indexOf(b.ProcessingJob.recipe)
+              ? 1
+              : -1;
           }
 
           if (a.ProcessingJob.processingJobId !== b.ProcessingJob.processingJobId) {

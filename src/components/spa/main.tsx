@@ -7,6 +7,7 @@ import { CTF } from "components/ctf/ctf";
 import { ProcessingTitle } from "components/visualisation/processingTitle";
 import { BaseProcessingJobProps } from "schema/interfaces";
 import { recipeTagMap } from "utils/config/parse";
+import { RefinementStep } from "./refine";
 
 // This refinement step blacklist should be TEMPORARY and will be removed when a proper data view exists
 const checkRecipe = (target: string, procJob: BaseProcessingJobProps["procJob"]) =>
@@ -19,7 +20,7 @@ const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
 
   const toDisplay = useMemo(
     () =>
-      ["em-spa-preprocess", "em-spa-class2d", "em-spa-class3d"].map((target) =>
+      ["em-spa-preprocess", "em-spa-class2d", "em-spa-class3d", "em-spa-refine"].map((target) =>
         checkRecipe(target, procJob)
       ),
     [procJob]
@@ -58,6 +59,7 @@ const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
                 {toDisplay[2] && (
                   <Classification autoProcId={autoProc.autoProcProgramId} type='3d' />
                 )}
+                {toDisplay[3] && <RefinementStep autoProcId={autoProc.autoProcProgramId} />}
               </Grid>
             )}
           </>

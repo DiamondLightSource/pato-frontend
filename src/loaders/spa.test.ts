@@ -58,7 +58,7 @@ describe("SPA Data", () => {
     expect(data.jobs).toEqual([]);
   });
 
-  it("should always show 3D classification last", async () => {
+  it("should always follow predefined order for processing job steps", async () => {
     server.use(
       rest.get("http://localhost/dataCollections/:collectionId/processingJobs", (req, res, ctx) =>
         res.once(
@@ -68,6 +68,11 @@ describe("SPA Data", () => {
               {
                 AutoProcProgram: { autoProcProgramId: 1 },
                 ProcessingJob: { recipe: "em-spa-preprocess" },
+                status: "Success",
+              },
+              {
+                AutoProcProgram: { autoProcProgramId: 1 },
+                ProcessingJob: { recipe: "em-spa-refine" },
                 status: "Success",
               },
               {
@@ -88,7 +93,12 @@ describe("SPA Data", () => {
     );
 
     const data = await spaLoader(queryClient)({ groupId: "1" });
-    expect(data.jobs![2]).toMatchObject({ ProcessingJob: { recipe: "em-spa-class3d" } });
+    expect(data.jobs).toMatchObject([
+      { ProcessingJob: { recipe: "em-spa-preprocess" } },
+      { ProcessingJob: { recipe: "em-spa-class2d" } },
+      { ProcessingJob: { recipe: "em-spa-class3d" } },
+      { ProcessingJob: { recipe: "em-spa-refine" } },
+    ]);
   });
 
   it("should keep similar step types together", async () => {
