@@ -345,12 +345,14 @@ export const handlers = [
     res(
       ctx.status(200),
       ctx.delay(0),
-      ctx.json({items: [
-        {
-          resolution: 1,
-          numberOfParticles: 1,
-        },
-      ]})
+      ctx.json({
+        items: [
+          {
+            resolution: 1,
+            numberOfParticles: 1,
+          },
+        ],
+      })
     )
   ),
 

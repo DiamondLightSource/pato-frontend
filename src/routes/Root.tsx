@@ -1,4 +1,4 @@
-import { Box, HStack, Tag, Text, Link, Progress } from "@chakra-ui/react";
+import { Box, HStack, Text, Link, Progress } from "@chakra-ui/react";
 import { Outlet, useLoaderData, useLocation } from "react-router-dom";
 import { Footer } from "components/navigation/footer";
 import { useIsFetching } from "@tanstack/react-query";
@@ -12,6 +12,7 @@ import {
 } from "@diamondlightsource/ui-components";
 import { useMemo } from "react";
 import "styles/main.css";
+import { VersionTag } from "components/navigation/versionTag";
 
 const handleLogin = () =>
   window.location.assign(
@@ -37,14 +38,7 @@ const PhaseBanner = ({ deployType }: { deployType: "dev" | "production" | "beta"
       py='0.2em'
       mb='0.8em'
     >
-      <Tag
-        fontWeight='600'
-        bg={deployType === "dev" ? "purple" : "diamond.700"}
-        color='diamond.50'
-        borderRadius='0'
-      >
-        {deployType.toUpperCase()}
-      </Tag>
+      <VersionTag deployType={deployType} />
       <Text>
         This version of the service is still in testing, report any issues to the{" "}
         <Link color='diamond.700' href={"mailto:" + process.env.REACT_APP_DEV_CONTACT}>

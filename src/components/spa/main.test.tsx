@@ -67,7 +67,7 @@ describe("SPA Processing Job Row", () => {
       />
     );
 
-    expect(screen.queryByText(/refinement/i)).toBeInTheDocument();
+    expect(screen.queryAllByText(/refinement/i).length).toBeGreaterThan(1);
     await screen.findByText(/open 3d visualisation/i);
   });
 

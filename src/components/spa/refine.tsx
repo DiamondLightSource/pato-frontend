@@ -1,4 +1,14 @@
-import { HStack, Skeleton, Box, VStack } from "@chakra-ui/react";
+import {
+  HStack,
+  Skeleton,
+  Box,
+  VStack,
+  Alert,
+  AlertIcon,
+  Text,
+  Link,
+  Divider,
+} from "@chakra-ui/react";
 import { useMemo } from "react";
 import { client, prependApiUrl } from "utils/api/client";
 import { components } from "schema/main";
@@ -46,13 +56,31 @@ const RefinementStep = ({ autoProcId }: ClassificationProps) => {
   }, [data, autoProcId]);
   return (
     <Box w='100%'>
+      <Alert my='10px' status='info' colorScheme='gray' variant='left-accent'>
+        <AlertIcon />
+        Particles are binned by a factor of 2 before refinement. The maximum achievable resolution
+        is therefore 4 times the pixel size used for data collection. Refinement is performed at a
+        number of different particle batch sizes to give an indication of how resolution is
+        improving with the number of particles.
+      </Alert>
+      <Alert my='10px' status='warning' colorScheme='yellow' variant='left-accent'>
+        <AlertIcon />
+        Resolution estimates are approximate and should not be taken as an indication of data
+        quality. Masks are not optimised and the performance of earlier automated processing steps
+        will affect the results. If the refined map looks correct you should expect to be able to
+        improve on these resolution values.
+      </Alert>
       {data ? (
         <HStack my='1em' w='100%' alignItems='stretch' flexWrap='wrap'>
           <VStack h='300px' flex='1 0 250px' alignItems='start'>
-            <PlotContainer>
+            <PlotContainer title='3D Refinement'>
               <ScatterPlot
                 data={data.data}
-                options={{ x: { label: "ln(numOfParticles)" }, y: { label: "1/res^2" } }}
+                options={{
+                  x: { label: "ln(numOfParticles)" },
+                  y: { label: "1/res^2" },
+                  points: { dotRadius: 4 },
+                }}
               />
             </PlotContainer>
             <MolstarModal autoProcId={autoProcId} classId={data.particleClassificationId} />
@@ -68,6 +96,11 @@ const RefinementStep = ({ autoProcId }: ClassificationProps) => {
       ) : (
         <Skeleton w='100%' h='500px' />
       )}
+      <Divider borderColor='diamond.300' />
+      <Text w='100%' mt='1em'>
+        Rosenthal, PB, Henderson, R., J. Mol. Biol. 333, 721–745 (2003){" "}
+        <Link color='diamond.600'>https://pubmed.ncbi.nlm.nih.gov/14568533/</Link>
+      </Text>
     </Box>
   );
 };

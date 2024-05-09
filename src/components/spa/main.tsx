@@ -26,9 +26,15 @@ const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
     [procJob]
   );
 
+  // TODO: remove all references of beta in processing title once refinement row is out of beta
   return (
     <AccordionItem>
-      <ProcessingTitle autoProc={autoProc} procJob={procJob} status={status} />
+      <ProcessingTitle
+        autoProc={autoProc}
+        procJob={procJob}
+        status={status}
+        isBeta={toDisplay[3]}
+      />
       <AccordionPanel p={4} bg='diamond.75'>
         {autoProc ? (
           <>
