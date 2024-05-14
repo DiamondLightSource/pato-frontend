@@ -11,7 +11,15 @@ v1.9.0 (14/05/2024)
 - Feedback link in footer now takes custom URLs
 - Direct link to sample handling service in session page
 - Refinement view
-- Updated description for particle picking images
+- Updated description for particle picking Images
+
+++++++++++
+v1.8.2 (08/04/2024)
+++++++++++
+
+**Changed**
+
+- Temporary workaround, filter SPA refinement step in processing jobs
 
 ++++++++++
 v1.8.1 (08/04/2024)
