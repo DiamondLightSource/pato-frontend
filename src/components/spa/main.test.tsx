@@ -57,6 +57,20 @@ describe("SPA Processing Job Row", () => {
     expect(screen.queryByText(/2d classification/i)).not.toBeInTheDocument();
   });
 
+  it("should only display refinement if recipe matches", async () => {
+    renderWithAccordion(
+      <SPA
+        autoProc={autoProcJob}
+        procJob={{ ...procJob, recipe: "em-spa-refine" }}
+        active={true}
+        status='Success'
+      />
+    );
+
+    expect(screen.queryAllByText(/refinement/i).length).toBeGreaterThan(1);
+    await screen.findByText(/open 3d visualisation/i);
+  });
+
   it("should only display preprocessing summary if recipe matches", () => {
     renderWithAccordion(
       <SPA

@@ -3,6 +3,17 @@ Changelog
 ==========
 
 ++++++++++
+v1.9.0 (14/05/2024)
+++++++++++
+
+**Added**
+
+- Feedback link in footer now takes custom URLs
+- Direct link to sample handling service in session page
+- Refinement view
+- Updated description for particle picking Images
+
+++++++++++
 v1.8.2 (08/04/2024)
 ++++++++++
 

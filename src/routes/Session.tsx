@@ -123,6 +123,7 @@ const SessionPage = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { page, setPage, setItemsPerPage, onSearch } = usePaginationSearchParams();
+  const { propId, visitId } = useParams();
 
   const navigate = useNavigate();
 
@@ -199,6 +200,13 @@ const SessionPage = () => {
             </TwoLineLink>
             <TwoLineLink title='Create New Data Collection' onClick={onOpen}>
               Create new data collection in session
+            </TwoLineLink>
+            <TwoLineLink
+              title='Edit sample information'
+              isDisabled={!process.env.REACT_APP_SAMPLE_HANDLING_URL}
+              href={`${process.env.REACT_APP_SAMPLE_HANDLING_URL}/proposals/${propId}/sessions/${visitId}`}
+            >
+              Edit session's sample information
             </TwoLineLink>
           </VStack>
         </HStack>

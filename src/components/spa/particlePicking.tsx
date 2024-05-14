@@ -3,10 +3,14 @@ import {
   Divider,
   Heading,
   Checkbox,
+  Text,
   VStack,
   Grid,
   Skeleton,
   Stack,
+  GridItem,
+  HStack,
+  Tag,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { client, prependApiUrl } from "utils/api/client";
@@ -170,7 +174,17 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
               options={{ y: { domain: data.iceThickness.domain } }}
             />
           </PlotContainer>
-          <ImageCard h='25vh' src={data.summary} title='Summary' />
+          <GridItem>
+            <ImageCard h='25vh' src={data.summary} title='Summary' />
+            <HStack py='0.5em' px='0.5em' bg='diamond.100'>
+              <Text flex='1 0 0'>
+                <Tag size='sm' bg='#008000'></Tag> Selected
+              </Text>
+              <Text flex='1 0 0'>
+                <Tag size='sm' bg='#FF7F00'></Tag> Not Selected
+              </Text>
+            </HStack>
+          </GridItem>
         </Grid>
       ) : isLoading ? (
         <Skeleton h='25vh' />

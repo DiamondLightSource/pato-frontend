@@ -16,6 +16,7 @@ import { recipeTagMap } from "utils/config/parse";
 import { parseDate } from "utils/generic";
 import { JobParamsDrawer } from "./jobParams";
 import { AutoProcSchema, ProcessingJobSchema } from "schema/interfaces";
+import { VersionTag } from "components/navigation/versionTag";
 
 export interface TwoLineTitleProps {
   title: string;
@@ -26,6 +27,7 @@ export interface ProcTitleProps {
   autoProc: AutoProcSchema | null;
   procJob: ProcessingJobSchema;
   status: string;
+  isBeta?: boolean;
 }
 
 const jobStatusColour: Record<string, string> = {
@@ -54,7 +56,7 @@ const RecipeTag = ({ recipe }: { recipe: string }) => {
   return <Tag colorScheme='blue'>{recipeTagMap[recipe]}</Tag>;
 };
 
-const ProcessingTitle = ({ procJob, autoProc, status }: ProcTitleProps) => {
+const ProcessingTitle = ({ procJob, autoProc, status, isBeta }: ProcTitleProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -81,6 +83,7 @@ const ProcessingTitle = ({ procJob, autoProc, status }: ProcTitleProps) => {
       </HStack>
       <Spacer />
       <HStack>
+        {isBeta && <VersionTag deployType='beta' />}
         <RecipeTag recipe={procJob.recipe} />
         <Tag colorScheme={jobStatusColour[status]}>{status}</Tag>
         <Tooltip label='View Job Parameters'>

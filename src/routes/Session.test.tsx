@@ -39,6 +39,16 @@ describe("Session Page", () => {
 
     expect(mockNavigate).toHaveBeenCalledWith("groups/1/tomograms/1", { relative: "path" });
   });
+
+  // TODO: re-enable this test once the two line link component sets the disabled attribute
+  /*it("should disable 'edit sample information button' if no sample handling service is provided", async () => {
+    renderWithRoute(<SessionPage />, () => ({
+      items: [],
+      session: { microscopeName: "Krios I", startDate: "startDateValue", endDate: "endDateValue" },
+    }));
+
+    const wrapper = await screen.findByText("Edit sample information");
+  });*/
 });
 
 describe("Data Collection Creation", () => {
@@ -75,4 +85,5 @@ describe("Data Collection Creation", () => {
     );
     expect(onCloseMock).toHaveBeenCalled();
   });
+
 });
