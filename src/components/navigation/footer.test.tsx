@@ -10,7 +10,7 @@ describe("No Data Indicator", () => {
   });
 
   it("should render feedback link if enabled", async () => {
-    process.env.REACT_APP_ENABLE_FEEDBACK = "true";
+    process.env.REACT_APP_FEEDBACK_URL = "true";
     renderWithProviders(<Footer />);
     expect(screen.getByText("Feedback")).toBeInTheDocument();
   });
