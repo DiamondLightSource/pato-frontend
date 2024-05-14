@@ -20,7 +20,8 @@ Configuration
 - REACT_APP_DEPLOY_TYPE: Deployment type
 - REACT_APP_VERSION: App version
 - REACT_APP_AUTH_TYPE: Authentication type. Can be :code:`oidc` or :code:`dummy`
-- REACT_APP_ENABLE_FEEDBACK: Enable user feedback page
+- REACT_APP_FEEDBACK_URL: Feedback form URL
+- REACT_APP_SAMPLE_HANDLING_URL: URL pointing to sample handling instance
 
 ==========
 Deployment

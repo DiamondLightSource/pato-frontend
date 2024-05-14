@@ -203,8 +203,8 @@ const SessionPage = () => {
             </TwoLineLink>
             <TwoLineLink
               title='Edit sample information'
-              isDisabled={!process.env.REACT_APP_SAMPLE_HANDLING}
-              href={`${process.env.REACT_APP_SAMPLE_HANDLING}/proposals/${propId}/sessions/${visitId}`}
+              isDisabled={!process.env.REACT_APP_SAMPLE_HANDLING_URL}
+              href={`${process.env.REACT_APP_SAMPLE_HANDLING_URL}/proposals/${propId}/sessions/${visitId}`}
             >
               Edit session's sample information
             </TwoLineLink>

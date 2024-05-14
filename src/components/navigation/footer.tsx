@@ -28,8 +28,8 @@ const Footer = () => (
       <Link as={LinkRouter} to='/about' color='diamond.400'>
         About Processing
       </Link>
-      {process.env.REACT_APP_ENABLE_FEEDBACK === "true" && (
-        <Link as={LinkRouter} to='/feedback' color='diamond.400'>
+      {!!process.env.REACT_APP_FEEDBACK_URL && (
+        <Link href={process.env.REACT_APP_FEEDBACK_URL} color='diamond.400'>
           Feedback
         </Link>
       )}
