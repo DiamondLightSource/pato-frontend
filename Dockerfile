@@ -8,6 +8,8 @@ ARG AUTH_ENDPOINT="http://localhost:8050/"
 ARG STAGING_HOST="ebic-pato-staging.diamond.ac.uk"
 ARG DEV_CONTACT="guilherme.de-freitas@diamond.ac.uk"
 ARG VERSION=0.1.0
+ARG SAMPLE_HANDLING_URL="http://localhost:8000/"
+ARG FEEDBACK_URL="http://localhost:8080/"
 
 ENV REACT_APP_DEPLOY_TYPE=${DEPLOY_TYPE}
 ENV REACT_APP_API_ENDPOINT=${API_ENDPOINT}
