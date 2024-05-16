@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.9.10 (16/05/2024)
+++++++++++
+
+**Fixed**
+
+- Beta tag is now only displayed on refinement steps
+
+++++++++++
 v1.9.0 (14/05/2024)
 ++++++++++
 
