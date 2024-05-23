@@ -195,7 +195,7 @@ const SessionPage = () => {
             <TwoLineLink title='Upload Model' isDisabled={true}>
               Upload custom model for data processing
             </TwoLineLink>
-            <TwoLineLink title='Submit Feedback' href='/feedback' isDisabled={true}>
+            <TwoLineLink title='Submit Feedback' href={process.env.REACT_APP_FEEDBACK_URL} isDisabled={!process.env.REACT_APP_FEEDBACK_URL}>
               Submit session feedback
             </TwoLineLink>
             <TwoLineLink title='Create New Data Collection' onClick={onOpen}>
