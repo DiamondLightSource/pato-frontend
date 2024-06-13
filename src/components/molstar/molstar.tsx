@@ -84,6 +84,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
   const [sliceIndex, setSliceIndex] = useState<number>();
   const [sliceCount, setSliceCount] = useState(0);
   const [showSlice, setShowSlice] = useState(false);
+  const [isoSurfaceValue, setIsoSurfaceValue] = useState(1);
 
   const [volumeData, setVolumeData] = useState<Volume>();
   const [repr, setRepr] = useState<StateObjectSelector>();
@@ -132,6 +133,21 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
   }, [sliceIndex, showSlice, repr, volumeData]);
 
   useEffect(() => {
+    if (repr && molstar && volumeData && !showSlice) {
+      molstar
+        .build()
+        .to(repr)
+        .update(
+          createVolumeRepresentationParams(molstar, volumeData, {
+            type: "isosurface",
+            typeParams: { isoValue: { kind: "relative", relativeValue: isoSurfaceValue } },
+          })
+        )
+        .commit();
+    }
+  }, [isoSurfaceValue, repr, showSlice, sliceIndex, volumeData]);
+
+  useEffect(() => {
     const init = async (rawData: ArrayBuffer) => {
       setIsRendered(true);
       molstar = new PluginContext(showSlice ? DefaultSliceSpec : Default3DSpec);
@@ -153,29 +169,19 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
       setSliceCount(newSliceCount);
       setSliceIndex(newSliceIndex);
 
+      // Generate initial representation before rerendering with default isosurface value
       const newRepr = molstar
         .build()
         .to(volume)
         .apply(
           StateTransforms.Representation.VolumeRepresentation3D,
-          createVolumeRepresentationParams(
-            molstar,
-            volume.data!,
-            showSlice
-              ? {
-                  type: "slice",
-                  typeParams: { dimension: { name: "y", params: newSliceIndex } },
-                  // Get central slice as default
-                }
-              : undefined
-          )
+          createVolumeRepresentationParams(molstar, volume.data!, undefined)
         );
 
       await newRepr.commit();
 
       setRepr(newRepr.selector);
       setVolumeData(volume.data);
-      resetOrientation(showSlice);
     };
 
     setIsRendered(undefined);
@@ -255,20 +261,44 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
             </Heading>
           )}
         </Box>
-        {sliceCount && (
-          <Slider
-            isDisabled={sliceCount < 1 || !showSlice}
-            orientation='vertical'
-            aria-label='Slice Slider'
-            onChange={handleSliceIndexChanged}
-            defaultValue={sliceCount / 2}
-            max={sliceCount}
-          >
-            <SliderTrack bg='diamond.200'>
-              <SliderFilledTrack bg='diamond.600' />
-            </SliderTrack>
-            <SliderThumb borderColor='diamond.300' />
-          </Slider>
+        {sliceCount && showSlice ? (
+          <>
+            <Text style={{ writingMode: "sideways-lr" }} color='diamond.300' fontWeight='600'>
+              Current Slice
+            </Text>
+            <Slider
+              orientation='vertical'
+              aria-label='Slice Slider'
+              onChange={handleSliceIndexChanged}
+              defaultValue={sliceCount / 2}
+              max={sliceCount}
+            >
+              <SliderTrack bg='diamond.200'>
+                <SliderFilledTrack bg='diamond.600' />
+              </SliderTrack>
+              <SliderThumb borderColor='diamond.300' />
+            </Slider>
+          </>
+        ) : (
+          <>
+            <Text style={{ writingMode: "sideways-lr" }} color='diamond.300' fontWeight='600'>
+              Isosurface Value
+            </Text>
+            <Slider
+              orientation='vertical'
+              aria-label='Isosurface Slider'
+              onChange={(v) => setIsoSurfaceValue(v)}
+              value={isoSurfaceValue}
+              step={0.001}
+              max={10}
+              min={0}
+            >
+              <SliderTrack bg='diamond.200'>
+                <SliderFilledTrack bg='diamond.600' />
+              </SliderTrack>
+              <SliderThumb borderColor='diamond.300' />
+            </Slider>
+          </>
         )}
       </HStack>
       <Spacer />

@@ -85,5 +85,4 @@ describe("Data Collection Creation", () => {
     );
     expect(onCloseMock).toHaveBeenCalled();
   });
-
 });
