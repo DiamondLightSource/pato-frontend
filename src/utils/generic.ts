@@ -81,3 +81,12 @@ export const debounce = (fn: Function, ms = 300) => {
     timer = setTimeout(() => fn(...args), ms);
   };
 };
+
+/**
+ * Capitalises first letter of string
+ *
+ * @param originalString Original string
+ * @returns Capitalised string
+ */
+export const capitalise = (originalString: string) =>
+  originalString.charAt(0).toUpperCase() + originalString.slice(1);

@@ -61,3 +61,5 @@ export type SortTypes = NonNullable<
     paths["/autoProc/{autoProcId}/classification"]["get"]["parameters"]["query"]
   >["sortBy"]
 >;
+
+export type TomogramMovieTypes = "denoised" | "segmented";

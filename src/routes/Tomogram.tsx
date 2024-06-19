@@ -30,6 +30,8 @@ import APNGContainer from "components/visualisation/apngContainer";
 import { Flipper, InfoGroup, APNGViewer } from "@diamondlightsource/ui-components";
 import { prependApiUrl } from "utils/api/client";
 import { CollectionTitle } from "components/visualisation/collectionTitle";
+import { TomogramMovieTypes } from "schema/interfaces";
+import { capitalise } from "utils/generic";
 
 const TomogramReprocessing = React.lazy(() => import("components/tomogram/reprocessing"));
 
@@ -44,6 +46,7 @@ const TomogramPage = () => {
 
   const [accordionIndex, setAccordionIndex] = useState<number | number[]>(0);
   const [openTomogram, setOpenTomogram] = useState<number | null>(null);
+  const [movieType, setMovieType] = useState<TomogramMovieTypes>("denoised");
 
   const onlyTomograms = useMemo(() => searchParams.get("onlyTomograms") === "true", [searchParams]);
   const sortBy = useMemo(() => searchParams.get("sortBy"), [searchParams]);
@@ -88,6 +91,11 @@ const TomogramPage = () => {
         : null
     );
   }, [loaderData]);
+
+  const handleOpenTomogram = useCallback((tomogramId: number, type: TomogramMovieTypes) => {
+    setMovieType(type);
+    setOpenTomogram(tomogramId);
+  }, []);
 
   const buttonDisabled = useMemo(() => {
     if (
@@ -183,7 +191,7 @@ const TomogramPage = () => {
               tomogram={job.Tomogram || null}
               status={job.status}
               active={accordionIndex === i}
-              onTomogramOpened={setOpenTomogram}
+              onTomogramOpened={handleOpenTomogram}
             />
           ))}
         </Accordion>
@@ -231,7 +239,10 @@ const TomogramPage = () => {
               </HStack>
               <Suspense>
                 <APNGContainer>
-                  <APNGViewer caption='Denoised' src={`${tomogramMovieSrc}?denoised=true`} />
+                  <APNGViewer
+                    caption={capitalise(movieType)}
+                    src={`${tomogramMovieSrc}?movieType=${movieType}`}
+                  />
                   <APNGViewer caption='Not Denoised' src={tomogramMovieSrc} />
                 </APNGContainer>
               </Suspense>
