@@ -21,7 +21,7 @@ vi.mock("@diamondlightsource/ui-components", async (importOriginal) => {
 vi.mock("components/tomogram/main", () => ({
   Tomogram: (props: TomogramProps) => (
     <AccordionItem>
-      <button onClick={() => props.onTomogramOpened(1)} data-testid='view movie' />
+      <button onClick={() => props.onTomogramOpened(1, "denoised")} data-testid='view movie' />
     </AccordionItem>
   ),
 }));

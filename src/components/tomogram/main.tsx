@@ -21,11 +21,16 @@ import { PlotContainer } from "components/visualisation/plotContainer";
 import { Motion } from "components/motion/motion";
 import { useCallback } from "react";
 import { client, prependApiUrl } from "utils/api/client";
-import { TomogramData, BaseProcessingJobProps, DataConfig } from "schema/interfaces";
+import {
+  TomogramData,
+  BaseProcessingJobProps,
+  DataConfig,
+  TomogramMovieTypes,
+} from "schema/interfaces";
 import { CTF } from "components/ctf/ctf";
 import { components } from "schema/main";
 import { ProcessingTitle } from "components/visualisation/processingTitle";
-import { parseData } from "utils/generic";
+import { capitalise, parseData } from "utils/generic";
 import { MdOpenInNew } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
 import { ScatterPlot, InfoGroup, ImageCard, BasePoint } from "@diamondlightsource/ui-components";
@@ -54,8 +59,25 @@ type TomogramResponse = components["schemas"]["TomogramResponse"];
 
 export interface TomogramProps extends BaseProcessingJobProps {
   tomogram: TomogramResponse | null;
-  onTomogramOpened: (tomogramId: number) => void;
+  onTomogramOpened: (tomogramId: number, type: TomogramMovieTypes) => void;
 }
+
+const TomogramThumbnail = ({
+  movieType,
+  baseUrl,
+}: {
+  movieType: TomogramMovieTypes | null;
+  baseUrl: string;
+}) => (
+  <VStack w='50%' h='100%'>
+    <ImageCard
+      p={0}
+      borderColor='transparent'
+      src={`${baseUrl}${movieType ? `?movieType=${movieType}` : ""}`}
+    />
+    <Text fontSize={13}>{movieType ? capitalise(movieType) : "Not Denoised"}</Text>
+  </VStack>
+);
 
 const fetchTomogramData = async (tomogram: TomogramResponse | null) => {
   let data: FullTomogramData = {
@@ -98,9 +120,12 @@ const Tomogram = ({
     queryFn: async () => await fetchTomogramData(tomogram),
   });
 
-  const handleOpenTomogram = useCallback(() => {
-    onTomogramOpened(data!.tomogram!.tomogramId);
-  }, [data, onTomogramOpened]);
+  const handleOpenTomogram = useCallback(
+    (type: TomogramMovieTypes) => {
+      onTomogramOpened(data!.tomogram!.tomogramId, type);
+    },
+    [data, onTomogramOpened]
+  );
 
   return (
     <AccordionItem isDisabled={false}>
@@ -138,28 +163,32 @@ const Tomogram = ({
                         <HStack>
                           <Heading size='sm'>Central Slice</Heading>
                           <Spacer />
-                          <Button h='25px' size='sm' onClick={handleOpenTomogram}>
-                            View Movie
+                          <Button
+                            h='25px'
+                            size='sm'
+                            onClick={() => handleOpenTomogram("segmented")}
+                          >
+                            View Segmented
+                            <Spacer />
+                            <Icon ml='10px' as={MdOpenInNew}></Icon>
+                          </Button>
+                          <Button h='25px' size='sm' onClick={() => handleOpenTomogram("denoised")}>
+                            View Denoised
                             <Spacer />
                             <Icon ml='10px' as={MdOpenInNew}></Icon>
                           </Button>
                         </HStack>
                       </CardHeader>
                       <CardBody pt={0}>
-                        <HStack mx='auto' w='auto' h='100%'>
-                          <VStack w='50%' h='100%'>
-                            <ImageCard
-                              p={0}
-                              borderColor='transparent'
-                              src={`${data.centralSlice}?denoised=true`}
-                            />
-                            <Text fontSize={13}>Denoised</Text>
-                          </VStack>
-                          <Divider orientation='vertical' />
-                          <VStack w='50%' h='100%'>
-                            <ImageCard p={0} borderColor='transparent' src={data.centralSlice} />
-                            <Text fontSize={13}>Not Denoised</Text>
-                          </VStack>
+                        <HStack
+                          mx='auto'
+                          w='auto'
+                          h='100%'
+                          divider={<Divider orientation='vertical' />}
+                        >
+                          <TomogramThumbnail baseUrl={data.centralSlice} movieType='segmented' />
+                          <TomogramThumbnail baseUrl={data.centralSlice} movieType='denoised' />
+                          <TomogramThumbnail baseUrl={data.centralSlice} movieType={null} />
                         </HStack>
                       </CardBody>
                     </Card>

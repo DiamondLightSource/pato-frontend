@@ -78,9 +78,9 @@ describe("Tomogram", () => {
     await screen.findByText("Alignment");
 
     fireEvent.click(screen.getByLabelText("Show Content"));
-    fireEvent.click(await screen.findByRole("button", { name: "View Movie" }));
+    fireEvent.click(await screen.findByRole("button", { name: "View Denoised" }));
 
-    await waitFor(() => expect(openCallback).toHaveBeenCalled());
+    await waitFor(() => expect(openCallback).toHaveBeenCalledWith(1, "denoised"));
   });
 
   it("should render if autoprocessing program is null", async () => {
