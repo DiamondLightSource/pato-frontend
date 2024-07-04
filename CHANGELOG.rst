@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.10.0 (13/06/2024)
+++++++++++
+
+**Added**
+
+- Isosurface slider for Molstar visualisation
+
+++++++++++
 v1.9.2 (16/05/2024)
 ++++++++++
 
