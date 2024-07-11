@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
-    "@diamondlightsource/ui-components": "^1.3.0",
+    "@diamondlightsource/ui-components": "^2.0.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@fullcalendar/core": "^6.1.14",
