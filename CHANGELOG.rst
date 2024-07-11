@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.10.1 (11/07/2024)
+++++++++++
+
+**Fixed**
+
+- Segmented denoised images no longer "jump around"
+
+++++++++++
 v1.10.0 (13/06/2024)
 ++++++++++
 
