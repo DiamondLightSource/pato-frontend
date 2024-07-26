@@ -25,7 +25,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { Md3DRotation, MdCamera, MdFileDownload, MdYoutubeSearchedFor } from "react-icons/md";
+import { Md3dRotation, MdCamera, MdFileDownload, MdYoutubeSearchedFor } from "react-icons/md";
 import { client, prependApiUrl } from "utils/api/client";
 import { Vec3 } from "molstar/lib/mol-math/linear-algebra";
 import { debounce } from "utils/generic";
@@ -215,7 +215,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
             isDisabled={!isRendered || showSlice}
             onClick={() => resetOrientation()}
           >
-            <Icon as={Md3DRotation} />
+            <Icon as={Md3dRotation} />
           </Button>
         </Tooltip>
         <Divider orientation='vertical' />

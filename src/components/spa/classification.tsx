@@ -159,6 +159,7 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
             page={classPage}
             onChange={setClassPage}
             total={!data || data.total < 1 ? 1 : pageAmount}
+            w="5em"
           />
         </HStack>
       </Stack>

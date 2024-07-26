@@ -274,7 +274,7 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
               )}
             </Button>
           </Tooltip>
-          <Flipper {...flipperProps} />
+          <Flipper {...flipperProps} w="5em" />
         </HStack>
       </Stack>
       <Divider />
