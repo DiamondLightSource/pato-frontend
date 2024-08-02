@@ -149,6 +149,7 @@ const TomogramPage = () => {
                 onChangeEnd={handleCollectionChanged}
                 defaultPage={currentIndex}
                 total={loaderData.total}
+                w="5em"
               />
             </HStack>
           </Stack>
@@ -235,6 +236,7 @@ const TomogramPage = () => {
                   onChangeEnd={handleCollectionChanged}
                   defaultPage={currentIndex}
                   total={loaderData.total}
+                  w="5em"
                 />
               </HStack>
               <Suspense>
