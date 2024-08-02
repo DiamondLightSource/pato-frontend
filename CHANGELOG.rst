@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.10.2 (26/07/2024)
+++++++++++
+
+**Fixed**
+
+- Tomogram page controller now takes up to 5 digits
+
+++++++++++
 v1.10.1 (11/07/2024)
 ++++++++++
 
