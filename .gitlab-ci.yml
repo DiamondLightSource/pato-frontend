@@ -2,7 +2,7 @@ image: node:19.4.0
 
 variables:
   IMAGE_NAME: gcr.io/diamond-pubreg/pato/frontend:$CI_COMMIT_TAG-$CI_COMMIT_SHORT_SHA
-  SAMPLE_HANDLING_URL: https://ebic-sample-handling.diamond.ac.uk
+  SAMPLE_HANDLING_URL: https://ebic-sample-handling-staging.diamond.ac.uk
   FEEDBACK_URL: https://forms.office.com/Pages/ResponsePage.aspx?id=dLonnQABDU2B_x1yja6N9tI2OIqG5E5NtM56yhIITmZUNFdMTTg0VU9TSlVYNE9XTEdUNTVKNTNaRi4u
 
 stages:
