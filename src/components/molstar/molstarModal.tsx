@@ -43,7 +43,7 @@ const MolstarModal = ({ autoProcId, classId, page, pageCount, onChange }: Molsta
               <Suspense>
                 <MolstarWrapper autoProcId={autoProcId} classId={classId}>
                   {pageCount && (
-                    <Flipper size='md' total={pageCount} page={page} onChange={onChange} w="5em" />
+                    <Flipper size='md' total={pageCount} page={page} onChange={onChange} w='5em' />
                   )}
                 </MolstarWrapper>
               </Suspense>

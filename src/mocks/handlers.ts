@@ -172,6 +172,28 @@ export const handlers = [
     res(ctx.status(404))
   ),
 
+  rest.get("http://localhost/dataCollections/:collectionId/ctf", (req, res, ctx) =>
+    res(
+      ctx.status(200),
+      ctx.delay(0),
+      ctx.json({
+        items: [{ x: 1, y: 1 }],
+      })
+    )
+  ),
+
+  rest.get(
+    "http://localhost/dataCollections/:collectionId/particleCountPerResolution",
+    (req, res, ctx) =>
+      res(
+        ctx.status(200),
+        ctx.delay(0),
+        ctx.json({
+          items: [{ x: 1, y: 1 }],
+        })
+      )
+  ),
+
   rest.get("http://localhost/invalidEndpoint", (req, res, ctx) => res(ctx.status(404))),
 
   rest.get("http://localhost/autoProc/:procId/particlePicker", (req, res, ctx) => {
