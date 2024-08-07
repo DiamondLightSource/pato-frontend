@@ -10,6 +10,7 @@ describe("Collection Statistics", () => {
 
     await screen.findByText("Estimated Resolution");
     await screen.findByText("Total Motion");
+    await screen.findByText("Particle count at different defoci");
   });
 
   it("should display message if at least one histogram endpoint fails", async () => {

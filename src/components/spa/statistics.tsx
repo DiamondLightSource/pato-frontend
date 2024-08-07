@@ -40,7 +40,13 @@ const Statistics = ({ dataCollectionId }: SpaProps) => {
           label: v.x,
           y: v.y / 1000,
         }));
-        setCtfData({ defocus: resDefocus.data.items, resolution: [barData] });
+
+        const defocus = resDefocus.data.items.map((v: BasePoint) => ({
+          x: v.x / 10000, // Angstroms to microns
+          y: v.y,
+        }));
+
+        setCtfData({ defocus, resolution: [barData] });
       } else {
         setCtfData(null);
       }
@@ -77,13 +83,16 @@ const Statistics = ({ dataCollectionId }: SpaProps) => {
       <Divider />
       {ctfData ? (
         <Grid py={2} templateColumns={{ base: "", md: "repeat(2, 1fr)" }} gap={2}>
-          <PlotContainer title='Particle Count/Defocus' h='25vh'>
+          <PlotContainer title='Particle count at different defoci' h='25vh'>
             <ScatterPlot
               data={ctfData.defocus}
               options={{ x: { label: "Defocus (μm)" }, y: { label: "Particle Count" } }}
             />
           </PlotContainer>
-          <PlotContainer title='Particle Count/Resolution' h='25vh'>
+          <PlotContainer
+            title='Particle CTF max resolution distribution (before 2D class selection)'
+            h='25vh'
+          >
             <BarChart
               data={ctfData.resolution}
               options={{ x: { label: "Resolution (Å)" }, y: { label: "Particle Count (10^3)" } }}
