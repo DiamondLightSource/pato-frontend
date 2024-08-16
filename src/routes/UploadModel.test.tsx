@@ -18,6 +18,13 @@ vi.mock("react-router-dom", async (importOriginal) => {
 const file = new File(["test.h5"], "test.h5", { type: "text/plain" });
 
 describe("Upload Model", () => {
+  afterAll(() => {
+    vi.resetAllMocks();
+  });
+  afterEach(() => {
+    mockUseNavigate.mockClear();
+  });
+  
   it("should display toast if upload is successful", async () => {
     renderWithProviders(<UploadModelPage />);
 
