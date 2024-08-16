@@ -1,4 +1,4 @@
-import { Button, Heading, useToast, VStack } from "@chakra-ui/react";
+import { Button, Divider, Heading, useToast, VStack, Text, Code } from "@chakra-ui/react";
 import { FormEvent, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -37,6 +37,8 @@ export const UploadModelPage = () => {
   return (
     <VStack alignItems='start' className='about-text' mt='1em'>
       <Heading>Upload Model</Heading>
+      <Divider/>
+      <Text>Upload model for use in processing. This model will be placed under the <Code>processing</Code> directory in your visit directory.</Text>
       <form onSubmit={uploadFile} encType='multipart/form-data'>
         <input name='file' data-testid='file-input' type='file' accept='.h5' />
         <Button w='8em' type='submit'>
