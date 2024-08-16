@@ -21,7 +21,7 @@ import {
   ModalProps,
 } from "@chakra-ui/react";
 import { useCallback, useEffect } from "react";
-import { useLoaderData, useNavigate, useParams, useRevalidator } from "react-router-dom";
+import { Link, useLoaderData, useNavigate, useParams, useRevalidator } from "react-router-dom";
 import {
   Pagination,
   DebouncedInput,
@@ -192,7 +192,8 @@ const SessionPage = () => {
           <VStack alignItems='start'>
             <Heading size='lg'>Actions</Heading>
             <Divider />
-            <TwoLineLink title='Upload Model' isDisabled={true}>
+            {/** @ts-expect-error */}
+            <TwoLineLink title='Upload Model' as={Link} to='upload-model'>
               Upload custom model for data processing
             </TwoLineLink>
             <TwoLineLink

@@ -436,6 +436,11 @@ export const handlers = [
     (req, res, ctx) => res(ctx.status(201), ctx.json({ dataCollectionId: 1 }))
   ),
 
+  rest.post(
+    "http://localhost/proposals/:propId/sessions/:sessionId/processingModel",
+    (req, res, ctx) => res(ctx.status(200), ctx.json({}))
+  ),
+
   rest.get("http://localhost/processingJob/:procJobId/parameters", (req, res, ctx) =>
     res(ctx.status(200), ctx.json({ items: { do_class3d: "1", do_class2d: "0", Cs: "1" } }))
   ),

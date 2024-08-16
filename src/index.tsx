@@ -21,6 +21,7 @@ import FeedbackForm from "routes/Feedback";
 import { SessionPage } from "routes/Session";
 import { sessionPageLoader } from "loaders/session";
 import { SessionResponse } from "schema/interfaces";
+import { UploadModelPage } from "routes/UploadModel";
 
 const Calendar = React.lazy(() => import("routes/Calendar"));
 const About = React.lazy(() => import("routes/About"));
@@ -106,6 +107,10 @@ const router = createBrowserRouter([
         path: "/proposals/:propId/sessions/:visitId",
         element: <SessionPage />,
         loader: ({ request, params }) => sessionPageLoader(queryClient)(request, params),
+      },
+      {
+        path: "/proposals/:propId/sessions/:visitId/upload-model",
+        element: <UploadModelPage />,
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups",
