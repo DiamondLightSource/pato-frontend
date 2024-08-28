@@ -162,7 +162,7 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
           total={innerTotal}
           onChange={handlePageChanged}
           page={innerPage}
-          w="5em"
+          w='5em'
         />
       </Stack>
       <Divider />
