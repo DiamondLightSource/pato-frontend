@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { PlotContainer } from "components/visualisation/plotContainer";
 import { Box, Divider, Grid, Heading, Skeleton } from "@chakra-ui/react";
 import { setHistogram } from "utils/api/response";
-import { BarChart, BarStats } from "@diamondlightsource/ui-components";
+import { BarChart, BarStats, BasePoint, ScatterPlot } from "@diamondlightsource/ui-components";
+import { client } from "utils/api/client";
 
 interface SpaProps {
   /* Parent data collection ID*/
@@ -14,6 +15,10 @@ const Statistics = ({ dataCollectionId }: SpaProps) => {
   const [totalMotion, setTotalMotion] = useState<BarStats[] | null>();
   const [resolution, setResolution] = useState<BarStats[] | null>();
   const [particleCount, setParticleCount] = useState<BarStats[] | null>();
+  const [ctfData, setCtfData] = useState<{
+    defocus: BasePoint[];
+    resolution: BarStats[][];
+  } | null>();
 
   useEffect(() => {
     const endpointPrefix = `dataCollections/${dataCollectionId}`;
@@ -23,8 +28,29 @@ const Statistics = ({ dataCollectionId }: SpaProps) => {
       setIceThickness,
       10000
     );
-    setHistogram(`${endpointPrefix}/resolution?dataBin=2&minimum=0`, setResolution, 1);
+    setHistogram(`${endpointPrefix}/resolution?dataBin=2&minimum=2`, setResolution, 1);
     setHistogram(`${endpointPrefix}/particles?dataBin=70&minimum=10`, setParticleCount, 10);
+
+    Promise.all([
+      client.safeGet(`dataCollections/${dataCollectionId}/ctf`),
+      client.safeGet(`dataCollections/${dataCollectionId}/particleCountPerResolution`),
+    ]).then(async ([resDefocus, resResolution]) => {
+      if (resDefocus.status === 200 && resResolution.status === 200) {
+        const barData = resResolution.data.items.map((v: BasePoint) => ({
+          label: v.x,
+          y: v.y / 1000,
+        }));
+
+        const defocus = resDefocus.data.items.map((v: BasePoint) => ({
+          x: v.x / 10000, // Angstroms to microns
+          y: v.y,
+        }));
+
+        setCtfData({ defocus, resolution: [barData] });
+      } else {
+        setCtfData(null);
+      }
+    });
   }, [dataCollectionId]);
 
   return (
@@ -49,6 +75,33 @@ const Statistics = ({ dataCollectionId }: SpaProps) => {
       ) : [iceThickness, totalMotion, resolution, particleCount].some((i) => i === null) ? (
         <Heading py='7vh' variant='notFound'>
           No Frequency Data Available
+        </Heading>
+      ) : (
+        <Skeleton h='25vh' />
+      )}
+      <Heading variant='collection'>CTF</Heading>
+      <Divider />
+      {ctfData ? (
+        <Grid py={2} templateColumns={{ base: "", md: "repeat(2, 1fr)" }} gap={2}>
+          <PlotContainer title='Particle count at different defoci' h='25vh'>
+            <ScatterPlot
+              data={ctfData.defocus}
+              options={{ x: { label: "Defocus (μm)" }, y: { label: "Particle Count" } }}
+            />
+          </PlotContainer>
+          <PlotContainer
+            title='Particle CTF max resolution distribution (before 2D class selection)'
+            h='25vh'
+          >
+            <BarChart
+              data={ctfData.resolution}
+              options={{ x: { label: "Resolution (Å)" }, y: { label: "Particle Count (10^3)" } }}
+            />
+          </PlotContainer>
+        </Grid>
+      ) : ctfData === null ? (
+        <Heading py='7vh' variant='notFound'>
+          No CTF Data Available
         </Heading>
       ) : (
         <Skeleton h='25vh' />

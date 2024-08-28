@@ -10,9 +10,10 @@ describe("Collection Statistics", () => {
 
     await screen.findByText("Estimated Resolution");
     await screen.findByText("Total Motion");
+    await screen.findByText("Particle count at different defoci");
   });
 
-  it("should display message if at least one endpoint fails", async () => {
+  it("should display message if at least one histogram endpoint fails", async () => {
     server.use(
       rest.get("http://localhost/dataCollections/:collectionId/totalMotion", (req, res, ctx) => {
         return res.once(ctx.status(404));
@@ -22,5 +23,17 @@ describe("Collection Statistics", () => {
     renderWithProviders(<Statistics dataCollectionId={1} />);
 
     await screen.findByText("No Frequency Data Available");
+  });
+
+  it("should display message if at least one CTF endpoint fails", async () => {
+    server.use(
+      rest.get("http://localhost/dataCollections/:collectionId/ctf", (req, res, ctx) => {
+        return res.once(ctx.status(404));
+      })
+    );
+
+    renderWithProviders(<Statistics dataCollectionId={1} />);
+
+    await screen.findByText("No CTF Data Available");
   });
 });

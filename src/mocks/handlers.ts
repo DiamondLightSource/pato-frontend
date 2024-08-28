@@ -172,6 +172,28 @@ export const handlers = [
     res(ctx.status(404))
   ),
 
+  rest.get("http://localhost/dataCollections/:collectionId/ctf", (req, res, ctx) =>
+    res(
+      ctx.status(200),
+      ctx.delay(0),
+      ctx.json({
+        items: [{ x: 1, y: 1 }],
+      })
+    )
+  ),
+
+  rest.get(
+    "http://localhost/dataCollections/:collectionId/particleCountPerResolution",
+    (req, res, ctx) =>
+      res(
+        ctx.status(200),
+        ctx.delay(0),
+        ctx.json({
+          items: [{ x: 1, y: 1 }],
+        })
+      )
+  ),
+
   rest.get("http://localhost/invalidEndpoint", (req, res, ctx) => res(ctx.status(404))),
 
   rest.get("http://localhost/autoProc/:procId/particlePicker", (req, res, ctx) => {
@@ -412,6 +434,11 @@ export const handlers = [
   rest.post(
     "http://localhost/proposals/:propId/sessions/:sessionId/dataCollections",
     (req, res, ctx) => res(ctx.status(201), ctx.json({ dataCollectionId: 1 }))
+  ),
+
+  rest.post(
+    "http://localhost/proposals/:propId/sessions/:sessionId/processingModel",
+    (req, res, ctx) => res(ctx.status(200), ctx.json({}))
   ),
 
   rest.get("http://localhost/processingJob/:procJobId/parameters", (req, res, ctx) =>

@@ -3,6 +3,19 @@ Changelog
 ==========
 
 ++++++++++
+v1.11.0 (06/08/2024)
+++++++++++
+
+**Added**
+
+- Include particle count per resolution/defocus values graph in collection statistics page
+- Custom model upload
+
+**Changed**
+
+- Redirect to Sample Handling is now done through the backend
+
+++++++++++
 v1.10.2 (26/07/2024)
 ++++++++++
 
