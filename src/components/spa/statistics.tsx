@@ -82,8 +82,14 @@ const Statistics = ({ dataCollectionId }: SpaProps) => {
       <Heading variant='collection'>CTF</Heading>
       <Divider />
       {ctfData ? (
-        <Grid py={2} templateColumns={{ base: "", md: "repeat(2, 1fr)" }} gap={2}>
-          <PlotContainer title='Particle count at different defoci' h='25vh'>
+        <Grid
+          py={2}
+          templateColumns={{ base: "", md: "repeat(2, 1fr)" }}
+          gap={2}
+          minH='200px'
+          h='20vw'
+        >
+          <PlotContainer title='Particle count at different defoci' h='100%'>
             <ScatterPlot
               data={ctfData.defocus}
               options={{ x: { label: "Defocus (μm)" }, y: { label: "Particle Count" } }}
@@ -91,7 +97,7 @@ const Statistics = ({ dataCollectionId }: SpaProps) => {
           </PlotContainer>
           <PlotContainer
             title='Particle CTF max resolution distribution (before 2D class selection)'
-            h='25vh'
+            h='100%'
           >
             <BarChart
               data={ctfData.resolution}
@@ -104,7 +110,7 @@ const Statistics = ({ dataCollectionId }: SpaProps) => {
           No CTF Data Available
         </Heading>
       ) : (
-        <Skeleton h='25vh' />
+        <Skeleton minH='200px' h='20vw' />
       )}
     </Box>
   );
