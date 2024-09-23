@@ -9,6 +9,7 @@ v1.11.1 (09/09/2024)
 **Fixed**
 
 - Use new version of component library, use correct width/height for APNGs
+- Improve graph height on smaller screens for statistics graphs
 
 ++++++++++
 v1.11.0 (06/08/2024)
