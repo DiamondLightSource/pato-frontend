@@ -24,6 +24,7 @@ import { ClassificationProps, SortTypes } from "schema/interfaces";
 import { MolstarModal } from "components/molstar/molstarModal";
 import { useQuery } from "@tanstack/react-query";
 import { Flipper, InfoGroup, ImageCard, Info } from "@diamondlightsource/ui-components";
+import { Table } from "@diamondlightsource/ui-components";
 
 type ClassificationSchema = components["schemas"]["Classification"];
 interface FullClassification extends ClassificationSchema {
@@ -211,22 +212,46 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
           <HStack my='1em' w='100%' alignItems='stretch' flexWrap='wrap'>
             <VStack flex='1 0 500px' alignItems='start'>
               {selectedClassInfo.info && (
-                <Box w='100%' flex='1 0 0'>
-                  <InfoGroup
-                    height='auto'
-                    cols={type === "3d" ? 3 : 5}
-                    info={selectedClassInfo.info as Info[]}
-                  />
-                </Box>
-              )}
-              {type === "3d" && (
-                <MolstarModal
-                  onChange={handle3dClassPageChange}
-                  autoProcId={autoProcId}
-                  page={classIndex}
-                  pageCount={data.total}
-                  classId={selectedClassInfo.particleClassificationId}
-                />
+                <HStack alignItems='start' w='100%' flex='1 0 0' flexWrap='wrap' h='100%'>
+                  <Box flex={`4 0 ${type === "3d" ? "100%" : "0"}`}>
+                    <InfoGroup
+                      height='auto'
+                      cols={type === "3d" ? 3 : 5}
+                      info={selectedClassInfo.info as Info[]}
+                    />
+                  </Box>
+                  <Box alignSelf={type === "2d" ? undefined : "end"}>
+                    <Heading size='xs' flex={type === "2d" ? "1 0 0" : undefined}>
+                      B-Factor
+                    </Heading>
+                    <Divider my='5px' />
+                    <Table
+                      data={[
+                        {
+                          intercept: selectedClassInfo.bFactorIntercept,
+                          slope: selectedClassInfo.bFactorSlope,
+                        },
+                      ]}
+                      headers={[
+                        { key: "intercept", label: "Intercept" },
+                        { key: "slope", label: "Slope" },
+                      ]}
+                    />
+                  </Box>
+                  {type === "3d" && (
+                    <>
+                      <Spacer />
+                      <MolstarModal
+                        alignSelf='end'
+                        onChange={handle3dClassPageChange}
+                        autoProcId={autoProcId}
+                        page={classIndex}
+                        pageCount={data.total}
+                        classId={selectedClassInfo.particleClassificationId}
+                      />
+                    </>
+                  )}
+                </HStack>
               )}
             </VStack>
             {type === "3d" && (

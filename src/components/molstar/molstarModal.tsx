@@ -9,6 +9,7 @@ import {
   useDisclosure,
   Button,
   Icon,
+  ButtonProps,
 } from "@chakra-ui/react";
 import { Suspense } from "react";
 import React from "react";
@@ -16,7 +17,7 @@ import { MdOpenInNew } from "react-icons/md";
 import { Flipper } from "@diamondlightsource/ui-components";
 const MolstarWrapper = React.lazy(() => import("components/molstar/molstar"));
 
-export interface MolstarModalProps {
+export interface MolstarModalProps extends Omit<ButtonProps, "onChange"> {
   autoProcId: number;
   classId: number;
   page?: number;
@@ -24,12 +25,19 @@ export interface MolstarModalProps {
   onChange?: (page: number) => void;
 }
 
-const MolstarModal = ({ autoProcId, classId, page, pageCount, onChange }: MolstarModalProps) => {
+const MolstarModal = ({
+  autoProcId,
+  classId,
+  page,
+  pageCount,
+  onChange,
+  ...props
+}: MolstarModalProps) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   return (
     <>
-      <Button onClick={onOpen} width='30em'>
+      <Button onClick={onOpen} width='30em' {...props}>
         Open 3D Visualisation <Spacer />
         <Icon as={MdOpenInNew}></Icon>
       </Button>
