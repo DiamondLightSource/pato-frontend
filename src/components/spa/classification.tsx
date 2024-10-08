@@ -213,23 +213,26 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
             <VStack flex='1 0 500px' alignItems='start'>
               {selectedClassInfo.info && (
                 <HStack alignItems='start' w='100%' flex='1 0 0' flexWrap='wrap' h='100%'>
-                  <Box flex={`4 0 ${type === "3d" ? "100%" : "0"}`}>
+                  <Box flex={`5 0 ${type === "3d" ? "100%" : "0"}`}>
                     <InfoGroup
                       height='auto'
                       cols={type === "3d" ? 3 : 5}
                       info={selectedClassInfo.info as Info[]}
                     />
                   </Box>
-                  <Box alignSelf={type === "2d" ? undefined : "end"}>
-                    <Heading size='xs' flex={type === "2d" ? "1 0 0" : undefined}>
-                      B-Factor
-                    </Heading>
+                  <Box
+                    alignSelf={type === "2d" ? undefined : "end"}
+                    flex={type === "2d" ? "1 0 0" : undefined}
+                  >
+                    <Heading size='xs'>B-Factor</Heading>
                     <Divider my='5px' />
                     <Table
                       data={[
                         {
-                          intercept: selectedClassInfo.bFactorIntercept,
-                          slope: selectedClassInfo.bFactorSlope,
+                          intercept: selectedClassInfo.bFactorFitIntercept,
+                          slope: selectedClassInfo.bFactorFitLinear
+                            ? (2 / selectedClassInfo.bFactorFitLinear).toFixed(4)
+                            : "?",
                         },
                       ]}
                       headers={[
