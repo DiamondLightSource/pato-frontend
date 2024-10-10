@@ -34,8 +34,6 @@ const fetchClassData = async (autoProcId: number) => {
 
   const firstClass: FullClassification = classResponse.data.items[0];
 
-  console.log(firstClass);
-
   return {
     data: bFactorResponse.data.items.map((item: any) => ({
       x: item.numberOfParticles,
