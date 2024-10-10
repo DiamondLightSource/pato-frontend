@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.12.1 (10/10/2024)
+++++++++++
+
+**Added**
+
+- Move B-factor displays to refinement view
+
+++++++++++
 v1.12.0 (09/10/2024)
 ++++++++++
 
