@@ -302,6 +302,8 @@ export const handlers = [
         symmetry: "C1",
         type: "2D",
         selected: false,
+        bFactorFitIntercept: 10,
+        bFactorFitLinear: 10,
       },
       {
         particleClassificationId: 2,
@@ -311,6 +313,8 @@ export const handlers = [
         symmetry: "C1",
         type: "2D",
         selected: true,
+        bFactorFitIntercept: 10,
+        bFactorFitLinear: 10,
       },
     ];
 

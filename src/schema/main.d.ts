@@ -374,6 +374,8 @@ export interface components {
       classDistribution?: number;
       /** Selected */
       selected?: boolean;
+      bFactorFitIntercept: number;
+      bFactorFitLinear: number;
     };
     /** CtfImageNumber */
     CtfImageNumber: {
