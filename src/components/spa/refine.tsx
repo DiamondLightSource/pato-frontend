@@ -8,6 +8,7 @@ import {
   Text,
   Link,
   Divider,
+  Spacer,
 } from "@chakra-ui/react";
 import { useMemo } from "react";
 import { client, prependApiUrl } from "utils/api/client";
@@ -15,7 +16,7 @@ import { components } from "schema/main";
 import { ClassificationProps } from "schema/interfaces";
 import { MolstarModal } from "components/molstar/molstarModal";
 import { useQuery } from "@tanstack/react-query";
-import { ImageCard, ScatterPlot } from "@diamondlightsource/ui-components";
+import { ImageCard, InfoGroup, ScatterPlot } from "@diamondlightsource/ui-components";
 import { PlotContainer } from "components/visualisation/plotContainer";
 
 type ClassificationSchema = components["schemas"]["Classification"];
@@ -33,12 +34,25 @@ const fetchClassData = async (autoProcId: number) => {
 
   const firstClass: FullClassification = classResponse.data.items[0];
 
+  console.log(firstClass);
+
   return {
     data: bFactorResponse.data.items.map((item: any) => ({
       x: item.numberOfParticles,
       y: item.resolution,
     })),
     particleClassificationId: firstClass.particleClassificationId,
+    bFactor: [
+      { label: "Intercept", value: firstClass.bFactorFitIntercept?.toFixed(3) ?? "?" },
+      {
+        label: "Slope",
+        value: firstClass.bFactorFitLinear?.toFixed(3) ?? "?",
+      },
+      {
+        label: "B-Factor",
+        value: firstClass.bFactorFitLinear ? (2 / firstClass.bFactorFitLinear).toFixed(3) : "?",
+      },
+    ],
   };
 };
 
@@ -83,7 +97,13 @@ const RefinementStep = ({ autoProcId }: ClassificationProps) => {
                 }}
               />
             </PlotContainer>
-            <MolstarModal autoProcId={autoProcId} classId={data.particleClassificationId} />
+            <HStack w='100%' alignItems='center' flexWrap='wrap'>
+              <MolstarModal autoProcId={autoProcId} classId={data.particleClassificationId} />
+              <Spacer />
+              <Box minWidth='200px'>
+                <InfoGroup info={data.bFactor} cols={3}></InfoGroup>
+              </Box>
+            </HStack>
           </VStack>
           <ImageCard
             flex='0 0 500px'
