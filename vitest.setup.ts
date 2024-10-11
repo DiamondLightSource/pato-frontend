@@ -1,38 +1,70 @@
-import "@testing-library/jest-dom";
-
-import { server } from "./src/mocks/server";
-import { queryClient } from "./src/utils/test-utils";
+import { server } from "@/mocks/server";
+import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
+import { getServerSession } from "next-auth";
 
-export const mockToast = vi.fn();
+const pathnameMock = vi.fn(() => "/");
+export const toastMock = vi.fn();
+
+vi.mock("next/cache", async (importOriginal) => {
+  const actual = await importOriginal<any>();
+  return { ...actual, revalidateTag: () => {}, revalidatePath: () => {} };
+});
+
+vi.mock("next/navigation", () => ({
+  ...require("next-router-mock"),
+  usePathname: pathnameMock,
+  redirect: vi.fn(),
+}));
+window.scrollTo = () => {};
+window.print = () => {};
+
+process.env.NEXT_PUBLIC_API_URL = "http://localhost/api";
+process.env.SERVER_API_URL = "http://localhost/api";
 
 beforeEach(() => server.listen());
+
 afterEach(() => {
   server.resetHandlers();
-  queryClient.clear();
-  mockToast.mockClear();
+  toastMock.mockClear();
   cleanup();
 });
+
 afterAll(() => {
   server.close();
-  vi.restoreAllMocks();
 });
+
+// Reference: https://github.com/nextauthjs/next-auth/discussions/4185#discussioncomment-2397318
+// We also need to mock the whole next-auth package, since it's used in
+// our various pages via the `export { getServerSideProps }` function.
+vi.mock("next-auth/next", () => ({
+  __esModule: true,
+  default: vi.fn(),
+  getServerSession: vi.fn(
+    () =>
+      new Promise((resolve) => {
+        resolve({
+          expiresIn: undefined,
+          loggedInAt: undefined,
+          someProp: "someString",
+        });
+      }),
+  ),
+}));
 
 vi.mock("@chakra-ui/react", async (importOriginal) => {
   const actual = await importOriginal<any>();
   return {
     ...actual,
-    createStandaloneToast: () => ({ toast: mockToast }),
-    useToast: () => mockToast,
+    createStandaloneToast: () => ({ toast: toastMock }),
+    useToast: () => toastMock,
   };
 });
 
-class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-}
-
-global.window.scrollTo = () => {}
-global.ResizeObserver = ResizeObserver;
-global.structuredClone = (val: Record<string, any>) => JSON.parse(JSON.stringify(val));
+vi.mock("next-auth", async (importOriginal) => {
+  const actual = await importOriginal<any>();
+  return {
+    ...actual,
+    getServerSession: () => {}
+  };
+});
