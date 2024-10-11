@@ -33,6 +33,8 @@ describe("Upload Model", () => {
     Object.defineProperty(fileInput, "files", {
       value: [file],
     });
+    
+    fireEvent.change(fileInput);
 
     fireEvent.click(screen.getByRole("button", { name: "Submit" }));
 
