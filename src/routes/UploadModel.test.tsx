@@ -25,6 +25,9 @@ describe("Upload Model", () => {
   afterEach(() => {
     mockUseNavigate.mockClear();
   });
+  beforeAll(() => {
+    vi.useRealTimers();
+  });
 
   it("should display toast if upload is successful", async () => {
     renderWithProviders(<UploadModelPage />);
