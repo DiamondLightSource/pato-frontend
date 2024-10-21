@@ -230,11 +230,11 @@ export const handlers = [
   }),
 
   rest.get("http://localhost/movies/:movieId/iceThickness", (req, res, ctx) => {
-    const dummy = { minimum: 1, maximum: 10, median: 5, q1: 3, q3: 6 };
+    const dummy = { minimum: 3000, maximum: 10000, median: 5000, q1: 3, q3: 6 };
     return res(
       ctx.status(200),
       ctx.delay(0),
-      ctx.json({ current: dummy, avg: { ...dummy, stddev: 2 } })
+      ctx.json({ current: dummy, avg: { ...dummy, stddev: 200 } })
     );
   }),
 
