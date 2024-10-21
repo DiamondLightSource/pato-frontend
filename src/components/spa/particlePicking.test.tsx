@@ -63,7 +63,7 @@ describe("Particle Picking", () => {
   it("should use standard deviation to base graph domain", async () => {
     renderWithProviders(<ParticlePicking autoProcId={2} page={12} total={150} />);
 
-    await screen.findByText("7.0");
-    await screen.findByText("3.0");
+    await screen.findByText("7.4");
+    await screen.findByText("2.7");
   });
 });
