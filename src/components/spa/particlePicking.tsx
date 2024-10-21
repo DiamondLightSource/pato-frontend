@@ -57,16 +57,16 @@ const convertToBoxPlot = (
   data: components["schemas"]["RelativeIceThickness"],
   label: string
 ): BoxPlotStats => ({
-  min: data.minimum,
-  max: data.maximum,
-  median: data.median,
-  q1: data.q1,
-  q3: data.q3,
+  min: data.minimum / 1000,
+  max: data.maximum / 1000,
+  median: data.median / 1000,
+  q1: data.q1 / 1000,
+  q3: data.q3 / 1000,
   label,
 });
 
 const fetchParticlePickingData = async (autoProcId: number, page: number) => {
-  const baseDomain = { min: 120000, max: 160000 };
+  const baseDomain = { min: 120, max: 160 };
 
   let data: FullParticleData = {
     particlePicker: null,
@@ -95,10 +95,10 @@ const fetchParticlePickingData = async (autoProcId: number, page: number) => {
       );
 
       if (fileData.status === 200) {
-        const boundary = fileData.data.avg.stddev;
+        const boundary = Math.round(fileData.data.avg.stddev / 1000);
 
         // 'Mean' as in the mean of all medians
-        const mean = fileData.data.avg.median;
+        const mean = Math.round(fileData.data.avg.median / 1000);
 
         data.iceThickness = {
           data: [
@@ -172,7 +172,15 @@ const ParticlePicking = ({ autoProcId, total, page }: ParticleProps) => {
           <PlotContainer title='Relative Ice Thickness' height='25vh'>
             <BoxPlot
               data={data.iceThickness.data}
-              options={{ y: { domain: data.iceThickness.domain } }}
+              options={{
+                y: {
+                  domain: data.iceThickness.domain,
+                  label: "Thickest → Thinnest",
+                  log: true,
+                  base: Math.E,
+                  precision: 1,
+                },
+              }}
             />
           </PlotContainer>
           <GridItem>

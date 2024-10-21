@@ -1,6 +1,5 @@
 import { screen, fireEvent, waitFor } from "@testing-library/react";
 import { renderWithProviders } from "utils/test-utils";
-import userEvent from "@testing-library/user-event";
 import { UploadModelPage } from "routes/UploadModel";
 import { server } from "mocks/server";
 import { rest } from "msw";
@@ -35,9 +34,7 @@ describe("Upload Model", () => {
       value: [file],
     });
 
-    fireEvent.change(fileInput);
-
-    await userEvent.click(screen.getByRole("button", { name: "Submit" }));
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
 
     await waitFor(() => expect(mockUseNavigate).toHaveBeenCalledWith(-1));
   });
