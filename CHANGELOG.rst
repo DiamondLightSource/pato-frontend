@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.12.2 (21/10/2024)
+++++++++++
+
+**Changed**
+
+- Ice thickness graph Y axis is now displayed in log scale
+
+++++++++++
 v1.12.1 (10/10/2024)
 ++++++++++
 
