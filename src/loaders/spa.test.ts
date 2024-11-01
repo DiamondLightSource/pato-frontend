@@ -101,6 +101,53 @@ describe("SPA Data", () => {
     ]);
   });
 
+  it("should filter out most recent refinement step", async () => {
+    server.use(
+      rest.get("http://localhost/dataCollections/:collectionId/processingJobs", (req, res, ctx) =>
+        res.once(
+          ctx.status(200),
+          ctx.json({
+            items: [
+              {
+                AutoProcProgram: { autoProcProgramId: 1 },
+                ProcessingJob: { recipe: "em-spa-preprocess" },
+                status: "Success",
+              },
+              {
+                AutoProcProgram: { autoProcProgramId: 1 },
+                ProcessingJob: { recipe: "em-spa-refine", processingJobId: 11 },
+                status: "Success",
+              },
+              {
+                AutoProcProgram: { autoProcProgramId: 1 },
+                ProcessingJob: { recipe: "em-spa-refine", processingJobId: 10 },
+                status: "Success",
+              },
+              {
+                AutoProcProgram: { autoProcProgramId: 2 },
+                ProcessingJob: { recipe: "em-spa-class3d" },
+                status: "Success",
+              },
+              {
+                AutoProcProgram: { autoProcProgramId: 3 },
+                ProcessingJob: { recipe: "em-spa-class2d" },
+                status: "Success",
+              },
+            ],
+          }),
+          ctx.delay(0)
+        )
+      )
+    );
+
+    const data = await spaLoader(queryClient)({ groupId: "1" });
+    expect(data.jobs!.find((v) => v.ProcessingJob.recipe === "em-spa-refine")).toStrictEqual({
+      AutoProcProgram: { autoProcProgramId: 1 },
+      ProcessingJob: { processingJobId: 10, recipe: "em-spa-refine" },
+      status: "Success",
+    });
+  });
+
   it("should keep similar step types together", async () => {
     server.use(
       rest.get("http://localhost/dataCollections/:collectionId/processingJobs", (req, res, ctx) =>
