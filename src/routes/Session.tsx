@@ -193,8 +193,8 @@ const SessionPage = () => {
             <Heading size='lg'>Actions</Heading>
             <Divider />
             {/** @ts-expect-error */}
-            <TwoLineLink title='Upload Model' as={Link} to='upload-model'>
-              Upload custom model for data processing
+            <TwoLineLink title='Upload Particle Picking Model' as={Link} to='upload-model'>
+              Upload custom model for particle picking (crYOLO)
             </TwoLineLink>
             <TwoLineLink
               title='Submit Feedback'
