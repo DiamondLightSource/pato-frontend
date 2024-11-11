@@ -1,5 +1,5 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { server } from "mocks/server";
 import { renderWithAccordion } from "utils/test-utils";
 import { Tomogram } from "components/tomogram/main";
@@ -26,8 +26,10 @@ describe("Tomogram", () => {
 
   it("should only display motion correction if tomogram is not fully processed", async () => {
     server.use(
-      rest.get("http://localhost/autoProc/:autoProcId/tomogram", (req, res, ctx) =>
-        res.once(ctx.status(404), ctx.delay(0))
+      http.get(
+        "http://localhost/autoProc/:autoProcId/tomogram",
+        () => HttpResponse.json({}, { status: 404 }),
+        { once: true }
       )
     );
 

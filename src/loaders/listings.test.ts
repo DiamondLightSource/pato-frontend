@@ -1,6 +1,6 @@
 import { checkListingChanged, listingLoader } from "loaders/listings";
 import { server } from "mocks/server";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { queryClient } from "utils/test-utils";
 
 const request = new Request("http://localhost/proposals/");
@@ -35,13 +35,10 @@ describe("Listing Data", () => {
 
   it("should include search keywords in URL", async () => {
     server.use(
-      rest.get("http://localhost/searchTest", (req, res, ctx) =>
-        res.once(
-          ctx.status(200),
-          ctx.delay(0),
-          ctx.json({ items: [{ value: req.url.searchParams.get("search") }] })
-        )
-      )
+      http.get("http://localhost/searchTest", ({ request }) => {
+        const url = new URL(request.url);
+        return HttpResponse.json({ items: [{ value: url.searchParams.get("search") }] });
+      })
     );
 
     const requestSearch = new Request("http://localhost/proposals?search=test");

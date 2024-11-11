@@ -1,4 +1,4 @@
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { server } from "mocks/server";
 import { tomogramLoader } from "loaders/tomogram";
 import { queryClient } from "utils/test-utils";
@@ -36,8 +36,12 @@ describe("Tomogram Data", () => {
 
   it("should return base object if no data collection is available", async () => {
     server.use(
-      rest.get("http://localhost/dataGroups/:groupId/dataCollections", (req, res, ctx) =>
-        res.once(ctx.status(404), ctx.delay(0))
+      http.get(
+        "http://localhost/dataGroups/:groupId/dataCollections",
+        () => HttpResponse.json({}, { status: 404 }),
+        {
+          once: true,
+        }
       )
     );
 
@@ -53,8 +57,10 @@ describe("Tomogram Data", () => {
 
   it("should return null jobs object if there are no jobs in the collection", async () => {
     server.use(
-      rest.get("http://localhost/dataCollections/:collectionId/tomograms", (req, res, ctx) =>
-        res.once(ctx.status(404), ctx.delay(0))
+      http.get(
+        "http://localhost/dataCollections/:collectionId/tomograms",
+        () => HttpResponse.json({}, { status: 404 }),
+        { once: true }
       )
     );
 

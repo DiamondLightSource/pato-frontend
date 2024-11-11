@@ -39,7 +39,7 @@ export const UploadModelPage = () => {
       <Heading>Upload Model</Heading>
       <Divider />
       <Text>
-        Upload model for use in processing. This model will be placed under the{" "}
+        Upload custom model for particle picking (crYOLO). This model will be placed under the{" "}
         <Code>processing</Code> directory in your visit directory.
       </Text>
       <form onSubmit={uploadFile} encType='multipart/form-data'>

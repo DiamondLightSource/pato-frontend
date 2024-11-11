@@ -1,8 +1,9 @@
 import { screen, fireEvent, waitFor } from "@testing-library/react";
 import { renderWithProviders } from "utils/test-utils";
+import userEvent from "@testing-library/user-event";
 import { UploadModelPage } from "routes/UploadModel";
 import { server } from "mocks/server";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { mockToast } from "../../vitest.setup";
 
 const mockUseNavigate = vi.fn();
@@ -24,6 +25,9 @@ describe("Upload Model", () => {
   afterEach(() => {
     mockUseNavigate.mockClear();
   });
+  beforeAll(() => {
+    vi.useRealTimers();
+  });
 
   it("should display toast if upload is successful", async () => {
     renderWithProviders(<UploadModelPage />);
@@ -34,16 +38,19 @@ describe("Upload Model", () => {
       value: [file],
     });
 
-    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+    fireEvent.change(fileInput);
+
+    await userEvent.click(screen.getByRole("button", { name: "Submit" }));
 
     await waitFor(() => expect(mockUseNavigate).toHaveBeenCalledWith(-1));
   });
 
   it("should display toast if upload fails and server returns error details", async () => {
     server.use(
-      rest.post(
+      http.post(
         "http://localhost/proposals/:propId/sessions/:sessionId/processingModel",
-        (req, res, ctx) => res.once(ctx.status(415), ctx.json({ detail: "Specific Error" }))
+        () => HttpResponse.json({ detail: "Specific Error" }, { status: 415 }),
+        { once: true }
       )
     );
 
@@ -68,9 +75,10 @@ describe("Upload Model", () => {
 
   it("should display toast if upload fails and server doesn't return details", async () => {
     server.use(
-      rest.post(
+      http.post(
         "http://localhost/proposals/:propId/sessions/:sessionId/processingModel",
-        (req, res, ctx) => res.once(ctx.status(500), ctx.json({}))
+        () => HttpResponse.json({}, { status: 500 }),
+        { once: true }
       )
     );
 

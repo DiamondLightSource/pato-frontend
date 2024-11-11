@@ -2,7 +2,7 @@ import { Motion } from "./motion";
 import { renderWithProviders } from "utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { server } from "mocks/server";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 
 describe("Motion", () => {
   it("should display message when no tilt alignment data is present", async () => {
@@ -62,8 +62,12 @@ describe("Motion", () => {
 
   it("should display message when no data is available", async () => {
     server.use(
-      rest.get("http://localhost/dataCollections/:id/motion", (req, res, ctx) =>
-        res.once(ctx.status(404))
+      http.get(
+        "http://localhost/dataCollections/:id/motion",
+        () => HttpResponse.json({}, { status: 404 }),
+        {
+          once: true,
+        }
       )
     );
     renderWithProviders(<Motion parentType='dataCollections' parentId={9} />);
@@ -101,9 +105,9 @@ describe("Motion", () => {
 
   it("should render even if drift is not available", async () => {
     server.use(
-      rest.get("http://localhost/movies/:id/drift", (req, res, ctx) =>
-        res(ctx.delay(0), ctx.status(404))
-      )
+      http.get("http://localhost/movies/:id/drift", () => HttpResponse.json({}, { status: 404 }), {
+        once: true,
+      })
     );
     renderWithProviders(<Motion parentType='tomograms' parentId={1} page={1} />);
     await screen.findByText("Refined Tilt Angle:");

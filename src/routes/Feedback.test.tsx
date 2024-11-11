@@ -1,5 +1,5 @@
 import { waitFor, screen, fireEvent } from "@testing-library/react";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { server } from "mocks/server";
 import { renderWithProviders } from "utils/test-utils";
 import FeedbackForm from "./Feedback";
@@ -8,8 +8,10 @@ import { mockToast } from "../../vitest.setup";
 describe("Feedback", () => {
   it("should display toast when not successful", async () => {
     server.use(
-      rest.post("http://localhost/feedback", (req, res, ctx) =>
-        res.once(ctx.status(500), ctx.json({ detail: "some error message" }), ctx.delay(0))
+      http.post(
+        "http://localhost/feedback",
+        () => HttpResponse.json({ detail: "some error message" }, { status: 500 }),
+        { once: true }
       )
     );
 
@@ -50,11 +52,7 @@ describe("Feedback", () => {
   });
 
   it("should display toast when successful", async () => {
-    server.use(
-      rest.post("http://localhost/feedback", (req, res, ctx) =>
-        res.once(ctx.status(200), ctx.delay(0))
-      )
-    );
+    server.use(http.post("http://localhost/feedback", () => HttpResponse.json({}), { once: true }));
 
     renderWithProviders(<FeedbackForm />);
 

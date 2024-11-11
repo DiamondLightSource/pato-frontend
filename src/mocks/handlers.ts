@@ -1,4 +1,4 @@
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 
 const withSearch = (items: Record<string, any>[], search?: string | null) =>
   items.filter((item) => !search || (item.proposalCode + item.proposalNumber).includes(search));
@@ -60,238 +60,184 @@ const getMotionData = (parentId: string) => {
 };
 
 export const handlers = [
-  rest.get("http://localhost/tomograms/:id/motion", (req, res, ctx) =>
-    res(ctx.status(200), ctx.delay(0), ctx.json(getMotionData(req.params.id.toString())))
+  http.get("http://localhost/tomograms/:id/motion", ({ params }) =>
+    HttpResponse.json(getMotionData(params.id.toString()))
   ),
 
-  rest.get("http://localhost/autoProc/:id/motion", (req, res, ctx) => {
-    return res(ctx.status(200), ctx.delay(0), ctx.json(getMotionData(req.params.id.toString())));
+  http.get("http://localhost/autoProc/:id/motion", ({ params }) =>
+    HttpResponse.json(getMotionData(params.id.toString()))
+  ),
+
+  http.get("http://localhost/autoProc/:autoProcId/tomogram", () =>
+    HttpResponse.json({ tomogramId: 1, dataCollectionId: 1 })
+  ),
+
+  http.get("http://localhost/auth/user", () =>
+    HttpResponse.json({ givenName: "Person", fedid: "abc12345" })
+  ),
+
+  http.get("http://localhost/auth/token", () => HttpResponse.json({})),
+
+  http.get("http://localhost/dataCollections/:collectionId/iceThickness", () =>
+    HttpResponse.json({ items: [{ x: 1, y: 1 }] })
+  ),
+
+  http.get("http://localhost/dataCollections/:collectionId/totalMotion", () =>
+    HttpResponse.json({ items: [{ x: 1, y: 1 }] })
+  ),
+
+  http.get("http://localhost/dataCollections/:collectionId/resolution", () =>
+    HttpResponse.json({ items: [{ x: 1, y: 1 }] })
+  ),
+
+  http.get("http://localhost/dataCollections/:collectionId/particles", () =>
+    HttpResponse.json({ items: [{ x: 1, y: 1 }] })
+  ),
+
+  http.get("http://localhost/dataCollections/:id/motion", () =>
+    HttpResponse.json({
+      items: [{ Movie: {}, CTF: {}, MotionCorrection: {} }],
+      total: 10,
+    })
+  ),
+
+  http.get("http://localhost/movies/:id/fft", () => HttpResponse.text("")),
+
+  http.get("http://localhost/movies/:id/micrograph", () => HttpResponse.text("")),
+
+  http.get("http://localhost/tomograms/:id/centralSlice", () => HttpResponse.text("")),
+
+  http.get("http://localhost/movies/:id/drift", () =>
+    HttpResponse.json({ items: [{ x: 1, y: 1 }] })
+  ),
+
+  http.get("http://localhost/tomograms/:id/ctf", () =>
+    HttpResponse.json({
+      items: [
+        {
+          refinedTiltAngle: 1,
+          estimatedResolution: 1,
+          estimatedDefocus: 1,
+          astigmatism: 1,
+        },
+      ],
+    })
+  ),
+
+  http.get("http://localhost/autoProc/:id/ctf", () =>
+    HttpResponse.json({
+      items: [
+        {
+          imageNumber: 1,
+          estimatedResolution: 1,
+          estimatedDefocus: 1,
+          astigmatism: 1,
+          numberOfParticles: 5,
+        },
+      ],
+    })
+  ),
+
+  http.get("http://localhost/tomograms/:tomogramId/shiftPlot", ({ request }) => {
+    const url = new URL(request.url);
+    return HttpResponse.json({
+      items: [{ x: 1, y: 1 }],
+      page: url.searchParams.get("page") ?? 1,
+      total: 300,
+    });
   }),
 
-  rest.get("http://localhost/autoProc/:autoProcId/tomogram", (req, res, ctx) =>
-    res(ctx.status(200), ctx.json({ tomogramId: 1, dataCollectionId: 1 }), ctx.delay(0))
+  http.get("http://localhost/dataCollections/:collection/tomogram", () =>
+    HttpResponse.json({}, { status: 404 })
   ),
 
-  rest.get("http://localhost/auth/user", (req, res, ctx) =>
-    res(ctx.status(200), ctx.json({ givenName: "Person", fedid: "abc12345" }))
+  http.get("http://localhost/dataCollections/:collectionId/ctf", () =>
+    HttpResponse.json({
+      items: [{ x: 1, y: 1 }],
+    })
   ),
 
-  rest.get("http://localhost/auth/token", (req, res, ctx) => res(ctx.status(200))),
-
-  rest.get("http://localhost/dataCollections/:collectionId/iceThickness", (req, res, ctx) =>
-    res(ctx.status(200), ctx.json({ items: [{ x: 1, y: 1 }] }), ctx.delay(0))
+  http.get("http://localhost/dataCollections/:collectionId/particleCountPerResolution", () =>
+    HttpResponse.json({
+      items: [{ x: 1, y: 1 }],
+    })
   ),
 
-  rest.get("http://localhost/dataCollections/:collectionId/totalMotion", (req, res, ctx) =>
-    res(ctx.status(200), ctx.json({ items: [{ x: 1, y: 1 }] }), ctx.delay(0))
-  ),
+  http.get("http://localhost/invalidEndpoint", () => HttpResponse.json({}, { status: 404 })),
 
-  rest.get("http://localhost/dataCollections/:collectionId/resolution", (req, res, ctx) =>
-    res(ctx.status(200), ctx.json({ items: [{ x: 1, y: 1 }] }), ctx.delay(0))
-  ),
-
-  rest.get("http://localhost/dataCollections/:collectionId/particles", (req, res, ctx) =>
-    res(ctx.status(200), ctx.json({ items: [{ x: 1, y: 1 }] }), ctx.delay(0))
-  ),
-
-  rest.get("http://localhost/dataCollections/:id/motion", (req, res, ctx) =>
-    res(
-      ctx.status(200),
-      ctx.delay(0),
-      ctx.json({
-        items: [{ Movie: {}, CTF: {}, MotionCorrection: {} }],
-        total: 10,
-      })
-    )
-  ),
-
-  rest.get("http://localhost/movies/:id/fft", (req, res, ctx) =>
-    res(ctx.status(200), ctx.delay(0), ctx.body(""))
-  ),
-
-  rest.get("http://localhost/movies/:id/micrograph", (req, res, ctx) =>
-    res(ctx.status(200), ctx.delay(0), ctx.body(""))
-  ),
-
-  rest.get("http://localhost/tomograms/:id/centralSlice", (req, res, ctx) =>
-    res(ctx.status(200), ctx.delay(0), ctx.body(""))
-  ),
-
-  rest.get("http://localhost/movies/:id/drift", (req, res, ctx) =>
-    res(ctx.delay(0), ctx.status(200), ctx.json({ items: [{ x: 1, y: 1 }] }))
-  ),
-
-  rest.get("http://localhost/tomograms/:id/ctf", (req, res, ctx) =>
-    res(
-      ctx.status(200),
-      ctx.delay(0),
-      ctx.json({
-        items: [
-          {
-            refinedTiltAngle: 1,
-            estimatedResolution: 1,
-            estimatedDefocus: 1,
-            astigmatism: 1,
-          },
-        ],
-      })
-    )
-  ),
-
-  rest.get("http://localhost/autoProc/:id/ctf", (req, res, ctx) =>
-    res(
-      ctx.status(200),
-      ctx.delay(0),
-      ctx.json({
-        items: [
-          {
-            imageNumber: 1,
-            estimatedResolution: 1,
-            estimatedDefocus: 1,
-            astigmatism: 1,
-            numberOfParticles: 5,
-          },
-        ],
-      })
-    )
-  ),
-
-  rest.get("http://localhost/tomograms/:tomogramId/shiftPlot", (req, res, ctx) =>
-    res(
-      ctx.status(200),
-      ctx.delay(0),
-      ctx.json({
-        items: [{ x: 1, y: 1 }],
-        page: req.url.searchParams.get("page") ?? 1,
-        total: 300,
-      })
-    )
-  ),
-
-  rest.get("http://localhost/dataCollections/:collection/tomogram", (req, res, ctx) =>
-    res(ctx.status(404))
-  ),
-
-  rest.get("http://localhost/dataCollections/:collectionId/ctf", (req, res, ctx) =>
-    res(
-      ctx.status(200),
-      ctx.delay(0),
-      ctx.json({
-        items: [{ x: 1, y: 1 }],
-      })
-    )
-  ),
-
-  rest.get(
-    "http://localhost/dataCollections/:collectionId/particleCountPerResolution",
-    (req, res, ctx) =>
-      res(
-        ctx.status(200),
-        ctx.delay(0),
-        ctx.json({
-          items: [{ x: 1, y: 1 }],
-        })
-      )
-  ),
-
-  rest.get("http://localhost/invalidEndpoint", (req, res, ctx) => res(ctx.status(404))),
-
-  rest.get("http://localhost/autoProc/:procId/particlePicker", (req, res, ctx) => {
-    switch (req.params.procId) {
+  http.get("http://localhost/autoProc/:procId/particlePicker", ({ params }) => {
+    switch (params.procId) {
       case "1":
-        return res(
-          ctx.status(200),
-          ctx.delay(0),
-          ctx.json({
-            items: [{ particlePickerId: null }],
-            total: 1,
-            limit: 1,
-          })
-        );
+        return HttpResponse.json({
+          items: [{ particlePickerId: null }],
+          total: 1,
+          limit: 1,
+        });
       default:
-        return res(
-          ctx.status(200),
-          ctx.delay(0),
-          ctx.json({
-            items: [
-              {
-                particlePickerId: 1,
-                imageNumber: 9999,
-                particleDiameter: 1,
-                numberOfParticles: 1,
-                createdTimestamp: "1",
-              },
-            ],
-            total: 3,
-            limit: 1,
-          })
-        );
+        return HttpResponse.json({
+          items: [
+            {
+              particlePickerId: 1,
+              imageNumber: 9999,
+              particleDiameter: 1,
+              numberOfParticles: 1,
+              createdTimestamp: "1",
+            },
+          ],
+          total: 3,
+          limit: 1,
+        });
     }
   }),
 
-  rest.get("http://localhost/movies/:movieId/iceThickness", (req, res, ctx) => {
+  http.get("http://localhost/movies/:movieId/iceThickness", () => {
     const dummy = { minimum: 3000, maximum: 10000, median: 5000, q1: 3, q3: 6 };
-    return res(
-      ctx.status(200),
-      ctx.delay(0),
-      ctx.json({ current: dummy, avg: { ...dummy, stddev: 200 } })
-    );
+    return HttpResponse.json({ current: dummy, avg: { ...dummy, stddev: 200 } });
   }),
 
-  rest.get("http://localhost/autoProc/:procId/particlePicker/:pickerId/image", (req, res, ctx) =>
-    res(ctx.status(404))
+  http.get("http://localhost/autoProc/:procId/particlePicker/:pickerId/image", () =>
+    HttpResponse.json({}, { status: 404 })
   ),
 
-  rest.get("http://localhost/dataCollections/:collectionId/processingJobs", (req, res, ctx) =>
-    res(
-      ctx.status(200),
-      ctx.json({
-        items: [
-          {
-            AutoProcProgram: { autoProcProgramId: 1 },
-            ProcessingJob: {},
-            status: "Success",
-          },
-        ],
-      })
-    )
+  http.get("http://localhost/dataCollections/:collectionId/processingJobs", () =>
+    HttpResponse.json({
+      items: [
+        {
+          AutoProcProgram: { autoProcProgramId: 1 },
+          ProcessingJob: {},
+          status: "Success",
+        },
+      ],
+    })
   ),
 
-  rest.get("http://localhost/dataCollections/:collectionId/tomograms", (req, res, ctx) =>
-    res(
-      ctx.status(200),
-      ctx.json({
-        items: [
-          {
-            Tomogram: { tomogramId: 1 },
-            AutoProcProgram: { autoProcProgramId: 1 },
-            ProcessingJob: {},
-            status: "Success",
-          },
-        ],
-      })
-    )
+  http.get("http://localhost/dataCollections/:collectionId/tomograms", () =>
+    HttpResponse.json({
+      items: [
+        {
+          Tomogram: { tomogramId: 1 },
+          AutoProcProgram: { autoProcProgramId: 1 },
+          ProcessingJob: {},
+          status: "Success",
+        },
+      ],
+    })
   ),
 
-  rest.get("http://localhost/tomograms/:tomogramId/projection", (req, res, ctx) =>
-    res(ctx.status(404))
+  http.get("http://localhost/tomograms/:tomogramId/projection", () =>
+    HttpResponse.json({}, { status: 404 })
   ),
 
-  rest.get(
-    "http://localhost/autoProc/:autoProcId/classification/:classId/image",
-    (req, res, ctx) => {
-      res(ctx.status(404), ctx.delay(0));
-    }
+  http.get("http://localhost/autoProc/:autoProcId/classification/:classId/image", () =>
+    HttpResponse.json({}, { status: 404 })
   ),
 
-  rest.get(
-    "http://localhost/autoProc/:autoProcId/particlePicker/:classId/image",
-    (req, res, ctx) => {
-      res(ctx.status(200), ctx.body("A"), ctx.set("Content-Type", "image/png"));
-    }
-  ),
+  http.get("http://localhost/autoProc/:autoProcId/particlePicker/:classId/image", () => {
+    HttpResponse.text("A", { headers: { "Content-Type": "image/png" } });
+  }),
 
-  rest.get("http://localhost/autoProc/:procId/classification", (req, res, ctx) => {
+  http.get("http://localhost/autoProc/:procId/classification", ({ request }) => {
+    const url = new URL(request.url);
     let items = [
       {
         particleClassificationId: 1,
@@ -318,138 +264,115 @@ export const handlers = [
       },
     ];
 
-    if (req.url.searchParams.get("sortBy") === "class") {
+    if (url.searchParams.get("sortBy") === "class") {
       items = items.sort((a, b) => (a.classDistribution! > b.classDistribution! ? -1 : 1));
     }
 
-    if (req.url.searchParams.get("excludeUnselected") === "true") {
+    if (url.searchParams.get("excludeUnselected") === "true") {
       items = items.filter((i) => i.selected !== false);
     }
 
-    return res(
-      ctx.status(200),
-      ctx.delay(0),
-      ctx.json({
-        items: items,
-        total: items.length,
-        limit: 8,
-      })
-    );
+    return HttpResponse.json({
+      items: items,
+      total: items.length,
+      limit: 8,
+    });
   }),
 
-  rest.get("http://localhost/autoProc/:procId/classification/:classId/image", (req, res, ctx) =>
-    res(ctx.status(404), ctx.delay(0))
+  http.get("http://localhost/autoProc/:procId/classification/:classId/image", () =>
+    HttpResponse.json({}, { status: 404 })
   ),
 
-  rest.get("http://localhost/proposals/:propId/sessions/:visitId", (req, res, ctx) =>
-    res(ctx.status(200), ctx.json({ beamLineName: "m01", sessionId: 1 }), ctx.delay(0))
+  http.get("http://localhost/proposals/:propId/sessions/:visitId", () =>
+    HttpResponse.json({ beamLineName: "m01", sessionId: 1 })
   ),
 
-  rest.get("http://localhost/unauthorisedEndpoint", (req, res, ctx) => res(ctx.status(401))),
+  http.get("http://localhost/unauthorisedEndpoint", () => HttpResponse.json({}, { status: 401 })),
 
-  rest.get("http://localhost/sessions", (req, res, ctx) =>
-    res(
-      ctx.status(200),
-      ctx.delay(0),
-      ctx.json({
-        items: [
+  http.get("http://localhost/sessions", () =>
+    HttpResponse.json({
+      items: [
+        {
+          proposalId: 999,
+          beamLineName: "m01",
+          sessionId: 1,
+          parentProposal: "cm31111",
+          visit_number: 1,
+          startDate: "2023-01-01T09:00",
+          endDate: "2023-01-01T09:00",
+        },
+      ],
+    })
+  ),
+
+  http.get("http://localhost/autoProc/:autoProcId/bFactorFit", () =>
+    HttpResponse.json({
+      items: [
+        {
+          resolution: 1,
+          numberOfParticles: 1,
+        },
+      ],
+    })
+  ),
+
+  http.get("http://localhost/dataGroups", ({ request }) => {
+    const url = new URL(request.url);
+    return HttpResponse.json({
+      items: withSearch(
+        [
           {
-            proposalId: 999,
-            beamLineName: "m01",
-            sessionId: 1,
-            parentProposal: "cm31111",
-            visit_number: 1,
-            startDate: "2023-01-01T09:00",
-            endDate: "2023-01-01T09:00",
+            dataCollectionGroupId: 1,
+            collections: 1,
+            experimentTypeName: "Tomogram",
           },
         ],
-      })
-    )
+        url.searchParams.get("search")
+      ),
+      total: 1,
+      limit: 25,
+    });
+  }),
+
+  http.get("http://localhost/proposals/:propId/sessions/:visitId/reprocessingEnabled", () =>
+    HttpResponse.json({
+      allowReprocessing: true,
+    })
   ),
 
-  rest.get("http://localhost/autoProc/:autoProcId/bFactorFit", (req, res, ctx) =>
-    res(
-      ctx.status(200),
-      ctx.delay(0),
-      ctx.json({
-        items: [
-          {
-            resolution: 1,
-            numberOfParticles: 1,
-          },
-        ],
-      })
-    )
+  http.get("http://localhost/dataGroups/:groupId/dataCollections", () =>
+    HttpResponse.json({
+      items: [
+        {
+          dataCollectionId: 9775784,
+          SESSIONID: 27489608,
+          fileTemplate: "/dls/files/GridSquare_11_1/",
+          comments: "Sample Tomogram",
+        },
+      ],
+      total: 80,
+      limit: 25,
+    })
   ),
 
-  rest.get("http://localhost/dataGroups", (req, res, ctx) =>
-    res(
-      ctx.status(200),
-      ctx.json({
-        items: withSearch(
-          [
-            {
-              dataCollectionGroupId: 1,
-              collections: 1,
-              experimentTypeName: "Tomogram",
-            },
-          ],
-          req.url.searchParams.get("search")
-        ),
-        total: 1,
-        limit: 25,
-      })
-    )
+  http.post("http://localhost/dataCollections/:collectionId/reprocessing/:type", () =>
+    HttpResponse.json({ processingJobId: 1 }, { status: 202 })
   ),
 
-  rest.get(
-    "http://localhost/proposals/:propId/sessions/:visitId/reprocessingEnabled",
-    (req, res, ctx) =>
-      res(
-        ctx.status(200),
-        ctx.json({
-          allowReprocessing: true,
-        })
-      )
+  http.post("http://localhost/proposals/:propId/sessions/:sessionId/dataCollections", () =>
+    HttpResponse.json({ dataCollectionId: 1 }, { status: 201 })
   ),
 
-  rest.get("http://localhost/dataGroups/:groupId/dataCollections", (req, res, ctx) =>
-    res(
-      ctx.status(200),
-      ctx.json({
-        items: [
-          {
-            dataCollectionId: 9775784,
-            SESSIONID: 27489608,
-            fileTemplate: "/dls/files/GridSquare_11_1/",
-            comments: "Sample Tomogram",
-          },
-        ],
-        total: 80,
-        limit: 25,
-      })
-    )
+  http.post("http://localhost/proposals/:propId/sessions/:sessionId/processingModel", () =>
+    HttpResponse.json({})
   ),
 
-  rest.post("http://localhost/dataCollections/:collectionId/reprocessing/:type", (req, res, ctx) =>
-    res(ctx.status(202), ctx.json({ processingJobId: 1 }))
+  http.get("http://localhost/processingJob/:procJobId/parameters", () =>
+    HttpResponse.json({ items: { do_class3d: "1", do_class2d: "0", Cs: "1" } })
   ),
 
-  rest.post(
-    "http://localhost/proposals/:propId/sessions/:sessionId/dataCollections",
-    (req, res, ctx) => res(ctx.status(201), ctx.json({ dataCollectionId: 1 }))
-  ),
-
-  rest.post(
-    "http://localhost/proposals/:propId/sessions/:sessionId/processingModel",
-    (req, res, ctx) => res(ctx.status(200), ctx.json({}))
-  ),
-
-  rest.get("http://localhost/processingJob/:procJobId/parameters", (req, res, ctx) =>
-    res(ctx.status(200), ctx.json({ items: { do_class3d: "1", do_class2d: "0", Cs: "1" } }))
-  ),
-
-  rest.get("http://localhost/proposals", (req, res, ctx) => {
+  http.get("http://localhost/proposals", ({ request }) => {
+    const url = new URL(request.url);
     const items = [
       {
         proposalCode: "cm",
@@ -481,14 +404,10 @@ export const handlers = [
       },
     ];
 
-    return res(
-      ctx.status(200),
-      ctx.delay(0),
-      ctx.json({
-        items: withSearch(items, req.url.searchParams.get("search")),
-        page: req.url.searchParams.get("page") ?? 1,
-        total: 300,
-      })
-    );
+    return HttpResponse.json({
+      items: withSearch(items, url.searchParams.get("search")),
+      page: url.searchParams.get("page") ?? 1,
+      total: 300,
+    });
   }),
 ];

@@ -1,7 +1,7 @@
 import { Classification } from "components/spa/classification";
 import { renderWithProviders } from "utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { server } from "mocks/server";
 import { ReactNode } from "react";
 
@@ -18,9 +18,10 @@ vi.mock("components/molstar/molstar", () => ({
 describe("Classification", () => {
   it("should match selected class to 3D visualisation modal page", async () => {
     server.use(
-      rest.get(
+      http.get(
         "http://localhost/autoProc/:autoProcId/classification/:classId/image",
-        (req, res, ctx) => res.once(ctx.status(404), ctx.delay(0))
+        () => HttpResponse.json({}, { status: 404 }),
+        { once: true }
       )
     );
 
@@ -75,8 +76,10 @@ describe("Classification", () => {
 
   it("should display message when classification data is not available", async () => {
     server.use(
-      rest.get("http://localhost/autoProc/:procId/classification", (req, res, ctx) =>
-        res.once(ctx.status(404))
+      http.get(
+        "http://localhost/autoProc/:procId/classification",
+        () => HttpResponse.json({}, { status: 404 }),
+        { once: true }
       )
     );
     renderWithProviders(<Classification autoProcId={2} />);
@@ -86,8 +89,10 @@ describe("Classification", () => {
 
   it("should disable sorting controls when no data is available", async () => {
     server.use(
-      rest.get("http://localhost/autoProc/:procId/classification", (req, res, ctx) =>
-        res.once(ctx.status(404))
+      http.get(
+        "http://localhost/autoProc/:procId/classification",
+        () => HttpResponse.json({}, { status: 404 }),
+        { once: true }
       )
     );
     renderWithProviders(<Classification autoProcId={2} />);
@@ -104,8 +109,10 @@ describe("Classification", () => {
 
   it("should display pagination control when no data is available, albeit disabled", async () => {
     server.use(
-      rest.get("http://localhost/autoProc/:procId/classification", (req, res, ctx) =>
-        res.once(ctx.status(404))
+      http.get(
+        "http://localhost/autoProc/:procId/classification",
+        () => HttpResponse.json({}, { status: 404 }),
+        { once: true }
       )
     );
 
@@ -148,10 +155,10 @@ describe("Classification", () => {
 
   it("should display classification boxes even if selection status is unknown", async () => {
     server.use(
-      rest.get("http://localhost/autoProc/:procId/classification", (req, res, ctx) =>
-        res.once(
-          ctx.status(200),
-          ctx.json({
+      http.get(
+        "http://localhost/autoProc/:procId/classification",
+        () =>
+          HttpResponse.json({
             items: [
               {
                 particleClassificationId: 2,
@@ -165,8 +172,8 @@ describe("Classification", () => {
             ],
             total: 1,
             limit: 8,
-          })
-        )
+          }),
+        { once: true }
       )
     );
 

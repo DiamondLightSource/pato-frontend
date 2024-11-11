@@ -1,5 +1,5 @@
 import { waitFor, screen, fireEvent } from "@testing-library/react";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { server } from "mocks/server";
 import { renderWithRoute } from "utils/test-utils";
 import { RelionReprocessing } from "./reprocessing";
@@ -9,8 +9,10 @@ describe("SPA Reprocessing", () => {
   it("should not close when not successful", async () => {
     const reprocessingCallback = vi.fn();
     server.use(
-      rest.post("http://localhost/dataCollections/1/reprocessing/spa", (req, res, ctx) =>
-        res.once(ctx.status(500), ctx.json({ detail: "some error message" }), ctx.delay(0))
+      http.post(
+        "http://localhost/dataCollections/1/reprocessing/spa",
+        () => HttpResponse.json({ detail: "some error message" }, { status: 500 }),
+        { once: true }
       )
     );
 

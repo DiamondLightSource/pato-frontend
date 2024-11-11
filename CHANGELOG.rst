@@ -3,6 +3,15 @@ Changelog
 ==========
 
 ++++++++++
+v1.12.3 (11/11/2024)
+++++++++++
+
+**Changed**
+
+- Ignore all but least recent refinement step
+- Update model upload message
+
+++++++++++
 v1.12.2 (21/10/2024)
 ++++++++++
 

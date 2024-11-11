@@ -2,7 +2,7 @@ import { ParticlePicking } from "components/spa/particlePicking";
 import { renderWithProviders } from "utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { server } from "mocks/server";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 
 describe("Particle Picking", () => {
   it("should display last page as default", () => {
@@ -28,8 +28,10 @@ describe("Particle Picking", () => {
 
   it("should display message when no particle picking data exists", async () => {
     server.use(
-      rest.get("http://localhost/autoProc/:procId/particlePicker", (req, res, ctx) =>
-        res(ctx.status(404))
+      http.get(
+        "http://localhost/autoProc/:procId/particlePicker",
+        () => HttpResponse.json({}, { status: 404 }),
+        { once: true }
       )
     );
     renderWithProviders(<ParticlePicking autoProcId={3} page={12} total={150} />);
@@ -64,6 +66,6 @@ describe("Particle Picking", () => {
     renderWithProviders(<ParticlePicking autoProcId={2} page={12} total={150} />);
 
     await screen.findByText("7.4");
-    await screen.findByText("2.7");
+    screen.getByText("2.7");
   });
 });
