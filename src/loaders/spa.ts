@@ -153,6 +153,15 @@ const getSpaData = async (groupId: string, propId: string, sessionId: string) =>
           return 0;
         });
 
+        // Remove most recent refinement step
+        const firstRefinementStepIndex = jobsList.findIndex(
+          (v) => v.ProcessingJob.recipe === "em-spa-refine"
+        );
+
+        if (firstRefinementStepIndex !== -1) {
+          jobsList = jobsList.slice(0, firstRefinementStepIndex + 1);
+        }
+
         returnData.jobs = jobsList;
       }
     }
