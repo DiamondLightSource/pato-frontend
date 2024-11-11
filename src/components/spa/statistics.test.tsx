@@ -2,7 +2,7 @@ import Statistics from "components/spa/statistics";
 import { renderWithProviders } from "utils/test-utils";
 import { screen } from "@testing-library/react";
 import { server } from "mocks/server";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 
 describe("Collection Statistics", () => {
   it("should display data when available", async () => {
@@ -15,9 +15,11 @@ describe("Collection Statistics", () => {
 
   it("should display message if at least one histogram endpoint fails", async () => {
     server.use(
-      rest.get("http://localhost/dataCollections/:collectionId/totalMotion", (req, res, ctx) => {
-        return res.once(ctx.status(404));
-      })
+      http.get(
+        "http://localhost/dataCollections/:collectionId/totalMotion",
+        () => HttpResponse.json({}, { status: 404 }),
+        { once: true }
+      )
     );
 
     renderWithProviders(<Statistics dataCollectionId={1} />);
@@ -27,9 +29,13 @@ describe("Collection Statistics", () => {
 
   it("should display message if at least one CTF endpoint fails", async () => {
     server.use(
-      rest.get("http://localhost/dataCollections/:collectionId/ctf", (req, res, ctx) => {
-        return res.once(ctx.status(404));
-      })
+      http.get(
+        "http://localhost/dataCollections/:collectionId/ctf",
+        () => HttpResponse.json({}, { status: 404 }),
+        {
+          once: true,
+        }
+      )
     );
 
     renderWithProviders(<Statistics dataCollectionId={1} />);

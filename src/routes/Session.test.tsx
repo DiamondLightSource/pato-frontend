@@ -2,7 +2,7 @@ import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { renderWithRoute } from "utils/test-utils";
 import { DataCollectionCreationForm, SessionPage } from "./Session";
 import { server } from "mocks/server";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { mockToast } from "../../vitest.setup";
 
 const mockNavigate = vi.fn();
@@ -54,9 +54,10 @@ describe("Session Page", () => {
 describe("Data Collection Creation", () => {
   it("should display toast if unsuccessful", async () => {
     server.use(
-      rest.post(
+      http.post(
         "http://localhost/proposals/:propId/sessions/:sessionId/dataCollections",
-        (req, res, ctx) => res.once(ctx.status(404), ctx.json({ detail: "Error message here" }))
+        () => HttpResponse.json({ detail: "Error message here" }, { status: 404 }),
+        { once: true }
       )
     );
 

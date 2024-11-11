@@ -1,4 +1,4 @@
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { server } from "mocks/server";
 import { spaLoader } from "loaders/spa";
 import { queryClient } from "utils/test-utils";
@@ -13,8 +13,12 @@ describe("SPA Data", () => {
 
   it("should return base object if no data collection is available", async () => {
     server.use(
-      rest.get("http://localhost/dataGroups/:groupId/dataCollections", (req, res, ctx) =>
-        res.once(ctx.status(404), ctx.delay(0))
+      http.get(
+        "http://localhost/dataGroups/:groupId/dataCollections",
+        () => HttpResponse.json({}, { status: 404 }),
+        {
+          once: true,
+        }
       )
     );
 
@@ -25,8 +29,10 @@ describe("SPA Data", () => {
 
   it("should return null jobs object if there are no jobs in the collection", async () => {
     server.use(
-      rest.get("http://localhost/dataCollections/:collectionId/processingJobs", (req, res, ctx) =>
-        res.once(ctx.status(404), ctx.delay(0))
+      http.get(
+        "http://localhost/dataCollections/:collectionId/processingJobs",
+        () => HttpResponse.json({}, { status: 404 }),
+        { once: true }
       )
     );
 
@@ -37,10 +43,10 @@ describe("SPA Data", () => {
 
   it("should filter out extraction processing jobs", async () => {
     server.use(
-      rest.get("http://localhost/dataCollections/:collectionId/processingJobs", (req, res, ctx) =>
-        res.once(
-          ctx.status(200),
-          ctx.json({
+      http.get(
+        "http://localhost/dataCollections/:collectionId/processingJobs",
+        () =>
+          HttpResponse.json({
             items: [
               {
                 AutoProcProgram: { autoProcProgramId: 1 },
@@ -49,8 +55,7 @@ describe("SPA Data", () => {
               },
             ],
           }),
-          ctx.delay(0)
-        )
+        { once: true }
       )
     );
 
@@ -60,10 +65,10 @@ describe("SPA Data", () => {
 
   it("should always follow predefined order for processing job steps", async () => {
     server.use(
-      rest.get("http://localhost/dataCollections/:collectionId/processingJobs", (req, res, ctx) =>
-        res.once(
-          ctx.status(200),
-          ctx.json({
+      http.get(
+        "http://localhost/dataCollections/:collectionId/processingJobs",
+        () =>
+          HttpResponse.json({
             items: [
               {
                 AutoProcProgram: { autoProcProgramId: 1 },
@@ -87,8 +92,7 @@ describe("SPA Data", () => {
               },
             ],
           }),
-          ctx.delay(0)
-        )
+        { once: true }
       )
     );
 
@@ -103,10 +107,10 @@ describe("SPA Data", () => {
 
   it("should keep similar step types together", async () => {
     server.use(
-      rest.get("http://localhost/dataCollections/:collectionId/processingJobs", (req, res, ctx) =>
-        res.once(
-          ctx.status(200),
-          ctx.json({
+      http.get(
+        "http://localhost/dataCollections/:collectionId/processingJobs",
+        () =>
+          HttpResponse.json({
             items: [
               {
                 AutoProcProgram: { autoProcProgramId: 1 },
@@ -130,8 +134,7 @@ describe("SPA Data", () => {
               },
             ],
           }),
-          ctx.delay(0)
-        )
+        { once: true }
       )
     );
 
@@ -146,10 +149,10 @@ describe("SPA Data", () => {
 
   it("should sort by processing job when there are multiple instances of the same step type", async () => {
     server.use(
-      rest.get("http://localhost/dataCollections/:collectionId/processingJobs", (req, res, ctx) =>
-        res.once(
-          ctx.status(200),
-          ctx.json({
+      http.get(
+        "http://localhost/dataCollections/:collectionId/processingJobs",
+        () =>
+          HttpResponse.json({
             items: [
               {
                 AutoProcProgram: { autoProcProgramId: 1 },
@@ -173,8 +176,7 @@ describe("SPA Data", () => {
               },
             ],
           }),
-          ctx.delay(0)
-        )
+        { once: true }
       )
     );
 
@@ -189,10 +191,10 @@ describe("SPA Data", () => {
 
   it("should sort by processing job ID in the case of multiple 3D classification jobs", async () => {
     server.use(
-      rest.get("http://localhost/dataCollections/:collectionId/processingJobs", (req, res, ctx) =>
-        res.once(
-          ctx.status(200),
-          ctx.json({
+      http.get(
+        "http://localhost/dataCollections/:collectionId/processingJobs",
+        () =>
+          HttpResponse.json({
             items: [
               {
                 AutoProcProgram: { autoProcProgramId: 1 },
@@ -221,8 +223,7 @@ describe("SPA Data", () => {
               },
             ],
           }),
-          ctx.delay(0)
-        )
+        { once: true }
       )
     );
 
@@ -238,10 +239,10 @@ describe("SPA Data", () => {
 
   it("should display acquisition software as SerialEM depending on fileTemplate", async () => {
     server.use(
-      rest.get("http://localhost/dataGroups/:groupId/dataCollections", async (req, res, ctx) =>
-        res.once(
-          ctx.status(200),
-          ctx.json({
+      http.get(
+        "http://localhost/dataGroups/:groupId/dataCollections",
+        () =>
+          HttpResponse.json({
             items: [
               {
                 dataCollectionId: 9775784,
@@ -249,8 +250,8 @@ describe("SPA Data", () => {
                 fileTemplate: "/dls/files/Frames/",
               },
             ],
-          })
-        )
+          }),
+        { once: true }
       )
     );
 
@@ -261,10 +262,10 @@ describe("SPA Data", () => {
 
   it("should set file template to empty string if null", async () => {
     server.use(
-      rest.get("http://localhost/dataGroups/:groupId/dataCollections", async (req, res, ctx) =>
-        res.once(
-          ctx.status(200),
-          ctx.json({
+      http.get(
+        "http://localhost/dataGroups/:groupId/dataCollections",
+        () =>
+          HttpResponse.json({
             items: [
               {
                 dataCollectionId: 9775784,
@@ -272,8 +273,8 @@ describe("SPA Data", () => {
                 fileTemplate: null,
               },
             ],
-          })
-        )
+          }),
+        { once: true }
       )
     );
 
@@ -284,10 +285,10 @@ describe("SPA Data", () => {
 
   it("should return empty acquisition software if fileTemplate is non-standard", async () => {
     server.use(
-      rest.get("http://localhost/dataGroups/:groupId/dataCollections", async (req, res, ctx) =>
-        res.once(
-          ctx.status(200),
-          ctx.json({
+      http.get(
+        "http://localhost/dataGroups/:groupId/dataCollections",
+        () =>
+          HttpResponse.json({
             items: [
               {
                 dataCollectionId: 9775784,
@@ -295,8 +296,8 @@ describe("SPA Data", () => {
                 fileTemplate: "/dls/files/nonStandard",
               },
             ],
-          })
-        )
+          }),
+        { once: true }
       )
     );
 
@@ -312,8 +313,12 @@ describe("SPA Data", () => {
 
   it("should return empty parameter list if backend returns 404", async () => {
     server.use(
-      rest.get("http://localhost/processingJob/:procJobId/parameters", async (req, res, ctx) =>
-        res.once(ctx.status(404))
+      http.get(
+        "http://localhost/processingJob/:procJobId/parameters",
+        () => HttpResponse.json({}, { status: 404 }),
+        {
+          once: true,
+        }
       )
     );
 
@@ -328,8 +333,12 @@ describe("SPA Data", () => {
 
   it("should set autoprocessing to true by default", async () => {
     server.use(
-      rest.get("http://localhost/processingJob/:procJobId/parameters", async (req, res, ctx) =>
-        res.once(ctx.status(200), ctx.json({ items: {} }))
+      http.get(
+        "http://localhost/processingJob/:procJobId/parameters",
+        () => HttpResponse.json({ items: {} }),
+        {
+          once: true,
+        }
       )
     );
 
