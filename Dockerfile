@@ -1,4 +1,4 @@
-FROM docker.io/library/node:20.11.0-alpine3.19 as build
+FROM docker.io/library/node:20.18.0-alpine3.20 as build
 
 WORKDIR /usr/src/app
 
@@ -30,7 +30,7 @@ RUN yarn install --immutable --check-cache
 COPY . ./
 RUN yarn build
 
-FROM docker.io/nginxinc/nginx-unprivileged:alpine3.18-slim
+FROM docker.io/nginxinc/nginx-unprivileged:alpine3.20-slim
 COPY --from=build /usr/src/app/build /usr/share/nginx/html
 COPY nginx/conf.d /etc/nginx/nginx.conf
 

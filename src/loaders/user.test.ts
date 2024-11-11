@@ -1,4 +1,4 @@
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { server } from "mocks/server";
 import { getUser } from "loaders/user";
 
@@ -15,18 +15,18 @@ describe("User Data", () => {
   });
 
   it("should return null if unauthorised", async () => {
-    server.use(rest.get("http://localhost/auth/user", (req, res, ctx) => res(ctx.status(401))));
+    server.use(
+      http.get("http://localhost/auth/user", () => HttpResponse.json({}, { status: 401 }), {
+        once: true,
+      })
+    );
 
     const data = await getUser();
     expect(data).toBe(null);
   });
 
   it("should return null if network request fails", async () => {
-    server.use(
-      rest.get("http://localhost/auth/user", (req, res, ctx) =>
-        res.networkError("Failed to connect")
-      )
-    );
+    server.use(http.get("http://localhost/auth/user", () => HttpResponse.error(), { once: true }));
 
     const user = await getUser();
     expect(user).toBe(null);
@@ -41,7 +41,7 @@ describe("User Data", () => {
     window.location.replace = vi.fn();
 
     server.use(
-      rest.get("http://localhost/auth/token", (req, res, ctx) => res.once(ctx.status(200)))
+      http.get("http://localhost/auth/token", () => HttpResponse.json({}), { once: true })
     );
 
     await getUser();
