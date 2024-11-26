@@ -22,13 +22,12 @@ import {
   TabList,
   TabPanel,
   TabPanels,
-  Tooltip,
   Button,
 } from "@chakra-ui/react";
 import { Suspense, useCallback, useEffect, useState } from "react";
-import { useLoaderData, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLoaderData, useLocation, useNavigate, useParams, Link } from "react-router-dom";
 import { SPA } from "components/spa/main";
-import { MdFolder } from "react-icons/md";
+import { MdFolder, MdOutlineGrain } from "react-icons/md";
 import { RelionReprocessing } from "components/spa/reprocessing";
 import { MdRedo } from "react-icons/md";
 import React from "react";
@@ -77,11 +76,21 @@ const SpaPage = () => {
           <HStack w='100%'>
             <CollectionTitle type='SPA' colorScheme='orange' />
             <Spacer />
-            <Tooltip label='Run Reprocessing'>
-              <Button isDisabled={!loaderData.allowReprocessing} onClick={onOpen}>
-                <Icon as={MdRedo} />
-              </Button>
-            </Tooltip>
+            <Button
+              leftIcon={<MdRedo />}
+              isDisabled={!loaderData.allowReprocessing}
+              onClick={onOpen}
+            >
+              Reprocessing
+            </Button>
+            <Button
+              leftIcon={<MdOutlineGrain />}
+              as={Link}
+              to={{ pathname: "../atlas" }}
+              relative='path'
+            >
+              View Atlas
+            </Button>
           </HStack>
           <HStack w='100%'>
             <Heading color='diamond.300' size='sm'>

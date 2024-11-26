@@ -9,6 +9,7 @@ const procJob = {
   comments: "comment",
   recipe: "recipe",
   automatic: 1,
+  recordTimestamp: "2024-01-01 00:00",
 };
 
 const autoProcJob = {

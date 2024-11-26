@@ -62,7 +62,7 @@ const pascalToSpace = (input: string) => {
  *
  * @returns Shortened, GB localised date string
  */
-export const parseDate = (dateString: string | undefined) => {
+export const parseDate = (dateString: string | undefined | null) => {
   const safeDate = dateString ?? "";
   const date = Date.parse(safeDate);
 

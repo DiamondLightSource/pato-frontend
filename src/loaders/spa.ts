@@ -140,8 +140,8 @@ const getSpaData = async (groupId: string, propId: string, sessionId: string) =>
          */
         jobsList.sort((a, b) => {
           if (a.ProcessingJob.recipe !== b.ProcessingJob.recipe) {
-            return recipeOrder.indexOf(a.ProcessingJob.recipe) >
-              recipeOrder.indexOf(b.ProcessingJob.recipe)
+            return recipeOrder.indexOf(a.ProcessingJob.recipe ?? "") >
+              recipeOrder.indexOf(b.ProcessingJob.recipe ?? "")
               ? 1
               : -1;
           }
