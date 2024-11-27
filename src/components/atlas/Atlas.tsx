@@ -1,3 +1,4 @@
+import { Heading, VStack, Link } from "@chakra-ui/react";
 import { AtlasResponse } from "loaders/atlas";
 import { useCallback } from "react";
 import { useLoaderData } from "react-router-dom";
@@ -20,6 +21,19 @@ export const Atlas = ({ groupId, onGridSquareClicked, selectedGridSquare }: Atla
     },
     [onGridSquareClicked]
   );
+
+  if (data.gridSquares.length < 1) {
+    return (
+      <VStack flex='1 0 500px' h='690px' textAlign='center' justifyContent='center'>
+        <Heading variant='notFound' size='md'>
+          No atlas grid information available
+        </Heading>
+        <Link color='diamond.700' href='.'>
+          Go back
+        </Link>
+      </VStack>
+    );
+  }
 
   return (
     <div style={{ display: "flex", flex: "1 0 500px" }}>

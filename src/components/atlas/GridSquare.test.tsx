@@ -28,7 +28,7 @@ describe("Atlas", () => {
   it("should display message if no foil holes are available", async () => {
     server.use(
       http.get(
-        "http://localhost/grid-squares/:foilHoleId/foil-holes",
+        "http://localhost/grid-squares/:gridSquareId/foil-holes",
         () => HttpResponse.json({}, { status: 404 }),
         { once: true }
       )
@@ -49,5 +49,19 @@ describe("Atlas", () => {
     renderWithProviders(<GridSquare gridSquareId={1} />);
 
     await screen.findByText("No foil hole selected");
+  });
+
+  it("should display message if no movies are available", async () => {
+    server.use(
+      http.get(
+        "http://localhost/foil-holes/:foilHoleId/movies",
+        () => HttpResponse.json({}, { status: 404 }),
+        { once: true }
+      )
+    );
+
+    renderWithProviders(<GridSquare gridSquareId={1} />);
+
+    await screen.findByText("No movies available");
   });
 });

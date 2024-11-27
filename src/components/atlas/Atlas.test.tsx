@@ -27,4 +27,10 @@ describe("Atlas", () => {
 
     expect(gridSquare).toHaveAttribute("fill", "blue");
   });
+
+  it("should display message if no atlas grid information is available", async () => {
+    renderWithRoute(<Atlas groupId='1' selectedGridSquare={1} />, () => ({ gridSquares: [] }));
+
+    await screen.findByText("No atlas grid information available");
+  });
 });

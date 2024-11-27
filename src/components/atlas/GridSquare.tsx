@@ -62,20 +62,13 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
       <Heading>Grid Square</Heading>
       <Divider />
       {gridSquareId === null ? (
-        <Heading
-          w='100%'
-          variant='not-found'
-          textAlign='center'
-          size='md'
-          h='512px'
-          alignContent='center'
-        >
+        <Heading w='100%' variant='notFound' size='md' h='512px' alignContent='center'>
           No grid square selected
         </Heading>
       ) : data === undefined || isLoading ? (
         <Skeleton h='512px' w='100%' />
       ) : data === null ? (
-        <Heading variant='not-found' size='md' h='512px' alignContent='center'>
+        <Heading variant='notFound' size='md' h='512px' w='100%' alignContent='center'>
           No foil holes available
         </Heading>
       ) : (
@@ -92,7 +85,7 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
                 key={i}
                 cx={foilHole.x}
                 cy={foilHole.y}
-                r={foilHole.diameter / 20}
+                r={foilHole.diameter / 2}
                 stroke='green'
                 fill={foilHoleId === foilHole.foilHoleId ? "blue" : "green"}
                 fillOpacity='0.4'
@@ -107,7 +100,17 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
         Movies
       </Heading>
       <Divider />
-      {movies ? (
+      {!movies ? (
+        foilHoleId ? (
+          <Heading w='100%' variant='notFound' size='md' h='5em' alignContent='center'>
+            No movies available
+          </Heading>
+        ) : (
+          <Heading w='100%' variant='notFound' size='md' h='5em' alignContent='center'>
+            No foil hole selected
+          </Heading>
+        )
+      ) : (
         <VStack w='100%' divider={<Divider />}>
           {movies.map((movie) => (
             <HStack w='100%' key={movie.movieId}>
@@ -119,17 +122,6 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
             </HStack>
           ))}
         </VStack>
-      ) : (
-        <Heading
-          w='100%'
-          variant='not-found'
-          textAlign='center'
-          size='md'
-          h='5em'
-          alignContent='center'
-        >
-          No foil hole selected
-        </Heading>
       )}
     </VStack>
   );
