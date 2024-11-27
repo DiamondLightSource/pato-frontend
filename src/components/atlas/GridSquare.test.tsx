@@ -62,6 +62,9 @@ describe("Atlas", () => {
 
     renderWithProviders(<GridSquare gridSquareId={1} />);
 
+    const gridSquare = await screen.findByRole("button");
+    fireEvent.click(gridSquare);
+
     await screen.findByText("No movies available");
   });
 });
