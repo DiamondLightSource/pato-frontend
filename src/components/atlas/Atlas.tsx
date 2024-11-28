@@ -47,15 +47,15 @@ export const Atlas = ({ groupId, onGridSquareClicked, selectedGridSquare }: Atla
           <rect
             role='button'
             key={gridSquare.gridSquareId}
-            x={gridSquare.x - gridSquare.width}
-            y={gridSquare.y}
+            x={gridSquare.x - gridSquare.width/2}
+            y={gridSquare.y - gridSquare.height/2}
             width={gridSquare.width}
             height={gridSquare.height}
             stroke='green'
             fill={selectedGridSquare === gridSquare.gridSquareId ? "blue" : "green"}
             fillOpacity='0.4'
             cursor='pointer'
-            transform={`rotate(${(180 / Math.PI) * gridSquare.angle} ${gridSquare.x + gridSquare.width / 20} ${gridSquare.y + gridSquare.height / 20})`}
+            transform={`rotate(${(180 / Math.PI) * gridSquare.angle} ${gridSquare.x} ${gridSquare.y})`}
             onClick={() => handleGridSquareClicked(gridSquare)}
           />
         ))}
