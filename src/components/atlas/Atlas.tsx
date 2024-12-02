@@ -47,8 +47,8 @@ export const Atlas = ({ groupId, onGridSquareClicked, selectedGridSquare }: Atla
           <rect
             role='button'
             key={gridSquare.gridSquareId}
-            x={gridSquare.x - gridSquare.width/2}
-            y={gridSquare.y - gridSquare.height/2}
+            x={gridSquare.x - gridSquare.width / 2}
+            y={gridSquare.y - gridSquare.height / 2}
             width={gridSquare.width}
             height={gridSquare.height}
             stroke='green'

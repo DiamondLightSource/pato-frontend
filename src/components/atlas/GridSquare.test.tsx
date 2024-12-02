@@ -42,7 +42,7 @@ describe("Atlas", () => {
   it("should display message if no grid square is selected", () => {
     renderWithProviders(<GridSquare gridSquareId={null} />);
 
-    expect(screen.getByText("No grid square selected")).toBeInTheDocument();
+    expect(screen.getByText(/no grid square selected/i)).toBeInTheDocument();
   });
 
   it("should display message if no foil hole is selected", async () => {

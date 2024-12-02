@@ -63,7 +63,7 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
       <Divider />
       {gridSquareId === null ? (
         <Heading w='100%' variant='notFound' size='md' h='512px' alignContent='center'>
-          No grid square selected
+          No grid square selected. Select one by clicking one of the atlas grid squares.
         </Heading>
       ) : data === undefined || isLoading ? (
         <Skeleton h='512px' w='100%' />
