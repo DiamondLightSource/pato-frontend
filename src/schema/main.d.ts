@@ -2358,6 +2358,31 @@ export interface components {
       /** Error Type */
       type: string;
     };
+    /** Grid Square */
+    GridSquare: {
+      gridSquareId: number;
+      x: number;
+      y: number;
+      height: number;
+      width: number;
+      angle: number;
+    };
+
+    /** Atlas */
+    Atlas: {
+      atlasId: number;
+      pixelSize: number;
+      cassetteSlot: number;
+      dataCollectionGroupId: number;
+    };
+
+    /** Foil Hole */
+    FoilHole: {
+      foilHoleId: number;
+      diameter: number;
+      x: number;
+      y: number;
+    };
   };
   responses: never;
   parameters: never;

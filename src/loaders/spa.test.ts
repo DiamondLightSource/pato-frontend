@@ -13,9 +13,13 @@ describe("SPA Data", () => {
 
   it("should return base object if no data collection is available", async () => {
     server.use(
-      http.get("http://localhost/dataGroups/:groupId/dataCollections", () => HttpResponse.json({}, { status: 404 }), {
-        once: true,
-      })
+      http.get(
+        "http://localhost/dataGroups/:groupId/dataCollections",
+        () => HttpResponse.json({}, { status: 404 }),
+        {
+          once: true,
+        }
+      )
     );
 
     const data = await spaLoader(queryClient)({ groupId: "1" });
@@ -355,9 +359,13 @@ describe("SPA Data", () => {
 
   it("should return empty parameter list if backend returns 404", async () => {
     server.use(
-      http.get("http://localhost/processingJob/:procJobId/parameters", () => HttpResponse.json({}, { status: 404 }), {
-        once: true,
-      })
+      http.get(
+        "http://localhost/processingJob/:procJobId/parameters",
+        () => HttpResponse.json({}, { status: 404 }),
+        {
+          once: true,
+        }
+      )
     );
 
     const data = await spaLoader(queryClient)({ groupId: "1" });
@@ -371,9 +379,13 @@ describe("SPA Data", () => {
 
   it("should set autoprocessing to true by default", async () => {
     server.use(
-      http.get("http://localhost/processingJob/:procJobId/parameters", () => HttpResponse.json({ items: {} }), {
-        once: true,
-      })
+      http.get(
+        "http://localhost/processingJob/:procJobId/parameters",
+        () => HttpResponse.json({ items: {} }),
+        {
+          once: true,
+        }
+      )
     );
 
     const data = await spaLoader(queryClient)({ groupId: "1" });
