@@ -1,5 +1,5 @@
 import { renderWithAccordion } from "utils/test-utils";
-import { screen } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { SPA } from "components/spa/main";
 
 const procJob = {
@@ -9,6 +9,7 @@ const procJob = {
   comments: "comment",
   recipe: "recipe",
   automatic: 1,
+  recordTimestamp: "2024-01-01 00:00",
 };
 
 const autoProcJob = {
@@ -98,5 +99,50 @@ describe("SPA Processing Job Row", () => {
     );
 
     expect(screen.getByText(/no data can be displayed/i)).toBeInTheDocument();
+  });
+
+  it("should update pages for all linked components if page changes", async () => {
+    renderWithAccordion(
+      <SPA
+        autoProc={autoProcJob}
+        procJob={{ ...procJob, recipe: "em-spa-preprocess" }}
+        active={true}
+        status='Success'
+      />
+    );
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /show content/i,
+      })
+    );
+
+    fireEvent.click(await screen.findByRole("button", { name: "Previous Page" }));
+    await waitFor(() =>
+      expect(screen.getAllByRole("textbox", { name: /current page/i })[1]).toHaveDisplayValue("9")
+    );
+  });
+
+  it("should use default page number if no valid page is provided", async () => {
+    renderWithAccordion(
+      <SPA
+        autoProc={autoProcJob}
+        procJob={{ ...procJob, recipe: "em-spa-preprocess" }}
+        active={true}
+        status='Success'
+      />,
+      undefined,
+      [{ search: "?movie=notANumber" }]
+    );
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /show content/i,
+      })
+    );
+
+    await waitFor(() =>
+      expect(screen.getAllByRole("textbox", { name: /current page/i })[0]).toHaveDisplayValue("10")
+    );
   });
 });

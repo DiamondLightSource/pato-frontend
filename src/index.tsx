@@ -22,6 +22,8 @@ import { SessionPage } from "routes/Session";
 import { sessionPageLoader } from "loaders/session";
 import { SessionResponse } from "schema/interfaces";
 import { UploadModelPage } from "routes/UploadModel";
+import AtlasPage from "routes/Atlas";
+import { atlasLoader } from "loaders/atlas";
 
 const Calendar = React.lazy(() => import("routes/Calendar"));
 const About = React.lazy(() => import("routes/About"));
@@ -146,6 +148,11 @@ const router = createBrowserRouter([
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/spa/",
         element: <SpaPage />,
         loader: ({ params }) => spaLoader(queryClient)(params),
+      },
+      {
+        path: "/proposals/:propId/sessions/:visitId/groups/:groupId/atlas",
+        element: <AtlasPage />,
+        loader: ({ params }) => atlasLoader(queryClient)(params),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/",

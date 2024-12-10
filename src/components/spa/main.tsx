@@ -1,6 +1,6 @@
 import { AccordionItem, AccordionPanel, Grid, Text } from "@chakra-ui/react";
 import { Motion } from "components/motion/motion";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Classification } from "components/spa/classification";
 import { ParticlePicking } from "components/spa/particlePicking";
 import { CTF } from "components/ctf/ctf";
@@ -8,6 +8,7 @@ import { ProcessingTitle } from "components/visualisation/processingTitle";
 import { BaseProcessingJobProps } from "schema/interfaces";
 import { recipeTagMap } from "utils/config/parse";
 import { RefinementStep } from "./refine";
+import { useSearchParams } from "react-router-dom";
 
 // This refinement step blacklist should be TEMPORARY and will be removed when a proper data view exists
 const checkRecipe = (target: string, procJob: BaseProcessingJobProps["procJob"]) =>
@@ -15,8 +16,27 @@ const checkRecipe = (target: string, procJob: BaseProcessingJobProps["procJob"])
   !(procJob.recipe, Object.keys(recipeTagMap).includes(procJob.recipe));
 
 const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [total, setTotal] = useState(0);
-  const [page, setPage] = useState<number | undefined>();
+
+  const setPage = useCallback(
+    (page: number) => {
+      setSearchParams((prev) => ({ ...prev, movie: page }));
+    },
+    [setSearchParams]
+  );
+
+  const page = useMemo(() => {
+    const movie = searchParams.get("movie");
+
+    if (movie && total) {
+      const intMovie = parseInt(movie);
+      if (isNaN(intMovie) || intMovie > total) return undefined;
+      return intMovie;
+    }
+
+    return undefined;
+  }, [searchParams, total]);
 
   const toDisplay = useMemo(
     () =>

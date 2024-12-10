@@ -25,8 +25,11 @@ const renderWithProviders = (
   return { ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 };
 
-const renderWithAccordion = (ui: React.ReactElement) =>
-  renderWithProviders(<Accordion>{ui}</Accordion>);
+const renderWithAccordion = (
+  ui: React.ReactElement,
+  renderOptions?: RenderOptions,
+  initialEntries: InitialEntry[] = ["/"]
+) => renderWithProviders(<Accordion>{ui}</Accordion>, renderOptions, initialEntries);
 
 const renderWithRoute = (
   ui: React.ReactElement,

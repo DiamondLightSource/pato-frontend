@@ -410,4 +410,18 @@ export const handlers = [
       total: 300,
     });
   }),
+
+  http.get("http://localhost/dataGroups/:dcgId/atlas", () => HttpResponse.json({ atlasId: 1 })),
+
+  http.get("http://localhost/dataGroups/:dcgId/grid-squares", () =>
+    HttpResponse.json({ items: [{ x: 1, y: 1, width: 1, height: 1, gridSquareId: 1 }] })
+  ),
+
+  http.get("http://localhost/foil-holes/:foilHoleId/movies", () =>
+    HttpResponse.json({ items: [{ movieNumber: 500, movieId: 500 }] })
+  ),
+
+  http.get("http://localhost/grid-squares/:foilHoleId/foil-holes", () =>
+    HttpResponse.json({ items: [{ foilHoleId: 500, x: 1, y: 1, diameter: 5 }] })
+  ),
 ];

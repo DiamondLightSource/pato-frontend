@@ -16,7 +16,7 @@ const spaCollectionConfig: DataConfig = {
   include: [
     ...collectionConfig.include,
     ...[
-      { name: "totalExposedDose", label: "Total Dose", unit: "e⁻/Å²" },
+      { name: "totalExposedDose", label: "Total Dose (aprox.)", unit: "e⁻/Å²" },
       { name: "exposureTime", label: "Total Exposure Time", unit: "seconds" },
       { name: "phasePlate", label: "Phase Plate Used" },
       { name: "c2aperture", label: "C2 Aperture", unit: "μm" },
@@ -140,8 +140,8 @@ const getSpaData = async (groupId: string, propId: string, sessionId: string) =>
          */
         jobsList.sort((a, b) => {
           if (a.ProcessingJob.recipe !== b.ProcessingJob.recipe) {
-            return recipeOrder.indexOf(a.ProcessingJob.recipe) >
-              recipeOrder.indexOf(b.ProcessingJob.recipe)
+            return recipeOrder.indexOf(a.ProcessingJob.recipe ?? "") >
+              recipeOrder.indexOf(b.ProcessingJob.recipe ?? "")
               ? 1
               : -1;
           }

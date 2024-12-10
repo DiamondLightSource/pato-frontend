@@ -1,4 +1,4 @@
-import { client, prependApiUrl } from "./client";
+import { client, prependApiUrl } from "utils/api/client";
 import { waitFor } from "@testing-library/react";
 
 const oldEnv = structuredClone(process.env);
