@@ -3,6 +3,18 @@ Changelog
 ==========
 
 ++++++++++
+v1.13.0 (11/11/2024)
+++++++++++
+
+**Added**
+
+- Add atlas grid page
+
+**Changed**
+
+- Add note to total dose, clarifying the dose is estimated
+
+++++++++++
 v1.12.3 (11/11/2024)
 ++++++++++
 
