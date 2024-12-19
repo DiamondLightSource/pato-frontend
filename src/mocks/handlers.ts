@@ -61,11 +61,11 @@ const getMotionData = (parentId: string) => {
 
 export const handlers = [
   http.get("http://localhost/tomograms/:id/motion", ({ params }) =>
-    HttpResponse.json(getMotionData(params.id.toString()))
+    HttpResponse.json(getMotionData(params.id!.toString()))
   ),
 
   http.get("http://localhost/autoProc/:id/motion", ({ params }) =>
-    HttpResponse.json(getMotionData(params.id.toString()))
+    HttpResponse.json(getMotionData(params.id!.toString()))
   ),
 
   http.get("http://localhost/autoProc/:autoProcId/tomogram", () =>

@@ -88,6 +88,7 @@ const SpaPage = () => {
               as={Link}
               to={{ pathname: "../atlas" }}
               relative='path'
+              isDisabled={!loaderData.hasAtlas}
             >
               View Atlas
             </Button>
