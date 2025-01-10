@@ -1,6 +1,7 @@
 import { Divider, Heading, Skeleton, VStack, Text, Link, Spacer, HStack } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import { components } from "schema/main";
 import { client, prependApiUrl } from "utils/api/client";
 
@@ -33,7 +34,16 @@ const fetchMovies = async (foilHoleId: number | null) => {
 };
 
 export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
-  const [foilHoleId, setFoilHoleId] = useState<number | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const foilHoleId = useMemo(() => {
+    const foilHole = searchParams.get("foilHole");
+    if (foilHole) {
+      const intFoilHole = parseInt(foilHole);
+      return isNaN(intFoilHole) ? null : intFoilHole;
+    }
+
+    return null;
+  }, [searchParams]);
 
   const { data, isLoading } = useQuery({
     queryKey: ["foilHoles", gridSquareId],
@@ -45,9 +55,18 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
     queryFn: async () => await fetchMovies(foilHoleId),
   });
 
-  const handleFoilHoleClicked = useCallback((foilHole: FoilHole) => {
-    setFoilHoleId(foilHole.foilHoleId);
-  }, []);
+  const handleFoilHoleClicked = useCallback(
+    (foilHole: FoilHole) => {
+      if (gridSquareId === null || foilHole.foilHoleId === null) {
+        return;
+      }
+      setSearchParams({
+        gridSquare: gridSquareId.toString(),
+        foilHole: foilHole.foilHoleId.toString(),
+      });
+    },
+    [gridSquareId, setSearchParams]
+  );
 
   return (
     <VStack

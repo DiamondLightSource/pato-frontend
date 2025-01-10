@@ -57,6 +57,7 @@ export interface SpaResponse {
   jobs: ProcessingJob[] | null;
   allowReprocessing: boolean;
   jobParameters: { items: ReprocessingParameters };
+  hasAtlas: boolean;
 }
 
 const recipeOrder = ["em-spa-preprocess", "em-spa-class2d", "em-spa-class3d", "em-spa-refine"];
@@ -74,18 +75,24 @@ const getSpaData = async (groupId: string, propId: string, sessionId: string) =>
     } as SpaCollectionData,
     jobs: null,
     allowReprocessing: false,
+    hasAtlas: false,
     jobParameters: {
       items: { performCalculation: true, doClass2D: true, doClass3D: true, useCryolo: true },
     },
   };
 
   if (response.status === 200 && response.data.items) {
-    const allowReprocessingResponse = await client.safeGet(
-      `proposals/${propId}/sessions/${sessionId}/reprocessingEnabled`
-    );
+    const [allowReprocessingResponse, atlasResponse] = await Promise.all([
+      client.safeGet(`proposals/${propId}/sessions/${sessionId}/reprocessingEnabled`),
+      client.safeGet(`dataGroups/${groupId}/atlas`),
+    ]);
 
     if (allowReprocessingResponse.status === 200) {
       returnData.allowReprocessing = allowReprocessingResponse.data.allowReprocessing;
+    }
+
+    if (atlasResponse.status === 200) {
+      returnData.hasAtlas = true;
     }
 
     const data = response.data.items[0] as DataCollection;
