@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.13.1 (10/01/2025)
+++++++++++
+
+**Changed**
+
+- Grey out atlas button if no atlas is available
+
+++++++++++
 v1.13.0 (10/12/2024)
 ++++++++++
 
