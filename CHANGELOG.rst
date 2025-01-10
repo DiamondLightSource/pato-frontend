@@ -9,6 +9,7 @@ v1.13.1 (10/01/2025)
 **Changed**
 
 - Grey out atlas button if no atlas is available
+- Foil hole ID is now stored in search params
 
 ++++++++++
 v1.13.0 (10/12/2024)
