@@ -18,10 +18,11 @@ import {
   Skeleton,
   Tooltip,
   Stack,
+  Link as ChakraLink,
 } from "@chakra-ui/react";
 import { PlotContainer } from "components/visualisation/plotContainer";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { MdComment } from "react-icons/md";
+import { MdComment, MdOutlineGrain } from "react-icons/md";
 import { client, prependApiUrl } from "utils/api/client";
 import { parseData } from "utils/generic";
 import { driftPlotOptions } from "utils/config/plot";
@@ -115,12 +116,19 @@ const flattenMovieData = (rawData: Record<string, any>) => {
   return flattenedData;
 };
 
+interface IdList {
+  movieId: number;
+  foilHoleId: number;
+  gridSquareId: number;
+}
+
 interface FullMotionData {
   motion: MotionData | null;
   total: number | null;
   micrograph: string;
   fft: string;
   drift: BasePoint[];
+  ids?: IdList;
 }
 
 const fetchMotionData = async (
@@ -179,6 +187,19 @@ const fetchMotionData = async (
     if (fileData.status === 200) {
       data.drift = fileData.data.items;
     }
+
+    const atlasIds = await client.safeGet(`movies/${movie.movieId}`);
+
+    if (atlasIds.status === 200 && atlasIds.data.movieId === movie.movieId) {
+      data = {
+        ...data,
+        ids: {
+          movieId: atlasIds.data.movieId,
+          foilHoleId: atlasIds.data.foilHoleId,
+          gridSquareId: atlasIds.data.gridSquareId,
+        },
+      };
+    }
   }
 
   return data;
@@ -210,6 +231,8 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
       data && data.motion && (data.motion.comments_CTF || data.motion.comments_MotionCorrection),
     [data]
   );
+
+  const hasIds = useMemo(() => data?.ids?.gridSquareId && data?.ids?.foilHoleId, [data]);
 
   useEffect(() => {
     if (page) {
@@ -272,6 +295,24 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
               {hasComments && (
                 <Circle size='3' position='absolute' top='-1' left='-1' bg='red'></Circle>
               )}
+            </Button>
+          </Tooltip>
+          <Tooltip id='atlas' label='Return to Atlas'>
+            <Button
+              leftIcon={<MdOutlineGrain />}
+              data-testid='movieToAtlas'
+              as={ChakraLink}
+              size='xs'
+              {...(hasIds
+                ? {
+                    href: `atlas?gridSquare=${data?.ids?.gridSquareId}&foilHole=${data?.ids?.foilHoleId}`,
+                  }
+                : {
+                    href: undefined,
+                    isDisabled: true,
+                  })}
+            >
+              View in Atlas
             </Button>
           </Tooltip>
           <Flipper {...flipperProps} w='5em' />
