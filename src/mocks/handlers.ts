@@ -424,4 +424,8 @@ export const handlers = [
   http.get("http://localhost/grid-squares/:foilHoleId/foil-holes", () =>
     HttpResponse.json({ items: [{ foilHoleId: 500, x: 1, y: 1, diameter: 5 }] })
   ),
+
+  http.get("http://localhost/movies/:movieId", () =>
+    HttpResponse.json({ movieId: 1, foilHoleId: 2, gridSquareId: 3 })
+  ),
 ];

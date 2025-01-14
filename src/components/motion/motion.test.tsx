@@ -24,6 +24,29 @@ describe("Motion", () => {
     await expect(screen.findByTestId("comment")).resolves.toBeEnabled();
   });
 
+  it("should link to atlas for specific movie", async () => {
+    renderWithProviders(<Motion parentType='tomograms' parentId={1} />);
+
+    await waitFor(() =>
+      expect(screen.findByText("View in Atlas")).resolves.toHaveAttribute(
+        "href",
+        "atlas?gridSquare=3&foilHole=2"
+      )
+    );
+  });
+
+  it("should disable atlas link if no IDs available", async () => {
+    server.use(
+      http.get("http://localhost/movies/:movieId", () => HttpResponse.json({}, { status: 404 }), {
+        once: true,
+      })
+    );
+    renderWithProviders(<Motion parentType='tomograms' parentId={1} />);
+
+    await expect(screen.findByText("View in Atlas")).resolves.toHaveAttribute("disabled");
+    await expect(screen.findByText("View in Atlas")).resolves.not.toHaveAttribute("href");
+  });
+
   it("should call callback when page changes", async () => {
     const motionChanged = vi.fn();
     renderWithProviders(
