@@ -28,7 +28,7 @@ describe("Motion", () => {
     renderWithProviders(<Motion parentType='tomograms' parentId={1} />);
 
     await waitFor(() =>
-      expect(screen.findByText("View in Atlas")).resolves.toHaveAttribute(
+      expect(screen.getByText("View in Atlas")).toHaveAttribute(
         "href",
         "atlas?gridSquare=3&foilHole=2"
       )
@@ -43,8 +43,8 @@ describe("Motion", () => {
     );
     renderWithProviders(<Motion parentType='tomograms' parentId={1} />);
 
-    await expect(screen.findByText("View in Atlas")).resolves.toHaveAttribute("disabled");
-    await expect(screen.findByText("View in Atlas")).resolves.not.toHaveAttribute("href");
+    expect(await screen.findByText("View in Atlas")).toHaveAttribute("disabled");
+    expect(await screen.findByText("View in Atlas")).not.toHaveAttribute("href");
   });
 
   it("should call callback when page changes", async () => {
