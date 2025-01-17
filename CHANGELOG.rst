@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.14.1 (17/01/2025)
+++++++++++
+
+**Fixed**
+
+- Fix foil hole placement on square grid squares
+
+++++++++++
 v1.14.0 (16/01/2025)
 ++++++++++
 
