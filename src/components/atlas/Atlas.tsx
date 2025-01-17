@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import { useLoaderData } from "react-router-dom";
 import { components } from "schema/main";
 import { prependApiUrl } from "utils/api/client";
+import "styles/atlas.css";
 
 export interface AtlasProps {
   groupId: string;
@@ -36,13 +37,9 @@ export const Atlas = ({ groupId, onGridSquareClicked, selectedGridSquare }: Atla
   }
 
   return (
-    <div style={{ display: "flex", flex: "1 0 500px" }}>
+    <div style={{ display: "flex", flex: "1 0 500px" }} className='img-wrapper'>
+      <img src={prependApiUrl(`dataGroups/${groupId}/atlas/image`)} alt='Atlas' />
       <svg viewBox='0 0 512 512'>
-        <image
-          width='512'
-          height='512'
-          href={prependApiUrl(`/dataGroups/${groupId}/atlas/image`)}
-        ></image>
         {data.gridSquares.map((gridSquare) => (
           <rect
             role='button'
