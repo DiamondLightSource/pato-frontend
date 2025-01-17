@@ -53,7 +53,6 @@ const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
         autoProc={autoProc}
         procJob={procJob}
         status={status}
-        isBeta={procJob.recipe === "em-spa-refine"}
       />
       <AccordionPanel p={4} bg='diamond.75'>
         {autoProc ? (
