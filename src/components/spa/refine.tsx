@@ -27,7 +27,7 @@ interface FullClassification extends ClassificationSchema {
 const fetchClassData = async (autoProcId: number) => {
   const promises = [
     client.safeGet(`autoProc/${autoProcId}/bFactorFit`),
-    client.safeGet(`autoProc/${autoProcId}/classification?limit=1&classType=3d`),
+    client.safeGet(`autoProc/${autoProcId}/classification?limit=2&classType=3d`),
   ];
 
   const [bFactorResponse, classResponse] = await Promise.all(promises);
@@ -39,7 +39,7 @@ const fetchClassData = async (autoProcId: number) => {
       x: item.numberOfParticles,
       y: item.resolution,
     })),
-    particleClassificationId: firstClass.particleClassificationId,
+    classes: classResponse.data.items as FullClassification[],
     bFactor: [
       { label: "Intercept", value: firstClass.bFactorFitIntercept?.toFixed(3) ?? "?" },
       {
@@ -63,7 +63,7 @@ const RefinementStep = ({ autoProcId }: ClassificationProps) => {
   const angDistImageUrl = useMemo(() => {
     if (!data) return undefined;
     return prependApiUrl(
-      `autoProc/${autoProcId}/classification/${data.particleClassificationId}/angleDistribution`
+      `autoProc/${autoProcId}/classification/${data.classes[0].particleClassificationId}/angleDistribution`
     );
   }, [data, autoProcId]);
   return (
@@ -96,7 +96,15 @@ const RefinementStep = ({ autoProcId }: ClassificationProps) => {
               />
             </PlotContainer>
             <HStack w='100%' alignItems='center' flexWrap='wrap'>
-              <MolstarModal autoProcId={autoProcId} classId={data.particleClassificationId} />
+              {data.classes.map((class3d) => (
+                <MolstarModal
+                  key={class3d.particleClassificationId}
+                  autoProcId={autoProcId}
+                  classId={class3d.particleClassificationId}
+                  buttonText={`Open 3D Visualisation (${class3d.symmetry})`}
+                  w='18em'
+                />
+              ))}
               <Spacer />
               <Box minWidth='200px'>
                 <InfoGroup info={data.bFactor} cols={3}></InfoGroup>
