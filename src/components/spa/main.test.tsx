@@ -69,7 +69,7 @@ describe("SPA Processing Job Row", () => {
     );
 
     expect(screen.queryAllByText(/refinement/i).length).toBeGreaterThan(1);
-    await screen.findByText(/open 3d visualisation/i);
+    await screen.findAllByText(/open 3d visualisation/i);
   });
 
   it("should only display preprocessing summary if recipe matches", () => {

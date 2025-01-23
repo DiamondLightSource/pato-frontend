@@ -23,6 +23,7 @@ export interface MolstarModalProps extends Omit<ButtonProps, "onChange"> {
   page?: number;
   pageCount?: number;
   onChange?: (page: number) => void;
+  buttonText?: string;
 }
 
 const MolstarModal = ({
@@ -31,6 +32,7 @@ const MolstarModal = ({
   page,
   pageCount,
   onChange,
+  buttonText = "Open 3D Visualisation",
   ...props
 }: MolstarModalProps) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -38,7 +40,8 @@ const MolstarModal = ({
   return (
     <>
       <Button onClick={onOpen} width='30em' {...props}>
-        Open 3D Visualisation <Spacer />
+        {buttonText}
+        <Spacer />
         <Icon as={MdOpenInNew}></Icon>
       </Button>
       <Modal size='2xl' isOpen={isOpen} onClose={onClose}>
