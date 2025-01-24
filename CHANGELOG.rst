@@ -3,6 +3,18 @@ Changelog
 ==========
 
 ++++++++++
+v1.15.0 (24/01/2025)
+++++++++++
+
+**Added**
+
+- Visualisation is now available for multiple refined 3D classes
+
+**Fixed**
+
+- Search params now update properly when page/search/limit changes
+
+++++++++++
 v1.14.1 (17/01/2025)
 ++++++++++
 
