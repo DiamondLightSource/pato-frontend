@@ -10,7 +10,7 @@ import { Error } from "routes/Error";
 import { Home } from "routes/Home";
 import { collectionHeaders, proposalHeaders, sessionHeaders } from "utils/config/table";
 import { getUser } from "loaders/user";
-import { checkListingChanged, handleCollectionClicked, listingLoader } from "loaders/listings";
+import { handleCollectionClicked, listingLoader } from "loaders/listings";
 import { spaLoader } from "loaders/spa";
 import { tomogramLoader } from "loaders/tomogram";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -69,7 +69,6 @@ const router = createBrowserRouter([
           />
         ),
         loader: ({ request, params }) => listingLoader(queryClient)(request, params, "proposals"),
-        shouldRevalidate: ({ currentUrl, nextUrl }) => checkListingChanged(currentUrl, nextUrl),
       },
       {
         path: "/calendar",
@@ -103,7 +102,6 @@ const router = createBrowserRouter([
             "sessions",
             processSessionData
           ),
-        shouldRevalidate: ({ currentUrl, nextUrl }) => checkListingChanged(currentUrl, nextUrl),
       },
       {
         path: "/proposals/:propId/sessions/:visitId",
@@ -133,7 +131,6 @@ const router = createBrowserRouter([
         ),
         loader: ({ request, params }) =>
           listingLoader(queryClient)(request, params, "dataCollections"),
-        shouldRevalidate: ({ currentUrl, nextUrl }) => checkListingChanged(currentUrl, nextUrl),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/tomograms/",
