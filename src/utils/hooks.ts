@@ -1,13 +1,11 @@
 import { useCallback, useMemo } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 /**
  * Hook providing pagination values and handlers
  */
 export const usePaginationSearchParams = () => {
-  const navigate = useNavigate();
-
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const page = useMemo(() => parseInt(searchParams.get("page") || "1"), [searchParams]);
   const itemsPerPage = useMemo(() => parseInt(searchParams.get("items") || "20"), [searchParams]);
@@ -16,19 +14,9 @@ export const usePaginationSearchParams = () => {
 
   const updateSearchParams = useCallback(
     (newValues: Record<string, string>) => {
-      const newSearchParams = new URLSearchParams({
-        ...Object.fromEntries(searchParams.entries()),
-        ...newValues,
-      });
-      navigate(
-        {
-          pathname: ".",
-          search: newSearchParams.toString(),
-        },
-        { replace: true }
-      );
+      setSearchParams((prev) => ({ ...prev, ...newValues }), { replace: true });
     },
-    [navigate, searchParams]
+    [setSearchParams]
   );
 
   const onSearch = useCallback(

@@ -256,7 +256,7 @@ export const handlers = [
         batchNumber: 355,
         classNumber: 1,
         particlesPerClass: 1,
-        symmetry: "C1",
+        symmetry: "C8",
         type: "2D",
         selected: true,
         bFactorFitIntercept: 10,

@@ -1,30 +1,11 @@
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { renderWithRoute } from "utils/test-utils";
 import { GenericListing } from "routes/GenericListing";
 import { proposalHeaders } from "utils/config/table";
 
-const mockUseNavigate = vi.fn();
-
-// I need to do this because navigations trigger wacky rerenders of the component, and often times, it gets
-// soft-stuck between states, requiring me to "prod" it with dummy events to get it going. Insofar, this seems
-// like the most elegant fix to this.
-vi.mock("react-router-dom", async (importOriginal) => {
-  const actual = await importOriginal<any>();
-  return {
-    ...actual,
-    useNavigate: () => mockUseNavigate,
-  };
-});
-
 describe("Generic Listing", () => {
-  afterAll(() => {
-    vi.resetAllMocks();
-  });
-  afterEach(() => {
-    mockUseNavigate.mockClear();
-  });
   it("should include search in request", async () => {
-    renderWithRoute(
+    const { router } = renderWithRoute(
       <GenericListing
         heading='Test'
         makePathCallback={(item) => item.test.toString()}
@@ -37,14 +18,11 @@ describe("Generic Listing", () => {
     fireEvent.change(search, { target: { value: "cm31111" } });
     fireEvent.blur(search);
 
-    expect(mockUseNavigate).toHaveBeenCalledWith(
-      expect.objectContaining({ search: "page=1&search=cm31111" }),
-      expect.anything()
-    );
+    expect(router.state.navigation.location!.search).toBe("?page=1&search=cm31111");
   });
 
   it("should perform request again when page changes", async () => {
-    renderWithRoute(
+    const { router } = renderWithRoute(
       <GenericListing
         heading='Test'
         makePathCallback={(item) => item.test.toString()}
@@ -53,13 +31,10 @@ describe("Generic Listing", () => {
       () => ({ data: null, total: 300 })
     );
 
-    const nextPage = await screen.findByRole("button", { name: "4" });
+    const nextPage = await screen.findByText("4");
     fireEvent.click(nextPage);
 
-    expect(mockUseNavigate).toHaveBeenCalledWith(
-      expect.objectContaining({ search: "page=4" }),
-      expect.anything()
-    );
+    expect(router.state.navigation.location!.search).toBe("?page=4");
   });
 
   it("should set data to null when invalid response is provided", async () => {
@@ -76,7 +51,7 @@ describe("Generic Listing", () => {
   });
 
   it("should set page to 1 when user performs search", async () => {
-    renderWithRoute(
+    const { router } = renderWithRoute(
       <GenericListing
         heading='data'
         makePathCallback={(item) => item.test.toString()}
@@ -88,22 +63,12 @@ describe("Generic Listing", () => {
     const search = await screen.findByPlaceholderText("Search...");
     fireEvent.click(screen.getByLabelText("Next Page"));
 
-    await waitFor(() =>
-      expect(mockUseNavigate).toHaveBeenCalledWith(
-        expect.objectContaining({ search: "page=2" }),
-        expect.anything()
-      )
-    );
+    expect(router.state.navigation.location!.search).toBe("?page=2");
 
     fireEvent.change(search, { target: { value: "cm3111" } });
     fireEvent.blur(search);
 
-    await waitFor(() =>
-      expect(mockUseNavigate).toHaveBeenCalledWith(
-        expect.objectContaining({ search: "page=1&search=cm31111" }),
-        expect.anything()
-      )
-    );
+    expect(router.state.navigation.location!.search).toBe("?page=1&search=cm3111");
   });
 
   it("should use item limit from URL when available", async () => {
@@ -129,7 +94,7 @@ describe("Generic Listing", () => {
 
   it("should call navigation callback when row is clicked", async () => {
     const mockCallback = vi.fn().mockReturnValue("somethingElse");
-    renderWithRoute(
+    const { router } = renderWithRoute(
       <GenericListing heading='data' makePathCallback={mockCallback} headers={proposalHeaders} />,
       () => ({ data: [{ proposalNumber: 31111 }] })
     );
@@ -139,7 +104,7 @@ describe("Generic Listing", () => {
 
     expect(mockCallback).toHaveBeenCalled();
 
-    expect(mockUseNavigate).toHaveBeenCalledWith("somethingElse", expect.anything());
+    expect(router.state.navigation.location!.pathname).toBe("/somethingElse");
   });
 
   it("should display sorting options if provided", async () => {
@@ -175,7 +140,7 @@ describe("Generic Listing", () => {
   });
 
   it("should include sort key in URL when fields are updated", async () => {
-    renderWithRoute(
+    const { router } = renderWithRoute(
       <GenericListing
         heading='data'
         headers={proposalHeaders}
@@ -190,9 +155,6 @@ describe("Generic Listing", () => {
     const sortBySelect = await screen.findByRole("combobox", { name: "Sort By" });
     fireEvent.change(sortBySelect, { target: { value: "sortKey2" } });
 
-    expect(mockUseNavigate).toHaveBeenCalledWith(
-      expect.objectContaining({ search: "sortBy=sortKey2" }),
-      expect.anything()
-    );
+    expect(router.state.navigation.location!.search).toEqual("?sortBy=sortKey2");
   });
 });

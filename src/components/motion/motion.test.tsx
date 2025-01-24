@@ -14,14 +14,14 @@ describe("Motion", () => {
   it("should display raw image count when no tilt. align. is present", async () => {
     renderWithProviders(<Motion parentType='dataCollections' parentId={2} />);
 
-    await expect(screen.findByLabelText("Total Pages")).resolves.toHaveTextContent("10");
+    expect(await screen.findByLabelText("Total Pages")).toHaveTextContent("10");
   });
 
   it("should display enabled comments button when comments are present", async () => {
     renderWithProviders(<Motion parentType='tomograms' parentId={3} />);
 
     await screen.findAllByText("20");
-    await expect(screen.findByTestId("comment")).resolves.toBeEnabled();
+    expect(screen.getByTestId("comment")).toBeEnabled();
   });
 
   it("should link to atlas for specific movie", async () => {
