@@ -14,7 +14,7 @@ export const usePaginationSearchParams = () => {
 
   const updateSearchParams = useCallback(
     (newValues: Record<string, string>) => {
-      setSearchParams((prev) => ({ ...prev, ...newValues }), { replace: true });
+      setSearchParams((prev) => ({ ...Object.fromEntries(prev), ...newValues }), { replace: true });
     },
     [setSearchParams]
   );

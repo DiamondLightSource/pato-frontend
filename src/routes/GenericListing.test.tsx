@@ -94,15 +94,21 @@ describe("Generic Listing", () => {
 
   it("should call navigation callback when row is clicked", async () => {
     const mockCallback = vi.fn().mockReturnValue("somethingElse");
+    const proposal = { proposalNumber: 31111 };
     const { router } = renderWithRoute(
       <GenericListing heading='data' makePathCallback={mockCallback} headers={proposalHeaders} />,
-      () => ({ data: [{ proposalNumber: 31111 }] })
+      () => ({ data: [proposal] }),
+      ["/?sortBy=sortKey2"]
     );
 
     const row = await screen.findByText("31111");
     fireEvent.click(row);
 
-    expect(mockCallback).toHaveBeenCalled();
+    expect(mockCallback).toHaveBeenCalledWith(
+      proposal,
+      0,
+      expect.objectContaining({ sortBy: "sortKey2" })
+    );
 
     expect(router.state.navigation.location!.pathname).toBe("/somethingElse");
   });

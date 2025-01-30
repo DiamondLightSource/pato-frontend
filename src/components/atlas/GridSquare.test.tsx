@@ -12,7 +12,7 @@ describe("Atlas", () => {
 
     fireEvent.click(gridSquare);
 
-    await screen.findByText("500");
+    await screen.findByLabelText("500");
   });
 
   it("should make selected foil hole blue", async () => {

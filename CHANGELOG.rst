@@ -3,6 +3,19 @@ Changelog
 ==========
 
 ++++++++++
+v1.16.0 (30/01/2025)
+++++++++++
+
+**Changed**
+
+- When a foil hole is selected, micrographs are displayed, instead of a list of movies
+
+**Fixed**
+
+- Sorting is correctly applied between pages when a tomogram in the list of tomograms is clicked
+- Searching for a term that returns no results doesn't clear out the `search` portion of your search parameters
+
+++++++++++
 v1.15.0 (24/01/2025)
 ++++++++++
 
