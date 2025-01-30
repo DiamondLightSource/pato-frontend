@@ -5,6 +5,12 @@ import { Pagination, DebouncedInput, Table } from "@diamondlightsource/ui-compon
 import { usePaginationSearchParams } from "utils/hooks";
 import { Option, Options } from "components/form/input";
 
+export interface PaginationSearchParams {
+  page: number;
+  itemsPerPage: number;
+  search: string | null;
+  sortBy: string | null;
+}
 export interface TableProps {
   headers: {
     key: string;
@@ -13,7 +19,11 @@ export interface TableProps {
   heading: string;
   /** Valid sorting values */
   sortOptions?: Option[];
-  makePathCallback?: (item: Record<string, string | number>, index: number) => string;
+  makePathCallback?: (
+    item: Record<string, string | number>,
+    index: number,
+    searchParams: PaginationSearchParams
+  ) => string;
 }
 
 interface TableData {
@@ -32,10 +42,13 @@ const GenericListing = ({ headers, heading, sortOptions, makePathCallback }: Tab
   const handleRowClicked = useCallback(
     (item: Record<string, any>, index: number) => {
       if (makePathCallback) {
-        navigate(makePathCallback(item, index), { relative: "path" });
+        navigate(
+          makePathCallback(item, index, { search, page, sortBy, itemsPerPage: data.limit }),
+          { relative: "path" }
+        );
       }
     },
-    [makePathCallback, navigate]
+    [makePathCallback, navigate, data, search, page, sortBy]
   );
 
   useEffect(() => {
