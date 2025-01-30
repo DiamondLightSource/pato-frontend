@@ -1,4 +1,4 @@
-import { Divider, Heading, Skeleton, VStack, Text, Link, Spacer, HStack } from "@chakra-ui/react";
+import { Divider, Heading, Skeleton, VStack, Link, Image, Grid } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -72,7 +72,7 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
   return (
     <VStack
       display='flex'
-      flex='1 0 500px'
+      flex='1 0 300px'
       p='0.5em'
       bg='diamond.50'
       alignItems='start'
@@ -127,17 +127,20 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
             </Heading>
           )
         ) : (
-          <VStack w='100%' divider={<Divider />}>
+          <Grid w='100%' gridGap='0.5em' templateColumns='repeat(auto-fill, minmax(150px, 1fr))'>
             {movies.map((movie) => (
-              <HStack w='100%' key={movie.movieId}>
-                <Text>{movie.movieId}</Text>
-                <Spacer />
-                <Link color='diamond.700' href={`spa?movie=${movie.movieNumber}`}>
-                  View
-                </Link>
-              </HStack>
+              <Link
+                key={movie.movieId}
+                href={`spa?movie=${movie.movieNumber}`}
+                aria-label={movie.movieId.toString()}
+              >
+                <Image
+                  alt={movie.movieId.toString()}
+                  src={prependApiUrl(`movies/${movie.movieId}/micrograph`)}
+                ></Image>
+              </Link>
             ))}
-          </VStack>
+          </Grid>
         )}
       </VStack>
     </VStack>

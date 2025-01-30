@@ -37,7 +37,7 @@ export const Atlas = ({ groupId, onGridSquareClicked, selectedGridSquare }: Atla
   }
 
   return (
-    <div style={{ display: "flex", flex: "1 0 500px" }} className='img-wrapper'>
+    <div style={{ display: "flex", flex: "1 0 300px" }} className='img-wrapper'>
       <img src={prependApiUrl(`dataGroups/${groupId}/atlas/image`)} alt='Atlas' />
       <svg viewBox='0 0 512 512'>
         {data.gridSquares.map((gridSquare) => (
