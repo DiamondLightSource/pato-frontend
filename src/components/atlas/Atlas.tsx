@@ -23,7 +23,7 @@ export const Atlas = ({ groupId, onGridSquareClicked, selectedGridSquare }: Atla
     [onGridSquareClicked]
   );
 
-  if (data.gridSquares.length < 1) {
+  if (!data?.gridSquares || data.gridSquares.length < 1) {
     return (
       <VStack flex='1 0 500px' h='690px' textAlign='center' justifyContent='center'>
         <Heading variant='notFound' size='md'>

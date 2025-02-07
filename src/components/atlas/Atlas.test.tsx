@@ -33,4 +33,10 @@ describe("Atlas", () => {
 
     await screen.findByText("No atlas grid information available");
   });
+
+  it("should display message if no valid data is returned", async () => {
+    renderWithRoute(<Atlas groupId='1' selectedGridSquare={1} />, () => null);
+
+    await screen.findByText("No atlas grid information available");
+  });
 });
