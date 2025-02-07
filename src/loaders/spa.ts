@@ -82,16 +82,21 @@ const getSpaData = async (groupId: string, propId: string, sessionId: string) =>
   };
 
   if (response.status === 200 && response.data.items) {
-    const [allowReprocessingResponse, atlasResponse] = await Promise.all([
+    const [allowReprocessingResponse, atlasResponse, gridSquaresResponse] = await Promise.all([
       client.safeGet(`proposals/${propId}/sessions/${sessionId}/reprocessingEnabled`),
       client.safeGet(`dataGroups/${groupId}/atlas`),
+      client.safeGet(`dataGroups/${groupId}/grid-squares?limit=1`),
     ]);
 
     if (allowReprocessingResponse.status === 200) {
       returnData.allowReprocessing = allowReprocessingResponse.data.allowReprocessing;
     }
 
-    if (atlasResponse.status === 200) {
+    if (
+      atlasResponse.status === 200 &&
+      gridSquaresResponse.status === 200 &&
+      gridSquaresResponse.data.items.length > 0
+    ) {
       returnData.hasAtlas = true;
     }
 
