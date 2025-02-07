@@ -407,6 +407,21 @@ describe("SPA Data", () => {
     expect(data.hasAtlas).toEqual(false);
   });
 
+  it("should set 'hasAtlas' to false if backend returns no grid square information", async () => {
+    server.use(
+      http.get(
+        "http://localhost/dataGroups/:dcgId/grid-squares",
+        () => HttpResponse.json({}, { status: 404 }),
+        {
+          once: true,
+        }
+      )
+    );
+
+    const data = await spaLoader(queryClient)({ groupId: "1" });
+    expect(data.hasAtlas).toEqual(false);
+  });
+
   it("should set 'hasAtlas' to true if backend returns atlas", async () => {
     const data = await spaLoader(queryClient)({ groupId: "1" });
     expect(data.hasAtlas).toEqual(true);

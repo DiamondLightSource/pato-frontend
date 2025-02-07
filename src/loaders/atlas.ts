@@ -8,23 +8,28 @@ export interface AtlasResponse {
   atlas: components["schemas"]["Atlas"];
 }
 
-const getAtlasData = async (groupId: string) => {
+const getAtlasData = async (groupId: string, searchParams: URLSearchParams) => {
   const [atlas, gridSquare] = await Promise.all([
     client.safeGet(`dataGroups/${groupId}/atlas`),
-    client.safeGet(`dataGroups/${groupId}/grid-squares?limit=3000`),
+    client.safeGet(`dataGroups/${groupId}/grid-squares?${searchParams}&limit=3000`),
   ]);
 
   return { gridSquares: gridSquare.data.items, atlas: atlas.data };
 };
 
-const queryBuilder = (groupId: string) => ({
-  queryKey: ["atlas", groupId],
-  queryFn: () => getAtlasData(groupId),
-  staleTime: 60000,
-});
+const queryBuilder = (groupId: string, request: Request) => {
+  const urlObj = new URL(request.url);
 
-export const atlasLoader = (queryClient: QueryClient) => async (params: Params) => {
-  const query = queryBuilder(params.groupId!);
-  return ((await queryClient.getQueryData(query.queryKey)) ??
-    (await queryClient.fetchQuery(query))) as AtlasResponse;
+  return {
+    queryKey: ["atlas", groupId, urlObj.searchParams.toString()],
+    queryFn: () => getAtlasData(groupId, urlObj.searchParams),
+    staleTime: 60000,
+  };
 };
+
+export const atlasLoader =
+  (queryClient: QueryClient) => async (request: Request, params: Params) => {
+    const query = queryBuilder(params.groupId!, request);
+    return ((await queryClient.getQueryData(query.queryKey)) ??
+      (await queryClient.fetchQuery(query))) as AtlasResponse;
+  };

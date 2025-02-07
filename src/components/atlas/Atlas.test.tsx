@@ -3,7 +3,9 @@ import { fireEvent, screen } from "@testing-library/react";
 import { Atlas } from "components/atlas/Atlas";
 
 const atlasItems = {
-  gridSquares: [{ x: 1, y: 1, width: 1, height: 1, gridSquareId: 1, angle: 1 }],
+  gridSquares: [
+    { x: 1, y: 1, width: 1, height: 1, gridSquareId: 1, angle: 1, image: "test/image.jpg" },
+  ],
 };
 
 describe("Atlas", () => {
@@ -32,5 +34,19 @@ describe("Atlas", () => {
     renderWithRoute(<Atlas groupId='1' selectedGridSquare={1} />, () => ({ gridSquares: [] }));
 
     await screen.findByText("No atlas grid information available");
+  });
+
+  it("should display message if no valid data is returned", async () => {
+    renderWithRoute(<Atlas groupId='1' />, () => null);
+
+    await screen.findByText("No atlas grid information available");
+  });
+
+  it("should show uncollected squares in red", async () => {
+    renderWithRoute(<Atlas groupId='1' />, () => ({
+      gridSquares: [{ x: 2, y: 1, width: 1, height: 1, gridSquareId: 2, angle: 1, image: null }],
+    }));
+
+    expect(await screen.findByTestId("square-0")).toHaveAttribute("fill", "red");
   });
 });

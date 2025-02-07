@@ -3,6 +3,18 @@ Changelog
 ==========
 
 ++++++++++
+v1.17.0 (07/02/2025)
+++++++++++
+
+**Added**
+
+- User can now display uncollected grid squares in atlas
+
+**Fixed**
+
+- Fix uncaught error on null/empty grid squares for valid atlases
+
+++++++++++
 v1.16.0 (30/01/2025)
 ++++++++++
 

@@ -149,7 +149,7 @@ const router = createBrowserRouter([
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/atlas",
         element: <AtlasPage />,
-        loader: ({ params }) => atlasLoader(queryClient)(params),
+        loader: ({ request, params }) => atlasLoader(queryClient)(request, params),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/",

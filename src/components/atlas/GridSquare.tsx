@@ -61,9 +61,16 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
       if (gridSquareId === null || foilHole.foilHoleId === null) {
         return;
       }
-      setSearchParams({
-        gridSquare: gridSquareId.toString(),
-        foilHole: foilHole.foilHoleId.toString(),
+
+      /* 
+      Search params are set like this so as not to overwrite hideUncollected. 
+      See the example in the React Router docs:
+      https://api.reactrouter.com/v7/types/react_router.SetURLSearchParams.html
+      */
+      setSearchParams((prev) => {
+        prev.set("gridSquare", gridSquareId.toString());
+        prev.set("foilHole", foilHole.foilHoleId.toString());
+        return prev;
       });
     },
     [gridSquareId, setSearchParams]

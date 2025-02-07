@@ -2366,6 +2366,7 @@ export interface components {
       height: number;
       width: number;
       angle: number;
+      image?: string;
     };
 
     /** Atlas */

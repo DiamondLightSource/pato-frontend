@@ -1,4 +1,4 @@
-import { Divider, Heading, HStack, VStack } from "@chakra-ui/react";
+import { Checkbox, Divider, Heading, HStack, Spacer, VStack } from "@chakra-ui/react";
 import { Atlas } from "components/atlas/Atlas";
 import { GridSquare } from "components/atlas/GridSquare";
 import { useCallback, useMemo } from "react";
@@ -21,14 +21,39 @@ const AtlasPage = () => {
 
   const handleGridSquareClicked = useCallback(
     (gridSquare: components["schemas"]["GridSquare"]) => {
-      setSearchParams((prev) => ({ ...prev, gridSquare: gridSquare.gridSquareId }));
+      /* 
+      Search params are set like this so as not to overwrite hideUncollected. 
+      See the example in the React Router docs:
+      https://api.reactrouter.com/v7/types/react_router.SetURLSearchParams.html
+      */
+      setSearchParams((prev) => {
+        prev.set("gridSquare", gridSquare.gridSquareId.toString());
+        return prev;
+      });
     },
     [setSearchParams]
   );
 
+  const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchParams((prev) => {
+      prev.set("hideUncollected", e.target.checked.toString());
+      return prev;
+    });
+  };
+
   return (
     <VStack alignItems='start'>
-      <Heading>Atlas</Heading>
+      <HStack w='100%'>
+        <Heading>Atlas</Heading>
+        <Spacer />
+        <Checkbox
+          defaultChecked={searchParams.get("hideUncollected") === "true"}
+          onChange={handleCheck}
+          size='lg'
+        >
+          Hide uncollected grid squares
+        </Checkbox>
+      </HStack>
       <Divider />
       <HStack w='100%' h='100%' alignItems='start' flexWrap='wrap'>
         <Atlas
