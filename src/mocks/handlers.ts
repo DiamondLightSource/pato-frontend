@@ -414,7 +414,9 @@ export const handlers = [
   http.get("http://localhost/dataGroups/:dcgId/atlas", () => HttpResponse.json({ atlasId: 1 })),
 
   http.get("http://localhost/dataGroups/:dcgId/grid-squares", () =>
-    HttpResponse.json({ items: [{ x: 1, y: 1, width: 1, height: 1, gridSquareId: 1 }] })
+    HttpResponse.json({
+      items: [{ x: 1, y: 1, width: 1, height: 1, gridSquareId: 1, image: "image.jpg" }],
+    })
   ),
 
   http.get("http://localhost/foil-holes/:foilHoleId/movies", () =>
