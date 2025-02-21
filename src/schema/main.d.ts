@@ -2383,6 +2383,7 @@ export interface components {
       diameter: number;
       x: number;
       y: number;
+      movieCount?: number;
     };
   };
   responses: never;
