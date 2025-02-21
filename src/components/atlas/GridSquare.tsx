@@ -74,7 +74,7 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
       }
 
       /* 
-      Search params are set like this so as not to overwrite hideUncollected. 
+      Search params are set like this so as not to overwrite hideSquares. 
       See the example in the React Router docs:
       https://api.reactrouter.com/v7/types/react_router.SetURLSearchParams.html
       */
@@ -100,22 +100,22 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
   ) => {
     const hideUncollectedHoles = searchParams.get("hideHoles") === "true";
     return foilHole.movieCount === 0
-    ? hideUncollectedHoles 
-      ? {
-        visibility: "hidden",
-      } 
-      : {
+      ? hideUncollectedHoles
+        ? {
+            visibility: "hidden",
+          }
+        : {
             stroke: "red",
             strokeOpacity: "0.4",
             fill: "red",
             fillOpacity: "0.2",
-      }
-    : {
-      role: "button",
-      stroke: "green",
-      fill: selectedFoilHole === foilHole.foilHoleId ? "blue" : "green",
-      fillOpacity: "0.4",
-      cursor: "pointer",
+          }
+      : {
+          role: "button",
+          stroke: "green",
+          fill: selectedFoilHole === foilHole.foilHoleId ? "blue" : "green",
+          fillOpacity: "0.4",
+          cursor: "pointer",
         };
   };
 
@@ -140,7 +140,7 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
           Hide uncollected foil holes
         </Checkbox>
       </HStack>
-     
+
       <Divider />
       {gridSquareId === null ? (
         <Heading w='100%' variant='notFound' size='md' h='512px' alignContent='center'>
