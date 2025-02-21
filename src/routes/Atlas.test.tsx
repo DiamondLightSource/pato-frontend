@@ -33,7 +33,7 @@ describe("Atlas", () => {
   it("should be unchecked by default", async () => {
     renderWithRoute(<AtlasPage />, () => ({ gridSquares: [] }));
 
-    expect(await screen.findByRole("checkbox")).not.toBeChecked();
+    expect(await screen.findByLabelText("Hide uncollected grid squares")).not.toBeChecked();
   });
 
   it("should should update search params when checked", async () => {
@@ -41,7 +41,7 @@ describe("Atlas", () => {
       "?hideUncollected=true",
     ]);
 
-    const checkbox = await screen.findByRole("checkbox");
+    const checkbox = await screen.findByLabelText("Hide uncollected grid squares");
 
     fireEvent.click(checkbox);
     await waitFor(() => expect(router.state.location.search).toBe("?hideUncollected=true"));
