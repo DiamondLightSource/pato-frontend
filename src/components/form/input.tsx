@@ -35,7 +35,7 @@ const FormItem = ({ unit, label, children, helperText, error, ...props }: FormIt
   <FormControl isInvalid={!!error} {...props}>
     <FormLabel marginBottom={0}>
       <HStack>
-        <Text>{label}</Text>
+        <Text fontWeight='600'>{label}</Text>
         {unit && (
           <Text fontSize={12} color='diamond.300'>
             ({unit})
@@ -45,8 +45,12 @@ const FormItem = ({ unit, label, children, helperText, error, ...props }: FormIt
       </HStack>
     </FormLabel>
     <FormErrorMessage fontWeight='600'>{error && error.message}</FormErrorMessage>
+    {helperText && (
+      <FormHelperText mt='0' fontSize='sm'>
+        {helperText}
+      </FormHelperText>
+    )}
     {children}
-    {helperText && <FormHelperText fontSize='sm'>{helperText}</FormHelperText>}
   </FormControl>
 );
 
