@@ -158,21 +158,21 @@ const Tomogram = ({
                 <Divider />
                 <Grid
                   py={2}
-                  templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}
+                  templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
                   gap={2}
                 >
-                  <GridItem h='20vh' minH='300px' colSpan={{ base: 2, md: 1 }}>
+                  <GridItem h='20vh' minH='300px' colSpan={{ base: 1, md: 1 }}>
                     <InfoGroup info={data.tomogram.info} />
                   </GridItem>
-                  <GridItem colSpan={{ base: 2, md: 1 }} h='20vh' minH='300px'>
+                  <GridItem colSpan={{ base: 2, md: 2 }} h='20vh' minH='300px'>
                     <Card h='100%'>
                       <CardHeader>
                         <HStack>
                           <Heading size='sm'>Central Slice</Heading>
                           <Spacer />
-                          <Select size='sm' w='150px' defaultValue={selectedTomogram} onChange={handleTomogramSelect}>
+                          <Select h='25px' w='150px'size='sm' defaultValue={selectedTomogram} onChange={handleTomogramSelect}>
                             <option value='picked'>Picked</option>
-                            <option value='segmented'>Segemented</option>
+                            <option value='segmented'>Segmented</option>
                           </Select>
                           <Button
                             h='25px'
@@ -204,7 +204,7 @@ const Tomogram = ({
                       </CardBody>
                     </Card>
                   </GridItem>
-                  <GridItem colSpan={{ base: 2, md: 1 }} h='20vh' minH='300px'>
+                  <GridItem colSpan={{ base: 1, md: 1 }} h='20vh' minH='300px'>
                     <ImageCard src={data.xyProj} title='XY Projection' />
                   </GridItem>
                   <GridItem colSpan={{ base: 2, md: 1 }} minW='100%' h='22vh' minH='200px'>
@@ -212,7 +212,7 @@ const Tomogram = ({
                       <ScatterPlot data={data.shiftPlot} />
                     </PlotContainer>
                   </GridItem>
-                  <GridItem colSpan={2} h='22vh' minH='200px'>
+                  <GridItem colSpan={{ base: 2, md: 3}} h='22vh' minH='200px'>
                     <ImageCard src={data.xzProj} title='XZ Projection' />
                   </GridItem>
                 </Grid>
