@@ -16,10 +16,11 @@ import {
   CardHeader,
   CardBody,
   Text,
+  Select,
 } from "@chakra-ui/react";
 import { PlotContainer } from "components/visualisation/plotContainer";
 import { Motion } from "components/motion/motion";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { client, prependApiUrl } from "utils/api/client";
 import {
   TomogramData,
@@ -119,6 +120,7 @@ const Tomogram = ({
     queryKey: ["tomogramAutoProc", procJob.processingJobId],
     queryFn: async () => await fetchTomogramData(tomogram),
   });
+  const [selectedTomogram, setSelectedTomogram] = useState<TomogramMovieTypes>('segmented');
 
   const handleOpenTomogram = useCallback(
     (type: TomogramMovieTypes) => {
@@ -126,6 +128,11 @@ const Tomogram = ({
     },
     [data, onTomogramOpened]
   );
+
+  const handleTomogramSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value as TomogramMovieTypes
+    setSelectedTomogram(value);
+  };
 
   return (
     <AccordionItem isDisabled={false}>
@@ -163,12 +170,16 @@ const Tomogram = ({
                         <HStack>
                           <Heading size='sm'>Central Slice</Heading>
                           <Spacer />
+                          <Select size='sm' w='150px' defaultValue={selectedTomogram} onChange={handleTomogramSelect}>
+                            <option value='picked'>Picked</option>
+                            <option value='segmented'>Segemented</option>
+                          </Select>
                           <Button
                             h='25px'
                             size='sm'
-                            onClick={() => handleOpenTomogram("segmented")}
+                            onClick={() => handleOpenTomogram(selectedTomogram)}
                           >
-                            View Segmented
+                            View {capitalise(selectedTomogram)}
                             <Spacer />
                             <Icon ml='10px' as={MdOpenInNew}></Icon>
                           </Button>
@@ -186,7 +197,7 @@ const Tomogram = ({
                           h='100%'
                           divider={<Divider orientation='vertical' />}
                         >
-                          <TomogramThumbnail baseUrl={data.centralSlice} movieType='segmented' />
+                          <TomogramThumbnail baseUrl={data.centralSlice} movieType={selectedTomogram} />
                           <TomogramThumbnail baseUrl={data.centralSlice} movieType='denoised' />
                           <TomogramThumbnail baseUrl={data.centralSlice} movieType={null} />
                         </HStack>
