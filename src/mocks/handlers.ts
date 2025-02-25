@@ -423,8 +423,13 @@ export const handlers = [
     HttpResponse.json({ items: [{ movieNumber: 500, movieId: 500 }] })
   ),
 
-  http.get("http://localhost/grid-squares/:foilHoleId/foil-holes", () =>
-    HttpResponse.json({ items: [{ foilHoleId: 500, x: 1, y: 1, diameter: 5 }] })
+  http.get("http://localhost/grid-squares/:gridSquareId/foil-holes", () =>
+    HttpResponse.json({
+      items: [
+        { foilHoleId: 500, x: 1, y: 1, diameter: 5, movieCount: 1 },
+        { foilHoleId: 501, x: 2, y: 2, diameter: 5, movieCount: 0 },
+      ],
+    })
   ),
 
   http.get("http://localhost/movies/:movieId", () =>

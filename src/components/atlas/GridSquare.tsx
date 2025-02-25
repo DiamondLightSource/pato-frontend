@@ -1,4 +1,15 @@
-import { Divider, Heading, Skeleton, VStack, Link, Image, Grid } from "@chakra-ui/react";
+import {
+  Divider,
+  Heading,
+  Skeleton,
+  VStack,
+  Link,
+  Image,
+  Grid,
+  HStack,
+  Spacer,
+  Checkbox,
+} from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -58,12 +69,12 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
 
   const handleFoilHoleClicked = useCallback(
     (foilHole: FoilHole) => {
-      if (gridSquareId === null || foilHole.foilHoleId === null) {
+      if (gridSquareId === null || foilHole.foilHoleId === null || foilHole.movieCount === 0) {
         return;
       }
 
       /* 
-      Search params are set like this so as not to overwrite hideUncollected. 
+      Search params are set like this so as not to overwrite hideSquares. 
       See the example in the React Router docs:
       https://api.reactrouter.com/v7/types/react_router.SetURLSearchParams.html
       */
@@ -76,6 +87,38 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
     [gridSquareId, setSearchParams]
   );
 
+  const handleFoilHide = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchParams((prev) => {
+      prev.set("hideHoles", e.target.checked.toString());
+      return prev;
+    });
+  };
+
+  const sortHole = (
+    foilHole: components["schemas"]["FoilHole"],
+    selectedFoilHole: number | null
+  ) => {
+    const hideUncollectedHoles = searchParams.get("hideHoles") === "true";
+    return foilHole.movieCount === 0
+      ? hideUncollectedHoles
+        ? {
+            visibility: "hidden",
+          }
+        : {
+            stroke: "red",
+            strokeOpacity: "0.4",
+            fill: "red",
+            fillOpacity: "0.2",
+          }
+      : {
+          role: "button",
+          stroke: "green",
+          fill: selectedFoilHole === foilHole.foilHoleId ? "blue" : "green",
+          fillOpacity: "0.4",
+          cursor: "pointer",
+        };
+  };
+
   return (
     <VStack
       display='flex'
@@ -86,7 +129,18 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
       border='1px solid'
       borderColor='diamond.900'
     >
-      <Heading>Grid Square</Heading>
+      <HStack w='100%'>
+        <Heading>Grid Square</Heading>
+        <Spacer />
+        <Checkbox
+          defaultChecked={searchParams.get("hideHoles") === "true"}
+          onChange={handleFoilHide}
+          size='lg'
+        >
+          Hide uncollected foil holes
+        </Checkbox>
+      </HStack>
+
       <Divider />
       {gridSquareId === null ? (
         <Heading w='100%' variant='notFound' size='md' h='512px' alignContent='center'>
@@ -104,16 +158,13 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
           <svg viewBox={"0 0 512 512"}>
             {data.map((foilHole: components["schemas"]["FoilHole"], i) => (
               <circle
-                role='button'
                 key={i}
+                data-testid={`foilHole-${i}`}
                 cx={foilHole.x}
                 cy={foilHole.y}
                 r={foilHole.diameter / 2}
-                stroke='green'
-                fill={foilHoleId === foilHole.foilHoleId ? "blue" : "green"}
-                fillOpacity='0.4'
-                cursor='pointer'
                 onClick={() => handleFoilHoleClicked(foilHole)}
+                {...sortHole(foilHole, foilHoleId)}
               />
             ))}
           </svg>
