@@ -101,7 +101,7 @@ const DataCollectionCreationForm = (props: Omit<ModalProps, "children">) => {
           <ModalCloseButton />
         </ModalHeader>
         <Divider />
-        <ModalBody p={0}>
+        <ModalBody p='1em'>
           <Form onSubmit={onSubmit} onClose={props.onClose}>
             <FormItem label='Movie File Directory'>
               <Input size='sm' defaultValue='raw' {...register("fileDirectory", { required })} />
@@ -153,7 +153,7 @@ const SessionPage = () => {
             <StatNumber>{data.session.endDate}</StatNumber>
           </Stat>
           <Stat borderBottom='3px solid' borderColor='diamond.700'>
-            <StatLabel>Beamline</StatLabel>
+            <StatLabel>Microscope</StatLabel>
             <StatNumber>{data.session.microscopeName}</StatNumber>
           </Stat>
         </HStack>

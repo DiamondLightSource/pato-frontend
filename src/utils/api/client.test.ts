@@ -24,14 +24,14 @@ describe("Client Main Class", () => {
     const originalLocation = window.location;
 
     Object.defineProperty(window, "location", {
-      value: { ...originalLocation, assign: vi.fn() },
+      value: { ...originalLocation, replace: vi.fn() },
       configurable: true,
     });
 
     await client.safeGet("unauthorisedEndpoint");
 
     await waitFor(() =>
-      expect(window.location.assign).toBeCalledWith(
+      expect(window.location.replace).toBeCalledWith(
         "http://localhost/auth/authorise?redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F&responseType=code"
       )
     );

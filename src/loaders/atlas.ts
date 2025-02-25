@@ -21,7 +21,7 @@ const queryBuilder = (groupId: string, request: Request) => {
   const urlObj = new URL(request.url);
 
   return {
-    queryKey: ["atlas", groupId, urlObj.searchParams.toString()],
+    queryKey: ["atlas", groupId, urlObj.searchParams.get("hideSquares")],
     queryFn: () => getAtlasData(groupId, urlObj.searchParams),
     staleTime: 60000,
   };

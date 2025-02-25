@@ -1,8 +1,12 @@
 import { AuthState } from "@diamondlightsource/ui-components";
-import { client } from "utils/api/client";
+import { client, redirectToAuth } from "utils/api/client";
 
-const getUser = async () => {
-  let user: AuthState | null = null;
+export interface UserWithEmail extends AuthState {
+  email?: string;
+}
+
+const getUser = async (redirectOnFail: boolean = false) => {
+  let user: UserWithEmail | null = null;
 
   const newUrl = new URL(window.location.href);
   const code = newUrl.searchParams.get("code");
@@ -16,9 +20,17 @@ const getUser = async () => {
 
   try {
     const response = await client.authGet("user");
-    return response.status === 200
-      ? { fedid: response.data.fedid, name: response.data.givenName }
-      : null;
+    if (response.status === 200) {
+      return {
+        fedid: response.data.fedid,
+        name: response.data.givenName,
+        email: response.data.email,
+      };
+    } else if (!redirectOnFail) {
+      return null;
+    }
+    redirectToAuth();
+    return {};
   } catch (NetworkError) {
     return user;
   }

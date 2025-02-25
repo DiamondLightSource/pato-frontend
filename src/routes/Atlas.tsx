@@ -22,7 +22,7 @@ const AtlasPage = () => {
   const handleGridSquareClicked = useCallback(
     (gridSquare: components["schemas"]["GridSquare"]) => {
       /* 
-      Search params are set like this so as not to overwrite hideUncollected. 
+      Search params are set like this so as not to overwrite hideSquares. 
       See the example in the React Router docs:
       https://api.reactrouter.com/v7/types/react_router.SetURLSearchParams.html
       */
@@ -36,7 +36,7 @@ const AtlasPage = () => {
 
   const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchParams((prev) => {
-      prev.set("hideUncollected", e.target.checked.toString());
+      prev.set("hideSquares", e.target.checked.toString());
       return prev;
     });
   };
@@ -47,7 +47,7 @@ const AtlasPage = () => {
         <Heading>Atlas</Heading>
         <Spacer />
         <Checkbox
-          defaultChecked={searchParams.get("hideUncollected") === "true"}
+          defaultChecked={searchParams.get("hideSquares") === "true"}
           onChange={handleCheck}
           size='lg'
         >

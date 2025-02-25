@@ -1,5 +1,5 @@
-import { renderWithProviders } from "utils/test-utils";
-import { fireEvent, screen } from "@testing-library/react";
+import { renderWithProviders, renderWithRoute } from "utils/test-utils";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { GridSquare } from "components/atlas/GridSquare";
 import { server } from "mocks/server";
 import { http, HttpResponse } from "msw";
@@ -66,5 +66,30 @@ describe("Atlas", () => {
     fireEvent.click(gridSquare);
 
     await screen.findByText("No movies available");
+  });
+
+  it("should toggle visibility of uncollected foil holes", async () => {
+    renderWithProviders(<GridSquare gridSquareId={1} />);
+
+    expect(await screen.findByTestId("foilHole-1")).toHaveAttribute("fill", "red");
+
+    const checkbox = await screen.findByLabelText("Hide uncollected foil holes");
+    fireEvent.click(checkbox);
+    expect(checkbox).toBeChecked();
+
+    expect(await screen.findByTestId("foilHole-1")).toHaveAttribute("visibility", "hidden");
+  });
+
+  it("should toggle the search params", async () => {
+    const { router } = renderWithRoute(<GridSquare gridSquareId={1} />, () => ({ foilHoles: [] }), [
+      "?hideHoles=true",
+    ]);
+
+    const checkbox = await screen.findByLabelText("Hide uncollected foil holes");
+
+    fireEvent.click(checkbox);
+    await waitFor(() => expect(router.state.location.search).toBe("?hideHoles=false"));
+    fireEvent.click(checkbox);
+    await waitFor(() => expect(router.state.location.search).toBe("?hideHoles=true"));
   });
 });

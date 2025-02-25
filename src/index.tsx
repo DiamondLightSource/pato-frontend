@@ -24,6 +24,7 @@ import { SessionResponse } from "schema/interfaces";
 import { UploadModelPage } from "routes/UploadModel";
 import AtlasPage from "routes/Atlas";
 import { atlasLoader } from "loaders/atlas";
+import AlertPage from "routes/Alert";
 
 const Calendar = React.lazy(() => import("routes/Calendar"));
 const About = React.lazy(() => import("routes/About"));
@@ -43,7 +44,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <Root />,
     errorElement: <Error />,
-    loader: getUser,
+    loader: () => getUser(false),
     shouldRevalidate: () => false,
     children: [
       {
@@ -131,6 +132,11 @@ const router = createBrowserRouter([
         ),
         loader: ({ request, params }) =>
           listingLoader(queryClient)(request, params, "dataCollections"),
+      },
+      {
+        path: "/proposals/:propId/sessions/:visitId/groups/:groupId/alerts",
+        element: <AlertPage />,
+        loader: () => getUser(true),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/tomograms/",

@@ -30,6 +30,13 @@ const getPrefix = (prefix: string = "/api/") => {
   return prefix;
 };
 
+export const redirectToAuth = () => {
+  const url = encodeURIComponent(window.location.href);
+  window.location.replace(
+    `${getPrefix(process.env.REACT_APP_AUTH_ENDPOINT)}authorise?redirect_uri=${url}&responseType=code`
+  );
+};
+
 export const client = async (
   endpoint: string,
   customConfig: Record<any, any> = {},
@@ -87,12 +94,7 @@ client.safeGet = async (endpoint: string, customConfig = {}) => {
   const resp = await client.get(endpoint, customConfig);
 
   if (resp.status === 401 && !window.location.href.includes("code=")) {
-    const url = encodeURIComponent(window.location.href);
-    window.location.assign(
-      `${getPrefix(
-        process.env.REACT_APP_AUTH_ENDPOINT
-      )}authorise?redirect_uri=${url}&responseType=code`
-    );
+    redirectToAuth();
   }
 
   return resp;

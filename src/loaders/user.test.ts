@@ -47,4 +47,17 @@ describe("User Data", () => {
     await getUser();
     expect(window.location.replace).toBeCalledWith("http://localhost/?otherVal=1234");
   });
+
+  it("should redirect if redirectOnFail is set", async () => {
+    server.use(
+      http.get("http://localhost/auth/user", () => HttpResponse.json({}, { status: 401 }), {
+        once: true,
+      })
+    );
+
+    await getUser(true);
+    expect(window.location.replace).toBeCalledWith(
+      "http://localhost/auth/authorise?redirect_uri=http%3A%2F%2Flocalhost%2F%3Fcode%3Dabc1234%26otherVal%3D1234&responseType=code"
+    );
+  });
 });

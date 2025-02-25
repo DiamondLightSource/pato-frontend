@@ -3,12 +3,22 @@ Changelog
 ==========
 
 ++++++++++
+v1.18.0 (07/02/2025)
+++++++++++
+
+**Added**
+
+- User can toggle between displaying/hiding foil holes with no movies @gmg29649
+- Foil holes with no movies get displayed in red @gmg29649
+- Email alerts registration page
+
+++++++++++
 v1.17.0 (07/02/2025)
 ++++++++++
 
 **Added**
 
-- User can now display uncollected grid squares in atlas
+- User can now display uncollected grid squares in atlas @gmg29649
 
 **Fixed**
 
