@@ -27,7 +27,7 @@ import {
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { useLoaderData, useLocation, useNavigate, useParams, Link } from "react-router-dom";
 import { SPA } from "components/spa/main";
-import { MdFolder, MdOutlineGrain } from "react-icons/md";
+import { MdFolder, MdNotifications, MdOutlineGrain } from "react-icons/md";
 import { RelionReprocessing } from "components/spa/reprocessing";
 import { MdRedo } from "react-icons/md";
 import React from "react";
@@ -76,6 +76,14 @@ const SpaPage = () => {
           <HStack w='100%'>
             <CollectionTitle type='SPA' colorScheme='orange' />
             <Spacer />
+            <Button
+              as={Link}
+              to={{ pathname: "../alerts" }}
+              relative='path'
+              leftIcon={<MdNotifications />}
+            >
+              Set Up Alerts
+            </Button>
             <Button
               leftIcon={<MdRedo />}
               isDisabled={!loaderData.allowReprocessing}

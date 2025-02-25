@@ -428,4 +428,6 @@ export const handlers = [
   http.get("http://localhost/movies/:movieId", () =>
     HttpResponse.json({ movieId: 1, foilHoleId: 2, gridSquareId: 3 })
   ),
+
+  http.post("http://localhost/dataGroups/:groupId/alerts", () => HttpResponse.json({})),
 ];
