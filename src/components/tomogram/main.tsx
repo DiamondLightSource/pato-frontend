@@ -120,7 +120,7 @@ const Tomogram = ({
     queryKey: ["tomogramAutoProc", procJob.processingJobId],
     queryFn: async () => await fetchTomogramData(tomogram),
   });
-  const [selectedTomogram, setSelectedTomogram] = useState<TomogramMovieTypes>('segmented');
+  const [selectedTomogram, setSelectedTomogram] = useState<TomogramMovieTypes>("segmented");
 
   const handleOpenTomogram = useCallback(
     (type: TomogramMovieTypes) => {
@@ -130,7 +130,7 @@ const Tomogram = ({
   );
 
   const handleTomogramSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value as TomogramMovieTypes
+    const value = e.target.value as TomogramMovieTypes;
     setSelectedTomogram(value);
   };
 
@@ -170,12 +170,20 @@ const Tomogram = ({
                         <HStack>
                           <Heading size='sm'>Central Slice</Heading>
                           <Spacer />
-                          <Select h='25px' w='150px'size='sm' defaultValue={selectedTomogram} onChange={handleTomogramSelect}>
-                            <option value='picked'>Picked</option>
+                          <Select
+                            h='25px'
+                            w='175px'
+                            size='sm'
+                            defaultValue='segmented'
+                            onChange={handleTomogramSelect}
+                            rounded='md'
+                          >
                             <option value='segmented'>Segmented</option>
+                            <option value='picked'>Picked</option>
                           </Select>
                           <Button
                             h='25px'
+                            w='150px'
                             size='sm'
                             onClick={() => handleOpenTomogram(selectedTomogram)}
                           >
@@ -197,7 +205,10 @@ const Tomogram = ({
                           h='100%'
                           divider={<Divider orientation='vertical' />}
                         >
-                          <TomogramThumbnail baseUrl={data.centralSlice} movieType={selectedTomogram} />
+                          <TomogramThumbnail
+                            baseUrl={data.centralSlice}
+                            movieType={selectedTomogram}
+                          />
                           <TomogramThumbnail baseUrl={data.centralSlice} movieType='denoised' />
                           <TomogramThumbnail baseUrl={data.centralSlice} movieType={null} />
                         </HStack>
@@ -212,7 +223,7 @@ const Tomogram = ({
                       <ScatterPlot data={data.shiftPlot} />
                     </PlotContainer>
                   </GridItem>
-                  <GridItem colSpan={{ base: 2, md: 3}} h='22vh' minH='200px'>
+                  <GridItem colSpan={{ base: 2, md: 3 }} h='22vh' minH='200px'>
                     <ImageCard src={data.xzProj} title='XZ Projection' />
                   </GridItem>
                 </Grid>
