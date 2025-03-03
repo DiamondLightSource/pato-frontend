@@ -85,6 +85,34 @@ describe("Tomogram", () => {
     await waitFor(() => expect(openCallback).toHaveBeenCalledWith(1, "denoised"));
   });
 
+  it("should select the tomogram to display", async () => {
+    renderWithAccordion(
+      <Tomogram
+        active={true}
+        autoProc={{ autoProcProgramId: 1 }}
+        procJob={basicProcJob}
+        tomogram={basicTomogram}
+        status={"Success"}
+        onTomogramOpened={() => {}}
+      />
+    );
+
+    fireEvent.click(screen.getByLabelText("Show Content"));
+
+    const selectBox = await screen.findByRole("combobox");
+
+    expect(selectBox).toBeInTheDocument();
+    expect(screen.getAllByRole("option")).toHaveLength(2);
+
+    expect(screen.getByText("Segmented", { selector: "p" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "View Segmented" })).toBeInTheDocument();
+
+    fireEvent.change(selectBox, { target: { value: "picked" } });
+
+    expect(screen.getByText("Picked", { selector: "p" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "View Picked" })).toBeInTheDocument();
+  });
+
   it("should render if autoprocessing program is null", async () => {
     renderWithAccordion(
       <Tomogram
