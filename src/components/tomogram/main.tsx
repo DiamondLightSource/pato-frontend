@@ -17,6 +17,7 @@ import {
   CardBody,
   Text,
   Select,
+  Tooltip,
 } from "@chakra-ui/react";
 import { PlotContainer } from "components/visualisation/plotContainer";
 import { Motion } from "components/motion/motion";
@@ -170,17 +171,20 @@ const Tomogram = ({
                         <HStack>
                           <Heading size='sm'>Central Slice</Heading>
                           <Spacer />
-                          <Select
-                            h='25px'
-                            w='175px'
-                            size='sm'
-                            defaultValue='segmented'
-                            onChange={handleTomogramSelect}
-                            rounded='md'
-                          >
-                            <option value='segmented'>Segmented</option>
-                            <option value='picked'>Picked</option>
-                          </Select>
+                          <Tooltip label='Select tomogram to display' placement='top'>
+                            <Select
+                              h='25px'
+                              w='175px'
+                              size='sm'
+                              defaultValue='segmented'
+                              onChange={handleTomogramSelect}
+                              rounded='md'
+                              cursor='pointer'
+                            >
+                              <option value='segmented'>Segmented</option>
+                              <option value='picked'>Picked</option>
+                            </Select>
+                          </Tooltip>
                           <Button
                             h='25px'
                             w='150px'
