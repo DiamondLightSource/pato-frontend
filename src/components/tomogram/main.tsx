@@ -241,13 +241,13 @@ const Tomogram = ({
                           divider={<Divider orientation='vertical' />}
                         >
                           {isLargeScreen ? (
-                            <>
-                              <TomogramThumbnail baseUrl={data.centralSlice} movieType='picked' />
+                            [
+                              <TomogramThumbnail baseUrl={data.centralSlice} movieType='picked' />,
                               <TomogramThumbnail
                                 baseUrl={data.centralSlice}
                                 movieType='segmented'
-                              />
-                            </>
+                              />,
+                            ]
                           ) : (
                             <TomogramThumbnail
                               baseUrl={data.centralSlice}
