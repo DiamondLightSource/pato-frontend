@@ -436,5 +436,7 @@ export const handlers = [
     HttpResponse.json({ movieId: 1, foilHoleId: 2, gridSquareId: 3 })
   ),
 
+  http.post("http://localhost/feedback", () => HttpResponse.json({})),
+
   http.post("http://localhost/dataGroups/:groupId/alerts", () => HttpResponse.json({})),
 ];

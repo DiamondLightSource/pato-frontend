@@ -31,7 +31,9 @@ describe("Particle Picking", () => {
       http.get(
         "http://localhost/autoProc/:procId/particlePicker",
         () => HttpResponse.json({}, { status: 404 }),
-        { once: true }
+        {
+          once: true,
+        }
       )
     );
     renderWithProviders(<ParticlePicking autoProcId={3} page={12} total={150} />);
@@ -67,5 +69,23 @@ describe("Particle Picking", () => {
 
     await screen.findByText("7.4");
     screen.getByText("2.7");
+  });
+
+  it("should set graph domain min to 1 if calculated min/max is less than 1", async () => {
+    server.use(
+      http.get(
+        "http://localhost/movies/:movieId/iceThickness",
+        () => {
+          const dummy = { minimum: 3000, maximum: 10000, median: 5000, q1: 3, q3: 6 };
+          return HttpResponse.json({ current: dummy, avg: { ...dummy, stddev: 10000 } });
+        },
+        { once: true }
+      )
+    );
+
+    renderWithProviders(<ParticlePicking autoProcId={2} page={12} total={150} />);
+
+    const elements = await screen.findAllByText("1");
+    expect(elements).toHaveLength(3);
   });
 });
