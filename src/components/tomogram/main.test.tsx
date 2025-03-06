@@ -19,6 +19,16 @@ const basicTomogram = { tomogramId: 1, dataCollectionId: 1, volumeFile: "", stac
 describe("Tomogram", () => {
   beforeAll(() => {
     vi.spyOn(global, "scrollTo").mockImplementation(() => {});
+    window.matchMedia = vi.fn().mockImplementation((query) => ({
+      matches: true,
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
   });
   afterAll(() => {
     vi.restoreAllMocks();
@@ -83,6 +93,66 @@ describe("Tomogram", () => {
     fireEvent.click(await screen.findByRole("button", { name: "View Denoised" }));
 
     await waitFor(() => expect(openCallback).toHaveBeenCalledWith(1, "denoised"));
+  });
+
+  it("should show all tomograms on large screens", async () => {
+    renderWithAccordion(
+      <Tomogram
+        active={true}
+        autoProc={{ autoProcProgramId: 1 }}
+        procJob={basicProcJob}
+        tomogram={basicTomogram}
+        status={"Success"}
+        onTomogramOpened={() => {}}
+      />
+    );
+
+    fireEvent.click(screen.getByLabelText("Show Content"));
+
+    expect(await screen.findByText("Segmented")).toBeInTheDocument();
+    expect(await screen.findByText("Picked")).toBeInTheDocument();
+
+    expect(screen.getByRole("button", { name: "View Segmented" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "View Picked" })).toBeInTheDocument();
+  });
+
+  it("should show tomogram selector on small screens", async () => {
+    window.matchMedia = vi.fn().mockImplementation((query) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
+
+    renderWithAccordion(
+      <Tomogram
+        active={true}
+        autoProc={{ autoProcProgramId: 1 }}
+        procJob={basicProcJob}
+        tomogram={basicTomogram}
+        status={"Success"}
+        onTomogramOpened={() => {}}
+      />
+    );
+
+    fireEvent.click(screen.getByLabelText("Show Content"));
+
+    const selectBox = await screen.findByRole("combobox");
+
+    expect(selectBox).toBeInTheDocument();
+    expect(screen.getAllByRole("option")).toHaveLength(2);
+
+    expect(screen.getByText("Segmented", { selector: "p" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "View Segmented" })).toBeInTheDocument();
+
+    fireEvent.change(selectBox, { target: { value: "picked" } });
+
+    expect(screen.getByText("Picked", { selector: "p" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "View Picked" })).toBeInTheDocument();
   });
 
   it("should render if autoprocessing program is null", async () => {

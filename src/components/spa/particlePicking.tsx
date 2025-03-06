@@ -100,12 +100,15 @@ const fetchParticlePickingData = async (autoProcId: number, page: number) => {
         // 'Mean' as in the mean of all medians
         const mean = Math.round(fileData.data.avg.median / 1000);
 
+        const minDomain = mean - boundary > 1 ? mean - boundary : 1;
+        const maxDomain = mean + boundary > 1 ? mean + boundary : 1;
+
         data.iceThickness = {
           data: [
             convertToBoxPlot(fileData.data.current, "Current Image"),
             convertToBoxPlot(fileData.data.avg, "Average"),
           ],
-          domain: { min: mean - boundary, max: mean + boundary },
+          domain: { min: minDomain, max: maxDomain },
         };
       }
     }

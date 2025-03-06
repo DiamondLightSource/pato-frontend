@@ -62,4 +62,4 @@ export type SortTypes = NonNullable<
   >["sortBy"]
 >;
 
-export type TomogramMovieTypes = "denoised" | "segmented";
+export type TomogramMovieTypes = "denoised" | "segmented" | "picked";
