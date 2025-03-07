@@ -3,12 +3,24 @@ Changelog
 ==========
 
 ++++++++++
-v1.18.1 (07/03/2025)
+v1.19.1 (07/03/2025)
 ++++++++++
 
 **Changed**
 
 - Automatically redirect user to relevant data collection type
+
+++++++++++
+v1.19.0 (06/03/2025)
+++++++++++
+
+**Added**
+
+- Display picked tomograms
+
+**Fixed**
+
+- Set box plot domain to always positive, non-zero numbers
 
 ++++++++++
 v1.18.0 (07/02/2025)
