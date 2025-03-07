@@ -25,6 +25,7 @@ import { UploadModelPage } from "routes/UploadModel";
 import AtlasPage from "routes/Atlas";
 import { atlasLoader } from "loaders/atlas";
 import AlertPage from "routes/Alert";
+import { groupLoader } from "loaders/group";
 
 const Calendar = React.lazy(() => import("routes/Calendar"));
 const About = React.lazy(() => import("routes/About"));
@@ -159,7 +160,8 @@ const router = createBrowserRouter([
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/",
-        element: <Navigate to='..' relative='path' replace />,
+        loader: ({ params }) => groupLoader(params),
+        element: <></>,
       },
     ],
   },
@@ -169,7 +171,7 @@ root.render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <RouterProvider router={router} future={{v7_startTransition: true}}/>
         <ToastContainer />
         {process.env.NODE_ENV === "development" && <ReactQueryDevtools initialIsOpen={false} />}
       </QueryClientProvider>
