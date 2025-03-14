@@ -23,11 +23,12 @@ import {
   TabPanel,
   TabPanels,
   Button,
+  Link as ChakraLink,
 } from "@chakra-ui/react";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { useLoaderData, useLocation, useNavigate, useParams, Link } from "react-router-dom";
 import { SPA } from "components/spa/main";
-import { MdFolder, MdNotifications, MdOutlineGrain } from "react-icons/md";
+import { MdFolder, MdNotifications, MdOutlineGrain, MdOutlineInsertChart } from "react-icons/md";
 import { RelionReprocessing } from "components/spa/reprocessing";
 import { MdRedo } from "react-icons/md";
 import React from "react";
@@ -77,18 +78,16 @@ const SpaPage = () => {
             <CollectionTitle type='SPA' colorScheme='orange' />
             <Spacer />
             <Button
-              as={Link}
-              to={{ pathname: "../alerts" }}
-              relative='path'
-              leftIcon={<MdNotifications />}
+              as={ChakraLink}
+              href={`${process.env.REACT_APP_API_ENDPOINT}dataCollections/${loaderData.collection.dataCollectionId}/report`}
+              leftIcon={<MdOutlineInsertChart />}
             >
-              Set Up Alerts
+              Report
             </Button>
-            <Button
-              leftIcon={<MdRedo />}
-              isDisabled={!loaderData.allowReprocessing}
-              onClick={onOpen}
-            >
+            <Button as={Link} to={{ pathname: "../alerts" }} relative='path' leftIcon={<MdNotifications />}>
+              Alerts
+            </Button>
+            <Button leftIcon={<MdRedo />} isDisabled={!loaderData.allowReprocessing} onClick={onOpen}>
               Reprocessing
             </Button>
             <Button
@@ -98,14 +97,13 @@ const SpaPage = () => {
               relative='path'
               isDisabled={!loaderData.hasAtlas}
             >
-              View Atlas
+              Atlas
             </Button>
           </HStack>
           <HStack w='100%'>
             <Heading color='diamond.300' size='sm'>
-              Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data
-              collection group <Code>{params.groupId}</Code>, data collection{" "}
-              <Code>{loaderData.collection.dataCollectionId}</Code>
+              Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data collection group{" "}
+              <Code>{params.groupId}</Code>, data collection <Code>{loaderData.collection.dataCollectionId}</Code>
             </Heading>
             <Spacer />
             {loaderData.collection.imageDirectory && (
@@ -146,8 +144,8 @@ const SpaPage = () => {
                   No Single Particle Analysis Data Available
                 </Heading>
                 <Heading w='50%' pb={5} variant='notFoundSubtitle'>
-                  ...or you may not have permission to view data in this collection. If this was
-                  shared with you through a link, check with the person that sent it.
+                  ...or you may not have permission to view data in this collection. If this was shared with you through
+                  a link, check with the person that sent it.
                 </Heading>
               </VStack>
             )}

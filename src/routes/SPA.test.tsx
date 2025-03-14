@@ -51,7 +51,7 @@ describe("SPA", () => {
       { hash: "#statistics" },
     ]);
 
-    const viewAtlasButton = await screen.findByText("View Atlas");
+    const viewAtlasButton = await screen.findByText("Atlas");
     expect(viewAtlasButton).toHaveAttribute("disabled");
   });
 
@@ -60,7 +60,7 @@ describe("SPA", () => {
       { hash: "#statistics" },
     ]);
 
-    const viewAtlasButton = await screen.findByText("View Atlas");
+    const viewAtlasButton = await screen.findByText("Atlas");
     expect(viewAtlasButton).not.toHaveAttribute("disabled");
   });
 
