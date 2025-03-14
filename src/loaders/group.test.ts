@@ -16,20 +16,6 @@ describe("Group Loader Redirect", () => {
     ["Tomography", "./tomograms"],
     ["Single Particle", "./spa"],
     ["Not-Valid", "/proposals/cm1/sessions/1"],
-<<<<<<< HEAD
-  ])("should redirect to $redirect if experiment type is $experimentType", async (experimentType, redirect) => {
-    server.use(
-      http.get(
-        "http://localhost/dataGroups/:groupId",
-        () => HttpResponse.json({ experimentTypeName: experimentType }),
-        { once: true }
-      )
-    );
-
-    await groupLoader({ propId: "cm1", visitId: "1", groupId: "1" });
-    expect(replace).toBeCalledWith(redirect);
-  });
-=======
   ])(
     "should redirect to $redirect if experiment type is $experimentType",
     async (experimentType, redirect) => {
@@ -43,5 +29,4 @@ describe("Group Loader Redirect", () => {
       expect(replace).toBeCalledWith(redirect);
     }
   );
->>>>>>> a2cfd0e1fd1174303558841c532336da31d1a0af
 });
