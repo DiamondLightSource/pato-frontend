@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.20.0 (14/03/2025)
+++++++++++
+
+**Added**
+
+- Add link to PDF report of SPA data collection
+
+++++++++++
 v1.19.1 (07/03/2025)
 ++++++++++
 
