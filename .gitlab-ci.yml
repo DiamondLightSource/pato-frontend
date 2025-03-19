@@ -47,7 +47,7 @@ build-image:
   only:
     - tags
   script:
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile Dockerfile --destination $IMAGE_NAME --build-arg API_ENDPOINT=/api/ --build-arg AUTH_ENDPOINT=/auth/ --build-arg VERSION=$CI_COMMIT_TAG --build-arg SAMPLE_HANDLING_URL=$SAMPLE_HANDLING_URL --build-arg FEEDBACK_URL=$FEEDBACK_URL
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile Dockerfile --destination $IMAGE_NAME --build-arg VERSION=$CI_COMMIT_TAG
 
 check-for-vulns:
   stage: build
