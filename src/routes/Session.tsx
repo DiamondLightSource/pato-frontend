@@ -37,7 +37,7 @@ import { Form } from "components/form/form";
 import { FormItem, Options } from "components/form/input";
 import { useForm } from "react-hook-form";
 import { required } from "utils/validation";
-import { client } from "utils/api/client";
+import { client, prependApiUrl } from "utils/api/client";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface LoaderData {
@@ -198,8 +198,8 @@ const SessionPage = () => {
             </TwoLineLink>
             <TwoLineLink
               title='Submit Feedback'
-              href={process.env.REACT_APP_FEEDBACK_URL}
-              isDisabled={!process.env.REACT_APP_FEEDBACK_URL}
+              href={window.ENV.FEEDBACK_URL}
+              isDisabled={!window.ENV.FEEDBACK_URL}
             >
               Submit session feedback
             </TwoLineLink>
@@ -208,7 +208,7 @@ const SessionPage = () => {
             </TwoLineLink>
             <TwoLineLink
               title='Edit sample information'
-              href={`${process.env.REACT_APP_API_ENDPOINT}proposals/${propId}/sessions/${visitId}/sampleHandling`}
+              href={prependApiUrl(`proposals/${propId}/sessions/${visitId}/sampleHandling`)}
             >
               Edit session's sample information
             </TwoLineLink>

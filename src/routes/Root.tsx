@@ -16,14 +16,14 @@ import { VersionTag } from "components/navigation/versionTag";
 
 const handleLogin = () =>
   window.location.assign(
-    `${process.env.REACT_APP_AUTH_ENDPOINT}authorise?redirect_uri=${encodeURIComponent(
+    `${window.ENV.AUTH_URL}authorise?redirect_uri=${encodeURIComponent(
       window.location.href
     )}&responseType=code`
   );
 
 const handleLogout = () =>
   window.location.assign(
-    `${process.env.REACT_APP_AUTH_ENDPOINT}logout?redirect_uri=${window.location.href}`
+    `${window.ENV.AUTH_URL}logout?redirect_uri=${window.location.href}`
   );
 
 const PhaseBanner = ({ deployType }: { deployType: "dev" | "production" | "beta" }) => {
@@ -41,7 +41,7 @@ const PhaseBanner = ({ deployType }: { deployType: "dev" | "production" | "beta"
       <VersionTag deployType={deployType} />
       <Text>
         This version of the service is still in testing, report any issues to the{" "}
-        <Link color='diamond.700' href={"mailto:" + process.env.REACT_APP_DEV_CONTACT}>
+        <Link color='diamond.700' href={"mailto:" + window.ENV.DEV_CONTACT}>
           developers.
         </Link>
       </Text>
@@ -59,7 +59,7 @@ const Root = () => {
       return "dev";
     }
 
-    return process.env.REACT_APP_STAGING_HOST === window.location.host ? "beta" : "production";
+    return window.ENV.ENVIRONMENT === "staging" ? "beta" : "production";
   }, []);
 
   return (

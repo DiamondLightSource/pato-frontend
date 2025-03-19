@@ -121,9 +121,7 @@ const Home = () => {
                     You must be logged in to view recent sessions
                   </Heading>
                   <Link
-                    href={`${
-                      process.env.REACT_APP_AUTH_ENDPOINT
-                    }authorise?redirect_uri=${encodeURIComponent(
+                    href={`${window.ENV.AUTH_URL}authorise?redirect_uri=${encodeURIComponent(
                       window.location.href
                     )}&responseType=code`}
                   >

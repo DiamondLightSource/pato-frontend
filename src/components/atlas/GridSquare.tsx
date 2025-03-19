@@ -194,7 +194,7 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
               >
                 <Image
                   alt={movie.movieId.toString()}
-                  src={prependApiUrl(`movies/${movie.movieId}/micrograph`)}
+                  src={prependApiUrl(`movies/${movie.movieId}/micrograph?compress=true`)}
                 ></Image>
               </Link>
             ))}

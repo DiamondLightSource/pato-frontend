@@ -5,6 +5,12 @@ export type AutoProcSchema = components["schemas"]["AutoProcProgram"];
 export type ProcessingJobSchema = components["schemas"]["ProcessingJob"];
 export type SessionResponse = components["schemas"]["SessionResponse"];
 
+declare global {
+  interface Window {
+    ENV: { API_URL: string; AUTH_URL: string; DEV_CONTACT: string; ENVIRONMENT: string; FEEDBACK_URL?: string };
+  }
+}
+
 export interface ParsedSessionReponse extends SessionResponse {
   microscopeName: string;
 }
@@ -57,9 +63,7 @@ export interface SpaCollectionData extends CollectionData {
 }
 
 export type SortTypes = NonNullable<
-  NonNullable<
-    paths["/autoProc/{autoProcId}/classification"]["get"]["parameters"]["query"]
-  >["sortBy"]
+  NonNullable<paths["/autoProc/{autoProcId}/classification"]["get"]["parameters"]["query"]>["sortBy"]
 >;
 
 export type TomogramMovieTypes = "denoised" | "segmented" | "picked";
