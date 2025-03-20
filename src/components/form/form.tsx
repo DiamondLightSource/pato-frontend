@@ -30,7 +30,9 @@ const Form = ({ children, onClose, onSubmit, isLoading, ...props }: FormProps) =
           <Button variant='outline' onClick={onClose}>
             Cancel
           </Button>
-          <Button isLoading={isLoading} type='submit'>Submit</Button>
+          <Button isLoading={isLoading} type='submit'>
+            Submit
+          </Button>
         </HStack>
       </form>
     </Box>

@@ -195,7 +195,7 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
                 <Image
                   alt={movie.movieId.toString()}
                   src={prependApiUrl(`movies/${movie.movieId}/micrograph`)}
-                  fallbackSrc="/images/loading.png"
+                  fallbackSrc='/images/loading.png'
                 ></Image>
               </Link>
             ))}

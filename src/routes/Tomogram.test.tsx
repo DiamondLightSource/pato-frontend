@@ -149,7 +149,9 @@ describe("Tomogram Movie Modal", () => {
     await screen.findByText("Tilt Align 1");
     fireEvent.click(await screen.findByTestId(/view picked movie/i));
 
-    expect(screen.getByText("Picked tomograms not currently usable with Relion")).toBeInTheDocument();
+    expect(
+      screen.getByText("Picked tomograms not currently usable with Relion")
+    ).toBeInTheDocument();
   });
 
   it("should go to next page if button in movie modal is clicked", async () => {
