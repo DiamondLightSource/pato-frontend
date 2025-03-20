@@ -22,6 +22,7 @@ vi.mock("components/tomogram/main", () => ({
   Tomogram: (props: TomogramProps) => (
     <AccordionItem>
       <button onClick={() => props.onTomogramOpened(1, "denoised")} data-testid='view movie' />
+      <button onClick={() => props.onTomogramOpened(1, "picked")} data-testid='view picked movie' />
     </AccordionItem>
   ),
 }));
@@ -143,6 +144,14 @@ describe("Tomogram Page", () => {
 });
 
 describe("Tomogram Movie Modal", () => {
+  it("should display warning if picked tomogram is selected", async () => {
+    renderWithRoute(<TomogramPage />, () => validData);
+    await screen.findByText("Tilt Align 1");
+    fireEvent.click(await screen.findByTestId(/view picked movie/i));
+
+    expect(screen.getByText("Picked tomograms not currently usable with Relion")).toBeInTheDocument();
+  });
+
   it("should go to next page if button in movie modal is clicked", async () => {
     const { router } = renderWithRoute(<TomogramPage />, () => validData);
     await screen.findByText("Tilt Align 1");
