@@ -10,10 +10,10 @@ import { recipeTagMap } from "utils/config/parse";
 import { RefinementStep } from "./refine";
 import { useSearchParams } from "react-router-dom";
 
-// This refinement step blacklist should be TEMPORARY and will be removed when a proper data view exists
+// TODO: rework this, since we're no longer filtering out certain processing job types
 const checkRecipe = (target: string, procJob: BaseProcessingJobProps["procJob"]) =>
   target === procJob.recipe ||
-  !(procJob.recipe, Object.keys(recipeTagMap).includes(procJob.recipe));
+  (procJob.recipe && !(procJob.recipe, Object.keys(recipeTagMap).includes(procJob.recipe)));
 
 const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
   const [searchParams, setSearchParams] = useSearchParams();

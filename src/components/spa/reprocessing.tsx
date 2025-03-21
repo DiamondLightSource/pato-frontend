@@ -41,7 +41,7 @@ const motionCorrectionBinningValues = [
 ];
 
 const requiredWhenNotStoppingAfterCTF = (
-  value: number | undefined,
+  value: number | null | undefined,
   formData: RelionProps["defaultValues"]
 ) => (!formData.stopAfterCtfEstimation && !value ? "Field is required" : true);
 

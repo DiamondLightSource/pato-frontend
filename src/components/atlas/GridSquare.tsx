@@ -69,7 +69,7 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
 
   const handleFoilHoleClicked = useCallback(
     (foilHole: FoilHole) => {
-      if (gridSquareId === null || foilHole.foilHoleId === null || foilHole.movieCount === 0) {
+      if (gridSquareId === null || foilHole.movieCount === 0) {
         return;
       }
 
