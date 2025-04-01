@@ -5,7 +5,7 @@ import { FormItem, NumericStepper } from "components/form/input";
 import { baseToast } from "@diamondlightsource/ui-components";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRevalidator } from "react-router-dom";
+import { useRevalidator } from "react-router";
 
 export interface ReprocessingProps {
   pixelSize?: number;

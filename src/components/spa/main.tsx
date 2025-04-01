@@ -8,7 +8,7 @@ import { ProcessingTitle } from "components/visualisation/processingTitle";
 import { BaseProcessingJobProps } from "schema/interfaces";
 import { recipeTagMap } from "utils/config/parse";
 import { RefinementStep } from "./refine";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 
 // TODO: rework this, since we're no longer filtering out certain processing job types
 const checkRecipe = (target: string, procJob: BaseProcessingJobProps["procJob"]) =>

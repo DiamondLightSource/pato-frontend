@@ -1,4 +1,4 @@
-import { Params, redirect } from "react-router-dom";
+import { Params, redirect } from "react-router";
 import { CollectionData } from "schema/interfaces";
 import { client } from "utils/api/client";
 import { includePage } from "utils/api/endpoint";

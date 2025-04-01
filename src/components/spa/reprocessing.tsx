@@ -20,7 +20,7 @@ import { baseToast } from "@diamondlightsource/ui-components";
 import { components } from "schema/main";
 import { required } from "utils/validation";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRevalidator } from "react-router-dom";
+import { useRevalidator } from "react-router";
 
 interface RelionProps {
   collectionId: number;

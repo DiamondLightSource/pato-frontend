@@ -1,6 +1,6 @@
 import { Button, Divider, Heading, useToast, VStack, Text, Code } from "@chakra-ui/react";
 import { FormEvent, useCallback } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
 
 import "styles/upload.css";
 import { client } from "utils/api/client";

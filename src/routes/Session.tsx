@@ -22,7 +22,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo } from "react";
-import { Link, useLoaderData, useNavigate, useParams, useRevalidator } from "react-router-dom";
+import { Link, useLoaderData, useNavigate, useParams, useRevalidator } from "react-router";
 import {
   Pagination,
   DebouncedInput,
