@@ -42,6 +42,7 @@ const renderWithRoute = (
         path: "*",
         element: ui,
         loader,
+        hydrateFallbackElement: <></>
       },
     ],
     {
