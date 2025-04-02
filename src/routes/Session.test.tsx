@@ -90,6 +90,25 @@ describe("Session Page", () => {
 
     expect(screen.queryByText("View Atlas")).not.toBeInTheDocument();
   });
+
+  it("should display error message if session does not exist", async () => {
+    renderWithRoute(<SessionPage />, () => ({
+      items: null,
+      session: null,
+    }));
+
+    await screen.findByText("Session Not Found");
+  });
+
+  it("should not display pagination if no items are available", async () => {
+    renderWithRoute(<SessionPage />, () => ({
+      items: null,
+      session: { microscopeName: "Krios I", startDate: "startDateValue", endDate: "endDateValue" },
+    }));
+
+    await screen.findByText(/krios i/i);
+    expect(screen.queryByLabelText("Previous Page")).not.toBeInTheDocument();
+  });
 });
 
 describe("Data Collection Creation", () => {
