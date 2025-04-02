@@ -100,9 +100,6 @@
     "webpack-manifest-plugin": "^5.0.1",
     "workbox-webpack-plugin": "^7.3.0"
   },
-  "resolutions": {
-    "nwsapi": "2.2.2"
-  },
   "msw": {
     "workerDirectory": "public"
   },

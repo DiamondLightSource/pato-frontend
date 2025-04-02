@@ -13276,10 +13276,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nwsapi@npm:2.2.2":
-  version: 2.2.2
-  resolution: "nwsapi@npm:2.2.2"
-  checksum: 10c0/f7c4fedb0dc0786204ee99f440e9827d6e01a0c0322e93b5c9a9a382dd0bd9650d98ca3d1967a77554e3ec1f9a46a20cfea80a41fb00e91c5101c53d8b2c9aed
+"nwsapi@npm:^2.2.12":
+  version: 2.2.20
+  resolution: "nwsapi@npm:2.2.20"
+  checksum: 10c0/07f4dafa3186aef7c007863e90acd4342a34ba9d44b22f14f644fdb311f6086887e21c2fc15efaa826c2bc39ab2bc841364a1a630e7c87e0cb723ba59d729297
   languageName: node
   linkType: hard
 
