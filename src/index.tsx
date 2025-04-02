@@ -171,7 +171,7 @@ root.render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} future={{v7_startTransition: true}}/>
+        <RouterProvider router={router} future={{ v7_startTransition: true }} />
         <ToastContainer />
         {process.env.NODE_ENV === "development" && <ReactQueryDevtools initialIsOpen={false} />}
       </QueryClientProvider>
