@@ -54,17 +54,11 @@ const TomogramPage = () => {
   const onlyTomograms = useMemo(() => searchParams.get("onlyTomograms") === "true", [searchParams]);
   const sortBy = useMemo(() => searchParams.get("sortBy"), [searchParams]);
   const currentIndex = useMemo(() => parseInt(params.collectionIndex ?? "1"), [params]);
-  const tomogramMovieSrc = useMemo(
-    () => prependApiUrl(`tomograms/${openTomogram}/movie`),
-    [openTomogram]
-  );
+  const tomogramMovieSrc = useMemo(() => prependApiUrl(`tomograms/${openTomogram}/movie`), [openTomogram]);
 
   const handleCollectionChanged = useCallback(
     (page: number) => {
-      navigate(
-        { pathname: `../${page}`, search: window.location.search },
-        { relative: "path", replace: true }
-      );
+      navigate({ pathname: `../${page}`, search: window.location.search }, { relative: "path", replace: true });
     },
     [navigate]
   );
@@ -101,18 +95,11 @@ const TomogramPage = () => {
   }, []);
 
   const buttonDisabled = useMemo(() => {
-    if (
-      loaderData.tomograms === null ||
-      !loaderData.collection.dataCollectionId ||
-      !loaderData.allowReprocessing
-    ) {
+    if (loaderData.tomograms === null || !loaderData.collection.dataCollectionId || !loaderData.allowReprocessing) {
       return true;
     }
 
-    const totalSucceeded = loaderData.tomograms.reduce(
-      (total, job) => total + (job.status === "Success" ? 1 : 0),
-      0
-    );
+    const totalSucceeded = loaderData.tomograms.reduce((total, job) => total + (job.status === "Success" ? 1 : 0), 0);
 
     if (totalSucceeded > 2 || totalSucceeded === 0) {
       return true;
@@ -126,11 +113,7 @@ const TomogramPage = () => {
       <HStack marginBottom={2}>
         <VStack w='100%'>
           <Stack w='100%' direction={{ base: "column", md: "row" }}>
-            <CollectionTitle
-              title={loaderData.collection.comments}
-              colorScheme='teal'
-              type='Tomogram'
-            />
+            <CollectionTitle title={loaderData.collection.comments} colorScheme='teal' type='Tomogram' />
             <Spacer />
             <HStack>
               <Tooltip label='Run Reprocessing'>
@@ -158,8 +141,8 @@ const TomogramPage = () => {
           </Stack>
           <HStack w='100%'>
             <Heading color='diamond.300' size='sm'>
-              Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data
-              collection group <Code>{params.groupId}</Code>
+              Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data collection group{" "}
+              <Code>{params.groupId}</Code>
             </Heading>
             <Spacer />
             <Checkbox
@@ -172,12 +155,7 @@ const TomogramPage = () => {
               Only show processed tomograms
             </Checkbox>
 
-            <Checkbox
-              data-testid='sort-tomograms'
-              isChecked={!!sortBy}
-              onChange={updateTomogramSort}
-              alignSelf='end'
-            >
+            <Checkbox data-testid='sort-tomograms' isChecked={!!sortBy} onChange={updateTomogramSort} alignSelf='end'>
               Sort by quality
             </Checkbox>
           </HStack>
@@ -251,10 +229,7 @@ const TomogramPage = () => {
               </HStack>
               <Suspense>
                 <APNGContainer>
-                  <APNGViewer
-                    caption={capitalise(movieType)}
-                    src={`${tomogramMovieSrc}?movieType=${movieType}`}
-                  />
+                  <APNGViewer caption={capitalise(movieType)} src={`${tomogramMovieSrc}?movieType=${movieType}`} />
                   <APNGViewer caption='Not Denoised' src={tomogramMovieSrc} />
                 </APNGContainer>
               </Suspense>
