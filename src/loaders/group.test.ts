@@ -1,9 +1,9 @@
 import { server } from "mocks/server";
 import { http, HttpResponse } from "msw";
-import { replace } from "react-router-dom";
+import { replace } from "react-router";
 import { groupLoader } from "./group";
 
-vi.mock("react-router-dom", async (importOriginal) => {
+vi.mock("react-router", async (importOriginal) => {
   const actual = await importOriginal<any>();
   return {
     ...actual,

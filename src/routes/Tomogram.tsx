@@ -19,9 +19,12 @@ import {
   ModalOverlay,
   useDisclosure,
   Stack,
+  Alert,
+  AlertTitle,
+  AlertIcon,
 } from "@chakra-ui/react";
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
-import { useLoaderData, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useLoaderData, useNavigate, useParams, useSearchParams } from "react-router";
 import { Tomogram } from "components/tomogram/main";
 import { MdList, MdRedo } from "react-icons/md";
 import React from "react";
@@ -187,7 +190,7 @@ const TomogramPage = () => {
           {loaderData.tomograms.map((job, i) => (
             <Tomogram
               key={`${job.ProcessingJob.processingJobId}-${i}`}
-              autoProc={job.AutoProcProgram}
+              autoProc={job.AutoProcProgram!}
               procJob={job.ProcessingJob}
               tomogram={job.Tomogram || null}
               status={job.status}
@@ -230,6 +233,13 @@ const TomogramPage = () => {
             <ModalCloseButton />
             <ModalBody h={{ base: "90vh", md: "60vh" }}>
               <HStack>
+                {/** TODO: Remove this in a few months once picked tomograms can be used with Relion */}
+                {movieType === "picked" && (
+                  <Alert status='warning' variant='left-accent' w='47%' mx='1.5%'>
+                    <AlertIcon />
+                    <AlertTitle>Picked tomograms not currently usable with Relion</AlertTitle>
+                  </Alert>
+                )}
                 <Spacer />
                 <Flipper
                   size='md'

@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { ChakraProvider, createStandaloneToast } from "@chakra-ui/react";
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
 import { Root } from "routes/Root";
 import { GenericListing } from "routes/GenericListing";
 import { TomogramPage } from "routes/Tomogram";
@@ -44,6 +44,7 @@ if (process.env.REACT_APP_DEPLOY_TYPE === "demo") {
 const router = createBrowserRouter([
   {
     path: "/",
+    hydrateFallbackElement: <></>,
     element: <Root />,
     errorElement: <Error />,
     loader: () => getUser(false),
@@ -52,6 +53,7 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+        hydrateFallbackElement: <></>,
         loader: sessionLoader(queryClient),
       },
       {
@@ -64,6 +66,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/proposals",
+        hydrateFallbackElement: <></>,
         element: (
           <GenericListing
             headers={proposalHeaders}
@@ -91,6 +94,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/proposals/:propId/sessions",
+        hydrateFallbackElement: <></>,
         element: (
           <GenericListing
             headers={sessionHeaders}
@@ -108,6 +112,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/proposals/:propId/sessions/:visitId",
+        hydrateFallbackElement: <></>,
         element: <SessionPage />,
         loader: ({ request, params }) => sessionPageLoader(queryClient)(request, params),
       },
@@ -122,11 +127,13 @@ const router = createBrowserRouter([
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/collections",
         element: <TomogramList/>,
+        hydrateFallbackElement: <></>,
         loader: ({ request, params }) =>
           listingLoader(queryClient)(request, params, "dataCollections"),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/alerts",
+        hydrateFallbackElement: <></>,
         element: <AlertPage />,
         loader: () => getUser(true),
       },
@@ -136,21 +143,25 @@ const router = createBrowserRouter([
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/tomograms/:collectionIndex",
+        hydrateFallbackElement: <></>,
         element: <TomogramPage />,
         loader: ({ params, request }) => tomogramLoader(queryClient)(params, request),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/spa/",
+        hydrateFallbackElement: <></>,
         element: <SpaPage />,
         loader: ({ params }) => spaLoader(queryClient)(params),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/atlas",
+        hydrateFallbackElement: <></>,
         element: <AtlasPage />,
         loader: ({ request, params }) => atlasLoader(queryClient)(request, params),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/",
+        hydrateFallbackElement: <></>,
         loader: ({ params }) => groupLoader(params),
         element: <></>,
       },
@@ -162,7 +173,7 @@ root.render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} future={{ v7_startTransition: true }} />
+        <RouterProvider router={router} />
         <ToastContainer />
         {process.env.NODE_ENV === "development" && <ReactQueryDevtools initialIsOpen={false} />}
       </QueryClientProvider>

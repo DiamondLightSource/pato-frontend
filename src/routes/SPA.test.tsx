@@ -47,18 +47,14 @@ describe("SPA", () => {
   });
 
   it("should grey out atlas button if no atlas is returned from the backend", async () => {
-    renderWithRoute(<SpaPage />, () => ({ ...baseLoaderData, hasAtlas: false }), [
-      { hash: "#statistics" },
-    ]);
+    renderWithRoute(<SpaPage />, () => ({ ...baseLoaderData, hasAtlas: false }));
 
     const viewAtlasButton = await screen.findByText("Atlas");
     expect(viewAtlasButton).toHaveAttribute("disabled");
   });
 
   it("should not grey out atlas button if atlas is returned from the backend", async () => {
-    renderWithRoute(<SpaPage />, () => ({ ...baseLoaderData, hasAtlas: true }), [
-      { hash: "#statistics" },
-    ]);
+    renderWithRoute(<SpaPage />, () => ({ ...baseLoaderData, hasAtlas: true }));
 
     const viewAtlasButton = await screen.findByText("Atlas");
     expect(viewAtlasButton).not.toHaveAttribute("disabled");

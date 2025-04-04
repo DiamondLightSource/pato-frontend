@@ -19,9 +19,10 @@ import {
   Select,
   useToast,
   ModalProps,
+  Button,
 } from "@chakra-ui/react";
-import { useCallback, useEffect } from "react";
-import { Link, useLoaderData, useNavigate, useParams, useRevalidator } from "react-router-dom";
+import { useCallback, useEffect, useMemo } from "react";
+import { Link, useLoaderData, useNavigate, useParams, useRevalidator } from "react-router";
 import {
   Pagination,
   DebouncedInput,
@@ -29,8 +30,7 @@ import {
   TwoLineLink,
   baseToast,
 } from "@diamondlightsource/ui-components";
-import { ParsedSessionReponse } from "schema/interfaces";
-import { handleGroupClicked } from "loaders/session";
+import { handleGroupClicked, SessionDataResponse } from "loaders/session";
 import { groupsHeaders } from "utils/config/table";
 import { usePaginationSearchParams } from "utils/hooks";
 import { Form } from "components/form/form";
@@ -39,13 +39,6 @@ import { useForm } from "react-hook-form";
 import { required } from "utils/validation";
 import { client } from "utils/api/client";
 import { useQueryClient } from "@tanstack/react-query";
-
-interface LoaderData {
-  items: Record<string, any>[];
-  session: ParsedSessionReponse;
-  total: number;
-  limit: number;
-}
 
 const fileExtensionValues = [
   { key: ".tif", value: ".tif" },
@@ -119,7 +112,7 @@ const DataCollectionCreationForm = (props: Omit<ModalProps, "children">) => {
 };
 
 const SessionPage = () => {
-  const data = useLoaderData() as LoaderData;
+  const data = useLoaderData() as SessionDataResponse;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { page, setPage, setItemsPerPage, onSearch } = usePaginationSearchParams();
@@ -133,6 +126,22 @@ const SessionPage = () => {
     },
     [navigate]
   );
+
+  const tableData = useMemo(() => {
+    return data.items.map((row) => ({
+      ...row,
+      atlasLink: row.atlasId ? (
+        <Button
+          size='xs'
+          as={Link}
+          to={`groups/${row.dataCollectionGroupId}/atlas`}
+          relative='path'
+        >
+          View Atlas
+        </Button>
+      ) : null,
+    }));
+  }, [data]);
 
   useEffect(() => {
     document.title = "PATo » Session";
@@ -174,7 +183,7 @@ const SessionPage = () => {
             <Divider mb={4} />
             <Table
               w='100%'
-              data={data.items}
+              data={tableData}
               headers={groupsHeaders}
               label='data collection groups'
               onClick={handleRowClicked}
@@ -209,6 +218,7 @@ const SessionPage = () => {
             <TwoLineLink
               title='Edit sample information'
               href={`${process.env.REACT_APP_API_ENDPOINT}proposals/${propId}/sessions/${visitId}/sampleHandling`}
+              isDisabled={!process.env.REACT_APP_API_ENDPOINT}
             >
               Edit session's sample information
             </TwoLineLink>

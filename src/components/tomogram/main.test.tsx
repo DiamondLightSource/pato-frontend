@@ -4,6 +4,7 @@ import { server } from "mocks/server";
 import { renderWithAccordion } from "utils/test-utils";
 import { Tomogram } from "components/tomogram/main";
 import { BaseProcessingJobProps } from "schema/interfaces";
+import { components } from "schema/main";
 
 const basicProcJob: BaseProcessingJobProps["procJob"] = {
   processingJobId: 1,
@@ -13,6 +14,10 @@ const basicProcJob: BaseProcessingJobProps["procJob"] = {
   recipe: "Test",
   automatic: 1,
 };
+
+const autoProcJob = {
+  autoProcProgramId: 1,
+} as components["schemas"]["AutoProcProgramResponse"];
 
 const basicTomogram = { tomogramId: 1, dataCollectionId: 1, volumeFile: "", stackFile: "" };
 
@@ -46,7 +51,7 @@ describe("Tomogram", () => {
     renderWithAccordion(
       <Tomogram
         active={true}
-        autoProc={{ autoProcProgramId: 1 }}
+        autoProc={autoProcJob}
         procJob={basicProcJob}
         tomogram={null}
         status={"Queued"}
@@ -62,7 +67,7 @@ describe("Tomogram", () => {
     renderWithAccordion(
       <Tomogram
         active={true}
-        autoProc={{ autoProcProgramId: 1 }}
+        autoProc={autoProcJob}
         procJob={basicProcJob}
         tomogram={basicTomogram}
         status={"Queued"}
@@ -79,7 +84,7 @@ describe("Tomogram", () => {
     renderWithAccordion(
       <Tomogram
         active={true}
-        autoProc={{ autoProcProgramId: 1 }}
+        autoProc={autoProcJob}
         procJob={basicProcJob}
         tomogram={basicTomogram}
         status={"Queued"}
@@ -99,7 +104,7 @@ describe("Tomogram", () => {
     renderWithAccordion(
       <Tomogram
         active={true}
-        autoProc={{ autoProcProgramId: 1 }}
+        autoProc={autoProcJob}
         procJob={basicProcJob}
         tomogram={basicTomogram}
         status={"Success"}
@@ -131,7 +136,7 @@ describe("Tomogram", () => {
     renderWithAccordion(
       <Tomogram
         active={true}
-        autoProc={{ autoProcProgramId: 1 }}
+        autoProc={autoProcJob}
         procJob={basicProcJob}
         tomogram={basicTomogram}
         status={"Success"}

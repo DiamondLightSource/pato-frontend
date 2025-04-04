@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 import { components } from "schema/main";
 import { client, prependApiUrl } from "utils/api/client";
 import "styles/atlas.css";
@@ -69,7 +69,7 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
 
   const handleFoilHoleClicked = useCallback(
     (foilHole: FoilHole) => {
-      if (gridSquareId === null || foilHole.foilHoleId === null || foilHole.movieCount === 0) {
+      if (gridSquareId === null || foilHole.movieCount === 0) {
         return;
       }
 
@@ -195,6 +195,7 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
                 <Image
                   alt={movie.movieId.toString()}
                   src={prependApiUrl(`movies/${movie.movieId}/micrograph`)}
+                  fallbackSrc='/images/loading.png'
                 ></Image>
               </Link>
             ))}

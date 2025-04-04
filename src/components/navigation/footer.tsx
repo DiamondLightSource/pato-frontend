@@ -1,5 +1,5 @@
 import { Spacer, HStack, Link, Text } from "@chakra-ui/react";
-import { Link as LinkRouter } from "react-router-dom";
+import { Link as LinkRouter } from "react-router";
 
 const currentYear = new Date().getFullYear();
 

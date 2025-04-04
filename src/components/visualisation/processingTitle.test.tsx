@@ -2,6 +2,7 @@ import { renderWithAccordion } from "utils/test-utils";
 import { ProcessingTitle } from "./processingTitle";
 import { screen } from "@testing-library/react";
 import { AccordionItem } from "@chakra-ui/react";
+import { components } from "schema/main";
 
 const procJob = {
   processingJobId: 1,
@@ -14,7 +15,7 @@ const procJob = {
 
 const autoProcJob = {
   autoProcProgramId: 1,
-};
+} as components["schemas"]["AutoProcProgramResponse"];
 
 describe("Processing Title", () => {
   it("should replace unknown date values with ?", async () => {

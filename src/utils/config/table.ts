@@ -19,6 +19,7 @@ export const groupsHeaders = [
   { key: "imageDirectory", label: "Image Directory" },
   { key: "experimentTypeName", label: "Experiment Type" },
   { key: "collections", label: "Collections" },
+  { key: "atlasLink", label: "" },
 ];
 
 export const beamlineToMicroscope: Record<string, string> = {

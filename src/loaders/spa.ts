@@ -1,5 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
-import { Params } from "react-router-dom";
+import { Params } from "react-router";
 import { DataConfig, SpaCollectionData } from "schema/interfaces";
 import { components } from "schema/main";
 import { client } from "utils/api/client";
@@ -106,7 +106,7 @@ const getSpaData = async (groupId: string, propId: string, sessionId: string) =>
 
     parsedCollectionData.info.unshift({
       label: "Acquisition Software",
-      value: getAcquisitionSoftware(data.fileTemplate),
+      value: getAcquisitionSoftware(data.fileTemplate ?? null),
     });
     parsedCollectionData.info.push({
       label: "Comments",

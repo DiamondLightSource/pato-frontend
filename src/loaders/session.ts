@@ -1,15 +1,15 @@
 import { QueryClient } from "@tanstack/react-query";
-import { Params } from "react-router-dom";
+import { Params } from "react-router";
+import { ParsedSessionReponse } from "schema/interfaces";
 import { components } from "schema/main";
 import { client } from "utils/api/client";
 import { buildEndpoint } from "utils/api/endpoint";
 import { parseSessionData } from "utils/api/response";
 
 type PagedGroups = components["schemas"]["Paged_DataCollectionGroupSummaryResponse_"];
-type SessionResponse = components["schemas"]["SessionResponse"];
 
 export interface SessionDataResponse extends PagedGroups {
-  session: SessionResponse | null;
+  session: ParsedSessionReponse;
 }
 
 const sessionQueryBuilder = (request: Request, params: Params<string>) => {

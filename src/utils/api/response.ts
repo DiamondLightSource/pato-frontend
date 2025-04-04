@@ -36,7 +36,7 @@ const parseSessionData = (item: SessionResponse): ParsedSessionReponse => {
   let newItem = Object.assign({}, item, {
     startDate: parseDate(item.startDate as string),
     endDate: parseDate(item.endDate as string),
-    microscopeName: item.beamLineName,
+    microscopeName: item.beamLineName ?? "",
   });
   const beamLineName = item.beamLineName as string;
   const humanName = beamlineToMicroscope[beamLineName];
