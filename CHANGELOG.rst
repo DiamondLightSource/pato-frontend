@@ -3,6 +3,20 @@ Changelog
 ==========
 
 ++++++++++
+v1.20.1 (02/04/2025)
+++++++++++
+
+**Changed**
+
+- Use loading icon for micrograph images
+- Display warning for picked tomograms
+- Display spinner to loading submit button
+
+**Fixed**
+
+- Cancel button on alerts form now works as expected
+
+++++++++++
 v1.20.0 (14/03/2025)
 ++++++++++
 
