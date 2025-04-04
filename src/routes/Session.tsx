@@ -138,18 +138,22 @@ const SessionPage = () => {
     if (data.items === null) {
       return null;
     }
+
+    // FIXME: tomograms currently have entries in the Atlas table, but they have no actual atlas data.
+    // Once this is fixed in the pipeline, we can remove the experiment type check.
     return data.items.map((row) => ({
       ...row,
-      atlasLink: row.atlasId ? (
-        <Button
-          size='xs'
-          as={RouterLink}
-          to={`groups/${row.dataCollectionGroupId}/atlas`}
-          relative='path'
-        >
-          View Atlas
-        </Button>
-      ) : null,
+      atlasLink:
+        row.atlasId && row.experimentTypeName === "Single Particle" ? (
+          <Button
+            size='xs'
+            as={RouterLink}
+            to={`groups/${row.dataCollectionGroupId}/atlas`}
+            relative='path'
+          >
+            View Atlas
+          </Button>
+        ) : null,
     }));
   }, [data]);
 
