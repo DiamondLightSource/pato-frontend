@@ -25,21 +25,7 @@ const SORT_OPTIONS = [
   { key: "globalAlignmentQuality", value: "Alignment Quality" },
 ];
 
-export interface PaginationSearchParams {
-  page: number;
-  itemsPerPage: number;
-  search: string | null;
-  sortBy: string | null;
-}
-export interface TableProps {
-  makePathCallback?: (
-    item: Record<string, string | number>,
-    index: number,
-    searchParams: PaginationSearchParams
-  ) => string;
-}
-
-interface TableData {
+interface TomogramListLoaderData {
   data: components["schemas"]["DataCollectionSummary"][];
   total: number;
   limit: number;
@@ -53,7 +39,7 @@ const TomogramCard = ({ title, value }: { title: string; value?: string | number
 );
 
 const TomogramList = () => {
-  const data = useLoaderData() as TableData;
+  const data = useLoaderData() as TomogramListLoaderData;
   const { search, page, sortBy, setPage, setItemsPerPage, setSortBy, onSearch } =
     usePaginationSearchParams();
 
@@ -87,16 +73,18 @@ const TomogramList = () => {
         />
       </HStack>
       <Divider mb={4} />
-      {data.data ? (
+      {data.data && data.data.length > 0 ? (
         <Grid gridTemplateColumns='repeat(auto-fit, minmax(600px, 1fr))' gap='0.5em'>
           {data.data.map((collection) => (
             <Card
+              key={collection.dataCollectionId}
               direction={{ base: "column", sm: "row" }}
               overflow='hidden'
               variant='outline'
               borderRadius='0'
               as={Link}
               to={`../tomograms/${collection.index}${sortBy ? "?sortBy=" : ""}${sortBy ?? ""}`}
+              relative='path'
             >
               <Image
                 h='90px'
@@ -132,7 +120,7 @@ const TomogramList = () => {
         </Heading>
       )}
       <Divider />
-      {data.data !== null && (
+      {data.data !== null && data.data.length > 0 && (
         <Pagination
           limit={data.limit}
           page={page}
@@ -146,11 +134,3 @@ const TomogramList = () => {
 };
 
 export { TomogramList };
-export const collectionHeaders = [
-  { key: "comments", label: "Comments" },
-  { key: "startTime", label: "Start Time" },
-  { key: "endTime", label: "End Time" },
-  { key: "runStatus", label: "Run Status" },
-  { key: "tomograms", label: "Processed Tomograms" },
-  { key: "globalAlignmentQuality", label: "Alignment Quality" },
-];

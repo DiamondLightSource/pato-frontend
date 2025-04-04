@@ -126,7 +126,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/collections",
-        element: <TomogramList/>,
+        element: <TomogramList />,
         hydrateFallbackElement: <></>,
         loader: ({ request, params }) =>
           listingLoader(queryClient)(request, params, "dataCollections"),
