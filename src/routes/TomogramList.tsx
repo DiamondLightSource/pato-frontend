@@ -87,6 +87,7 @@ const TomogramList = () => {
               relative='path'
             >
               <Image
+                maxW='190px'
                 h='90px'
                 fallbackSrc='/images/no-image.png'
                 src={prependApiUrl(`dataCollections/${collection.dataCollectionId}/centralSlice`)}
@@ -94,12 +95,7 @@ const TomogramList = () => {
 
               <VStack>
                 <CardBody py='15px' px='20px'>
-                  <HStack>
-                    <Heading size='md'>{collection.comments}</Heading>
-                    <Text>
-                      {collection.startTime ?? "?"} - {collection.endTime ?? "?"}
-                    </Text>
-                  </HStack>
+                  <Heading size='md'>{collection.comments}</Heading>
 
                   <HStack pt='10px'>
                     <TomogramCard
@@ -107,7 +103,6 @@ const TomogramList = () => {
                       value={collection.globalAlignmentQuality}
                     />
                     <TomogramCard title='Tomograms' value={collection.tomograms} />
-                    <TomogramCard title='Run Status' value={collection.runStatus} />
                   </HStack>
                 </CardBody>
               </VStack>
