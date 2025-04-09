@@ -8,12 +8,24 @@ import { ProcessingTitle } from "components/visualisation/processingTitle";
 import { BaseProcessingJobProps } from "schema/interfaces";
 import { recipeTagMap } from "utils/config/parse";
 import { RefinementStep } from "./refine";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 
-// TODO: rework this, since we're no longer filtering out certain processing job types
+const recipes = Object.keys(recipeTagMap);
+
+/**
+ * Check if recipe matches a given recipe type, or if it's not in the list of known recipe types.
+ *
+ * If it matches the target recipe type, return true, otherwise, only return true if it is an unknown recipe type.
+ *
+ * This is to maintain backwards compatibility with back when we had processing jobs with multiple autoprocessing
+ * programs, but no separation between the different recipes.
+ * @param target Target recipe type
+ * @param procJob Processing job to check
+ * @returns boolean
+ */
 const checkRecipe = (target: string, procJob: BaseProcessingJobProps["procJob"]) =>
   target === procJob.recipe ||
-  (procJob.recipe && !(procJob.recipe, Object.keys(recipeTagMap).includes(procJob.recipe)));
+  (procJob.recipe && !Object.keys(recipeTagMap).includes(procJob.recipe));
 
 const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -38,14 +50,6 @@ const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
     return undefined;
   }, [searchParams, total]);
 
-  const toDisplay = useMemo(
-    () =>
-      ["em-spa-preprocess", "em-spa-class2d", "em-spa-class3d", "em-spa-refine"].map((target) =>
-        checkRecipe(target, procJob)
-      ),
-    [procJob]
-  );
-
   return (
     <AccordionItem>
       <ProcessingTitle autoProc={autoProc} procJob={procJob} status={status} />
@@ -54,7 +58,7 @@ const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
           <>
             {active && (
               <Grid gap={3} templateColumns={{ base: "1", "2xl": "repeat(2, 1fr)" }}>
-                {toDisplay[0] && (
+                {checkRecipe(recipes[0], procJob) && (
                   <>
                     <CTF
                       onGraphClicked={setPage}
@@ -75,11 +79,15 @@ const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
                     />
                   </>
                 )}
-                {toDisplay[1] && <Classification autoProcId={autoProc.autoProcProgramId} />}
-                {toDisplay[2] && (
+                {checkRecipe(recipes[1], procJob) && (
+                  <Classification autoProcId={autoProc.autoProcProgramId} />
+                )}
+                {checkRecipe(recipes[2], procJob) && (
                   <Classification autoProcId={autoProc.autoProcProgramId} type='3d' />
                 )}
-                {toDisplay[3] && <RefinementStep autoProcId={autoProc.autoProcProgramId} />}
+                {checkRecipe(recipes[3], procJob) && (
+                  <RefinementStep autoProcId={autoProc.autoProcProgramId} />
+                )}
               </Grid>
             )}
           </>
