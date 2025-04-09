@@ -71,7 +71,7 @@ describe("Session Page", () => {
 
   it("should display link to atlas if data collection group has atlas", async () => {
     renderWithRoute(<SessionPage />, () => ({
-      items: [{ experimentTypeName: "Tomogram", dataCollectionGroupId: 1, atlasId: 5 }],
+      items: [{ experimentTypeName: "Single Particle", dataCollectionGroupId: 1, atlasId: 5 }],
       session: { microscopeName: "Krios I", startDate: "startDateValue", endDate: "endDateValue" },
     }));
 
@@ -80,15 +80,43 @@ describe("Session Page", () => {
     expect(atlasButton).toHaveAttribute("href", "/groups/1/atlas");
   });
 
-  it("should not display link to atlas if data collection group has no atlas", async () => {
+  it("should not display link to atlas if data collection group is tomogram", async () => {
     renderWithRoute(<SessionPage />, () => ({
-      items: [{ experimentTypeName: "Tomogram", dataCollectionGroupId: 1 }],
+      items: [{ experimentTypeName: "Tomogram", dataCollectionGroupId: 1, atlasId: 5 }],
       session: { microscopeName: "Krios I", startDate: "startDateValue", endDate: "endDateValue" },
     }));
 
-    await screen.findByText("Tomogram");
+    expect(screen.queryByText("View Atlas")).not.toBeInTheDocument();
+  });
+
+  it("should not display link to atlas if data collection group has no atlas", async () => {
+    renderWithRoute(<SessionPage />, () => ({
+      items: [{ experimentTypeName: "Single Particle", dataCollectionGroupId: 1 }],
+      session: { microscopeName: "Krios I", startDate: "startDateValue", endDate: "endDateValue" },
+    }));
+
+    await screen.findByText("Single Particle");
 
     expect(screen.queryByText("View Atlas")).not.toBeInTheDocument();
+  });
+
+  it("should display error message if session does not exist", async () => {
+    renderWithRoute(<SessionPage />, () => ({
+      items: null,
+      session: null,
+    }));
+
+    await screen.findByText("Session Not Found");
+  });
+
+  it("should not display pagination if no items are available", async () => {
+    renderWithRoute(<SessionPage />, () => ({
+      items: null,
+      session: { microscopeName: "Krios I", startDate: "startDateValue", endDate: "endDateValue" },
+    }));
+
+    await screen.findByText(/krios i/i);
+    expect(screen.queryByLabelText("Previous Page")).not.toBeInTheDocument();
   });
 });
 
