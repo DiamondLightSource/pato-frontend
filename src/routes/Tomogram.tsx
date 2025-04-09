@@ -168,7 +168,7 @@ const TomogramPage = () => {
           {loaderData.tomograms.map((job, i) => (
             <Tomogram
               key={`${job.ProcessingJob.processingJobId}-${i}`}
-              autoProc={job.AutoProcProgram}
+              autoProc={job.AutoProcProgram!}
               procJob={job.ProcessingJob}
               tomogram={job.Tomogram || null}
               status={job.status}
@@ -213,7 +213,7 @@ const TomogramPage = () => {
               <HStack>
                 {/** TODO: Remove this in a few months once picked tomograms can be used with Relion */}
                 {movieType === "picked" && (
-                  <Alert status="warning" variant='left-accent' w="47%" mx="1.5%">
+                  <Alert status='warning' variant='left-accent' w='47%' mx='1.5%'>
                     <AlertIcon />
                     <AlertTitle>Picked tomograms not currently usable with Relion</AlertTitle>
                   </Alert>
