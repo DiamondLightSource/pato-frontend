@@ -1,7 +1,7 @@
 PATo
 ===========================
 
-|code_ci| |code_cov|
+|code_ci| |license|
 
 ============== ==============================================================
 Source code    https://github.com/DiamondLightSource/pato-frontend
