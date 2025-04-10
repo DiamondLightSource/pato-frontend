@@ -24,7 +24,7 @@ import {
   AlertIcon,
 } from "@chakra-ui/react";
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
-import { useLoaderData, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useLoaderData, useNavigate, useParams, useSearchParams } from "react-router";
 import { Tomogram } from "components/tomogram/main";
 import { MdList, MdRedo } from "react-icons/md";
 import React from "react";

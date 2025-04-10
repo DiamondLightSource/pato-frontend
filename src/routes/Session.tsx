@@ -29,7 +29,7 @@ import {
   useNavigate,
   useParams,
   useRevalidator,
-} from "react-router-dom";
+} from "react-router";
 import {
   Pagination,
   DebouncedInput,

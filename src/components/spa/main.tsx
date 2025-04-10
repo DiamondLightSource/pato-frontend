@@ -8,7 +8,7 @@ import { ProcessingTitle } from "components/visualisation/processingTitle";
 import { BaseProcessingJobProps } from "schema/interfaces";
 import { recipeTagMap } from "utils/config/parse";
 import { RefinementStep } from "./refine";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 
 const recipes = Object.keys(recipeTagMap);
 

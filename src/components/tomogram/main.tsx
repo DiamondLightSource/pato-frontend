@@ -72,7 +72,7 @@ const TomogramThumbnail = ({
   movieType: TomogramMovieTypes | null;
   baseUrl: string;
 }) => (
-  <VStack w='50%' h='100%'>
+  <VStack w='50%' h='100%' key={movieType}>
     <ImageCard
       p={0}
       borderColor='transparent'
@@ -242,20 +242,34 @@ const Tomogram = ({
                         >
                           {isLargeScreen ? (
                             [
-                              <TomogramThumbnail baseUrl={data.centralSlice} movieType='picked' />,
                               <TomogramThumbnail
+                                key='picked'
+                                baseUrl={data.centralSlice}
+                                movieType='picked'
+                              />,
+                              <TomogramThumbnail
+                                key='segmented'
                                 baseUrl={data.centralSlice}
                                 movieType='segmented'
                               />,
                             ]
                           ) : (
                             <TomogramThumbnail
+                              key={selectedTomogram}
                               baseUrl={data.centralSlice}
                               movieType={selectedTomogram}
                             />
                           )}
-                          <TomogramThumbnail baseUrl={data.centralSlice} movieType='denoised' />
-                          <TomogramThumbnail baseUrl={data.centralSlice} movieType={null} />
+                          <TomogramThumbnail
+                            key='denoised'
+                            baseUrl={data.centralSlice}
+                            movieType='denoised'
+                          />
+                          <TomogramThumbnail
+                            key='noisy'
+                            baseUrl={data.centralSlice}
+                            movieType={null}
+                          />
                         </HStack>
                       </CardBody>
                     </Card>

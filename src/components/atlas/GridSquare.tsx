@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 import { components } from "schema/main";
 import { client, prependApiUrl } from "utils/api/client";
 import "styles/atlas.css";
