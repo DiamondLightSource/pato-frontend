@@ -35,6 +35,7 @@ import React from "react";
 import { InfoGroup } from "@diamondlightsource/ui-components";
 import { SpaResponse } from "loaders/spa";
 import { CollectionTitle } from "components/visualisation/collectionTitle";
+import { prependApiUrl } from "utils/api/client";
 
 const Statistics = React.lazy(() => import("components/spa/statistics"));
 
@@ -79,7 +80,7 @@ const SpaPage = () => {
             <Spacer />
             <Button
               as={ChakraLink}
-              href={`${process.env.REACT_APP_API_ENDPOINT}dataCollections/${loaderData.collection.dataCollectionId}/report`}
+              href={prependApiUrl(`dataCollections/${loaderData.collection.dataCollectionId}/report`)}
               leftIcon={<MdOutlineInsertChart />}
             >
               Report

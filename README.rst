@@ -4,7 +4,7 @@ PATo
 |code_ci| |license|
 
 ============== ==============================================================
-Source code    https://github.com/DiamondLightSource/pato-frontend
+Source code    https://github.com/DiamondLightSource/pato-frontend/
 ============== ==============================================================
 
 Particle Analysis and Tomography Visualization Interface
@@ -13,15 +13,19 @@ Particle Analysis and Tomography Visualization Interface
 Configuration
 ==========
 
-- REACT_APP_API_ENDPOINT: API URL
-- REACT_APP_AUTH_ENDPOINT: Auth URL
-- REACT_APP_STAGING_URL: Staging deployment URL
-- REACT_APP_DEV_CONTACT: Developer contact email
-- REACT_APP_DEPLOY_TYPE: Deployment type
+Build time:
+
 - REACT_APP_VERSION: App version
-- REACT_APP_AUTH_TYPE: Authentication type. Can be :code:`oidc` or :code:`dummy`
-- REACT_APP_FEEDBACK_URL: Feedback form URL
-- REACT_APP_SAMPLE_HANDLING_URL: URL pointing to sample handling instance
+
+Run time:
+
+Create a configuration file named `config.js`, based on `config.example.js`, and mount custom runtime configs on the root of the deployment folder (e.g.: :code:`/usr/share/nginx/html` for nginx). In local development mode, modify :code:`config.js` in :code:`/public` instead.
+
+- API_URL: base URL for API endpoints
+- AUTH_URL: base URL for authentication endpoints
+- DEV_CONTACT: email used for contacting application support
+- ENVIRONMENT: application environment - one of 'production', 'staging' or 'demo'
+- FEEDBACK_URL (optional): URL pointing to form that takes user feedback
 
 ==========
 Deployment
