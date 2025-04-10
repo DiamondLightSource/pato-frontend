@@ -43,8 +43,8 @@ Testing
 
 - Run :code:`yarn test`
 
-.. |code_ci| image:: https://github.com/DiamondLightSource/pato-frontend/actions/workflows/node.js.yml/badge.svg
-    :target: https://github.com/DiamondLightSource/pato-frontend/actions/workflows/node.js.yml
+.. |code_ci| image:: https://github.com/DiamondLightSource/pato-frontend/actions/workflows/test.yml/badge.svg
+    :target: https://github.com/DiamondLightSource/pato-frontend/actions/workflows/test.yml
     :alt: Code CI
 
 .. |license| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
