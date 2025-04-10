@@ -15,7 +15,7 @@ import { baseToast } from "@diamondlightsource/ui-components";
 import { client } from "utils/api/client";
 import { useMemo, useState } from "react";
 import { pascalToSpace } from "utils/generic";
-import { useLoaderData, useNavigate, useParams } from "react-router-dom";
+import { useLoaderData, useNavigate, useParams } from "react-router";
 import { UserWithEmail } from "loaders/user";
 
 export interface AlertValues {

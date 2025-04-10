@@ -1,4 +1,4 @@
-import { Params, replace } from "react-router-dom";
+import { Params, replace } from "react-router";
 import { components } from "schema/main";
 import { client } from "utils/api/client";
 

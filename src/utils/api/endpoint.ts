@@ -1,4 +1,4 @@
-import { Params, createSearchParams } from "react-router-dom";
+import { Params, createSearchParams } from "react-router";
 
 export const includePage = (
   endpoint: string,

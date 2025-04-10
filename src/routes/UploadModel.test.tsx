@@ -8,7 +8,7 @@ import { mockToast } from "../../vitest.setup";
 
 const mockUseNavigate = vi.fn();
 
-vi.mock("react-router-dom", async (importOriginal) => {
+vi.mock("react-router", async (importOriginal) => {
   const actual = await importOriginal<any>();
   return {
     ...actual,

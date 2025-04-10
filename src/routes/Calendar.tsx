@@ -3,7 +3,7 @@ import { EventClickArg, EventInput, DatesSetArg, EventContentArg } from "@fullca
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { useCallback, useEffect, useState } from "react";
 import { client } from "utils/api/client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { components } from "schema/main";
 import "styles/calendar.css";
 import FullCalendar from "@fullcalendar/react";

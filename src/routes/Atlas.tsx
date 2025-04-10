@@ -2,7 +2,7 @@ import { Checkbox, Divider, Heading, HStack, Spacer, VStack } from "@chakra-ui/r
 import { Atlas } from "components/atlas/Atlas";
 import { GridSquare } from "components/atlas/GridSquare";
 import { useCallback, useMemo } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router";
 import { components } from "schema/main";
 
 const AtlasPage = () => {

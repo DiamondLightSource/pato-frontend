@@ -1,6 +1,6 @@
 import { Divider, Heading, HStack, Spacer, Box, Select, Text } from "@chakra-ui/react";
 import { useCallback, useEffect } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router";
 import { Pagination, DebouncedInput, Table } from "@diamondlightsource/ui-components";
 import { usePaginationSearchParams } from "utils/hooks";
 import { Option, Options } from "components/form/input";

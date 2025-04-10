@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { MdLogin } from "react-icons/md";
 
-import { Link as LinkRouter, useLoaderData } from "react-router-dom";
+import { Link as LinkRouter, useLoaderData } from "react-router";
 import { components } from "schema/main";
 
 type Session = components["schemas"]["SessionResponse"];

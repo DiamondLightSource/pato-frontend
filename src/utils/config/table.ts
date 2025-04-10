@@ -22,15 +22,6 @@ export const groupsHeaders = [
   { key: "atlasLink", label: "" },
 ];
 
-export const collectionHeaders = [
-  { key: "comments", label: "Comments" },
-  { key: "startTime", label: "Start Time" },
-  { key: "endTime", label: "End Time" },
-  { key: "runStatus", label: "Run Status" },
-  { key: "tomograms", label: "Processed Tomograms" },
-  { key: "globalAlignmentQuality", label: "Alignment Quality" },
-];
-
 export const beamlineToMicroscope: Record<string, string> = {
   m02: "Krios 1",
   m03: "Krios 2",

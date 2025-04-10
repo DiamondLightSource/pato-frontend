@@ -2,10 +2,10 @@ import type { RenderOptions } from "@testing-library/react";
 
 import React, { PropsWithChildren } from "react";
 import { render } from "@testing-library/react";
-import { createMemoryRouter, LoaderFunction, MemoryRouter, RouterProvider } from "react-router-dom";
+import { createMemoryRouter, LoaderFunction, MemoryRouter, RouterProvider } from "react-router";
 import { Accordion } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { InitialEntry } from "@remix-run/router";
+import { InitialEntry } from "react-router";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 0 } },
@@ -42,6 +42,7 @@ const renderWithRoute = (
         path: "*",
         element: ui,
         loader,
+        hydrateFallbackElement: <></>,
       },
     ],
     {

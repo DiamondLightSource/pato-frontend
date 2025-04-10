@@ -1,12 +1,12 @@
 import { screen } from "@testing-library/react";
 import { renderWithProviders } from "utils/test-utils";
 import { Error } from "./Error";
-import { useRouteError } from "react-router-dom";
+import { useRouteError } from "react-router";
 import { Mock } from "vitest";
 
 const mockRouteError = vi.fn();
 
-vi.mock("react-router-dom", async (importOriginal) => {
+vi.mock("react-router", async (importOriginal) => {
   const actual = await importOriginal<any>();
   return {
     ...actual,

@@ -1,5 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
-import { Params } from "react-router-dom";
+import { Params } from "react-router";
 import { components } from "schema/main";
 import { client } from "utils/api/client";
 

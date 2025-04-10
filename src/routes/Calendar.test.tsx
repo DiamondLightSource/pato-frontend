@@ -4,7 +4,7 @@ import Calendar from "routes/Calendar";
 
 const mockNavigate = vi.fn();
 
-vi.mock("react-router-dom", async (importOriginal) => {
+vi.mock("react-router", async (importOriginal) => {
   const actual = await importOriginal<any>();
   return {
     ...actual,

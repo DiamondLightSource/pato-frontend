@@ -1,5 +1,5 @@
 import { Box, HStack, Text, Link, Progress } from "@chakra-ui/react";
-import { Outlet, useLoaderData, useLocation } from "react-router-dom";
+import { Outlet, useLoaderData, useLocation } from "react-router";
 import { Footer } from "components/navigation/footer";
 import { useIsFetching } from "@tanstack/react-query";
 import {
