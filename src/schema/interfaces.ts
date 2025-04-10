@@ -7,7 +7,13 @@ export type SessionResponse = components["schemas"]["SessionResponse"];
 
 declare global {
   interface Window {
-    ENV: { API_URL: string; AUTH_URL: string; DEV_CONTACT: string; ENVIRONMENT: string; FEEDBACK_URL?: string };
+    ENV: {
+      API_URL: string;
+      AUTH_URL: string;
+      DEV_CONTACT: string;
+      ENVIRONMENT: "demo" | "staging" | "production";
+      FEEDBACK_URL?: string;
+    };
   }
 }
 
