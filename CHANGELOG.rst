@@ -6,9 +6,10 @@ Changelog
 v1.21.1 (10/04/2025)
 ++++++++++
 
-**Added**
+**Changed**
 
 - Update Vite/React Router version
+- Use runtime config file
 
 ++++++++++
 v1.21.0 (09/04/2025)
