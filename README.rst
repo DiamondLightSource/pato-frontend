@@ -19,7 +19,7 @@ Build time:
 
 Run time:
 
-Create a configuration file named `config.js`, based on `config.example.js`, and mount custom runtime configs on the root of the deployment folder
+Create a configuration file named `config.js`, based on `config.example.js`, and mount custom runtime configs on the root of the deployment folder (e.g.: :code:`/usr/share/nginx/html` for nginx). In local development mode, modify :code:`config.js` in :code:`/public` instead.
 
 - API_URL: base URL for API endpoints
 - AUTH_URL: base URL for authentication endpoints
