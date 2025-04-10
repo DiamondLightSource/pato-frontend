@@ -106,7 +106,7 @@ const getSpaData = async (groupId: string, propId: string, sessionId: string) =>
 
     parsedCollectionData.info.unshift({
       label: "Acquisition Software",
-      value: getAcquisitionSoftware(data.fileTemplate),
+      value: getAcquisitionSoftware(data.fileTemplate ?? null),
     });
     parsedCollectionData.info.push({
       label: "Comments",

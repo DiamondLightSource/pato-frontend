@@ -5,9 +5,10 @@ export interface FormProps extends Omit<BoxProps, "onSubmit"> {
   children?: ReactNode;
   onClose?: () => void;
   onSubmit?: React.FormEventHandler<HTMLFormElement>;
+  isLoading?: boolean;
 }
 
-const Form = ({ children, onClose, onSubmit, ...props }: FormProps) => {
+const Form = ({ children, onClose, onSubmit, isLoading, ...props }: FormProps) => {
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -29,7 +30,9 @@ const Form = ({ children, onClose, onSubmit, ...props }: FormProps) => {
           <Button variant='outline' onClick={onClose}>
             Cancel
           </Button>
-          <Button type='submit'>Submit</Button>
+          <Button isLoading={isLoading} type='submit'>
+            Submit
+          </Button>
         </HStack>
       </form>
     </Box>

@@ -69,7 +69,7 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
 
   const handleFoilHoleClicked = useCallback(
     (foilHole: FoilHole) => {
-      if (gridSquareId === null || foilHole.foilHoleId === null || foilHole.movieCount === 0) {
+      if (gridSquareId === null || foilHole.movieCount === 0) {
         return;
       }
 
@@ -194,7 +194,8 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
               >
                 <Image
                   alt={movie.movieId.toString()}
-                  src={prependApiUrl(`movies/${movie.movieId}/micrograph?compress=true`)}
+                  src={prependApiUrl(`movies/${movie.movieId}/micrograph`)}
+                  fallbackSrc='/images/loading.png'
                 ></Image>
               </Link>
             ))}

@@ -1,7 +1,7 @@
 import { Info, BasePoint } from "@diamondlightsource/ui-components";
 import { components, paths } from "schema/main";
 
-export type AutoProcSchema = components["schemas"]["AutoProcProgram"];
+export type AutoProcSchema = components["schemas"]["AutoProcProgramResponse"];
 export type ProcessingJobSchema = components["schemas"]["ProcessingJob"];
 export type SessionResponse = components["schemas"]["SessionResponse"];
 

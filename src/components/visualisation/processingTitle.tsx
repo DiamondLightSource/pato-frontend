@@ -48,8 +48,8 @@ const TwoLineTitle = ({ title, value }: TwoLineTitleProps) => (
   </VStack>
 );
 
-const RecipeTag = ({ recipe }: { recipe: string }) => {
-  if (!(recipe in recipeTagMap)) {
+const RecipeTag = ({ recipe }: { recipe?: string | null }) => {
+  if (!recipe || !(recipe in recipeTagMap)) {
     return null;
   }
 

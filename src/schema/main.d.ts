@@ -5,336 +5,1224 @@
 
 export interface paths {
   "/sessions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Sessions
      * @description List visits belonging to a proposal
      */
     get: operations["get_sessions_sessions_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/tomograms/{tomogramId}/shiftPlot": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Shift Plot
      * @description Get X-Y shift plot data
      */
     get: operations["get_shift_plot_tomograms__tomogramId__shiftPlot_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/tomograms/{tomogramId}/motion": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Motion Correction
      * @description Get motion correction data for the given tomogram
      */
     get: operations["get_motion_correction_tomograms__tomogramId__motion_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/tomograms/{tomogramId}/centralSlice": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Slice
      * @description Get tomogram central slice image
      */
     get: operations["get_slice_tomograms__tomogramId__centralSlice_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/tomograms/{tomogramId}/movie": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Movie
      * @description Get tomogram movie image
      */
     get: operations["get_movie_tomograms__tomogramId__movie_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/tomograms/{tomogramId}/projection": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Projection
      * @description Get tomogram projection image
      */
     get: operations["get_projection_tomograms__tomogramId__projection_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/tomograms/{tomogramId}/ctf": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Ctf
      * @description Get astigmatism, resolution and defocus as a function of tilt image
-     * alignment refined tilt angles
+     *     alignment refined tilt angles
      */
     get: operations["get_ctf_tomograms__tomogramId__ctf_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/movies/{movieId}/micrograph": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Micrograph
      * @description Get micrograph snapshot
      */
     get: operations["get_micrograph_movies__movieId__micrograph_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/movies/{movieId}/fft": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Fft
      * @description Get FFT theoretical image
      */
     get: operations["get_fft_movies__movieId__fft_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/movies/{movieId}/drift": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Drift
      * @description Get drift from a JSON file or from the drift table
      */
     get: operations["get_drift_movies__movieId__drift_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/movies/{movieId}/iceThickness": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Relative Ice Thickness
      * @description Get values for relative ice thickness for a given movie
      */
     get: operations["get_relative_ice_thickness_movies__movieId__iceThickness_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/movies/{movieId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Movie Info
+     * @description Get foil hole and grid square IDs for a given movie
+     */
+    get: operations["get_movie_info_movies__movieId__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/dataCollections/{collectionId}/tomograms": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Tomograms
      * @description Get tomogram that belongs to the collection
      */
     get: operations["get_tomograms_dataCollections__collectionId__tomograms_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/dataCollections/{collectionId}/reprocessing/tomograms": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Initiate Tomogram Reprocessing
      * @description Initiate data reprocessing
      */
     post: operations["initiate_tomogram_reprocessing_dataCollections__collectionId__reprocessing_tomograms_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/dataCollections/{collectionId}/reprocessing/spa": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Initiate Spa Reprocessing
      * @description Initiate data reprocessing
      */
     post: operations["initiate_spa_reprocessing_dataCollections__collectionId__reprocessing_spa_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/dataCollections/{collectionId}/processingJobs": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Processing Jobs
      * @description Get processing jobs that belong to the collection
      */
     get: operations["get_processing_jobs_dataCollections__collectionId__processingJobs_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/dataCollections/{collectionId}/motion": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Motion Correction
      * @description Get motion correction and tilt alignment data
      */
     get: operations["get_motion_correction_dataCollections__collectionId__motion_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/dataCollections/{collectionId}/iceThickness": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Ice Histogram
      * @description Get relative ice thickness histogram
      */
     get: operations["get_ice_histogram_dataCollections__collectionId__iceThickness_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/dataCollections/{collectionId}/totalMotion": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Motion Histogram
      * @description Get total motion histogram
      */
     get: operations["get_motion_histogram_dataCollections__collectionId__totalMotion_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/dataCollections/{collectionId}/resolution": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Resolution
      * @description Get estimated resolution histogram
      */
     get: operations["get_resolution_dataCollections__collectionId__resolution_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/dataCollections/{collectionId}/particles": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Particle Count
      * @description Get particle count histogram
      */
     get: operations["get_particle_count_dataCollections__collectionId__particles_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/dataCollections/{collectionId}/ctf": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Ctf
+     * @description Get defocus/particle count information
+     */
+    get: operations["get_ctf_dataCollections__collectionId__ctf_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/dataCollections/{collectionId}/particleCountPerResolution": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get Particle Count Per Resolution */
+    get: operations["get_particle_count_per_resolution_dataCollections__collectionId__particleCountPerResolution_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/dataCollections/{collectionId}/report": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Session Report
+     * @description Generate session report
+     */
+    get: operations["get_session_report_dataCollections__collectionId__report_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/dataGroups/{groupId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Collection Group
+     * @description Get data collection group
+     */
+    get: operations["get_collection_group_dataGroups__groupId__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/dataGroups": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Collection Groups
      * @description List collection groups belonging to a session
      */
     get: operations["get_collection_groups_dataGroups_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/dataGroups/{groupId}/dataCollections": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Collections
      * @description List collections belonging to a data collection group
      */
     get: operations["get_collections_dataGroups__groupId__dataCollections_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/dataGroups/{groupId}/grid-squares": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Grid Squares
+     * @description Get child grid squares
+     */
+    get: operations["get_grid_squares_dataGroups__groupId__grid_squares_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/dataGroups/{groupId}/atlas": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Atlas
+     * @description Get atlas
+     */
+    get: operations["get_atlas_dataGroups__groupId__atlas_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/dataGroups/{groupId}/atlas/image": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Atlas Image
+     * @description Get atlas image
+     */
+    get: operations["get_atlas_image_dataGroups__groupId__atlas_image_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/dataGroups/{groupId}/alerts": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Sign Up For Alerts
+     * @description Request alerts for a given email address
+     */
+    post: operations["sign_up_for_alerts_dataGroups__groupId__alerts_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/proposals": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Proposals
      * @description List proposals
      */
     get: operations["get_proposals_proposals_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/proposals/{proposalReference}/sessions/{visitNumber}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Session
-     * @description List proposals
+     * @description Get individual session
      */
     get: operations["get_session_proposals__proposalReference__sessions__visitNumber__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/proposals/{proposalReference}/sessions/{visitNumber}/dataCollections": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Create Data Collection
+     * @description Create data collection
+     */
+    post: operations["create_data_collection_proposals__proposalReference__sessions__visitNumber__dataCollections_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/proposals/{proposalReference}/sessions/{visitNumber}/reprocessingEnabled": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Check Reprocessing Enabled
+     * @description Check if reprocessing is enabled for session
+     */
+    get: operations["check_reprocessing_enabled_proposals__proposalReference__sessions__visitNumber__reprocessingEnabled_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/proposals/{proposalReference}/sessions/{visitNumber}/sampleHandling": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Redirect To Sample Handling
+     * @description Sample handling redirect
+     */
+    get: operations["redirect_to_sample_handling_proposals__proposalReference__sessions__visitNumber__sampleHandling_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/proposals/{proposalReference}/sessions/{visitNumber}/processingModel": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Upload Processing Model
+     * @description Upload custom processing model
+     */
+    post: operations["upload_processing_model_proposals__proposalReference__sessions__visitNumber__processingModel_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/autoProc/{autoProcId}/tomogram": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Tomogram
      * @description Get tomogram
      */
     get: operations["get_tomogram_autoProc__autoProcId__tomogram_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/autoProc/{autoProcId}/motion": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Motion Correction
      * @description Get motion correction and tilt alignment data (including drift plot)
      */
     get: operations["get_motion_correction_autoProc__autoProcId__motion_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/autoProc/{autoProcId}/ctf": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Ctf
-     * @description Get astigmatism, resolution and defocus as a function of motion correction
-     * image numbers
+     * @description Get astigmatism, resolution, particle count and defocus as a function of motion correction
+     *     image numbers. Meant to be used with SPA processing jobs
      */
     get: operations["get_ctf_autoProc__autoProcId__ctf_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/autoProc/{autoProcId}/particlePicker": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Particle Picker
      * @description Get particle picking data
      */
     get: operations["get_particle_picker_autoProc__autoProcId__particlePicker_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/autoProc/{autoProcId}/classification": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Classification
      * @description Get classification data
      */
     get: operations["get_classification_autoProc__autoProcId__classification_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/autoProc/{autoProcId}/classification/{classificationId}/image": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Classification Image
      * @description Get class' image representation or MRC file
      */
     get: operations["get_classification_image_autoProc__autoProcId__classification__classificationId__image_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/autoProc/{autoProcId}/classification/{classificationId}/angleDistribution": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Angle Distribution
+     * @description Get Mollweide plot of angle distributions
+     */
+    get: operations["get_angle_distribution_autoProc__autoProcId__classification__classificationId__angleDistribution_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/autoProc/{autoProcId}/particlePicker/{particlePickerId}/image": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Particle Picker Image
      * @description Get class image
      */
     get: operations["get_particle_picker_image_autoProc__autoProcId__particlePicker__particlePickerId__image_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/autoProc/{autoProcId}/iceThickness": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Ice Histogram
      * @description Get relative ice thickness histogram
      */
     get: operations["get_ice_histogram_autoProc__autoProcId__iceThickness_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/autoProc/{autoProcId}/totalMotion": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Motion
      * @description Get total motion histogram
      */
     get: operations["get_motion_autoProc__autoProcId__totalMotion_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/autoProc/{autoProcId}/resolution": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Resolution
      * @description Get estimated resolution histogram
      */
     get: operations["get_resolution_autoProc__autoProcId__resolution_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/autoProc/{autoProcId}/particles": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Particle Count
      * @description Get particle count histogram
      */
     get: operations["get_particle_count_autoProc__autoProcId__particles_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/autoProc/{autoProcId}/bFactorFit": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get B Factor Fit
+     * @description Get B factor fit data
+     */
+    get: operations["get_b_factor_fit_autoProc__autoProcId__bFactorFit_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/feedback": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Post Feedback
      * @description Post user feedback to configured email address
      */
     post: operations["post_feedback_feedback_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/processingJob/{processingJobId}/parameters": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Initiate Tomogram Reprocessing
      * @description Get processing job parameters
      */
     get: operations["initiate_tomogram_reprocessing_processingJob__processingJobId__parameters_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/grid-squares/{gridSquareId}/foil-holes": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Foil Holes
+     * @description Get foil holes in a grid square
+     */
+    get: operations["get_foil_holes_grid_squares__gridSquareId__foil_holes_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/grid-squares/{gridSquareId}/image": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Grid Square Image
+     * @description Get image of grid square
+     */
+    get: operations["get_grid_square_image_grid_squares__gridSquareId__image_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/foil-holes/{foilHoleId}/movies": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Movies
+     * @description Get movies in a foil hole
+     */
+    get: operations["get_movies_foil_holes__foilHoleId__movies_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
 }
-
 export type webhooks = Record<string, never>;
-
 export interface components {
   schemas: {
-    /** AutoProcProgram */
-    AutoProcProgram: {
+    /** Atlas */
+    Atlas: {
+      /** Atlasid */
+      atlasId: number;
+      /** Pixelsize */
+      pixelSize: number;
+      /** Cassetteslot */
+      cassetteSlot?: number | null;
+      /** Datacollectiongroupid */
+      dataCollectionGroupId: number;
+    };
+    /** AutoProcProgramResponse */
+    AutoProcProgramResponse: {
       /** Autoprocprogramid */
       autoProcProgramId: number;
       /** Processingcommandline */
-      processingCommandLine?: string;
+      processingCommandLine: string | null;
       /** Processingprograms */
-      processingPrograms?: string;
+      processingPrograms: string | null;
       /** Processingstatus */
-      processingStatus?: number;
+      processingStatus?: number | null;
       /** Processingmessage */
-      processingMessage?: string;
-      /**
-       * Processingstarttime
-       * Format: date-time
-       */
-      processingStartTime?: string;
-      /**
-       * Processingendtime
-       * Format: date-time
-       */
-      processingEndTime?: string;
+      processingMessage: string | null;
+      /** Processingstarttime */
+      processingStartTime?: string | null;
+      /** Processingendtime */
+      processingEndTime?: string | null;
       /** Processingenvironment */
-      processingEnvironment?: string;
+      processingEnvironment: string | null;
+      /** Recordtimestamp */
+      recordTimeStamp?: string | null;
+    };
+    /** BFactorFitOut */
+    BFactorFitOut: {
+      /** Numberofparticles */
+      numberOfParticles: number;
+      /** Resolution */
+      resolution: number;
+    };
+    /** BaseDataCollectionOut */
+    BaseDataCollectionOut: {
       /**
-       * Recordtimestamp
-       * Format: date-time
+       * Datacollectionid
+       * @description Data Collection ID
        */
-      recordTimeStamp?: string;
+      dataCollectionId: number;
+      /** Datacollectiongroupid */
+      dataCollectionGroupId: number;
+      /** Index */
+      index?: number | null;
+      /**
+       * Starttime
+       * @description Start time of the dataCollection
+       */
+      startTime?: string | null;
+      /**
+       * Endtime
+       * @description End time of the dataCollection
+       */
+      endTime?: string | null;
+      /** Experimenttype */
+      experimenttype?: string | null;
+      /** Filetemplate */
+      fileTemplate?: string | null;
+      /** Imagesuffix */
+      imageSuffix?: string | null;
+      /**
+       * Imagedirectory
+       * @description The directory where files reside - should end with a slash
+       */
+      imageDirectory?: string | null;
+      /** Imageprefix */
+      imagePrefix?: string | null;
+    };
+    /** Body_upload_processing_model_proposals__proposalReference__sessions__visitNumber__processingModel_post */
+    Body_upload_processing_model_proposals__proposalReference__sessions__visitNumber__processingModel_post: {
+      /**
+       * File
+       * Format: binary
+       */
+      file: string;
     };
     /** CTF */
     CTF: {
       /** Ctfid */
       ctfId: number;
       /** Box size in x */
-      boxSizeX: number;
+      boxSizeX?: number | null;
       /** Box size in y */
-      boxSizeY: number;
+      boxSizeY?: number | null;
       /** Minimum resolution for CTF */
-      minResolution: number;
+      minResolution?: number | null;
       /** Maxresolution */
-      maxResolution: number;
+      maxResolution?: number | null;
       /** Mindefocus */
-      minDefocus: number;
+      minDefocus?: number | null;
       /** Maxdefocus */
-      maxDefocus: number;
+      maxDefocus?: number | null;
       /** Defocusstepsize */
-      defocusStepSize: number;
+      defocusStepSize?: number | null;
       /** Astigmatism */
-      astigmatism: number;
+      astigmatism?: number | null;
       /** Astigmatismangle */
-      astigmatismAngle: number;
+      astigmatismAngle?: number | null;
       /** Estimatedresolution */
-      estimatedResolution: number;
+      estimatedResolution?: number | null;
       /** Estimateddefocus */
-      estimatedDefocus: number;
+      estimatedDefocus?: number | null;
       /** Amplitudecontrast */
-      amplitudeContrast: number;
+      amplitudeContrast?: number | null;
       /** Correlation value */
-      ccValue: number;
+      ccValue?: number | null;
       /** Full path to the jpg image of the simulated FFT */
-      fftTheoreticalFullPath: string;
+      fftTheoreticalFullPath?: string | null;
       /** Comments */
-      comments: string;
+      comments?: string | null;
     };
     /** Classification */
     Classification: {
@@ -359,9 +1247,9 @@ export interface components {
       /** Classnumber */
       classNumber: number;
       /** Classimagefullpath */
-      classImageFullPath?: string;
+      classImageFullPath?: string | null;
       /** Particlesperclass */
-      particlesPerClass?: number;
+      particlesPerClass?: number | null;
       /** Rotationaccuracy */
       rotationAccuracy: number;
       /** Translationaccuracy */
@@ -371,61 +1259,44 @@ export interface components {
       /** Overallfouriercompleteness */
       overallFourierCompleteness: number;
       /** Classdistribution */
-      classDistribution?: number;
+      classDistribution?: number | null;
       /** Selected */
-      selected?: boolean;
-      bFactorFitIntercept: number;
-      bFactorFitLinear: number;
+      selected?: boolean | null;
+      /** Bfactorfitintercept */
+      bFactorFitIntercept?: number | null;
+      /** Bfactorfitlinear */
+      bFactorFitLinear?: number | null;
     };
-    /** CtfImageNumber */
-    CtfImageNumber: {
+    /** CtfBaseSpa */
+    CtfBaseSpa: {
       /** Estimatedresolution */
-      estimatedResolution?: number;
+      estimatedResolution?: number | null;
       /** Estimateddefocus */
-      estimatedDefocus?: number;
+      estimatedDefocus?: number | null;
       /** Astigmatism */
-      astigmatism?: number;
+      astigmatism?: number | null;
       /** Imagenumber */
       imageNumber: number;
-    };
-    /** CtfImageNumberList */
-    CtfImageNumberList: {
-      /** Items */
-      items: {
-        /** Estimatedresolution */
-        estimatedResolution?: number;
-        /** Estimateddefocus */
-        estimatedDefocus?: number;
-        /** Astigmatism */
-        astigmatism?: number;
-        /** Imagenumber */
-        imageNumber: number;
-      }[];
+      /** Numberofparticles */
+      numberOfParticles?: number | null;
     };
     /** CtfTiltAlign */
     CtfTiltAlign: {
       /** Estimatedresolution */
-      estimatedResolution?: number;
+      estimatedResolution?: number | null;
       /** Estimateddefocus */
-      estimatedDefocus?: number;
+      estimatedDefocus?: number | null;
       /** Astigmatism */
-      astigmatism?: number;
+      astigmatism?: number | null;
       /** Refinedtiltangle */
-      refinedTiltAngle?: number;
+      refinedTiltAngle?: number | null;
     };
-    /** CtfTiltAlignList */
-    CtfTiltAlignList: {
-      /** Items */
-      items: {
-        /** Estimatedresolution */
-        estimatedResolution?: number;
-        /** Estimateddefocus */
-        estimatedDefocus?: number;
-        /** Astigmatism */
-        astigmatism?: number;
-        /** Refinedtiltangle */
-        refinedTiltAngle?: number;
-      }[];
+    /** DataCollectionCreationParameters */
+    DataCollectionCreationParameters: {
+      /** Filedirectory */
+      fileDirectory: string;
+      /** Fileextension */
+      fileExtension: string;
     };
     /** DataCollectionGroupSummaryResponse */
     DataCollectionGroupSummaryResponse: {
@@ -440,21 +1311,23 @@ export interface components {
        */
       sessionId: number;
       /** Experimenttype */
-      experimentType?: string;
+      experimentType?: string | null;
+      /** Atlasid */
+      atlasId?: number | null;
       /**
        * Experimenttypeid
        * @default 37
        */
-      experimentTypeId?: number;
+      experimentTypeId: number | null;
       /**
        * Experimenttypename
        * @default Single Particle
        */
-      experimentTypeName?: string;
+      experimentTypeName: string | null;
       /** Imagedirectory */
-      imageDirectory?: string;
+      imageDirectory?: string | null;
       /** Comments */
-      comments?: string;
+      comments?: string | null;
       /** Collections */
       collections: number;
     };
@@ -465,221 +1338,214 @@ export interface components {
        * @description Data Collection ID
        */
       dataCollectionId: number;
-      /**
-       * Sessionid
-       * @description Session ID
-       */
-      SESSIONID: number;
-      /** Comments */
-      comments?: string;
+      /** Datacollectiongroupid */
+      dataCollectionGroupId: number;
+      /** Index */
+      index?: number | null;
       /**
        * Starttime
-       * Format: date-time
        * @description Start time of the dataCollection
        */
-      startTime: string;
-      /** Pixelsizeonimage */
-      pixelSizeOnImage: number;
-      /** Voltage */
-      voltage: number;
-      /** Imagesizex */
-      imageSizeX: number;
-      /** Imagesizey */
-      imageSizeY: number;
-      /** Experimenttype */
-      experimenttype: string;
-      /** Index */
-      index: number;
+      startTime?: string | null;
       /**
        * Endtime
-       * Format: date-time
        * @description End time of the dataCollection
        */
-      endTime: string;
-      /** Runstatus */
-      runStatus: string;
-      /** Axisstart */
-      axisStart?: number;
-      /** Axisend */
-      axisEnd?: number;
-      /** Axisrange */
-      axisRange?: number;
-      /** Overlap */
-      overlap?: number;
-      /** Numberofimages */
-      numberOfImages?: number;
-      /** Startimagenumber */
-      startImageNumber?: number;
-      /** Numberofpasses */
-      numberOfPasses?: number;
-      /** Exposuretime */
-      exposureTime?: number;
+      endTime?: string | null;
+      /** Experimenttype */
+      experimenttype?: string | null;
+      /** Filetemplate */
+      fileTemplate?: string | null;
+      /** Imagesuffix */
+      imageSuffix?: string | null;
       /**
        * Imagedirectory
        * @description The directory where files reside - should end with a slash
        */
-      imageDirectory: string;
+      imageDirectory?: string | null;
       /** Imageprefix */
-      imagePrefix: string;
-      /** Imagesuffix */
-      imageSuffix: string;
+      imagePrefix?: string | null;
+      /** Comments */
+      comments?: string | null;
+      /**
+       * Pixelsizeonimage
+       * @description Pixel size on image, calculated from magnification
+       */
+      pixelSizeOnImage?: number | null;
+      /** Voltage */
+      voltage?: number | null;
+      /**
+       * Imagesizex
+       * @description Image size in x, in case crop has been used.
+       */
+      imageSizeX?: number | null;
+      /**
+       * Imagesizey
+       * @description Image size in y, in case crop has been used.
+       */
+      imageSizeY?: number | null;
+      /** Runstatus */
+      runStatus?: string | null;
+      /** Axisstart */
+      axisStart?: number | null;
+      /** Axisend */
+      axisEnd?: number | null;
+      /** Axisrange */
+      axisRange?: number | null;
+      /** Overlap */
+      overlap?: number | null;
+      /** Numberofimages */
+      numberOfImages?: number | null;
+      /** Startimagenumber */
+      startImageNumber?: number | null;
+      /** Numberofpasses */
+      numberOfPasses?: number | null;
+      /** Exposuretime */
+      exposureTime?: number | null;
       /**
        * Imagecontainersubpath
        * @description Internal path of a HDF5 file pointing to the data
-       *         for this data collection
+       *             for this data collection
        */
-      imageContainerSubPath: string;
-      /** Filetemplate */
-      fileTemplate: string;
+      imageContainerSubPath?: string | null;
       /** Wavelength */
-      wavelength?: number;
+      wavelength?: number | null;
       /** Resolution */
-      resolution?: number;
+      resolution?: number | null;
       /** Detectordistance */
-      detectorDistance?: number;
+      detectorDistance?: number | null;
       /** Xbeam */
-      xBeam?: number;
+      xBeam?: number | null;
       /** Ybeam */
-      yBeam?: number;
+      yBeam?: number | null;
       /** Printableforreport */
-      printableForReport?: number;
-      /** Crystalclass */
-      CRYSTALCLASS: string;
+      printableForReport?: number | null;
       /** Slitgapvertical */
-      slitGapVertical?: number;
+      slitGapVertical?: number | null;
       /** Slitgaphorizontal */
-      slitGapHorizontal?: number;
+      slitGapHorizontal?: number | null;
       /** Transmission */
-      transmission?: number;
+      transmission?: number | null;
       /** Synchrotronmode */
-      synchrotronMode: string;
+      synchrotronMode?: string | null;
       /** Xtalsnapshotfullpath1 */
-      xtalSnapshotFullPath1: string;
+      xtalSnapshotFullPath1?: string | null;
       /** Xtalsnapshotfullpath2 */
-      xtalSnapshotFullPath2: string;
+      xtalSnapshotFullPath2?: string | null;
       /** Xtalsnapshotfullpath3 */
-      xtalSnapshotFullPath3: string;
+      xtalSnapshotFullPath3?: string | null;
       /** Xtalsnapshotfullpath4 */
-      xtalSnapshotFullPath4: string;
-      /**
-       * RotationAxisEnum
-       * @description An enumeration.
-       * @enum {string}
-       */
-      rotationAxis?: "Omega" | "Kappa" | "Phi";
+      xtalSnapshotFullPath4?: string | null;
+      rotationAxis?: components["schemas"]["RotationAxisEnum"] | null;
       /** Phistart */
-      phiStart?: number;
+      phiStart?: number | null;
       /** Kappastart */
-      kappaStart?: number;
+      kappaStart?: number | null;
       /** Omegastart */
-      omegaStart?: number;
+      omegaStart?: number | null;
       /** Chistart */
-      chiStart?: number;
+      chiStart?: number | null;
       /** Resolutionatcorner */
-      resolutionAtCorner?: number;
+      resolutionAtCorner?: number | null;
       /** Detector2Theta */
-      detector2Theta?: number;
-      /** Detectormode */
-      DETECTORMODE: string;
+      detector2Theta?: number | null;
       /** Undulatorgap1 */
-      undulatorGap1?: number;
+      undulatorGap1?: number | null;
       /** Undulatorgap2 */
-      undulatorGap2?: number;
+      undulatorGap2?: number | null;
       /** Undulatorgap3 */
-      undulatorGap3?: number;
+      undulatorGap3?: number | null;
       /** Beamsizeatsamplex */
-      beamSizeAtSampleX?: number;
+      beamSizeAtSampleX?: number | null;
       /** Beamsizeatsampley */
-      beamSizeAtSampleY?: number;
+      beamSizeAtSampleY?: number | null;
       /** Centeringmethod */
-      centeringMethod: string;
+      centeringMethod?: string | null;
       /** Averagetemperature */
-      averageTemperature?: number;
+      averageTemperature?: number | null;
       /** Actualcenteringposition */
-      actualCenteringPosition: string;
+      actualCenteringPosition?: string | null;
       /** Beamshape */
-      beamShape: string;
-      /** Datacollectiongroupid */
-      dataCollectionGroupId: number;
-      /** Positionid */
-      POSITIONID?: number;
+      beamShape?: string | null;
       /** Detectorid */
-      detectorId?: number;
+      detectorId?: number | null;
       /** Screeningorigid */
-      screeningOrigId?: number;
+      screeningOrigId?: number | null;
       /** Startpositionid */
-      startPositionId?: number;
+      startPositionId?: number | null;
       /** Endpositionid */
-      endPositionId?: number;
+      endPositionId?: number | null;
       /** Flux */
-      flux?: number;
+      flux?: number | null;
       /** Strategysubwedgeorigid */
-      strategySubWedgeOrigId?: number;
+      strategySubWedgeOrigId?: number | null;
       /** Blsubsampleid */
-      blSubSampleId?: number;
+      blSubSampleId?: number | null;
       /** Flux End */
-      flux_end?: number;
+      flux_end?: number | null;
       /** Bestwilsonplotpath */
-      bestWilsonPlotPath: string;
+      bestWilsonPlotPath?: string | null;
       /** Processeddatafile */
-      processedDataFile: string;
+      processedDataFile?: string | null;
       /** Datfullpath */
-      datFullPath: string;
+      datFullPath?: string | null;
       /** Magnification */
-      magnification?: number;
+      magnification?: number | null;
       /** Totalabsorbeddose */
-      totalAbsorbedDose?: number;
+      totalAbsorbedDose?: number | null;
       /** Binning */
-      binning?: number;
+      binning?: number | null;
       /** Particlediameter */
-      particleDiameter?: number;
+      particleDiameter?: number | null;
       /** Boxsize Ctf */
-      boxSize_CTF?: number;
+      boxSize_CTF?: number | null;
       /** Minresolution */
-      minResolution?: number;
+      minResolution?: number | null;
       /** Mindefocus */
-      minDefocus?: number;
+      minDefocus?: number | null;
       /** Maxdefocus */
-      maxDefocus?: number;
+      maxDefocus?: number | null;
       /** Defocusstepsize */
-      defocusStepSize?: number;
+      defocusStepSize?: number | null;
       /** Amountastigmatism */
-      amountAstigmatism?: number;
+      amountAstigmatism?: number | null;
       /** Extractsize */
-      extractSize?: number;
+      extractSize?: number | null;
       /** Bgradius */
-      bgRadius?: number;
+      bgRadius?: number | null;
       /** Objaperture */
-      objAperture?: number;
+      objAperture?: number | null;
       /** C1Aperture */
-      c1aperture?: number;
+      c1aperture?: number | null;
       /** C2Aperture */
-      c2aperture?: number;
+      c2aperture?: number | null;
       /** C3Aperture */
-      c3aperture?: number;
+      c3aperture?: number | null;
       /** C1Lens */
-      c1lens?: number;
+      c1lens?: number | null;
       /** C2Lens */
-      c2lens?: number;
+      c2lens?: number | null;
       /** C3Lens */
-      c3lens?: number;
+      c3lens?: number | null;
       /** Totalexposeddose */
-      totalExposedDose?: number;
+      totalExposedDose?: number | null;
       /** Nominalmagnification */
-      nominalMagnification?: number;
+      nominalMagnification?: number | null;
       /** Nominaldefocus */
-      nominalDefocus?: number;
+      nominalDefocus?: number | null;
       /** Phaseplate */
-      phasePlate?: string;
+      phasePlate?: string | null;
       /** Datacollectionplanid */
-      dataCollectionPlanId?: number;
+      dataCollectionPlanId?: number | null;
       /** Tomograms */
       tomograms: number;
+      /** Globalalignmentquality */
+      globalAlignmentQuality?: number | null;
     };
     /** DataPoint */
     DataPoint: {
       /** X */
-      x: number | string;
+      x: string | number;
       /** Y */
       y: number;
     };
@@ -694,260 +1560,33 @@ export interface components {
       /** Useragent */
       userAgent: string;
     };
+    /** FoilHole */
+    FoilHole: {
+      /** Diameter */
+      diameter: number;
+      /** Foilholeid */
+      foilHoleId: number;
+      /** X */
+      x: number;
+      /** Y */
+      y: number;
+      /**
+       * Moviecount
+       * @default 0
+       */
+      movieCount: number | null;
+    };
     /** FullMovie */
     FullMovie: {
-      /** CTF */
-      CTF: {
-        /** Ctfid */
-        ctfId: number;
-        /** Box size in x */
-        boxSizeX: number;
-        /** Box size in y */
-        boxSizeY: number;
-        /** Minimum resolution for CTF */
-        minResolution: number;
-        /** Maxresolution */
-        maxResolution: number;
-        /** Mindefocus */
-        minDefocus: number;
-        /** Maxdefocus */
-        maxDefocus: number;
-        /** Defocusstepsize */
-        defocusStepSize: number;
-        /** Astigmatism */
-        astigmatism: number;
-        /** Astigmatismangle */
-        astigmatismAngle: number;
-        /** Estimatedresolution */
-        estimatedResolution: number;
-        /** Estimateddefocus */
-        estimatedDefocus: number;
-        /** Amplitudecontrast */
-        amplitudeContrast: number;
-        /** Correlation value */
-        ccValue: number;
-        /** Full path to the jpg image of the simulated FFT */
-        fftTheoreticalFullPath: string;
-        /** Comments */
-        comments: string;
-      };
-      /** Movie */
-      Movie: {
-        /** Movieid */
-        movieId: number;
-        /** Movienumber */
-        movieNumber?: number;
-        /** Moviefullpath */
-        movieFullPath: string;
-        /**
-         * Createdtimestamp
-         * Format: date-time
-         */
-        createdTimeStamp: string;
-        /** Positionx */
-        positionX?: number;
-        /** Positiony */
-        positionY?: number;
-        /** Nominal defocus */
-        nominalDefocus: number;
-        /** Angle */
-        angle: number;
-        /** accumulated electron fluence from start to end of acquisition of movie */
-        fluence: number;
-        /** number of frames per movie */
-        numberOfFrames: number;
-      };
-      /** MotionCorrection */
-      MotionCorrection: {
-        /** Motioncorrectionid */
-        motionCorrectionId: number;
-        /** Datacollectionid */
-        dataCollectionId?: number;
-        /** Autoprocprogramid */
-        autoProcProgramId?: number;
-        /** Movie number, sequential in time 1-n */
-        imageNumber: number;
-        /** First frame of movie used */
-        firstFrame: number;
-        /** Last frame of movie used */
-        lastFrame: number;
-        /** Dose per frame */
-        dosePerFrame: number;
-        /** Dose weight */
-        doseWeight: number;
-        /** Total motion */
-        totalMotion: number;
-        /** Average motion per frame */
-        averageMotionPerFrame: number;
-        /** Path to drift plot */
-        driftPlotFullPath: string;
-        /** Path to micrograph */
-        micrographFullPath: string;
-        /** Path to micrograph */
-        micrographSnapshotFullPath: string;
-        /** Patches used in x */
-        patchesUsedX: number;
-        /** Patches used in y */
-        patchesUsedY: number;
-        /** Path to raw micrograph FFT */
-        fftFullPath: string;
-        /** Path to drift corrected micrograph FFT */
-        fftCorrectedFullPath: string;
-        /** Comments */
-        comments: string;
-      };
-      /** TiltImageAlignment */
-      TiltImageAlignment?: {
-        /** Movieid */
-        movieId: number;
-        /** Defocusu */
-        defocusU?: number;
-        /** Defocusv */
-        defocusV?: number;
-        /** Psdfile */
-        psdFile: string;
-        /** Resolution */
-        resolution?: number;
-        /** Fitquality */
-        fitQuality?: number;
-        /** Refinedmagnification */
-        refinedMagnification?: number;
-        /** Refinedtiltangle */
-        refinedTiltAngle?: number;
-        /** Refinedtiltaxis */
-        refinedTiltAxis?: number;
-        /** Residualerror */
-        residualError?: number;
-      };
+      CTF: components["schemas"]["CTF"];
+      Movie: components["schemas"]["Movie"];
+      MotionCorrection: components["schemas"]["MotionCorrection"];
+      TiltImageAlignment?: components["schemas"]["TiltImageAlignmentOut"] | null;
     };
     /** FullMovieWithTilt */
     FullMovieWithTilt: {
       /** Items */
-      items: {
-        /** CTF */
-        CTF: {
-          /** Ctfid */
-          ctfId: number;
-          /** Box size in x */
-          boxSizeX: number;
-          /** Box size in y */
-          boxSizeY: number;
-          /** Minimum resolution for CTF */
-          minResolution: number;
-          /** Maxresolution */
-          maxResolution: number;
-          /** Mindefocus */
-          minDefocus: number;
-          /** Maxdefocus */
-          maxDefocus: number;
-          /** Defocusstepsize */
-          defocusStepSize: number;
-          /** Astigmatism */
-          astigmatism: number;
-          /** Astigmatismangle */
-          astigmatismAngle: number;
-          /** Estimatedresolution */
-          estimatedResolution: number;
-          /** Estimateddefocus */
-          estimatedDefocus: number;
-          /** Amplitudecontrast */
-          amplitudeContrast: number;
-          /** Correlation value */
-          ccValue: number;
-          /** Full path to the jpg image of the simulated FFT */
-          fftTheoreticalFullPath: string;
-          /** Comments */
-          comments: string;
-        };
-        /** Movie */
-        Movie: {
-          /** Movieid */
-          movieId: number;
-          /** Movienumber */
-          movieNumber?: number;
-          /** Moviefullpath */
-          movieFullPath: string;
-          /**
-           * Createdtimestamp
-           * Format: date-time
-           */
-          createdTimeStamp: string;
-          /** Positionx */
-          positionX?: number;
-          /** Positiony */
-          positionY?: number;
-          /** Nominal defocus */
-          nominalDefocus: number;
-          /** Angle */
-          angle: number;
-          /** accumulated electron fluence from start to end of acquisition of movie */
-          fluence: number;
-          /** number of frames per movie */
-          numberOfFrames: number;
-        };
-        /** MotionCorrection */
-        MotionCorrection: {
-          /** Motioncorrectionid */
-          motionCorrectionId: number;
-          /** Datacollectionid */
-          dataCollectionId?: number;
-          /** Autoprocprogramid */
-          autoProcProgramId?: number;
-          /** Movie number, sequential in time 1-n */
-          imageNumber: number;
-          /** First frame of movie used */
-          firstFrame: number;
-          /** Last frame of movie used */
-          lastFrame: number;
-          /** Dose per frame */
-          dosePerFrame: number;
-          /** Dose weight */
-          doseWeight: number;
-          /** Total motion */
-          totalMotion: number;
-          /** Average motion per frame */
-          averageMotionPerFrame: number;
-          /** Path to drift plot */
-          driftPlotFullPath: string;
-          /** Path to micrograph */
-          micrographFullPath: string;
-          /** Path to micrograph */
-          micrographSnapshotFullPath: string;
-          /** Patches used in x */
-          patchesUsedX: number;
-          /** Patches used in y */
-          patchesUsedY: number;
-          /** Path to raw micrograph FFT */
-          fftFullPath: string;
-          /** Path to drift corrected micrograph FFT */
-          fftCorrectedFullPath: string;
-          /** Comments */
-          comments: string;
-        };
-        /** TiltImageAlignment */
-        TiltImageAlignment?: {
-          /** Movieid */
-          movieId: number;
-          /** Defocusu */
-          defocusU?: number;
-          /** Defocusv */
-          defocusV?: number;
-          /** Psdfile */
-          psdFile: string;
-          /** Resolution */
-          resolution?: number;
-          /** Fitquality */
-          fitQuality?: number;
-          /** Refinedmagnification */
-          refinedMagnification?: number;
-          /** Refinedtiltangle */
-          refinedTiltAngle?: number;
-          /** Refinedtiltaxis */
-          refinedTiltAxis?: number;
-          /** Residualerror */
-          residualError?: number;
-        };
-      }[];
+      items: components["schemas"]["FullMovie"][];
       /** Total */
       total: number;
       /** Page */
@@ -957,163 +1596,155 @@ export interface components {
       /** Rawtotal */
       rawTotal: number;
     };
-    /** GenericPlot */
-    GenericPlot: {
-      /** Items */
-      items: {
-        /** X */
-        x: number | string;
-        /** Y */
-        y: number;
-      }[];
+    /** GridSquare */
+    GridSquare: {
+      /** Gridsquareid */
+      gridSquareId: number;
+      /** X */
+      x: number;
+      /** Y */
+      y: number;
+      /** Height */
+      height: number;
+      /** Width */
+      width: number;
+      /** Angle */
+      angle: number;
+      /** Image */
+      image?: string | null;
     };
     /** HTTPValidationError */
     HTTPValidationError: {
       /** Detail */
-      detail?: {
-        /** Location */
-        loc: (string | number)[];
-        /** Message */
-        msg: string;
-        /** Error Type */
-        type: string;
-      }[];
+      detail?: components["schemas"]["ValidationError"][];
     };
     /** IceThicknessWithAverage */
     IceThicknessWithAverage: {
-      /** Current */
-      current: {
-        /** Minimum */
-        minimum: number;
-        /** Q1 */
-        q1: number;
-        /** Median */
-        median: number;
-        /** Q3 */
-        q3: number;
-        /** Maximum */
-        maximum: number;
-      };
-      /** Avg */
-      avg: {
-        /** Minimum */
-        minimum: number;
-        /** Q1 */
-        q1: number;
-        /** Median */
-        median: number;
-        /** Q3 */
-        q3: number;
-        /** Maximum */
-        maximum: number;
-      };
+      /** @description Ice thickness data for current selected movie */
+      current?: components["schemas"]["RelativeIceThickness"];
+      /** @description Average ice thickness data for movies belonging to autoproc. program */
+      avg?: components["schemas"]["RelativeIceThickness"] | null;
+    };
+    /** ItemList[BFactorFitOut] */
+    ItemList_BFactorFitOut_: {
+      /** Items */
+      items: components["schemas"]["BFactorFitOut"][];
+    };
+    /** ItemList[CtfBaseSpa] */
+    ItemList_CtfBaseSpa_: {
+      /** Items */
+      items: components["schemas"]["CtfBaseSpa"][];
+    };
+    /** ItemList[CtfTiltAlign] */
+    ItemList_CtfTiltAlign_: {
+      /** Items */
+      items: components["schemas"]["CtfTiltAlign"][];
+    };
+    /** ItemList[DataPoint] */
+    ItemList_DataPoint_: {
+      /** Items */
+      items: components["schemas"]["DataPoint"][];
     };
     /** MotionCorrection */
     MotionCorrection: {
       /** Motioncorrectionid */
       motionCorrectionId: number;
       /** Datacollectionid */
-      dataCollectionId?: number;
+      dataCollectionId?: number | null;
       /** Autoprocprogramid */
-      autoProcProgramId?: number;
+      autoProcProgramId?: number | null;
       /** Movie number, sequential in time 1-n */
-      imageNumber: number;
+      imageNumber?: number | null;
       /** First frame of movie used */
-      firstFrame: number;
+      firstFrame?: number | null;
       /** Last frame of movie used */
-      lastFrame: number;
+      lastFrame?: number | null;
       /** Dose per frame */
-      dosePerFrame: number;
+      dosePerFrame?: number | null;
       /** Dose weight */
-      doseWeight: number;
+      doseWeight?: number | null;
       /** Total motion */
-      totalMotion: number;
+      totalMotion?: number | null;
       /** Average motion per frame */
-      averageMotionPerFrame: number;
+      averageMotionPerFrame?: number | null;
       /** Path to drift plot */
-      driftPlotFullPath: string;
+      driftPlotFullPath?: string | null;
       /** Path to micrograph */
-      micrographFullPath: string;
+      micrographFullPath?: string | null;
       /** Path to micrograph */
-      micrographSnapshotFullPath: string;
+      micrographSnapshotFullPath?: string | null;
       /** Patches used in x */
-      patchesUsedX: number;
+      patchesUsedX?: number | null;
       /** Patches used in y */
-      patchesUsedY: number;
+      patchesUsedY?: number | null;
       /** Path to raw micrograph FFT */
-      fftFullPath: string;
+      fftFullPath?: string | null;
       /** Path to drift corrected micrograph FFT */
-      fftCorrectedFullPath: string;
+      fftCorrectedFullPath?: string | null;
       /** Comments */
-      comments: string;
+      comments?: string | null;
     };
     /** Movie */
     Movie: {
       /** Movieid */
       movieId: number;
       /** Movienumber */
-      movieNumber?: number;
+      movieNumber?: number | null;
       /** Moviefullpath */
-      movieFullPath: string;
+      movieFullPath?: string | null;
       /**
        * Createdtimestamp
        * Format: date-time
        */
       createdTimeStamp: string;
       /** Positionx */
-      positionX?: number;
+      positionX?: number | null;
       /** Positiony */
-      positionY?: number;
+      positionY?: number | null;
       /** Nominal defocus */
-      nominalDefocus: number;
+      nominalDefocus?: number | null;
       /** Angle */
-      angle: number;
+      angle?: number | null;
       /** accumulated electron fluence from start to end of acquisition of movie */
-      fluence: number;
+      fluence?: number | null;
       /** number of frames per movie */
-      numberOfFrames: number;
+      numberOfFrames?: number | null;
+      /** Foilholeid */
+      foilHoleId?: number | null;
+      /** Gridsquareid */
+      gridSquareId?: number | null;
+    };
+    /**
+     * NotificationSignup
+     * @description Required information for signing up to notifications
+     */
+    NotificationSignup: {
+      /** Particlecountmin */
+      particleCountMin?: number | null;
+      /** Particlecountmax */
+      particleCountMax?: number | null;
+      /** Astigmatismmin */
+      astigmatismMin?: number | null;
+      /** Astigmatismmax */
+      astigmatismMax?: number | null;
+      /** Defocusmin */
+      defocusMin?: number | null;
+      /** Defocusmax */
+      defocusMax?: number | null;
+      /** Resolutionmin */
+      resolutionMin?: number | null;
+      /** Resolutionmax */
+      resolutionMax?: number | null;
+      /**
+       * Email
+       * Format: email
+       */
+      email: string;
     };
     /** Paged[Classification] */
     Paged_Classification_: {
       /** Items */
-      items: {
-        /** Particleclassificationgroupid */
-        particleClassificationGroupId: number;
-        /** Particlepickerid */
-        particlePickerId: number;
-        /** Programid */
-        programId: number;
-        /** Type */
-        type: string;
-        /** Batchnumber */
-        batchNumber: number;
-        /** Numberofparticlesperbatch */
-        numberOfParticlesPerBatch: number;
-        /** Numberofclassesperbatch */
-        numberOfClassesPerBatch: number;
-        /** Symmetry */
-        symmetry: string;
-        /** Particleclassificationid */
-        particleClassificationId: number;
-        /** Classnumber */
-        classNumber: number;
-        /** Classimagefullpath */
-        classImageFullPath?: string;
-        /** Particlesperclass */
-        particlesPerClass?: number;
-        /** Rotationaccuracy */
-        rotationAccuracy: number;
-        /** Translationaccuracy */
-        translationAccuracy: number;
-        /** Estimatedresolution */
-        estimatedResolution: number;
-        /** Overallfouriercompleteness */
-        overallFourierCompleteness: number;
-        /** Classdistribution */
-        classDistribution?: number;
-        /** Selected */
-        selected?: boolean;
-      }[];
+      items: components["schemas"]["Classification"][];
       /** Total */
       total: number;
       /** Page */
@@ -1124,36 +1755,7 @@ export interface components {
     /** Paged[DataCollectionGroupSummaryResponse] */
     Paged_DataCollectionGroupSummaryResponse_: {
       /** Items */
-      items: {
-        /**
-         * Datacollectiongroupid
-         * @description Data Collection Group ID
-         */
-        dataCollectionGroupId: number;
-        /**
-         * Sessionid
-         * @description Session ID
-         */
-        sessionId: number;
-        /** Experimenttype */
-        experimentType?: string;
-        /**
-         * Experimenttypeid
-         * @default 37
-         */
-        experimentTypeId?: number;
-        /**
-         * Experimenttypename
-         * @default Single Particle
-         */
-        experimentTypeName?: string;
-        /** Imagedirectory */
-        imageDirectory?: string;
-        /** Comments */
-        comments?: string;
-        /** Collections */
-        collections: number;
-      }[];
+      items: components["schemas"]["DataCollectionGroupSummaryResponse"][];
       /** Total */
       total: number;
       /** Page */
@@ -1164,223 +1766,18 @@ export interface components {
     /** Paged[DataCollectionSummary] */
     Paged_DataCollectionSummary_: {
       /** Items */
-      items: {
-        /**
-         * Datacollectionid
-         * @description Data Collection ID
-         */
-        dataCollectionId: number;
-        /**
-         * Sessionid
-         * @description Session ID
-         */
-        SESSIONID: number;
-        /** Comments */
-        comments?: string;
-        /**
-         * Starttime
-         * Format: date-time
-         * @description Start time of the dataCollection
-         */
-        startTime: string;
-        /** Pixelsizeonimage */
-        pixelSizeOnImage: number;
-        /** Voltage */
-        voltage: number;
-        /** Imagesizex */
-        imageSizeX: number;
-        /** Imagesizey */
-        imageSizeY: number;
-        /** Experimenttype */
-        experimenttype: string;
-        /** Index */
-        index: number;
-        /**
-         * Endtime
-         * Format: date-time
-         * @description End time of the dataCollection
-         */
-        endTime: string;
-        /** Runstatus */
-        runStatus: string;
-        /** Axisstart */
-        axisStart?: number;
-        /** Axisend */
-        axisEnd?: number;
-        /** Axisrange */
-        axisRange?: number;
-        /** Overlap */
-        overlap?: number;
-        /** Numberofimages */
-        numberOfImages?: number;
-        /** Startimagenumber */
-        startImageNumber?: number;
-        /** Numberofpasses */
-        numberOfPasses?: number;
-        /** Exposuretime */
-        exposureTime?: number;
-        /**
-         * Imagedirectory
-         * @description The directory where files reside - should end with a slash
-         */
-        imageDirectory: string;
-        /** Imageprefix */
-        imagePrefix: string;
-        /** Imagesuffix */
-        imageSuffix: string;
-        /**
-         * Imagecontainersubpath
-         * @description Internal path of a HDF5 file pointing to the data
-         *         for this data collection
-         */
-        imageContainerSubPath: string;
-        /** Filetemplate */
-        fileTemplate: string;
-        /** Wavelength */
-        wavelength?: number;
-        /** Resolution */
-        resolution?: number;
-        /** Detectordistance */
-        detectorDistance?: number;
-        /** Xbeam */
-        xBeam?: number;
-        /** Ybeam */
-        yBeam?: number;
-        /** Printableforreport */
-        printableForReport?: number;
-        /** Crystalclass */
-        CRYSTALCLASS: string;
-        /** Slitgapvertical */
-        slitGapVertical?: number;
-        /** Slitgaphorizontal */
-        slitGapHorizontal?: number;
-        /** Transmission */
-        transmission?: number;
-        /** Synchrotronmode */
-        synchrotronMode: string;
-        /** Xtalsnapshotfullpath1 */
-        xtalSnapshotFullPath1: string;
-        /** Xtalsnapshotfullpath2 */
-        xtalSnapshotFullPath2: string;
-        /** Xtalsnapshotfullpath3 */
-        xtalSnapshotFullPath3: string;
-        /** Xtalsnapshotfullpath4 */
-        xtalSnapshotFullPath4: string;
-        /**
-         * RotationAxisEnum
-         * @description An enumeration.
-         * @enum {string}
-         */
-        rotationAxis?: "Omega" | "Kappa" | "Phi";
-        /** Phistart */
-        phiStart?: number;
-        /** Kappastart */
-        kappaStart?: number;
-        /** Omegastart */
-        omegaStart?: number;
-        /** Chistart */
-        chiStart?: number;
-        /** Resolutionatcorner */
-        resolutionAtCorner?: number;
-        /** Detector2Theta */
-        detector2Theta?: number;
-        /** Detectormode */
-        DETECTORMODE: string;
-        /** Undulatorgap1 */
-        undulatorGap1?: number;
-        /** Undulatorgap2 */
-        undulatorGap2?: number;
-        /** Undulatorgap3 */
-        undulatorGap3?: number;
-        /** Beamsizeatsamplex */
-        beamSizeAtSampleX?: number;
-        /** Beamsizeatsampley */
-        beamSizeAtSampleY?: number;
-        /** Centeringmethod */
-        centeringMethod: string;
-        /** Averagetemperature */
-        averageTemperature?: number;
-        /** Actualcenteringposition */
-        actualCenteringPosition: string;
-        /** Beamshape */
-        beamShape: string;
-        /** Datacollectiongroupid */
-        dataCollectionGroupId: number;
-        /** Positionid */
-        POSITIONID?: number;
-        /** Detectorid */
-        detectorId?: number;
-        /** Screeningorigid */
-        screeningOrigId?: number;
-        /** Startpositionid */
-        startPositionId?: number;
-        /** Endpositionid */
-        endPositionId?: number;
-        /** Flux */
-        flux?: number;
-        /** Strategysubwedgeorigid */
-        strategySubWedgeOrigId?: number;
-        /** Blsubsampleid */
-        blSubSampleId?: number;
-        /** Flux End */
-        flux_end?: number;
-        /** Bestwilsonplotpath */
-        bestWilsonPlotPath: string;
-        /** Processeddatafile */
-        processedDataFile: string;
-        /** Datfullpath */
-        datFullPath: string;
-        /** Magnification */
-        magnification?: number;
-        /** Totalabsorbeddose */
-        totalAbsorbedDose?: number;
-        /** Binning */
-        binning?: number;
-        /** Particlediameter */
-        particleDiameter?: number;
-        /** Boxsize Ctf */
-        boxSize_CTF?: number;
-        /** Minresolution */
-        minResolution?: number;
-        /** Mindefocus */
-        minDefocus?: number;
-        /** Maxdefocus */
-        maxDefocus?: number;
-        /** Defocusstepsize */
-        defocusStepSize?: number;
-        /** Amountastigmatism */
-        amountAstigmatism?: number;
-        /** Extractsize */
-        extractSize?: number;
-        /** Bgradius */
-        bgRadius?: number;
-        /** Objaperture */
-        objAperture?: number;
-        /** C1Aperture */
-        c1aperture?: number;
-        /** C2Aperture */
-        c2aperture?: number;
-        /** C3Aperture */
-        c3aperture?: number;
-        /** C1Lens */
-        c1lens?: number;
-        /** C2Lens */
-        c2lens?: number;
-        /** C3Lens */
-        c3lens?: number;
-        /** Totalexposeddose */
-        totalExposedDose?: number;
-        /** Nominalmagnification */
-        nominalMagnification?: number;
-        /** Nominaldefocus */
-        nominalDefocus?: number;
-        /** Phaseplate */
-        phasePlate?: string;
-        /** Datacollectionplanid */
-        dataCollectionPlanId?: number;
-        /** Tomograms */
-        tomograms: number;
-      }[];
+      items: components["schemas"]["DataCollectionSummary"][];
+      /** Total */
+      total: number;
+      /** Page */
+      page: number;
+      /** Limit */
+      limit: number;
+    };
+    /** Paged[FoilHole] */
+    Paged_FoilHole_: {
+      /** Items */
+      items: components["schemas"]["FoilHole"][];
       /** Total */
       total: number;
       /** Page */
@@ -1391,131 +1788,29 @@ export interface components {
     /** Paged[FullMovie] */
     Paged_FullMovie_: {
       /** Items */
-      items: {
-        /** CTF */
-        CTF: {
-          /** Ctfid */
-          ctfId: number;
-          /** Box size in x */
-          boxSizeX: number;
-          /** Box size in y */
-          boxSizeY: number;
-          /** Minimum resolution for CTF */
-          minResolution: number;
-          /** Maxresolution */
-          maxResolution: number;
-          /** Mindefocus */
-          minDefocus: number;
-          /** Maxdefocus */
-          maxDefocus: number;
-          /** Defocusstepsize */
-          defocusStepSize: number;
-          /** Astigmatism */
-          astigmatism: number;
-          /** Astigmatismangle */
-          astigmatismAngle: number;
-          /** Estimatedresolution */
-          estimatedResolution: number;
-          /** Estimateddefocus */
-          estimatedDefocus: number;
-          /** Amplitudecontrast */
-          amplitudeContrast: number;
-          /** Correlation value */
-          ccValue: number;
-          /** Full path to the jpg image of the simulated FFT */
-          fftTheoreticalFullPath: string;
-          /** Comments */
-          comments: string;
-        };
-        /** Movie */
-        Movie: {
-          /** Movieid */
-          movieId: number;
-          /** Movienumber */
-          movieNumber?: number;
-          /** Moviefullpath */
-          movieFullPath: string;
-          /**
-           * Createdtimestamp
-           * Format: date-time
-           */
-          createdTimeStamp: string;
-          /** Positionx */
-          positionX?: number;
-          /** Positiony */
-          positionY?: number;
-          /** Nominal defocus */
-          nominalDefocus: number;
-          /** Angle */
-          angle: number;
-          /** accumulated electron fluence from start to end of acquisition of movie */
-          fluence: number;
-          /** number of frames per movie */
-          numberOfFrames: number;
-        };
-        /** MotionCorrection */
-        MotionCorrection: {
-          /** Motioncorrectionid */
-          motionCorrectionId: number;
-          /** Datacollectionid */
-          dataCollectionId?: number;
-          /** Autoprocprogramid */
-          autoProcProgramId?: number;
-          /** Movie number, sequential in time 1-n */
-          imageNumber: number;
-          /** First frame of movie used */
-          firstFrame: number;
-          /** Last frame of movie used */
-          lastFrame: number;
-          /** Dose per frame */
-          dosePerFrame: number;
-          /** Dose weight */
-          doseWeight: number;
-          /** Total motion */
-          totalMotion: number;
-          /** Average motion per frame */
-          averageMotionPerFrame: number;
-          /** Path to drift plot */
-          driftPlotFullPath: string;
-          /** Path to micrograph */
-          micrographFullPath: string;
-          /** Path to micrograph */
-          micrographSnapshotFullPath: string;
-          /** Patches used in x */
-          patchesUsedX: number;
-          /** Patches used in y */
-          patchesUsedY: number;
-          /** Path to raw micrograph FFT */
-          fftFullPath: string;
-          /** Path to drift corrected micrograph FFT */
-          fftCorrectedFullPath: string;
-          /** Comments */
-          comments: string;
-        };
-        /** TiltImageAlignment */
-        TiltImageAlignment?: {
-          /** Movieid */
-          movieId: number;
-          /** Defocusu */
-          defocusU?: number;
-          /** Defocusv */
-          defocusV?: number;
-          /** Psdfile */
-          psdFile: string;
-          /** Resolution */
-          resolution?: number;
-          /** Fitquality */
-          fitQuality?: number;
-          /** Refinedmagnification */
-          refinedMagnification?: number;
-          /** Refinedtiltangle */
-          refinedTiltAngle?: number;
-          /** Refinedtiltaxis */
-          refinedTiltAxis?: number;
-          /** Residualerror */
-          residualError?: number;
-        };
-      }[];
+      items: components["schemas"]["FullMovie"][];
+      /** Total */
+      total: number;
+      /** Page */
+      page: number;
+      /** Limit */
+      limit: number;
+    };
+    /** Paged[GridSquare] */
+    Paged_GridSquare_: {
+      /** Items */
+      items: components["schemas"]["GridSquare"][];
+      /** Total */
+      total: number;
+      /** Page */
+      page: number;
+      /** Limit */
+      limit: number;
+    };
+    /** Paged[Movie] */
+    Paged_Movie_: {
+      /** Items */
+      items: components["schemas"]["Movie"][];
       /** Total */
       total: number;
       /** Page */
@@ -1526,25 +1821,7 @@ export interface components {
     /** Paged[ParticlePicker] */
     Paged_ParticlePicker_: {
       /** Items */
-      items: {
-        /** Particlediameter */
-        particleDiameter?: number;
-        /** Numberofparticles */
-        numberOfParticles?: number;
-        /** Particlepickerid */
-        particlePickerId?: number;
-        /** Summaryfullimagepath */
-        summaryFullImagePath?: string;
-        /** Imagenumber */
-        imageNumber: number;
-        /** Movieid */
-        movieId: number;
-        /**
-         * Createdtimestamp
-         * Format: date-time
-         */
-        createdTimeStamp?: string;
-      }[];
+      items: components["schemas"]["ParticlePicker"][];
       /** Total */
       total: number;
       /** Page */
@@ -1555,60 +1832,7 @@ export interface components {
     /** Paged[ProcessingJobResponse] */
     Paged_ProcessingJobResponse_: {
       /** Items */
-      items: {
-        /** AutoProcProgram */
-        AutoProcProgram: {
-          /** Autoprocprogramid */
-          autoProcProgramId: number;
-          /** Processingcommandline */
-          processingCommandLine?: string;
-          /** Processingprograms */
-          processingPrograms?: string;
-          /** Processingstatus */
-          processingStatus?: number;
-          /** Processingmessage */
-          processingMessage?: string;
-          /**
-           * Processingstarttime
-           * Format: date-time
-           */
-          processingStartTime?: string;
-          /**
-           * Processingendtime
-           * Format: date-time
-           */
-          processingEndTime?: string;
-          /** Processingenvironment */
-          processingEnvironment?: string;
-          /**
-           * Recordtimestamp
-           * Format: date-time
-           */
-          recordTimeStamp?: string;
-        };
-        /** ProcessingJob */
-        ProcessingJob: {
-          /** Processingjobid */
-          processingJobId: number;
-          /** Datacollectionid */
-          dataCollectionId: number;
-          /** Displayname */
-          displayName: string;
-          /** Comments */
-          comments: string;
-          /**
-           * Recordtimestamp
-           * Format: date-time
-           */
-          recordTimestamp?: string;
-          /** Recipe */
-          recipe: string;
-          /** Automatic */
-          automatic?: number;
-        };
-        /** Status */
-        status: string;
-      }[];
+      items: components["schemas"]["ProcessingJobResponse"][];
       /** Total */
       total: number;
       /** Page */
@@ -1619,36 +1843,7 @@ export interface components {
     /** Paged[ProposalResponse] */
     Paged_ProposalResponse_: {
       /** Items */
-      items: {
-        /**
-         * Proposalid
-         * @description Proposal ID
-         */
-        proposalId: number;
-        /** Personid */
-        personId: number;
-        /** Title */
-        title: string;
-        /** Proposalcode */
-        proposalCode: string;
-        /** Proposalnumber */
-        proposalNumber: string;
-        /**
-         * Bltimestamp
-         * Format: date-time
-         */
-        bltimeStamp: string;
-        /** Proposaltype */
-        proposalType: string;
-        /**
-         * StateEnum
-         * @description An enumeration.
-         * @enum {string}
-         */
-        state: "Open" | "Closed" | "Cancelled";
-        /** Sessions */
-        sessions: number;
-      }[];
+      items: components["schemas"]["ProposalResponse"][];
       /** Total */
       total: number;
       /** Page */
@@ -1659,101 +1854,7 @@ export interface components {
     /** Paged[SessionResponse] */
     Paged_SessionResponse_: {
       /** Items */
-      items: {
-        /**
-         * Sessionid
-         * @description Session ID
-         */
-        sessionId: number;
-        /** Beamlinesetupid */
-        beamLineSetupId?: number;
-        /**
-         * Proposalid
-         * @description Proposal ID
-         */
-        proposalId: number;
-        /** Beamcalendarid */
-        beamCalendarId?: number;
-        /** Projectcode */
-        projectCode: string;
-        /**
-         * Startdate
-         * Format: date-time
-         */
-        startDate?: string;
-        /**
-         * Enddate
-         * Format: date-time
-         */
-        endDate?: string;
-        /** Beamlinename */
-        beamLineName: string;
-        /** Scheduled */
-        scheduled: number;
-        /** Nbshifts */
-        nbShifts: number;
-        /** Comments */
-        comments: string;
-        /** Beamlineoperator */
-        beamLineOperator?: string;
-        /**
-         * Bltimestamp
-         * Format: date-time
-         */
-        bltimeStamp: string;
-        /** Parentproposal */
-        parentProposal: string;
-        /** Visit Number */
-        visit_number: number;
-        /**
-         * Usedflag
-         * @description Indicates if session has Datacollections or XFE or EnergyScans attached
-         */
-        usedFlag: number;
-        /** Sessiontitle */
-        sessionTitle: string;
-        /** Structuredeterminations */
-        structureDeterminations?: number;
-        /** Dewartransport */
-        dewarTransport?: number;
-        /**
-         * Databackupfrance
-         * @description Data backup and express delivery France
-         */
-        databackupFrance: number;
-        /**
-         * Databackupeurope
-         * @description Data backup and express delivery Europe
-         */
-        databackupEurope: number;
-        /** Expsessionpk */
-        expSessionPk: number;
-        /**
-         * Operatorsitenumber
-         * @description Matricule site
-         */
-        operatorSiteNumber: string;
-        /**
-         * Lastupdate
-         * Format: date-time
-         * @description Last update timestamp: by default the end of the session, the last collect
-         */
-        lastUpdate: string;
-        /**
-         * Protecteddata
-         * @description Indicates if the data is protected or not
-         */
-        protectedData: string;
-        /**
-         * Archived
-         * @description The data for the session is archived and no longer available on disk
-         */
-        archived: number;
-        /** Collectiongroups */
-        collectionGroups?: number;
-        /** Datacollectiongroupid */
-        dataCollectionGroupId?: number;
-      }[];
+      items: components["schemas"]["SessionResponse"][];
       /** Total */
       total: number;
       /** Page */
@@ -1764,89 +1865,7 @@ export interface components {
     /** Paged[TomogramFullResponse] */
     Paged_TomogramFullResponse_: {
       /** Items */
-      items: {
-        /** AutoProcProgram */
-        AutoProcProgram: {
-          /** Autoprocprogramid */
-          autoProcProgramId: number;
-          /** Processingcommandline */
-          processingCommandLine?: string;
-          /** Processingprograms */
-          processingPrograms?: string;
-          /** Processingstatus */
-          processingStatus?: number;
-          /** Processingmessage */
-          processingMessage?: string;
-          /**
-           * Processingstarttime
-           * Format: date-time
-           */
-          processingStartTime?: string;
-          /**
-           * Processingendtime
-           * Format: date-time
-           */
-          processingEndTime?: string;
-          /** Processingenvironment */
-          processingEnvironment?: string;
-          /**
-           * Recordtimestamp
-           * Format: date-time
-           */
-          recordTimeStamp?: string;
-        };
-        /** ProcessingJob */
-        ProcessingJob: {
-          /** Processingjobid */
-          processingJobId: number;
-          /** Datacollectionid */
-          dataCollectionId: number;
-          /** Displayname */
-          displayName: string;
-          /** Comments */
-          comments: string;
-          /**
-           * Recordtimestamp
-           * Format: date-time
-           */
-          recordTimestamp?: string;
-          /** Recipe */
-          recipe: string;
-          /** Automatic */
-          automatic?: number;
-        };
-        /** Status */
-        status: string;
-        /** TomogramResponse */
-        Tomogram?: {
-          /** Tomogramid */
-          tomogramId: number;
-          /** Volumefile */
-          volumeFile: string;
-          /** Stackfile */
-          stackFile: string;
-          /** Sizex */
-          sizeX?: number;
-          /** Sizey */
-          sizeY?: number;
-          /** Sizez */
-          sizeZ?: number;
-          /** Pixelspacing */
-          pixelSpacing?: number;
-          /** Residualerrormean */
-          residualErrorMean?: number;
-          /** Residualerrorsd */
-          residualErrorSD?: number;
-          /** Xaxiscorrection */
-          xAxisCorrection?: number;
-          /** Tiltangleoffset */
-          tiltAngleOffset?: number;
-          /** Zshift */
-          zShift?: number;
-          /** Refinedtiltaxis */
-          refinedTiltAxis?: number;
-        };
-      }[];
+      items: components["schemas"]["TomogramFullResponse"][];
       /** Total */
       total: number;
       /** Page */
@@ -1857,22 +1876,19 @@ export interface components {
     /** ParticlePicker */
     ParticlePicker: {
       /** Particlediameter */
-      particleDiameter?: number;
+      particleDiameter?: number | null;
       /** Numberofparticles */
-      numberOfParticles?: number;
+      numberOfParticles?: number | null;
       /** Particlepickerid */
-      particlePickerId?: number;
+      particlePickerId?: number | null;
       /** Summaryfullimagepath */
-      summaryFullImagePath?: string;
+      summaryFullImagePath?: string | null;
       /** Imagenumber */
       imageNumber: number;
       /** Movieid */
       movieId: number;
-      /**
-       * Createdtimestamp
-       * Format: date-time
-       */
-      createdTimeStamp?: string;
+      /** Createdtimestamp */
+      createdTimeStamp?: string | null;
     };
     /** ProcessingJob */
     ProcessingJob: {
@@ -1881,80 +1897,27 @@ export interface components {
       /** Datacollectionid */
       dataCollectionId: number;
       /** Displayname */
-      displayName: string;
+      displayName?: string | null;
       /** Comments */
-      comments: string;
-      /**
-       * Recordtimestamp
-       * Format: date-time
-       */
-      recordTimestamp?: string;
+      comments?: string | null;
+      /** Recordtimestamp */
+      recordTimestamp?: string | null;
       /** Recipe */
-      recipe: string;
+      recipe?: string | null;
       /** Automatic */
-      automatic?: number;
+      automatic?: number | null;
     };
     /** ProcessingJobParameters */
     ProcessingJobParameters: {
       /** Items */
       items: {
-        [key: string]: string | undefined;
+        [key: string]: string;
       };
-      /** Allowreprocessing */
-      allowReprocessing: boolean;
     };
     /** ProcessingJobResponse */
     ProcessingJobResponse: {
-      /** AutoProcProgram */
-      AutoProcProgram: {
-        /** Autoprocprogramid */
-        autoProcProgramId: number;
-        /** Processingcommandline */
-        processingCommandLine?: string;
-        /** Processingprograms */
-        processingPrograms?: string;
-        /** Processingstatus */
-        processingStatus?: number;
-        /** Processingmessage */
-        processingMessage?: string;
-        /**
-         * Processingstarttime
-         * Format: date-time
-         */
-        processingStartTime?: string;
-        /**
-         * Processingendtime
-         * Format: date-time
-         */
-        processingEndTime?: string;
-        /** Processingenvironment */
-        processingEnvironment?: string;
-        /**
-         * Recordtimestamp
-         * Format: date-time
-         */
-        recordTimeStamp?: string;
-      } | null;
-      /** ProcessingJob */
-      ProcessingJob: {
-        /** Processingjobid */
-        processingJobId: number;
-        /** Datacollectionid */
-        dataCollectionId: number;
-        /** Displayname */
-        displayName: string;
-        /** Comments */
-        comments: string;
-        /**
-         * Recordtimestamp
-         * Format: date-time
-         */
-        recordTimestamp?: string;
-        /** Recipe */
-        recipe: string;
-        /** Automatic */
-        automatic?: number;
-      };
+      AutoProcProgram?: components["schemas"]["AutoProcProgramResponse"] | null;
+      ProcessingJob: components["schemas"]["ProcessingJob"];
       /** Status */
       status: string;
     };
@@ -1964,28 +1927,23 @@ export interface components {
        * Proposalid
        * @description Proposal ID
        */
-      proposalId: number;
+      proposalId?: number;
       /** Personid */
       personId: number;
       /** Title */
-      title: string;
+      title?: string | null;
       /** Proposalcode */
-      proposalCode: string;
+      proposalCode?: string | null;
       /** Proposalnumber */
-      proposalNumber: string;
+      proposalNumber?: string | null;
       /**
        * Bltimestamp
        * Format: date-time
        */
       bltimeStamp: string;
       /** Proposaltype */
-      proposalType: string;
-      /**
-       * StateEnum
-       * @description An enumeration.
-       * @enum {string}
-       */
-      state: "Open" | "Closed" | "Cancelled";
+      proposalType?: string | null;
+      state: components["schemas"]["StateEnum"];
       /** Sessions */
       sessions: number;
     };
@@ -2001,7 +1959,8 @@ export interface components {
       q3: number;
       /** Maximum */
       maximum: number;
-      stddev: number | null;
+      /** Stddev */
+      stddev?: number | null;
     };
     /** ReprocessingResponse */
     ReprocessingResponse: {
@@ -2010,7 +1969,6 @@ export interface components {
     };
     /**
      * RotationAxisEnum
-     * @description An enumeration.
      * @enum {string}
      */
     RotationAxisEnum: "Omega" | "Kappa" | "Phi";
@@ -2021,17 +1979,17 @@ export interface components {
        * @default 300
        * @enum {integer}
        */
-      voltage?: 200 | 300;
+      voltage: 200 | 300;
       /**
        * Sphericalaberration
        * @default 2.7
        */
-      sphericalAberration?: number;
+      sphericalAberration: number;
       /**
        * Phaseplateused
        * @default false
        */
-      phasePlateUsed?: boolean;
+      phasePlateUsed: boolean;
       /** Pixelsize */
       pixelSize: number;
       /**
@@ -2039,70 +1997,63 @@ export interface components {
        * @default 1
        * @enum {integer}
        */
-      motionCorrectionBinning?: 1 | 2;
+      motionCorrectionBinning: 1 | 2;
       /** Doseperframe */
       dosePerFrame: number;
       /**
        * Stopafterctfestimation
        * @default false
        */
-      stopAfterCtfEstimation?: boolean;
+      stopAfterCtfEstimation: boolean;
       /**
        * Usecryolo
        * @description Use crYOLO with autopick. Academic users only.
        * @default false
        */
-      useCryolo?: boolean;
+      useCryolo: boolean;
       /**
        * Doclass3D
        * @default true
        */
-      doClass3D?: boolean;
+      doClass3D: boolean | null;
       /**
        * Doclass2D
        * @default true
        */
-      doClass2D?: boolean;
+      doClass2D: boolean | null;
       /** Maskdiameter */
-      maskDiameter: number;
+      maskDiameter?: number | null;
       /** Boxsize */
-      boxSize: number;
-      /** Downsampleboxsize */
-      downsampleBoxSize: number;
+      boxSize?: number | null;
       /**
        * Performcalculation
        * @default true
        */
-      performCalculation?: boolean;
+      performCalculation: boolean;
       /**
        * Usefsccriterion
        * @default false
        */
-      useFscCriterion?: boolean;
-      /**
-       * Perform2Dsecondpass
-       * @default true
-       */
-      perform2DSecondPass?: boolean;
-      /**
-       * Perform3Dsecondpass
-       * @default false
-       */
-      perform3DSecondPass?: boolean;
+      useFscCriterion: boolean | null;
       /** Minimumdiameter */
-      minimumDiameter?: number;
+      minimumDiameter?: number | null;
       /** Maximumdiameter */
-      maximumDiameter?: number;
+      maximumDiameter?: number | null;
       /**
        * Gainreferencefile
        * @default gain.mrc
        */
-      gainReferenceFile?: string;
+      gainReferenceFile: string;
       /**
        * Extractdownscale
-       * @default false
+       * @default true
        */
-      extractDownscale?: boolean;
+      extractDownscale: boolean | null;
+    };
+    /** SessionAllowsReprocessing */
+    SessionAllowsReprocessing: {
+      /** Allowreprocessing */
+      allowReprocessing: boolean;
     };
     /** SessionResponse */
     SessionResponse: {
@@ -2110,38 +2061,30 @@ export interface components {
        * Sessionid
        * @description Session ID
        */
-      sessionId: number;
+      sessionId?: number;
       /** Beamlinesetupid */
-      beamLineSetupId?: number;
+      beamLineSetupId?: number | null;
       /**
        * Proposalid
        * @description Proposal ID
        */
-      proposalId: number;
+      proposalId?: number;
       /** Beamcalendarid */
-      beamCalendarId?: number;
-      /** Projectcode */
-      projectCode: string;
-      /**
-       * Startdate
-       * Format: date-time
-       */
-      startDate?: string;
-      /**
-       * Enddate
-       * Format: date-time
-       */
-      endDate?: string;
+      beamCalendarId?: number | null;
+      /** Startdate */
+      startDate?: string | null;
+      /** Enddate */
+      endDate?: string | null;
       /** Beamlinename */
-      beamLineName: string;
+      beamLineName?: string | null;
       /** Scheduled */
-      scheduled: number;
+      scheduled?: number | null;
       /** Nbshifts */
-      nbShifts: number;
+      nbShifts?: number | null;
       /** Comments */
-      comments: string;
+      comments?: string | null;
       /** Beamlineoperator */
-      beamLineOperator?: string;
+      beamLineOperator?: string | null;
       /**
        * Bltimestamp
        * Format: date-time
@@ -2150,168 +2093,62 @@ export interface components {
       /** Parentproposal */
       parentProposal: string;
       /** Visit Number */
-      visit_number: number;
+      visit_number?: number | null;
       /**
        * Usedflag
        * @description Indicates if session has Datacollections or XFE or EnergyScans attached
        */
-      usedFlag: number;
-      /** Sessiontitle */
-      sessionTitle: string;
-      /** Structuredeterminations */
-      structureDeterminations?: number;
-      /** Dewartransport */
-      dewarTransport?: number;
-      /**
-       * Databackupfrance
-       * @description Data backup and express delivery France
-       */
-      databackupFrance: number;
-      /**
-       * Databackupeurope
-       * @description Data backup and express delivery Europe
-       */
-      databackupEurope: number;
-      /** Expsessionpk */
-      expSessionPk: number;
-      /**
-       * Operatorsitenumber
-       * @description Matricule site
-       */
-      operatorSiteNumber: string;
+      usedFlag?: number | null;
       /**
        * Lastupdate
-       * Format: date-time
        * @description Last update timestamp: by default the end of the session, the last collect
        */
-      lastUpdate: string;
-      /**
-       * Protecteddata
-       * @description Indicates if the data is protected or not
-       */
-      protectedData: string;
+      lastUpdate?: string | null;
       /**
        * Archived
        * @description The data for the session is archived and no longer available on disk
        */
       archived: number;
       /** Collectiongroups */
-      collectionGroups?: number;
+      collectionGroups?: number | null;
       /** Datacollectiongroupid */
-      dataCollectionGroupId?: number;
+      dataCollectionGroupId?: number | null;
     };
     /**
      * StateEnum
-     * @description An enumeration.
      * @enum {string}
      */
     StateEnum: "Open" | "Closed" | "Cancelled";
-    /** TiltImageAlignment */
-    TiltImageAlignment: {
+    /** TiltImageAlignmentOut */
+    TiltImageAlignmentOut: {
       /** Movieid */
       movieId: number;
       /** Defocusu */
-      defocusU?: number;
+      defocusU?: number | null;
       /** Defocusv */
-      defocusV?: number;
+      defocusV?: number | null;
       /** Psdfile */
-      psdFile: string;
+      psdFile?: string | null;
       /** Resolution */
-      resolution?: number;
+      resolution?: number | null;
       /** Fitquality */
-      fitQuality?: number;
+      fitQuality?: number | null;
       /** Refinedmagnification */
-      refinedMagnification?: number;
+      refinedMagnification?: number | null;
       /** Refinedtiltangle */
-      refinedTiltAngle?: number;
+      refinedTiltAngle?: number | null;
       /** Refinedtiltaxis */
-      refinedTiltAxis?: number;
+      refinedTiltAxis?: number | null;
       /** Residualerror */
-      residualError?: number;
+      residualError?: number | null;
     };
     /** TomogramFullResponse */
     TomogramFullResponse: {
-      /** AutoProcProgram */
-      AutoProcProgram: {
-        /** Autoprocprogramid */
-        autoProcProgramId: number;
-        /** Processingcommandline */
-        processingCommandLine?: string;
-        /** Processingprograms */
-        processingPrograms?: string;
-        /** Processingstatus */
-        processingStatus?: number;
-        /** Processingmessage */
-        processingMessage?: string;
-        /**
-         * Processingstarttime
-         * Format: date-time
-         */
-        processingStartTime?: string;
-        /**
-         * Processingendtime
-         * Format: date-time
-         */
-        processingEndTime?: string;
-        /** Processingenvironment */
-        processingEnvironment?: string;
-        /**
-         * Recordtimestamp
-         * Format: date-time
-         */
-        recordTimeStamp?: string;
-      };
-      /** ProcessingJob */
-      ProcessingJob: {
-        /** Processingjobid */
-        processingJobId: number;
-        /** Datacollectionid */
-        dataCollectionId: number;
-        /** Displayname */
-        displayName: string;
-        /** Comments */
-        comments: string;
-        /**
-         * Recordtimestamp
-         * Format: date-time
-         */
-        recordTimestamp?: string;
-        /** Recipe */
-        recipe: string;
-        /** Automatic */
-        automatic?: number;
-      };
+      AutoProcProgram?: components["schemas"]["AutoProcProgramResponse"] | null;
+      ProcessingJob: components["schemas"]["ProcessingJob"];
       /** Status */
       status: string;
-      /** TomogramResponse */
-      Tomogram?: {
-        /** Tomogramid */
-        tomogramId: number;
-        /** Volumefile */
-        volumeFile: string;
-        /** Stackfile */
-        stackFile: string;
-        /** Sizex */
-        sizeX?: number;
-        /** Sizey */
-        sizeY?: number;
-        /** Sizez */
-        sizeZ?: number;
-        /** Pixelspacing */
-        pixelSpacing?: number;
-        /** Residualerrormean */
-        residualErrorMean?: number;
-        /** Residualerrorsd */
-        residualErrorSD?: number;
-        /** Xaxiscorrection */
-        xAxisCorrection?: number;
-        /** Tiltangleoffset */
-        tiltAngleOffset?: number;
-        /** Zshift */
-        zShift?: number;
-        /** Refinedtiltaxis */
-        refinedTiltAxis?: number;
-      };
+      Tomogram?: components["schemas"]["TomogramResponse"] | null;
     };
     /** TomogramReprocessingParameters */
     TomogramReprocessingParameters: {
@@ -2325,29 +2162,29 @@ export interface components {
       /** Tomogramid */
       tomogramId: number;
       /** Volumefile */
-      volumeFile: string;
+      volumeFile?: string | null;
       /** Stackfile */
-      stackFile: string;
+      stackFile?: string | null;
       /** Sizex */
-      sizeX?: number;
+      sizeX?: number | null;
       /** Sizey */
-      sizeY?: number;
+      sizeY?: number | null;
       /** Sizez */
-      sizeZ?: number;
+      sizeZ?: number | null;
       /** Pixelspacing */
-      pixelSpacing?: number;
+      pixelSpacing?: number | null;
       /** Residualerrormean */
-      residualErrorMean?: number;
+      residualErrorMean?: number | null;
       /** Residualerrorsd */
-      residualErrorSD?: number;
+      residualErrorSD?: number | null;
       /** Xaxiscorrection */
-      xAxisCorrection?: number;
+      xAxisCorrection?: number | null;
       /** Tiltangleoffset */
-      tiltAngleOffset?: number;
+      tiltAngleOffset?: number | null;
       /** Zshift */
-      zShift?: number;
+      zShift?: number | null;
       /** Refinedtiltaxis */
-      refinedTiltAxis?: number;
+      refinedTiltAxis?: number | null;
     };
     /** ValidationError */
     ValidationError: {
@@ -2358,33 +2195,6 @@ export interface components {
       /** Error Type */
       type: string;
     };
-    /** Grid Square */
-    GridSquare: {
-      gridSquareId: number;
-      x: number;
-      y: number;
-      height: number;
-      width: number;
-      angle: number;
-      image?: string;
-    };
-
-    /** Atlas */
-    Atlas: {
-      atlasId: number;
-      pixelSize: number;
-      cassetteSlot: number;
-      dataCollectionGroupId: number;
-    };
-
-    /** Foil Hole */
-    FoilHole: {
-      foilHoleId: number;
-      diameter: number;
-      x: number;
-      y: number;
-      movieCount?: number;
-    };
   };
   responses: never;
   parameters: never;
@@ -2392,2743 +2202,1836 @@ export interface components {
   headers: never;
   pathItems: never;
 }
-
-export type external = Record<string, never>;
-
+export type $defs = Record<string, never>;
 export interface operations {
   get_sessions_sessions_get: {
-    /**
-     * Get Sessions
-     * @description List visits belonging to a proposal
-     */
-    parameters?: {
-      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-      /** @description Number of results to show */
+    parameters: {
       query?: {
-        proposal?: string;
-        search?: string;
-        minEndDate?: string;
-        maxEndDate?: string;
-        minStartDate?: string;
-        maxStartDate?: string;
+        proposal?: string | null;
+        search?: string | null;
+        minEndDate?: string | null;
+        maxEndDate?: string | null;
+        minStartDate?: string | null;
+        maxStartDate?: string | null;
         countCollections?: boolean;
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
         page?: number;
+        /** @description Number of results to show */
         limit?: number;
       };
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Items */
-            items: {
-              /**
-               * Sessionid
-               * @description Session ID
-               */
-              sessionId: number;
-              /** Beamlinesetupid */
-              beamLineSetupId?: number;
-              /**
-               * Proposalid
-               * @description Proposal ID
-               */
-              proposalId: number;
-              /** Beamcalendarid */
-              beamCalendarId?: number;
-              /** Projectcode */
-              projectCode: string;
-              /**
-               * Startdate
-               * Format: date-time
-               */
-              startDate?: string;
-              /**
-               * Enddate
-               * Format: date-time
-               */
-              endDate?: string;
-              /** Beamlinename */
-              beamLineName: string;
-              /** Scheduled */
-              scheduled: number;
-              /** Nbshifts */
-              nbShifts: number;
-              /** Comments */
-              comments: string;
-              /** Beamlineoperator */
-              beamLineOperator?: string;
-              /**
-               * Bltimestamp
-               * Format: date-time
-               */
-              bltimeStamp: string;
-              /** Parentproposal */
-              parentProposal: string;
-              /** Visit Number */
-              visit_number: number;
-              /**
-               * Usedflag
-               * @description Indicates if session has Datacollections or XFE or EnergyScans attached
-               */
-              usedFlag: number;
-              /** Sessiontitle */
-              sessionTitle: string;
-              /** Structuredeterminations */
-              structureDeterminations?: number;
-              /** Dewartransport */
-              dewarTransport?: number;
-              /**
-               * Databackupfrance
-               * @description Data backup and express delivery France
-               */
-              databackupFrance: number;
-              /**
-               * Databackupeurope
-               * @description Data backup and express delivery Europe
-               */
-              databackupEurope: number;
-              /** Expsessionpk */
-              expSessionPk: number;
-              /**
-               * Operatorsitenumber
-               * @description Matricule site
-               */
-              operatorSiteNumber: string;
-              /**
-               * Lastupdate
-               * Format: date-time
-               * @description Last update timestamp: by default the end of the session, the last collect
-               */
-              lastUpdate: string;
-              /**
-               * Protecteddata
-               * @description Indicates if the data is protected or not
-               */
-              protectedData: string;
-              /**
-               * Archived
-               * @description The data for the session is archived and no longer available on disk
-               */
-              archived: number;
-              /** Collectiongroups */
-              collectionGroups?: number;
-              /** Datacollectiongroupid */
-              dataCollectionGroupId?: number;
-            }[];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Limit */
-            limit: number;
-          };
+          "application/json": components["schemas"]["Paged_SessionResponse_"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_shift_plot_tomograms__tomogramId__shiftPlot_get: {
-    /**
-     * Get Shift Plot
-     * @description Get X-Y shift plot data
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         tomogramId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Items */
-            items: {
-              /** X */
-              x: number | string;
-              /** Y */
-              y: number;
-            }[];
-          };
+          "application/json": components["schemas"]["ItemList_DataPoint_"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_motion_correction_tomograms__tomogramId__motion_get: {
-    /**
-     * Get Motion Correction
-     * @description Get motion correction data for the given tomogram
-     */
     parameters: {
-      /** @description Get index closest to the middle. Limit is set to 1, page is ignored */
-      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-      /** @description Number of results to show */
       query?: {
-        getMiddle?: Record<string, never>;
+        /** @description Get index closest to the middle. Limit is set to 1, page is ignored */
+        getMiddle?: unknown;
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
         page?: number;
+        /** @description Number of results to show */
         limit?: number;
       };
+      header?: never;
       path: {
         tomogramId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Items */
-            items: {
-              /** CTF */
-              CTF: {
-                /** Ctfid */
-                ctfId: number;
-                /** Box size in x */
-                boxSizeX: number;
-                /** Box size in y */
-                boxSizeY: number;
-                /** Minimum resolution for CTF */
-                minResolution: number;
-                /** Maxresolution */
-                maxResolution: number;
-                /** Mindefocus */
-                minDefocus: number;
-                /** Maxdefocus */
-                maxDefocus: number;
-                /** Defocusstepsize */
-                defocusStepSize: number;
-                /** Astigmatism */
-                astigmatism: number;
-                /** Astigmatismangle */
-                astigmatismAngle: number;
-                /** Estimatedresolution */
-                estimatedResolution: number;
-                /** Estimateddefocus */
-                estimatedDefocus: number;
-                /** Amplitudecontrast */
-                amplitudeContrast: number;
-                /** Correlation value */
-                ccValue: number;
-                /** Full path to the jpg image of the simulated FFT */
-                fftTheoreticalFullPath: string;
-                /** Comments */
-                comments: string;
-              };
-              /** Movie */
-              Movie: {
-                /** Movieid */
-                movieId: number;
-                /** Movienumber */
-                movieNumber?: number;
-                /** Moviefullpath */
-                movieFullPath: string;
-                /**
-                 * Createdtimestamp
-                 * Format: date-time
-                 */
-                createdTimeStamp: string;
-                /** Positionx */
-                positionX?: number;
-                /** Positiony */
-                positionY?: number;
-                /** Nominal defocus */
-                nominalDefocus: number;
-                /** Angle */
-                angle: number;
-                /** accumulated electron fluence from start to end of acquisition of movie */
-                fluence: number;
-                /** number of frames per movie */
-                numberOfFrames: number;
-              };
-              /** MotionCorrection */
-              MotionCorrection: {
-                /** Motioncorrectionid */
-                motionCorrectionId: number;
-                /** Datacollectionid */
-                dataCollectionId?: number;
-                /** Autoprocprogramid */
-                autoProcProgramId?: number;
-                /** Movie number, sequential in time 1-n */
-                imageNumber: number;
-                /** First frame of movie used */
-                firstFrame: number;
-                /** Last frame of movie used */
-                lastFrame: number;
-                /** Dose per frame */
-                dosePerFrame: number;
-                /** Dose weight */
-                doseWeight: number;
-                /** Total motion */
-                totalMotion: number;
-                /** Average motion per frame */
-                averageMotionPerFrame: number;
-                /** Path to drift plot */
-                driftPlotFullPath: string;
-                /** Path to micrograph */
-                micrographFullPath: string;
-                /** Path to micrograph */
-                micrographSnapshotFullPath: string;
-                /** Patches used in x */
-                patchesUsedX: number;
-                /** Patches used in y */
-                patchesUsedY: number;
-                /** Path to raw micrograph FFT */
-                fftFullPath: string;
-                /** Path to drift corrected micrograph FFT */
-                fftCorrectedFullPath: string;
-                /** Comments */
-                comments: string;
-              };
-              /** TiltImageAlignment */
-              TiltImageAlignment?: {
-                /** Movieid */
-                movieId: number;
-                /** Defocusu */
-                defocusU?: number;
-                /** Defocusv */
-                defocusV?: number;
-                /** Psdfile */
-                psdFile: string;
-                /** Resolution */
-                resolution?: number;
-                /** Fitquality */
-                fitQuality?: number;
-                /** Refinedmagnification */
-                refinedMagnification?: number;
-                /** Refinedtiltangle */
-                refinedTiltAngle?: number;
-                /** Refinedtiltaxis */
-                refinedTiltAxis?: number;
-                /** Residualerror */
-                residualError?: number;
-              };
-            }[];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Limit */
-            limit: number;
-            /** Rawtotal */
-            rawTotal: number;
-          };
+          "application/json": components["schemas"]["FullMovieWithTilt"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_slice_tomograms__tomogramId__centralSlice_get: {
-    /**
-     * Get Slice
-     * @description Get tomogram central slice image
-     */
     parameters: {
       query?: {
-        denoised?: Record<string, never>;
+        movieType?: ("denoised" | "segmented" | "picked") | null;
       };
+      header?: never;
       path: {
         tomogramId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
-      200: never;
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_movie_tomograms__tomogramId__movie_get: {
-    /**
-     * Get Movie
-     * @description Get tomogram movie image
-     */
     parameters: {
       query?: {
-        denoised?: Record<string, never>;
+        movieType?: ("denoised" | "segmented" | "picked") | null;
       };
+      header?: never;
       path: {
         tomogramId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
-      200: never;
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_projection_tomograms__tomogramId__projection_get: {
-    /**
-     * Get Projection
-     * @description Get tomogram projection image
-     */
     parameters: {
       query: {
         axis: "xy" | "xz";
       };
+      header?: never;
       path: {
         tomogramId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
-      200: never;
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_ctf_tomograms__tomogramId__ctf_get: {
-    /**
-     * Get Ctf
-     * @description Get astigmatism, resolution and defocus as a function of tilt image
-     * alignment refined tilt angles
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         tomogramId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Items */
-            items: {
-              /** Estimatedresolution */
-              estimatedResolution?: number;
-              /** Estimateddefocus */
-              estimatedDefocus?: number;
-              /** Astigmatism */
-              astigmatism?: number;
-              /** Refinedtiltangle */
-              refinedTiltAngle?: number;
-            }[];
-          };
+          "application/json": components["schemas"]["ItemList_CtfTiltAlign_"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_micrograph_movies__movieId__micrograph_get: {
-    /**
-     * Get Micrograph
-     * @description Get micrograph snapshot
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         movieId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
-      200: never;
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_fft_movies__movieId__fft_get: {
-    /**
-     * Get Fft
-     * @description Get FFT theoretical image
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         movieId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
-      200: never;
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_drift_movies__movieId__drift_get: {
-    /**
-     * Get Drift
-     * @description Get drift from a JSON file or from the drift table
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         movieId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Items */
-            items: {
-              /** X */
-              x: number | string;
-              /** Y */
-              y: number;
-            }[];
-          };
+          "application/json": components["schemas"]["ItemList_DataPoint_"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_relative_ice_thickness_movies__movieId__iceThickness_get: {
-    /**
-     * Get Relative Ice Thickness
-     * @description Get values for relative ice thickness for a given movie
-     */
     parameters: {
       query?: {
         getAverages?: boolean;
       };
+      header?: never;
       path: {
         movieId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Current */
-            current: {
-              /** Minimum */
-              minimum: number;
-              /** Q1 */
-              q1: number;
-              /** Median */
-              median: number;
-              /** Q3 */
-              q3: number;
-              /** Maximum */
-              maximum: number;
-            };
-            /** Avg */
-            avg: {
-              /** Minimum */
-              minimum: number;
-              /** Q1 */
-              q1: number;
-              /** Median */
-              median: number;
-              /** Q3 */
-              q3: number;
-              /** Maximum */
-              maximum: number;
-            };
-          };
+          "application/json": components["schemas"]["IceThicknessWithAverage"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_movie_info_movies__movieId__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        movieId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Movie"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_tomograms_dataCollections__collectionId__tomograms_get: {
-    /**
-     * Get Tomograms
-     * @description Get tomogram that belongs to the collection
-     */
     parameters: {
-      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-      /** @description Number of results to show */
       query?: {
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
         page?: number;
+        /** @description Number of results to show */
         limit?: number;
       };
+      header?: never;
       path: {
         collectionId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Items */
-            items: {
-              /** AutoProcProgram */
-              AutoProcProgram: {
-                /** Autoprocprogramid */
-                autoProcProgramId: number;
-                /** Processingcommandline */
-                processingCommandLine?: string;
-                /** Processingprograms */
-                processingPrograms?: string;
-                /** Processingstatus */
-                processingStatus?: number;
-                /** Processingmessage */
-                processingMessage?: string;
-                /**
-                 * Processingstarttime
-                 * Format: date-time
-                 */
-                processingStartTime?: string;
-                /**
-                 * Processingendtime
-                 * Format: date-time
-                 */
-                processingEndTime?: string;
-                /** Processingenvironment */
-                processingEnvironment?: string;
-                /**
-                 * Recordtimestamp
-                 * Format: date-time
-                 */
-                recordTimeStamp?: string;
-              };
-              /** ProcessingJob */
-              ProcessingJob: {
-                /** Processingjobid */
-                processingJobId: number;
-                /** Datacollectionid */
-                dataCollectionId: number;
-                /** Displayname */
-                displayName: string;
-                /** Comments */
-                comments: string;
-                /**
-                 * Recordtimestamp
-                 * Format: date-time
-                 */
-                recordTimestamp?: string;
-                /** Recipe */
-                recipe: string;
-                /** Automatic */
-                automatic?: number;
-              };
-              /** Status */
-              status: string;
-              /** TomogramResponse */
-              Tomogram?: {
-                /** Tomogramid */
-                tomogramId: number;
-                /** Volumefile */
-                volumeFile: string;
-                /** Stackfile */
-                stackFile: string;
-                /** Sizex */
-                sizeX?: number;
-                /** Sizey */
-                sizeY?: number;
-                /** Sizez */
-                sizeZ?: number;
-                /** Pixelspacing */
-                pixelSpacing?: number;
-                /** Residualerrormean */
-                residualErrorMean?: number;
-                /** Residualerrorsd */
-                residualErrorSD?: number;
-                /** Xaxiscorrection */
-                xAxisCorrection?: number;
-                /** Tiltangleoffset */
-                tiltAngleOffset?: number;
-                /** Zshift */
-                zShift?: number;
-                /** Refinedtiltaxis */
-                refinedTiltAxis?: number;
-              };
-            }[];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Limit */
-            limit: number;
-          };
+          "application/json": components["schemas"]["Paged_TomogramFullResponse_"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   initiate_tomogram_reprocessing_dataCollections__collectionId__reprocessing_tomograms_post: {
-    /**
-     * Initiate Tomogram Reprocessing
-     * @description Initiate data reprocessing
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         collectionId: number;
       };
+      cookie?: never;
     };
     requestBody: {
       content: {
-        "application/json": {
-          /** Pixelsize */
-          pixelSize: number;
-          /** Tiltoffset */
-          tiltOffset: number;
-        };
+        "application/json": components["schemas"]["TomogramReprocessingParameters"];
       };
     };
     responses: {
       /** @description Successful Response */
       202: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Processingjobid */
-            processingJobId: number;
-          };
+          "application/json": components["schemas"]["ReprocessingResponse"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   initiate_spa_reprocessing_dataCollections__collectionId__reprocessing_spa_post: {
-    /**
-     * Initiate Spa Reprocessing
-     * @description Initiate data reprocessing
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         collectionId: number;
       };
+      cookie?: never;
     };
     requestBody: {
       content: {
-        "application/json": {
-          /**
-           * Voltage
-           * @default 300
-           * @enum {integer}
-           */
-          voltage?: 200 | 300;
-          /**
-           * Sphericalaberration
-           * @default 2.7
-           */
-          sphericalAberration?: number;
-          /**
-           * Phaseplateused
-           * @default false
-           */
-          phasePlateUsed?: boolean;
-          /** Pixelsize */
-          pixelSize: number;
-          /**
-           * Motioncorrectionbinning
-           * @default 1
-           * @enum {integer}
-           */
-          motionCorrectionBinning?: 1 | 2;
-          /** Doseperframe */
-          dosePerFrame: number;
-          /**
-           * Stopafterctfestimation
-           * @default false
-           */
-          stopAfterCtfEstimation?: boolean;
-          /**
-           * Usecryolo
-           * @description Use crYOLO with autopick. Academic users only.
-           * @default false
-           */
-          useCryolo?: boolean;
-          /**
-           * Doclass3D
-           * @default true
-           */
-          doClass3D?: boolean;
-          /**
-           * Doclass2D
-           * @default true
-           */
-          doClass2D?: boolean;
-          /** Maskdiameter */
-          maskDiameter: number;
-          /** Boxsize */
-          boxSize: number;
-          /** Downsampleboxsize */
-          downsampleBoxSize: number;
-          /**
-           * Performcalculation
-           * @default true
-           */
-          performCalculation?: boolean;
-          /**
-           * Usefsccriterion
-           * @default false
-           */
-          useFscCriterion?: boolean;
-          /**
-           * Perform2Dsecondpass
-           * @default true
-           */
-          perform2DSecondPass?: boolean;
-          /**
-           * Perform3Dsecondpass
-           * @default false
-           */
-          perform3DSecondPass?: boolean;
-          /** Minimumdiameter */
-          minimumDiameter?: number;
-          /** Maximumdiameter */
-          maximumDiameter?: number;
-          /**
-           * Gainreferencefile
-           * @default gain.mrc
-           */
-          gainReferenceFile?: string;
-          /**
-           * Extractdownscale
-           * @default false
-           */
-          extractDownscale?: boolean;
-        };
+        "application/json": components["schemas"]["SPAReprocessingParameters"];
       };
     };
     responses: {
       /** @description Successful Response */
       202: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Processingjobid */
-            processingJobId: number;
-          };
+          "application/json": components["schemas"]["ReprocessingResponse"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_processing_jobs_dataCollections__collectionId__processingJobs_get: {
-    /**
-     * Get Processing Jobs
-     * @description Get processing jobs that belong to the collection
-     */
     parameters: {
-      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-      /** @description Number of results to show */
       query?: {
         search?: string;
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
         page?: number;
+        /** @description Number of results to show */
         limit?: number;
       };
+      header?: never;
       path: {
         collectionId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Items */
-            items: {
-              /** AutoProcProgram */
-              AutoProcProgram: {
-                /** Autoprocprogramid */
-                autoProcProgramId: number;
-                /** Processingcommandline */
-                processingCommandLine?: string;
-                /** Processingprograms */
-                processingPrograms?: string;
-                /** Processingstatus */
-                processingStatus?: number;
-                /** Processingmessage */
-                processingMessage?: string;
-                /**
-                 * Processingstarttime
-                 * Format: date-time
-                 */
-                processingStartTime?: string;
-                /**
-                 * Processingendtime
-                 * Format: date-time
-                 */
-                processingEndTime?: string;
-                /** Processingenvironment */
-                processingEnvironment?: string;
-                /**
-                 * Recordtimestamp
-                 * Format: date-time
-                 */
-                recordTimeStamp?: string;
-              };
-              /** ProcessingJob */
-              ProcessingJob: {
-                /** Processingjobid */
-                processingJobId: number;
-                /** Datacollectionid */
-                dataCollectionId: number;
-                /** Displayname */
-                displayName: string;
-                /** Comments */
-                comments: string;
-                /**
-                 * Recordtimestamp
-                 * Format: date-time
-                 */
-                recordTimestamp?: string;
-                /** Recipe */
-                recipe: string;
-                /** Automatic */
-                automatic?: number;
-              };
-              /** Status */
-              status: string;
-            }[];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Limit */
-            limit: number;
-          };
+          "application/json": components["schemas"]["Paged_ProcessingJobResponse_"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_motion_correction_dataCollections__collectionId__motion_get: {
-    /**
-     * Get Motion Correction
-     * @description Get motion correction and tilt alignment data
-     */
     parameters: {
-      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-      /** @description Number of results to show */
       query?: {
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
         page?: number;
+        /** @description Number of results to show */
         limit?: number;
       };
+      header?: never;
       path: {
         collectionId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Items */
-            items: {
-              /** CTF */
-              CTF: {
-                /** Ctfid */
-                ctfId: number;
-                /** Box size in x */
-                boxSizeX: number;
-                /** Box size in y */
-                boxSizeY: number;
-                /** Minimum resolution for CTF */
-                minResolution: number;
-                /** Maxresolution */
-                maxResolution: number;
-                /** Mindefocus */
-                minDefocus: number;
-                /** Maxdefocus */
-                maxDefocus: number;
-                /** Defocusstepsize */
-                defocusStepSize: number;
-                /** Astigmatism */
-                astigmatism: number;
-                /** Astigmatismangle */
-                astigmatismAngle: number;
-                /** Estimatedresolution */
-                estimatedResolution: number;
-                /** Estimateddefocus */
-                estimatedDefocus: number;
-                /** Amplitudecontrast */
-                amplitudeContrast: number;
-                /** Correlation value */
-                ccValue: number;
-                /** Full path to the jpg image of the simulated FFT */
-                fftTheoreticalFullPath: string;
-                /** Comments */
-                comments: string;
-              };
-              /** Movie */
-              Movie: {
-                /** Movieid */
-                movieId: number;
-                /** Movienumber */
-                movieNumber?: number;
-                /** Moviefullpath */
-                movieFullPath: string;
-                /**
-                 * Createdtimestamp
-                 * Format: date-time
-                 */
-                createdTimeStamp: string;
-                /** Positionx */
-                positionX?: number;
-                /** Positiony */
-                positionY?: number;
-                /** Nominal defocus */
-                nominalDefocus: number;
-                /** Angle */
-                angle: number;
-                /** accumulated electron fluence from start to end of acquisition of movie */
-                fluence: number;
-                /** number of frames per movie */
-                numberOfFrames: number;
-              };
-              /** MotionCorrection */
-              MotionCorrection: {
-                /** Motioncorrectionid */
-                motionCorrectionId: number;
-                /** Datacollectionid */
-                dataCollectionId?: number;
-                /** Autoprocprogramid */
-                autoProcProgramId?: number;
-                /** Movie number, sequential in time 1-n */
-                imageNumber: number;
-                /** First frame of movie used */
-                firstFrame: number;
-                /** Last frame of movie used */
-                lastFrame: number;
-                /** Dose per frame */
-                dosePerFrame: number;
-                /** Dose weight */
-                doseWeight: number;
-                /** Total motion */
-                totalMotion: number;
-                /** Average motion per frame */
-                averageMotionPerFrame: number;
-                /** Path to drift plot */
-                driftPlotFullPath: string;
-                /** Path to micrograph */
-                micrographFullPath: string;
-                /** Path to micrograph */
-                micrographSnapshotFullPath: string;
-                /** Patches used in x */
-                patchesUsedX: number;
-                /** Patches used in y */
-                patchesUsedY: number;
-                /** Path to raw micrograph FFT */
-                fftFullPath: string;
-                /** Path to drift corrected micrograph FFT */
-                fftCorrectedFullPath: string;
-                /** Comments */
-                comments: string;
-              };
-              /** TiltImageAlignment */
-              TiltImageAlignment?: {
-                /** Movieid */
-                movieId: number;
-                /** Defocusu */
-                defocusU?: number;
-                /** Defocusv */
-                defocusV?: number;
-                /** Psdfile */
-                psdFile: string;
-                /** Resolution */
-                resolution?: number;
-                /** Fitquality */
-                fitQuality?: number;
-                /** Refinedmagnification */
-                refinedMagnification?: number;
-                /** Refinedtiltangle */
-                refinedTiltAngle?: number;
-                /** Refinedtiltaxis */
-                refinedTiltAxis?: number;
-                /** Residualerror */
-                residualError?: number;
-              };
-            }[];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Limit */
-            limit: number;
-          };
+          "application/json": components["schemas"]["Paged_FullMovie_"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_ice_histogram_dataCollections__collectionId__iceThickness_get: {
-    /**
-     * Get Ice Histogram
-     * @description Get relative ice thickness histogram
-     */
     parameters: {
       query?: {
         dataBin?: number;
         minimum?: number;
       };
+      header?: never;
       path: {
         collectionId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": Record<string, never>;
+          "application/json": unknown;
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_motion_histogram_dataCollections__collectionId__totalMotion_get: {
-    /**
-     * Get Motion Histogram
-     * @description Get total motion histogram
-     */
     parameters: {
       query?: {
         dataBin?: number;
         minimum?: number;
       };
+      header?: never;
       path: {
         collectionId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": Record<string, never>;
+          "application/json": unknown;
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_resolution_dataCollections__collectionId__resolution_get: {
-    /**
-     * Get Resolution
-     * @description Get estimated resolution histogram
-     */
     parameters: {
       query?: {
         dataBin?: number;
         minimum?: number;
       };
+      header?: never;
       path: {
         collectionId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": Record<string, never>;
+          "application/json": unknown;
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_particle_count_dataCollections__collectionId__particles_get: {
-    /**
-     * Get Particle Count
-     * @description Get particle count histogram
-     */
     parameters: {
       query?: {
         dataBin?: number;
         minimum?: number;
       };
+      header?: never;
       path: {
         collectionId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": Record<string, never>;
+          "application/json": unknown;
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_ctf_dataCollections__collectionId__ctf_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        collectionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ItemList_DataPoint_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_particle_count_per_resolution_dataCollections__collectionId__particleCountPerResolution_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        collectionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ItemList_DataPoint_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_session_report_dataCollections__collectionId__report_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        collectionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
+          "application/pdf": unknown;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_collection_group_dataGroups__groupId__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        groupId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DataCollectionGroupSummaryResponse"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_collection_groups_dataGroups_get: {
-    /**
-     * Get Collection Groups
-     * @description List collection groups belonging to a session
-     */
-    parameters?: {
-      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-      /** @description Number of results to show */
+    parameters: {
       query?: {
-        session?: number;
-        proposal?: string;
-        search?: string;
+        session?: number | null;
+        proposal?: string | null;
+        search?: string | null;
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
         page?: number;
+        /** @description Number of results to show */
         limit?: number;
       };
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Items */
-            items: {
-              /**
-               * Datacollectiongroupid
-               * @description Data Collection Group ID
-               */
-              dataCollectionGroupId: number;
-              /**
-               * Sessionid
-               * @description Session ID
-               */
-              sessionId: number;
-              /** Experimenttype */
-              experimentType?: string;
-              /**
-               * Experimenttypeid
-               * @default 37
-               */
-              experimentTypeId?: number;
-              /**
-               * Experimenttypename
-               * @default Single Particle
-               */
-              experimentTypeName?: string;
-              /** Imagedirectory */
-              imageDirectory?: string;
-              /** Comments */
-              comments?: string;
-              /** Collections */
-              collections: number;
-            }[];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Limit */
-            limit: number;
-          };
+          "application/json": components["schemas"]["Paged_DataCollectionGroupSummaryResponse_"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_collections_dataGroups__groupId__dataCollections_get: {
-    /**
-     * Get Collections
-     * @description List collections belonging to a data collection group
-     */
     parameters: {
-      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-      /** @description Number of results to show */
       query?: {
-        search?: string;
+        search?: string | null;
         onlyTomograms?: boolean;
+        sortBy?: "dataCollectionId" | "globalAlignmentQuality" | "";
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
         page?: number;
+        /** @description Number of results to show */
         limit?: number;
       };
+      header?: never;
+      path: {
+        groupId: number | null;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Paged_DataCollectionSummary_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_grid_squares_dataGroups__groupId__grid_squares_get: {
+    parameters: {
+      query?: {
+        hideSquares?: boolean;
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        page?: number;
+        /** @description Number of results to show */
+        limit?: number;
+      };
+      header?: never;
       path: {
         groupId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Paged_GridSquare_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_atlas_dataGroups__groupId__atlas_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        groupId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Atlas"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_atlas_image_dataGroups__groupId__atlas_image_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        groupId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  sign_up_for_alerts_dataGroups__groupId__alerts_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        groupId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["NotificationSignup"];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Items */
-            items: {
-              /**
-               * Datacollectionid
-               * @description Data Collection ID
-               */
-              dataCollectionId: number;
-              /**
-               * Sessionid
-               * @description Session ID
-               */
-              SESSIONID: number;
-              /** Comments */
-              comments?: string;
-              /**
-               * Starttime
-               * Format: date-time
-               * @description Start time of the dataCollection
-               */
-              startTime: string;
-              /** Pixelsizeonimage */
-              pixelSizeOnImage: number;
-              /** Voltage */
-              voltage: number;
-              /** Imagesizex */
-              imageSizeX: number;
-              /** Imagesizey */
-              imageSizeY: number;
-              /** Experimenttype */
-              experimenttype: string;
-              /** Index */
-              index: number;
-              /**
-               * Endtime
-               * Format: date-time
-               * @description End time of the dataCollection
-               */
-              endTime: string;
-              /** Runstatus */
-              runStatus: string;
-              /** Axisstart */
-              axisStart?: number;
-              /** Axisend */
-              axisEnd?: number;
-              /** Axisrange */
-              axisRange?: number;
-              /** Overlap */
-              overlap?: number;
-              /** Numberofimages */
-              numberOfImages?: number;
-              /** Startimagenumber */
-              startImageNumber?: number;
-              /** Numberofpasses */
-              numberOfPasses?: number;
-              /** Exposuretime */
-              exposureTime?: number;
-              /**
-               * Imagedirectory
-               * @description The directory where files reside - should end with a slash
-               */
-              imageDirectory: string;
-              /** Imageprefix */
-              imagePrefix: string;
-              /** Imagesuffix */
-              imageSuffix: string;
-              /**
-               * Imagecontainersubpath
-               * @description Internal path of a HDF5 file pointing to the data
-               *         for this data collection
-               */
-              imageContainerSubPath: string;
-              /** Filetemplate */
-              fileTemplate: string;
-              /** Wavelength */
-              wavelength?: number;
-              /** Resolution */
-              resolution?: number;
-              /** Detectordistance */
-              detectorDistance?: number;
-              /** Xbeam */
-              xBeam?: number;
-              /** Ybeam */
-              yBeam?: number;
-              /** Printableforreport */
-              printableForReport?: number;
-              /** Crystalclass */
-              CRYSTALCLASS: string;
-              /** Slitgapvertical */
-              slitGapVertical?: number;
-              /** Slitgaphorizontal */
-              slitGapHorizontal?: number;
-              /** Transmission */
-              transmission?: number;
-              /** Synchrotronmode */
-              synchrotronMode: string;
-              /** Xtalsnapshotfullpath1 */
-              xtalSnapshotFullPath1: string;
-              /** Xtalsnapshotfullpath2 */
-              xtalSnapshotFullPath2: string;
-              /** Xtalsnapshotfullpath3 */
-              xtalSnapshotFullPath3: string;
-              /** Xtalsnapshotfullpath4 */
-              xtalSnapshotFullPath4: string;
-              /**
-               * RotationAxisEnum
-               * @description An enumeration.
-               * @enum {string}
-               */
-              rotationAxis?: "Omega" | "Kappa" | "Phi";
-              /** Phistart */
-              phiStart?: number;
-              /** Kappastart */
-              kappaStart?: number;
-              /** Omegastart */
-              omegaStart?: number;
-              /** Chistart */
-              chiStart?: number;
-              /** Resolutionatcorner */
-              resolutionAtCorner?: number;
-              /** Detector2Theta */
-              detector2Theta?: number;
-              /** Detectormode */
-              DETECTORMODE: string;
-              /** Undulatorgap1 */
-              undulatorGap1?: number;
-              /** Undulatorgap2 */
-              undulatorGap2?: number;
-              /** Undulatorgap3 */
-              undulatorGap3?: number;
-              /** Beamsizeatsamplex */
-              beamSizeAtSampleX?: number;
-              /** Beamsizeatsampley */
-              beamSizeAtSampleY?: number;
-              /** Centeringmethod */
-              centeringMethod: string;
-              /** Averagetemperature */
-              averageTemperature?: number;
-              /** Actualcenteringposition */
-              actualCenteringPosition: string;
-              /** Beamshape */
-              beamShape: string;
-              /** Datacollectiongroupid */
-              dataCollectionGroupId: number;
-              /** Positionid */
-              POSITIONID?: number;
-              /** Detectorid */
-              detectorId?: number;
-              /** Screeningorigid */
-              screeningOrigId?: number;
-              /** Startpositionid */
-              startPositionId?: number;
-              /** Endpositionid */
-              endPositionId?: number;
-              /** Flux */
-              flux?: number;
-              /** Strategysubwedgeorigid */
-              strategySubWedgeOrigId?: number;
-              /** Blsubsampleid */
-              blSubSampleId?: number;
-              /** Flux End */
-              flux_end?: number;
-              /** Bestwilsonplotpath */
-              bestWilsonPlotPath: string;
-              /** Processeddatafile */
-              processedDataFile: string;
-              /** Datfullpath */
-              datFullPath: string;
-              /** Magnification */
-              magnification?: number;
-              /** Totalabsorbeddose */
-              totalAbsorbedDose?: number;
-              /** Binning */
-              binning?: number;
-              /** Particlediameter */
-              particleDiameter?: number;
-              /** Boxsize Ctf */
-              boxSize_CTF?: number;
-              /** Minresolution */
-              minResolution?: number;
-              /** Mindefocus */
-              minDefocus?: number;
-              /** Maxdefocus */
-              maxDefocus?: number;
-              /** Defocusstepsize */
-              defocusStepSize?: number;
-              /** Amountastigmatism */
-              amountAstigmatism?: number;
-              /** Extractsize */
-              extractSize?: number;
-              /** Bgradius */
-              bgRadius?: number;
-              /** Objaperture */
-              objAperture?: number;
-              /** C1Aperture */
-              c1aperture?: number;
-              /** C2Aperture */
-              c2aperture?: number;
-              /** C3Aperture */
-              c3aperture?: number;
-              /** C1Lens */
-              c1lens?: number;
-              /** C2Lens */
-              c2lens?: number;
-              /** C3Lens */
-              c3lens?: number;
-              /** Totalexposeddose */
-              totalExposedDose?: number;
-              /** Nominalmagnification */
-              nominalMagnification?: number;
-              /** Nominaldefocus */
-              nominalDefocus?: number;
-              /** Phaseplate */
-              phasePlate?: string;
-              /** Datacollectionplanid */
-              dataCollectionPlanId?: number;
-              /** Tomograms */
-              tomograms: number;
-            }[];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Limit */
-            limit: number;
-          };
+          "application/json": unknown;
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_proposals_proposals_get: {
-    /**
-     * Get Proposals
-     * @description List proposals
-     */
-    parameters?: {
-      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-      /** @description Number of results to show */
+    parameters: {
       query?: {
         search?: string;
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
         page?: number;
+        /** @description Number of results to show */
         limit?: number;
       };
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Items */
-            items: {
-              /**
-               * Proposalid
-               * @description Proposal ID
-               */
-              proposalId: number;
-              /** Personid */
-              personId: number;
-              /** Title */
-              title: string;
-              /** Proposalcode */
-              proposalCode: string;
-              /** Proposalnumber */
-              proposalNumber: string;
-              /**
-               * Bltimestamp
-               * Format: date-time
-               */
-              bltimeStamp: string;
-              /** Proposaltype */
-              proposalType: string;
-              /**
-               * StateEnum
-               * @description An enumeration.
-               * @enum {string}
-               */
-              state: "Open" | "Closed" | "Cancelled";
-              /** Sessions */
-              sessions: number;
-            }[];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Limit */
-            limit: number;
-          };
+          "application/json": components["schemas"]["Paged_ProposalResponse_"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_session_proposals__proposalReference__sessions__visitNumber__get: {
-    /**
-     * Get Session
-     * @description List proposals
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
-        visitNumber: Record<string, never>;
         proposalReference: string;
+        visitNumber: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SessionResponse"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_data_collection_proposals__proposalReference__sessions__visitNumber__dataCollections_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        proposalReference: string;
+        visitNumber: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DataCollectionCreationParameters"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["BaseDataCollectionOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  check_reprocessing_enabled_proposals__proposalReference__sessions__visitNumber__reprocessingEnabled_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        proposalReference: string;
+        visitNumber: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SessionAllowsReprocessing"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  redirect_to_sample_handling_proposals__proposalReference__sessions__visitNumber__sampleHandling_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        proposalReference: string;
+        visitNumber: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      307: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  upload_processing_model_proposals__proposalReference__sessions__visitNumber__processingModel_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        proposalReference: string;
+        visitNumber: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["Body_upload_processing_model_proposals__proposalReference__sessions__visitNumber__processingModel_post"];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /**
-             * Sessionid
-             * @description Session ID
-             */
-            sessionId: number;
-            /** Beamlinesetupid */
-            beamLineSetupId?: number;
-            /**
-             * Proposalid
-             * @description Proposal ID
-             */
-            proposalId: number;
-            /** Beamcalendarid */
-            beamCalendarId?: number;
-            /** Projectcode */
-            projectCode: string;
-            /**
-             * Startdate
-             * Format: date-time
-             */
-            startDate?: string;
-            /**
-             * Enddate
-             * Format: date-time
-             */
-            endDate?: string;
-            /** Beamlinename */
-            beamLineName: string;
-            /** Scheduled */
-            scheduled: number;
-            /** Nbshifts */
-            nbShifts: number;
-            /** Comments */
-            comments: string;
-            /** Beamlineoperator */
-            beamLineOperator?: string;
-            /**
-             * Bltimestamp
-             * Format: date-time
-             */
-            bltimeStamp: string;
-            /** Parentproposal */
-            parentProposal: string;
-            /** Visit Number */
-            visit_number: number;
-            /**
-             * Usedflag
-             * @description Indicates if session has Datacollections or XFE or EnergyScans attached
-             */
-            usedFlag: number;
-            /** Sessiontitle */
-            sessionTitle: string;
-            /** Structuredeterminations */
-            structureDeterminations?: number;
-            /** Dewartransport */
-            dewarTransport?: number;
-            /**
-             * Databackupfrance
-             * @description Data backup and express delivery France
-             */
-            databackupFrance: number;
-            /**
-             * Databackupeurope
-             * @description Data backup and express delivery Europe
-             */
-            databackupEurope: number;
-            /** Expsessionpk */
-            expSessionPk: number;
-            /**
-             * Operatorsitenumber
-             * @description Matricule site
-             */
-            operatorSiteNumber: string;
-            /**
-             * Lastupdate
-             * Format: date-time
-             * @description Last update timestamp: by default the end of the session, the last collect
-             */
-            lastUpdate: string;
-            /**
-             * Protecteddata
-             * @description Indicates if the data is protected or not
-             */
-            protectedData: string;
-            /**
-             * Archived
-             * @description The data for the session is archived and no longer available on disk
-             */
-            archived: number;
-            /** Collectiongroups */
-            collectionGroups?: number;
-            /** Datacollectiongroupid */
-            dataCollectionGroupId?: number;
-          };
+          "application/json": unknown;
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_tomogram_autoProc__autoProcId__tomogram_get: {
-    /**
-     * Get Tomogram
-     * @description Get tomogram
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         autoProcId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Tomogramid */
-            tomogramId: number;
-            /** Volumefile */
-            volumeFile: string;
-            /** Stackfile */
-            stackFile: string;
-            /** Sizex */
-            sizeX?: number;
-            /** Sizey */
-            sizeY?: number;
-            /** Sizez */
-            sizeZ?: number;
-            /** Pixelspacing */
-            pixelSpacing?: number;
-            /** Residualerrormean */
-            residualErrorMean?: number;
-            /** Residualerrorsd */
-            residualErrorSD?: number;
-            /** Xaxiscorrection */
-            xAxisCorrection?: number;
-            /** Tiltangleoffset */
-            tiltAngleOffset?: number;
-            /** Zshift */
-            zShift?: number;
-            /** Refinedtiltaxis */
-            refinedTiltAxis?: number;
-          };
+          "application/json": components["schemas"]["TomogramResponse"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_motion_correction_autoProc__autoProcId__motion_get: {
-    /**
-     * Get Motion Correction
-     * @description Get motion correction and tilt alignment data (including drift plot)
-     */
     parameters: {
-      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-      /** @description Number of results to show */
       query?: {
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
         page?: number;
+        /** @description Number of results to show */
         limit?: number;
       };
+      header?: never;
       path: {
         autoProcId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Items */
-            items: {
-              /** CTF */
-              CTF: {
-                /** Ctfid */
-                ctfId: number;
-                /** Box size in x */
-                boxSizeX: number;
-                /** Box size in y */
-                boxSizeY: number;
-                /** Minimum resolution for CTF */
-                minResolution: number;
-                /** Maxresolution */
-                maxResolution: number;
-                /** Mindefocus */
-                minDefocus: number;
-                /** Maxdefocus */
-                maxDefocus: number;
-                /** Defocusstepsize */
-                defocusStepSize: number;
-                /** Astigmatism */
-                astigmatism: number;
-                /** Astigmatismangle */
-                astigmatismAngle: number;
-                /** Estimatedresolution */
-                estimatedResolution: number;
-                /** Estimateddefocus */
-                estimatedDefocus: number;
-                /** Amplitudecontrast */
-                amplitudeContrast: number;
-                /** Correlation value */
-                ccValue: number;
-                /** Full path to the jpg image of the simulated FFT */
-                fftTheoreticalFullPath: string;
-                /** Comments */
-                comments: string;
-              };
-              /** Movie */
-              Movie: {
-                /** Movieid */
-                movieId: number;
-                /** Movienumber */
-                movieNumber?: number;
-                /** Moviefullpath */
-                movieFullPath: string;
-                /**
-                 * Createdtimestamp
-                 * Format: date-time
-                 */
-                createdTimeStamp: string;
-                /** Positionx */
-                positionX?: number;
-                /** Positiony */
-                positionY?: number;
-                /** Nominal defocus */
-                nominalDefocus: number;
-                /** Angle */
-                angle: number;
-                /** accumulated electron fluence from start to end of acquisition of movie */
-                fluence: number;
-                /** number of frames per movie */
-                numberOfFrames: number;
-              };
-              /** MotionCorrection */
-              MotionCorrection: {
-                /** Motioncorrectionid */
-                motionCorrectionId: number;
-                /** Datacollectionid */
-                dataCollectionId?: number;
-                /** Autoprocprogramid */
-                autoProcProgramId?: number;
-                /** Movie number, sequential in time 1-n */
-                imageNumber: number;
-                /** First frame of movie used */
-                firstFrame: number;
-                /** Last frame of movie used */
-                lastFrame: number;
-                /** Dose per frame */
-                dosePerFrame: number;
-                /** Dose weight */
-                doseWeight: number;
-                /** Total motion */
-                totalMotion: number;
-                /** Average motion per frame */
-                averageMotionPerFrame: number;
-                /** Path to drift plot */
-                driftPlotFullPath: string;
-                /** Path to micrograph */
-                micrographFullPath: string;
-                /** Path to micrograph */
-                micrographSnapshotFullPath: string;
-                /** Patches used in x */
-                patchesUsedX: number;
-                /** Patches used in y */
-                patchesUsedY: number;
-                /** Path to raw micrograph FFT */
-                fftFullPath: string;
-                /** Path to drift corrected micrograph FFT */
-                fftCorrectedFullPath: string;
-                /** Comments */
-                comments: string;
-              };
-              /** TiltImageAlignment */
-              TiltImageAlignment?: {
-                /** Movieid */
-                movieId: number;
-                /** Defocusu */
-                defocusU?: number;
-                /** Defocusv */
-                defocusV?: number;
-                /** Psdfile */
-                psdFile: string;
-                /** Resolution */
-                resolution?: number;
-                /** Fitquality */
-                fitQuality?: number;
-                /** Refinedmagnification */
-                refinedMagnification?: number;
-                /** Refinedtiltangle */
-                refinedTiltAngle?: number;
-                /** Refinedtiltaxis */
-                refinedTiltAxis?: number;
-                /** Residualerror */
-                residualError?: number;
-              };
-            }[];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Limit */
-            limit: number;
-          };
+          "application/json": components["schemas"]["Paged_FullMovie_"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_ctf_autoProc__autoProcId__ctf_get: {
-    /**
-     * Get Ctf
-     * @description Get astigmatism, resolution and defocus as a function of motion correction
-     * image numbers
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         autoProcId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Items */
-            items: {
-              /** Estimatedresolution */
-              estimatedResolution?: number;
-              /** Estimateddefocus */
-              estimatedDefocus?: number;
-              /** Astigmatism */
-              astigmatism?: number;
-              /** Imagenumber */
-              imageNumber: number;
-            }[];
-          };
+          "application/json": components["schemas"]["ItemList_CtfBaseSpa_"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_particle_picker_autoProc__autoProcId__particlePicker_get: {
-    /**
-     * Get Particle Picker
-     * @description Get particle picking data
-     */
     parameters: {
-      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-      /** @description Number of results to show */
       query?: {
         filterNull?: boolean;
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
         page?: number;
+        /** @description Number of results to show */
         limit?: number;
       };
+      header?: never;
       path: {
         autoProcId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Items */
-            items: {
-              /** Particlediameter */
-              particleDiameter?: number;
-              /** Numberofparticles */
-              numberOfParticles?: number;
-              /** Particlepickerid */
-              particlePickerId?: number;
-              /** Summaryfullimagepath */
-              summaryFullImagePath?: string;
-              /** Imagenumber */
-              imageNumber: number;
-              /** Movieid */
-              movieId: number;
-              /**
-               * Createdtimestamp
-               * Format: date-time
-               */
-              createdTimeStamp?: string;
-            }[];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Limit */
-            limit: number;
-          };
+          "application/json": components["schemas"]["Paged_ParticlePicker_"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_classification_autoProc__autoProcId__classification_get: {
-    /**
-     * Get Classification
-     * @description Get classification data
-     */
     parameters: {
-      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-      /** @description Number of results to show */
       query?: {
         sortBy?: "class" | "particles" | "resolution";
         classType?: "2d" | "3d";
         excludeUnselected?: boolean;
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
         page?: number;
+        /** @description Number of results to show */
         limit?: number;
       };
+      header?: never;
       path: {
         autoProcId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Items */
-            items: {
-              /** Particleclassificationgroupid */
-              particleClassificationGroupId: number;
-              /** Particlepickerid */
-              particlePickerId: number;
-              /** Programid */
-              programId: number;
-              /** Type */
-              type: string;
-              /** Batchnumber */
-              batchNumber: number;
-              /** Numberofparticlesperbatch */
-              numberOfParticlesPerBatch: number;
-              /** Numberofclassesperbatch */
-              numberOfClassesPerBatch: number;
-              /** Symmetry */
-              symmetry: string;
-              /** Particleclassificationid */
-              particleClassificationId: number;
-              /** Classnumber */
-              classNumber: number;
-              /** Classimagefullpath */
-              classImageFullPath?: string;
-              /** Particlesperclass */
-              particlesPerClass?: number;
-              /** Rotationaccuracy */
-              rotationAccuracy: number;
-              /** Translationaccuracy */
-              translationAccuracy: number;
-              /** Estimatedresolution */
-              estimatedResolution: number;
-              /** Overallfouriercompleteness */
-              overallFourierCompleteness: number;
-              /** Classdistribution */
-              classDistribution?: number;
-              /** Selected */
-              selected?: boolean;
-            }[];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Limit */
-            limit: number;
-          };
+          "application/json": components["schemas"]["Paged_Classification_"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_classification_image_autoProc__autoProcId__classification__classificationId__image_get: {
-    /**
-     * Get Classification Image
-     * @description Get class' image representation or MRC file
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         classificationId: number;
         autoProcId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
-      200: never;
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_angle_distribution_autoProc__autoProcId__classification__classificationId__angleDistribution_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        classificationId: number;
+        autoProcId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_particle_picker_image_autoProc__autoProcId__particlePicker__particlePickerId__image_get: {
-    /**
-     * Get Particle Picker Image
-     * @description Get class image
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         particlePickerId: number;
         autoProcId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
-      200: never;
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_ice_histogram_autoProc__autoProcId__iceThickness_get: {
-    /**
-     * Get Ice Histogram
-     * @description Get relative ice thickness histogram
-     */
     parameters: {
       query?: {
         dataBin?: number;
         minimum?: number;
       };
+      header?: never;
       path: {
         autoProcId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": Record<string, never>;
+          "application/json": unknown;
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_motion_autoProc__autoProcId__totalMotion_get: {
-    /**
-     * Get Motion
-     * @description Get total motion histogram
-     */
     parameters: {
       query?: {
         dataBin?: number;
         minimum?: number;
       };
+      header?: never;
       path: {
         autoProcId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": Record<string, never>;
+          "application/json": unknown;
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_resolution_autoProc__autoProcId__resolution_get: {
-    /**
-     * Get Resolution
-     * @description Get estimated resolution histogram
-     */
     parameters: {
       query?: {
         dataBin?: number;
         minimum?: number;
       };
+      header?: never;
       path: {
         autoProcId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": Record<string, never>;
+          "application/json": unknown;
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   get_particle_count_autoProc__autoProcId__particles_get: {
-    /**
-     * Get Particle Count
-     * @description Get particle count histogram
-     */
     parameters: {
       query?: {
         dataBin?: number;
         minimum?: number;
       };
+      header?: never;
       path: {
         autoProcId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": Record<string, never>;
+          "application/json": unknown;
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_b_factor_fit_autoProc__autoProcId__bFactorFit_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        autoProcId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ItemList_BFactorFitOut_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   post_feedback_feedback_post: {
-    /**
-     * Post Feedback
-     * @description Post user feedback to configured email address
-     */
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        "application/json": {
-          /** Fullname */
-          fullName: string;
-          /** Email */
-          email: string;
-          /** Comments */
-          comments: string;
-          /** Useragent */
-          userAgent: string;
-        };
+        "application/json": components["schemas"]["FeedbackForm"];
       };
     };
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": Record<string, never>;
+          "application/json": unknown;
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
   initiate_tomogram_reprocessing_processingJob__processingJobId__parameters_get: {
-    /**
-     * Initiate Tomogram Reprocessing
-     * @description Get processing job parameters
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         processingJobId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Items */
-            items: {
-              [key: string]: string | undefined;
-            };
-            /** Allowreprocessing */
-            allowReprocessing: boolean;
-          };
+          "application/json": components["schemas"]["ProcessingJobParameters"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": {
-            /** Detail */
-            detail?: {
-              /** Location */
-              loc: (string | number)[];
-              /** Message */
-              msg: string;
-              /** Error Type */
-              type: string;
-            }[];
-          };
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_foil_holes_grid_squares__gridSquareId__foil_holes_get: {
+    parameters: {
+      query?: {
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        page?: number;
+        /** @description Number of results to show */
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        gridSquareId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Paged_FoilHole_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_grid_square_image_grid_squares__gridSquareId__image_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        gridSquareId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_movies_foil_holes__foilHoleId__movies_get: {
+    parameters: {
+      query?: {
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        page?: number;
+        /** @description Number of results to show */
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        foilHoleId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Paged_Movie_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };

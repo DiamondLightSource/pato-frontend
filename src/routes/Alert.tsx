@@ -13,7 +13,7 @@ import { FormItem } from "components/form/input";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { baseToast } from "@diamondlightsource/ui-components";
 import { client } from "utils/api/client";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { pascalToSpace } from "utils/generic";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { UserWithEmail } from "loaders/user";
@@ -113,9 +113,12 @@ const AlertPage = () => {
   const navigate = useNavigate();
   const user = useLoaderData() as UserWithEmail;
   const form = useForm<AlertValues>({ defaultValues: { email: user?.email ?? undefined } });
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = form.handleSubmit(async (info) => {
+    setIsLoading(true);
     const response = await client.post(`dataGroups/${groupId}/alerts`, info);
+    setIsLoading(false);
 
     if (response.status !== 200) {
       toast(errorToast);
@@ -135,7 +138,7 @@ const AlertPage = () => {
         following values exceed your configured limits.
       </Text>
       <FormProvider {...form}>
-        <Form onSubmit={onSubmit} maxW='600px'>
+        <Form onSubmit={onSubmit} onClose={() => navigate(-1)} isLoading={isLoading} maxW='600px'>
           <FormItem
             label='Email'
             unit='required'

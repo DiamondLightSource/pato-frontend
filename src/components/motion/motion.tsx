@@ -162,10 +162,12 @@ const fetchMotionData = async (
 
   const responseData: components["schemas"]["Paged_FullMovie_"] = response.data;
 
-  // Estimated defocus is provided in angstroms
-  responseData.items[0].CTF.estimatedDefocus = parseFloat(
-    (responseData.items[0].CTF.estimatedDefocus * 0.0001).toFixed(3)
-  );
+  if (responseData.items[0].CTF.estimatedDefocus) {
+    // Estimated defocus is provided in angstroms
+    responseData.items[0].CTF.estimatedDefocus = parseFloat(
+      (responseData.items[0].CTF.estimatedDefocus * 0.0001).toFixed(3)
+    );
+  }
 
   data = {
     ...data,

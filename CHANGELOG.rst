@@ -3,6 +3,28 @@ Changelog
 ==========
 
 ++++++++++
+v1.21.0 (09/04/2025)
+++++++++++
+
+**Added**
+
+- Display "view atlas" button next to data collection group row
+
+++++++++++
+v1.20.1 (02/04/2025)
+++++++++++
+
+**Changed**
+
+- Use loading icon for micrograph images
+- Display warning for picked tomograms
+- Display spinner to loading submit button
+
+**Fixed**
+
+- Cancel button on alerts form now works as expected
+
+++++++++++
 v1.20.0 (14/03/2025)
 ++++++++++
 
