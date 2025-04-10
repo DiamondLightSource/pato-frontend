@@ -44,7 +44,9 @@ const GenericListing = ({ headers, heading, sortOptions, makePathCallback }: Tab
       if (makePathCallback) {
         navigate(
           makePathCallback(item, index, { search, page, sortBy, itemsPerPage: data.limit }),
-          { relative: "path" }
+          {
+            relative: "path",
+          }
         );
       }
     },
@@ -87,13 +89,15 @@ const GenericListing = ({ headers, heading, sortOptions, makePathCallback }: Tab
       <Divider mb={4} />
       <Table data={data.data} headers={headers} label={heading} onClick={handleRowClicked} />
       <Divider />
-      <Pagination
-        limit={data.limit}
-        page={page}
-        onPageChange={setPage}
-        onItemCountChange={setItemsPerPage}
-        total={data.total}
-      />
+      {data.data !== null && (
+        <Pagination
+          limit={data.limit}
+          page={page}
+          onPageChange={setPage}
+          onItemCountChange={setItemsPerPage}
+          total={data.total}
+        />
+      )}
     </Box>
   );
 };

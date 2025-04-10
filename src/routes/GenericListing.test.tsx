@@ -3,6 +3,8 @@ import { renderWithRoute } from "utils/test-utils";
 import { GenericListing } from "routes/GenericListing";
 import { proposalHeaders } from "utils/config/table";
 
+const proposal = { proposalNumber: 31111 };
+
 describe("Generic Listing", () => {
   it("should include search in request", async () => {
     const { router } = renderWithRoute(
@@ -28,7 +30,7 @@ describe("Generic Listing", () => {
         makePathCallback={(item) => item.test.toString()}
         headers={proposalHeaders}
       />,
-      () => ({ data: null, total: 300 })
+      () => ({ data: [proposal], total: 300 })
     );
 
     const nextPage = await screen.findByText("4");
@@ -94,7 +96,6 @@ describe("Generic Listing", () => {
 
   it("should call navigation callback when row is clicked", async () => {
     const mockCallback = vi.fn().mockReturnValue("somethingElse");
-    const proposal = { proposalNumber: 31111 };
     const { router } = renderWithRoute(
       <GenericListing heading='data' makePathCallback={mockCallback} headers={proposalHeaders} />,
       () => ({ data: [proposal] }),
@@ -162,5 +163,15 @@ describe("Generic Listing", () => {
     fireEvent.change(sortBySelect, { target: { value: "sortKey2" } });
 
     expect(router.state.navigation.location!.search).toEqual("?sortBy=sortKey2");
+  });
+
+  it("should not display pagination controls if data is null", async () => {
+    renderWithRoute(<GenericListing heading='data' headers={proposalHeaders} />, () => ({
+      data: null,
+    }));
+
+    await screen.findByText("No data found");
+
+    expect(screen.queryByLabelText("Previous Page")).not.toBeInTheDocument();
   });
 });

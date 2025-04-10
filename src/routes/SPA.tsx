@@ -85,10 +85,19 @@ const SpaPage = () => {
             >
               Report
             </Button>
-            <Button as={Link} to={{ pathname: "../alerts" }} relative='path' leftIcon={<MdNotifications />}>
+            <Button
+              as={Link}
+              to={{ pathname: "../alerts" }}
+              relative='path'
+              leftIcon={<MdNotifications />}
+            >
               Alerts
             </Button>
-            <Button leftIcon={<MdRedo />} isDisabled={!loaderData.allowReprocessing} onClick={onOpen}>
+            <Button
+              leftIcon={<MdRedo />}
+              isDisabled={!loaderData.allowReprocessing}
+              onClick={onOpen}
+            >
               Reprocessing
             </Button>
             <Button
@@ -103,8 +112,9 @@ const SpaPage = () => {
           </HStack>
           <HStack w='100%'>
             <Heading color='diamond.300' size='sm'>
-              Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data collection group{" "}
-              <Code>{params.groupId}</Code>, data collection <Code>{loaderData.collection.dataCollectionId}</Code>
+              Proposal <Code>{params.propId}</Code>, visit <Code>{params.visitId}</Code>, data
+              collection group <Code>{params.groupId}</Code>, data collection{" "}
+              <Code>{loaderData.collection.dataCollectionId}</Code>
             </Heading>
             <Spacer />
             {loaderData.collection.imageDirectory && (
@@ -133,7 +143,7 @@ const SpaPage = () => {
                   <SPA
                     key={i}
                     active={accordionIndex === i}
-                    autoProc={job.AutoProcProgram}
+                    autoProc={job.AutoProcProgram!}
                     procJob={job.ProcessingJob}
                     status={job.status}
                   />
@@ -145,8 +155,8 @@ const SpaPage = () => {
                   No Single Particle Analysis Data Available
                 </Heading>
                 <Heading w='50%' pb={5} variant='notFoundSubtitle'>
-                  ...or you may not have permission to view data in this collection. If this was shared with you through
-                  a link, check with the person that sent it.
+                  ...or you may not have permission to view data in this collection. If this was
+                  shared with you through a link, check with the person that sent it.
                 </Heading>
               </VStack>
             )}

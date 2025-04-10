@@ -1,6 +1,7 @@
 import { renderWithAccordion } from "utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { SPA } from "components/spa/main";
+import { components } from "schema/main";
 
 const procJob = {
   processingJobId: 1,
@@ -14,7 +15,7 @@ const procJob = {
 
 const autoProcJob = {
   autoProcProgramId: 1,
-};
+} as components["schemas"]["AutoProcProgramResponse"];
 
 describe("SPA Processing Job Row", () => {
   it("should display all visualisations if recipe isn't in recipe mapping", () => {

@@ -6,6 +6,7 @@ import { http, HttpResponse } from "msw";
 import { mockToast } from "../../vitest.setup";
 
 const mockNavigate = vi.fn();
+const oldEnv = structuredClone(process.env);
 
 vi.mock("react-router-dom", async (importOriginal) => {
   const actual = await importOriginal<any>();
@@ -16,6 +17,10 @@ vi.mock("react-router-dom", async (importOriginal) => {
 });
 
 describe("Session Page", () => {
+  afterAll(() => {
+    process.env = oldEnv;
+  });
+
   it("should render session metadata headers", async () => {
     renderWithRoute(<SessionPage />, () => ({
       items: [],
@@ -40,15 +45,79 @@ describe("Session Page", () => {
     expect(mockNavigate).toHaveBeenCalledWith("groups/1/tomograms/1", { relative: "path" });
   });
 
-  // TODO: re-enable this test once the two line link component sets the disabled attribute
-  /*it("should disable 'edit sample information button' if no sample handling service is provided", async () => {
+  it("should disable 'edit sample information' button if no sample handling service is provided", async () => {
+    process.env.REACT_APP_API_ENDPOINT = undefined;
+
     renderWithRoute(<SessionPage />, () => ({
       items: [],
       session: { microscopeName: "Krios I", startDate: "startDateValue", endDate: "endDateValue" },
     }));
 
-    const wrapper = await screen.findByText("Edit sample information");
-  });*/
+    const link = await screen.findByText("Edit sample information");
+    expect(link.parentNode?.parentNode?.parentNode).toHaveAttribute("aria-disabled");
+  });
+
+  it("should disable 'submit feedback' button if no feedback URL is provided", async () => {
+    process.env.REACT_APP_FEEDBACK_URL = undefined;
+
+    renderWithRoute(<SessionPage />, () => ({
+      items: [],
+      session: { microscopeName: "Krios I", startDate: "startDateValue", endDate: "endDateValue" },
+    }));
+
+    const link = await screen.findByText("Submit Feedback");
+    expect(link.parentNode?.parentNode?.parentNode).toHaveAttribute("aria-disabled");
+  });
+
+  it("should display link to atlas if data collection group has atlas", async () => {
+    renderWithRoute(<SessionPage />, () => ({
+      items: [{ experimentTypeName: "Single Particle", dataCollectionGroupId: 1, atlasId: 5 }],
+      session: { microscopeName: "Krios I", startDate: "startDateValue", endDate: "endDateValue" },
+    }));
+
+    const atlasButton = await screen.findByText("View Atlas");
+
+    expect(atlasButton).toHaveAttribute("href", "/groups/1/atlas");
+  });
+
+  it("should not display link to atlas if data collection group is tomogram", async () => {
+    renderWithRoute(<SessionPage />, () => ({
+      items: [{ experimentTypeName: "Tomogram", dataCollectionGroupId: 1, atlasId: 5 }],
+      session: { microscopeName: "Krios I", startDate: "startDateValue", endDate: "endDateValue" },
+    }));
+
+    expect(screen.queryByText("View Atlas")).not.toBeInTheDocument();
+  });
+
+  it("should not display link to atlas if data collection group has no atlas", async () => {
+    renderWithRoute(<SessionPage />, () => ({
+      items: [{ experimentTypeName: "Single Particle", dataCollectionGroupId: 1 }],
+      session: { microscopeName: "Krios I", startDate: "startDateValue", endDate: "endDateValue" },
+    }));
+
+    await screen.findByText("Single Particle");
+
+    expect(screen.queryByText("View Atlas")).not.toBeInTheDocument();
+  });
+
+  it("should display error message if session does not exist", async () => {
+    renderWithRoute(<SessionPage />, () => ({
+      items: null,
+      session: null,
+    }));
+
+    await screen.findByText("Session Not Found");
+  });
+
+  it("should not display pagination if no items are available", async () => {
+    renderWithRoute(<SessionPage />, () => ({
+      items: null,
+      session: { microscopeName: "Krios I", startDate: "startDateValue", endDate: "endDateValue" },
+    }));
+
+    await screen.findByText(/krios i/i);
+    expect(screen.queryByLabelText("Previous Page")).not.toBeInTheDocument();
+  });
 });
 
 describe("Data Collection Creation", () => {
