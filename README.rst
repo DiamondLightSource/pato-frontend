@@ -24,7 +24,7 @@ Create a configuration file named `config.js`, based on `config.example.js`, and
 - API_URL: base URL for API endpoints
 - AUTH_URL: base URL for authentication endpoints
 - DEV_CONTACT: email used for contacting application support
-- ENVIRONMENT: application environment - one of 'production', 'staging' or 'dev'
+- ENVIRONMENT: application environment - one of 'production', 'staging' or 'demo'
 - FEEDBACK_URL (optional): URL pointing to form that takes user feedback
 
 ==========
