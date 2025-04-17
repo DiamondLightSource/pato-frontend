@@ -1,6 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
 import { Params } from "react-router";
-import { PaginationSearchParams } from "routes/GenericListing";
 import { client } from "utils/api/client";
 import { buildEndpoint } from "utils/api/endpoint";
 
@@ -60,10 +59,3 @@ export const listingLoader =
 
     return { data: null, total: 0, limit: 20 };
   };
-
-export const handleCollectionClicked = (
-  item: Record<string, string | number>,
-  _: any,
-  searchParams: PaginationSearchParams
-) =>
-  `../tomograms/${item.index}${searchParams.sortBy ? "?sortBy=" : ""}${searchParams.sortBy ?? ""}`;
