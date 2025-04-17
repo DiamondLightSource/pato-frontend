@@ -33,7 +33,7 @@ const getPrefix = (prefix: string = "/api/") => {
 export const redirectToAuth = () => {
   const url = encodeURIComponent(window.location.href);
   window.location.replace(
-    `${getPrefix(process.env.REACT_APP_AUTH_ENDPOINT)}authorise?redirect_uri=${url}&responseType=code`
+    `${getPrefix(window.ENV.AUTH_URL)}authorise?redirect_uri=${url}&responseType=code`
   );
 };
 
@@ -41,7 +41,7 @@ export const client = async (
   endpoint: string,
   customConfig: Record<any, any> = {},
   body?: Record<any, any> | FormData,
-  prefix = getPrefix(process.env.REACT_APP_API_ENDPOINT)
+  prefix = getPrefix(window.ENV.API_URL)
 ): Promise<never | Response> => {
   const config: RequestConfig = {
     method: body != null ? "POST" : "GET",
@@ -116,7 +116,7 @@ client.authGet = async (endpoint: string, customConfig = {}) => {
       ...customConfig,
     }),
     undefined,
-    getPrefix(process.env.REACT_APP_AUTH_ENDPOINT)
+    getPrefix(window.ENV.AUTH_URL)
   );
 };
 
@@ -125,4 +125,4 @@ client.post = async (endpoint: string, body: Record<any, any> | FormData, custom
 };
 
 export const prependApiUrl = (url: string) =>
-  `${getPrefix(process.env.REACT_APP_API_ENDPOINT)}${url}`;
+  `${getPrefix(window.ENV.API_URL)}${url}`;

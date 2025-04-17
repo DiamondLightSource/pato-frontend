@@ -3,6 +3,23 @@ Changelog
 ==========
 
 ++++++++++
+v1.21.1 (10/04/2025)
+++++++++++
+
+**Changed**
+
+- Update Vite/React Router version
+- Use runtime config file
+
+++++++++++
+v1.21.0 (09/04/2025)
+++++++++++
+
+**Added**
+
+- Display "view atlas" button next to data collection group row
+
+++++++++++
 v1.20.1 (02/04/2025)
 ++++++++++
 

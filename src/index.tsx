@@ -36,7 +36,7 @@ const container = document.getElementById("root")!;
 const root = createRoot(container);
 const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: 1.08e7 } } });
 
-if (process.env.REACT_APP_DEPLOY_TYPE === "demo") {
+if (window.ENV.ENVIRONMENT === "demo" && process.env.NODE_ENV === "development") {
   const { worker } = require("./mocks/browser");
   worker.start();
 }
