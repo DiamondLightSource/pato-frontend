@@ -1,20 +1,20 @@
 import { client, prependApiUrl } from "utils/api/client";
 import { waitFor } from "@testing-library/react";
 
-const oldEnv = structuredClone(process.env);
+const oldEnv = structuredClone(window.ENV);
 
 describe("Client Helper Functions", () => {
   afterAll(() => {
-    process.env = oldEnv;
+    window.ENV = oldEnv;
   });
 
   it("should prefix current location to URLs if API endpoint starts with /", () => {
-    process.env.REACT_APP_API_ENDPOINT = "/api/";
+    window.ENV.API_URL = "/api/";
     expect(prependApiUrl("test")).toBe("http://localhost:3000/api/test");
   });
 
   it("should prefix full URL to requests when applicable", () => {
-    process.env.REACT_APP_API_ENDPOINT = "https://otherlocation.co.uk/";
+    window.ENV.API_URL = "https://otherlocation.co.uk/";
     expect(prependApiUrl("test")).toBe("https://otherlocation.co.uk/test");
   });
 });

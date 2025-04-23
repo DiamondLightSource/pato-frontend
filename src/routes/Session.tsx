@@ -20,9 +20,16 @@ import {
   useToast,
   ModalProps,
   Button,
+  Link,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo } from "react";
-import { Link, useLoaderData, useNavigate, useParams, useRevalidator } from "react-router";
+import {
+  Link as RouterLink,
+  useLoaderData,
+  useNavigate,
+  useParams,
+  useRevalidator,
+} from "react-router";
 import {
   Pagination,
   DebouncedInput,
@@ -37,7 +44,7 @@ import { Form } from "components/form/form";
 import { FormItem, Options } from "components/form/input";
 import { useForm } from "react-hook-form";
 import { required } from "utils/validation";
-import { client } from "utils/api/client";
+import { client, prependApiUrl } from "utils/api/client";
 import { useQueryClient } from "@tanstack/react-query";
 
 const fileExtensionValues = [
@@ -128,24 +135,48 @@ const SessionPage = () => {
   );
 
   const tableData = useMemo(() => {
+    if (data.items === null) {
+      return null;
+    }
+
+    // FIXME: tomograms currently have entries in the Atlas table, but they have no actual atlas data.
+    // Once this is fixed in the pipeline, we can remove the experiment type check.
     return data.items.map((row) => ({
       ...row,
-      atlasLink: row.atlasId ? (
-        <Button
-          size='xs'
-          as={Link}
-          to={`groups/${row.dataCollectionGroupId}/atlas`}
-          relative='path'
-        >
-          View Atlas
-        </Button>
-      ) : null,
+      atlasLink:
+        row.atlasId && row.experimentTypeName === "Single Particle" ? (
+          <Button
+            size='xs'
+            as={RouterLink}
+            to={`groups/${row.dataCollectionGroupId}/atlas`}
+            relative='path'
+          >
+            View Atlas
+          </Button>
+        ) : null,
     }));
   }, [data]);
 
   useEffect(() => {
     document.title = "PATo » Session";
   }, []);
+
+  if (data.session === null) {
+    return (
+      <VStack>
+        <Heading pt={5} variant='notFound'>
+          Session Not Found
+        </Heading>
+        <Heading w='50%' pb={5} variant='notFoundSubtitle'>
+          ...or you may not have permission to view this session. If this was shared with you
+          through a link, check with the person that sent it.
+        </Heading>
+        <Link color='diamond.700' href='..' as={RouterLink} to='..'>
+          Go back
+        </Link>
+      </VStack>
+    );
+  }
 
   return (
     <Box h='100%'>
@@ -189,26 +220,28 @@ const SessionPage = () => {
               onClick={handleRowClicked}
             />
             <Divider />
-            <Pagination
-              limit={data.limit}
-              page={page}
-              onPageChange={setPage}
-              onItemCountChange={setItemsPerPage}
-              total={data.total}
-              w='100%'
-            />
+            {data.items !== null && (
+              <Pagination
+                limit={data.limit}
+                page={page}
+                onPageChange={setPage}
+                onItemCountChange={setItemsPerPage}
+                total={data.total}
+                w='100%'
+              />
+            )}
           </VStack>
           <VStack alignItems='start'>
             <Heading size='lg'>Actions</Heading>
             <Divider />
             {/** @ts-expect-error */}
-            <TwoLineLink title='Upload Particle Picking Model' as={Link} to='upload-model'>
+            <TwoLineLink title='Upload Particle Picking Model' as={RouterLink} to='upload-model'>
               Upload custom model for particle picking (crYOLO)
             </TwoLineLink>
             <TwoLineLink
               title='Submit Feedback'
-              href={process.env.REACT_APP_FEEDBACK_URL}
-              isDisabled={!process.env.REACT_APP_FEEDBACK_URL}
+              href={window.ENV.FEEDBACK_URL}
+              isDisabled={!window.ENV.FEEDBACK_URL}
             >
               Submit session feedback
             </TwoLineLink>
@@ -217,8 +250,7 @@ const SessionPage = () => {
             </TwoLineLink>
             <TwoLineLink
               title='Edit sample information'
-              href={`${process.env.REACT_APP_API_ENDPOINT}proposals/${propId}/sessions/${visitId}/sampleHandling`}
-              isDisabled={!process.env.REACT_APP_API_ENDPOINT}
+              href={prependApiUrl(`proposals/${propId}/sessions/${visitId}/sampleHandling`)}
             >
               Edit session's sample information
             </TwoLineLink>

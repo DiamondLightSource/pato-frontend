@@ -33,6 +33,15 @@ class ResizeObserver {
   disconnect() {}
 }
 
+window.ENV = {
+  API_URL: "http://localhost/",
+  AUTH_URL: "http://localhost/auth/",
+  DEV_CONTACT: "guilherme.de-freitas@diamond.ac.uk",
+  ENVIRONMENT: "production",
+  FEEDBACK_URL: "true",
+}
+
+
 global.window.scrollTo = () => {}
 global.ResizeObserver = ResizeObserver;
 global.structuredClone = (val: Record<string, any>) => JSON.parse(JSON.stringify(val));
