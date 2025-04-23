@@ -31,7 +31,7 @@ interface TomogramListLoaderData {
   limit: number;
 }
 
-const TomogramCard = ({ title, value }: { title: string; value?: string | number | null }) => (
+const TomogramStat = ({ title, value }: { title: string; value?: string | number | null }) => (
   <HStack flex='1 0 auto'>
     <Text fontWeight='600'>{title} :</Text>
     <Text>{value ?? "?"}</Text>
@@ -98,11 +98,11 @@ const TomogramList = () => {
                   <Heading size='md'>{collection.comments}</Heading>
 
                   <HStack pt='10px'>
-                    <TomogramCard
+                    <TomogramStat
                       title='Alignment Quality'
                       value={collection.globalAlignmentQuality}
                     />
-                    <TomogramCard title='Tomograms' value={collection.tomograms} />
+                    <TomogramStat title='Tomograms' value={collection.tomograms} />
                   </HStack>
                 </CardBody>
               </VStack>
