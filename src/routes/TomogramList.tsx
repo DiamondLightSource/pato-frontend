@@ -115,7 +115,7 @@ const TomogramList = () => {
         </Heading>
       )}
       <Divider />
-      {data.data !== null && data.data.length > 0 && (
+      {data.data && data.data.length > 0 && (
         <Pagination
           limit={data.limit}
           page={page}
