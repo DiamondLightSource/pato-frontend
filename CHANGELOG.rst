@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.22.0 (24/04/2025)
+++++++++++
+
+**Added**
+
+- Display tomogram central slices in tomogram list
+
+++++++++++
 v1.21.1 (10/04/2025)
 ++++++++++
 
