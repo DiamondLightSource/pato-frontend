@@ -8,9 +8,9 @@ import { TomogramPage } from "routes/Tomogram";
 import { SpaPage } from "routes/SPA";
 import { Error } from "routes/Error";
 import { Home } from "routes/Home";
-import { collectionHeaders, proposalHeaders, sessionHeaders } from "utils/config/table";
+import { proposalHeaders, sessionHeaders } from "utils/config/table";
 import { getUser } from "loaders/user";
-import { handleCollectionClicked, listingLoader } from "loaders/listings";
+import { listingLoader } from "loaders/listings";
 import { spaLoader } from "loaders/spa";
 import { tomogramLoader } from "loaders/tomogram";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -26,6 +26,7 @@ import AtlasPage from "routes/Atlas";
 import { atlasLoader } from "loaders/atlas";
 import AlertPage from "routes/Alert";
 import { groupLoader } from "loaders/group";
+import { TomogramList } from "routes/TomogramList";
 
 const Calendar = React.lazy(() => import("routes/Calendar"));
 const About = React.lazy(() => import("routes/About"));
@@ -125,18 +126,8 @@ const router = createBrowserRouter([
       },
       {
         path: "/proposals/:propId/sessions/:visitId/groups/:groupId/collections",
+        element: <TomogramList />,
         hydrateFallbackElement: <></>,
-        element: (
-          <GenericListing
-            headers={collectionHeaders}
-            heading='Data Collections'
-            makePathCallback={handleCollectionClicked}
-            sortOptions={[
-              { key: "dataCollectionId", value: "Data Collection ID" },
-              { key: "globalAlignmentQuality", value: "Alignment Quality" },
-            ]}
-          />
-        ),
         loader: ({ request, params }) =>
           listingLoader(queryClient)(request, params, "dataCollections"),
       },
