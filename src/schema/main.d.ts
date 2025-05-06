@@ -1561,8 +1561,6 @@ export interface components {
       globalAlignmentQuality?: number | null;
       /** Tomograms */
       tomograms: number;
-      /** Globalalignmentquality */
-      globalAlignmentQuality?: number | null;
     };
     /** DataPoint */
     DataPoint: {
@@ -1597,6 +1595,14 @@ export interface components {
        * @default 0
        */
       movieCount: number | null;
+      /** Particlecount */
+      particleCount?: number | null;
+      /** Resolution */
+      resolution?: number | null;
+      /** Defocus */
+      defocus?: number | null;
+      /** Astigmatism */
+      astigmatism?: number | null;
     };
     /** FullMovie */
     FullMovie: {
@@ -1949,7 +1955,7 @@ export interface components {
        * Proposalid
        * @description Proposal ID
        */
-      proposalId?: number;
+      proposalId: number;
       /** Personid */
       personId: number;
       /** Title */
@@ -2083,14 +2089,14 @@ export interface components {
        * Sessionid
        * @description Session ID
        */
-      sessionId?: number;
+      sessionId: number;
       /** Beamlinesetupid */
       beamLineSetupId?: number | null;
       /**
        * Proposalid
        * @description Proposal ID
        */
-      proposalId?: number;
+      proposalId: number;
       /** Beamcalendarid */
       beamCalendarId?: number | null;
       /** Startdate */

@@ -69,7 +69,10 @@ export interface SpaCollectionData extends CollectionData {
 }
 
 export type SortTypes = NonNullable<
-  NonNullable<paths["/autoProc/{autoProcId}/classification"]["get"]["parameters"]["query"]>["sortBy"]
+  NonNullable<
+    paths["/autoProc/{autoProcId}/classification"]["get"]["parameters"]["query"]
+  >["sortBy"]
 >;
 
 export type TomogramMovieTypes = "denoised" | "segmented" | "picked";
+export type FoilHoleMetricTypes = "defocus" | "astigmatism" | "particleCount" | "resolution";

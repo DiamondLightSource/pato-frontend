@@ -27,7 +27,7 @@ const sortSquare = (
     : {
         stroke: "red",
         strokeOpacity: "0.4",
-        fill: "red",
+        fill: "black",
         fillOpacity: "0.2",
       };
 };
