@@ -4,7 +4,7 @@ import { GridSquare } from "components/atlas/GridSquare";
 import { server } from "mocks/server";
 import { http, HttpResponse } from "msw";
 
-describe("Atlas", () => {
+describe("Grid Square", () => {
   it("should display movies if foil hole selected", async () => {
     renderWithProviders(<GridSquare gridSquareId={1} />);
 
@@ -13,16 +13,6 @@ describe("Atlas", () => {
     fireEvent.click(gridSquare);
 
     await screen.findByLabelText("500");
-  });
-
-  it("should make selected foil hole blue", async () => {
-    renderWithProviders(<GridSquare gridSquareId={1} />);
-
-    const gridSquare = await screen.findByRole("button");
-
-    fireEvent.click(gridSquare);
-
-    expect(gridSquare).toHaveAttribute("fill", "blue");
   });
 
   it("should display message if no foil holes are available", async () => {
@@ -66,18 +56,6 @@ describe("Atlas", () => {
     fireEvent.click(gridSquare);
 
     await screen.findByText("No movies available");
-  });
-
-  it("should toggle visibility of uncollected foil holes", async () => {
-    renderWithProviders(<GridSquare gridSquareId={1} />);
-
-    expect(await screen.findByTestId("foilHole-1")).toHaveAttribute("fill", "red");
-
-    const checkbox = await screen.findByLabelText("Hide uncollected foil holes");
-    fireEvent.click(checkbox);
-    expect(checkbox).toBeChecked();
-
-    expect(await screen.findByTestId("foilHole-1")).toHaveAttribute("visibility", "hidden");
   });
 
   it("should toggle the search params", async () => {

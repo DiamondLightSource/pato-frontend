@@ -9,7 +9,6 @@ import {
   HStack,
   Spacer,
   Checkbox,
-  Box,
   Text,
   Select,
 } from "@chakra-ui/react";
@@ -20,7 +19,7 @@ import { components } from "schema/main";
 import { client, prependApiUrl } from "utils/api/client";
 import "styles/atlas.css";
 import { FoilHoleMetricTypes } from "schema/interfaces";
-import { pascalToSpace } from "utils/generic";
+import { HeatmapOptions, HeatmapOverlay } from "components/visualisation/Heatmap";
 
 type FoilHole = components["schemas"]["FoilHole"];
 
@@ -32,12 +31,10 @@ export interface FoilHoleWithColour extends FoilHole {
   colour?: string;
 }
 
-const HEATMAP_PALETTE = ["#fde725", "#5ec962", "#21918c", "#3b528b", "#440154"];
-const MEAS_UNITS = {
-  resolution: "Å",
-  astigmatism: "nm",
-  particleCount: "units",
-  defocus: "μm",
+const HEATMAP_VALUES: Record<string, HeatmapOptions> = {
+  resolution: { label: "Resolution (Å)", max: 5, type: "log", binCount: 5 },
+  astigmatism: { label: "Astigmatism (nm)", max: 50, type: "log", binCount: 5 },
+  particleCount: { label: "Particle Count", min: 0, max: 500, type: "linear", binCount: 5 },
 };
 
 const fetchFoilHoles = async (gridSquareId: number | null) => {
@@ -90,38 +87,18 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
       return null;
     }
 
-    const sortedFoilHoles: FoilHoleWithColour[] = data
-      .filter((f) => f[heatmapMetric] !== null)
-      .sort((a, b) => a[heatmapMetric]! - b[heatmapMetric]!);
-    const binSize = Math.round(sortedFoilHoles.length / 5);
-
-    const bins: number[] = [];
-
-    for (let i = 0; i < 5; i++) {
-      const index = binSize * i;
-      bins.push(sortedFoilHoles[index][heatmapMetric]!);
-    }
-
-    for (let i = 0; i < sortedFoilHoles.length; i++) {
-      const index = Math.floor(i / binSize);
-      sortedFoilHoles[i].colour =
-        HEATMAP_PALETTE[index >= HEATMAP_PALETTE.length ? HEATMAP_PALETTE.length - 1 : index];
-    }
-
-    const allFoilHoles = [
-      ...sortedFoilHoles,
-      ...data.filter((foilHole) => foilHole[heatmapMetric] === null),
-    ];
-
-    return { bins, items: allFoilHoles };
+    return data.map((foilHole) => ({
+      ...foilHole,
+      value: foilHole[heatmapMetric] ?? null,
+      id: foilHole.foilHoleId,
+    }));
   }, [data, heatmapMetric]);
 
   const handleFoilHoleClicked = useCallback(
-    (foilHole: FoilHole) => {
-      if (gridSquareId === null || foilHole.movieCount === 0) {
+    (foilHole: number | string) => {
+      if (gridSquareId === null) {
         return;
       }
-
       /* 
       Search params are set like this so as not to overwrite hideSquares. 
       See the example in the React Router docs:
@@ -129,7 +106,7 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
       */
       setSearchParams((prev) => {
         prev.set("gridSquare", gridSquareId.toString());
-        prev.set("foilHole", foilHole.foilHoleId.toString());
+        prev.set("foilHole", foilHole.toString());
         return prev;
       });
     },
@@ -144,32 +121,6 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
       });
     },
     [setSearchParams]
-  );
-
-  const sortHole = useCallback(
-    (foilHole: FoilHoleWithColour, selectedFoilHole: number | null) => {
-      const hideUncollectedHoles = searchParams.get("hideHoles") === "true";
-      const isSelected = selectedFoilHole === foilHole.foilHoleId;
-      return foilHole.movieCount === 0
-        ? hideUncollectedHoles
-          ? {
-              visibility: "hidden",
-            }
-          : {
-              stroke: "red",
-              strokeOpacity: "0.4",
-              fill: "black",
-              fillOpacity: "0.2",
-            }
-        : {
-            role: "button",
-            stroke: isSelected ? "white" : foilHole.colour,
-            fill: foilHole.colour,
-            fillOpacity: isSelected ? "0.8" : "0.4",
-            cursor: "pointer",
-          };
-    },
-    [searchParams]
   );
 
   return (
@@ -206,64 +157,35 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
           No foil holes available
         </Heading>
       ) : (
-        <VStack w='100%'>
-          <div style={{ width: "100%" }} className='img-wrapper'>
-            <img src={prependApiUrl(`grid-squares/${gridSquareId}/image`)} alt='Grid Square' />
-            <svg viewBox={"0 0 512 512"}>
-              {foilHoles.items.map((foilHole, i) => (
-                <circle
-                  key={i}
-                  data-testid={`foilHole-${i}`}
-                  cx={foilHole.x}
-                  cy={foilHole.y}
-                  r={foilHole.diameter / 2}
-                  onClick={() => handleFoilHoleClicked(foilHole)}
-                  {...sortHole(foilHole, foilHoleId)}
-                />
-              ))}
-            </svg>
-          </div>
-          <HStack zIndex={2} w='100%' flexWrap='wrap'>
-            <VStack gap='2px'>
-              <HStack gap='1px'>
-                {HEATMAP_PALETTE.map((colour, i) => (
-                  <VStack alignItems='left'>
-                    <Box bg={colour} key={colour} h='12px' w='60px'></Box>
-                    <Text fontSize='12px'>{foilHoles.bins[i].toFixed(1)}</Text>
-                  </VStack>
-                ))}
-              </HStack>
-
-              <Text fontSize='12px'>
-                {pascalToSpace(heatmapMetric)} ({MEAS_UNITS[heatmapMetric]})
-              </Text>
-            </VStack>
-            <Spacer />
-            <HStack>
-              <Text>Display heatmap for</Text>
-              <Select
-                w='10em'
-                variant='hi-contrast'
-                p='1px'
-                onChange={(e) => setHeatmapMetric(e.target.value as FoilHoleMetricTypes)}
-                value={heatmapMetric}
-              >
-                <option key={"resolution"} value={"resolution"}>
-                  Resolution
-                </option>
-                <option key={"particleCount"} value={"particleCount"}>
-                  Particle Count
-                </option>
-                <option key={"astigmatism"} value={"astigmatism"}>
-                  Astigmatism
-                </option>
-                <option key={"defocus"} value={"defocus"}>
-                  Defocus
-                </option>
-              </Select>
-            </HStack>
+        <HeatmapOverlay
+          image={`grid-squares/${gridSquareId}/image`}
+          options={HEATMAP_VALUES[heatmapMetric]}
+          onItemClicked={handleFoilHoleClicked}
+          items={foilHoles}
+          selectedItem={foilHoleId}
+          hideNull={searchParams.get("hideHoles") === "true"}
+        >
+          <HStack>
+            <Text>Display heatmap for</Text>
+            <Select
+              w='10em'
+              variant='hi-contrast'
+              p='1px'
+              onChange={(e) => setHeatmapMetric(e.target.value as FoilHoleMetricTypes)}
+              value={heatmapMetric}
+            >
+              <option key={"resolution"} value={"resolution"}>
+                Resolution
+              </option>
+              <option key={"particleCount"} value={"particleCount"}>
+                Particle Count
+              </option>
+              <option key={"astigmatism"} value={"astigmatism"}>
+                Astigmatism
+              </option>
+            </Select>
           </HStack>
-        </VStack>
+        </HeatmapOverlay>
       )}
       <VStack zIndex={2} divider={<Divider />} w='100%' alignItems='start'>
         <Heading mt='0.5em' size='lg'>

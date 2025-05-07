@@ -124,5 +124,4 @@ client.post = async (endpoint: string, body: Record<any, any> | FormData, custom
   return await client(endpoint, { ...customConfig }, body);
 };
 
-export const prependApiUrl = (url: string) =>
-  `${getPrefix(window.ENV.API_URL)}${url}`;
+export const prependApiUrl = (url: string) => `${getPrefix(window.ENV.API_URL)}${url}`;

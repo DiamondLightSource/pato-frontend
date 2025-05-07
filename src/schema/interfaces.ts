@@ -74,5 +74,7 @@ export type SortTypes = NonNullable<
   >["sortBy"]
 >;
 
+export type RequiredAndNonNullable<T, K extends keyof T> = T & { [P in K]-?: NonNullable<T[P]> };
+
 export type TomogramMovieTypes = "denoised" | "segmented" | "picked";
-export type FoilHoleMetricTypes = "defocus" | "astigmatism" | "particleCount" | "resolution";
+export type FoilHoleMetricTypes = "astigmatism" | "particleCount" | "resolution";

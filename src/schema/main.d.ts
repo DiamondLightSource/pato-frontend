@@ -1599,8 +1599,6 @@ export interface components {
       particleCount?: number | null;
       /** Resolution */
       resolution?: number | null;
-      /** Defocus */
-      defocus?: number | null;
       /** Astigmatism */
       astigmatism?: number | null;
     };

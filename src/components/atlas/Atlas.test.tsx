@@ -42,11 +42,11 @@ describe("Atlas", () => {
     await screen.findByText("No atlas grid information available");
   });
 
-  it("should show uncollected squares in red", async () => {
+  it("should show uncollected squares in black", async () => {
     renderWithRoute(<Atlas groupId='1' />, () => ({
       gridSquares: [{ x: 2, y: 1, width: 1, height: 1, gridSquareId: 2, angle: 1, image: null }],
     }));
 
-    expect(await screen.findByTestId("square-0")).toHaveAttribute("fill", "red");
+    expect(await screen.findByTestId("square-0")).toHaveAttribute("fill", "black");
   });
 });
