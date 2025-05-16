@@ -426,8 +426,26 @@ export const handlers = [
   http.get("http://localhost/grid-squares/:gridSquareId/foil-holes", () =>
     HttpResponse.json({
       items: [
-        { foilHoleId: 500, x: 1, y: 1, diameter: 5, movieCount: 1 },
-        { foilHoleId: 501, x: 2, y: 2, diameter: 5, movieCount: 0 },
+        {
+          foilHoleId: 500,
+          x: 1,
+          y: 1,
+          diameter: 5,
+          movieCount: 1,
+          astigmatism: 1,
+          particleCount: 5,
+          resolution: 9,
+        },
+        {
+          foilHoleId: 501,
+          x: 2,
+          y: 2,
+          diameter: 5,
+          movieCount: 0,
+          astigmatism: null,
+          particleCount: null,
+          resolution: null,
+        },
       ],
     })
   ),

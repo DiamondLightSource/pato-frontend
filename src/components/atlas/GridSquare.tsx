@@ -9,13 +9,17 @@ import {
   HStack,
   Spacer,
   Checkbox,
+  Text,
+  Select,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useSearchParams } from "react-router";
 import { components } from "schema/main";
 import { client, prependApiUrl } from "utils/api/client";
 import "styles/atlas.css";
+import { FoilHoleMetricTypes } from "schema/interfaces";
+import { HeatmapOptions, HeatmapOverlay } from "components/visualisation/Heatmap";
 
 type FoilHole = components["schemas"]["FoilHole"];
 
@@ -23,14 +27,24 @@ export interface GridSquareProps {
   gridSquareId: number | null;
 }
 
+export interface FoilHoleWithColour extends FoilHole {
+  colour?: string;
+}
+
+const HEATMAP_VALUES: Record<string, HeatmapOptions> = {
+  resolution: { label: "Resolution (Å)", max: 5, type: "log", binCount: 5 },
+  astigmatism: { label: "Astigmatism (nm)", max: 50, type: "log", binCount: 5 },
+  particleCount: { label: "Particle Count", min: 0, max: 500, type: "linear", binCount: 5 },
+};
+
 const fetchFoilHoles = async (gridSquareId: number | null) => {
   if (!gridSquareId) {
     return null;
   }
 
-  const foilHoles = await client.safeGet(`grid-squares/${gridSquareId}/foil-holes?limit=3000`);
+  const foilHoleReq = await client.safeGet(`grid-squares/${gridSquareId}/foil-holes?limit=3000`);
 
-  return foilHoles.status === 200 ? (foilHoles.data.items as FoilHole[]) : null;
+  return foilHoleReq.status === 200 ? (foilHoleReq.data.items as FoilHole[]) : null;
 };
 
 const fetchMovies = async (foilHoleId: number | null) => {
@@ -56,6 +70,7 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
 
     return null;
   }, [searchParams]);
+  const [heatmapMetric, setHeatmapMetric] = useState<FoilHoleMetricTypes>("resolution");
 
   const { data, isLoading } = useQuery({
     queryKey: ["foilHoles", gridSquareId],
@@ -67,12 +82,23 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
     queryFn: async () => await fetchMovies(foilHoleId),
   });
 
+  const foilHoles = useMemo(() => {
+    if (!data) {
+      return null;
+    }
+
+    return data.map((foilHole) => ({
+      ...foilHole,
+      value: foilHole[heatmapMetric] ?? null,
+      id: foilHole.foilHoleId,
+    }));
+  }, [data, heatmapMetric]);
+
   const handleFoilHoleClicked = useCallback(
-    (foilHole: FoilHole) => {
-      if (gridSquareId === null || foilHole.movieCount === 0) {
+    (foilHole: number | string) => {
+      if (gridSquareId === null) {
         return;
       }
-
       /* 
       Search params are set like this so as not to overwrite hideSquares. 
       See the example in the React Router docs:
@@ -80,44 +106,22 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
       */
       setSearchParams((prev) => {
         prev.set("gridSquare", gridSquareId.toString());
-        prev.set("foilHole", foilHole.foilHoleId.toString());
+        prev.set("foilHole", foilHole.toString());
         return prev;
       });
     },
     [gridSquareId, setSearchParams]
   );
 
-  const handleFoilHide = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchParams((prev) => {
-      prev.set("hideHoles", e.target.checked.toString());
-      return prev;
-    });
-  };
-
-  const sortHole = (
-    foilHole: components["schemas"]["FoilHole"],
-    selectedFoilHole: number | null
-  ) => {
-    const hideUncollectedHoles = searchParams.get("hideHoles") === "true";
-    return foilHole.movieCount === 0
-      ? hideUncollectedHoles
-        ? {
-            visibility: "hidden",
-          }
-        : {
-            stroke: "red",
-            strokeOpacity: "0.4",
-            fill: "red",
-            fillOpacity: "0.2",
-          }
-      : {
-          role: "button",
-          stroke: "green",
-          fill: selectedFoilHole === foilHole.foilHoleId ? "blue" : "green",
-          fillOpacity: "0.4",
-          cursor: "pointer",
-        };
-  };
+  const handleFoilHide = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchParams((prev) => {
+        prev.set("hideHoles", e.target.checked.toString());
+        return prev;
+      });
+    },
+    [setSearchParams]
+  );
 
   return (
     <VStack
@@ -148,27 +152,40 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
         </Heading>
       ) : data === undefined || isLoading ? (
         <Skeleton h='512px' w='100%' />
-      ) : data === null ? (
+      ) : foilHoles === null ? (
         <Heading variant='notFound' size='md' h='512px' w='100%' alignContent='center'>
           No foil holes available
         </Heading>
       ) : (
-        <div style={{ width: "100%" }} className='img-wrapper'>
-          <img src={prependApiUrl(`grid-squares/${gridSquareId}/image`)} alt='Grid Square' />
-          <svg viewBox={"0 0 512 512"}>
-            {data.map((foilHole: components["schemas"]["FoilHole"], i) => (
-              <circle
-                key={i}
-                data-testid={`foilHole-${i}`}
-                cx={foilHole.x}
-                cy={foilHole.y}
-                r={foilHole.diameter / 2}
-                onClick={() => handleFoilHoleClicked(foilHole)}
-                {...sortHole(foilHole, foilHoleId)}
-              />
-            ))}
-          </svg>
-        </div>
+        <HeatmapOverlay
+          image={`grid-squares/${gridSquareId}/image`}
+          options={HEATMAP_VALUES[heatmapMetric]}
+          onItemClicked={handleFoilHoleClicked}
+          items={foilHoles}
+          selectedItem={foilHoleId}
+          hideNull={searchParams.get("hideHoles") === "true"}
+        >
+          <HStack>
+            <Text>Display heatmap for</Text>
+            <Select
+              w='10em'
+              variant='hi-contrast'
+              p='1px'
+              onChange={(e) => setHeatmapMetric(e.target.value as FoilHoleMetricTypes)}
+              value={heatmapMetric}
+            >
+              <option key={"resolution"} value={"resolution"}>
+                Resolution
+              </option>
+              <option key={"particleCount"} value={"particleCount"}>
+                Particle Count
+              </option>
+              <option key={"astigmatism"} value={"astigmatism"}>
+                Astigmatism
+              </option>
+            </Select>
+          </HStack>
+        </HeatmapOverlay>
       )}
       <VStack zIndex={2} divider={<Divider />} w='100%' alignItems='start'>
         <Heading mt='0.5em' size='lg'>

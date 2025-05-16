@@ -22,9 +22,7 @@ const handleLogin = () =>
   );
 
 const handleLogout = () =>
-  window.location.assign(
-    `${window.ENV.AUTH_URL}logout?redirect_uri=${window.location.href}`
-  );
+  window.location.assign(`${window.ENV.AUTH_URL}logout?redirect_uri=${window.location.href}`);
 
 const PhaseBanner = ({ deployType }: { deployType: "dev" | "production" | "beta" }) => {
   if (deployType === "production") {

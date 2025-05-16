@@ -6,6 +6,7 @@ import { components } from "schema/main";
 import { prependApiUrl } from "utils/api/client";
 import "styles/atlas.css";
 
+// TODO: make heatmap component more generic so we can replace this atlas view with it
 export interface AtlasProps {
   groupId: string;
   onGridSquareClicked?: (gridSquare: components["schemas"]["GridSquare"]) => void;
@@ -27,7 +28,7 @@ const sortSquare = (
     : {
         stroke: "red",
         strokeOpacity: "0.4",
-        fill: "red",
+        fill: "black",
         fillOpacity: "0.2",
       };
 };

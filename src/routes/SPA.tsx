@@ -80,7 +80,9 @@ const SpaPage = () => {
             <Spacer />
             <Button
               as={ChakraLink}
-              href={prependApiUrl(`dataCollections/${loaderData.collection.dataCollectionId}/report`)}
+              href={prependApiUrl(
+                `dataCollections/${loaderData.collection.dataCollectionId}/report`
+              )}
               leftIcon={<MdOutlineInsertChart />}
             >
               Report
