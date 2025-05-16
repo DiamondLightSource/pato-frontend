@@ -71,8 +71,6 @@ export const HeatmapOverlay = ({
       return { bins: [], items };
     }
 
-    console.log(sortedItems);
-
     if (heatmapOptions.min === undefined) {
       heatmapOptions.min = sortedItems[0].value;
     }
