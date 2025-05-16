@@ -34,7 +34,7 @@ export interface FoilHoleWithColour extends FoilHole {
 const HEATMAP_VALUES: Record<string, HeatmapOptions> = {
   resolution: { label: "Resolution (Å)", max: 5, type: "log", binCount: 5 },
   astigmatism: { label: "Astigmatism (nm)", max: 50, type: "log", binCount: 5 },
-  particleCount: { label: "Particle Count", min: 0, max: 500, type: "linear", binCount: 5 },
+  particleCount: { label: "Particle Count", min: 0, max: 300, type: "linear", binCount: 5 },
 };
 
 const fetchFoilHoles = async (gridSquareId: number | null) => {
