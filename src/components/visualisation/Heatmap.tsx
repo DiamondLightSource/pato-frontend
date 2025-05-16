@@ -92,7 +92,7 @@ export const HeatmapOverlay = ({
         : range / (heatmapOptions.binCount - 1);
     const bins: number[] = [heatmapOptions.min];
 
-    for (let i = 1; i < 5; i++) {
+    for (let i = 1; i < heatmapOptions.binCount; i++) {
       bins.push(
         heatmapOptions.type === "log" ? heatmapOptions.min + Math.pow(binBase, i) - 1 : binBase * i
       );
