@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.23.0 (16/05/2025)
+++++++++++
+
+**Added**
+
+- Display heatmap for CTF values/particle count for foil holes 
+
+++++++++++
 v1.22.0 (24/04/2025)
 ++++++++++
 
