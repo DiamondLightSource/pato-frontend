@@ -27,6 +27,15 @@ export const classificationConfig: DataConfig = {
   root: ["particleClassificationId"],
 };
 
+export const classification3dConfig: DataConfig = {
+  ...classificationConfig,
+  include: [
+    ...classificationConfig.include,
+    { name: "angularEfficiency" },
+    { name: "suggestedTilt" },
+  ],
+};
+
 export const recipeTagMap: Record<string, string> = {
   "em-spa-preprocess": "Preprocessing",
   "em-spa-class2d": "2D Classification",

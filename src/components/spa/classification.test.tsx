@@ -153,6 +153,14 @@ describe("Classification", () => {
     expect(screen.getByText("Angle Distribution")).toBeInTheDocument();
   });
 
+  it("should display angular efficiency and suggested tilt if type is 3d", async () => {
+    renderWithProviders(<Classification autoProcId={1} type='3d' />);
+
+    await screen.findByText("355-1 (1)");
+    expect(screen.getByText("Angular Efficiency:")).toBeInTheDocument();
+    expect(screen.getByText("Suggested Tilt:")).toBeInTheDocument();
+  });
+
   it("should display classification boxes even if selection status is unknown", async () => {
     server.use(
       http.get(

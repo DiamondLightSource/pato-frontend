@@ -19,7 +19,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { client, prependApiUrl } from "utils/api/client";
 import { components } from "schema/main";
 import { parseData } from "utils/generic";
-import { classificationConfig } from "utils/config/parse";
+import { classification3dConfig, classificationConfig } from "utils/config/parse";
 import { ClassificationProps, SortTypes } from "schema/interfaces";
 import { MolstarModal } from "components/molstar/molstarModal";
 import { useQuery } from "@tanstack/react-query";
@@ -108,11 +108,14 @@ const Classification = ({ autoProcId, type = "2d" }: ClassificationProps) => {
 
   const selectedClassInfo = useMemo(() => {
     if (data && data.data && data.data[selectedClass]) {
-      return parseData(data.data[selectedClass], classificationConfig);
+      return parseData(
+        data.data[selectedClass],
+        type === "3d" ? classification3dConfig : classificationConfig
+      );
     }
 
     return {};
-  }, [selectedClass, data]);
+  }, [selectedClass, data, type]);
 
   const angDistImageUrl = useMemo(
     () =>
