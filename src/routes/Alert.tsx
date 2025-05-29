@@ -17,6 +17,7 @@ import { useMemo, useState } from "react";
 import { pascalToSpace } from "utils/generic";
 import { useLoaderData, useNavigate, useParams } from "react-router";
 import { UserWithEmail } from "loaders/user";
+import { emailRegex } from "utils/validation";
 
 export interface AlertValues {
   email: string;
@@ -33,8 +34,6 @@ export interface AlertValues {
 const getFieldWithSuffix = (fieldName: string, suffix: "Min" | "Max") =>
   (fieldName + suffix) as keyof AlertValues;
 
-// This is not up to RFC822, but this doesn't need to be thorough
-const emailRegex = /.+@.+\..+/g;
 const errorToast: UseToastOptions = {
   ...baseToast,
   title: "An error has occurred while registering your alerts. Please try again later.",

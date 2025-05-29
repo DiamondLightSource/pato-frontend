@@ -5,7 +5,7 @@ export interface UserWithEmail extends AuthState {
   email?: string;
 }
 
-const getUser = async (redirectOnFail: boolean = false) => {
+export const getUser = async (redirectOnFail: boolean = false) => {
   let user: UserWithEmail | null = null;
 
   const newUrl = new URL(window.location.href);
@@ -35,5 +35,3 @@ const getUser = async (redirectOnFail: boolean = false) => {
     return user;
   }
 };
-
-export { getUser };

@@ -5,11 +5,13 @@ import { components } from "schema/main";
 import { client } from "utils/api/client";
 import { buildEndpoint } from "utils/api/endpoint";
 import { parseSessionData } from "utils/api/response";
+import { getUser, UserWithEmail } from "loaders/user";
 
 type PagedGroups = components["schemas"]["Paged_DataCollectionGroupSummaryResponse_"];
 
 export interface SessionDataResponse extends PagedGroups {
   session: ParsedSessionReponse;
+  user: UserWithEmail | null;
 }
 
 const sessionQueryBuilder = (request: Request, params: Params<string>) => {
@@ -54,7 +56,9 @@ const getListingData = async (
     return { total: 0, items: [], limit: 20, session };
   }
 
-  return { ...(response.data as PagedGroups), session };
+  const user = await getUser();
+
+  return { ...(response.data as PagedGroups), session, user };
 };
 
 export const sessionPageLoader =
