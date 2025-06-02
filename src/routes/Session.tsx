@@ -153,7 +153,7 @@ export const EmailForm = ({ user, ...props }: EmailFormProps) => {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          <Heading size='md'>Set Alert Email</Heading>
+          <Heading size='md'>Set Your Preferred Alert Email</Heading>
           <ModalCloseButton />
         </ModalHeader>
         <Divider />
@@ -314,8 +314,8 @@ export const SessionPage = () => {
             >
               Edit session's sample information
             </TwoLineLink>
-            <TwoLineLink title='Set email' onClick={onEmailOpen}>
-              Set email to be used for alerts
+            <TwoLineLink title='Set your contact email' onClick={onEmailOpen}>
+              Set your preferred email to be used for alerts
             </TwoLineLink>
           </VStack>
         </HStack>
