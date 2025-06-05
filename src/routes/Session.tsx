@@ -21,6 +21,7 @@ import {
   ModalProps,
   Button,
   Link,
+  Text,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo } from "react";
 import {
@@ -153,11 +154,14 @@ export const EmailForm = ({ user, ...props }: EmailFormProps) => {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          <Heading size='md'>Set Your Preferred Alert Email</Heading>
+          <Heading size='md'>Set your contact email</Heading>
           <ModalCloseButton />
         </ModalHeader>
         <Divider />
         <ModalBody p='1em'>
+          <Text size='sm' mb='1em'>
+            Set your preferred email to be used for alerts
+          </Text>
           <Form onSubmit={onSubmit} onClose={props.onClose}>
             <FormItem label='Email' error={formState.errors.emailAddress}>
               <Input

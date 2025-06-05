@@ -94,7 +94,7 @@ export const capitalise = (originalString: string) =>
 
 /**
  * Get error message contained in HTTP response
- * 
+ *
  * @param response HTTP response to parse
  * @returns Error message string or default error message
  */
