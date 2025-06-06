@@ -1,6 +1,6 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { renderWithRoute } from "utils/test-utils";
-import { DataCollectionCreationForm, SessionPage } from "./Session";
+import { DataCollectionCreationForm, EmailForm, SessionPage } from "./Session";
 import { server } from "mocks/server";
 import { http, HttpResponse } from "msw";
 import { mockToast } from "../../vitest.setup";
@@ -125,7 +125,7 @@ describe("Data Collection Creation", () => {
     server.use(
       http.post(
         "http://localhost/proposals/:propId/sessions/:sessionId/dataCollections",
-        () => HttpResponse.json({ detail: "Error message here" }, { status: 404 }),
+        () => HttpResponse.json({ detail: [{ msg: "Error message here" }] }, { status: 404 }),
         { once: true }
       )
     );
@@ -154,5 +154,93 @@ describe("Data Collection Creation", () => {
       )
     );
     expect(onCloseMock).toHaveBeenCalled();
+  });
+});
+
+describe("Email Form", () => {
+  it("should display email if user already has email", () => {
+    renderWithRoute(
+      <EmailForm
+        user={{ fedid: "abc1234", name: "John Doe", email: "test@facility.ac.uk" }}
+        onClose={() => {}}
+        isOpen={true}
+      />
+    );
+
+    expect(screen.getByRole("textbox", { name: "Email" })).toHaveDisplayValue(
+      "test@facility.ac.uk"
+    );
+  });
+
+  it("should display toast and close modal if successful", async () => {
+    const onCloseMock = vi.fn();
+
+    renderWithRoute(
+      <EmailForm
+        user={{ fedid: "abc1234", name: "John Doe", email: "test@facility.ac.uk" }}
+        onClose={onCloseMock}
+        isOpen={true}
+      />
+    );
+
+    fireEvent.change(screen.getByRole("textbox", { name: "Email" }), {
+      target: { value: "test2@facility2.ac.uk" },
+    });
+    fireEvent.click(screen.getByText("Submit"));
+
+    await waitFor(() =>
+      expect(mockToast).toHaveBeenCalledWith(
+        expect.objectContaining({ title: "Successfully updated alert email!" })
+      )
+    );
+    expect(onCloseMock).toHaveBeenCalled();
+  });
+
+  it("should display message if invalid email is provided", async () => {
+    const onCloseMock = vi.fn();
+
+    renderWithRoute(
+      <EmailForm
+        user={{ fedid: "abc1234", name: "John Doe", email: "test@facility.ac.uk" }}
+        onClose={onCloseMock}
+        isOpen={true}
+      />
+    );
+
+    fireEvent.change(screen.getByRole("textbox", { name: "Email" }), {
+      target: { value: "invalid-email" },
+    });
+    fireEvent.click(screen.getByText("Submit"));
+
+    await screen.findByText("Invalid email address");
+  });
+
+  it("should display toast if unsuccessful", async () => {
+    server.use(
+      http.patch(
+        "http://localhost/me",
+        () => HttpResponse.json({ detail: [{ msg: "Error message here" }] }, { status: 404 }),
+        { once: true }
+      )
+    );
+
+    renderWithRoute(
+      <EmailForm
+        user={{ fedid: "abc1234", name: "John Doe", email: "test@facility.ac.uk" }}
+        onClose={() => {}}
+        isOpen={true}
+      />
+    );
+
+    fireEvent.change(screen.getByRole("textbox", { name: "Email" }), {
+      target: { value: "test2@facility2.ac.uk" },
+    });
+    fireEvent.click(screen.getByText("Submit"));
+
+    await waitFor(() =>
+      expect(mockToast).toHaveBeenCalledWith(
+        expect.objectContaining({ description: "Error message here" })
+      )
+    );
   });
 });

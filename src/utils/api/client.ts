@@ -15,7 +15,7 @@ interface RequestConfig {
   [k: string]: any;
 }
 
-export interface Response {
+export interface ClientResponse {
   status: number;
   data: any;
   headers: Record<string, any>;
@@ -42,7 +42,7 @@ export const client = async (
   customConfig: Record<any, any> = {},
   body?: Record<any, any> | FormData,
   prefix = getPrefix(window.ENV.API_URL)
-): Promise<never | Response> => {
+): Promise<never | ClientResponse> => {
   const config: RequestConfig = {
     method: body != null ? "POST" : "GET",
     ...customConfig,
@@ -122,6 +122,10 @@ client.authGet = async (endpoint: string, customConfig = {}) => {
 
 client.post = async (endpoint: string, body: Record<any, any> | FormData, customConfig = {}) => {
   return await client(endpoint, { ...customConfig }, body);
+};
+
+client.patch = async (endpoint: string, body: Record<any, any> | FormData, customConfig = {}) => {
+  return await client(endpoint, { method: "PATCH", ...customConfig }, body);
 };
 
 export const prependApiUrl = (url: string) => `${getPrefix(window.ENV.API_URL)}${url}`;

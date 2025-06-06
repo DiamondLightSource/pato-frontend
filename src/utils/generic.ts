@@ -1,4 +1,5 @@
 import { DataConfig } from "schema/interfaces";
+import { ClientResponse } from "./api/client";
 
 const timeFormatter = new Intl.DateTimeFormat("en-GB", {
   dateStyle: "short",
@@ -90,3 +91,22 @@ export const debounce = (fn: Function, ms = 300) => {
  */
 export const capitalise = (originalString: string) =>
   originalString.charAt(0).toUpperCase() + originalString.slice(1);
+
+/**
+ * Get error message contained in HTTP response
+ *
+ * @param response HTTP response to parse
+ * @returns Error message string or default error message
+ */
+export const getErrorMessage = (response: ClientResponse) => {
+  let message = "Report this error to a local contact or developer";
+  if (
+    response.status !== 500 &&
+    Array.isArray(response.data.detail) &&
+    response.data.detail[0].msg
+  ) {
+    message = response.data.detail[0].msg;
+  }
+
+  return message;
+};

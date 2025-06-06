@@ -457,4 +457,8 @@ export const handlers = [
   http.post("http://localhost/feedback", () => HttpResponse.json({})),
 
   http.post("http://localhost/dataGroups/:groupId/alerts", () => HttpResponse.json({})),
+
+  http.patch("http://localhost/me", () =>
+    HttpResponse.json({ login: "abc12345", emailAddress: "test@facility.ac.uk" })
+  ),
 ];

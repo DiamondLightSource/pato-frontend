@@ -21,6 +21,7 @@ import {
   ModalProps,
   Button,
   Link,
+  Text,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo } from "react";
 import {
@@ -43,9 +44,19 @@ import { usePaginationSearchParams } from "utils/hooks";
 import { Form } from "components/form/form";
 import { FormItem, Options } from "components/form/input";
 import { useForm } from "react-hook-form";
-import { required } from "utils/validation";
+import { emailRegex, required } from "utils/validation";
 import { client, prependApiUrl } from "utils/api/client";
 import { useQueryClient } from "@tanstack/react-query";
+import { UserWithEmail } from "loaders/user";
+import { getErrorMessage } from "utils/generic";
+
+export interface EmailFormProps extends Omit<ModalProps, "children"> {
+  user: UserWithEmail | null;
+}
+
+interface EmailFormValues {
+  emailAddress: string;
+}
 
 const fileExtensionValues = [
   { key: ".tif", value: ".tif" },
@@ -54,7 +65,7 @@ const fileExtensionValues = [
   { key: ".eer", value: ".eer" },
 ];
 
-const DataCollectionCreationForm = (props: Omit<ModalProps, "children">) => {
+export const DataCollectionCreationForm = (props: Omit<ModalProps, "children">) => {
   const queryClient = useQueryClient();
   const { handleSubmit, register } = useForm();
   const revalidator = useRevalidator();
@@ -68,14 +79,10 @@ const DataCollectionCreationForm = (props: Omit<ModalProps, "children">) => {
     );
 
     if (response.status !== 201) {
-      const message =
-        response.status !== 500
-          ? response.data
-          : "Report this error to a local contact or developer";
       toast({
         ...baseToast,
         title: "Error creating data collection",
-        description: message.detail,
+        description: getErrorMessage(response),
         status: "error",
       });
     } else {
@@ -118,10 +125,67 @@ const DataCollectionCreationForm = (props: Omit<ModalProps, "children">) => {
   );
 };
 
-const SessionPage = () => {
+export const EmailForm = ({ user, ...props }: EmailFormProps) => {
+  const { handleSubmit, register, formState } = useForm<EmailFormValues>();
+  const toast = useToast();
+
+  const onSubmit = handleSubmit(async (formData) => {
+    const response = await client.patch("me", formData);
+
+    if (response.status !== 200) {
+      toast({
+        ...baseToast,
+        title: "Error updating alert email",
+        description: getErrorMessage(response),
+        status: "error",
+      });
+    } else {
+      toast({
+        ...baseToast,
+        title: "Successfully updated alert email!",
+      });
+
+      props.onClose();
+    }
+  });
+
+  return (
+    <Modal size='2xl' {...props}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>
+          <Heading size='md'>Set your contact email</Heading>
+          <ModalCloseButton />
+        </ModalHeader>
+        <Divider />
+        <ModalBody p='1em'>
+          <Text size='sm' mb='1em'>
+            Set your preferred email to be used for alerts
+          </Text>
+          <Form onSubmit={onSubmit} onClose={props.onClose}>
+            <FormItem label='Email' error={formState.errors.emailAddress}>
+              <Input
+                borderColor={formState.errors.emailAddress && "red"}
+                size='sm'
+                defaultValue={user?.email}
+                {...register("emailAddress", {
+                  required,
+                  pattern: { value: emailRegex, message: "Invalid email address" },
+                })}
+              />
+            </FormItem>
+          </Form>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
+  );
+};
+
+export const SessionPage = () => {
   const data = useLoaderData() as SessionDataResponse;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isEmailOpen, onOpen: onEmailOpen, onClose: onEmailClose } = useDisclosure();
   const { page, setPage, setItemsPerPage, onSearch } = usePaginationSearchParams();
   const { propId, visitId } = useParams();
 
@@ -254,12 +318,14 @@ const SessionPage = () => {
             >
               Edit session's sample information
             </TwoLineLink>
+            <TwoLineLink title='Set your contact email' onClick={onEmailOpen}>
+              Set your preferred email to be used for alerts
+            </TwoLineLink>
           </VStack>
         </HStack>
       </VStack>
       <DataCollectionCreationForm onClose={onClose} isOpen={isOpen} />
+      <EmailForm user={data.user} onClose={onEmailClose} isOpen={isEmailOpen} />
     </Box>
   );
 };
-
-export { SessionPage, DataCollectionCreationForm };
