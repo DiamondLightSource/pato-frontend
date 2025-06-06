@@ -3,6 +3,15 @@ Changelog
 ==========
 
 ++++++++++
+v1.24.0 (06/06/2025)
+++++++++++
+
+**Added**
+
+- Add angular efficiency and suggested tilt to 3D classification
+- Allow user to set email in session page
+
+++++++++++
 v1.23.1 (16/05/2025)
 ++++++++++
 
