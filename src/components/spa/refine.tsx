@@ -32,7 +32,10 @@ const fetchClassData = async (autoProcId: number) => {
 
   const [bFactorResponse, classResponse] = await Promise.all(promises);
 
-  const firstClass: FullClassification = classResponse.data.items[0];
+  const classes: FullClassification[] = classResponse.data.items;
+  const firstClass = classes[0];
+
+  const bestResolution = Math.min(...classes.map(particleClass => particleClass.estimatedResolution))
 
   return {
     data: bFactorResponse.data.items.map((item: any) => ({
@@ -50,6 +53,10 @@ const fetchClassData = async (autoProcId: number) => {
         label: "B-Factor",
         value: firstClass.bFactorFitLinear ? (2 / firstClass.bFactorFitLinear).toFixed(3) : "?",
       },
+      {
+        label: "Best Resolution",
+        value: bestResolution ? (bestResolution.toFixed(2) + " Å") : "?",
+      }
     ],
   };
 };
@@ -83,7 +90,7 @@ const RefinementStep = ({ autoProcId }: ClassificationProps) => {
         improve on these resolution values.
       </Alert>
       {data ? (
-        <HStack my='1em' w='100%' alignItems='stretch' flexWrap='wrap'>
+        <HStack my='1em' w='100%' flexWrap='wrap'>
           <VStack h='300px' flex='1 0 250px' alignItems='start'>
             <PlotContainer title='3D Refinement'>
               <ScatterPlot
@@ -106,8 +113,8 @@ const RefinementStep = ({ autoProcId }: ClassificationProps) => {
                 />
               ))}
               <Spacer />
-              <Box minWidth='200px'>
-                <InfoGroup info={data.bFactor} cols={3}></InfoGroup>
+              <Box minW="80px">
+                <InfoGroup info={data.bFactor} cols={2}></InfoGroup>
               </Box>
             </HStack>
           </VStack>
