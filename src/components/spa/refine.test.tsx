@@ -24,6 +24,13 @@ describe("SPA Refinement Step", () => {
     expect(screen.getByText("Open 3D Visualisation (C1)")).toBeInTheDocument();
   });
 
+  it("should display best resolution", async () => {
+    renderWithAccordion(<RefinementStep autoProcId={1} />);
+
+    await screen.findByText(/best resolution/i);
+    expect(screen.getByText("3.00 Å")).toBeInTheDocument();
+  });
+
   it("should only render one button if there's only one particle classification group", async () => {
     server.use(
       http.get(
