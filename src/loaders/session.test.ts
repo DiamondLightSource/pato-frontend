@@ -18,7 +18,9 @@ describe("Session Data", () => {
       http.get(
         "http://localhost/proposals/:propId/sessions/:visitId",
         () => HttpResponse.json({}, { status: 404 }),
-        { once: true }
+        {
+          once: true,
+        }
       )
     );
     const data = await sessionPageLoader(queryClient)(request, { propId: "1", visitId: "1" });
@@ -29,11 +31,15 @@ describe("Session Data", () => {
 
   it("should return empty list if data collection groups request fails", async () => {
     server.use(
-      http.get("http://localhost/dataGroups", () => HttpResponse.json({}, { status: 404 }), {
-        once: true,
-      })
+      http.get(
+        "http://localhost/proposals/cm1/sessions/1/dataGroups",
+        () => HttpResponse.json({}, { status: 404 }),
+        {
+          once: true,
+        }
+      )
     );
-    const data = await sessionPageLoader(queryClient)(request, { propId: "1", visitId: "1" });
+    const data = await sessionPageLoader(queryClient)(request, { propId: "cm1", visitId: "1" });
 
     expect(data.items).toEqual([]);
   });

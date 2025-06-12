@@ -3,7 +3,7 @@ import { Params } from "react-router";
 import { ParsedSessionReponse } from "schema/interfaces";
 import { components } from "schema/main";
 import { client } from "utils/api/client";
-import { buildEndpoint } from "utils/api/endpoint";
+import { includePage } from "utils/api/endpoint";
 import { parseSessionData } from "utils/api/response";
 import { getUser, UserWithEmail } from "loaders/user";
 
@@ -33,9 +33,8 @@ const getListingData = async (
   page: string,
   search: string
 ) => {
-  const builtEndpoint = buildEndpoint(
-    "dataGroups",
-    params,
+  const builtEndpoint = includePage(
+    `proposals/${params.propId}/sessions/${params.visitId}/dataGroups`,
     parseInt(items),
     parseInt(page),
     search
