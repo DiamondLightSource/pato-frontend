@@ -55,7 +55,7 @@ const fetchClassData = async (autoProcId: number) => {
       },
       {
         label: "Best Resolution",
-        value: bestResolution.toFixed(2) + " Å",
+        value: bestResolution ? (bestResolution.toFixed(2) + " Å") : "?",
       }
     ],
   };
