@@ -81,7 +81,7 @@ const getSpaData = async (groupId: string, propId: string, sessionId: string) =>
     },
   };
 
-  if (response.status === 200 && response.data.items) {
+  if (response.status === 200 && response.data.items && response.data.items.length) {
     const [allowReprocessingResponse, atlasResponse, gridSquaresResponse] = await Promise.all([
       client.safeGet(`proposals/${propId}/sessions/${sessionId}/reprocessingEnabled`),
       client.safeGet(`dataGroups/${groupId}/atlas`),
@@ -126,7 +126,7 @@ const getSpaData = async (groupId: string, propId: string, sessionId: string) =>
         )
       );
 
-      if (jobsResponse.status === 200 && jobsResponse.data.items) {
+      if (jobsResponse.status === 200 && jobsResponse.data.items && jobsResponse.data.items.length) {
         const processingJobId = jobsResponse.data.items[0].ProcessingJob.processingJobId;
         const response = await client.get(`processingJob/${processingJobId}/parameters`);
 
