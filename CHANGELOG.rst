@@ -1,6 +1,17 @@
 ==========
 Changelog
 ==========
+++++++++++
+v1.25.0 (16/06/2025)
+++++++++++
+
+**Added**
+
+- Display best resolution for refinement step
+
+**Fixed**
+
+- Display page even if no data collections are present for SPA
 
 ++++++++++
 v1.24.0 (06/06/2025)
