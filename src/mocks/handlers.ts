@@ -318,7 +318,7 @@ export const handlers = [
     })
   ),
 
-  http.get("http://localhost/dataGroups", ({ request }) => {
+  http.get("http://localhost/proposals/:propId/sessions/:visitId/dataGroups", ({ request }) => {
     const url = new URL(request.url);
     return HttpResponse.json({
       items: withSearch(

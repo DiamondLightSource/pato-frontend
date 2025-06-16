@@ -35,8 +35,6 @@ export const buildEndpoint = (
   switch (endpoint) {
     case "sessions":
       return `${builtEndpoint}&proposal=${params.propId}&countCollections=true`;
-    case "dataGroups":
-      return `${builtEndpoint}&proposal=${params.propId}&session=${params.visitId}`;
     case "dataCollections":
       return `dataGroups/${params.groupId}/${builtEndpoint}`;
     case "processingJobs":
