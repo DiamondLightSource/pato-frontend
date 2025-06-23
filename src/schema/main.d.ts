@@ -502,6 +502,46 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/dataCollections/{collectionId}/attachments": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get File Attachments
+     * @description Get data collection file attachments
+     */
+    get: operations["get_file_attachments_dataCollections__collectionId__attachments_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/dataCollections/{collectionId}/attachments/{attachmentId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get File Attachment
+     * @description Get data collection file attachment
+     */
+    get: operations["get_file_attachment_dataCollections__collectionId__attachments__attachmentId__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/dataGroups/{groupId}": {
     parameters: {
       query?: never;
@@ -514,26 +554,6 @@ export interface paths {
      * @description Get data collection group
      */
     get: operations["get_collection_group_dataGroups__groupId__get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/dataGroups": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /**
-     * Get Collection Groups
-     * @description List collection groups belonging to a session
-     */
-    get: operations["get_collection_groups_dataGroups_get"];
     put?: never;
     post?: never;
     delete?: never;
@@ -636,6 +656,26 @@ export interface paths {
      * @description Request alerts for a given email address
      */
     post: operations["sign_up_for_alerts_dataGroups__groupId__alerts_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/proposals/{proposalReference}/sessions/{visitNumber}/dataGroups": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Data Collection Groups
+     * @description List collection groups belonging to a session
+     */
+    get: operations["get_data_collection_groups_proposals__proposalReference__sessions__visitNumber__dataGroups_get"];
+    put?: never;
+    post?: never;
     delete?: never;
     options?: never;
     head?: never;
@@ -1123,6 +1163,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/me": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * Update User Info
+     * @description Update own user information
+     */
+    patch: operations["update_user_info_me_patch"];
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1271,13 +1331,13 @@ export interface components {
       /** Particlesperclass */
       particlesPerClass?: number | null;
       /** Rotationaccuracy */
-      rotationAccuracy: number;
+      rotationAccuracy?: number | null;
       /** Translationaccuracy */
-      translationAccuracy: number;
+      translationAccuracy?: number | null;
       /** Estimatedresolution */
-      estimatedResolution: number;
+      estimatedResolution?: number | null;
       /** Overallfouriercompleteness */
-      overallFourierCompleteness: number;
+      overallFourierCompleteness?: number | null;
       /** Classdistribution */
       classDistribution?: number | null;
       /** Selected */
@@ -1286,6 +1346,10 @@ export interface components {
       bFactorFitIntercept?: number | null;
       /** Bfactorfitlinear */
       bFactorFitLinear?: number | null;
+      /** Angularefficiency */
+      angularEfficiency?: number | null;
+      /** Suggestedtilt */
+      suggestedTilt?: number | null;
     };
     /** CtfBaseSpa */
     CtfBaseSpa: {
@@ -1317,6 +1381,18 @@ export interface components {
       fileDirectory: string;
       /** Fileextension */
       fileExtension: string;
+    };
+    /** DataCollectionFileAttachmentOut */
+    DataCollectionFileAttachmentOut: {
+      /** Datacollectionfileattachmentid */
+      dataCollectionFileAttachmentId: number;
+      /** Filetype */
+      fileType: string;
+      /**
+       * Createtime
+       * Format: date-time
+       */
+      createTime: string;
     };
     /** DataCollectionGroupSummaryResponse */
     DataCollectionGroupSummaryResponse: {
@@ -1465,8 +1541,6 @@ export interface components {
       omegaStart?: number | null;
       /** Chistart */
       chiStart?: number | null;
-      /** Resolutionatcorner */
-      resolutionAtCorner?: number | null;
       /** Detector2Theta */
       detector2Theta?: number | null;
       /** Undulatorgap1 */
@@ -1481,32 +1555,14 @@ export interface components {
       beamSizeAtSampleY?: number | null;
       /** Centeringmethod */
       centeringMethod?: string | null;
-      /** Averagetemperature */
-      averageTemperature?: number | null;
-      /** Actualcenteringposition */
-      actualCenteringPosition?: string | null;
-      /** Beamshape */
-      beamShape?: string | null;
       /** Detectorid */
       detectorId?: number | null;
-      /** Screeningorigid */
-      screeningOrigId?: number | null;
-      /** Startpositionid */
-      startPositionId?: number | null;
-      /** Endpositionid */
-      endPositionId?: number | null;
       /** Flux */
       flux?: number | null;
-      /** Strategysubwedgeorigid */
-      strategySubWedgeOrigId?: number | null;
       /** Blsubsampleid */
       blSubSampleId?: number | null;
       /** Flux End */
       flux_end?: number | null;
-      /** Bestwilsonplotpath */
-      bestWilsonPlotPath?: string | null;
-      /** Processeddatafile */
-      processedDataFile?: string | null;
       /** Datfullpath */
       datFullPath?: string | null;
       /** Magnification */
@@ -1517,8 +1573,6 @@ export interface components {
       binning?: number | null;
       /** Particlediameter */
       particleDiameter?: number | null;
-      /** Boxsize Ctf */
-      boxSize_CTF?: number | null;
       /** Minresolution */
       minResolution?: number | null;
       /** Mindefocus */
@@ -1527,32 +1581,10 @@ export interface components {
       maxDefocus?: number | null;
       /** Defocusstepsize */
       defocusStepSize?: number | null;
-      /** Amountastigmatism */
-      amountAstigmatism?: number | null;
-      /** Extractsize */
-      extractSize?: number | null;
-      /** Bgradius */
-      bgRadius?: number | null;
-      /** Objaperture */
-      objAperture?: number | null;
-      /** C1Aperture */
-      c1aperture?: number | null;
       /** C2Aperture */
       c2aperture?: number | null;
-      /** C3Aperture */
-      c3aperture?: number | null;
-      /** C1Lens */
-      c1lens?: number | null;
-      /** C2Lens */
-      c2lens?: number | null;
-      /** C3Lens */
-      c3lens?: number | null;
       /** Totalexposeddose */
       totalExposedDose?: number | null;
-      /** Nominalmagnification */
-      nominalMagnification?: number | null;
-      /** Nominaldefocus */
-      nominalDefocus?: number | null;
       /** Phaseplate */
       phasePlate?: string | null;
       /** Datacollectionplanid */
@@ -1778,6 +1810,17 @@ export interface components {
       /** Limit */
       limit: number;
     };
+    /** Paged[DataCollectionFileAttachmentOut] */
+    Paged_DataCollectionFileAttachmentOut_: {
+      /** Items */
+      items: components["schemas"]["DataCollectionFileAttachmentOut"][];
+      /** Total */
+      total: number;
+      /** Page */
+      page: number;
+      /** Limit */
+      limit: number;
+    };
     /** Paged[DataCollectionGroupSummaryResponse] */
     Paged_DataCollectionGroupSummaryResponse_: {
       /** Items */
@@ -1915,6 +1958,27 @@ export interface components {
       movieId: number;
       /** Createdtimestamp */
       createdTimeStamp?: string | null;
+    };
+    /** PersonIn */
+    PersonIn: {
+      /**
+       * Emailaddress
+       * Format: email
+       */
+      emailAddress: string;
+    };
+    /** PersonOut */
+    PersonOut: {
+      /** Familyname */
+      familyName?: string | null;
+      /** Givenname */
+      givenName?: string | null;
+      /** Emailaddress */
+      emailAddress?: string | null;
+      /** Title */
+      title?: string | null;
+      /** Login */
+      login?: string | null;
     };
     /** ProcessingJob */
     ProcessingJob: {
@@ -3057,6 +3121,73 @@ export interface operations {
       };
     };
   };
+  get_file_attachments_dataCollections__collectionId__attachments_get: {
+    parameters: {
+      query?: {
+        fileType?: string | null;
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        page?: number;
+        /** @description Number of results to show */
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        collectionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Paged_DataCollectionFileAttachmentOut_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_file_attachment_dataCollections__collectionId__attachments__attachmentId__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        attachmentId: number;
+        collectionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   get_collection_group_dataGroups__groupId__get: {
     parameters: {
       query?: never;
@@ -3075,43 +3206,6 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["DataCollectionGroupSummaryResponse"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  get_collection_groups_dataGroups_get: {
-    parameters: {
-      query?: {
-        session?: number | null;
-        proposal?: string | null;
-        search?: string | null;
-        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-        page?: number;
-        /** @description Number of results to show */
-        limit?: number;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Paged_DataCollectionGroupSummaryResponse_"];
         };
       };
       /** @description Validation Error */
@@ -3283,6 +3377,44 @@ export interface operations {
         };
         content: {
           "application/json": unknown;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_data_collection_groups_proposals__proposalReference__sessions__visitNumber__dataGroups_get: {
+    parameters: {
+      query?: {
+        search?: string | null;
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        page?: number;
+        /** @description Number of results to show */
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        proposalReference: string;
+        visitNumber: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Paged_DataCollectionGroupSummaryResponse_"];
         };
       };
       /** @description Validation Error */
@@ -4080,6 +4212,39 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["Paged_Movie_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_user_info_me_patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PersonIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PersonOut"];
         };
       };
       /** @description Validation Error */

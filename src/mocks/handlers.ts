@@ -90,6 +90,10 @@ export const handlers = [
     HttpResponse.json({ items: [{ x: 1, y: 1 }] })
   ),
 
+  http.get("http://localhost/dataCollections/:collectionId/attachments", () =>
+    HttpResponse.json({ items: [{ fileType: "params", dataCollectionFileAttachmentId: 250 }] })
+  ),
+
   http.get("http://localhost/dataCollections/:collectionId/particles", () =>
     HttpResponse.json({ items: [{ x: 1, y: 1 }] })
   ),
@@ -250,7 +254,7 @@ export const handlers = [
         selected: false,
         bFactorFitIntercept: 10,
         bFactorFitLinear: 10,
-        estimatedResolution: 3
+        estimatedResolution: 3,
       },
       {
         particleClassificationId: 2,
@@ -262,7 +266,7 @@ export const handlers = [
         selected: true,
         bFactorFitIntercept: 10,
         bFactorFitLinear: 10,
-        estimatedResolution: 5
+        estimatedResolution: 5,
       },
     ];
 

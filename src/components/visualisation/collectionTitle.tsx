@@ -10,7 +10,7 @@ export interface CollectionTitleProps {
 }
 
 const CollectionTitle = ({ title, type, colorScheme }: CollectionTitleProps) => (
-  <HStack>
+  <HStack minW='300px'>
     <Heading>{title ?? "Data Collection"}</Heading>
     <Tooltip label='About Processing'>
       <Tag
