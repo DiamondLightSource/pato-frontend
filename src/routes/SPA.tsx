@@ -24,20 +24,84 @@ import {
   TabPanels,
   Button,
   Link as ChakraLink,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Spinner,
 } from "@chakra-ui/react";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { useLoaderData, useLocation, useNavigate, useParams, Link } from "react-router";
 import { SPA } from "components/spa/main";
-import { MdFolder, MdNotifications, MdOutlineGrain, MdOutlineInsertChart } from "react-icons/md";
+import {
+  MdFolder,
+  MdNotifications,
+  MdOutlineGrain,
+  MdExpandMore,
+  MdDownload,
+} from "react-icons/md";
 import { RelionReprocessing } from "components/spa/reprocessing";
 import { MdRedo } from "react-icons/md";
 import React from "react";
 import { InfoGroup } from "@diamondlightsource/ui-components";
 import { SpaResponse } from "loaders/spa";
 import { CollectionTitle } from "components/visualisation/collectionTitle";
-import { prependApiUrl } from "utils/api/client";
+import { client, prependApiUrl } from "utils/api/client";
+import { useQuery } from "@tanstack/react-query";
+import { components } from "schema/main";
 
 const Statistics = React.lazy(() => import("components/spa/statistics"));
+
+interface DownloadMenuProps {
+  dataCollectionId: number;
+}
+
+const fetchMmcifAttachment = async (dataCollectionId: number) => {
+  // At the moment, anything attached by eBIC with a file type of params is
+  // guaranteed to be a mmCIF file
+  const response = await client.safeGet(
+    `dataCollections/${dataCollectionId}/attachments?fileType=params`
+  );
+
+  if (response.status !== 200 || !response.data.items || !response.data.items.length) {
+    return null;
+  }
+
+  const responseAttachment: components["schemas"]["DataCollectionFileAttachmentOut"] =
+    response.data.items[0];
+
+  return responseAttachment.dataCollectionFileAttachmentId;
+};
+
+const DownloadMenu = ({ dataCollectionId }: DownloadMenuProps) => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["dc-attachments", dataCollectionId],
+    queryFn: async () => await fetchMmcifAttachment(dataCollectionId),
+  });
+
+  if (isLoading) {
+    return (
+      <Box p='10px'>
+        <Spinner />
+      </Box>
+    );
+  }
+
+  return (
+    <>
+      <MenuItem as={ChakraLink} href={prependApiUrl(`dataCollections/${dataCollectionId}/report`)}>
+        PDF Report
+      </MenuItem>
+      <MenuItem
+        isDisabled={!data}
+        as={ChakraLink}
+        href={prependApiUrl(`dataCollections/${dataCollectionId}/attachments/${data}`)}
+      >
+        PDB File (mmCIF)
+      </MenuItem>
+    </>
+  );
+};
 
 const SpaPage = () => {
   const params = useParams();
@@ -75,42 +139,50 @@ const SpaPage = () => {
     <Box>
       <HStack marginBottom={2}>
         <VStack w='100%'>
-          <HStack w='100%'>
+          <HStack w='100%' flexWrap='wrap'>
             <CollectionTitle type='SPA' colorScheme='orange' />
             <Spacer />
-            <Button
-              as={ChakraLink}
-              href={prependApiUrl(
-                `dataCollections/${loaderData.collection.dataCollectionId}/report`
-              )}
-              leftIcon={<MdOutlineInsertChart />}
-            >
-              Report
-            </Button>
-            <Button
-              as={Link}
-              to={{ pathname: "../alerts" }}
-              relative='path'
-              leftIcon={<MdNotifications />}
-            >
-              Alerts
-            </Button>
-            <Button
-              leftIcon={<MdRedo />}
-              isDisabled={!loaderData.allowReprocessing}
-              onClick={onOpen}
-            >
-              Reprocessing
-            </Button>
-            <Button
-              leftIcon={<MdOutlineGrain />}
-              as={Link}
-              to={{ pathname: "../atlas" }}
-              relative='path'
-              isDisabled={!loaderData.hasAtlas}
-            >
-              Atlas
-            </Button>
+            <HStack flexWrap='wrap'>
+              <Menu isLazy>
+                <MenuButton
+                  isDisabled={!loaderData.collection.dataCollectionId}
+                  as={Button}
+                  rightIcon={<MdExpandMore />}
+                  leftIcon={<MdDownload />}
+                >
+                  Download
+                </MenuButton>
+                <MenuList>
+                  {loaderData.collection.dataCollectionId && (
+                    <DownloadMenu dataCollectionId={loaderData.collection.dataCollectionId} />
+                  )}
+                </MenuList>
+              </Menu>
+              <Button
+                as={Link}
+                to={{ pathname: "../alerts" }}
+                relative='path'
+                leftIcon={<MdNotifications />}
+              >
+                Alerts
+              </Button>
+              <Button
+                leftIcon={<MdRedo />}
+                isDisabled={!loaderData.allowReprocessing}
+                onClick={onOpen}
+              >
+                Reprocessing
+              </Button>
+              <Button
+                leftIcon={<MdOutlineGrain />}
+                as={Link}
+                to={{ pathname: "../atlas" }}
+                relative='path'
+                isDisabled={!loaderData.hasAtlas}
+              >
+                Atlas
+              </Button>
+            </HStack>
           </HStack>
           <HStack w='100%'>
             <Heading color='diamond.300' size='sm'>
