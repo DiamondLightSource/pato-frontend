@@ -53,7 +53,7 @@ describe("Session Page", () => {
       session: { microscopeName: "Krios I", startDate: "startDateValue", endDate: "endDateValue" },
     }));
 
-    const link = await screen.findByText("Edit sample information");
+    const link = await screen.findByText("Create sample information");
     expect(link.parentNode?.parentNode?.parentNode).toHaveAttribute("aria-disabled");
   });
 
