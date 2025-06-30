@@ -250,7 +250,7 @@ export const handlers = [
         selected: false,
         bFactorFitIntercept: 10,
         bFactorFitLinear: 10,
-        estimatedResolution: 3
+        estimatedResolution: 3,
       },
       {
         particleClassificationId: 2,
@@ -262,7 +262,7 @@ export const handlers = [
         selected: true,
         bFactorFitIntercept: 10,
         bFactorFitLinear: 10,
-        estimatedResolution: 5
+        estimatedResolution: 5,
       },
     ];
 

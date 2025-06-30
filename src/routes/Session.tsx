@@ -313,10 +313,10 @@ export const SessionPage = () => {
               Create new data collection in session
             </TwoLineLink>
             <TwoLineLink
-              title='Create sample information'
+              title='Create sample information (SCAUP)'
               href={prependApiUrl(`proposals/${propId}/sessions/${visitId}/sampleHandling`)}
             >
-              Create/edit session sample and shipment information (SCAUP)
+              Create/edit session sample and shipment information
             </TwoLineLink>
             <TwoLineLink title='Set your contact email' onClick={onEmailOpen}>
               Set your preferred email to be used for alerts

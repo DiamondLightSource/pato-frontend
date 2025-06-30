@@ -126,7 +126,11 @@ const getSpaData = async (groupId: string, propId: string, sessionId: string) =>
         )
       );
 
-      if (jobsResponse.status === 200 && jobsResponse.data.items && jobsResponse.data.items.length) {
+      if (
+        jobsResponse.status === 200 &&
+        jobsResponse.data.items &&
+        jobsResponse.data.items.length
+      ) {
         const processingJobId = jobsResponse.data.items[0].ProcessingJob.processingJobId;
         const response = await client.get(`processingJob/${processingJobId}/parameters`);
 

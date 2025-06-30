@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.25.2 (30/06/2025)
+++++++++++
+
+**Changed**
+
+- Updated sample handling service link text
+
+++++++++++
 v1.25.1 (25/06/2025)
 ++++++++++
 

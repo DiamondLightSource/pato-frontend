@@ -32,7 +32,7 @@ export const classification3dConfig: DataConfig = {
   include: [
     ...classificationConfig.include,
     { name: "angularEfficiency" },
-    { name: "suggestedTilt", unit: "°"},
+    { name: "suggestedTilt", unit: "°" },
   ],
 };
 
