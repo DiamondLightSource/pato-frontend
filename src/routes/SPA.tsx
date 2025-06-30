@@ -97,7 +97,7 @@ const DownloadMenu = ({ dataCollectionId }: DownloadMenuProps) => {
         as={ChakraLink}
         href={prependApiUrl(`dataCollections/${dataCollectionId}/attachments/${data}`)}
       >
-        PDB File (mmCIF)
+        EMDB File (mmCIF)
       </MenuItem>
     </>
   );
