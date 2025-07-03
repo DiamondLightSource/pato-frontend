@@ -9,6 +9,7 @@ import {
   Link,
   Divider,
   Spacer,
+  Heading,
 } from "@chakra-ui/react";
 import { useMemo } from "react";
 import { client, prependApiUrl } from "utils/api/client";
@@ -32,10 +33,21 @@ const fetchClassData = async (autoProcId: number) => {
 
   const [bFactorResponse, classResponse] = await Promise.all(promises);
 
+  if (
+    bFactorResponse.status !== 200 ||
+    classResponse.status !== 200 ||
+    bFactorResponse.data.items.length === 0 ||
+    classResponse.data.items.length === 0
+  ) {
+    return null;
+  }
+
   const classes: FullClassification[] = classResponse.data.items;
   const firstClass = classes[0];
 
-  const bestResolution = Math.min(...classes.map(particleClass => particleClass.estimatedResolution))
+  const bestResolution = Math.min(
+    ...classes.map((particleClass) => particleClass.estimatedResolution)
+  );
 
   return {
     data: bFactorResponse.data.items.map((item: any) => ({
@@ -55,14 +67,14 @@ const fetchClassData = async (autoProcId: number) => {
       },
       {
         label: "Best Resolution",
-        value: bestResolution ? (bestResolution.toFixed(2) + " Å") : "?",
-      }
+        value: bestResolution ? bestResolution.toFixed(2) + " Å" : "?",
+      },
     ],
   };
 };
 
 const RefinementStep = ({ autoProcId }: ClassificationProps) => {
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["refinement", autoProcId],
     queryFn: async () => await fetchClassData(autoProcId),
   });
@@ -89,7 +101,9 @@ const RefinementStep = ({ autoProcId }: ClassificationProps) => {
         will affect the results. If the refined map looks correct you should expect to be able to
         improve on these resolution values.
       </Alert>
-      {data ? (
+      {isLoading ? (
+        <Skeleton w='100%' h='300px' />
+      ) : data ? (
         <HStack my='1em' w='100%' flexWrap='wrap'>
           <VStack h='300px' flex='1 0 250px' alignItems='start'>
             <PlotContainer title='3D Refinement'>
@@ -113,7 +127,7 @@ const RefinementStep = ({ autoProcId }: ClassificationProps) => {
                 />
               ))}
               <Spacer />
-              <Box minW="80px">
+              <Box minW='80px'>
                 <InfoGroup info={data.bFactor} cols={2}></InfoGroup>
               </Box>
             </HStack>
@@ -127,7 +141,9 @@ const RefinementStep = ({ autoProcId }: ClassificationProps) => {
           ></ImageCard>
         </HStack>
       ) : (
-        <Skeleton w='100%' h='500px' />
+        <Heading pt={5} h='300px' variant='notFound'>
+          Refinement data not found
+        </Heading>
       )}
       <Divider borderColor='diamond.300' />
       <Text w='100%' mt='1em'>
