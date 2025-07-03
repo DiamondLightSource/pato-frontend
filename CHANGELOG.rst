@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.25.3 (01/07/2025)
+++++++++++
+
+**Changed**
+
+- Display message if no refinement data is present
+
+++++++++++
 v1.25.2 (30/06/2025)
 ++++++++++
 
