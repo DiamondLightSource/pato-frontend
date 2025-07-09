@@ -1,15 +1,4 @@
-import {
-  HStack,
-  Skeleton,
-  Box,
-  VStack,
-  Alert,
-  AlertIcon,
-  Text,
-  Link,
-  Divider,
-  Spacer,
-} from "@chakra-ui/react";
+import { HStack, Skeleton, Box, VStack, Alert, AlertIcon, Text, Link, Divider, Spacer } from "@chakra-ui/react";
 import { useMemo } from "react";
 import { client, prependApiUrl } from "utils/api/client";
 import { components } from "schema/main";
@@ -35,7 +24,14 @@ const fetchClassData = async (autoProcId: number) => {
   const classes: FullClassification[] = classResponse.data.items;
   const firstClass = classes[0];
 
-  const bestResolution = Math.min(...classes.map(particleClass => particleClass.estimatedResolution))
+  const bestResolution = Math.min(
+    ...classes.reduce((filtered, particleClass) => {
+      if (particleClass.estimatedResolution) {
+        filtered.push(particleClass.estimatedResolution);
+      }
+      return filtered;
+    }, [] as number[])
+  );
 
   return {
     data: bFactorResponse.data.items.map((item: any) => ({
@@ -55,8 +51,8 @@ const fetchClassData = async (autoProcId: number) => {
       },
       {
         label: "Best Resolution",
-        value: bestResolution ? (bestResolution.toFixed(2) + " Å") : "?",
-      }
+        value: bestResolution ? bestResolution.toFixed(2) + " Å" : "?",
+      },
     ],
   };
 };
@@ -77,17 +73,15 @@ const RefinementStep = ({ autoProcId }: ClassificationProps) => {
     <Box w='100%'>
       <Alert my='10px' status='info' colorScheme='gray' variant='left-accent'>
         <AlertIcon />
-        Particles are binned by a factor of 2 before refinement. The maximum achievable resolution
-        is therefore 4 times the pixel size used for data collection. Refinement is performed at a
-        number of different particle batch sizes to give an indication of how resolution is
-        improving with the number of particles.
+        Particles are binned by a factor of 2 before refinement. The maximum achievable resolution is therefore 4 times
+        the pixel size used for data collection. Refinement is performed at a number of different particle batch sizes
+        to give an indication of how resolution is improving with the number of particles.
       </Alert>
       <Alert my='10px' status='warning' colorScheme='yellow' variant='left-accent'>
         <AlertIcon />
-        Resolution estimates are approximate and should not be taken as an indication of data
-        quality. Masks are not optimised and the performance of earlier automated processing steps
-        will affect the results. If the refined map looks correct you should expect to be able to
-        improve on these resolution values.
+        Resolution estimates are approximate and should not be taken as an indication of data quality. Masks are not
+        optimised and the performance of earlier automated processing steps will affect the results. If the refined map
+        looks correct you should expect to be able to improve on these resolution values.
       </Alert>
       {data ? (
         <HStack my='1em' w='100%' flexWrap='wrap'>
@@ -113,7 +107,7 @@ const RefinementStep = ({ autoProcId }: ClassificationProps) => {
                 />
               ))}
               <Spacer />
-              <Box minW="80px">
+              <Box minW='80px'>
                 <InfoGroup info={data.bFactor} cols={2}></InfoGroup>
               </Box>
             </HStack>
