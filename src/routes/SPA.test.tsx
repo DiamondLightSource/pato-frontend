@@ -1,6 +1,8 @@
 import { fireEvent, screen } from "@testing-library/react";
 import { renderWithRoute } from "utils/test-utils";
 import { SpaPage } from "./SPA";
+import { server } from "mocks/server";
+import { http, HttpResponse } from "msw";
 
 const job = {
   AutoProcProgram: {
@@ -32,6 +34,44 @@ describe("SPA", () => {
     renderWithRoute(<SpaPage />, () => ({ ...baseLoaderData, jobs: [] }));
 
     await screen.findByText("No Single Particle Analysis Data Available");
+  });
+
+  it("should disable downloads button if no data collections are available", async () => {
+    renderWithRoute(<SpaPage />, () => ({
+      ...baseLoaderData,
+      collection: { ...baseLoaderData.collection, dataCollectionId: undefined },
+    }));
+
+    const downloadButton = await screen.findByRole("button", { name: "Download" });
+    expect(downloadButton).toHaveAttribute("disabled");
+  });
+
+  it("should disable mmCIF download button if no attachments are available", async () => {
+    server.use(
+      http.get(
+        "http://localhost/dataCollections/:collectionId/attachments",
+        () => HttpResponse.json({ items: [] }),
+        { once: true }
+      )
+    );
+
+    renderWithRoute(<SpaPage />, () => baseLoaderData);
+
+    const downloadButton = await screen.findByRole("button", { name: "Download" });
+    fireEvent.click(downloadButton);
+
+    const pdbLink = await screen.findByRole("menuitem", { name: /emdb file \(mmcif\)/i });
+    expect(pdbLink).toHaveAttribute("aria-disabled");
+  });
+
+  it("should provide link to mmCIF file if file is available", async () => {
+    renderWithRoute(<SpaPage />, () => baseLoaderData);
+
+    const downloadButton = await screen.findByRole("button", { name: "Download" });
+    fireEvent.click(downloadButton);
+
+    const pdbLink = await screen.findByRole("menuitem", { name: /emdb file \(mmcif\)/i });
+    expect(pdbLink).toHaveAttribute("href", "http://localhost/dataCollections/1/attachments/250");
   });
 
   it("should display jobs if they are available", async () => {
