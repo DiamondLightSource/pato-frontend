@@ -54,6 +54,7 @@ const Statistics = React.lazy(() => import("components/spa/statistics"));
 
 interface DownloadMenuProps {
   dataCollectionId: number;
+  proposal: string;
 }
 
 const fetchMmcifAttachment = async (dataCollectionId: number) => {
@@ -73,7 +74,7 @@ const fetchMmcifAttachment = async (dataCollectionId: number) => {
   return responseAttachment.dataCollectionFileAttachmentId;
 };
 
-const DownloadMenu = ({ dataCollectionId }: DownloadMenuProps) => {
+const DownloadMenu = ({ dataCollectionId, proposal }: DownloadMenuProps) => {
   const { data, isLoading } = useQuery({
     queryKey: ["dc-attachments", dataCollectionId],
     queryFn: async () => await fetchMmcifAttachment(dataCollectionId),
@@ -96,6 +97,8 @@ const DownloadMenu = ({ dataCollectionId }: DownloadMenuProps) => {
         isDisabled={!data}
         as={ChakraLink}
         href={prependApiUrl(`dataCollections/${dataCollectionId}/attachments/${data}`)}
+        download={`${proposal}_${dataCollectionId}.mmcif`}
+        target='_blank'
       >
         EMDB File (mmCIF)
       </MenuItem>
@@ -154,7 +157,10 @@ const SpaPage = () => {
                 </MenuButton>
                 <MenuList>
                   {loaderData.collection.dataCollectionId && (
-                    <DownloadMenu dataCollectionId={loaderData.collection.dataCollectionId} />
+                    <DownloadMenu
+                      proposal={`${params.propId}-${params.visitId}`}
+                      dataCollectionId={loaderData.collection.dataCollectionId}
+                    />
                   )}
                 </MenuList>
               </Menu>

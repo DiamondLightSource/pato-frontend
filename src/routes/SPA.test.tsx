@@ -60,7 +60,7 @@ describe("SPA", () => {
     const downloadButton = await screen.findByRole("button", { name: "Download" });
     fireEvent.click(downloadButton);
 
-    const pdbLink = await screen.findByRole("menuitem", { name: /pdb file \(mmcif\)/i });
+    const pdbLink = await screen.findByRole("menuitem", { name: /emdb file \(mmcif\)/i });
     expect(pdbLink).toHaveAttribute("aria-disabled");
   });
 
@@ -70,7 +70,7 @@ describe("SPA", () => {
     const downloadButton = await screen.findByRole("button", { name: "Download" });
     fireEvent.click(downloadButton);
 
-    const pdbLink = await screen.findByRole("menuitem", { name: /pdb file \(mmcif\)/i });
+    const pdbLink = await screen.findByRole("menuitem", { name: /emdb file \(mmcif\)/i });
     expect(pdbLink).toHaveAttribute("href", "http://localhost/dataCollections/1/attachments/250");
   });
 
