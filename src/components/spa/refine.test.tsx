@@ -61,4 +61,21 @@ describe("SPA Refinement Step", () => {
     await screen.findByText("Open 3D Visualisation (C1)");
     expect(screen.getAllByText(/open 3d visualisation/i)).toHaveLength(1);
   });
+
+  it("should display message if no refinement data is available", async () => {
+    server.use(
+      http.get(
+        "http://localhost/autoProc/:procId/classification",
+        () =>
+          HttpResponse.json({
+            items: [],
+          }),
+        { once: true }
+      )
+    );
+
+    renderWithAccordion(<RefinementStep autoProcId={1} />);
+
+    await screen.findByText("Refinement data not found");
+  });
 });
