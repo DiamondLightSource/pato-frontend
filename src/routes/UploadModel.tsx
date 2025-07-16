@@ -1,5 +1,5 @@
-import { Button, Divider, Heading, useToast, VStack, Text, Code } from "@chakra-ui/react";
-import { FormEvent, useCallback } from "react";
+import { Button, Divider, Heading, useToast, VStack, Text, Code, Progress, HStack } from "@chakra-ui/react";
+import { FormEvent, useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import "styles/upload.css";
@@ -8,6 +8,7 @@ import { client } from "utils/api/client";
 export const UploadModelPage = () => {
   const { propId, visitId } = useParams();
   const toast = useToast();
+  const [progress, setProgress] = useState<number | null>(null);
 
   const navigate = useNavigate();
 
@@ -15,21 +16,31 @@ export const UploadModelPage = () => {
     async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const data = new FormData(e.currentTarget);
-      const resp = await client.post(
-        `proposals/${propId}/sessions/${visitId}/processingModel`,
-        data
-      );
+      const xhr = new XMLHttpRequest();
 
-      if (resp.status === 200) {
-        toast({ status: "success", title: "Model successfully uploaded!" });
-        navigate(-1);
-      } else {
+      // I'm using the old XHR API because ReadableStreams don't work well with multipart form data;
+      // binary files stream just fine, but multipart is missing the boundaries and headers, which
+      // makes the backend error out. There are libraries to handle this, but this is the simplest
+      // way that doesn't introducte any dependencies
+      xhr.upload.addEventListener("progress", (event) => {
+        setProgress(event.loaded / event.total * 100);
+      });
+
+      xhr.upload.addEventListener("error", () => {
         toast({
           status: "error",
           title: "Upload failed!",
-          description: resp.data.detail || "Internal server error",
+          description: "Internal server error",
         });
-      }
+      });
+
+      xhr.upload.addEventListener("loadend", () => {
+        toast({ status: "success", title: "Model successfully uploaded!" });
+        navigate(`/proposals/${propId}/sessions/${visitId}`);
+      });
+
+      xhr.open("POST", `proposals/${propId}/sessions/${visitId}/processingModel`, true);
+      xhr.send(data);
     },
     [propId, visitId, toast, navigate]
   );
@@ -39,15 +50,16 @@ export const UploadModelPage = () => {
       <Heading>Upload Model</Heading>
       <Divider />
       <Text>
-        Upload custom model for particle picking (crYOLO). This model will be placed under the{" "}
-        <Code>processing</Code> directory in your visit directory.
+        Upload custom model for particle picking (crYOLO). This model will be placed under the <Code>processing</Code>{" "}
+        directory in your visit directory.
       </Text>
       <form onSubmit={uploadFile} encType='multipart/form-data'>
         <input name='file' data-testid='file-input' type='file' accept='.h5' />
-        <Button w='8em' type='submit'>
+        <Button w='8em' type='submit' isLoading={progress !== null}>
           Submit
         </Button>
       </form>
+      {progress !== null && <HStack><Progress value={progress} width="12em" /><Text>{progress.toFixed(1)}%</Text></HStack>}
     </VStack>
   );
 };
