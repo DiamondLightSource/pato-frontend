@@ -1,9 +1,9 @@
-import { Button, Divider, Heading, useToast, VStack, Text, Code, Progress, HStack } from "@chakra-ui/react";
+import { Button, Divider, Heading, useToast, VStack, Text, Code, Progress } from "@chakra-ui/react";
 import { FormEvent, useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import "styles/upload.css";
-import { client } from "utils/api/client";
+import { prependApiUrl } from "utils/api/client";
 
 export const UploadModelPage = () => {
   const { propId, visitId } = useParams();
@@ -23,7 +23,7 @@ export const UploadModelPage = () => {
       // makes the backend error out. There are libraries to handle this, but this is the simplest
       // way that doesn't introducte any dependencies
       xhr.upload.addEventListener("progress", (event) => {
-        setProgress(event.loaded / event.total * 100);
+        setProgress((event.loaded / event.total) * 100);
       });
 
       xhr.upload.addEventListener("error", () => {
@@ -34,12 +34,12 @@ export const UploadModelPage = () => {
         });
       });
 
-      xhr.upload.addEventListener("loadend", () => {
+      xhr.upload.addEventListener("load", () => {
         toast({ status: "success", title: "Model successfully uploaded!" });
         navigate(`/proposals/${propId}/sessions/${visitId}`);
       });
 
-      xhr.open("POST", `proposals/${propId}/sessions/${visitId}/processingModel`, true);
+      xhr.open("POST", prependApiUrl(`proposals/${propId}/sessions/${visitId}/processingModel`));
       xhr.send(data);
     },
     [propId, visitId, toast, navigate]
@@ -55,11 +55,18 @@ export const UploadModelPage = () => {
       </Text>
       <form onSubmit={uploadFile} encType='multipart/form-data'>
         <input name='file' data-testid='file-input' type='file' accept='.h5' />
-        <Button w='8em' type='submit' isLoading={progress !== null}>
+        <Button
+          w='12em'
+          type='submit'
+          loadingText={progress !== null ? (progress === 100 ? "Processing" : `${progress.toFixed(1)}%`) : null}
+          isLoading={progress !== null}
+        >
           Submit
         </Button>
       </form>
-      {progress !== null && <HStack><Progress value={progress} width="12em" /><Text>{progress.toFixed(1)}%</Text></HStack>}
+      {progress !== null && (
+        <Progress isIndeterminate={progress === 100} value={progress < 100 ? progress : undefined} width='12em' />
+      )}
     </VStack>
   );
 };
