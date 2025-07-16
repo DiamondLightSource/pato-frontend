@@ -34,10 +34,18 @@ export const UploadModelPage = () => {
         });
       });
 
-      xhr.upload.addEventListener("load", () => {
-        toast({ status: "success", title: "Model successfully uploaded!" });
-        navigate(`/proposals/${propId}/sessions/${visitId}`);
-      });
+      xhr.addEventListener("load", () => {
+        if (xhr.status === 200) {
+          toast({ status: "success", title: "Model successfully uploaded!" });
+          navigate(`/proposals/${propId}/sessions/${visitId}`);
+        } else {
+          toast({
+            status: "error",
+            title: "Upload failed!",
+            description: "Internal server error",
+          });
+        }
+      })
 
       xhr.open("POST", prependApiUrl(`proposals/${propId}/sessions/${visitId}/processingModel`));
       xhr.send(data);
