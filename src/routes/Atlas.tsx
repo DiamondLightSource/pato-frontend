@@ -1,13 +1,16 @@
 import { Checkbox, Divider, Heading, HStack, Spacer, VStack } from "@chakra-ui/react";
 import { Atlas } from "components/atlas/Atlas";
 import { GridSquare } from "components/atlas/GridSquare";
+import { SearchMap } from "components/atlas/SearchMap";
+import { AtlasResponse } from "loaders/atlas";
 import { useCallback, useMemo } from "react";
-import { useParams, useSearchParams } from "react-router";
+import { useLoaderData, useParams, useSearchParams } from "react-router";
 import { components } from "schema/main";
 
 const AtlasPage = () => {
   const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
+  const data = useLoaderData() as AtlasResponse;
 
   const gridSquareId = useMemo(() => {
     const gridSquare = searchParams.get("gridSquare");
@@ -18,6 +21,22 @@ const AtlasPage = () => {
 
     return null;
   }, [searchParams]);
+
+  const scalingFactor = useMemo(() => {
+    if (data.dataCollectionGroup.experimentTypeName !== "Tomography") {
+      return 0;
+    }
+
+    const gridSquare = data.gridSquares.find(
+      (gridSquare) => gridSquare.gridSquareId === gridSquareId
+    );
+
+    if (!gridSquare) {
+      return 0;
+    }
+
+    return data.atlas.pixelSize * 10e5 * 2048 / gridSquare.width;
+  }, [data, gridSquareId]);
 
   const handleGridSquareClicked = useCallback(
     (gridSquare: components["schemas"]["GridSquare"]) => {
@@ -61,7 +80,14 @@ const AtlasPage = () => {
           onGridSquareClicked={handleGridSquareClicked}
           selectedGridSquare={gridSquareId}
         ></Atlas>
-        <GridSquare gridSquareId={gridSquareId} />
+        {data.dataCollectionGroup.experimentTypeName === "Tomography" ? (
+          <SearchMap
+          searchMapId={gridSquareId}
+          scalingFactor={scalingFactor}
+        />
+        ) : (
+          <GridSquare gridSquareId={gridSquareId} />
+        )}
       </HStack>
     </VStack>
   );

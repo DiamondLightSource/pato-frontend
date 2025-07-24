@@ -417,6 +417,8 @@ export const handlers = [
     });
   }),
 
+  http.get("http://localhost/dataGroups/:dcgId", () => HttpResponse.json({ dataCollectionGroupId: 1 })),
+
   http.get("http://localhost/dataGroups/:dcgId/atlas", () => HttpResponse.json({ atlasId: 1 })),
 
   http.get("http://localhost/dataGroups/:dcgId/grid-squares", () =>
@@ -451,6 +453,29 @@ export const handlers = [
           astigmatism: null,
           particleCount: null,
           resolution: null,
+        },
+      ],
+    })
+  ),
+
+  http.get("http://localhost/grid-squares/:gridSquareId/tomograms", () =>
+    HttpResponse.json({
+      items: [
+        {
+          tomogramId: 500,
+          pixelLocationX: 1,
+          pixelLocationY: 1,
+          sizeX: 5,
+          sizeY: 1,
+          pixelSpacing: 1,
+        },
+        {
+          tomogramId: 600,
+          pixelLocationX: 1,
+          pixelLocationY: 1,
+          sizeX: 5,
+          sizeY: 1,
+          pixelSpacing: 1,
         },
       ],
     })
