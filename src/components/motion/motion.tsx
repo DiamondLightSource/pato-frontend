@@ -78,7 +78,7 @@ const motionConfig = {
     { name: "averageMotionPerFrame", label: "Average Motion/Frame", unit: "Å" },
     { name: "imageNumber" },
     { name: ["patchesUsedX", "patchesUsedY"], label: "Patches Used" },
-    { name: ["boxSizeX", "boxSizeY"], label: "Box Size", unit: "μm" },
+    { name: ["boxSizeX", "boxSizeY"], label: "Box Size", unit: "px" },
     { name: ["minResolution", "maxResolution"], label: "Resolution", unit: "Å" },
     { name: ["minDefocus", "maxDefocus"], label: "Defocus", unit: "Å" },
     { name: "amplitudeContrast" },
@@ -166,6 +166,13 @@ const fetchMotionData = async (
     // Estimated defocus is provided in angstroms
     responseData.items[0].CTF.estimatedDefocus = parseFloat(
       (responseData.items[0].CTF.estimatedDefocus * 0.0001).toFixed(3)
+    );
+  }
+
+  if (responseData.items[0].CTF.astigmatism) {
+    // Astigmatism is provided in angstroms, we want it in nm
+    responseData.items[0].CTF.astigmatism = parseFloat(
+      (responseData.items[0].CTF.astigmatism * 0.1).toFixed(3)
     );
   }
 
