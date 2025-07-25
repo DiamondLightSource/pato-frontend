@@ -131,7 +131,7 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
                 onClick={() => handleItemClicked(item)}
                 role='button'
                 stroke='green'
-                fill={item.id === 131275 ? "purple" : "green"}
+                fill="green"
                 fillOpacity='0.4'
                 cursor='pointer'
               />
