@@ -78,6 +78,10 @@ export const handlers = [
 
   http.get("http://localhost/auth/token", () => HttpResponse.json({})),
 
+  http.get("http://localhost/dataCollections/:collectionId", () =>
+    HttpResponse.json({ index: 1, experimentTypeName: "Tomography" })
+  ),
+
   http.get("http://localhost/dataCollections/:collectionId/iceThickness", () =>
     HttpResponse.json({ items: [{ x: 1, y: 1 }] })
   ),
@@ -417,7 +421,9 @@ export const handlers = [
     });
   }),
 
-  http.get("http://localhost/dataGroups/:dcgId", () => HttpResponse.json({ dataCollectionGroupId: 1 })),
+  http.get("http://localhost/dataGroups/:dcgId", () =>
+    HttpResponse.json({ dataCollectionGroupId: 1 })
+  ),
 
   http.get("http://localhost/dataGroups/:dcgId/atlas", () => HttpResponse.json({ atlasId: 1 })),
 
@@ -463,18 +469,18 @@ export const handlers = [
       items: [
         {
           tomogramId: 500,
-          pixelLocationX: 1,
-          pixelLocationY: 1,
-          sizeX: 5,
-          sizeY: 1,
+          pixelLocationX: 150,
+          pixelLocationY: 150,
+          sizeX: 500,
+          sizeY: 100,
           pixelSpacing: 1,
         },
         {
           tomogramId: 600,
-          pixelLocationX: 1,
-          pixelLocationY: 1,
-          sizeX: 5,
-          sizeY: 1,
+          pixelLocationX: 100,
+          pixelLocationY: 100,
+          sizeX: 500,
+          sizeY: 100,
           pixelSpacing: 1,
         },
       ],

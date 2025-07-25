@@ -1,10 +1,11 @@
-import { Divider, Heading, Skeleton, VStack, HStack } from "@chakra-ui/react";
+import { Divider, Heading, Skeleton, VStack, HStack, useToast } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { components } from "schema/main";
 import { client, prependApiUrl } from "utils/api/client";
 import "styles/atlas.css";
 import { useNavigate } from "react-router-dom";
+import { baseToast } from "@diamondlightsource/ui-components";
 
 type Tomogram = components["schemas"]["TomogramResponse"];
 
@@ -48,15 +49,13 @@ const fetchTomograms = async (searchMapId: number | null, scalingFactor: number)
     filtered.push({
       dataCollectionId: tomogram.dataCollectionId,
       id: tomogram.tomogramId,
-      x: tomogram.pixelLocationX/10,
-      y: tomogram.pixelLocationY/10,
-      width: tomogram.sizeX * tomogram.pixelSpacing / scalingFactor,
-      height: tomogram.sizeY * tomogram.pixelSpacing / scalingFactor,
+      // Binning and pixel size conversion from atlas to search map
+      x: tomogram.pixelLocationX * (512 / 7567),
+      y: tomogram.pixelLocationY * (512 / 7567),
+      // Apply tomogram pixel size conversion and scaling factor
+      width: tomogram.sizeX * tomogram.pixelSpacing * scalingFactor,
+      height: tomogram.sizeY * tomogram.pixelSpacing * scalingFactor,
     });
-
-    console.log(filtered);
-
-    //data.atlas.pixelSize * 2048 / gridSquare.width
 
     return filtered;
   }, []) as TomogramRegion[];
@@ -69,12 +68,19 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
   });
 
   const navigate = useNavigate();
+  const toast = useToast();
 
   const handleItemClicked = useCallback(
     async (tomogram: TomogramRegion) => {
       const response = await client.safeGet(`dataCollections/${tomogram.dataCollectionId}`);
 
       if (response.status !== 200) {
+        toast({
+          ...baseToast,
+          title: "Error",
+          description: "Could not get tomogram information",
+          status: "error",
+        });
         return;
       }
 
@@ -82,7 +88,7 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
 
       navigate(`../tomograms/${dataCollection.index}`, { relative: "path" });
     },
-    [navigate]
+    [navigate, toast]
   );
 
   return (
@@ -111,9 +117,9 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
           No tomograms available
         </Heading>
       ) : (
-        <div style={{ display: "flex", flex: "1 0 300px" }} className='img-wrapper'>
+        <div style={{ width: "100%" }} className='img-wrapper'>
           <img src={prependApiUrl(`grid-squares/${searchMapId}/image`)} alt='Search Map' />
-          <svg viewBox='0 0 512 512'>
+          <svg viewBox='0 0 512 800'>
             {data.map((item, i) => (
               <rect
                 data-testid={`item-${i}`}
@@ -123,11 +129,11 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
                 width={item.width}
                 height={item.height}
                 onClick={() => handleItemClicked(item)}
-                role= "button"
-                stroke= "green"
-                fill="green"
-                fillOpacity= "0.4"
-                cursor= "pointer"
+                role='button'
+                stroke='green'
+                fill={item.id === 131275 ? "purple" : "green"}
+                fillOpacity='0.4'
+                cursor='pointer'
               />
             ))}
           </svg>

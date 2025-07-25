@@ -1,9 +1,22 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { renderWithRoute } from "utils/test-utils";
 import AtlasPage from "./Atlas";
+import { SearchMap } from "components/atlas/SearchMap";
 
-const baseLoaderDict = { atlas: {pixelSize: 5}, gridSquares: [], dataCollectionGroup: {experimentTypeName: "SPA"} };
+const baseLoaderDict = {
+  atlas: { pixelSize: 5 },
+  gridSquares: [],
+  dataCollectionGroup: { experimentTypeName: "SPA" },
+};
 const baseLoader = () => baseLoaderDict;
+
+vi.mock("components/atlas/SearchMap", async (importOriginal) => {
+  const actual = await importOriginal<any>();
+  return {
+    ...actual,
+    SearchMap: vi.fn(() => <p>Search Map</p>),
+  };
+});
 
 describe("Atlas", () => {
   it("should render page", async () => {
@@ -41,9 +54,7 @@ describe("Atlas", () => {
   });
 
   it("should should update search params when checked", async () => {
-    const { router } = renderWithRoute(<AtlasPage />, baseLoader, [
-      "?hideSquares=true",
-    ]);
+    const { router } = renderWithRoute(<AtlasPage />, baseLoader, ["?hideSquares=true"]);
 
     const checkbox = await screen.findByLabelText("Hide uncollected grid squares");
 
@@ -54,8 +65,30 @@ describe("Atlas", () => {
   });
 
   it("should display search map if experiment type is tomography", async () => {
-    renderWithRoute(<AtlasPage />, () => ({...baseLoaderDict, dataCollectionGroup: {experimentTypeName: "Tomogram"}}));
+    renderWithRoute(<AtlasPage />, () => ({
+      ...baseLoaderDict,
+      dataCollectionGroup: { experimentTypeName: "Tomography" },
+    }));
 
     await screen.findByText("Search Map");
+  });
+
+  it("should calculate tomogram area scaling factor", async () => {
+    renderWithRoute(<AtlasPage />, () => ({
+      ...baseLoaderDict,
+      gridSquares: [
+        { x: 1, y: 1, height: 1, width: 1, angle: 90, gridSquareId: 1, image: "test/image.jpg" },
+      ],
+      dataCollectionGroup: { experimentTypeName: "Tomography" },
+    }));
+
+    fireEvent.click(await screen.findByRole("button"));
+
+    await waitFor(() =>
+      expect(SearchMap).toBeCalledWith(
+        { searchMapId: 1, scalingFactor: expect.closeTo(1.31e-9, 2) },
+        {}
+      )
+    );
   });
 });

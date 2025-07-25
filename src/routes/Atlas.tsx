@@ -7,6 +7,13 @@ import { useCallback, useMemo } from "react";
 import { useLoaderData, useParams, useSearchParams } from "react-router";
 import { components } from "schema/main";
 
+/*
+ * Pixel sizes on atlases and search maps are not consistent (due to magnification and other)
+ * factors, so we need to apply a scaling factor when displaying tomograms on search maps.
+ * This does not apply to grid squares and foil holes.
+ */
+const ATLAS_SEARCH_MAP_SCALING_FACTOR = 7.8;
+
 const AtlasPage = () => {
   const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -35,7 +42,14 @@ const AtlasPage = () => {
       return 0;
     }
 
-    return data.atlas.pixelSize * 10e5 * 2048 / gridSquare.width;
+    /*
+     * When converting from MRC files to JPG, the image is binned to always have 512px width (hence 512)
+     * Atlas pixel sizes are stored in metres, while pixel sizes for tomograms are stored in angstroms,
+     * so we'll also scale it so the units match (hence 1e-10)
+     */
+    return (
+      (512 * 1e-10) / data.atlas.pixelSize / gridSquare.width / ATLAS_SEARCH_MAP_SCALING_FACTOR
+    );
   }, [data, gridSquareId]);
 
   const handleGridSquareClicked = useCallback(
@@ -81,10 +95,7 @@ const AtlasPage = () => {
           selectedGridSquare={gridSquareId}
         ></Atlas>
         {data.dataCollectionGroup.experimentTypeName === "Tomography" ? (
-          <SearchMap
-          searchMapId={gridSquareId}
-          scalingFactor={scalingFactor}
-        />
+          <SearchMap searchMapId={gridSquareId} scalingFactor={scalingFactor} />
         ) : (
           <GridSquare gridSquareId={gridSquareId} />
         )}
