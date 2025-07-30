@@ -13,6 +13,7 @@ vi.mock("react-router", async (importOriginal) => {
   return {
     ...actual,
     useNavigate: () => mockUseNavigate,
+    useParams: () => ({ propId: "cm1", visitId: 1 }),
   };
 });
 
@@ -42,7 +43,7 @@ describe("Upload Model", () => {
 
     await userEvent.click(screen.getByRole("button", { name: "Submit" }));
 
-    await waitFor(() => expect(mockUseNavigate).toHaveBeenCalledWith(-1));
+    await waitFor(() => expect(mockUseNavigate).toHaveBeenCalledWith("/proposals/cm1/sessions/1"));
   });
 
   it("should display toast if upload fails and server returns error details", async () => {
