@@ -8,8 +8,8 @@ import { useLoaderData, useParams, useSearchParams } from "react-router";
 import { components } from "schema/main";
 
 /*
- * Pixel sizes on atlases and search maps are not consistent (due to magnification and other)
- * factors, so we need to apply a scaling factor when displaying tomograms on search maps.
+ * Pixel sizes on atlases and search maps are not consistent (due to magnification and other
+ * factors), so we need to apply a scaling factor when displaying tomograms on search maps.
  * This does not apply to grid squares and foil holes.
  */
 const ATLAS_SEARCH_MAP_SCALING_FACTOR = 7.8;
