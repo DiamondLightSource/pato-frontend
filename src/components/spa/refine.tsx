@@ -94,15 +94,17 @@ const RefinementStep = ({ autoProcId }: ClassificationProps) => {
     <Box w='100%'>
       <Alert my='10px' status='info' colorScheme='gray' variant='left-accent'>
         <AlertIcon />
-        Particles are binned by a factor of 2 before refinement. The maximum achievable resolution is therefore 4 times
-        the pixel size used for data collection. Refinement is performed at a number of different particle batch sizes
-        to give an indication of how resolution is improving with the number of particles.
+        Particles are binned by a factor of 2 before refinement. The maximum achievable resolution
+        is therefore 4 times the pixel size used for data collection. Refinement is performed at a
+        number of different particle batch sizes to give an indication of how resolution is
+        improving with the number of particles.
       </Alert>
       <Alert my='10px' status='warning' colorScheme='yellow' variant='left-accent'>
         <AlertIcon />
-        Resolution estimates are approximate and should not be taken as an indication of data quality. Masks are not
-        optimised and the performance of earlier automated processing steps will affect the results. If the refined map
-        looks correct you should expect to be able to improve on these resolution values.
+        Resolution estimates are approximate and should not be taken as an indication of data
+        quality. Masks are not optimised and the performance of earlier automated processing steps
+        will affect the results. If the refined map looks correct you should expect to be able to
+        improve on these resolution values.
       </Alert>
       {isLoading ? (
         <Skeleton w='100%' h='300px' />
