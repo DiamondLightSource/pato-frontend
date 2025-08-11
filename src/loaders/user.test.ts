@@ -48,12 +48,33 @@ describe("User Data", () => {
     expect(window.location.replace).toBeCalledWith("http://localhost/?otherVal=1234");
   });
 
+  it("should redirect to 'invalid user' page if user is invalid", async () => {
+    window.location.assign = vi.fn();
+
+    server.use(
+      http.get(
+        "http://localhost/auth/user",
+        () =>
+          HttpResponse.json(
+            { detail: "User is not listed or does not have permission to view content" },
+            { status: 401 }
+          ),
+        { once: true }
+      )
+    );
+
+    await getUser();
+    expect(window.location.assign).toBeCalledWith("/invalid-user");
+  });
+
   it("should redirect if redirectOnFail is set", async () => {
     server.use(
       http.get("http://localhost/auth/user", () => HttpResponse.json({}, { status: 401 }), {
         once: true,
       })
     );
+
+    window.location.replace = vi.fn();
 
     await getUser(true);
     expect(window.location.replace).toBeCalledWith(

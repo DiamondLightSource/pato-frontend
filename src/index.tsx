@@ -27,6 +27,7 @@ import { atlasLoader } from "loaders/atlas";
 import AlertPage from "routes/Alert";
 import { groupLoader } from "loaders/group";
 import { TomogramList } from "routes/TomogramList";
+import InvalidUserPage from "routes/InvalidUser";
 
 const Calendar = React.lazy(() => import("routes/Calendar"));
 const About = React.lazy(() => import("routes/About"));
@@ -55,6 +56,11 @@ const router = createBrowserRouter([
         element: <Home />,
         hydrateFallbackElement: <></>,
         loader: sessionLoader(queryClient),
+      },
+      {
+        path: "/invalid-user",
+        element: <InvalidUserPage />,
+        hydrateFallbackElement: <></>,
       },
       {
         path: "/about",
