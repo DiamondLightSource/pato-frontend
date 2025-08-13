@@ -6,15 +6,17 @@ import { client } from "utils/api/client";
 export interface AtlasResponse {
   gridSquares: components["schemas"]["GridSquare"][];
   atlas: components["schemas"]["Atlas"];
+  dataCollectionGroup: components["schemas"]["DataCollectionGroupSummaryResponse"];
 }
 
 const getAtlasData = async (groupId: string, searchParams: URLSearchParams) => {
-  const [atlas, gridSquare] = await Promise.all([
+  const [atlas, gridSquare, dcg] = await Promise.all([
     client.safeGet(`dataGroups/${groupId}/atlas`),
     client.safeGet(`dataGroups/${groupId}/grid-squares?${searchParams}&limit=3000`),
+    client.safeGet(`dataGroups/${groupId}`),
   ]);
 
-  return { gridSquares: gridSquare.data.items, atlas: atlas.data };
+  return { gridSquares: gridSquare.data.items, atlas: atlas.data, dataCollectionGroup: dcg.data };
 };
 
 const queryBuilder = (groupId: string, request: Request) => {

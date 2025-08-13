@@ -245,6 +245,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/dataCollections/{collectionId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Data Collection
+     * @description Get data collection
+     */
+    get: operations["get_data_collection_dataCollections__collectionId__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/dataCollections/{collectionId}/tomograms": {
     parameters: {
       query?: never;
@@ -1123,6 +1143,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/grid-squares/{gridSquareId}/tomograms": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Tomograms
+     * @description Get tomograms in a search map
+     */
+    get: operations["get_tomograms_grid_squares__gridSquareId__tomograms_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/grid-squares/{gridSquareId}/image": {
     parameters: {
       query?: never;
@@ -1942,6 +1982,17 @@ export interface components {
       /** Limit */
       limit: number;
     };
+    /** Paged[TomogramResponse] */
+    Paged_TomogramResponse_: {
+      /** Items */
+      items: components["schemas"]["TomogramResponse"][];
+      /** Total */
+      total: number;
+      /** Page */
+      page: number;
+      /** Limit */
+      limit: number;
+    };
     /** ParticlePicker */
     ParticlePicker: {
       /** Particlediameter */
@@ -2249,6 +2300,8 @@ export interface components {
     };
     /** TomogramResponse */
     TomogramResponse: {
+      /** Datacollectionid */
+      dataCollectionId: number;
       /** Tomogramid */
       tomogramId: number;
       /** Volumefile */
@@ -2261,6 +2314,10 @@ export interface components {
       sizeY?: number | null;
       /** Sizez */
       sizeZ?: number | null;
+      /** Pixellocationx */
+      pixelLocationX?: number | null;
+      /** Pixellocationy */
+      pixelLocationY?: number | null;
       /** Pixelspacing */
       pixelSpacing?: number | null;
       /** Residualerrormean */
@@ -2668,6 +2725,37 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["Movie"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_data_collection_dataCollections__collectionId__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        collectionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["BaseDataCollectionOut"];
         };
       };
       /** @description Validation Error */
@@ -4147,6 +4235,42 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["Paged_FoilHole_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_tomograms_grid_squares__gridSquareId__tomograms_get: {
+    parameters: {
+      query?: {
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        page?: number;
+        /** @description Number of results to show */
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        gridSquareId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Paged_TomogramResponse_"];
         };
       };
       /** @description Validation Error */

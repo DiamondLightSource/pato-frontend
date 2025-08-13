@@ -1,13 +1,23 @@
 import { Checkbox, Divider, Heading, HStack, Spacer, VStack } from "@chakra-ui/react";
 import { Atlas } from "components/atlas/Atlas";
 import { GridSquare } from "components/atlas/GridSquare";
+import { SearchMap } from "components/atlas/SearchMap";
+import { AtlasResponse } from "loaders/atlas";
 import { useCallback, useMemo } from "react";
-import { useParams, useSearchParams } from "react-router";
+import { useLoaderData, useParams, useSearchParams } from "react-router";
 import { components } from "schema/main";
+
+/*
+ * Pixel sizes on atlases and search maps are not consistent (due to magnification and other
+ * factors), so we need to apply a scaling factor when displaying tomograms on search maps.
+ * This does not apply to grid squares and foil holes.
+ */
+const ATLAS_SEARCH_MAP_SCALING_FACTOR = 7.8;
 
 const AtlasPage = () => {
   const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
+  const data = useLoaderData() as AtlasResponse;
 
   const gridSquareId = useMemo(() => {
     const gridSquare = searchParams.get("gridSquare");
@@ -18,6 +28,29 @@ const AtlasPage = () => {
 
     return null;
   }, [searchParams]);
+
+  const scalingFactor = useMemo(() => {
+    if (data.dataCollectionGroup.experimentTypeName !== "Tomography") {
+      return 0;
+    }
+
+    const gridSquare = data.gridSquares.find(
+      (gridSquare) => gridSquare.gridSquareId === gridSquareId
+    );
+
+    if (!gridSquare) {
+      return 0;
+    }
+
+    /*
+     * When converting from MRC files to JPG, the image is binned to always have 512px width (hence 512)
+     * Atlas pixel sizes are stored in metres, while pixel sizes for tomograms are stored in angstroms,
+     * so we'll also scale it so the units match (hence 1e-10)
+     */
+    return (
+      (512 * 1e-10) / data.atlas.pixelSize / gridSquare.width / ATLAS_SEARCH_MAP_SCALING_FACTOR
+    );
+  }, [data, gridSquareId]);
 
   const handleGridSquareClicked = useCallback(
     (gridSquare: components["schemas"]["GridSquare"]) => {
@@ -61,7 +94,11 @@ const AtlasPage = () => {
           onGridSquareClicked={handleGridSquareClicked}
           selectedGridSquare={gridSquareId}
         ></Atlas>
-        <GridSquare gridSquareId={gridSquareId} />
+        {data.dataCollectionGroup.experimentTypeName === "Tomography" ? (
+          <SearchMap searchMapId={gridSquareId} scalingFactor={scalingFactor} />
+        ) : (
+          <GridSquare gridSquareId={gridSquareId} />
+        )}
       </HStack>
     </VStack>
   );
