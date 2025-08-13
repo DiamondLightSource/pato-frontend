@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.27.1 (13/08/2025)
+++++++++++
+
+**Changed**
+
+- Remove scaling factor for search map positions
+
+++++++++++
 v1.27.0 (13/08/2025)
 ++++++++++
 

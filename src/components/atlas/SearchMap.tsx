@@ -50,8 +50,8 @@ const fetchTomograms = async (searchMapId: number | null, scalingFactor: number)
       dataCollectionId: tomogram.dataCollectionId,
       id: tomogram.tomogramId,
       // Binning and pixel size conversion from atlas to search map
-      x: tomogram.pixelLocationX * (512 / 7567),
-      y: tomogram.pixelLocationY * (512 / 7567),
+      x: tomogram.pixelLocationX,
+      y: tomogram.pixelLocationY,
       // Apply tomogram pixel size conversion and scaling factor
       width: tomogram.sizeX * tomogram.pixelSpacing * scalingFactor,
       height: tomogram.sizeY * tomogram.pixelSpacing * scalingFactor,
@@ -117,7 +117,7 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
           No tomograms available
         </Heading>
       ) : (
-        <div style={{ width: "100%" }} className='img-wrapper'>
+        <div style={{ width: "100%", overflow: "hidden" }} className='img-wrapper' >
           <img src={prependApiUrl(`grid-squares/${searchMapId}/image`)} alt='Search Map' />
           <svg viewBox='0 0 512 800'>
             {data.map((item, i) => (
