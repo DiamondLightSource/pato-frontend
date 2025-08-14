@@ -117,7 +117,7 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
           No tomograms available
         </Heading>
       ) : (
-        <div style={{ width: "100%", overflow: "hidden" }} className='img-wrapper' >
+        <div style={{ width: "100%", overflow: "hidden" }} className='img-wrapper'>
           <img src={prependApiUrl(`grid-squares/${searchMapId}/image`)} alt='Search Map' />
           <svg viewBox='0 0 512 800'>
             {data.map((item, i) => (
@@ -131,7 +131,7 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
                 onClick={() => handleItemClicked(item)}
                 role='button'
                 stroke='green'
-                fill="green"
+                fill='green'
                 fillOpacity='0.4'
                 cursor='pointer'
               />

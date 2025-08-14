@@ -207,17 +207,16 @@ export const SessionPage = () => {
     // Once this is fixed in the pipeline, we can remove the experiment type check.
     return data.items.map((row) => ({
       ...row,
-      atlasLink:
-        row.atlasId && row.experimentTypeName === "Single Particle" ? (
-          <Button
-            size='xs'
-            as={RouterLink}
-            to={`groups/${row.dataCollectionGroupId}/atlas`}
-            relative='path'
-          >
-            View Atlas
-          </Button>
-        ) : null,
+      atlasLink: row.atlasId ? (
+        <Button
+          size='xs'
+          as={RouterLink}
+          to={`groups/${row.dataCollectionGroupId}/atlas`}
+          relative='path'
+        >
+          View Atlas
+        </Button>
+      ) : null,
     }));
   }, [data]);
 

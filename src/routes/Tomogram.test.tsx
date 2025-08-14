@@ -46,6 +46,7 @@ const validData = {
     },
   ],
   allowReprocessing: true,
+  hasAtlas: true,
 } as LoaderReturn;
 
 const secondValidData = {
@@ -79,6 +80,7 @@ const invalidJob = {
   page: 1,
   tomograms: null,
   allowReprocessing: true,
+  hasAtlas: false,
 } as LoaderReturn;
 
 describe("Tomogram Page", () => {
@@ -120,6 +122,13 @@ describe("Tomogram Page", () => {
     renderWithRoute(<TomogramPage />, () => invalidJob);
     await screen.findByText("Tilt Align 1");
     expect(screen.getByRole("button", { name: /run reprocessing/i })).toHaveAttribute("disabled");
+  });
+
+  it("should disable atlas button if there's no atlas available", async () => {
+    renderWithRoute(<TomogramPage />, () => invalidJob);
+
+    await screen.findByText("Tilt Align 1");
+    expect(screen.getByRole("link", { name: /view atlas/i })).toHaveAttribute("disabled");
   });
 
   it("should not allow reprocessing if collection has more than 2 processed tomograms", async () => {

@@ -24,9 +24,9 @@ import {
   AlertIcon,
 } from "@chakra-ui/react";
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
-import { useLoaderData, useNavigate, useParams, useSearchParams } from "react-router";
+import { Link, useLoaderData, useNavigate, useParams, useSearchParams } from "react-router";
 import { Tomogram } from "components/tomogram/main";
-import { MdList, MdRedo } from "react-icons/md";
+import { MdList, MdOutlineGrain, MdRedo } from "react-icons/md";
 import React from "react";
 import { TomogramResponse } from "loaders/tomogram";
 import APNGContainer from "components/visualisation/apngContainer";
@@ -133,6 +133,17 @@ const TomogramPage = () => {
             />
             <Spacer />
             <HStack>
+              <Tooltip label='View Atlas'>
+                <Button
+                  aria-label='View Atlas'
+                  as={Link}
+                  to={{ pathname: "../../atlas" }}
+                  relative='path'
+                  isDisabled={!loaderData.hasAtlas}
+                >
+                  <Icon as={MdOutlineGrain} />
+                </Button>
+              </Tooltip>
               <Tooltip label='Run Reprocessing'>
                 <Button aria-label='Run Reprocessing' onClick={onOpen} isDisabled={buttonDisabled}>
                   <Icon as={MdRedo} />

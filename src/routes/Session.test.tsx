@@ -80,15 +80,6 @@ describe("Session Page", () => {
     expect(atlasButton).toHaveAttribute("href", "/groups/1/atlas");
   });
 
-  it("should not display link to atlas if data collection group is tomogram", async () => {
-    renderWithRoute(<SessionPage />, () => ({
-      items: [{ experimentTypeName: "Tomogram", dataCollectionGroupId: 1, atlasId: 5 }],
-      session: { microscopeName: "Krios I", startDate: "startDateValue", endDate: "endDateValue" },
-    }));
-
-    expect(screen.queryByText("View Atlas")).not.toBeInTheDocument();
-  });
-
   it("should not display link to atlas if data collection group has no atlas", async () => {
     renderWithRoute(<SessionPage />, () => ({
       items: [{ experimentTypeName: "Single Particle", dataCollectionGroupId: 1 }],

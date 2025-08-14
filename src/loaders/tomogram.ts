@@ -17,6 +17,7 @@ export interface TomogramResponse {
   /** Tomograms belonging to data collection (one per autoproc program) */
   tomograms: TomogramFullResponse[] | null;
   allowReprocessing: boolean;
+  hasAtlas: boolean;
 }
 
 const getTomogramData = async (
@@ -38,19 +39,26 @@ const getTomogramData = async (
     page: 1,
     tomograms: null,
     allowReprocessing: false,
+    hasAtlas: false,
   };
 
-  const collectionResponse = await client.safeGet(
-    includePage(
-      `dataGroups/${groupId}/dataCollections?${searchParams}`,
-      1,
-      parseInt(collectionIndex)
-    )
-  );
+  const [collectionResponse, groupResponse, reprocessingResponse] = await Promise.all([
+    client.safeGet(
+      includePage(
+        `dataGroups/${groupId}/dataCollections?${searchParams}`,
+        1,
+        parseInt(collectionIndex)
+      )
+    ),
+    client.safeGet(`dataGroups/${groupId}`),
+    client.safeGet(`proposals/${propId}/sessions/${sessionId}/reprocessingEnabled`),
+  ]);
 
-  const reprocessingResponse = await client.safeGet(
-    `proposals/${propId}/sessions/${sessionId}/reprocessingEnabled`
-  );
+  if (groupResponse.status === 200) {
+    const groupData: components["schemas"]["DataCollectionGroupSummaryResponse"] =
+      groupResponse.data;
+    returnData.hasAtlas = !!groupData.atlasId;
+  }
 
   if (reprocessingResponse.status === 200) {
     returnData.allowReprocessing = reprocessingResponse.data.allowReprocessing;
