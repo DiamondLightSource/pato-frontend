@@ -26,6 +26,13 @@ export const getUser = async (redirectOnFail: boolean = false) => {
         name: response.data.givenName,
         email: response.data.email,
       };
+    } else if (
+      response.status === 401 &&
+      window.location.pathname !== "/invalid-user" &&
+      response.data.detail === "User is not listed or does not have permission to view content"
+    ) {
+      window.location.assign("/invalid-user");
+      return null;
     } else if (!redirectOnFail) {
       return null;
     }
