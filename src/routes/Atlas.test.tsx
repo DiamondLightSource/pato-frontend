@@ -64,6 +64,27 @@ describe("Atlas", () => {
     await waitFor(() => expect(router.state.location.search).toBe("?hideSquares=false"));
   });
 
+  it("should should update hideEmptySearchMaps search param if a tomography experiment is provided", async () => {
+    const { router } = renderWithRoute(
+      <AtlasPage />,
+      () => ({
+        ...baseLoaderDict,
+        gridSquares: [
+          { x: 1, y: 1, height: 1, width: 1, angle: 90, gridSquareId: 1, image: "test/image.jpg" },
+        ],
+        dataCollectionGroup: { experimentTypeName: "Tomography" },
+      }),
+      ["?hideEmptySearchMaps=true"]
+    );
+
+    const checkbox = await screen.findByLabelText("Hide empty search maps");
+
+    fireEvent.click(checkbox);
+    await waitFor(() => expect(router.state.location.search).toBe("?hideEmptySearchMaps=true"));
+    fireEvent.click(checkbox);
+    await waitFor(() => expect(router.state.location.search).toBe("?hideEmptySearchMaps=false"));
+  });
+
   it("should display search map if experiment type is tomography", async () => {
     renderWithRoute(<AtlasPage />, () => ({
       ...baseLoaderDict,

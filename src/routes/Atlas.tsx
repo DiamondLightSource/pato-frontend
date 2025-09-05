@@ -19,6 +19,14 @@ const AtlasPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const data = useLoaderData() as AtlasResponse;
 
+  const targetSearchParam = useMemo(
+    () =>
+      data.dataCollectionGroup.experimentTypeName === "Tomography"
+        ? "hideEmptySearchMaps"
+        : "hideSquares",
+    [data]
+  );
+
   const gridSquareId = useMemo(() => {
     const gridSquare = searchParams.get("gridSquare");
     if (gridSquare) {
@@ -67,12 +75,15 @@ const AtlasPage = () => {
     [setSearchParams]
   );
 
-  const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchParams((prev) => {
-      prev.set("hideSquares", e.target.checked.toString());
-      return prev;
-    });
-  };
+  const handleCheck = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchParams((prev) => {
+        prev.set(targetSearchParam, e.target.checked.toString());
+        return prev;
+      });
+    },
+    [targetSearchParam, setSearchParams]
+  );
 
   return (
     <VStack alignItems='start'>
@@ -80,11 +91,14 @@ const AtlasPage = () => {
         <Heading>Atlas</Heading>
         <Spacer />
         <Checkbox
-          defaultChecked={searchParams.get("hideSquares") === "true"}
+          defaultChecked={searchParams.get(targetSearchParam) === "true"}
           onChange={handleCheck}
           size='lg'
         >
-          Hide uncollected grid squares
+          Hide{" "}
+          {data.dataCollectionGroup.experimentTypeName === "Tomography"
+            ? "empty search maps"
+            : "uncollected grid squares"}
         </Checkbox>
       </HStack>
       <Divider />
