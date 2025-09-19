@@ -377,6 +377,10 @@ export const handlers = [
     HttpResponse.json({})
   ),
 
+  http.post("http://localhost/proposals/:propId/sessions/:sessionId/initialModel", () =>
+    HttpResponse.json({})
+  ),
+
   http.get("http://localhost/processingJob/:procJobId/parameters", () =>
     HttpResponse.json({ items: { do_class3d: "1", do_class2d: "0", Cs: "1" } })
   ),
