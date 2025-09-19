@@ -1,12 +1,29 @@
-import { Button, Divider, Heading, useToast, VStack, Text, Code } from "@chakra-ui/react";
+import {
+  Button,
+  Divider,
+  Heading,
+  useToast,
+  VStack,
+  Text,
+  FormControl,
+  FormLabel,
+  Input,
+  HStack,
+} from "@chakra-ui/react";
 import { FormEvent, useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import "styles/upload.css";
 import { client } from "utils/api/client";
 
-export const UploadModelPage = () => {
-  const { propId, visitId } = useParams();
+export interface UploadFormProps {
+  requestUrl: string;
+  fileExtension: string;
+  redirectUrl: string;
+  title: string;
+}
+
+const UploadForm = ({ requestUrl, fileExtension, redirectUrl, title }: UploadFormProps) => {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
 
@@ -18,15 +35,12 @@ export const UploadModelPage = () => {
       const data = new FormData(e.currentTarget);
 
       setLoading(true);
-      const resp = await client.post(
-        `proposals/${propId}/sessions/${visitId}/processingModel`,
-        data
-      );
+      const resp = await client.post(requestUrl, data);
       setLoading(false);
 
       if (resp.status === 200) {
         toast({ status: "success", title: "Model successfully uploaded!" });
-        navigate(`/proposals/${propId}/sessions/${visitId}`);
+        navigate(redirectUrl);
       } else {
         toast({
           status: "error",
@@ -35,23 +49,63 @@ export const UploadModelPage = () => {
         });
       }
     },
-    [propId, visitId, toast, navigate]
+    [toast, navigate, redirectUrl, requestUrl]
   );
 
   return (
-    <VStack alignItems='start' className='about-text' mt='1em'>
+    <form onSubmit={uploadFile} encType='multipart/form-data'>
+      <HStack>
+        <FormControl>
+          <FormLabel size='sm' mt='1.5em'>
+            {title}:
+          </FormLabel>
+          <Input
+            name='file'
+            data-testid={`file-input-${fileExtension}`}
+            type='file'
+            accept={fileExtension}
+            h='auto'
+          />
+        </FormControl>
+        <Button
+          ml='1em'
+          mt='3.5em'
+          w='10em'
+          type='submit'
+          data-testid={`submit-${fileExtension}`}
+          loadingText='Uploading'
+          isLoading={loading}
+        >
+          Submit
+        </Button>
+      </HStack>
+    </form>
+  );
+};
+
+export const UploadModelPage = () => {
+  const { propId, visitId } = useParams();
+
+  return (
+    <VStack alignItems='start' className='about-text'>
       <Heading>Upload Model</Heading>
       <Divider />
       <Text>
-        Upload custom model for particle picking (crYOLO). This model will be placed under the{" "}
-        <Code>processing</Code> directory in your visit directory.
+        Upload custom initial model, or custom particle picking model (crYOLO). These models will be
+        placed in your visit directory.
       </Text>
-      <form onSubmit={uploadFile} encType='multipart/form-data'>
-        <input name='file' data-testid='file-input' type='file' accept='.h5' />
-        <Button w='8em' type='submit' loadingText='Uploading' isLoading={loading}>
-          Submit
-        </Button>
-      </form>
+      <UploadForm
+        requestUrl={`proposals/${propId}/sessions/${visitId}/processingModel`}
+        redirectUrl={`/proposals/${propId}/sessions/${visitId}`}
+        fileExtension='.h5'
+        title='Particle picking model(crYOLO)'
+      />
+      <UploadForm
+        requestUrl={`proposals/${propId}/sessions/${visitId}/initialModel`}
+        redirectUrl={`/proposals/${propId}/sessions/${visitId}`}
+        fileExtension='.mrc'
+        title='Initial reference model'
+      />
     </VStack>
   );
 };
