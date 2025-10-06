@@ -298,8 +298,8 @@ export const SessionPage = () => {
             <Heading size='lg'>Actions</Heading>
             <Divider />
             {/** @ts-expect-error */}
-            <TwoLineLink title='Upload Particle Picking Model' as={RouterLink} to='upload-model'>
-              Upload custom model for particle picking (crYOLO)
+            <TwoLineLink title='Upload Models' as={RouterLink} to='upload-model'>
+              Upload custom particle picking (crYOLO) or initial reference model
             </TwoLineLink>
             <TwoLineLink
               title='Submit Feedback'
