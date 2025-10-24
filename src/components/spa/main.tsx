@@ -6,11 +6,11 @@ import { ParticlePicking } from "components/spa/particlePicking";
 import { CTF } from "components/ctf/ctf";
 import { ProcessingTitle } from "components/visualisation/processingTitle";
 import { BaseProcessingJobProps } from "schema/interfaces";
-import { recipeTagMap } from "utils/config/parse";
+import { spaRecipeTagMap } from "utils/config/parse";
 import { RefinementStep } from "./refine";
 import { useSearchParams } from "react-router";
 
-const recipes = Object.keys(recipeTagMap);
+const recipes = Object.keys(spaRecipeTagMap);
 
 /**
  * Check if recipe matches a given recipe type, or if it's not in the list of known recipe types.
@@ -25,7 +25,7 @@ const recipes = Object.keys(recipeTagMap);
  */
 const checkRecipe = (target: string, procJob: BaseProcessingJobProps["procJob"]) =>
   target === procJob.recipe ||
-  (procJob.recipe && !Object.keys(recipeTagMap).includes(procJob.recipe));
+  (procJob.recipe && !Object.keys(spaRecipeTagMap).includes(procJob.recipe));
 
 const SPA = ({ autoProc, procJob, status, active }: BaseProcessingJobProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
