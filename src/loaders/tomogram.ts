@@ -2,7 +2,7 @@ import { Params, redirect } from "react-router";
 import { CollectionData } from "schema/interfaces";
 import { client } from "utils/api/client";
 import { includePage } from "utils/api/endpoint";
-import { collectionConfig } from "utils/config/parse";
+import { collectionConfig, tomographyRecipeTagMap } from "utils/config/parse";
 import { parseData } from "utils/generic";
 import { components } from "schema/main";
 import { QueryClient } from "@tanstack/react-query";
@@ -89,8 +89,12 @@ const getTomogramData = async (
     );
 
     if (tomogramsResponse.status === 200 && tomogramsResponse.data) {
-      const items = tomogramsResponse.data.items;
-      returnData.tomograms = items;
+      const items = tomogramsResponse.data.items as TomogramFullResponse[];
+      returnData.tomograms = items.filter(
+        (tomogram) =>
+          tomogram.ProcessingJob.recipe &&
+          Object.keys(tomographyRecipeTagMap).includes(tomogram.ProcessingJob.recipe)
+      );
     }
   }
 
