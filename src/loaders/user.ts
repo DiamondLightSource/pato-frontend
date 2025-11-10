@@ -13,6 +13,8 @@ export const getUser = async (redirectOnFail: boolean = false) => {
 
   if (code) {
     newUrl.searchParams.delete("code");
+    newUrl.searchParams.delete("session_state");
+    newUrl.searchParams.delete("iss");
 
     await client.authGet(`token?redirect_uri=${encodeURIComponent(newUrl.href)}&code=${code}`);
     window.location.replace(newUrl.href);
