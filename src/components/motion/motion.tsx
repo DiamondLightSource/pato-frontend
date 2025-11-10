@@ -234,9 +234,14 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
   const [actualTotal, setActualTotal] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { data, isLoading } = useQuery({
+  const {data: motion, isLoading: isMotionLoading} = useQuery({
     queryKey: ["motion", parentId, parentType, innerPage],
     queryFn: async () => await fetchMotionData(parentType, parentId, innerPage),
+  })
+
+  const { data: movie, isLoading: isMovieLoading } = useQuery({
+    queryKey: ["movie", parentId, parentType, innerPage],
+    queryFn: async () => await fetchMovieData(parentType, parentId, innerPage),
   });
 
   const darkImages = useMemo(() => {
@@ -379,7 +384,7 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
             </DrawerContent>
           </Drawer>
         </Grid>
-      ) : isLoading ? (
+      ) : isMotionLoading | isMovieLoading ? (
         <Skeleton h='25vh' />
       ) : (
         <Heading pt='10vh' variant='notFound' h='25vh'>

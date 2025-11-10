@@ -24,12 +24,7 @@ import { PlotContainer } from "components/visualisation/plotContainer";
 import { Motion } from "components/motion/motion";
 import { useCallback, useState } from "react";
 import { client, prependApiUrl } from "utils/api/client";
-import {
-  TomogramData,
-  BaseProcessingJobProps,
-  DataConfig,
-  TomogramMovieTypes,
-} from "schema/interfaces";
+import { TomogramData, BaseProcessingJobProps, DataConfig, TomogramMovieTypes } from "schema/interfaces";
 import { CTF } from "components/ctf/ctf";
 import { components } from "schema/main";
 import { ProcessingTitle } from "components/visualisation/processingTitle";
@@ -65,19 +60,9 @@ export interface TomogramProps extends BaseProcessingJobProps {
   onTomogramOpened: (tomogramId: number, type: TomogramMovieTypes) => void;
 }
 
-const TomogramThumbnail = ({
-  movieType,
-  baseUrl,
-}: {
-  movieType: TomogramMovieTypes | null;
-  baseUrl: string;
-}) => (
+const TomogramThumbnail = ({ movieType, baseUrl }: { movieType: TomogramMovieTypes | null; baseUrl: string }) => (
   <VStack w='50%' h='100%' key={movieType}>
-    <ImageCard
-      p={0}
-      borderColor='transparent'
-      src={`${baseUrl}${movieType ? `?movieType=${movieType}` : ""}`}
-    />
+    <ImageCard p={0} borderColor='transparent' src={`${baseUrl}${movieType ? `?movieType=${movieType}` : ""}`} />
     <Text fontSize={13}>{movieType ? capitalise(movieType) : "Not Denoised"}</Text>
   </VStack>
 );
@@ -110,14 +95,7 @@ const fetchTomogramData = async (tomogram: TomogramResponse | null) => {
   return data;
 };
 
-const Tomogram = ({
-  autoProc,
-  procJob,
-  tomogram,
-  status,
-  onTomogramOpened,
-  active = false,
-}: TomogramProps) => {
+const Tomogram = ({ autoProc, procJob, tomogram, status, onTomogramOpened, active = false }: TomogramProps) => {
   const { data, isLoading } = useQuery({
     queryKey: ["tomogramAutoProc", procJob.processingJobId],
     queryFn: async () => await fetchTomogramData(tomogram),
@@ -154,23 +132,36 @@ const Tomogram = ({
               <Motion parentId={procJob.dataCollectionId} parentType='tomograms' />
             </Box>
           ) : (
-            <Grid gap={3} templateColumns={{ base: "", "2xl": "repeat(2, 1fr)" }}>
+            <Grid gap={3} templateColumns={{ "base": "", "2xl": "repeat(2, 1fr)" }}>
               <Box minW='0'>
                 <Heading variant='collection'>Alignment</Heading>
                 <Divider />
-                <Grid
-                  py={2}
-                  templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
-                  gap={2}
-                >
-                  <GridItem
-                    h='20vh'
-                    minH={{ sm: "200px", md: "300px" }}
-                    colSpan={{ base: 2, md: 1 }}
-                  >
-                    <InfoGroup info={data.tomogram.info} />
+                <Grid py={2} templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }} gap={2}>
+                  <GridItem colSpan={{ base: 1, md: 1 }}>
+                    <InfoGroup info={data.tomogram.info} cols={2} />
                   </GridItem>
                   <GridItem colSpan={{ base: 2, md: 3 }} h='20vh' minH='300px'>
+                    <Card h='100%'>
+                      <CardHeader>
+                        <HStack>
+                          <Heading size='sm'>Stacks</Heading>
+                          <Spacer />
+                          <Button h='25px' size='sm' onClick={() => handleOpenTomogram("denoised")}>
+                            View
+                            <Spacer />
+                            <Icon ml='10px' as={MdOpenInNew}></Icon>
+                          </Button>
+                        </HStack>
+                      </CardHeader>
+                      <CardBody pt={0}>
+                        <HStack mx='auto' w='auto' h='100%' divider={<Divider orientation='vertical' />}>
+                          <TomogramThumbnail key='Aligned' baseUrl={data.centralSlice} movieType='aligned' />
+                          <TomogramThumbnail key='Unaligned' baseUrl={data.centralSlice} movieType="unaligned" />
+                        </HStack>
+                      </CardBody>
+                    </Card>
+                  </GridItem>
+                  <GridItem colSpan={{ base: 4, md: 4 }} h='20vh' minH='300px'>
                     <Card h='100%'>
                       <CardHeader>
                         <HStack>
@@ -178,20 +169,12 @@ const Tomogram = ({
                           <Spacer />
                           {isLargeScreen ? (
                             <>
-                              <Button
-                                h='25px'
-                                size='sm'
-                                onClick={() => handleOpenTomogram("picked")}
-                              >
+                              <Button h='25px' size='sm' onClick={() => handleOpenTomogram("picked")}>
                                 View Picked
                                 <Spacer />
                                 <Icon ml='10px' as={MdOpenInNew}></Icon>
                               </Button>
-                              <Button
-                                h='25px'
-                                size='sm'
-                                onClick={() => handleOpenTomogram("segmented")}
-                              >
+                              <Button h='25px' size='sm' onClick={() => handleOpenTomogram("segmented")}>
                                 View Segmented
                                 <Spacer />
                                 <Icon ml='10px' as={MdOpenInNew}></Icon>
@@ -213,11 +196,7 @@ const Tomogram = ({
                                   <option value='picked'>Picked</option>
                                 </Select>
                               </Tooltip>
-                              <Button
-                                h='25px'
-                                size='sm'
-                                onClick={() => handleOpenTomogram(selectedTomogram)}
-                              >
+                              <Button h='25px' size='sm' onClick={() => handleOpenTomogram(selectedTomogram)}>
                                 View {capitalise(selectedTomogram)}
                                 <Spacer />
                                 <Icon ml='10px' as={MdOpenInNew}></Icon>
@@ -233,24 +212,11 @@ const Tomogram = ({
                         </HStack>
                       </CardHeader>
                       <CardBody pt={0}>
-                        <HStack
-                          mx='auto'
-                          w='auto'
-                          h='100%'
-                          divider={<Divider orientation='vertical' />}
-                        >
+                        <HStack mx='auto' w='auto' h='100%' divider={<Divider orientation='vertical' />}>
                           {isLargeScreen ? (
                             [
-                              <TomogramThumbnail
-                                key='picked'
-                                baseUrl={data.centralSlice}
-                                movieType='picked'
-                              />,
-                              <TomogramThumbnail
-                                key='segmented'
-                                baseUrl={data.centralSlice}
-                                movieType='segmented'
-                              />,
+                              <TomogramThumbnail key='picked' baseUrl={data.centralSlice} movieType='picked' />,
+                              <TomogramThumbnail key='segmented' baseUrl={data.centralSlice} movieType='segmented' />,
                             ]
                           ) : (
                             <TomogramThumbnail
@@ -259,16 +225,8 @@ const Tomogram = ({
                               movieType={selectedTomogram}
                             />
                           )}
-                          <TomogramThumbnail
-                            key='denoised'
-                            baseUrl={data.centralSlice}
-                            movieType='denoised'
-                          />
-                          <TomogramThumbnail
-                            key='noisy'
-                            baseUrl={data.centralSlice}
-                            movieType={null}
-                          />
+                          <TomogramThumbnail key='denoised' baseUrl={data.centralSlice} movieType='denoised' />
+                          <TomogramThumbnail key='noisy' baseUrl={data.centralSlice} movieType={null} />
                         </HStack>
                       </CardBody>
                     </Card>
