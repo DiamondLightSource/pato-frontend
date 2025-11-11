@@ -34,7 +34,7 @@ const getMotionData = (parentId: string) => {
         items: [
           {
             CTF: { comments: "comment!" },
-            Movie: {},
+            Movie: { movieId: 1 },
             TiltImageAlignment: { refinedTiltAxis: 958 },
           },
         ],
@@ -47,7 +47,7 @@ const getMotionData = (parentId: string) => {
         items: [
           {
             CTF: { comments: "comment!" },
-            Movie: {},
+            Movie: { movieId: 1 },
             TiltImageAlignment: { refinedTiltAxis: 958 },
           },
         ],
@@ -100,7 +100,7 @@ export const handlers = [
 
   http.get("http://localhost/dataCollections/:id/motion", () =>
     HttpResponse.json({
-      items: [{ Movie: {}, CTF: {}, MotionCorrection: {} }],
+      items: [{ Movie: { movieId: 1 }, CTF: {}, MotionCorrection: {} }],
       total: 10,
     })
   ),
@@ -114,6 +114,8 @@ export const handlers = [
   http.get("http://localhost/movies/:id/micrograph", () => HttpResponse.text("")),
 
   http.get("http://localhost/tomograms/:id/centralSlice", () => HttpResponse.text("")),
+
+  http.get("http://localhost/tomograms/:id/movie", () => HttpResponse.text("")),
 
   http.get("http://localhost/movies/:id/drift", () =>
     HttpResponse.json({ items: [{ x: 1, y: 1 }] })

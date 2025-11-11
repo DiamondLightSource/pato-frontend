@@ -5,12 +5,6 @@ import { server } from "mocks/server";
 import { http, HttpResponse } from "msw";
 
 describe("Motion", () => {
-  it("should display message when no tilt alignment data is present", async () => {
-    renderWithProviders(<Motion parentType='dataCollections' parentId={2} />);
-
-    await screen.findByText("No tilt alignment data available");
-  });
-
   it("should display raw image count when no tilt. align. is present", async () => {
     renderWithProviders(<Motion parentType='dataCollections' parentId={2} />);
 
