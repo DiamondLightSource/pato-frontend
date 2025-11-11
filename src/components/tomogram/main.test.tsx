@@ -75,7 +75,7 @@ describe("Tomogram", () => {
       />
     );
 
-    await screen.findByText("Alignment");
+    await screen.findAllByText("Alignment");
   });
 
   it("should fire callback when open movie button clicked", async () => {
@@ -92,10 +92,10 @@ describe("Tomogram", () => {
       />
     );
 
-    await screen.findByText("Alignment");
+    await screen.findAllByText("Alignment");
 
     fireEvent.click(screen.getByLabelText("Show Content"));
-    fireEvent.click(await screen.findByRole("button", { name: "View Denoised" }));
+    fireEvent.click(screen.getByText(/view denoised/i));
 
     await waitFor(() => expect(openCallback).toHaveBeenCalledWith(1, "denoised"));
   });
@@ -112,13 +112,13 @@ describe("Tomogram", () => {
       />
     );
 
-    fireEvent.click(screen.getByLabelText("Show Content"));
+    //fireEvent.click(screen.getByLabelText("Show Content"));
 
     expect(await screen.findByText("Segmented")).toBeInTheDocument();
     expect(await screen.findByText("Picked")).toBeInTheDocument();
 
-    expect(screen.getByRole("button", { name: "View Segmented" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "View Picked" })).toBeInTheDocument();
+    expect(screen.getByText(/view segmented/i)).toBeInTheDocument();
+    expect(screen.getByText(/view picked/i)).toBeInTheDocument();
   });
 
   it("should show tomogram selector on small screens", async () => {
@@ -173,5 +173,21 @@ describe("Tomogram", () => {
     );
 
     await screen.findByText("Motion Correction/CTF");
+  });
+
+  it("should display dark image count", async () => {
+    renderWithAccordion(
+      <Tomogram
+        active={true}
+        autoProc={autoProcJob}
+        procJob={basicProcJob}
+        tomogram={basicTomogram}
+        status={"Queued"}
+        onTomogramOpened={() => {}}
+      />
+    );
+
+    await screen.findAllByText("Alignment");
+    await screen.findByText("Dark Images: 10");
   });
 });

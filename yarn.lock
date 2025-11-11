@@ -3159,13 +3159,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@chakra-ui/icons@npm:^2.2.5":
-  version: 2.2.5
-  resolution: "@chakra-ui/icons@npm:2.2.5"
+"@chakra-ui/icons@npm:^2.2.6":
+  version: 2.2.6
+  resolution: "@chakra-ui/icons@npm:2.2.6"
   peerDependencies:
     "@chakra-ui/react": ">=2.0.0"
     react: ">=18"
-  checksum: 10c0/914518c116fd47d6e26631b0260b42976c1d3ec43227a5dcff39cf62b63146814491d5f11134cf98d604803b833dc53592f70597e023a98f6d263ea0390baf9d
+  checksum: 10c0/588d013ac21f53430bf8f03530c7355c67bb4d7e245c86e5b9b93018d6373f4ef64ce6557b5f39185998969539101a8957b6a367d01175a3238f11c421fe8ee9
   languageName: node
   linkType: hard
 
@@ -4120,11 +4120,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@diamondlightsource/ui-components@npm:^2.2.2":
-  version: 2.2.2
-  resolution: "@diamondlightsource/ui-components@npm:2.2.2"
+"@diamondlightsource/ui-components@npm:v2.2.4":
+  version: 2.2.4
+  resolution: "@diamondlightsource/ui-components@npm:2.2.4"
   dependencies:
-    "@chakra-ui/icons": "npm:^2.2.5"
+    "@chakra-ui/icons": "npm:^2.2.6"
     "@visx/axis": "npm:^3.12.0"
     "@visx/event": "npm:^3.12.0"
     "@visx/grid": "npm:^3.12.0"
@@ -4135,16 +4135,16 @@ __metadata:
     "@visx/stats": "npm:^3.12.0"
     "@visx/tooltip": "npm:^3.12.0"
     "@visx/voronoi": "npm:^3.12.0"
-    apng-js: "npm:^1.1.4"
-    react-icons: "npm:^5.4.0"
+    apng-js: "npm:^1.1.5"
+    react-icons: "npm:^5.5.0"
   peerDependencies:
-    "@chakra-ui/react": ^2.3.6
-    "@emotion/react": ^11.10.4
-    "@emotion/styled": ^11.10.4
+    "@chakra-ui/react": ^2.10.9
+    "@emotion/react": ^11.14.0
+    "@emotion/styled": ^11.14.1
     framer-motion: ^11.11.4
-    react: ^18.2.0
-    react-dom: ^18.2.0
-  checksum: 10c0/ad6624524fef5a51f1a43eb3ff521f053910430c43be7cf05ec79dd1b7c608b6b53b4497a15c74f2ca0d751f3d3cacad1ca83d5566e2226b4bfd72da6f79a2b0
+    react: ^19.2.0 || ^18.0.0
+    react-dom: ^19.2.0 || ^18.0.0
+  checksum: 10c0/44277d592d5eaa226fc86670239ce2bfa901c1b119e71726ff1abad487c4fec15e45cb974dd34340b07b14518de4e05e1e3c15bb7e8533295226be8a43ef5dfb
   languageName: node
   linkType: hard
 
@@ -7252,10 +7252,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apng-js@npm:^1.1.4":
-  version: 1.1.4
-  resolution: "apng-js@npm:1.1.4"
-  checksum: 10c0/1a095b31b505f690fa4893cc7c2d952f7d724e766fa56da5dba2d0d6303f086f4991ff738c641163bf820ceff29ad8857f7c1f89a5fc528d0af342f8bebc1340
+"apng-js@npm:^1.1.5":
+  version: 1.1.5
+  resolution: "apng-js@npm:1.1.5"
+  checksum: 10c0/768b4ebdf2b9e6b5adcd5302aeba0b80c788d2da25cef629a498ac1ce9f1fdc2324fffb0cf0a9e5425e2a23918e8c1684a7bb87bcb745ceb832593640a5b95f3
   languageName: node
   linkType: hard
 
@@ -14174,7 +14174,7 @@ __metadata:
     "@babel/core": "npm:^7.28.0"
     "@babel/preset-env": "npm:^7.28.0"
     "@chakra-ui/react": "npm:^2.8.2"
-    "@diamondlightsource/ui-components": "npm:^2.2.2"
+    "@diamondlightsource/ui-components": "npm:v2.2.4"
     "@emotion/react": "npm:^11.14.0"
     "@emotion/styled": "npm:^11.14.1"
     "@fullcalendar/core": "npm:^6.1.18"
@@ -15035,15 +15035,6 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18 || ^19
   checksum: 10c0/eb8518d42a074d9e115d4b414bac18ae72708b2d047a9453dcc7588b00df300b32cebf6ecb7f2c8aa534808b3dc54bde4124af95c1e432b6691f9aba07c93b11
-  languageName: node
-  linkType: hard
-
-"react-icons@npm:^5.4.0":
-  version: 5.4.0
-  resolution: "react-icons@npm:5.4.0"
-  peerDependencies:
-    react: "*"
-  checksum: 10c0/698b0c4616870152d86de2585fb709bf3eeb9292d971d689965dade5f0ee71cdc92d2125b728ab220cc39a4c6d6bad1ed526b9b934ab39a7b6001bc23b73ee16
   languageName: node
   linkType: hard
 

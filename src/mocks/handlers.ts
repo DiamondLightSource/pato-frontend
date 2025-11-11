@@ -18,15 +18,15 @@ const getMotionData = (parentId: string) => {
     case "1":
       data = {
         items,
-        total: 10,
-        rawTotal: 20,
+        alignedTotal: 10,
+        total: 20,
       };
       break;
     case "2":
       data = {
         items,
-        total: 0,
-        rawTotal: 20,
+        total: 20,
+        alignedTotal: 0,
       };
       break;
     case "3":
@@ -34,12 +34,12 @@ const getMotionData = (parentId: string) => {
         items: [
           {
             CTF: { comments: "comment!" },
-            Movie: {},
+            Movie: { movieId: 1 },
             TiltImageAlignment: { refinedTiltAxis: 958 },
           },
         ],
-        total: 0,
-        rawTotal: 20,
+        total: 20,
+        alignedTotal: 10,
       };
       break;
     case "4":
@@ -47,11 +47,11 @@ const getMotionData = (parentId: string) => {
         items: [
           {
             CTF: { comments: "comment!" },
-            Movie: {},
+            Movie: { movieId: 1 },
             TiltImageAlignment: { refinedTiltAxis: 958 },
           },
         ],
-        rawTotal: "asd",
+        alignedTotal: "asd",
         total: 10,
       };
       break;
@@ -60,10 +60,6 @@ const getMotionData = (parentId: string) => {
 };
 
 export const handlers = [
-  http.get("http://localhost/tomograms/:id/motion", ({ params }) =>
-    HttpResponse.json(getMotionData(params.id!.toString()))
-  ),
-
   http.get("http://localhost/autoProc/:id/motion", ({ params }) =>
     HttpResponse.json(getMotionData(params.id!.toString()))
   ),
@@ -104,9 +100,13 @@ export const handlers = [
 
   http.get("http://localhost/dataCollections/:id/motion", () =>
     HttpResponse.json({
-      items: [{ Movie: {}, CTF: {}, MotionCorrection: {} }],
+      items: [{ Movie: { movieId: 1 }, CTF: {}, MotionCorrection: {} }],
       total: 10,
     })
+  ),
+
+  http.get("http://localhost/dataCollections/:id/tomogram-motion", ({ params }) =>
+    HttpResponse.json(getMotionData(params.id!.toString()))
   ),
 
   http.get("http://localhost/movies/:id/fft", () => HttpResponse.text("")),
@@ -114,6 +114,8 @@ export const handlers = [
   http.get("http://localhost/movies/:id/micrograph", () => HttpResponse.text("")),
 
   http.get("http://localhost/tomograms/:id/centralSlice", () => HttpResponse.text("")),
+
+  http.get("http://localhost/tomograms/:id/movie", () => HttpResponse.text("")),
 
   http.get("http://localhost/movies/:id/drift", () =>
     HttpResponse.json({ items: [{ x: 1, y: 1 }] })

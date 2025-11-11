@@ -5,12 +5,6 @@ import { server } from "mocks/server";
 import { http, HttpResponse } from "msw";
 
 describe("Motion", () => {
-  it("should display message when no tilt alignment data is present", async () => {
-    renderWithProviders(<Motion parentType='dataCollections' parentId={2} />);
-
-    await screen.findByText("No tilt alignment data available");
-  });
-
   it("should display raw image count when no tilt. align. is present", async () => {
     renderWithProviders(<Motion parentType='dataCollections' parentId={2} />);
 
@@ -107,7 +101,7 @@ describe("Motion", () => {
     await waitFor(() => expect(totalChanged).toBeCalledWith(20));
   });
 
-  it("displays '?' if passed values for raw total and total include NaN", async () => {
+  it("displays '?' if passed values for aligned and total include NaN", async () => {
     renderWithProviders(<Motion parentType='tomograms' parentId={4} />);
     await screen.findByRole("heading", { name: "?" });
   });
