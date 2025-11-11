@@ -39,10 +39,10 @@ import {
 import { components } from "schema/main";
 
 interface MotionData {
-  /** Total number of tilt alignment images available */
-  total: number;
   /** Total number of motion correction images available (including tilt alignment) */
-  rawTotal: number;
+  total: number;
+  /** Total number of tilt alignment images available */
+  alignedTotal: number;
   /** Motion correction comments */
   comments_MotionCorrection?: string;
   /** CTF comments */
@@ -90,7 +90,7 @@ const motionConfig = {
     "movieId",
     "drift",
     "total",
-    "rawTotal",
+    "alignedTotal",
     "refinedTiltAxis",
     "comments_CTF",
     "comments_MotionCorrection",
@@ -98,7 +98,10 @@ const motionConfig = {
 };
 
 const flattenMovieData = (rawData: Record<string, any>) => {
-  let flattenedData: Record<string, string> = { rawTotal: rawData.rawTotal, total: rawData.total };
+  let flattenedData: Record<string, string> = {
+    alignedTotal: rawData.alignedTotal,
+    total: rawData.total,
+  };
   const items = rawData.items[0];
 
   for (let type in items) {
@@ -129,6 +132,7 @@ interface FullMotionData {
   fft: string;
   drift: BasePoint[];
   ids?: IdList;
+  page?: number;
 }
 
 const fetchMotionData = async (
@@ -136,7 +140,7 @@ const fetchMotionData = async (
   parentId: number,
   page: number | undefined
 ) => {
-  let fullEndpoint = `${parentType}/${parentId}/motion?limit=1`;
+  let fullEndpoint = `dataCollections/${parentId}/${parentType === "tomograms" ? "tomogram-" : ""}motion?limit=1`;
 
   if (parentType === "tomograms" && page === undefined) {
     fullEndpoint += "&getMiddle=true";
@@ -145,7 +149,14 @@ const fetchMotionData = async (
   }
 
   const response = await client.safeGet(fullEndpoint);
-  let data: FullMotionData = { motion: null, total: null, micrograph: "", fft: "", drift: [] };
+  let data: FullMotionData = {
+    motion: null,
+    total: null,
+    micrograph: "",
+    fft: "",
+    drift: [],
+    page: undefined,
+  };
 
   if (response.status !== 200) {
     return data;
@@ -160,7 +171,9 @@ const fetchMotionData = async (
         }
       : motionConfig;
 
-  const responseData: components["schemas"]["Paged_FullMovie_"] = response.data;
+  const responseData:
+    | components["schemas"]["Paged_FullMovie_"]
+    | components["schemas"]["FullMovieWithTilt"] = response.data;
 
   if (responseData.items[0].CTF.estimatedDefocus) {
     // Estimated defocus is provided in angstroms
@@ -178,15 +191,17 @@ const fetchMotionData = async (
 
   data = {
     ...data,
-    total: response.data.total,
+    total: responseData.total,
     motion: parseData(flattenMovieData(responseData), extendedMotionConfig) as MotionData,
   };
 
-  const movie = response.data.items[0].Movie;
+  const movie = responseData.items[0].Movie;
 
   if (movie !== undefined) {
+    const moviePage = responseData.page + 1;
     data = {
       ...data,
+      page: moviePage,
       micrograph: prependApiUrl(`movies/${movie.movieId}/micrograph`),
       fft: prependApiUrl(`movies/${movie.movieId}/fft`),
     };
@@ -225,16 +240,17 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
   });
 
   const darkImages = useMemo(() => {
-    if (!data || !data.motion || !data.total || data.motion.rawTotal === undefined) {
+    if (!data || !data.motion || !data.total || data.motion.alignedTotal === undefined) {
       return "No tilt alignment data available";
     }
 
-    if (isNaN(data.motion.rawTotal - data.total)) {
+    if (isNaN(data.motion.alignedTotal - data.total)) {
       return "?";
     }
 
-    return `Dark Images: ${data.motion.rawTotal - data.total}`;
+    return `Dark Images: ${data.motion.total - data.motion.alignedTotal}`;
   }, [data]);
+
   const hasComments = useMemo(
     () =>
       data && data.motion && (data.motion.comments_CTF || data.motion.comments_MotionCorrection),
@@ -272,12 +288,12 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
       return { ...base, page, onChange: handlePageChanged };
     }
 
-    return { ...base, defaultPage: page, onChangeEnd: handlePageChanged };
-  }, [actualTotal, handlePageChanged, page, parentType]);
+    return { ...base, defaultPage: data?.page || page, onChangeEnd: handlePageChanged };
+  }, [actualTotal, handlePageChanged, page, parentType, data]);
 
   useEffect(() => {
     if (data && data.motion) {
-      const total = data.total || data.motion.rawTotal;
+      const total = data.total ?? 0;
       setActualTotal(total);
       if (onTotalChanged) {
         onTotalChanged(total);

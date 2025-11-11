@@ -107,7 +107,7 @@ describe("Motion", () => {
     await waitFor(() => expect(totalChanged).toBeCalledWith(20));
   });
 
-  it("displays '?' if passed values for raw total and total include NaN", async () => {
+  it("displays '?' if passed values for aligned and total include NaN", async () => {
     renderWithProviders(<Motion parentType='tomograms' parentId={4} />);
     await screen.findByRole("heading", { name: "?" });
   });

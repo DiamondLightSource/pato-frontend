@@ -44,26 +44,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/tomograms/{tomogramId}/motion": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /**
-     * Get Motion Correction
-     * @description Get motion correction data for the given tomogram
-     */
-    get: operations["get_motion_correction_tomograms__tomogramId__motion_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   "/tomograms/{tomogramId}/centralSlice": {
     parameters: {
       query?: never;
@@ -357,6 +337,26 @@ export interface paths {
      * @description Get motion correction and tilt alignment data
      */
     get: operations["get_motion_correction_dataCollections__collectionId__motion_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/dataCollections/{collectionId}/tomogram-motion": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Motion Correction For Tomogram
+     * @description Get motion correction and tilt alignment data for tomogram
+     */
+    get: operations["get_motion_correction_for_tomogram_dataCollections__collectionId__tomogram_motion_get"];
     put?: never;
     post?: never;
     delete?: never;
@@ -816,6 +816,26 @@ export interface paths {
      * @description Upload custom processing model
      */
     post: operations["upload_processing_model_proposals__proposalReference__sessions__visitNumber__processingModel_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/proposals/{proposalReference}/sessions/{visitNumber}/initialModel": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Upload Initial Model
+     * @description Upload custom initial model
+     */
+    post: operations["upload_initial_model_proposals__proposalReference__sessions__visitNumber__initialModel_post"];
     delete?: never;
     options?: never;
     head?: never;
@@ -1301,6 +1321,14 @@ export interface components {
       /** Imageprefix */
       imagePrefix?: string | null;
     };
+    /** Body_upload_initial_model_proposals__proposalReference__sessions__visitNumber__initialModel_post */
+    Body_upload_initial_model_proposals__proposalReference__sessions__visitNumber__initialModel_post: {
+      /**
+       * File
+       * Format: binary
+       */
+      file: string;
+    };
     /** Body_upload_processing_model_proposals__proposalReference__sessions__visitNumber__processingModel_post */
     Body_upload_processing_model_proposals__proposalReference__sessions__visitNumber__processingModel_post: {
       /**
@@ -1691,8 +1719,8 @@ export interface components {
       page: number;
       /** Limit */
       limit: number;
-      /** Rawtotal */
-      rawTotal: number;
+      /** Alignedtotal */
+      alignedTotal: number;
     };
     /** GridSquare */
     GridSquare: {
@@ -2423,44 +2451,6 @@ export interface operations {
       };
     };
   };
-  get_motion_correction_tomograms__tomogramId__motion_get: {
-    parameters: {
-      query?: {
-        /** @description Get index closest to the middle. Limit is set to 1, page is ignored */
-        getMiddle?: unknown;
-        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-        page?: number;
-        /** @description Number of results to show */
-        limit?: number;
-      };
-      header?: never;
-      path: {
-        tomogramId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["FullMovieWithTilt"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
   get_slice_tomograms__tomogramId__centralSlice_get: {
     parameters: {
       query?: {
@@ -2948,6 +2938,44 @@ export interface operations {
       };
     };
   };
+  get_motion_correction_for_tomogram_dataCollections__collectionId__tomogram_motion_get: {
+    parameters: {
+      query?: {
+        /** @description Get index closest to the middle. Limit is set to 1, page is ignored */
+        getMiddle?: unknown;
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        page?: number;
+        /** @description Number of results to show */
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        collectionId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FullMovieWithTilt"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   get_ice_histogram_dataCollections__collectionId__iceThickness_get: {
     parameters: {
       query?: {
@@ -3350,6 +3378,7 @@ export interface operations {
     parameters: {
       query?: {
         hideSquares?: boolean;
+        hideEmptySearchMaps?: boolean;
         /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
         page?: number;
         /** @description Number of results to show */
@@ -3694,6 +3723,42 @@ export interface operations {
     requestBody: {
       content: {
         "multipart/form-data": components["schemas"]["Body_upload_processing_model_proposals__proposalReference__sessions__visitNumber__processingModel_post"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  upload_initial_model_proposals__proposalReference__sessions__visitNumber__initialModel_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        proposalReference: string;
+        visitNumber: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["Body_upload_initial_model_proposals__proposalReference__sessions__visitNumber__initialModel_post"];
       };
     };
     responses: {
