@@ -151,11 +151,10 @@ const Tomogram = ({
             </VStack>
           ) : !data || data.tomogram === null ? (
             <Box>
-              <Motion parentId={procJob.dataCollectionId} parentType='dataCollections' />
+              <Motion parentId={procJob.dataCollectionId} parentType='tomograms' />
             </Box>
           ) : (
             <Grid gap={3} templateColumns={{ base: "", "2xl": "repeat(2, 1fr)" }}>
-              <Motion parentType='tomograms' parentId={data.tomogram.tomogramId} />
               <Box minW='0'>
                 <Heading variant='collection'>Alignment</Heading>
                 <Divider />
