@@ -2,6 +2,14 @@
 Changelog
 ==========
 ++++++++++
+v1.30.0 (03/11/2025)
+++++++++++
+
+**Added**
+
+- Display processing program types for tomograms
+
+++++++++++
 v1.29.1 (06/10/2025)
 +++++++++
 

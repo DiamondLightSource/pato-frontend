@@ -90,4 +90,27 @@ describe("Tomogram Data", () => {
 
     expect(data.allowReprocessing).toBe(true);
   });
+
+  it("should not return items which do not have valid processing job types", async () => {
+    server.use(
+      http.get(
+        "http://localhost/dataCollections/:collectionId/tomograms",
+        () =>
+          HttpResponse.json({
+            items: [
+              { ProcessingJob: { recipe: "not-valid" } },
+              { ProcessingJob: { recipe: "em-tomo-align" } },
+            ],
+          }),
+        { once: true }
+      )
+    );
+
+    const data = await tomogramLoader(queryClient)(
+      { groupId: "1", propId: "cm1", visitId: "1" },
+      request
+    );
+
+    expect(data.tomograms).toHaveLength(1);
+  });
 });

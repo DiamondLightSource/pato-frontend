@@ -36,11 +36,21 @@ export const classification3dConfig: DataConfig = {
   ],
 };
 
-export const recipeTagMap: Record<string, string> = {
+export const spaRecipeTagMap: Record<string, string> = {
   "em-spa-preprocess": "Preprocessing",
   "em-spa-class2d": "2D Classification",
   "em-spa-class3d": "3D Classification",
   "em-spa-refine": "Refinement",
+};
+
+export const tomographyRecipeTagMap: Record<string, string> = {
+  "em-tomo-align": "Alignment",
+  "em-tomo-preprocess": "Preprocessing",
+};
+
+export const recipeTagMap: Record<string, string> = {
+  ...spaRecipeTagMap,
+  ...tomographyRecipeTagMap,
 };
 
 interface FieldEntry {
