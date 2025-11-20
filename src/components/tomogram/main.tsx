@@ -22,7 +22,7 @@ import {
 } from "@chakra-ui/react";
 import { PlotContainer } from "components/visualisation/plotContainer";
 import { Motion } from "components/motion/motion";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { client, prependApiUrl } from "utils/api/client";
 import {
   TomogramData,
@@ -37,6 +37,8 @@ import { capitalise, parseData } from "utils/generic";
 import { MdOpenInNew } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
 import { ScatterPlot, InfoGroup, ImageCard, BasePoint } from "@diamondlightsource/ui-components";
+import { countDarkImages, fetchMotionData } from "utils/api/queries/motion";
+import { DarkImageCount } from "components/visualisation/DarkImages";
 
 const tomogramConfig: DataConfig = {
   include: [
@@ -122,6 +124,22 @@ const Tomogram = ({
     queryKey: ["tomogramAutoProc", procJob.processingJobId],
     queryFn: async () => await fetchTomogramData(tomogram),
   });
+
+  const { data: motion, isLoading: isMotionLoading } = useQuery({
+    queryKey: [
+      "motion",
+      { parentId: procJob.dataCollectionId, parentType: "tomograms", innerPage: undefined },
+    ],
+    queryFn: fetchMotionData,
+  });
+
+  const darkImages = useMemo(() => {
+    if (motion) {
+      return countDarkImages(motion);
+    }
+    return null;
+  }, [motion]);
+
   const [selectedTomogram, setSelectedTomogram] = useState<TomogramMovieTypes>("segmented");
   const [isLargeScreen] = useMediaQuery("(min-width: 1500px)");
 
@@ -156,21 +174,54 @@ const Tomogram = ({
           ) : (
             <Grid gap={3} templateColumns={{ base: "", "2xl": "repeat(2, 1fr)" }}>
               <Box minW='0'>
-                <Heading variant='collection'>Alignment</Heading>
+                <HStack>
+                  <Heading variant='collection'>Alignment</Heading>
+                  {!isMotionLoading && <DarkImageCount count={darkImages} />}
+                </HStack>
                 <Divider />
-                <Grid
-                  py={2}
-                  templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
-                  gap={2}
-                >
-                  <GridItem
-                    h='20vh'
-                    minH={{ sm: "200px", md: "300px" }}
-                    colSpan={{ base: 2, md: 1 }}
-                  >
-                    <InfoGroup info={data.tomogram.info} />
+                <Grid py={2} templateColumns='repeat(4, 1fr)' gap={2}>
+                  <GridItem colSpan={{ base: 4, md: 2 }}>
+                    <InfoGroup info={data.tomogram.info} cols={1} />
                   </GridItem>
-                  <GridItem colSpan={{ base: 2, md: 3 }} h='20vh' minH='300px'>
+                  <GridItem colSpan={{ base: 4, md: 2 }} h='20vh' minH='300px'>
+                    <Card h='100%'>
+                      <CardHeader>
+                        <HStack>
+                          <Heading size='sm'>Stacks</Heading>
+                          <Spacer />
+                          <Button
+                            h='25px'
+                            size='sm'
+                            onClick={() => handleOpenTomogram("alignment")}
+                          >
+                            View
+                            <Spacer />
+                            <Icon ml='10px' as={MdOpenInNew}></Icon>
+                          </Button>
+                        </HStack>
+                      </CardHeader>
+                      <CardBody pt={0}>
+                        <HStack
+                          mx='auto'
+                          w='auto'
+                          h='100%'
+                          divider={<Divider orientation='vertical' />}
+                        >
+                          <TomogramThumbnail
+                            key='Alignment'
+                            baseUrl={data.centralSlice}
+                            movieType='alignment'
+                          />
+                          <TomogramThumbnail
+                            key='Unaligned'
+                            baseUrl={data.centralSlice}
+                            movieType='stack'
+                          />
+                        </HStack>
+                      </CardBody>
+                    </Card>
+                  </GridItem>
+                  <GridItem colSpan={4} h='20vh' minH='300px'>
                     <Card h='100%'>
                       <CardHeader>
                         <HStack>
@@ -273,15 +324,15 @@ const Tomogram = ({
                       </CardBody>
                     </Card>
                   </GridItem>
-                  <GridItem colSpan={{ base: 2, md: 1 }} h='22vh' minH='200px'>
+                  <GridItem colSpan={{ base: 4, md: 1 }} h='22vh' minH='200px'>
                     <ImageCard src={data.xyProj} title='XY Projection' />
                   </GridItem>
-                  <GridItem colSpan={{ base: 2, md: 1 }} minW='100%' h='22vh' minH='200px'>
+                  <GridItem colSpan={{ base: 4, md: 1 }} minW='100%' h='22vh' minH='200px'>
                     <PlotContainer title='Shift Plot'>
                       <ScatterPlot data={data.shiftPlot} />
                     </PlotContainer>
                   </GridItem>
-                  <GridItem colSpan={2} h='22vh' minH='200px'>
+                  <GridItem colSpan={{ base: 4, md: 2 }} h='22vh' minH='200px'>
                     <ImageCard src={data.xzProj} title='XZ Projection' />
                   </GridItem>
                 </Grid>

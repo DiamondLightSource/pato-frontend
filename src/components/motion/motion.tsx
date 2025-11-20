@@ -23,8 +23,6 @@ import {
 import { PlotContainer } from "components/visualisation/plotContainer";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { MdComment, MdOutlineGrain } from "react-icons/md";
-import { client, prependApiUrl } from "utils/api/client";
-import { parseData } from "utils/generic";
 import { driftPlotOptions } from "utils/config/plot";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -32,25 +30,11 @@ import {
   ScatterPlot,
   InfoGroup,
   ImageCard,
-  BasePoint,
-  Info,
   FlipperProps,
 } from "@diamondlightsource/ui-components";
-import { components } from "schema/main";
-
-interface MotionData {
-  /** Total number of motion correction images available (including tilt alignment) */
-  total: number;
-  /** Total number of tilt alignment images available */
-  alignedTotal: number;
-  /** Motion correction comments */
-  comments_MotionCorrection?: string;
-  /** CTF comments */
-  comments_CTF?: string;
-  /** Refined tilt axis */
-  refinedTiltAxis?: number;
-  info: Info[];
-}
+import { countDarkImages, fetchMotionData } from "utils/api/queries/motion";
+import { fetchMovieData } from "utils/api/queries/movie";
+import { DarkImageCount } from "components/visualisation/DarkImages";
 
 export interface MotionProps {
   /** ID for the parent of the motion correction. Could be a tomogram or something else in the future. */
@@ -65,199 +49,38 @@ export interface MotionProps {
   page?: number;
 }
 
-// The order actually matters, outputs should be closer to the top
-const motionConfig = {
-  include: [
-    { name: "createdTimeStamp", label: "Movie Timestamp" },
-    { name: "dosePerFrame", unit: "e⁻/Å²" },
-    { name: "estimatedResolution", unit: "Å" },
-    { name: "estimatedDefocus", unit: "μm" },
-    { name: "ccValue", label: "CC Value" },
-    { name: "astigmatismAngle", unit: "°" },
-    { name: "totalMotion", unit: "Å" },
-    { name: "averageMotionPerFrame", label: "Average Motion/Frame", unit: "Å" },
-    { name: "imageNumber" },
-    { name: ["patchesUsedX", "patchesUsedY"], label: "Patches Used" },
-    { name: ["boxSizeX", "boxSizeY"], label: "Box Size", unit: "px" },
-    { name: ["minResolution", "maxResolution"], label: "Resolution", unit: "Å" },
-    { name: ["minDefocus", "maxDefocus"], label: "Defocus", unit: "Å" },
-    { name: "amplitudeContrast" },
-    { name: "defocusStepSize", unit: "Å" },
-    { name: "astigmatism", unit: "nm" },
-  ],
-  root: [
-    "tomogramId",
-    "movieId",
-    "drift",
-    "total",
-    "alignedTotal",
-    "refinedTiltAxis",
-    "comments_CTF",
-    "comments_MotionCorrection",
-  ],
-};
-
-const flattenMovieData = (rawData: Record<string, any>) => {
-  let flattenedData: Record<string, string> = {
-    alignedTotal: rawData.alignedTotal,
-    total: rawData.total,
-  };
-  const items = rawData.items[0];
-
-  for (let type in items) {
-    if (items[type] !== null) {
-      for (let [key, value] of Object.entries(items[type])) {
-        if (key !== "comments") {
-          flattenedData[key] = value as string;
-        } else {
-          flattenedData[`${key}_${type}`] = value as string;
-        }
-      }
-    }
-  }
-
-  return flattenedData;
-};
-
-interface IdList {
-  movieId: number;
-  foilHoleId: number;
-  gridSquareId: number;
-}
-
-interface FullMotionData {
-  motion: MotionData | null;
-  total: number | null;
-  micrograph: string;
-  fft: string;
-  drift: BasePoint[];
-  ids?: IdList;
-  page?: number;
-}
-
-const fetchMotionData = async (
-  parentType: "tomograms" | "dataCollections" | "autoProc",
-  parentId: number,
-  page: number | undefined
-) => {
-  let fullEndpoint = `dataCollections/${parentId}/${parentType === "tomograms" ? "tomogram-" : ""}motion?limit=1`;
-
-  if (parentType === "tomograms" && page === undefined) {
-    fullEndpoint += "&getMiddle=true";
-  } else {
-    fullEndpoint += `&page=${page ? page - 1 : -1}`;
-  }
-
-  const response = await client.safeGet(fullEndpoint);
-  let data: FullMotionData = {
-    motion: null,
-    total: null,
-    micrograph: "",
-    fft: "",
-    drift: [],
-    page: undefined,
-  };
-
-  if (response.status !== 200) {
-    return data;
-  }
-
-  // Refined tilt angle is irrelevant to SPA
-  const extendedMotionConfig =
-    parentType === "tomograms"
-      ? {
-          ...motionConfig,
-          include: [...motionConfig.include, { name: "refinedTiltAngle", unit: "°" }],
-        }
-      : motionConfig;
-
-  const responseData:
-    | components["schemas"]["Paged_FullMovie_"]
-    | components["schemas"]["FullMovieWithTilt"] = response.data;
-
-  if (responseData.items[0].CTF.estimatedDefocus) {
-    // Estimated defocus is provided in angstroms
-    responseData.items[0].CTF.estimatedDefocus = parseFloat(
-      (responseData.items[0].CTF.estimatedDefocus * 0.0001).toFixed(3)
-    );
-  }
-
-  if (responseData.items[0].CTF.astigmatism) {
-    // Astigmatism is provided in angstroms, we want it in nm
-    responseData.items[0].CTF.astigmatism = parseFloat(
-      (responseData.items[0].CTF.astigmatism * 0.1).toFixed(3)
-    );
-  }
-
-  data = {
-    ...data,
-    total: responseData.total,
-    motion: parseData(flattenMovieData(responseData), extendedMotionConfig) as MotionData,
-  };
-
-  const movie = responseData.items[0].Movie;
-
-  if (movie !== undefined) {
-    const moviePage = responseData.page + 1;
-    data = {
-      ...data,
-      page: moviePage,
-      micrograph: prependApiUrl(`movies/${movie.movieId}/micrograph`),
-      fft: prependApiUrl(`movies/${movie.movieId}/fft`),
-    };
-
-    const fileData = await client.safeGet(`movies/${movie.movieId}/drift`);
-
-    if (fileData.status === 200) {
-      data.drift = fileData.data.items;
-    }
-
-    const atlasIds = await client.safeGet(`movies/${movie.movieId}`);
-
-    if (atlasIds.status === 200 && atlasIds.data.movieId === movie.movieId) {
-      data = {
-        ...data,
-        ids: {
-          movieId: atlasIds.data.movieId,
-          foilHoleId: atlasIds.data.foilHoleId,
-          gridSquareId: atlasIds.data.gridSquareId,
-        },
-      };
-    }
-  }
-
-  return data;
-};
-
 const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: MotionProps) => {
   const [innerPage, setInnerPage] = useState<number | undefined>();
   const [actualTotal, setActualTotal] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["motion", parentId, parentType, innerPage],
-    queryFn: async () => await fetchMotionData(parentType, parentId, innerPage),
+  const { data: motion, isLoading: isMotionLoading } = useQuery({
+    queryKey: ["motion", { parentId, parentType, innerPage }],
+    queryFn: fetchMotionData,
+    keepPreviousData: true,
+  });
+
+  const { data: movie, isLoading: isMovieLoading } = useQuery({
+    // Movie ID is already guaranteed to be a valid number because of the 'enabled' check
+    queryKey: ["movie", { movieId: motion?.movieId! }],
+    queryFn: fetchMovieData,
+    enabled: !!motion && !!motion.movieId,
   });
 
   const darkImages = useMemo(() => {
-    if (!data || !data.motion || !data.total || data.motion.alignedTotal === undefined) {
-      return "No tilt alignment data available";
+    if (motion) {
+      return countDarkImages(motion);
     }
-
-    if (isNaN(data.motion.alignedTotal - data.total)) {
-      return "?";
-    }
-
-    return `Dark Images: ${data.motion.total - data.motion.alignedTotal}`;
-  }, [data]);
+    return null;
+  }, [motion]);
 
   const hasComments = useMemo(
     () =>
-      data && data.motion && (data.motion.comments_CTF || data.motion.comments_MotionCorrection),
-    [data]
+      motion && motion.data && (motion.data.comments_CTF || motion.data.comments_MotionCorrection),
+    [motion]
   );
 
-  const hasIds = useMemo(() => data?.ids?.gridSquareId && data?.ids?.foilHoleId, [data]);
+  const hasIds = useMemo(() => movie?.ids?.gridSquareId && movie?.ids?.foilHoleId, [movie]);
 
   useEffect(() => {
     if (page) {
@@ -288,18 +111,18 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
       return { ...base, page, onChange: handlePageChanged };
     }
 
-    return { ...base, defaultPage: data?.page || page, onChangeEnd: handlePageChanged };
-  }, [actualTotal, handlePageChanged, page, parentType, data]);
+    return { ...base, defaultPage: motion?.page || page, onChangeEnd: handlePageChanged };
+  }, [actualTotal, handlePageChanged, page, parentType, motion]);
 
   useEffect(() => {
-    if (data && data.motion) {
-      const total = data.total ?? 0;
+    if (motion && motion.data) {
+      const total = motion.total ?? 0;
       setActualTotal(total);
       if (onTotalChanged) {
         onTotalChanged(total);
       }
     }
-  }, [onTotalChanged, data]);
+  }, [onTotalChanged, motion]);
 
   return (
     <div>
@@ -307,11 +130,7 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
         <Heading variant='collection' pr='2' mt='0'>
           Motion Correction/CTF
         </Heading>
-        {parentType !== "autoProc" && (
-          <Heading size='sm' display='flex' alignSelf='center' color='diamond.300'>
-            {darkImages}
-          </Heading>
-        )}
+        {parentType !== "autoProc" && <DarkImageCount count={darkImages} />}
         <Spacer />
         <HStack>
           <Tooltip id='comment' label='View Comments'>
@@ -330,7 +149,7 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
               size='xs'
               {...(hasIds
                 ? {
-                    href: `atlas?gridSquare=${data?.ids?.gridSquareId}&foilHole=${data?.ids?.foilHoleId}`,
+                    href: `atlas?gridSquare=${movie?.ids?.gridSquareId}&foilHole=${movie?.ids?.foilHoleId}`,
                   }
                 : {
                     href: undefined,
@@ -344,20 +163,20 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
         </HStack>
       </Stack>
       <Divider />
-      {data && data.motion ? (
+      {!isMotionLoading && !isMovieLoading && movie && motion && motion.data ? (
         <Grid py={2} templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }} gap={2}>
           <GridItem h={{ base: "15vh", md: "25vh" }} colSpan={{ base: 2, md: 1 }}>
-            <InfoGroup info={data.motion.info} />
+            <InfoGroup info={motion.data.info} />
           </GridItem>
           <GridItem h={{ base: "20vh", md: "25vh" }}>
-            <ImageCard src={data.micrograph} title='Micrograph Snapshot' height='100%' />
+            <ImageCard src={movie.micrograph} title='Micrograph Snapshot' height='100%' />
           </GridItem>
           <GridItem h={{ base: "20vh", md: "25vh" }}>
-            <ImageCard src={data.fft} title='FFT Theoretical' height='100%' />
+            <ImageCard src={movie.fft} title='FFT Theoretical' height='100%' />
           </GridItem>
           <GridItem h={{ base: "20vh", md: "25vh" }} colSpan={{ base: 2, md: 1 }}>
             <PlotContainer title='Drift'>
-              <ScatterPlot options={driftPlotOptions} data={data.drift} />
+              <ScatterPlot options={driftPlotOptions} data={movie.drift} />
             </PlotContainer>
           </GridItem>
           <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
@@ -368,18 +187,18 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
               <DrawerBody>
                 <Heading size='sm'>CTF</Heading>
                 <Code h='25vh' w='100%' overflowY='scroll'>
-                  {data.motion.comments_CTF}
+                  {motion.data.comments_CTF}
                 </Code>
                 <Divider marginY={3} />
                 <Heading size='sm'>Motion Correction</Heading>
                 <Code h='25vh' w='100%' overflowY='scroll'>
-                  {data.motion.comments_MotionCorrection}
+                  {motion.data.comments_MotionCorrection}
                 </Code>
               </DrawerBody>
             </DrawerContent>
           </Drawer>
         </Grid>
-      ) : isLoading ? (
+      ) : motion !== null && (isMotionLoading || isMovieLoading) ? (
         <Skeleton h='25vh' />
       ) : (
         <Heading pt='10vh' variant='notFound' h='25vh'>

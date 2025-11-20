@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { cloneElement, useEffect, useMemo, useRef, useState } from "react";
 import { MdFastForward, MdFastRewind, MdPause, MdPlayArrow } from "react-icons/md";
-import { ApngProps } from "@diamondlightsource/ui-components";
+import { ApngProps, APNGViewer } from "@diamondlightsource/ui-components";
 import "styles/canvas.css";
 
 export interface ApngContainerProps extends BoxProps {
@@ -64,7 +64,10 @@ const APNGContainer = ({
       <HStack h='90%'>
         {(Array.isArray(children) ? children : [children]).map((child, i) => (
           <Box key={i} h='100%' w='100%'>
-            {cloneElement(child, { onFrameCountChanged: setFrameLength, frameIndex })}
+            {cloneElement(
+              child,
+              child.type === APNGViewer ? { onFrameCountChanged: setFrameLength, frameIndex } : {}
+            )}
           </Box>
         ))}
         <Spacer />
