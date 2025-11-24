@@ -26,6 +26,7 @@ Create a configuration file named `config.js`, based on `config.example.js`, and
 - DEV_CONTACT: email used for contacting application support
 - ENVIRONMENT: application environment - one of 'production', 'staging' or 'demo'
 - FEEDBACK_URL (optional): URL pointing to form that takes user feedback
+- REPROCESSING_ENABLED: whether to show or hide reprocessing buttons
 
 ==========
 Deployment

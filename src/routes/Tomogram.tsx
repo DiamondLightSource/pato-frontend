@@ -144,11 +144,17 @@ const TomogramPage = () => {
                   <Icon as={MdOutlineGrain} />
                 </Button>
               </Tooltip>
-              <Tooltip label='Run Reprocessing'>
-                <Button aria-label='Run Reprocessing' onClick={onOpen} isDisabled={buttonDisabled}>
-                  <Icon as={MdRedo} />
-                </Button>
-              </Tooltip>
+              {window.ENV.REPROCESSING_ENABLED && (
+                <Tooltip label='Run Reprocessing'>
+                  <Button
+                    aria-label='Run Reprocessing'
+                    onClick={onOpen}
+                    isDisabled={buttonDisabled}
+                  >
+                    <Icon as={MdRedo} />
+                  </Button>
+                </Tooltip>
+              )}
               <Tooltip label='List Collections'>
                 <Button
                   aria-label='List Collections'

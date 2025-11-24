@@ -172,13 +172,15 @@ const SpaPage = () => {
               >
                 Alerts
               </Button>
-              <Button
-                leftIcon={<MdRedo />}
-                isDisabled={!loaderData.allowReprocessing}
-                onClick={onOpen}
-              >
-                Reprocessing
-              </Button>
+              {window.ENV.REPROCESSING_ENABLED && (
+                <Button
+                  leftIcon={<MdRedo />}
+                  isDisabled={!loaderData.allowReprocessing}
+                  onClick={onOpen}
+                >
+                  Reprocessing
+                </Button>
+              )}
               <Button
                 leftIcon={<MdOutlineGrain />}
                 as={Link}
