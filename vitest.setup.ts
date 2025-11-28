@@ -39,6 +39,7 @@ window.ENV = {
   DEV_CONTACT: "guilherme.de-freitas@diamond.ac.uk",
   ENVIRONMENT: "production",
   FEEDBACK_URL: "true",
+  REPROCESSING_ENABLED: true
 }
 
 
