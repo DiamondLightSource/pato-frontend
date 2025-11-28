@@ -64,9 +64,19 @@ describe("Group Selection Handler", () => {
     );
   });
 
-  it("should redirect user to tomogram page if experimentType is tomo", () => {
+  it("should redirect user to tomogram page if experimentType is tomo and no experimentTypeName is present", () => {
     expect(handleGroupClicked({ experimentType: "tomo", dataCollectionGroupId: 1 })).toBe(
       "groups/1/tomograms/1"
     );
+  });
+
+  it("should give experimentTypeName precedence over experimentType", () => {
+    expect(
+      handleGroupClicked({
+        experimentTypeName: "Single Particle",
+        experimentType: "tomo",
+        dataCollectionGroupId: 1,
+      })
+    ).toBe("groups/1/spa");
   });
 });

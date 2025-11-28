@@ -74,16 +74,15 @@ export const sessionPageLoader =
   };
 
 export const handleGroupClicked = (item: Record<string, string | number>) => {
-  if (item.experimentType === "tomo") {
-    return `groups/${item.dataCollectionGroupId}/tomograms/1`;
-  }
-
   switch (item.experimentTypeName) {
     case "Single Particle":
       return `groups/${item.dataCollectionGroupId}/spa`;
     case "Tomogram":
       return `groups/${item.dataCollectionGroupId}/tomograms/1`;
     default:
+      if (item.experimentType === "tomo") {
+        return `groups/${item.dataCollectionGroupId}/tomograms/1`;
+      }
       return `groups/${item.dataCollectionGroupId}/spa`;
   }
 };
