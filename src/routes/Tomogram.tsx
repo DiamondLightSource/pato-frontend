@@ -19,9 +19,6 @@ import {
   ModalOverlay,
   useDisclosure,
   Stack,
-  Alert,
-  AlertTitle,
-  AlertIcon,
 } from "@chakra-ui/react";
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useLoaderData, useNavigate, useParams, useSearchParams } from "react-router";
@@ -29,12 +26,10 @@ import { Tomogram } from "components/tomogram/main";
 import { MdList, MdOutlineGrain, MdRedo } from "react-icons/md";
 import React from "react";
 import { TomogramResponse } from "loaders/tomogram";
-import APNGContainer from "components/visualisation/apngContainer";
-import { Flipper, InfoGroup, APNGViewer } from "@diamondlightsource/ui-components";
-import { prependApiUrl } from "utils/api/client";
+import { Flipper, InfoGroup } from "@diamondlightsource/ui-components";
 import { CollectionTitle } from "components/visualisation/collectionTitle";
 import { TomogramMovieTypes } from "schema/interfaces";
-import { capitalise } from "utils/generic";
+import { SliceViewer } from "components/tomogram/SliceViewer";
 
 const TomogramReprocessing = React.lazy(() => import("components/tomogram/reprocessing"));
 
@@ -54,10 +49,6 @@ const TomogramPage = () => {
   const onlyTomograms = useMemo(() => searchParams.get("onlyTomograms") === "true", [searchParams]);
   const sortBy = useMemo(() => searchParams.get("sortBy"), [searchParams]);
   const currentIndex = useMemo(() => parseInt(params.collectionIndex ?? "1"), [params]);
-  const tomogramMovieSrc = useMemo(
-    () => prependApiUrl(`tomograms/${openTomogram}/movie`),
-    [openTomogram]
-  );
 
   const handleCollectionChanged = useCallback(
     (page: number) => {
@@ -236,43 +227,15 @@ const TomogramPage = () => {
         </Modal>
       )}
 
-      {openTomogram && (
-        <Modal size='6xl' isOpen onClose={() => setOpenTomogram(null)}>
-          <ModalOverlay />
-          <ModalContent minW={{ base: "95vh", md: "65vh" }}>
-            <ModalHeader paddingBottom={0}>Movie</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody h={{ base: "90vh", md: "60vh" }}>
-              <HStack>
-                {/** TODO: Remove this in a few months once picked tomograms can be used with Relion */}
-                {movieType === "picked" && (
-                  <Alert status='warning' variant='left-accent' w='47%' mx='1.5%'>
-                    <AlertIcon />
-                    <AlertTitle>Picked tomograms not currently usable with Relion</AlertTitle>
-                  </Alert>
-                )}
-                <Spacer />
-                <Flipper
-                  size='md'
-                  onChangeEnd={handleCollectionChanged}
-                  defaultPage={currentIndex}
-                  total={loaderData.total}
-                  w='5em'
-                />
-              </HStack>
-              <Suspense>
-                <APNGContainer>
-                  <APNGViewer
-                    caption={capitalise(movieType)}
-                    src={`${tomogramMovieSrc}?movieType=${movieType}`}
-                  />
-                  <APNGViewer caption='Not Denoised' src={tomogramMovieSrc} />
-                </APNGContainer>
-              </Suspense>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-      )}
+      <SliceViewer
+        isOpen={!!openTomogram}
+        movieType={movieType}
+        onClose={() => setOpenTomogram(null)}
+        tomogramId={openTomogram ?? 0}
+        onPageChange={handleCollectionChanged}
+        page={currentIndex}
+        total={loaderData.total}
+      />
     </Box>
   );
 };
