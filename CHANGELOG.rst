@@ -1,6 +1,16 @@
 ==========
 Changelog
 ==========
+
+++++++++++
+v1.31.0 (01/12/2025)
+++++++++++
+
+**Added**
+
+- Tomogram stack display
+- Reprocessing button can now be hidden
+
 ++++++++++
 v1.30.0 (03/11/2025)
 ++++++++++
