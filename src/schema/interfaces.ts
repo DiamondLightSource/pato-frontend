@@ -13,6 +13,7 @@ declare global {
       DEV_CONTACT: string;
       ENVIRONMENT: "demo" | "staging" | "production";
       FEEDBACK_URL?: string;
+      REPROCESSING_ENABLED: boolean;
     };
   }
 }

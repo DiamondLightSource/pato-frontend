@@ -36,6 +36,31 @@ describe("SPA", () => {
     await screen.findByText("No Single Particle Analysis Data Available");
   });
 
+  it("should disable reprocessing button if reprocessing is not allowed", async () => {
+    renderWithRoute(<SpaPage />, () => ({ ...baseLoaderData, allowReprocessing: false }));
+
+    await screen.findByText(/ctf/i);
+    expect(screen.getByText(/reprocessing/i)).toHaveAttribute("disabled");
+  });
+
+  it("should enable reprocessing button if reprocessing is allowed", async () => {
+    renderWithRoute(<SpaPage />, () => baseLoaderData);
+
+    await screen.findByText(/ctf/i);
+    expect(screen.getByText(/reprocessing/i)).not.toHaveAttribute("disabled");
+  });
+
+  it("should hide reprocessing button if config is set", async () => {
+    Object.defineProperty(window.ENV, "REPROCESSING_ENABLED", { value: false });
+
+    renderWithRoute(<SpaPage />, () => baseLoaderData);
+
+    await screen.findByText(/ctf/i);
+    expect(screen.queryByText(/reprocessing/i)).not.toBeInTheDocument();
+
+    Object.defineProperty(window.ENV, "REPROCESSING_ENABLED", { value: true });
+  });
+
   it("should disable downloads button if no data collections are available", async () => {
     renderWithRoute(<SpaPage />, () => ({
       ...baseLoaderData,

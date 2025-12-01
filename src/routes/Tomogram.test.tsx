@@ -62,6 +62,17 @@ describe("Tomogram Page", () => {
     );
   });
 
+  it("should hide reprocessing button if config is set", async () => {
+    Object.defineProperty(window.ENV, "REPROCESSING_ENABLED", { value: false });
+
+    renderWithRoute(<TomogramPage />, () => validData);
+
+    await screen.findByText("Tilt Align 1");
+    expect(screen.queryByRole("button", { name: /run reprocessing/i })).not.toBeInTheDocument();
+
+    Object.defineProperty(window.ENV, "REPROCESSING_ENABLED", { value: true });
+  });
+
   it("should display reprocessing modal when button is clicked", async () => {
     renderWithRoute(<TomogramPage />, () => validData);
     await screen.findByText("Tilt Align 1");

@@ -41,7 +41,8 @@ export const parseData = (rawData: Record<string, any>, config: DataConfig) => {
   return data;
 };
 
-const prettifyValue = (value: number | string, unit: string) => (value !== null && value !== undefined ? `${value} ${unit}` : "?");
+const prettifyValue = (value: number | string, unit: string) =>
+  value !== null && value !== undefined ? `${value} ${unit}` : "?";
 
 /**
  * Converts a pascal case string to a "human" space separated string
