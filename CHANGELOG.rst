@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.31.1 (02/12/2025)
+++++++++++
+
+**Fixed**
+
+- experimentTypeId now holds precedence over experimentType when determining collection type
+
+++++++++++
 v1.31.0 (01/12/2025)
 ++++++++++
 
