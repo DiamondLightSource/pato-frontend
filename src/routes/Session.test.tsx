@@ -34,11 +34,11 @@ describe("Session Page", () => {
 
   it("should navigate to the clicked group's path when table row clicked", async () => {
     renderWithRoute(<SessionPage />, () => ({
-      items: [{ experimentTypeName: "Tomogram", dataCollectionGroupId: 1 }],
+      items: [{ experimentTypeName: "Tomography", dataCollectionGroupId: 1 }],
       session: { microscopeName: "Krios I", startDate: "startDateValue", endDate: "endDateValue" },
     }));
 
-    const row = await screen.findByText(/tomogram/i);
+    const row = await screen.findByText(/tomography/i);
 
     fireEvent.click(row);
 

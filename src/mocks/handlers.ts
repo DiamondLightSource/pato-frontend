@@ -336,7 +336,7 @@ export const handlers = [
           {
             dataCollectionGroupId: 1,
             collections: 1,
-            experimentTypeName: "Tomogram",
+            experimentTypeName: "Tomography",
           },
         ],
         url.searchParams.get("search")

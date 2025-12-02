@@ -47,7 +47,7 @@ describe("Session Data", () => {
 
 describe("Group Selection Handler", () => {
   it("should get proper redirect URL for tomograms", () => {
-    expect(handleGroupClicked({ experimentTypeName: "Tomogram", dataCollectionGroupId: 1 })).toBe(
+    expect(handleGroupClicked({ experimentTypeName: "Tomography", dataCollectionGroupId: 1 })).toBe(
       "groups/1/tomograms/1"
     );
   });
