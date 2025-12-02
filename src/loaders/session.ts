@@ -77,7 +77,7 @@ export const handleGroupClicked = (item: Record<string, string | number>) => {
   switch (item.experimentTypeName) {
     case "Single Particle":
       return `groups/${item.dataCollectionGroupId}/spa`;
-    case "Tomogram":
+    case "Tomography":
       return `groups/${item.dataCollectionGroupId}/tomograms/1`;
     default:
       if (item.experimentType === "tomo") {
