@@ -98,7 +98,8 @@ export const fetchMotionData = async ({
   queryKey: MotionQueryKeys;
 }): Promise<ParsedMotionData | null> => {
   const { parentType, parentId, innerPage } = queryKey[1];
-  let fullEndpoint = `dataCollections/${parentId}/${parentType === "tomograms" ? "tomogram-" : ""}motion?limit=1`;
+  const endpointPrefix = parentType === "tomograms" ? "dataCollections" : parentType;
+  let fullEndpoint = `${endpointPrefix}/${parentId}/${parentType === "tomograms" ? "tomogram-" : ""}motion?limit=1`;
 
   if (parentType === "tomograms" && innerPage === undefined) {
     fullEndpoint += "&getMiddle=true";
