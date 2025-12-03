@@ -3,6 +3,14 @@ Changelog
 ==========
 
 ++++++++++
+v1.31.2 (03/12/2025)
+++++++++++
+
+**Fixed**
+
+- Fix motion correction view for SPA sessions
+
+++++++++++
 v1.31.1 (02/12/2025)
 ++++++++++
 
