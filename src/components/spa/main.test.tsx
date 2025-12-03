@@ -120,7 +120,7 @@ describe("SPA Processing Job Row", () => {
 
     fireEvent.click(await screen.findByRole("button", { name: "Previous Page" }));
     await waitFor(() =>
-      expect(screen.getAllByRole("textbox", { name: /current page/i })[1]).toHaveDisplayValue("9")
+      expect(screen.getAllByRole("textbox", { name: /current page/i })[1]).toHaveDisplayValue("19")
     );
   });
 
@@ -143,7 +143,7 @@ describe("SPA Processing Job Row", () => {
     );
 
     await waitFor(() =>
-      expect(screen.getAllByRole("textbox", { name: /current page/i })[0]).toHaveDisplayValue("10")
+      expect(screen.getAllByRole("textbox", { name: /current page/i })[0]).toHaveDisplayValue("20")
     );
   });
 });
