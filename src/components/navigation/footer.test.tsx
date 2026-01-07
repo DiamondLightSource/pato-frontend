@@ -14,4 +14,10 @@ describe("No Data Indicator", () => {
     renderWithProviders(<Footer />);
     expect(screen.getByText("Feedback")).toBeInTheDocument();
   });
+
+  it("should render changelog link if enabled", async () => {
+    window.ENV.CHANGELOG_URL = "https://foo.com";
+    renderWithProviders(<Footer />);
+    expect(screen.getByText("Changelog")).toBeInTheDocument();
+  });
 });

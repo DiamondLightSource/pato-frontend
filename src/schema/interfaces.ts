@@ -14,6 +14,7 @@ declare global {
       ENVIRONMENT: "demo" | "staging" | "production";
       FEEDBACK_URL?: string;
       REPROCESSING_ENABLED: boolean;
+      CHANGELOG_URL?: string;
     };
   }
 }
