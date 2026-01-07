@@ -28,6 +28,11 @@ const Footer = () => (
       <Link as={LinkRouter} to='/about' color='diamond.400'>
         About Processing
       </Link>
+      {!!window.ENV.CHANGELOG_URL && (
+        <Link href={window.ENV.CHANGELOG_URL} as={LinkRouter} color='diamond.400'>
+          Changelog
+        </Link>
+      )}
       {!!window.ENV.FEEDBACK_URL && (
         <Link href={window.ENV.FEEDBACK_URL} color='diamond.400'>
           Feedback
