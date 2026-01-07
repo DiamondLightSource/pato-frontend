@@ -2,8 +2,10 @@ import { Checkbox, Divider, Heading, HStack, Spacer, VStack } from "@chakra-ui/r
 import { Atlas } from "components/atlas/Atlas";
 import { GridSquare } from "components/atlas/GridSquare";
 import { SearchMap } from "components/atlas/SearchMap";
+import { ColourChannelSelector } from "components/clem/ColourChannelSelector";
+import { ClemROIs } from "components/clem/ROI";
 import { AtlasResponse } from "loaders/atlas";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useLoaderData, useParams, useSearchParams } from "react-router";
 import { components } from "schema/main";
 
@@ -18,12 +20,10 @@ const AtlasPage = () => {
   const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const data = useLoaderData() as AtlasResponse;
+  const [colours, setColours] = useState({"red": true, "blue": true, "green": true, "gray": true});
 
   const targetSearchParam = useMemo(
-    () =>
-      data.dataCollectionGroup.experimentTypeName === "Tomography"
-        ? "hideEmptySearchMaps"
-        : "hideSquares",
+    () => (data.dataCollectionGroup.experimentTypeName === "Tomography" ? "hideEmptySearchMaps" : "hideSquares"),
     [data]
   );
 
@@ -42,9 +42,7 @@ const AtlasPage = () => {
       return 0;
     }
 
-    const gridSquare = data.gridSquares.find(
-      (gridSquare) => gridSquare.gridSquareId === gridSquareId
-    );
+    const gridSquare = data.gridSquares.find((gridSquare) => gridSquare.gridSquareId === gridSquareId);
 
     if (!gridSquare) {
       return 0;
@@ -55,9 +53,7 @@ const AtlasPage = () => {
      * Atlas pixel sizes are stored in metres, while pixel sizes for tomograms are stored in angstroms,
      * so we'll also scale it so the units match (hence 1e-10)
      */
-    return (
-      (512 * 1e-10) / data.atlas.pixelSize / gridSquare.width / ATLAS_SEARCH_MAP_SCALING_FACTOR
-    );
+    return (512 * 1e-10) / data.atlas.pixelSize / gridSquare.width / ATLAS_SEARCH_MAP_SCALING_FACTOR;
   }, [data, gridSquareId]);
 
   const handleGridSquareClicked = useCallback(
@@ -90,16 +86,13 @@ const AtlasPage = () => {
       <HStack w='100%'>
         <Heading>Atlas</Heading>
         <Spacer />
-        <Checkbox
-          defaultChecked={searchParams.get(targetSearchParam) === "true"}
-          onChange={handleCheck}
-          size='lg'
-        >
+        { data.dataCollectionGroup.experimentTypeName === "CLEM" ? <ColourChannelSelector onChange={setColours} selectedColours={colours}/> :
+        <Checkbox defaultChecked={searchParams.get(targetSearchParam) === "true"} onChange={handleCheck} size='lg'>
           Hide{" "}
           {data.dataCollectionGroup.experimentTypeName === "Tomography"
             ? "empty search maps"
             : "uncollected grid squares"}
-        </Checkbox>
+        </Checkbox>}
       </HStack>
       <Divider />
       <HStack w='100%' h='100%' alignItems='start' flexWrap='wrap'>
@@ -107,10 +100,11 @@ const AtlasPage = () => {
           groupId={params.groupId!}
           onGridSquareClicked={handleGridSquareClicked}
           selectedGridSquare={gridSquareId}
+          colours={data.dataCollectionGroup.experimentTypeName === "CLEM" ? colours : null}
         ></Atlas>
         {data.dataCollectionGroup.experimentTypeName === "Tomography" ? (
           <SearchMap searchMapId={gridSquareId} scalingFactor={scalingFactor} />
-        ) : (
+        ) : data.dataCollectionGroup.experimentTypeName === "CLEM" ? <ClemROIs gridSquareId={gridSquareId}/> : (
           <GridSquare gridSquareId={gridSquareId} />
         )}
       </HStack>
