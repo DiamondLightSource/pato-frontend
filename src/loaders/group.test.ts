@@ -15,6 +15,7 @@ describe("Group Loader Redirect", () => {
   it.each([
     ["Tomography", "./tomograms"],
     ["Single Particle", "./spa"],
+    ["Atlas", "./atlas"],
     ["Not-Valid", "/proposals/cm1/sessions/1"],
   ])(
     "should redirect to $redirect if experiment type is $experimentType",

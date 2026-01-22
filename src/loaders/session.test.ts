@@ -64,6 +64,12 @@ describe("Group Selection Handler", () => {
     );
   });
 
+  it("should get proper redirect URL for atlas", () => {
+    expect(handleGroupClicked({ experimentTypeName: "Atlas", dataCollectionGroupId: 1 })).toBe(
+      "groups/1/atlas"
+    );
+  });
+
   it("should redirect user to tomogram page if experimentType is tomo and no experimentTypeName is present", () => {
     expect(handleGroupClicked({ experimentType: "tomo", dataCollectionGroupId: 1 })).toBe(
       "groups/1/tomograms/1"
