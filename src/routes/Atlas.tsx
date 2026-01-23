@@ -11,8 +11,10 @@ import { components } from "schema/main";
  * Pixel sizes on atlases and search maps are not consistent (due to magnification and other
  * factors), so we need to apply a scaling factor when displaying tomograms on search maps.
  * This does not apply to grid squares and foil holes.
+ * 
+ * This has been removed for now, as it's easier to rempove the scaling factor in here than Murphy
  */
-const ATLAS_SEARCH_MAP_SCALING_FACTOR = 7.8;
+//const ATLAS_SEARCH_MAP_SCALING_FACTOR = 7.8;
 
 const AtlasPage = () => {
   const params = useParams();
@@ -56,7 +58,7 @@ const AtlasPage = () => {
      * so we'll also scale it so the units match (hence 1e-10)
      */
     return (
-      (512 * 1e-10) / data.atlas.pixelSize / gridSquare.width / ATLAS_SEARCH_MAP_SCALING_FACTOR
+      (512 * 1e-10) / data.atlas.pixelSize / gridSquare.width
     );
   }, [data, gridSquareId]);
 
