@@ -15,4 +15,5 @@ window.ENV = {
     ENVIRONMENT: "production",
     FEEDBACK_URL: "true",
     REPROCESSING_ENABLED: true,
+    CHANGELOG_URL: "https://github.com/DiamondLightSource/pato-frontend/blob/master/CHANGELOG.md"
 }
