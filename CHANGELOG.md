@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.31.3 (26/01/2026)
+
+**Added**
+
+- Add link to changelog
+
+**Fixed**
+
+- Remove scaling factor for search maps
+
+**Changed**
+
+- Update about processing page
+
 ## v1.31.2 (03/12/2025)
 
 **Fixed**
