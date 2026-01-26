@@ -5,6 +5,7 @@
 **Added**
 
 - Add link to changelog
+- Redirect user to atlas if experiment type is atlas
 
 **Fixed**
 
