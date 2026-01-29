@@ -1,4 +1,4 @@
-import { DataConfig } from "schema/interfaces";
+import { AtlasOrGridSquare, ColourChannel, DataConfig } from "schema/interfaces";
 import { ClientResponse } from "./api/client";
 
 const timeFormatter = new Intl.DateTimeFormat("en-GB", {
@@ -110,4 +110,26 @@ export const getErrorMessage = (response: ClientResponse) => {
   }
 
   return message;
+};
+
+export const getAvailableColours = (item: AtlasOrGridSquare) => {
+  const availableColours: Record<ColourChannel, boolean | null> = {
+    grey: null,
+    red: null,
+    green: null,
+    blue: null,
+    magenta: null,
+    cyan: null,
+    yellow: null,
+  };
+
+  for (const colour of Object.keys(availableColours)) {
+    availableColours[colour as ColourChannel] = item[
+      `has${capitalise(colour)}` as keyof AtlasOrGridSquare
+    ]
+      ? true
+      : null;
+  }
+
+  return availableColours;
 };

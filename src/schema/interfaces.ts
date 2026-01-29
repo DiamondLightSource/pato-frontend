@@ -79,3 +79,7 @@ export type RequiredAndNonNullable<T, K extends keyof T> = T & { [P in K]-?: Non
 
 export type TomogramMovieTypes = "denoised" | "segmented" | "picked" | "alignment" | "stack";
 export type FoilHoleMetricTypes = "astigmatism" | "particleCount" | "resolution";
+export type AtlasOrGridSquare =
+  | components["schemas"]["Atlas"]
+  | components["schemas"]["GridSquare"];
+export type ColourChannel = components["schemas"]["ColourChannel"];

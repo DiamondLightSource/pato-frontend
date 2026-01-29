@@ -1,6 +1,7 @@
 import { renderWithRoute } from "utils/test-utils";
 import { fireEvent, screen } from "@testing-library/react";
 import { Atlas } from "components/atlas/Atlas";
+import { colours } from "utils/test-utils";
 
 const atlasItems = {
   gridSquares: [
@@ -48,5 +49,13 @@ describe("Atlas", () => {
     }));
 
     expect(await screen.findByTestId("square-0")).toHaveAttribute("fill", "black");
+  });
+
+  it("should display colour channel display if colours are passed in", async () => {
+    renderWithRoute(<Atlas groupId='1' colours={colours} />, () => ({
+      gridSquares: [{ x: 2, y: 1, width: 1, height: 1, gridSquareId: 2, angle: 1, image: null }],
+    }));
+
+    await screen.findByAltText("cyan");
   });
 });

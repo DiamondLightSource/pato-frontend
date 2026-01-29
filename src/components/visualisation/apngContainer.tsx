@@ -18,19 +18,32 @@ import {
   ButtonGroup,
   BoxProps,
 } from "@chakra-ui/react";
-import { cloneElement, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { MdFastForward, MdFastRewind, MdPause, MdPlayArrow } from "react-icons/md";
-import { ApngProps, APNGViewer } from "@diamondlightsource/ui-components";
+import { APNGViewer } from "@diamondlightsource/ui-components";
 import "styles/canvas.css";
 
-export interface ApngContainerProps extends BoxProps {
-  children: React.ReactElement<ApngProps> | React.ReactElement<ApngProps>[];
+interface ApngView {
+  src: string;
+  caption?: string;
+  hidden?: boolean;
 }
+export interface ApngContainerProps extends BoxProps {
+  views: ApngView[];
+  overlap?: boolean;
+}
+
+const OVERLAP_PROPS = {
+  top: 0,
+  left: 0,
+  position: "absolute" as BoxProps["position"],
+};
 
 const APNGContainer = ({
   width = "100%",
   height = "64vh",
-  children,
+  views,
+  overlap = false,
   ...props
 }: ApngContainerProps) => {
   const [frameLength, setFrameLength] = useState<number>();
@@ -59,15 +72,38 @@ const APNGContainer = ({
     return () => clearInterval(playRef.current);
   }, [frameIndex, playing, frametime, frameLength, playIncrement, playForward]);
 
+  const visibleViews = useMemo(
+    () =>
+      Object.values(views).reduce((prev, { hidden }) => {
+        if (!hidden) {
+          prev += 1;
+        }
+        return prev;
+      }, 0),
+    [views]
+  );
+
   return (
     <Box h={height} w={width} px={4} pt={4} pb='0' {...props}>
-      <HStack h='90%'>
-        {(Array.isArray(children) ? children : [children]).map((child, i) => (
-          <Box key={i} h='100%' w='100%'>
-            {cloneElement(
-              child,
-              child.type === APNGViewer ? { onFrameCountChanged: setFrameLength, frameIndex } : {}
-            )}
+      <HStack h={overlap ? "100%" : "90%"}>
+        {views.map((view, i) => (
+          <Box
+            key={i}
+            h='100%'
+            w={overlap ? "95%" : "100%"}
+            {...(overlap ? { ...OVERLAP_PROPS } : {})}
+            opacity={overlap ? (1 / visibleViews) * 1.2 : 1}
+            display={view.hidden ? "none" : "block"}
+            aria-hidden={!!view.hidden}
+            aria-label={view.caption}
+          >
+            <APNGViewer
+              key={i}
+              onFrameCountChanged={setFrameLength}
+              frameIndex={frameIndex}
+              caption={view.caption}
+              src={view.src}
+            />
           </Box>
         ))}
         <Spacer />

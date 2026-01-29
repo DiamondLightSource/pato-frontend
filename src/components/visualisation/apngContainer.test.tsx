@@ -1,43 +1,18 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { renderWithProviders } from "utils/test-utils";
 import APNGContainer from "./apngContainer";
-import { APNGViewer, ApngProps } from "@diamondlightsource/ui-components";
-import { useEffect } from "react";
-
-vi.mock("@diamondlightsource/ui-components", async (importOriginal) => {
-  const actual = await importOriginal<any>();
-  return {
-    ...actual,
-    APNGViewer: ({ onFrameCountChanged, src }: ApngProps) => {
-      useEffect(() => {
-        if (onFrameCountChanged) {
-          onFrameCountChanged(3);
-        }
-      }, [onFrameCountChanged]);
-
-      return <p>{src}</p>;
-    },
-  };
-});
 
 global.URL.createObjectURL = vi.fn(() => "http://localhost/noimage.png");
 
 describe("APNG Container", () => {
   it("should render single APNG child", async () => {
-    renderWithProviders(
-      <APNGContainer>
-        <APNGViewer src='tomograms/1/movie' />
-      </APNGContainer>
-    );
+    renderWithProviders(<APNGContainer views={[{ src: "tomograms/1/movie" }]} />);
     await screen.findByText("tomograms/1/movie");
   });
 
   it("should render multiple APNG children", async () => {
     renderWithProviders(
-      <APNGContainer>
-        <APNGViewer src='tomograms/1/movie' />
-        <APNGViewer src='tomograms/1/movie' />
-      </APNGContainer>
+      <APNGContainer views={[{ src: "tomograms/1/movie" }, { src: "tomograms/1/movie" }]} />
     );
     const apngs = await screen.findAllByText("tomograms/1/movie");
 
@@ -45,11 +20,7 @@ describe("APNG Container", () => {
   });
 
   it("should stop at last frame when playing", async () => {
-    renderWithProviders(
-      <APNGContainer>
-        <APNGViewer src='tomograms/1/movie' />
-      </APNGContainer>
-    );
+    renderWithProviders(<APNGContainer views={[{ src: "tomograms/1/movie" }]} />);
     await screen.findByText("tomograms/1/movie");
 
     const playButton = screen.getByLabelText("Play");
@@ -63,11 +34,7 @@ describe("APNG Container", () => {
   });
 
   it("should stop at first frame when playing in reverse", async () => {
-    renderWithProviders(
-      <APNGContainer>
-        <APNGViewer src='tomograms/1/movie' />
-      </APNGContainer>
-    );
+    renderWithProviders(<APNGContainer views={[{ src: "tomograms/1/movie" }]} />);
     await screen.findByText("tomograms/1/movie");
 
     fireEvent.click(screen.getByLabelText("Play"));
@@ -88,11 +55,7 @@ describe("APNG Container", () => {
   });
 
   it("should update button state when paused", async () => {
-    renderWithProviders(
-      <APNGContainer>
-        <APNGViewer src='tomograms/1/movie' />
-      </APNGContainer>
-    );
+    renderWithProviders(<APNGContainer views={[{ src: "tomograms/1/movie" }]} />);
     await screen.findByText("tomograms/1/movie");
 
     fireEvent.click(screen.getByLabelText("Play"));
@@ -102,14 +65,24 @@ describe("APNG Container", () => {
   });
 
   it("should display correct frame count", async () => {
-    renderWithProviders(
-      <APNGContainer>
-        <APNGViewer src='tomograms/1/movie' />
-      </APNGContainer>
-    );
+    renderWithProviders(<APNGContainer views={[{ src: "tomograms/1/movie" }]} />);
     await screen.findByText("tomograms/1/movie");
 
     const slider = screen.getByRole("slider");
     expect(slider).toHaveAttribute("aria-valuemax", "3");
+  });
+
+  it("should hide items tagged with hidden", async () => {
+    renderWithProviders(
+      <APNGContainer
+        views={[
+          { src: "tomograms/2/movie", caption: "foo", hidden: true },
+          { src: "tomograms/1/movie" },
+        ]}
+      />
+    );
+    const image = await screen.findByLabelText("foo");
+
+    expect(image).toHaveAttribute("aria-hidden", "true");
   });
 });

@@ -6,14 +6,14 @@ import { components } from "schema/main";
 import { prependApiUrl } from "utils/api/client";
 import "styles/atlas.css";
 import { ColourChannelDisplay } from "components/clem/ColourChannelDisplay";
-import { ColourChannel } from "components/clem/ColourChannelSelector";
+import { getAvailableColours } from "utils/generic";
 
 // TODO: make heatmap component more generic so we can replace this atlas view with it
 export interface AtlasProps {
   groupId: string;
   onGridSquareClicked?: (gridSquare: components["schemas"]["GridSquare"]) => void;
   selectedGridSquare?: number | null;
-  colours: Record<ColourChannel, boolean> | null;
+  colours?: ReturnType<typeof getAvailableColours> | null;
 }
 
 const sortSquare = (
@@ -36,7 +36,12 @@ const sortSquare = (
       };
 };
 
-export const Atlas = ({ groupId, onGridSquareClicked, selectedGridSquare, colours }: AtlasProps) => {
+export const Atlas = ({
+  groupId,
+  onGridSquareClicked,
+  selectedGridSquare,
+  colours,
+}: AtlasProps) => {
   const data = useLoaderData() as AtlasResponse;
   const handleGridSquareClicked = useCallback(
     (gridSquare: components["schemas"]["GridSquare"]) => {
@@ -62,7 +67,11 @@ export const Atlas = ({ groupId, onGridSquareClicked, selectedGridSquare, colour
 
   return (
     <div style={{ display: "flex", flex: "1 0 300px" }} className='img-wrapper'>
-      {colours ? <ColourChannelDisplay groupId={groupId} colours={colours}/> : <img src={prependApiUrl(`dataGroups/${groupId}/atlas/image`)} alt='Atlas' />}
+      {colours ? (
+        <ColourChannelDisplay itemId={groupId} colours={colours} />
+      ) : (
+        <img src={prependApiUrl(`dataGroups/${groupId}/atlas/image`)} alt='Atlas' />
+      )}
       <svg viewBox='0 0 512 512'>
         {data.gridSquares.map((gridSquare, index) => (
           <rect
