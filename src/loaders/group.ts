@@ -18,6 +18,8 @@ export const groupLoader = async (params: Params<string>) => {
       return replace("./spa");
     case "Tomography":
       return replace("./tomograms");
+    case "Atlas":
+      return replace("./atlas");
     default:
       return replace(sessionLocation);
   }
