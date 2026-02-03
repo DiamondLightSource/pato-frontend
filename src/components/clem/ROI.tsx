@@ -23,7 +23,7 @@ export const ClemROIs = ({ gridSquare }: ClemROIsProps) => {
       display='flex'
       flex='1 0 300px'
       p='0.5em'
-      pb='60px'
+      pb='70px'
       bg='diamond.50'
       alignItems='start'
       border='1px solid'
