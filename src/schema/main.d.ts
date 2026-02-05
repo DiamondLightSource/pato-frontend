@@ -1257,6 +1257,43 @@ export interface components {
       cassetteSlot?: number | null;
       /** Datacollectiongroupid */
       dataCollectionGroupId: number;
+      /**
+       * Hasred
+       * @default false
+       */
+      hasRed: boolean;
+      /**
+       * Hasgreen
+       * @default false
+       */
+      hasGreen: boolean;
+      /**
+       * Hasblue
+       * @default false
+       */
+      hasBlue: boolean;
+      /**
+       * Hascyan
+       * @default false
+       */
+      hasCyan: boolean;
+      /**
+       * Hasmagenta
+       * @default false
+       */
+      hasMagenta: boolean;
+      /**
+       * Hasyellow
+       * @default false
+       */
+      hasYellow: boolean;
+      /**
+       * Hasgrey
+       * @default false
+       */
+      hasGrey: boolean;
+      /** Mode */
+      mode?: string | null;
     };
     /** AutoProcProgramResponse */
     AutoProcProgramResponse: {
@@ -1419,6 +1456,8 @@ export interface components {
       /** Suggestedtilt */
       suggestedTilt?: number | null;
     };
+    /** @enum {string} */
+    ColourChannel: "grey" | "red" | "green" | "blue" | "magenta" | "cyan" | "yellow";
     /** CtfBaseSpa */
     CtfBaseSpa: {
       /** Estimatedresolution */
@@ -1738,6 +1777,43 @@ export interface components {
       angle: number;
       /** Image */
       image?: string | null;
+      /**
+       * Hasred
+       * @default false
+       */
+      hasRed: boolean;
+      /**
+       * Hasgreen
+       * @default false
+       */
+      hasGreen: boolean;
+      /**
+       * Hasblue
+       * @default false
+       */
+      hasBlue: boolean;
+      /**
+       * Hascyan
+       * @default false
+       */
+      hasCyan: boolean;
+      /**
+       * Hasmagenta
+       * @default false
+       */
+      hasMagenta: boolean;
+      /**
+       * Hasyellow
+       * @default false
+       */
+      hasYellow: boolean;
+      /**
+       * Hasgrey
+       * @default false
+       */
+      hasGrey: boolean;
+      /** Mode */
+      mode?: string | null;
     };
     /** HTTPValidationError */
     HTTPValidationError: {
@@ -1840,6 +1916,7 @@ export interface components {
       /** Gridsquareid */
       gridSquareId?: number | null;
     };
+    MovieType: ("denoised" | "segmented" | "picked" | "alignment" | "stack") | null;
     /**
      * NotificationSignup
      * @description Required information for signing up to notifications
@@ -2454,7 +2531,7 @@ export interface operations {
   get_slice_tomograms__tomogramId__centralSlice_get: {
     parameters: {
       query?: {
-        movieType?: ("denoised" | "segmented" | "picked") | null;
+        movieType?: components["schemas"]["MovieType"];
       };
       header?: never;
       path: {
@@ -2485,7 +2562,7 @@ export interface operations {
   get_movie_tomograms__tomogramId__movie_get: {
     parameters: {
       query?: {
-        movieType?: ("denoised" | "segmented" | "picked") | null;
+        movieType?: components["schemas"]["MovieType"];
       };
       header?: never;
       path: {
@@ -3209,7 +3286,7 @@ export interface operations {
   get_tomogram_central_slice_dataCollections__collectionId__centralSlice_get: {
     parameters: {
       query?: {
-        movieType?: ("denoised" | "segmented" | "picked") | null;
+        movieType?: components["schemas"]["MovieType"];
       };
       header?: never;
       path: {
@@ -3445,7 +3522,9 @@ export interface operations {
   };
   get_atlas_image_dataGroups__groupId__atlas_image_get: {
     parameters: {
-      query?: never;
+      query?: {
+        colour?: components["schemas"]["ColourChannel"];
+      };
       header?: never;
       path: {
         groupId: number;
@@ -4351,7 +4430,9 @@ export interface operations {
   };
   get_grid_square_image_grid_squares__gridSquareId__image_get: {
     parameters: {
-      query?: never;
+      query?: {
+        colour?: components["schemas"]["ColourChannel"];
+      };
       header?: never;
       path: {
         gridSquareId: number;

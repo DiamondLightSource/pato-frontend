@@ -6,10 +6,21 @@ import { createMemoryRouter, LoaderFunction, MemoryRouter, RouterProvider } from
 import { Accordion } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { InitialEntry } from "react-router";
+import { ColourChannelSelectorProps } from "components/clem/ColourChannelSelector";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 0 } },
 });
+
+const colours: ColourChannelSelectorProps["selectedColours"] = {
+  red: false,
+  blue: null,
+  green: null,
+  yellow: true,
+  magenta: null,
+  grey: null,
+  cyan: null,
+};
 
 const renderWithProviders = (
   ui: React.ReactElement,
@@ -60,4 +71,4 @@ const renderWithRoute = (
   };
 };
 
-export { renderWithProviders, renderWithAccordion, renderWithRoute, queryClient };
+export { renderWithProviders, renderWithAccordion, renderWithRoute, queryClient, colours };

@@ -79,6 +79,7 @@ export const handleGroupClicked = (item: Record<string, string | number>) => {
       return `groups/${item.dataCollectionGroupId}/spa`;
     case "Tomography":
       return `groups/${item.dataCollectionGroupId}/tomograms/1`;
+    case "CLEM":
     case "Atlas":
       return `groups/${item.dataCollectionGroupId}/atlas`;
     default:

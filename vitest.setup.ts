@@ -3,6 +3,8 @@ import "@testing-library/jest-dom";
 import { server } from "./src/mocks/server";
 import { queryClient } from "./src/utils/test-utils";
 import { cleanup } from "@testing-library/react";
+import { useEffect } from "react";
+import { ApngProps } from "@diamondlightsource/ui-components";
 
 export const mockToast = vi.fn();
 
@@ -24,6 +26,22 @@ vi.mock("@chakra-ui/react", async (importOriginal) => {
     ...actual,
     createStandaloneToast: () => ({ toast: mockToast }),
     useToast: () => mockToast,
+  };
+});
+
+vi.mock("@diamondlightsource/ui-components", async (importOriginal) => {
+  const actual = await importOriginal<any>();
+  return {
+    ...actual,
+    APNGViewer: ({ onFrameCountChanged, src }: ApngProps) => {
+      useEffect(() => {
+        if (onFrameCountChanged) {
+          onFrameCountChanged(3);
+        }
+      }, [onFrameCountChanged]);
+
+      return src;
+    },
   };
 });
 

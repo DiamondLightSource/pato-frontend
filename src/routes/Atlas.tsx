@@ -1,11 +1,14 @@
-import { Checkbox, Divider, Heading, HStack, Spacer, VStack } from "@chakra-ui/react";
+import { Checkbox, Divider, Heading, HStack, VStack } from "@chakra-ui/react";
 import { Atlas } from "components/atlas/Atlas";
 import { GridSquare } from "components/atlas/GridSquare";
 import { SearchMap } from "components/atlas/SearchMap";
+import { ColourChannelSelector } from "components/clem/ColourChannelSelector";
+import { ClemROIs } from "components/clem/ROI";
 import { AtlasResponse } from "loaders/atlas";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useLoaderData, useParams, useSearchParams } from "react-router";
 import { components } from "schema/main";
+import { getAvailableColours } from "utils/generic";
 
 /*
  * Pixel sizes on atlases and search maps are not consistent (due to magnification and other
@@ -20,6 +23,7 @@ const AtlasPage = () => {
   const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const data = useLoaderData() as AtlasResponse;
+  const [colours, setColours] = useState(getAvailableColours(data.atlas));
 
   const targetSearchParam = useMemo(
     () =>
@@ -38,6 +42,15 @@ const AtlasPage = () => {
 
     return null;
   }, [searchParams]);
+
+  const selectedGridSquare = useMemo(() => {
+    if (data.dataCollectionGroup.experimentTypeName !== "CLEM" || !gridSquareId) {
+      // Return early if we're not CLEM - all other experiment types don't use grid square information directly
+      return null;
+    }
+
+    return data.gridSquares.find((gridSquare) => gridSquare.gridSquareId === gridSquareId);
+  }, [gridSquareId, data]);
 
   const scalingFactor = useMemo(() => {
     if (data.dataCollectionGroup.experimentTypeName !== "Tomography") {
@@ -90,18 +103,21 @@ const AtlasPage = () => {
   return (
     <VStack alignItems='start'>
       <HStack w='100%'>
-        <Heading>Atlas</Heading>
-        <Spacer />
-        <Checkbox
-          defaultChecked={searchParams.get(targetSearchParam) === "true"}
-          onChange={handleCheck}
-          size='lg'
-        >
-          Hide{" "}
-          {data.dataCollectionGroup.experimentTypeName === "Tomography"
-            ? "empty search maps"
-            : "uncollected grid squares"}
-        </Checkbox>
+        <Heading pr='0.5em'>Atlas</Heading>
+        {data.dataCollectionGroup.experimentTypeName === "CLEM" ? (
+          <ColourChannelSelector onChange={setColours} selectedColours={colours} />
+        ) : (
+          <Checkbox
+            defaultChecked={searchParams.get(targetSearchParam) === "true"}
+            onChange={handleCheck}
+            size='lg'
+          >
+            Hide{" "}
+            {data.dataCollectionGroup.experimentTypeName === "Tomography"
+              ? "empty search maps"
+              : "uncollected grid squares"}
+          </Checkbox>
+        )}
       </HStack>
       <Divider />
       <HStack w='100%' h='100%' alignItems='start' flexWrap='wrap'>
@@ -109,9 +125,12 @@ const AtlasPage = () => {
           groupId={params.groupId!}
           onGridSquareClicked={handleGridSquareClicked}
           selectedGridSquare={gridSquareId}
+          colours={data.dataCollectionGroup.experimentTypeName === "CLEM" ? colours : null}
         ></Atlas>
         {data.dataCollectionGroup.experimentTypeName === "Tomography" ? (
           <SearchMap searchMapId={gridSquareId} scalingFactor={scalingFactor} />
+        ) : data.dataCollectionGroup.experimentTypeName === "CLEM" ? (
+          <ClemROIs gridSquare={selectedGridSquare} />
         ) : (
           <GridSquare gridSquareId={gridSquareId} />
         )}

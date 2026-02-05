@@ -11,7 +11,7 @@ import {
   Heading,
   VStack,
 } from "@chakra-ui/react";
-import { Flipper, APNGViewer } from "@diamondlightsource/ui-components";
+import { Flipper } from "@diamondlightsource/ui-components";
 import APNGContainer from "components/visualisation/apngContainer";
 import { Suspense, useMemo } from "react";
 import { TomogramMovieTypes } from "schema/interfaces";
@@ -65,7 +65,7 @@ export const SliceViewer = ({
           </HStack>
           <Suspense>
             {movieType === "alignment" ? (
-              <APNGContainer>
+              <HStack>
                 <VStack h='100%' w='100%' spacing='0' bg='diamond.100'>
                   <Image
                     h='100%'
@@ -80,16 +80,20 @@ export const SliceViewer = ({
                     Alignment
                   </Heading>
                 </VStack>
-                <APNGViewer caption='Stack' src={`${tomogramMovieSrc}?movieType=stack`} />
-              </APNGContainer>
-            ) : (
-              <APNGContainer>
-                <APNGViewer
-                  caption={capitalise(movieType)}
-                  src={`${tomogramMovieSrc}?movieType=${movieType}`}
+                <APNGContainer
+                  views={[{ src: `${tomogramMovieSrc}?movieType=stack`, caption: "Stack" }]}
                 />
-                <APNGViewer caption='Not Denoised' src={tomogramMovieSrc} />
-              </APNGContainer>
+              </HStack>
+            ) : (
+              <APNGContainer
+                views={[
+                  {
+                    src: `${tomogramMovieSrc}?movieType=${movieType}`,
+                    caption: capitalise(movieType),
+                  },
+                  { src: tomogramMovieSrc, caption: "Not Denoised" },
+                ]}
+              />
             )}
           </Suspense>
         </ModalBody>
