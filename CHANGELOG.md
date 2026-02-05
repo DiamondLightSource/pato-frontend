@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.14.0 (05/02/2026)
+
+**Added** 
+
+- CLEM view in atlas page
+
 ## v1.31.3 (26/01/2026)
 
 **Added**
