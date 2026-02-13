@@ -4,6 +4,7 @@ import { Atlas } from "components/atlas/Atlas";
 import { colours } from "utils/test-utils";
 
 const atlasItems = {
+  atlas: { atlasId: 1 },
   gridSquares: [
     { x: 1, y: 1, width: 1, height: 1, gridSquareId: 1, angle: 1, image: "test/image.jpg" },
   ],
@@ -45,6 +46,7 @@ describe("Atlas", () => {
 
   it("should show uncollected squares in black", async () => {
     renderWithRoute(<Atlas groupId='1' />, () => ({
+      atlas: { atlasId: 1 },
       gridSquares: [{ x: 2, y: 1, width: 1, height: 1, gridSquareId: 2, angle: 1, image: null }],
     }));
 
@@ -53,6 +55,7 @@ describe("Atlas", () => {
 
   it("should display colour channel display if colours are passed in", async () => {
     renderWithRoute(<Atlas groupId='1' colours={colours} />, () => ({
+      atlas: { atlasId: 1 },
       gridSquares: [{ x: 2, y: 1, width: 1, height: 1, gridSquareId: 2, angle: 1, image: null }],
     }));
 

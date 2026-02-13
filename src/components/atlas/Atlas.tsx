@@ -52,7 +52,7 @@ export const Atlas = ({
     [onGridSquareClicked]
   );
 
-  if (!data?.gridSquares || data.gridSquares.length < 1) {
+  if (!data?.atlas) {
     return (
       <VStack flex='1 0 500px' h='690px' textAlign='center' justifyContent='center'>
         <Heading variant='notFound' size='md'>
@@ -73,19 +73,20 @@ export const Atlas = ({
         <img src={prependApiUrl(`dataGroups/${groupId}/atlas/image`)} alt='Atlas' />
       )}
       <svg viewBox='0 0 512 512'>
-        {data.gridSquares.map((gridSquare, index) => (
-          <rect
-            data-testid={`square-${index}`}
-            key={gridSquare.gridSquareId}
-            x={gridSquare.x - gridSquare.width / 2}
-            y={gridSquare.y - gridSquare.height / 2}
-            width={gridSquare.width}
-            height={gridSquare.height}
-            transform={`rotate(${(180 / Math.PI) * gridSquare.angle} ${gridSquare.x} ${gridSquare.y})`}
-            onClick={() => handleGridSquareClicked(gridSquare)}
-            {...sortSquare(gridSquare, selectedGridSquare!)}
-          />
-        ))}
+        {data.gridSquares &&
+          data.gridSquares.map((gridSquare, index) => (
+            <rect
+              data-testid={`square-${index}`}
+              key={gridSquare.gridSquareId}
+              x={gridSquare.x - gridSquare.width / 2}
+              y={gridSquare.y - gridSquare.height / 2}
+              width={gridSquare.width}
+              height={gridSquare.height}
+              transform={`rotate(${(180 / Math.PI) * gridSquare.angle} ${gridSquare.x} ${gridSquare.y})`}
+              onClick={() => handleGridSquareClicked(gridSquare)}
+              {...sortSquare(gridSquare, selectedGridSquare!)}
+            />
+          ))}
       </svg>
     </div>
   );

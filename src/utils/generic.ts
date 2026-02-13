@@ -112,7 +112,7 @@ export const getErrorMessage = (response: ClientResponse) => {
   return message;
 };
 
-export const getAvailableColours = (item: AtlasOrGridSquare) => {
+export const getAvailableColours = (item: AtlasOrGridSquare | null) => {
   const availableColours: Record<ColourChannel, boolean | null> = {
     grey: null,
     red: null,
@@ -122,6 +122,10 @@ export const getAvailableColours = (item: AtlasOrGridSquare) => {
     cyan: null,
     yellow: null,
   };
+
+  if (!item) {
+    return availableColours;
+  }
 
   for (const colour of Object.keys(availableColours)) {
     availableColours[colour as ColourChannel] = item[
