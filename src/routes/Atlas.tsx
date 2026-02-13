@@ -44,7 +44,11 @@ const AtlasPage = () => {
   }, [searchParams]);
 
   const selectedGridSquare = useMemo(() => {
-    if (data.dataCollectionGroup.experimentTypeName !== "CLEM" || !gridSquareId) {
+    if (
+      data.dataCollectionGroup.experimentTypeName !== "CLEM" ||
+      !gridSquareId ||
+      !data.gridSquares
+    ) {
       // Return early if we're not CLEM - all other experiment types don't use grid square information directly
       return null;
     }
@@ -53,7 +57,7 @@ const AtlasPage = () => {
   }, [gridSquareId, data]);
 
   const scalingFactor = useMemo(() => {
-    if (data.dataCollectionGroup.experimentTypeName !== "Tomography") {
+    if (data.dataCollectionGroup.experimentTypeName !== "Tomography" || !data.gridSquares) {
       return 0;
     }
 
@@ -61,7 +65,7 @@ const AtlasPage = () => {
       (gridSquare) => gridSquare.gridSquareId === gridSquareId
     );
 
-    if (!gridSquare) {
+    if (!gridSquare || !data.atlas) {
       return 0;
     }
 

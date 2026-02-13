@@ -4,8 +4,8 @@ import { components } from "schema/main";
 import { client } from "utils/api/client";
 
 export interface AtlasResponse {
-  gridSquares: components["schemas"]["GridSquare"][];
-  atlas: components["schemas"]["Atlas"];
+  gridSquares: components["schemas"]["GridSquare"][] | null;
+  atlas: components["schemas"]["Atlas"] | null;
   dataCollectionGroup: components["schemas"]["DataCollectionGroupSummaryResponse"];
 }
 
