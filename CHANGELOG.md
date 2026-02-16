@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.14.1 (16/02/2026)
+
+**Fixed** 
+
+- Display atlases without grid squares
+
 ## v1.14.0 (05/02/2026)
 
 **Added** 
