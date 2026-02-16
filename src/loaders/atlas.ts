@@ -4,8 +4,8 @@ import { components } from "schema/main";
 import { client } from "utils/api/client";
 
 export interface AtlasResponse {
-  gridSquares: components["schemas"]["GridSquare"][];
-  atlas: components["schemas"]["Atlas"];
+  gridSquares: components["schemas"]["GridSquare"][] | null;
+  atlas: components["schemas"]["Atlas"] | null;
   dataCollectionGroup: components["schemas"]["DataCollectionGroupSummaryResponse"];
 }
 
@@ -16,7 +16,11 @@ const getAtlasData = async (groupId: string, searchParams: URLSearchParams) => {
     client.safeGet(`dataGroups/${groupId}`),
   ]);
 
-  return { gridSquares: gridSquare.data.items, atlas: atlas.data, dataCollectionGroup: dcg.data };
+  return {
+    gridSquares: atlas.status === 200 ? gridSquare.data.items : null,
+    atlas: atlas.status === 200 ? atlas.data : null,
+    dataCollectionGroup: dcg.data,
+  };
 };
 
 const queryBuilder = (groupId: string, request: Request) => {

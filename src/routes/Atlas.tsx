@@ -14,7 +14,7 @@ import { getAvailableColours } from "utils/generic";
  * Pixel sizes on atlases and search maps are not consistent (due to magnification and other
  * factors), so we need to apply a scaling factor when displaying tomograms on search maps.
  * This does not apply to grid squares and foil holes.
- * 
+ *
  * This has been removed for now, as it's easier to rempove the scaling factor in here than Murphy
  */
 //const ATLAS_SEARCH_MAP_SCALING_FACTOR = 7.8;
@@ -44,7 +44,11 @@ const AtlasPage = () => {
   }, [searchParams]);
 
   const selectedGridSquare = useMemo(() => {
-    if (data.dataCollectionGroup.experimentTypeName !== "CLEM" || !gridSquareId) {
+    if (
+      data.dataCollectionGroup.experimentTypeName !== "CLEM" ||
+      !gridSquareId ||
+      !data.gridSquares
+    ) {
       // Return early if we're not CLEM - all other experiment types don't use grid square information directly
       return null;
     }
@@ -53,7 +57,7 @@ const AtlasPage = () => {
   }, [gridSquareId, data]);
 
   const scalingFactor = useMemo(() => {
-    if (data.dataCollectionGroup.experimentTypeName !== "Tomography") {
+    if (data.dataCollectionGroup.experimentTypeName !== "Tomography" || !data.gridSquares) {
       return 0;
     }
 
@@ -61,7 +65,7 @@ const AtlasPage = () => {
       (gridSquare) => gridSquare.gridSquareId === gridSquareId
     );
 
-    if (!gridSquare) {
+    if (!gridSquare || !data.atlas) {
       return 0;
     }
 
@@ -70,9 +74,7 @@ const AtlasPage = () => {
      * Atlas pixel sizes are stored in metres, while pixel sizes for tomograms are stored in angstroms,
      * so we'll also scale it so the units match (hence 1e-10)
      */
-    return (
-      (512 * 1e-10) / data.atlas.pixelSize / gridSquare.width
-    );
+    return (512 * 1e-10) / data.atlas.pixelSize / gridSquare.width;
   }, [data, gridSquareId]);
 
   const handleGridSquareClicked = useCallback(
