@@ -74,6 +74,15 @@ export const sessionPageLoader =
   };
 
 export const handleGroupClicked = (item: Record<string, string | number>) => {
+  // If no collections are available, then only atlas data is available
+  if (
+    item.collections !== undefined &&
+    item.collections !== null &&
+    (item.collections as number) < 1
+  ) {
+    return `groups/${item.dataCollectionGroupId}/atlas`;
+  }
+
   switch (item.experimentTypeName) {
     case "Single Particle":
       return `groups/${item.dataCollectionGroupId}/spa`;
