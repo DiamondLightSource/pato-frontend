@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.32.2 (20/02/2026)
+
+**Changed**
+
+- Redirect user to atlas if no data collections are present
+
 ## v1.32.1 (16/02/2026)
 
 **Fixed** 
