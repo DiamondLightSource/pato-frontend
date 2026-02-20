@@ -85,4 +85,14 @@ describe("Group Selection Handler", () => {
       })
     ).toBe("groups/1/spa");
   });
+
+  it("should redirect to atlas if number of collections is 0", () => {
+    expect(
+      handleGroupClicked({
+        experimentTypeName: "Tomography",
+        dataCollectionGroupId: 1,
+        collections: 0,
+      })
+    ).toBe("groups/1/atlas");
+  });
 });
