@@ -261,7 +261,7 @@ export const SessionPage = () => {
           </Stat>
         </HStack>
         <HStack w='100%' gap='1em' alignItems='start' flexWrap='wrap'>
-          <VStack flex='1 0 700px'>
+          <VStack flex='6 0 700px'>
             <HStack w='100%'>
               <Heading size='lg'>Data Collection Groups</Heading>
               <Spacer />
@@ -294,7 +294,7 @@ export const SessionPage = () => {
               />
             )}
           </VStack>
-          <VStack alignItems='start' flexBasis='500px' pb='2em'>
+          <VStack alignItems='start' flex='1 0 500px' pb='2em'>
             <Heading size='lg'>Actions</Heading>
             <Divider />
             {/** @ts-expect-error */}
