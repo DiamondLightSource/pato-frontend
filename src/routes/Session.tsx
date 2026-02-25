@@ -294,7 +294,7 @@ export const SessionPage = () => {
               />
             )}
           </VStack>
-          <VStack alignItems='start'>
+          <VStack alignItems='start' flexBasis='500px' pb='2em'>
             <Heading size='lg'>Actions</Heading>
             <Divider />
             {/** @ts-expect-error */}
