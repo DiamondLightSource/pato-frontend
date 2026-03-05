@@ -3,12 +3,6 @@ import { render, screen } from "@testing-library/react";
 import { colours } from "utils/test-utils";
 
 describe("Colour Channel Display", () => {
-  it("should display plain image if data type is atlas", () => {
-    render(<ColourChannelDisplay colours={colours} itemId={1} dataType='atlas' />);
-
-    expect(screen.getByRole("img")).toBeInTheDocument();
-  });
-
   it("should display APNG viewer if data type is atlas", () => {
     render(<ColourChannelDisplay colours={colours} itemId={1} dataType='gridSquare' />);
 

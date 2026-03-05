@@ -43,25 +43,16 @@ export const ColourChannelDisplay = ({
   }
 
   return (
-    <Box width='100%' position='relative'>
-      {dataType === "atlas" ? (
-        Object.entries(colours).map(([colour, enabled]) => (
-          <img
-            key={colour}
-            style={{ display: enabled ? "block" : "none", opacity: 1 / colourCount }}
-            src={`${prefix}?colour=${colour}`}
-            alt={colour}
-          />
-        ))
-      ) : (
-        <APNGContainer
-          overlap={true}
-          views={Object.entries(colours).map(([colour, enabled]) => ({
-            src: `${prefix}?colour=${colour}`,
-            hidden: !enabled,
-          }))}
-        />
-      )}
+    <Box width='100%' minH='790px' h='100%' position='relative'>
+      <APNGContainer
+        minH='790px'
+        pb='6em'
+        overlap={true}
+        views={Object.entries(colours).map(([colour, enabled]) => ({
+          src: `${prefix}?colour=${colour}`,
+          hidden: !enabled,
+        }))}
+      />
     </Box>
   );
 };

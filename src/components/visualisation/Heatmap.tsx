@@ -159,7 +159,7 @@ export const HeatmapOverlay = ({
     <VStack w='100%'>
       <div style={{ width: "100%" }} className='img-wrapper'>
         <img src={prependApiUrl(image)} alt='Grid Square' />
-        <svg viewBox={"0 0 512 512"}>
+        <svg viewBox={"0 0 512 512"} className='static-png'>
           {colouredItems.items.map((item, i) =>
             "diameter" in item ? (
               <circle
