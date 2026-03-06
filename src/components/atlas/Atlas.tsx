@@ -66,13 +66,16 @@ export const Atlas = ({
   }
 
   return (
-    <div style={{ display: "flex", flex: "1 0 300px" }} className='img-wrapper'>
+    <div
+      style={{ display: "flex", flex: "1 0 300px", paddingBottom: "6em" }}
+      className='img-wrapper'
+    >
       {colours ? (
         <ColourChannelDisplay itemId={groupId} colours={colours} />
       ) : (
         <img src={prependApiUrl(`dataGroups/${groupId}/atlas/image`)} alt='Atlas' />
       )}
-      <svg viewBox='0 0 512 512'>
+      <svg viewBox='0 0 512 512' className='static-png'>
         {data.gridSquares &&
           data.gridSquares.map((gridSquare, index) => (
             <rect

@@ -59,6 +59,6 @@ describe("Atlas", () => {
       gridSquares: [{ x: 2, y: 1, width: 1, height: 1, gridSquareId: 2, angle: 1, image: null }],
     }));
 
-    await screen.findByAltText("cyan");
+    await screen.findByText("http://localhost/dataGroups/1/atlas/image?colour=cyan");
   });
 });

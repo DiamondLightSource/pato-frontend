@@ -6,7 +6,7 @@
   width: 100%;
 }
 
-.img-wrapper svg {
+.img-wrapper .static-png {
   position: absolute;
   top: 0;
   left: 0;

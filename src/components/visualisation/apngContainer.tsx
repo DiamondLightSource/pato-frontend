@@ -85,7 +85,7 @@ const APNGContainer = ({
 
   return (
     <Box h={height} w={width} px={4} pt={4} pb='0' {...props}>
-      <HStack h={overlap ? "100%" : "90%"}>
+      <HStack h={overlap ? "100%" : "90%"} minH={props.minH}>
         {views.map((view, i) => (
           <Box
             key={i}

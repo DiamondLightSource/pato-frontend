@@ -119,7 +119,7 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
       ) : (
         <div style={{ width: "100%", overflow: "hidden" }} className='img-wrapper'>
           <img src={prependApiUrl(`grid-squares/${searchMapId}/image`)} alt='Search Map' />
-          <svg viewBox='0 0 512 800'>
+          <svg viewBox='0 0 512 800' className='static-png'>
             {data.map((item, i) => (
               <rect
                 data-testid={`item-${i}`}
