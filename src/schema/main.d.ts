@@ -1531,6 +1531,8 @@ export interface components {
       imageDirectory?: string | null;
       /** Comments */
       comments?: string | null;
+      /** Cassetteposition */
+      cassettePosition?: number | null;
       /** Collections */
       collections: number;
     };
@@ -2446,6 +2448,10 @@ export interface components {
       msg: string;
       /** Error Type */
       type: string;
+      /** Input */
+      input?: unknown;
+      /** Context */
+      ctx?: Record<string, never>;
     };
   };
   responses: never;
