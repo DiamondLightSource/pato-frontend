@@ -1,4 +1,4 @@
-FROM docker.io/library/node:22.14.0-alpine3.20 as build
+FROM docker.io/library/node:24.14.0-alpine3.23 as build
 
 WORKDIR /usr/src/app
 
@@ -15,7 +15,7 @@ RUN yarn install --immutable --check-cache
 COPY . ./
 RUN yarn build
 
-FROM docker.io/nginxinc/nginx-unprivileged:alpine3.21-slim
+FROM docker.io/nginxinc/nginx-unprivileged:alpine3.23-slim
 COPY --from=build /usr/src/app/build /usr/share/nginx/html
 COPY nginx/conf.d /etc/nginx/nginx.conf
 
