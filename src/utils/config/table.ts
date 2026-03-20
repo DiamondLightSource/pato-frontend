@@ -15,7 +15,7 @@ export const sessionHeaders = [
 
 export const groupsHeaders = [
   { key: "dataCollectionGroupId", label: "ID" },
-  { key: "comments", label: "Comments" },
+  { key: "cassettePosition", label: "Cassette Slot" },
   { key: "imageDirectory", label: "Image Directory" },
   { key: "experimentTypeName", label: "Experiment Type" },
   { key: "collections", label: "Collections" },
