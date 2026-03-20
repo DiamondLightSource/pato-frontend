@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.32.3 (20/03/2026)
+
+**Changed**
+
+- Display cassette slot instead of comments in session page
+
+**Fixed**
+
+- Fix overlapping colour channels in atlas
+
 ## v1.32.2 (20/02/2026)
 
 **Changed**
