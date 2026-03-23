@@ -1,6 +1,13 @@
-import { HStack, Heading, Link } from "@chakra-ui/layout";
-import { Tag, TagLeftIcon, TagLabel, TagProps } from "@chakra-ui/tag";
-import { Tooltip } from "@chakra-ui/tooltip";
+import {
+  Tooltip,
+  Tag,
+  TagLeftIcon,
+  TagLabel,
+  TagProps,
+  HStack,
+  Heading,
+  Link,
+} from "@chakra-ui/react";
 import { MdInfoOutline } from "react-icons/md";
 
 export interface CollectionTitleProps {

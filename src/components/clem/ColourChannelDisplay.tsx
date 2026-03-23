@@ -52,6 +52,7 @@ export const ColourChannelDisplay = ({
           src: `${prefix}?colour=${colour}`,
           hidden: !enabled,
         }))}
+        fallbackToPng={true}
       />
     </Box>
   );
