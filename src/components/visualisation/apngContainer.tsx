@@ -31,6 +31,7 @@ interface ApngView {
 export interface ApngContainerProps extends BoxProps {
   views: ApngView[];
   overlap?: boolean;
+  fallbackToPng?: boolean;
 }
 
 const OVERLAP_PROPS = {
@@ -44,6 +45,7 @@ const APNGContainer = ({
   height = "64vh",
   views,
   overlap = false,
+  fallbackToPng,
   ...props
 }: ApngContainerProps) => {
   const [frameLength, setFrameLength] = useState<number>();
@@ -103,6 +105,7 @@ const APNGContainer = ({
               frameIndex={frameIndex}
               caption={view.caption}
               src={view.src}
+              fallbackToPng={fallbackToPng}
             />
           </Box>
         ))}

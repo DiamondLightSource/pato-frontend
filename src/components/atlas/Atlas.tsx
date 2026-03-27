@@ -75,7 +75,11 @@ export const Atlas = ({
       ) : (
         <img src={prependApiUrl(`dataGroups/${groupId}/atlas/image`)} alt='Atlas' />
       )}
-      <svg viewBox='0 0 512 512' className='static-png'>
+      <svg
+        viewBox='0 0 512 512'
+        className='static-png'
+        style={{ width: colours ? "95%" : undefined }}
+      >
         {data.gridSquares &&
           data.gridSquares.map((gridSquare, index) => (
             <rect

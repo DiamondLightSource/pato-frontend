@@ -1,4 +1,4 @@
-import { createStandaloneToast } from "@chakra-ui/toast";
+import { createStandaloneToast } from "@chakra-ui/react";
 import { baseToast } from "@diamondlightsource/ui-components";
 const { toast } = createStandaloneToast();
 
