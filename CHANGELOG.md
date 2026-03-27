@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.32.4 (26/03/2026)
+
+**Fixed**
+
+- Display static PNG as fallback for APNG viewer
+- Fix how session page is displayed on smaller screens
+
 ## v1.32.3 (20/03/2026)
 
 **Changed**
