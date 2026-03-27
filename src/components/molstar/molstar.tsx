@@ -153,7 +153,7 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
       molstar = new PluginContext(showSlice ? DefaultSliceSpec : Default3DSpec);
 
       await molstar.init();
-      molstar.mount(viewerDiv.current!);
+      await molstar.mountAsync(viewerDiv.current!);
 
       const data = await molstar.builders.data.rawData(
         { data: rawData! },
