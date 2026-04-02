@@ -15,15 +15,17 @@ import { Suspense } from "react";
 import React from "react";
 import { MdOpenInNew } from "react-icons/md";
 import { Flipper } from "@diamondlightsource/ui-components";
+import MolstarTomogramWrapper from "./MolstarTomogram";
 const MolstarWrapper = React.lazy(() => import("components/molstar/molstar"));
 
 export interface MolstarModalProps extends Omit<ButtonProps, "onChange"> {
-  autoProcId: number;
-  classId: number;
+  autoProcId?: number;
+  classId?: number;
   page?: number;
   pageCount?: number;
   onChange?: (page: number) => void;
   buttonText?: string;
+  tomogramId?: number;
 }
 
 const MolstarModal = ({
@@ -33,6 +35,7 @@ const MolstarModal = ({
   pageCount,
   onChange,
   buttonText = "Open 3D Visualisation",
+  tomogramId,
   ...props
 }: MolstarModalProps) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -52,11 +55,15 @@ const MolstarModal = ({
           <ModalBody h={{ base: "90vh", md: "60vh" }}>
             {isOpen && (
               <Suspense>
-                <MolstarWrapper autoProcId={autoProcId} classId={classId}>
-                  {pageCount && (
-                    <Flipper size='md' total={pageCount} page={page} onChange={onChange} w='5em' />
-                  )}
-                </MolstarWrapper>
+                {autoProcId && classId ? (
+                  <MolstarWrapper autoProcId={autoProcId} classId={classId}>
+                    {pageCount && <Flipper size='md' total={pageCount} page={page} onChange={onChange} w='5em' />}
+                  </MolstarWrapper>
+                ) : (
+                  tomogramId && <MolstarTomogramWrapper tomogramId={tomogramId}>
+                    {pageCount && <Flipper size='md' total={pageCount} page={page} onChange={onChange} w='5em' />}
+                  </MolstarTomogramWrapper>
+                )}
               </Suspense>
             )}
           </ModalBody>
