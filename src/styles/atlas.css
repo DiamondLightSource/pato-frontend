@@ -4,6 +4,8 @@
 
 .img-wrapper img {
   width: 100%;
+  max-width: 720px;
+  align-self: flex-start;
 }
 
 .img-wrapper .static-png {
@@ -11,4 +13,5 @@
   top: 0;
   left: 0;
   z-index: 1;
+  width: 95%;
 }

@@ -3,17 +3,24 @@ import { prependApiUrl } from "utils/api/client";
 import { getAvailableColours } from "utils/generic";
 import { Box, Heading } from "@chakra-ui/react";
 import APNGContainer from "components/visualisation/apngContainer";
+import { ApngProps } from "@diamondlightsource/ui-components";
 
 export interface ColourChannelDisplayProps {
   itemId: number | string;
   colours: ReturnType<typeof getAvailableColours>;
   dataType?: "gridSquare" | "atlas";
+  onLoad?: ApngProps["onLoad"];
+  height?: string;
+  minHeight?: string;
 }
 
 export const ColourChannelDisplay = ({
   colours,
   itemId,
+  onLoad,
   dataType = "atlas",
+  height = "70vh",
+  minHeight="790px"
 }: ColourChannelDisplayProps) => {
   const prefix = useMemo(
     () =>
@@ -43,10 +50,12 @@ export const ColourChannelDisplay = ({
   }
 
   return (
-    <Box width='100%' minH='790px' h='100%' position='relative'>
+    <Box width='100%' h='100%' minH={minHeight} position='relative'>
       <APNGContainer
-        minH='790px'
-        pb='6em'
+        onLoad={onLoad}
+        mb="1em"
+        height={height}
+        minH={minHeight}
         overlap={true}
         views={Object.entries(colours).map(([colour, enabled]) => ({
           src: `${prefix}?colour=${colour}`,

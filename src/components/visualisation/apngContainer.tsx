@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MdFastForward, MdFastRewind, MdPause, MdPlayArrow } from "react-icons/md";
-import { APNGViewer } from "@diamondlightsource/ui-components";
+import { APNGViewer, ApngProps } from "@diamondlightsource/ui-components";
 import "styles/canvas.css";
 
 interface ApngView {
@@ -28,10 +28,11 @@ interface ApngView {
   caption?: string;
   hidden?: boolean;
 }
-export interface ApngContainerProps extends BoxProps {
+export interface ApngContainerProps extends Omit<BoxProps, "onLoad"> {
   views: ApngView[];
   overlap?: boolean;
   fallbackToPng?: boolean;
+  onLoad?: ApngProps["onLoad"];
 }
 
 const OVERLAP_PROPS = {
@@ -46,6 +47,7 @@ const APNGContainer = ({
   views,
   overlap = false,
   fallbackToPng,
+  onLoad,
   ...props
 }: ApngContainerProps) => {
   const [frameLength, setFrameLength] = useState<number>();
@@ -91,8 +93,8 @@ const APNGContainer = ({
         {views.map((view, i) => (
           <Box
             key={i}
-            h='100%'
             w={overlap ? "95%" : "100%"}
+            h="100%"
             {...(overlap ? { ...OVERLAP_PROPS } : {})}
             opacity={overlap ? (1 / visibleViews) * 1.2 : 1}
             display={view.hidden ? "none" : "block"}
@@ -100,6 +102,7 @@ const APNGContainer = ({
             aria-label={view.caption}
           >
             <APNGViewer
+              onLoad={onLoad}
               key={i}
               onFrameCountChanged={setFrameLength}
               frameIndex={frameIndex}
