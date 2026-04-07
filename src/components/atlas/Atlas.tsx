@@ -1,6 +1,6 @@
 import { Heading, VStack, Link } from "@chakra-ui/react";
 import { AtlasResponse } from "loaders/atlas";
-import { useCallback } from "react";
+import { SyntheticEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useLoaderData } from "react-router";
 import { components } from "schema/main";
 import { prependApiUrl } from "utils/api/client";
@@ -42,6 +42,7 @@ export const Atlas = ({
   selectedGridSquare,
   colours,
 }: AtlasProps) => {
+  const [svgDimensions, setSvgDimensions] = useState({ width: 512, height: 512 });
   const data = useLoaderData() as AtlasResponse;
   const handleGridSquareClicked = useCallback(
     (gridSquare: components["schemas"]["GridSquare"]) => {
@@ -51,6 +52,10 @@ export const Atlas = ({
     },
     [onGridSquareClicked]
   );
+
+  const viewBoxSize = useMemo(() => {
+    return `0 0 ${svgDimensions.width} ${svgDimensions.height}`;
+  }, [svgDimensions]);
 
   if (!data?.atlas) {
     return (
@@ -66,20 +71,13 @@ export const Atlas = ({
   }
 
   return (
-    <div
-      style={{ display: "flex", flex: "1 0 300px", paddingBottom: "6em" }}
-      className='img-wrapper'
-    >
+    <div className='img-wrapper'>
       {colours ? (
-        <ColourChannelDisplay itemId={groupId} colours={colours} />
+        <ColourChannelDisplay itemId={groupId} minHeight="700px" height="700px" colours={colours} onLoad={setSvgDimensions} />
       ) : (
         <img src={prependApiUrl(`dataGroups/${groupId}/atlas/image`)} alt='Atlas' />
       )}
-      <svg
-        viewBox='0 0 512 512'
-        className='static-png'
-        style={{ width: colours ? "95%" : undefined }}
-      >
+      <svg viewBox={viewBoxSize} className='static-png'>
         {data.gridSquares &&
           data.gridSquares.map((gridSquare, index) => (
             <rect

@@ -3172,9 +3172,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@diamondlightsource/ui-components@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "@diamondlightsource/ui-components@npm:2.3.0"
+"@diamondlightsource/ui-components@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "@diamondlightsource/ui-components@npm:2.4.0"
   dependencies:
     "@chakra-ui/icons": "npm:^2.2.6"
     "@visx/axis": "npm:^3.12.0"
@@ -3196,7 +3196,7 @@ __metadata:
     framer-motion: ^11.11.4
     react: ^19.2.0 || ^18.0.0
     react-dom: ^19.2.0 || ^18.0.0
-  checksum: 10c0/80cdb0ec59c8e83d92786f8ddc23843877cb968feab7829abc3320b15a01f6c3b78cd206e7ecc979189ae96dc79b8c1c4773844255782747dea1b655e7f29f6a
+  checksum: 10c0/73407489a9c903962ac9043f20220c65349a2c41a74d2dd190d0b1f0450c9b91197cb02871b7e3507442245233415d4c604d1396377e5876b6270d824add2e78
   languageName: node
   linkType: hard
 
@@ -13450,7 +13450,7 @@ __metadata:
     "@babel/core": "npm:^7.29.0"
     "@babel/preset-env": "npm:^7.29.0"
     "@chakra-ui/react": "npm:^2.10.9"
-    "@diamondlightsource/ui-components": "npm:^2.3.0"
+    "@diamondlightsource/ui-components": "npm:^2.4.0"
     "@emotion/react": "npm:^11.14.0"
     "@emotion/styled": "npm:^11.14.1"
     "@fullcalendar/core": "npm:^6.1.20"
