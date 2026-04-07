@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.32.5 (07/04/2026)
+
+**Fixed**
+
+- Fix APNG viewer overlay positioning
+
 ## v1.32.4 (26/03/2026)
 
 **Fixed**
