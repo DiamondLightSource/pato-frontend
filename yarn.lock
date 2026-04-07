@@ -3172,9 +3172,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@diamondlightsource/ui-components@file://home/yrh59256/Desktop/component-library/package.tgz::locator=pato-frontend%40workspace%3A.":
-  version: 2.3.0
-  resolution: "@diamondlightsource/ui-components@file://home/yrh59256/Desktop/component-library/package.tgz#//home/yrh59256/Desktop/component-library/package.tgz::hash=95dbd6&locator=pato-frontend%40workspace%3A."
+"@diamondlightsource/ui-components@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "@diamondlightsource/ui-components@npm:2.4.0"
   dependencies:
     "@chakra-ui/icons": "npm:^2.2.6"
     "@visx/axis": "npm:^3.12.0"
@@ -3196,7 +3196,7 @@ __metadata:
     framer-motion: ^11.11.4
     react: ^19.2.0 || ^18.0.0
     react-dom: ^19.2.0 || ^18.0.0
-  checksum: 10c0/230d46abad4aae467051666f91d5ae71d950484a380ae552b828c6a2b5d4a81642319456323e9c31fc579c5bf947f3f9ee236672caa3aeb479a82069f73a0dfb
+  checksum: 10c0/73407489a9c903962ac9043f20220c65349a2c41a74d2dd190d0b1f0450c9b91197cb02871b7e3507442245233415d4c604d1396377e5876b6270d824add2e78
   languageName: node
   linkType: hard
 
@@ -13450,7 +13450,7 @@ __metadata:
     "@babel/core": "npm:^7.29.0"
     "@babel/preset-env": "npm:^7.29.0"
     "@chakra-ui/react": "npm:^2.10.9"
-    "@diamondlightsource/ui-components": "file://home/yrh59256/Desktop/component-library/package.tgz"
+    "@diamondlightsource/ui-components": "npm:^2.4.0"
     "@emotion/react": "npm:^11.14.0"
     "@emotion/styled": "npm:^11.14.1"
     "@fullcalendar/core": "npm:^6.1.20"
