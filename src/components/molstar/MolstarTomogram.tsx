@@ -1,7 +1,7 @@
 import { DefaultPluginSpec, PluginSpec } from "molstar/lib/mol-plugin/spec";
 import { PluginContext } from "molstar/lib/mol-plugin/context";
 import { PluginConfig } from "molstar/lib/mol-plugin/config";
-import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { StateObjectSelector } from "molstar/lib/mol-state";
 import { PluginStateObject } from "molstar/lib/mol-plugin-state/objects";
 import { StateTransforms } from "molstar/lib/mol-plugin-state/transforms";
@@ -9,7 +9,6 @@ import { createVolumeRepresentationParams } from "molstar/lib/mol-plugin-state/h
 import {
   Box,
   Button,
-  ButtonGroup,
   Divider,
   Heading,
   HStack,
@@ -28,7 +27,6 @@ import {
 import { Md3dRotation, MdCamera, MdFileDownload, MdYoutubeSearchedFor } from "react-icons/md";
 import { client, prependApiUrl } from "utils/api/client";
 import { Vec3 } from "molstar/lib/mol-math/linear-algebra";
-import { debounce } from "utils/generic";
 import { Volume } from "molstar/lib/mol-model/volume";
 import { ColorNames } from "molstar/lib/mol-util/color/names";
 
@@ -39,19 +37,21 @@ const Default3DSpec: PluginSpec = {
 
 let molstar: PluginContext | null = null;
 
-const COLOURS = [
-  ColorNames.blue,
-  ColorNames.red,
-  ColorNames.gray,
-  ColorNames.orange,
-  ColorNames.purple,
-];
+const COLOURS = {
+  microtubule: ColorNames.blue,
+  ribosome: ColorNames.red,
+  membrane: ColorNames.gray,
+  tric: ColorNames.orange,
+};
 
 interface MolstarTomogramWrapperProps {
   /* Additional custom controls */
   children?: ReactNode;
   tomogramId: number;
 }
+
+interface VolumeData {volume: Volume, repr: StateObjectSelector<PluginStateObject.Volume.Representation3D>}
+
 
 // This is tested inside the Molstar internals, and there is no benefit to a complex mock for this
 /* c8 ignore start */
@@ -74,6 +74,21 @@ const MolstarTomogramWrapper = ({ children, tomogramId }: MolstarTomogramWrapper
   const viewerDiv = useRef<HTMLDivElement>(null);
   const [isRendered, setIsRendered] = useState<boolean | undefined>(false);
   const [isoSurfaceValue, setIsoSurfaceValue] = useState(1);
+  const [data, setData] = useState<VolumeData[]>([]);
+
+  useEffect(() => {
+    for (const volData of data) {
+      if (molstar) {
+        molstar?.build().to(volData.repr).update(
+            createVolumeRepresentationParams(molstar, volData.volume, {
+              type: "isosurface",
+              typeParams: { isoValue: { kind: "relative", relativeValue: isoSurfaceValue } },
+            })
+          )
+          .commit();
+        }
+      }
+    }, [isoSurfaceValue, data]);
 
   useEffect(() => {
     const init = async () => {
@@ -83,8 +98,21 @@ const MolstarTomogramWrapper = ({ children, tomogramId }: MolstarTomogramWrapper
       await molstar.init();
       await molstar.mountAsync(viewerDiv.current!);
 
-      ["ribosome", "microtubule", "membrane", "tric"].map(async (feature, i) => {
-        const mrcFile = await client.safeGet(`/tomograms/${tomogramId}/feature?feature=${feature}`);
+      const newData: VolumeData[] = [];
+
+      const featureResp = await client.safeGet(`/tomograms/${tomogramId}/features`);
+
+      if (featureResp.status !== 200 || featureResp.data.features.length < 1) {
+        return;
+      }
+
+      console.log(featureResp.data)
+
+      // TODO: update type
+      const features: string[] = featureResp.data.features;
+
+      features.map(async (feature, i) => {
+        const mrcFile = await client.safeGet(`/tomograms/${tomogramId}/features/${feature}`);
 
         if (mrcFile.status !== 200 || !molstar) {
           return;
@@ -106,18 +134,21 @@ const MolstarTomogramWrapper = ({ children, tomogramId }: MolstarTomogramWrapper
               typeParams: {
               isoValue: {
                 kind: "relative",
-                relativeValue: isoSurfaceValue,
+                relativeValue: 1,
               },
               tryUseGpu: true,
               sizeFactor: 1,
               visuals: ["solid"],
             },
               color: "uniform",
-              colorParams: {value: COLOURS[i]}
+              colorParams: {value: COLOURS[feature]}
             }),
           );
+        
         await newRepr.commit();
+        newData.push({volume: volume!.data!, repr: newRepr.selector});
       });
+      setData(newData);
     };
 
     setIsRendered(undefined);
@@ -128,7 +159,7 @@ const MolstarTomogramWrapper = ({ children, tomogramId }: MolstarTomogramWrapper
       molstar?.dispose();
       molstar = null;
     };
-  }, [viewerDiv, tomogramId, isoSurfaceValue]);
+  }, [viewerDiv, tomogramId]);
 
   return (
     <VStack h='100%'>
