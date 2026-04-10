@@ -1,7 +1,7 @@
 .img-wrapper {
   position: relative;
-  display: "flex";
-  flex: "1 0 300px";
+  display: flex;
+  flex: 1 0 300px;
 }
 
 .img-wrapper img {
