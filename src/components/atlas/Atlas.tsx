@@ -1,6 +1,6 @@
 import { Heading, VStack, Link } from "@chakra-ui/react";
 import { AtlasResponse } from "loaders/atlas";
-import { SyntheticEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useLoaderData } from "react-router";
 import { components } from "schema/main";
 import { prependApiUrl } from "utils/api/client";
