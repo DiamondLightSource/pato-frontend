@@ -1,6 +1,6 @@
 import { Divider, Heading, Skeleton, VStack, HStack, useToast } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import { useCallback } from "react";
+import { SyntheticEvent, useCallback, useState } from "react";
 import { components } from "schema/main";
 import { client, prependApiUrl } from "utils/api/client";
 import "styles/atlas.css";
@@ -62,6 +62,7 @@ const fetchTomograms = async (searchMapId: number | null, scalingFactor: number)
 };
 
 export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
+  const [viewBox, setViewBox] = useState("0 0 512 512");
   const { data, isLoading } = useQuery({
     queryKey: ["searchMapTomograms", searchMapId],
     queryFn: async () => await fetchTomograms(searchMapId, scalingFactor),
@@ -91,6 +92,10 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
     [navigate, toast]
   );
 
+  const handleLoad = useCallback((e: SyntheticEvent<HTMLImageElement, Event>) => {
+      setViewBox(`0 0 ${e.currentTarget.naturalWidth} ${e.currentTarget.naturalHeight}`);
+  }, [setViewBox])
+
   return (
     <VStack
       display='flex'
@@ -117,9 +122,9 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
           No tomograms available
         </Heading>
       ) : (
-        <div style={{ width: "100%", overflow: "hidden" }} className='img-wrapper'>
-          <img src={prependApiUrl(`grid-squares/${searchMapId}/image`)} alt='Search Map' />
-          <svg viewBox='0 0 512 800' className='static-png'>
+        <div style={{ width: "100%" }} className='img-wrapper'>
+          <img src={prependApiUrl(`grid-squares/${searchMapId}/image`)} alt='Search Map' onLoad={handleLoad} />
+          <svg viewBox={viewBox} className='static-png'>
             {data.map((item, i) => (
               <rect
                 data-testid={`item-${i}`}

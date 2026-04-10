@@ -1,6 +1,6 @@
 import { Heading, VStack, Link } from "@chakra-ui/react";
 import { AtlasResponse } from "loaders/atlas";
-import { SyntheticEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useLoaderData } from "react-router";
 import { components } from "schema/main";
 import { prependApiUrl } from "utils/api/client";
@@ -71,13 +71,19 @@ export const Atlas = ({
   }
 
   return (
-    <div className='img-wrapper'>
+    <div className='img-wrapper' style={{ marginBottom: colours ? "6em" : "0" }}>
       {colours ? (
-        <ColourChannelDisplay itemId={groupId} minHeight="700px" height="700px" colours={colours} onLoad={setSvgDimensions} />
+        <ColourChannelDisplay
+          itemId={groupId}
+          minHeight='820px'
+          height='820px'
+          colours={colours}
+          onLoad={setSvgDimensions}
+        />
       ) : (
         <img src={prependApiUrl(`dataGroups/${groupId}/atlas/image`)} alt='Atlas' />
       )}
-      <svg viewBox={viewBoxSize} className='static-png'>
+      <svg viewBox={viewBoxSize} className='static-png' style={{ width: colours ? "95%" : "100%" }}>
         {data.gridSquares &&
           data.gridSquares.map((gridSquare, index) => (
             <rect
