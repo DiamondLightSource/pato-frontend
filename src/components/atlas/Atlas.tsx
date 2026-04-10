@@ -71,13 +71,19 @@ export const Atlas = ({
   }
 
   return (
-    <div className='img-wrapper'>
+    <div className='img-wrapper' style={{ marginBottom: colours ? "6em" : "0" }}>
       {colours ? (
-        <ColourChannelDisplay itemId={groupId} minHeight="700px" height="700px" colours={colours} onLoad={setSvgDimensions} />
+        <ColourChannelDisplay
+          itemId={groupId}
+          minHeight='700px'
+          height='700px'
+          colours={colours}
+          onLoad={setSvgDimensions}
+        />
       ) : (
         <img src={prependApiUrl(`dataGroups/${groupId}/atlas/image`)} alt='Atlas' />
       )}
-      <svg viewBox={viewBoxSize} className='static-png'>
+      <svg viewBox={viewBoxSize} className='static-png' style={{ width: colours ? "95%" : "100%" }}>
         {data.gridSquares &&
           data.gridSquares.map((gridSquare, index) => (
             <rect
