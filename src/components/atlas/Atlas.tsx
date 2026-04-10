@@ -75,8 +75,8 @@ export const Atlas = ({
       {colours ? (
         <ColourChannelDisplay
           itemId={groupId}
-          minHeight='700px'
-          height='700px'
+          minHeight='820px'
+          height='820px'
           colours={colours}
           onLoad={setSvgDimensions}
         />
