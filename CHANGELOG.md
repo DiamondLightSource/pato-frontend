@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.32.6 (10/04/2026)
+
+**Fixed**
+
+- Fix atlas overlay
+
 ## v1.32.5 (07/04/2026)
 
 **Fixed**
