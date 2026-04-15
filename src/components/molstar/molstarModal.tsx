@@ -15,7 +15,7 @@ import { Suspense } from "react";
 import React from "react";
 import { MdOpenInNew } from "react-icons/md";
 import { Flipper } from "@diamondlightsource/ui-components";
-import MolstarTomogramWrapper from "./MolstarTomogram";
+const MolstarTomogramWrapper = React.lazy(() => import("components/molstar/MolstarTomogram"));
 const MolstarWrapper = React.lazy(() => import("components/molstar/molstar"));
 
 export interface MolstarModalProps extends Omit<ButtonProps, "onChange"> {
@@ -26,6 +26,7 @@ export interface MolstarModalProps extends Omit<ButtonProps, "onChange"> {
   onChange?: (page: number) => void;
   buttonText?: string;
   tomogramId?: number;
+  buttonWidth?: string;
 }
 
 const MolstarModal = ({
@@ -36,13 +37,21 @@ const MolstarModal = ({
   onChange,
   buttonText = "Open 3D Visualisation",
   tomogramId,
+  buttonWidth = "30em",
   ...props
 }: MolstarModalProps) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const MolstarRenderer = autoProcId && classId ? MolstarWrapper : MolstarTomogramWrapper;
+  const molstarProps = { autoProcId, classId, tomogramId };
+
+  if (!autoProcId && !classId && !tomogramId) {
+    console.error("No valid item ID provided for Molstar renderer");
+    return null;
+  }
 
   return (
     <>
-      <Button onClick={onOpen} width='30em' {...props}>
+      <Button onClick={onOpen} width={buttonWidth} {...props}>
         {buttonText}
         <Spacer />
         <Icon as={MdOpenInNew}></Icon>
@@ -55,15 +64,12 @@ const MolstarModal = ({
           <ModalBody h={{ base: "90vh", md: "60vh" }}>
             {isOpen && (
               <Suspense>
-                {autoProcId && classId ? (
-                  <MolstarWrapper autoProcId={autoProcId} classId={classId}>
-                    {pageCount && <Flipper size='md' total={pageCount} page={page} onChange={onChange} w='5em' />}
-                  </MolstarWrapper>
-                ) : (
-                  tomogramId && <MolstarTomogramWrapper tomogramId={tomogramId}>
-                    {pageCount && <Flipper size='md' total={pageCount} page={page} onChange={onChange} w='5em' />}
-                  </MolstarTomogramWrapper>
-                )}
+                {/* @ts-ignore The appropriate renderer is selected and ensures the values aren't null , this does look ugly though */}
+                <MolstarRenderer {...molstarProps}>
+                  {pageCount && (
+                    <Flipper size='md' total={pageCount} page={page} onChange={onChange} w='5em' />
+                  )}
+                </MolstarRenderer>
               </Suspense>
             )}
           </ModalBody>

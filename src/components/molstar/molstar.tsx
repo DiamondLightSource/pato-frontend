@@ -281,7 +281,12 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
           </>
         ) : (
           <>
-            <Text style={{ writingMode: "sideways-lr" }} color='diamond.300' fontWeight='600'>
+            <Text
+              style={{ writingMode: "sideways-lr" }}
+              h='auto'
+              color='diamond.300'
+              fontWeight='600'
+            >
               Isosurface Value
             </Text>
             <Slider

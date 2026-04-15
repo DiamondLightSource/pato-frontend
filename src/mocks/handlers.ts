@@ -115,6 +115,10 @@ export const handlers = [
 
   http.get("http://localhost/tomograms/:id/centralSlice", () => HttpResponse.text("")),
 
+  http.get("http://localhost/tomograms/:id/features", () =>
+    HttpResponse.json({ features: ["membrane"] })
+  ),
+
   http.get("http://localhost/tomograms/:id/movie", () => HttpResponse.text("")),
 
   http.get("http://localhost/movies/:id/drift", () =>

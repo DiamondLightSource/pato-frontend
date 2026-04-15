@@ -39,7 +39,6 @@ import { useQuery } from "@tanstack/react-query";
 import { ScatterPlot, InfoGroup, ImageCard, BasePoint } from "@diamondlightsource/ui-components";
 import { countDarkImages, fetchMotionData } from "utils/api/queries/motion";
 import { DarkImageCount } from "components/visualisation/DarkImages";
-import { MolstarModal } from "components/molstar/molstarModal";
 
 const tomogramConfig: DataConfig = {
   include: [
@@ -174,8 +173,6 @@ const Tomogram = ({
             </Box>
           ) : (
             <Grid gap={3} templateColumns={{ base: "", "2xl": "repeat(2, 1fr)" }}>
-
-      <MolstarModal tomogramId={data!.tomogram!.tomogramId}/>
               <Box minW='0'>
                 <HStack>
                   <Heading variant='collection'>Alignment</Heading>

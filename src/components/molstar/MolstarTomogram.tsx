@@ -29,6 +29,8 @@ import { client, prependApiUrl } from "utils/api/client";
 import { Vec3 } from "molstar/lib/mol-math/linear-algebra";
 import { Volume } from "molstar/lib/mol-model/volume";
 import { ColorNames } from "molstar/lib/mol-util/color/names";
+import { TomogramFeature } from "schema/interfaces";
+import { Color } from "molstar/lib/mol-util/color";
 
 const Default3DSpec: PluginSpec = {
   ...DefaultPluginSpec(),
@@ -37,7 +39,7 @@ const Default3DSpec: PluginSpec = {
 
 let molstar: PluginContext | null = null;
 
-const COLOURS = {
+const COLOURS: Record<TomogramFeature, Color> = {
   microtubule: ColorNames.blue,
   ribosome: ColorNames.red,
   membrane: ColorNames.gray,
@@ -50,8 +52,11 @@ interface MolstarTomogramWrapperProps {
   tomogramId: number;
 }
 
-interface VolumeData {volume: Volume, repr: StateObjectSelector<PluginStateObject.Volume.Representation3D>}
-
+interface VolumeData {
+  volume: Volume;
+  repr: StateObjectSelector<PluginStateObject.Volume.Representation3D>;
+  feature: TomogramFeature;
+}
 
 // This is tested inside the Molstar internals, and there is no benefit to a complex mock for this
 /* c8 ignore start */
@@ -64,7 +69,7 @@ const resetOrientation = (isSlice = false) => {
         scene.boundingSphereVisible.center,
         scene.boundingSphereVisible.radius,
         isSlice ? Vec3.unitZ : Vec3.unitY,
-        isSlice ? Vec3.negUnitY : Vec3.negUnitZ,
+        isSlice ? Vec3.negUnitY : Vec3.negUnitZ
       ),
   });
 };
@@ -79,16 +84,21 @@ const MolstarTomogramWrapper = ({ children, tomogramId }: MolstarTomogramWrapper
   useEffect(() => {
     for (const volData of data) {
       if (molstar) {
-        molstar?.build().to(volData.repr).update(
+        molstar
+          ?.build()
+          .to(volData.repr)
+          .update(
             createVolumeRepresentationParams(molstar, volData.volume, {
               type: "isosurface",
               typeParams: { isoValue: { kind: "relative", relativeValue: isoSurfaceValue } },
+              color: "uniform",
+              colorParams: { value: COLOURS[volData.feature] },
             })
           )
           .commit();
-        }
       }
-    }, [isoSurfaceValue, data]);
+    }
+  }, [isoSurfaceValue, data]);
 
   useEffect(() => {
     const init = async () => {
@@ -100,28 +110,31 @@ const MolstarTomogramWrapper = ({ children, tomogramId }: MolstarTomogramWrapper
 
       const newData: VolumeData[] = [];
 
-      const featureResp = await client.safeGet(`/tomograms/${tomogramId}/features`);
+      const featureResp = await client.safeGet(`tomograms/${tomogramId}/features`);
 
       if (featureResp.status !== 200 || featureResp.data.features.length < 1) {
+        setIsRendered(false);
         return;
       }
 
-      console.log(featureResp.data)
-
-      // TODO: update type
-      const features: string[] = featureResp.data.features;
+      const features: TomogramFeature[] = featureResp.data.features;
 
       features.map(async (feature, i) => {
-        const mrcFile = await client.safeGet(`/tomograms/${tomogramId}/features/${feature}`);
+        const mrcFile = await client.safeGet(`tomograms/${tomogramId}/features/${feature}`);
 
         if (mrcFile.status !== 200 || !molstar) {
+          setIsRendered(false);
           return;
         }
 
         const rawData = mrcFile.data;
-        const data = await molstar.builders.data.rawData({ data: rawData! }, { state: { isGhost: true } });
+        const data = await molstar.builders.data.rawData(
+          { data: rawData! },
+          { state: { isGhost: false } }
+        );
         const parsed = await molstar.dataFormats.get("ccp4")!.parse(molstar, data);
-        const volume: StateObjectSelector<PluginStateObject.Volume.Data> = parsed.volumes?.[0] ?? parsed.volume;
+        const volume: StateObjectSelector<PluginStateObject.Volume.Data> =
+          parsed.volumes?.[0] ?? parsed.volume;
 
         // Generate initial representation before rerendering with default isosurface value
         const newRepr = molstar
@@ -132,21 +145,21 @@ const MolstarTomogramWrapper = ({ children, tomogramId }: MolstarTomogramWrapper
             createVolumeRepresentationParams(molstar, volume.data!, {
               type: "isosurface",
               typeParams: {
-              isoValue: {
-                kind: "relative",
-                relativeValue: 1,
+                isoValue: {
+                  kind: "relative",
+                  relativeValue: 1,
+                },
+                tryUseGpu: true,
+                sizeFactor: 1,
+                visuals: ["solid"],
               },
-              tryUseGpu: true,
-              sizeFactor: 1,
-              visuals: ["solid"],
-            },
               color: "uniform",
-              colorParams: {value: COLOURS[feature]}
-            }),
+              colorParams: { value: COLOURS[feature] },
+            })
           );
-        
+
         await newRepr.commit();
-        newData.push({volume: volume!.data!, repr: newRepr.selector});
+        newData.push({ volume: volume!.data!, repr: newRepr.selector, feature });
       });
       setData(newData);
     };
@@ -165,12 +178,20 @@ const MolstarTomogramWrapper = ({ children, tomogramId }: MolstarTomogramWrapper
     <VStack h='100%'>
       <HStack w='100%'>
         <Tooltip label='Reset Zoom'>
-          <Button aria-label='Reset Zoom' isDisabled={!isRendered} onClick={() => molstar!.managers.camera.reset()}>
+          <Button
+            aria-label='Reset Zoom'
+            isDisabled={!isRendered}
+            onClick={() => molstar!.managers.camera.reset()}
+          >
             <Icon as={MdYoutubeSearchedFor} />
           </Button>
         </Tooltip>
         <Tooltip label='Reset Original Orientation'>
-          <Button aria-label='Reset Original Orientation' isDisabled={!isRendered} onClick={() => resetOrientation()}>
+          <Button
+            aria-label='Reset Original Orientation'
+            isDisabled={!isRendered}
+            onClick={() => resetOrientation()}
+          >
             <Icon as={Md3dRotation} />
           </Button>
         </Tooltip>
@@ -195,11 +216,24 @@ const MolstarTomogramWrapper = ({ children, tomogramId }: MolstarTomogramWrapper
         {children}
       </HStack>
       <HStack h='90%' w='100%'>
-        <Box bg='diamond.75' position='relative' display='flex' flexGrow={5} h='100%' ref={viewerDiv}>
+        <Box
+          bg='diamond.75'
+          position='relative'
+          display='flex'
+          flexGrow={5}
+          h='100%'
+          ref={viewerDiv}
+        >
           {isRendered ? null : isRendered === undefined ? (
             <Skeleton h='100%' w='100%' />
           ) : (
-            <Heading display='flex' justifyContent='center' alignSelf='center' w='100%' variant='notFound'>
+            <Heading
+              display='flex'
+              justifyContent='center'
+              alignSelf='center'
+              w='100%'
+              variant='notFound'
+            >
               No Valid Volume File
             </Heading>
           )}
@@ -214,7 +248,7 @@ const MolstarTomogramWrapper = ({ children, tomogramId }: MolstarTomogramWrapper
             onChange={(v) => setIsoSurfaceValue(v)}
             value={isoSurfaceValue}
             step={0.001}
-            max={10}
+            max={3}
             min={0}
           >
             <SliderTrack bg='diamond.200'>
