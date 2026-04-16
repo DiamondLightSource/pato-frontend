@@ -1,10 +1,8 @@
 import { Button, ButtonGroup } from "@chakra-ui/react";
 import { useCallback, useMemo } from "react";
-import { components } from "schema/main";
+import { ColourChannel } from "schema/interfaces";
 import { getAvailableColours } from "utils/generic";
 import { COLOUR_NAME } from "utils/validation";
-
-export type ColourChannel = components["schemas"]["ColourChannel"];
 
 interface ColourButtonInterface {
   colour: ColourChannel;

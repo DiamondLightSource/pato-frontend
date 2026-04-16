@@ -1,6 +1,5 @@
-import { DefaultPluginSpec, PluginSpec } from "molstar/lib/mol-plugin/spec";
+
 import { PluginContext } from "molstar/lib/mol-plugin/context";
-import { PluginConfig } from "molstar/lib/mol-plugin/config";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { StateObjectSelector } from "molstar/lib/mol-state";
 import { PluginStateObject } from "molstar/lib/mol-plugin-state/objects";
@@ -13,7 +12,6 @@ import {
   Heading,
   HStack,
   Icon,
-  Link,
   Skeleton,
   Slider,
   SliderFilledTrack,
@@ -24,18 +22,13 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { Md3dRotation, MdCamera, MdFileDownload, MdYoutubeSearchedFor } from "react-icons/md";
-import { client, prependApiUrl } from "utils/api/client";
-import { Vec3 } from "molstar/lib/mol-math/linear-algebra";
+import { Md3dRotation, MdCamera, MdYoutubeSearchedFor } from "react-icons/md";
+import { client } from "utils/api/client";
 import { Volume } from "molstar/lib/mol-model/volume";
 import { ColorNames } from "molstar/lib/mol-util/color/names";
 import { TomogramFeature } from "schema/interfaces";
 import { Color } from "molstar/lib/mol-util/color";
-
-const Default3DSpec: PluginSpec = {
-  ...DefaultPluginSpec(),
-  config: [[PluginConfig.VolumeStreaming.Enabled, false]],
-};
+import { Default3DSpec, resetCameraOrientation } from "utils/molstar";
 
 let molstar: PluginContext | null = null;
 
@@ -58,21 +51,8 @@ interface VolumeData {
   feature: TomogramFeature;
 }
 
-// This is tested inside the Molstar internals, and there is no benefit to a complex mock for this
 /* c8 ignore start */
-const resetOrientation = (isSlice = false) => {
-  // Resets to original orientation (depends on view type)
-
-  molstar!.canvas3d!.requestCameraReset({
-    snapshot: (scene, camera) =>
-      camera.getInvariantFocus(
-        scene.boundingSphereVisible.center,
-        scene.boundingSphereVisible.radius,
-        isSlice ? Vec3.unitZ : Vec3.unitY,
-        isSlice ? Vec3.negUnitY : Vec3.negUnitZ
-      ),
-  });
-};
+const resetOrientation = (isSlice = false) => resetCameraOrientation(molstar!, isSlice);
 /* c8 ignore end */
 
 const MolstarTomogramWrapper = ({ children, tomogramId }: MolstarTomogramWrapperProps) => {
@@ -204,13 +184,6 @@ const MolstarTomogramWrapper = ({ children, tomogramId }: MolstarTomogramWrapper
           >
             <Icon as={MdCamera} />
           </Button>
-        </Tooltip>
-        <Tooltip label='Download File'>
-          <Link href={prependApiUrl("")} target='_blank'>
-            <Button aria-label='Download File' isDisabled={!isRendered}>
-              <Icon as={MdFileDownload} />
-            </Button>
-          </Link>
         </Tooltip>
         <Spacer />
         {children}
