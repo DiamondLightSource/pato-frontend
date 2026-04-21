@@ -15,3 +15,7 @@
   left: 0;
   z-index: 1;
 }
+
+.apng-viewer img {
+  width: 100%;
+}
