@@ -28,6 +28,7 @@ export const ClemROIs = ({ gridSquare }: ClemROIsProps) => {
       alignItems='start'
       border='1px solid'
       borderColor='diamond.900'
+      className='apng-viewer'
     >
       <HStack w='100%'>
         <Heading>ROIs</Heading>
