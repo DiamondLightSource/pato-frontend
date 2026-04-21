@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.33.0 (21/04/2026)
+
+**Fixed**
+
+- Fix CLEM non-animated PNG sizes
+
+**Added**
+
+- Tomogram feature view
+
 ## v1.32.6 (10/04/2026)
 
 **Fixed**
