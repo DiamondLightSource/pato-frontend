@@ -84,6 +84,46 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/tomograms/{tomogramId}/features/{feature}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Feature
+     * @description Get tomogram feature
+     */
+    get: operations["get_feature_tomograms__tomogramId__features__feature__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/tomograms/{tomogramId}/features": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Features
+     * @description Get tomogram features
+     */
+    get: operations["get_features_tomograms__tomogramId__features_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/tomograms/{tomogramId}/projection": {
     parameters: {
       query?: never;
@@ -1414,7 +1454,7 @@ export interface components {
       /** Particleclassificationgroupid */
       particleClassificationGroupId: number;
       /** Particlepickerid */
-      particlePickerId: number;
+      particlePickerId?: number | null;
       /** Programid */
       programId: number;
       /** Type */
@@ -1456,8 +1496,6 @@ export interface components {
       /** Suggestedtilt */
       suggestedTilt?: number | null;
     };
-    /** @enum {string} */
-    ColourChannel: "grey" | "red" | "green" | "blue" | "magenta" | "cyan" | "yellow";
     /** CtfBaseSpa */
     CtfBaseSpa: {
       /** Estimatedresolution */
@@ -1710,6 +1748,13 @@ export interface components {
       /** Y */
       y: number;
     };
+    /** FeatureList */
+    FeatureList: {
+      /** Features */
+      features: components["schemas"]["FeatureType"][];
+    };
+    /** @enum {string} */
+    FeatureType: "ribosome" | "microtubule" | "membrane" | "tric";
     /** FeedbackForm */
     FeedbackForm: {
       /** Fullname */
@@ -1918,7 +1963,6 @@ export interface components {
       /** Gridsquareid */
       gridSquareId?: number | null;
     };
-    MovieType: ("denoised" | "segmented" | "picked" | "alignment" | "stack") | null;
     /**
      * NotificationSignup
      * @description Required information for signing up to notifications
@@ -2537,7 +2581,7 @@ export interface operations {
   get_slice_tomograms__tomogramId__centralSlice_get: {
     parameters: {
       query?: {
-        movieType?: components["schemas"]["MovieType"];
+        movieType?: ("denoised" | "segmented" | "picked" | "alignment" | "stack") | null;
       };
       header?: never;
       path: {
@@ -2568,7 +2612,7 @@ export interface operations {
   get_movie_tomograms__tomogramId__movie_get: {
     parameters: {
       query?: {
-        movieType?: components["schemas"]["MovieType"];
+        movieType?: ("denoised" | "segmented" | "picked" | "alignment" | "stack") | null;
       };
       header?: never;
       path: {
@@ -2584,6 +2628,67 @@ export interface operations {
           [name: string]: unknown;
         };
         content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_feature_tomograms__tomogramId__features__feature__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        feature: "ribosome" | "microtubule" | "membrane" | "tric";
+        tomogramId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_features_tomograms__tomogramId__features_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        tomogramId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FeatureList"];
+        };
       };
       /** @description Validation Error */
       422: {
@@ -3292,7 +3397,7 @@ export interface operations {
   get_tomogram_central_slice_dataCollections__collectionId__centralSlice_get: {
     parameters: {
       query?: {
-        movieType?: components["schemas"]["MovieType"];
+        movieType?: ("denoised" | "segmented" | "picked" | "alignment" | "stack") | null;
       };
       header?: never;
       path: {
@@ -3529,7 +3634,7 @@ export interface operations {
   get_atlas_image_dataGroups__groupId__atlas_image_get: {
     parameters: {
       query?: {
-        colour?: components["schemas"]["ColourChannel"];
+        colour?: "grey" | "red" | "green" | "blue" | "magenta" | "cyan" | "yellow";
       };
       header?: never;
       path: {
@@ -4437,7 +4542,7 @@ export interface operations {
   get_grid_square_image_grid_squares__gridSquareId__image_get: {
     parameters: {
       query?: {
-        colour?: components["schemas"]["ColourChannel"];
+        colour?: "grey" | "red" | "green" | "blue" | "magenta" | "cyan" | "yellow";
       };
       header?: never;
       path: {

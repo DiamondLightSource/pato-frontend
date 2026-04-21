@@ -30,8 +30,25 @@ import { Flipper, InfoGroup } from "@diamondlightsource/ui-components";
 import { CollectionTitle } from "components/visualisation/collectionTitle";
 import { TomogramMovieTypes } from "schema/interfaces";
 import { SliceViewer } from "components/tomogram/SliceViewer";
+import { MolstarModal } from "components/molstar/molstarModal";
+import { client } from "utils/api/client";
+import { useQuery } from "@tanstack/react-query";
 
 const TomogramReprocessing = React.lazy(() => import("components/tomogram/reprocessing"));
+
+const getHasFeatures = async (tomogramId?: number | null) => {
+  if (!tomogramId) {
+    return false;
+  }
+
+  const response = await client.safeGet(`tomograms/${tomogramId}/features`);
+
+  if (response.status !== 200) {
+    return false;
+  }
+
+  return (response.data.features as string[]).length > 0;
+};
 
 const TomogramPage = () => {
   const params = useParams();
@@ -74,17 +91,24 @@ const TomogramPage = () => {
     }));
   }, [setSearchParams]);
 
+  const currentTomogram = loaderData.tomograms
+    ? loaderData.tomograms[0]?.Tomogram?.tomogramId
+    : null;
+
+  const { data: hasFeatures } = useQuery<boolean>({
+    queryKey: ["tomogramFeatures", currentTomogram],
+    queryFn: async () => getHasFeatures(currentTomogram),
+  });
+
   useEffect(() => {
     document.title = `PATo » Tomograms » ${params.collectionIndex}`;
   }, [params]);
 
   useEffect(() => {
     setOpenTomogram((prevState) =>
-      prevState !== null && loaderData.tomograms && loaderData.tomograms[0].Tomogram
-        ? loaderData.tomograms[0].Tomogram.tomogramId
-        : null
+      prevState !== null && currentTomogram ? currentTomogram : null
     );
-  }, [loaderData]);
+  }, [loaderData, currentTomogram]);
 
   const handleOpenTomogram = useCallback((tomogramId: number, type: TomogramMovieTypes) => {
     setMovieType(type);
@@ -124,6 +148,13 @@ const TomogramPage = () => {
             />
             <Spacer />
             <HStack>
+              <MolstarModal
+                buttonWidth='120px'
+                buttonText='3D Vis.'
+                disabled={!hasFeatures}
+                // If we have features, then we have a valid tomogram ID
+                tomogramId={currentTomogram!}
+              />
               <Tooltip label='View Atlas'>
                 <Button
                   aria-label='View Atlas'

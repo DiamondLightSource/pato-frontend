@@ -5,6 +5,8 @@ import { TomogramResponse } from "loaders/tomogram";
 import { CollectionData } from "schema/interfaces";
 import { TomogramProps } from "components/tomogram/main";
 import { AccordionItem } from "@chakra-ui/react";
+import { server } from "mocks/server";
+import { http, HttpResponse } from "msw";
 
 type LoaderReturn = Awaited<TomogramResponse>;
 
@@ -130,5 +132,25 @@ describe("Tomogram Page", () => {
 
     await screen.findByText("Tilt Align 1");
     expect(screen.getByRole("button", { name: /run reprocessing/i })).toHaveAttribute("disabled");
+  });
+
+  it("should enable 3D visualisation button if tomogram has features", async () => {
+    renderWithRoute(<TomogramPage />, () => validData);
+
+    const visButton = await screen.findByText("3D Vis.");
+    await waitFor(() => expect(visButton).not.toBeDisabled());
+  });
+
+  it("should disable 3D visualisation button if tomogram has no features", async () => {
+    server.use(
+      http.get("http://localhost/tomograms/:id/features", () =>
+        HttpResponse.json({}, { status: 404 })
+      )
+    );
+
+    renderWithRoute(<TomogramPage />, () => validData);
+
+    const visButton = await screen.findByText("3D Vis.");
+    expect(visButton).toBeDisabled();
   });
 });

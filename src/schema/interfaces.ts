@@ -83,4 +83,5 @@ export type FoilHoleMetricTypes = "astigmatism" | "particleCount" | "resolution"
 export type AtlasOrGridSquare =
   | components["schemas"]["Atlas"]
   | components["schemas"]["GridSquare"];
-export type ColourChannel = components["schemas"]["ColourChannel"];
+export type ColourChannel = "grey" | "red" | "green" | "blue" | "magenta" | "cyan" | "yellow";
+export type TomogramFeature = components["schemas"]["FeatureType"];

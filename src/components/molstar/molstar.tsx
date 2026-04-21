@@ -27,29 +27,9 @@ import {
 } from "@chakra-ui/react";
 import { Md3dRotation, MdCamera, MdFileDownload, MdYoutubeSearchedFor } from "react-icons/md";
 import { client, prependApiUrl } from "utils/api/client";
-import { Vec3 } from "molstar/lib/mol-math/linear-algebra";
 import { debounce } from "utils/generic";
 import { Volume } from "molstar/lib/mol-model/volume";
-
-const Default3DSpec: PluginSpec = {
-  ...DefaultPluginSpec(),
-  config: [[PluginConfig.VolumeStreaming.Enabled, false]],
-};
-
-const DefaultSliceSpec: PluginSpec = {
-  ...Default3DSpec,
-  canvas3d: {
-    trackball: {
-      rotateSpeed: 0,
-    },
-    cameraResetDurationMs: 0,
-    camera: {
-      helper: {
-        axes: {},
-      },
-    },
-  },
-};
+import { resetCameraOrientation, Default3DSpec, DefaultSliceSpec } from "utils/molstar";
 
 let molstar: PluginContext | null = null;
 
@@ -61,21 +41,8 @@ interface MolstarWrapperProps {
   children?: ReactNode;
 }
 
-// This is tested inside the Molstar internals, and there is no benefit to a complex mock for this
 /* c8 ignore start */
-const resetOrientation = (isSlice = false) => {
-  // Resets to original orientation (depends on view type)
-
-  molstar!.canvas3d!.requestCameraReset({
-    snapshot: (scene, camera) =>
-      camera.getInvariantFocus(
-        scene.boundingSphereVisible.center,
-        scene.boundingSphereVisible.radius,
-        isSlice ? Vec3.unitZ : Vec3.unitY,
-        isSlice ? Vec3.negUnitY : Vec3.negUnitZ
-      ),
-  });
-};
+const resetOrientation = (isSlice = false) => resetCameraOrientation(molstar!, isSlice);
 /* c8 ignore end */
 
 const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) => {
@@ -281,7 +248,12 @@ const MolstarWrapper = ({ classId, autoProcId, children }: MolstarWrapperProps) 
           </>
         ) : (
           <>
-            <Text style={{ writingMode: "sideways-lr" }} color='diamond.300' fontWeight='600'>
+            <Text
+              style={{ writingMode: "sideways-lr" }}
+              h='auto'
+              color='diamond.300'
+              fontWeight='600'
+            >
               Isosurface Value
             </Text>
             <Slider
