@@ -17,6 +17,7 @@ export const groupLoader = async (params: Params<string>) => {
     case "Single Particle":
       return replace("./spa");
     case "Tomography":
+    case "Soft X-Ray Tomography":
       return replace("./tomograms");
     case "Atlas":
       return replace("./atlas");

@@ -60,7 +60,7 @@ const Calendar = () => {
 
     client
       .safeGet(
-        `sessions?minStartDate=${calendarDates.start}&maxStartDate=${calendarDates.end}&search=m&limit=250`
+        `sessions?minStartDate=${calendarDates.start}&maxStartDate=${calendarDates.end}&limit=250`
       )
       .then((response) => {
         const events: EventInput[] = response.data.items
