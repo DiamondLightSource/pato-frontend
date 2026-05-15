@@ -67,11 +67,10 @@ const tomogramConfig: DataConfig = {
 const sxtConfig: DataConfig = {
   include: [
     { name: "stackFile" },
+    { name: "volumeFile" },
     { name: "minimumTiltAngle", unit: "°" },
     { name: "maximumTiltAngle", unit: "°" },
     { name: "tiltAngleStep", unit: "°" },
-    { name: "volumeFile" },
-    { name: "pixelSpacing" },
   ],
   root: ["dataCollectionId", "tomogramId"],
 };

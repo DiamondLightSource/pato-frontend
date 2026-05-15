@@ -9,6 +9,15 @@ export const collectionConfig: DataConfig = {
   root: ["comments", "dataCollectionId", "pixelSizeOnImage"],
 };
 
+export const sxtCollectionConfig: DataConfig = {
+  include: [
+    { name: "pixelSizeOnImage", unit: "Å" },
+    { name: "wavelength", unit: "eV" },
+    { name: ["imageSizeX", "imageSizeY"], unit: "pixels", label: "Image Size" },
+  ],
+  root: ["comments", "dataCollectionId", "pixelSizeOnImage"],
+};
+
 export const classificationConfig: DataConfig = {
   include: [
     { name: "type" },
