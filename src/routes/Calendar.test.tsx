@@ -42,7 +42,7 @@ describe("Calendar", () => {
 
     fireEvent.click(screen.getAllByRole("button")[1]);
     expect(fetchSpy).toHaveBeenCalledWith(
-      "http://localhost/sessions?minStartDate=2022-11-27T00:00:00.000Z&maxStartDate=2023-01-08T00:00:00.000Z&search=m&limit=250",
+      "http://localhost/sessions?minStartDate=2022-11-27T00:00:00.000Z&maxStartDate=2023-01-08T00:00:00.000Z&limit=250",
       expect.anything()
     );
 
