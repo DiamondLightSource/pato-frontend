@@ -206,16 +206,13 @@ const Tomogram = ({
                 </HStack>
                 <Divider />
                 <Grid py={2} templateColumns='repeat(4, 1fr)' gap={2}>
-                  {checkRecipe(recipes[0], procJob) && (
-                    <GridItem colSpan={{ base: 4, md: 2 }}>
+                  <GridItem colSpan={{ base: 4, md: 2 }}>
+                    {checkRecipe(recipes[0], procJob) ? (
                       <InfoGroup info={data.tomogram.info} cols={1} />
-                    </GridItem>
-                  )}
-                  {checkRecipe(recipes[2], procJob) && (
-                    <GridItem colSpan={{ base: 4, md: 2 }}>
+                    ) : (
                       <InfoGroup info={data.sxt.info} cols={1} />
-                    </GridItem>
-                  )}
+                    )}
+                  </GridItem>
                   <GridItem colSpan={{ base: 4, md: 2 }} h='20vh' minH='300px'>
                     <Card h='100%'>
                       <CardHeader>
@@ -321,7 +318,7 @@ const Tomogram = ({
                         </HStack>
                       </CardHeader>
                       <CardBody pt={0}>
-                        {checkRecipe(recipes[0], procJob) && (
+                        {checkRecipe(recipes[0], procJob) ? (
                           <HStack
                             mx='auto'
                             w='auto'
@@ -359,8 +356,7 @@ const Tomogram = ({
                               movieType={null}
                             />
                           </HStack>
-                        )}
-                        {checkRecipe(recipes[2], procJob) && (
+                        ) : (
                           <HStack
                             mx='auto'
                             w='auto'
