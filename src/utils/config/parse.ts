@@ -46,6 +46,7 @@ export const spaRecipeTagMap: Record<string, string> = {
 export const tomographyRecipeTagMap: Record<string, string> = {
   "em-tomo-align": "Alignment",
   "em-tomo-preprocess": "Preprocessing",
+  "sxt-aretomo": "AreTomo",
 };
 
 export const recipeTagMap: Record<string, string> = {
