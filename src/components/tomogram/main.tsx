@@ -36,7 +36,7 @@ import { ProcessingTitle } from "components/visualisation/processingTitle";
 import { capitalise, parseData } from "utils/generic";
 import { MdOpenInNew } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
-import {tomographyRecipeTagMap} from "utils/config/parse";
+import { tomographyRecipeTagMap } from "utils/config/parse";
 import { ScatterPlot, InfoGroup, ImageCard, BasePoint } from "@diamondlightsource/ui-components";
 import { countDarkImages, fetchMotionData } from "utils/api/queries/motion";
 import { DarkImageCount } from "components/visualisation/DarkImages";
@@ -199,16 +199,23 @@ const Tomogram = ({
             </Box>
           ) : (
             <Grid gap={3} templateColumns={{ base: "", "2xl": "repeat(2, 1fr)" }}>
-              {checkRecipe(recipes[0], procJob) && <Box minW='0'>
+              <Box minW='0'>
                 <HStack>
                   <Heading variant='collection'>Alignment</Heading>
                   {!isMotionLoading && <DarkImageCount count={darkImages} />}
                 </HStack>
                 <Divider />
                 <Grid py={2} templateColumns='repeat(4, 1fr)' gap={2}>
-                  <GridItem colSpan={{ base: 4, md: 2 }}>
-                    <InfoGroup info={data.tomogram.info} cols={1} />
-                  </GridItem>
+                  {checkRecipe(recipes[0], procJob) && (
+                    <GridItem colSpan={{ base: 4, md: 2 }}>
+                      <InfoGroup info={data.tomogram.info} cols={1} />
+                    </GridItem>
+                  )}
+                  {checkRecipe(recipes[2], procJob) && (
+                    <GridItem colSpan={{ base: 4, md: 2 }}>
+                      <InfoGroup info={data.sxt.info} cols={1} />
+                    </GridItem>
+                  )}
                   <GridItem colSpan={{ base: 4, md: 2 }} h='20vh' minH='300px'>
                     <Card h='100%'>
                       <CardHeader>
@@ -255,15 +262,17 @@ const Tomogram = ({
                           <Spacer />
                           {isLargeScreen ? (
                             <>
-                              <Button
-                                h='25px'
-                                size='sm'
-                                onClick={() => handleOpenTomogram("picked")}
-                              >
-                                View Picked
-                                <Spacer />
-                                <Icon ml='10px' as={MdOpenInNew}></Icon>
-                              </Button>
+                              {checkRecipe(recipes[0], procJob) && (
+                                <Button
+                                  h='25px'
+                                  size='sm'
+                                  onClick={() => handleOpenTomogram("picked")}
+                                >
+                                  View Picked
+                                  <Spacer />
+                                  <Icon ml='10px' as={MdOpenInNew}></Icon>
+                                </Button>
+                              )}
                               <Button
                                 h='25px'
                                 size='sm'
@@ -287,7 +296,9 @@ const Tomogram = ({
                                   cursor='pointer'
                                 >
                                   <option value='segmented'>Segmented</option>
-                                  <option value='picked'>Picked</option>
+                                  {checkRecipe(recipes[0], procJob) && (
+                                    <option value='picked'>Picked</option>
+                                  )}
                                 </Select>
                               </Tooltip>
                               <Button
@@ -310,192 +321,79 @@ const Tomogram = ({
                         </HStack>
                       </CardHeader>
                       <CardBody pt={0}>
-                        <HStack
-                          mx='auto'
-                          w='auto'
-                          h='100%'
-                          divider={<Divider orientation='vertical' />}
-                        >
-                          {isLargeScreen ? (
-                            [
-                              <TomogramThumbnail
-                                key='picked'
-                                baseUrl={data.centralSlice}
-                                movieType='picked'
-                              />,
-                              <TomogramThumbnail
-                                key='segmented'
-                                baseUrl={data.centralSlice}
-                                movieType='segmented'
-                              />,
-                            ]
-                          ) : (
-                            <TomogramThumbnail
-                              key={selectedTomogram}
-                              baseUrl={data.centralSlice}
-                              movieType={selectedTomogram}
-                            />
-                          )}
-                          <TomogramThumbnail
-                            key='denoised'
-                            baseUrl={data.centralSlice}
-                            movieType='denoised'
-                          />
-                          <TomogramThumbnail
-                            key='noisy'
-                            baseUrl={data.centralSlice}
-                            movieType={null}
-                          />
-                        </HStack>
-                      </CardBody>
-                    </Card>
-                  </GridItem>
-                  <GridItem colSpan={{ base: 4, md: 1 }} h='22vh' minH='200px'>
-                    <ImageCard src={data.xyProj} title='XY Projection' />
-                  </GridItem>
-                  <GridItem colSpan={{ base: 4, md: 1 }} minW='100%' h='22vh' minH='200px'>
-                    <PlotContainer title='Shift Plot'>
-                      <ScatterPlot data={data.shiftPlot} />
-                    </PlotContainer>
-                  </GridItem>
-                  <GridItem colSpan={{ base: 4, md: 2 }} h='22vh' minH='200px'>
-                    <ImageCard src={data.xzProj} title='XZ Projection' />
-                  </GridItem>
-                </Grid>
-              </Box>}
-              {checkRecipe(recipes[1], procJob) && <CTF parentId={data.tomogram.tomogramId} parentType='tomograms' />}
-              {checkRecipe(recipes[2], procJob) && <Box minW='0'>
-                <HStack>
-                  <Heading variant='collection'>Alignment</Heading>
-                </HStack>
-                <Divider />
-                <Grid py={2} templateColumns='repeat(4, 1fr)' gap={2}>
-                  <GridItem colSpan={{ base: 4, md: 2 }}>
-                    <InfoGroup info={data.sxt.info} cols={1} />
-                  </GridItem>
-                  <GridItem colSpan={{ base: 4, md: 2 }} h='20vh' minH='300px'>
-                    <Card h='100%'>
-                      <CardHeader>
-                        <HStack>
-                          <Heading size='sm'>Stacks</Heading>
-                          <Spacer />
-                          <Button
-                            h='25px'
-                            size='sm'
-                            onClick={() => handleOpenTomogram("alignment")}
+                        {checkRecipe(recipes[0], procJob) && (
+                          <HStack
+                            mx='auto'
+                            w='auto'
+                            h='100%'
+                            divider={<Divider orientation='vertical' />}
                           >
-                            View
-                            <Spacer />
-                            <Icon ml='10px' as={MdOpenInNew}></Icon>
-                          </Button>
-                        </HStack>
-                      </CardHeader>
-                      <CardBody pt={0}>
-                        <HStack
-                          mx='auto'
-                          w='auto'
-                          h='100%'
-                          divider={<Divider orientation='vertical' />}
-                        >
-                          <TomogramThumbnail
-                            key='Alignment'
-                            baseUrl={data.centralSlice}
-                            movieType='alignment'
-                          />
-                          <TomogramThumbnail
-                            key='Unaligned'
-                            baseUrl={data.centralSlice}
-                            movieType='stack'
-                          />
-                        </HStack>
-                      </CardBody>
-                    </Card>
-                  </GridItem>
-                  <GridItem colSpan={4} h='20vh' minH='300px'>
-                    <Card h='100%'>
-                      <CardHeader>
-                        <HStack>
-                          <Heading size='sm'>Central Slice</Heading>
-                          <Spacer />
-                          {isLargeScreen ? (
-                            <>
-                              <Button
-                                h='25px'
-                                size='sm'
-                                onClick={() => handleOpenTomogram("segmented")}
-                              >
-                                View Segmented
-                                <Spacer />
-                                <Icon ml='10px' as={MdOpenInNew}></Icon>
-                              </Button>
-                            </>
-                          ) : (
-                            <>
-                              <Tooltip label='Select tomogram to display' placement='top'>
-                                <Select
-                                  h='25px'
-                                  w='175px'
-                                  size='sm'
-                                  defaultValue='segmented'
-                                  onChange={handleTomogramSelect}
-                                  rounded='md'
-                                  cursor='pointer'
-                                >
-                                  <option value='segmented'>Segmented</option>
-                                </Select>
-                              </Tooltip>
-                              <Button
-                                h='25px'
-                                size='sm'
-                                onClick={() => handleOpenTomogram(selectedTomogram)}
-                              >
-                                View {capitalise(selectedTomogram)}
-                                <Spacer />
-                                <Icon ml='10px' as={MdOpenInNew}></Icon>
-                              </Button>
-                            </>
-                          )}
-
-                          <Button h='25px' size='sm' onClick={() => handleOpenTomogram("denoised")}>
-                            View Denoised
-                            <Spacer />
-                            <Icon ml='10px' as={MdOpenInNew}></Icon>
-                          </Button>
-                        </HStack>
-                      </CardHeader>
-                      <CardBody pt={0}>
-                        <HStack
-                          mx='auto'
-                          w='auto'
-                          h='100%'
-                          divider={<Divider orientation='vertical' />}
-                        >
-                          {isLargeScreen ? (
-                            [
+                            {isLargeScreen ? (
+                              [
+                                <TomogramThumbnail
+                                  key='picked'
+                                  baseUrl={data.centralSlice}
+                                  movieType='picked'
+                                />,
+                                <TomogramThumbnail
+                                  key='segmented'
+                                  baseUrl={data.centralSlice}
+                                  movieType='segmented'
+                                />,
+                              ]
+                            ) : (
                               <TomogramThumbnail
-                                key='segmented'
+                                key={selectedTomogram}
                                 baseUrl={data.centralSlice}
-                                movieType='segmented'
-                              />,
-                            ]
-                          ) : (
+                                movieType={selectedTomogram}
+                              />
+                            )}
                             <TomogramThumbnail
-                              key={selectedTomogram}
+                              key='denoised'
                               baseUrl={data.centralSlice}
-                              movieType={selectedTomogram}
+                              movieType='denoised'
                             />
-                          )}
-                          <TomogramThumbnail
-                            key='denoised'
-                            baseUrl={data.centralSlice}
-                            movieType='denoised'
-                          />
-                          <TomogramThumbnail
-                            key='noisy'
-                            baseUrl={data.centralSlice}
-                            movieType={null}
-                          />
-                        </HStack>
+                            <TomogramThumbnail
+                              key='noisy'
+                              baseUrl={data.centralSlice}
+                              movieType={null}
+                            />
+                          </HStack>
+                        )}
+                        {checkRecipe(recipes[2], procJob) && (
+                          <HStack
+                            mx='auto'
+                            w='auto'
+                            h='100%'
+                            divider={<Divider orientation='vertical' />}
+                          >
+                            {isLargeScreen ? (
+                              [
+                                <TomogramThumbnail
+                                  key='segmented'
+                                  baseUrl={data.centralSlice}
+                                  movieType='segmented'
+                                />,
+                              ]
+                            ) : (
+                              <TomogramThumbnail
+                                key={selectedTomogram}
+                                baseUrl={data.centralSlice}
+                                movieType={selectedTomogram}
+                              />
+                            )}
+                            <TomogramThumbnail
+                              key='denoised'
+                              baseUrl={data.centralSlice}
+                              movieType='denoised'
+                            />
+                            <TomogramThumbnail
+                              key='noisy'
+                              baseUrl={data.centralSlice}
+                              movieType={null}
+                            />
+                          </HStack>
+                        )}
                       </CardBody>
                     </Card>
                   </GridItem>
@@ -511,7 +409,10 @@ const Tomogram = ({
                     <ImageCard src={data.xzProj} title='XZ Projection' />
                   </GridItem>
                 </Grid>
-              </Box>}
+              </Box>
+              {checkRecipe(recipes[0], procJob) && (
+                <CTF parentId={data.tomogram.tomogramId} parentType='tomograms' />
+              )}
             </Grid>
           )}
         </AccordionPanel>
