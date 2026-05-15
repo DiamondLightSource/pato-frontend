@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.33.1 (15/05/2026)
+
+**Changed**
+
+- Display B24 sessions in calendar
+
 ## v1.33.0 (21/04/2026)
 
 **Fixed**
