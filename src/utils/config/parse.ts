@@ -14,6 +14,9 @@ export const sxtCollectionConfig: DataConfig = {
     { name: "pixelSizeOnImage", unit: "Å" },
     { name: "wavelength", unit: "eV" },
     { name: ["imageSizeX", "imageSizeY"], unit: "pixels", label: "Image Size" },
+    { name: "axisStart", unit: "°" },
+    { name: "axisEnd", unit: "°" },
+    { name: "numberOfImages" },
   ],
   root: ["comments", "dataCollectionId", "pixelSizeOnImage"],
 };

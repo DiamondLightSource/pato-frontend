@@ -60,6 +60,7 @@ const tomogramConfig: DataConfig = {
     { name: "volumeFile" },
     { name: "pixelSpacing" },
     { name: "refinedTiltAxis", unit: "°" },
+    { name: "globalAlignmentQuality" },
   ],
   root: ["dataCollectionId", "tomogramId"],
 };
@@ -68,9 +69,8 @@ const sxtConfig: DataConfig = {
   include: [
     { name: "stackFile" },
     { name: "volumeFile" },
-    { name: "minimumTiltAngle", unit: "°" },
-    { name: "maximumTiltAngle", unit: "°" },
-    { name: "tiltAngleStep", unit: "°" },
+    { name: "globalAlignmentQuality" },
+    { name: "sizeZ", unit: "pixels" },
   ],
   root: ["dataCollectionId", "tomogramId"],
 };
