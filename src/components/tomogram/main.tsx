@@ -313,7 +313,9 @@ const Tomogram = ({
               <Box minW='0'>
                 <HStack>
                   <Heading variant='collection'>Alignment</Heading>
-                  {!isMotionLoading && <DarkImageCount count={darkImages} />}
+                  {checkRecipe(recipes[0], procJob) && !isMotionLoading && (
+                    <DarkImageCount count={darkImages} />
+                  )}
                 </HStack>
                 <Divider />
                 <Grid py={2} templateColumns='repeat(4, 1fr)' gap={2}>
