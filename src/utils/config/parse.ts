@@ -11,11 +11,12 @@ export const collectionConfig: DataConfig = {
 
 export const sxtCollectionConfig: DataConfig = {
   include: [
-    { name: "pixelSizeOnImage", unit: "Å" },
+    { name: "pixelSizeNanometers", unit: "nm" },
     { name: "wavelength", unit: "eV" },
     { name: ["imageSizeX", "imageSizeY"], unit: "pixels", label: "Image Size" },
     { name: "axisStart", unit: "°" },
     { name: "axisEnd", unit: "°" },
+    { name: "axisStep", unit: "°" },
     { name: "numberOfImages" },
   ],
   root: ["comments", "dataCollectionId", "pixelSizeOnImage"],
