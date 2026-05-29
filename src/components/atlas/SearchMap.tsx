@@ -92,9 +92,12 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
     [navigate, toast]
   );
 
-  const handleLoad = useCallback((e: SyntheticEvent<HTMLImageElement, Event>) => {
+  const handleLoad = useCallback(
+    (e: SyntheticEvent<HTMLImageElement, Event>) => {
       setViewBox(`0 0 ${e.currentTarget.naturalWidth} ${e.currentTarget.naturalHeight}`);
-  }, [setViewBox])
+    },
+    [setViewBox]
+  );
 
   return (
     <VStack
@@ -123,7 +126,11 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
         </Heading>
       ) : (
         <div style={{ width: "100%" }} className='img-wrapper'>
-          <img src={prependApiUrl(`grid-squares/${searchMapId}/image`)} alt='Search Map' onLoad={handleLoad} />
+          <img
+            src={prependApiUrl(`grid-squares/${searchMapId}/image`)}
+            alt='Search Map'
+            onLoad={handleLoad}
+          />
           <svg viewBox={viewBox} className='static-png'>
             {data.map((item, i) => (
               <rect

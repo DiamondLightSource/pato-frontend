@@ -25,7 +25,7 @@ export const DefaultSliceSpec: PluginSpec = {
 
 // This is tested inside the Molstar internals, and there is no benefit to a complex mock for this
 /* c8 ignore start */
-export const resetCameraOrientation = (molstar: PluginContext,isSlice = false) => {
+export const resetCameraOrientation = (molstar: PluginContext, isSlice = false) => {
   // Resets to original orientation (depends on view type)
 
   molstar.canvas3d!.requestCameraReset({

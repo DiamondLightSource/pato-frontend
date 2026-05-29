@@ -1,4 +1,3 @@
-
 import { PluginContext } from "molstar/lib/mol-plugin/context";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { StateObjectSelector } from "molstar/lib/mol-state";

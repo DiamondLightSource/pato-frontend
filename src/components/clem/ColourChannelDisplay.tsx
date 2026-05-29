@@ -20,7 +20,7 @@ export const ColourChannelDisplay = ({
   onLoad,
   dataType = "atlas",
   height = "70vh",
-  minHeight="790px"
+  minHeight = "790px",
 }: ColourChannelDisplayProps) => {
   const prefix = useMemo(
     () =>
@@ -53,7 +53,7 @@ export const ColourChannelDisplay = ({
     <Box width='100%' h='100%' minH={minHeight} position='relative'>
       <APNGContainer
         onLoad={onLoad}
-        mb="1em"
+        mb='1em'
         height={height}
         minH={minHeight}
         overlap={true}
