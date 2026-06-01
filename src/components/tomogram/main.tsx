@@ -187,7 +187,7 @@ const TomogramSlicesHasPicks = ({
                   cursor='pointer'
                 >
                   <option value='segmented'>Segmented</option>
-                  <option value='segmented'>Picked</option>
+                  <option value='picked'>Picked</option>
                 </Select>
               </Tooltip>
               <Button h='25px' size='sm' onClick={() => handleOpenTomogram(selectedTomogram)}>
@@ -304,7 +304,7 @@ const Tomogram = ({
               <Skeleton w='100%' h='20vh' />
               <Skeleton w='100%' h='20vh' />
             </VStack>
-          ) : !data || data.tomogram === null || data.sxt == null ? (
+          ) : !data || data.tomogram === null || data.sxt === null ? (
             <Box>
               <Motion parentId={procJob.dataCollectionId} parentType='tomograms' />
             </Box>
