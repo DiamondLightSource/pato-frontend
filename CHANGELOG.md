@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.34.0 (01/06/2026)
+
+**Added**
+
+- Add tomography display for soft x-ray tomography
+
 ## v1.33.1 (15/05/2026)
 
 **Changed**
