@@ -11,7 +11,7 @@ const basicProcJob: BaseProcessingJobProps["procJob"] = {
   dataCollectionId: 1,
   displayName: "Test",
   comments: "Test",
-  recipe: "Test",
+  recipe: "em-tomo-align",
   automatic: 1,
 };
 
@@ -52,7 +52,7 @@ describe("Tomogram", () => {
       <Tomogram
         active={true}
         autoProc={autoProcJob}
-        procJob={basicProcJob}
+        procJob={{...basicProcJob, recipe: "foo"}}
         tomogram={null}
         status={"Queued"}
         onTomogramOpened={() => {}}
@@ -95,7 +95,7 @@ describe("Tomogram", () => {
     await screen.findAllByText("Alignment");
 
     fireEvent.click(screen.getByLabelText("Show Content"));
-    fireEvent.click(screen.getByText(/view denoised/i));
+    fireEvent.click(await screen.findByText(/view denoised/i));
 
     await waitFor(() => expect(openCallback).toHaveBeenCalledWith(1, "denoised"));
   });

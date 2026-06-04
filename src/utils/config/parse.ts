@@ -9,6 +9,19 @@ export const collectionConfig: DataConfig = {
   root: ["comments", "dataCollectionId", "pixelSizeOnImage"],
 };
 
+export const sxtCollectionConfig: DataConfig = {
+  include: [
+    { name: "pixelSizeNanometers", unit: "nm" },
+    { name: "wavelength", unit: "eV" },
+    { name: ["imageSizeX", "imageSizeY"], unit: "pixels", label: "Image Size" },
+    { name: "axisStart", unit: "°" },
+    { name: "axisEnd", unit: "°" },
+    { name: "axisStep", unit: "°" },
+    { name: "numberOfImages" },
+  ],
+  root: ["comments", "dataCollectionId", "pixelSizeOnImage"],
+};
+
 export const classificationConfig: DataConfig = {
   include: [
     { name: "type" },
@@ -46,6 +59,7 @@ export const spaRecipeTagMap: Record<string, string> = {
 export const tomographyRecipeTagMap: Record<string, string> = {
   "em-tomo-align": "Alignment",
   "em-tomo-preprocess": "Preprocessing",
+  "sxt-aretomo": "AreTomo",
 };
 
 export const recipeTagMap: Record<string, string> = {

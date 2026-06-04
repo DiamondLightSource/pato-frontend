@@ -2,7 +2,7 @@ import { Params, redirect } from "react-router";
 import { CollectionData } from "schema/interfaces";
 import { client } from "utils/api/client";
 import { includePage } from "utils/api/endpoint";
-import { collectionConfig, tomographyRecipeTagMap } from "utils/config/parse";
+import { collectionConfig, sxtCollectionConfig, tomographyRecipeTagMap } from "utils/config/parse";
 import { parseData } from "utils/generic";
 import { components } from "schema/main";
 import { QueryClient } from "@tanstack/react-query";
@@ -82,7 +82,7 @@ const getTomogramData = async (
 
     returnData.collection = parseData(
       collectionResponse.data.items[0],
-      collectionConfig
+      collectionResponse.data.items[0].voltage ? collectionConfig : sxtCollectionConfig
     ) as CollectionData;
 
     const tomogramsResponse = await client.safeGet(

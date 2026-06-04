@@ -94,7 +94,7 @@ const APNGContainer = ({
           <Box
             key={i}
             w={overlap ? "95%" : "100%"}
-            h="100%"
+            h='100%'
             {...(overlap ? { ...OVERLAP_PROPS } : {})}
             opacity={overlap ? (1 / visibleViews) * 1.2 : 1}
             display={view.hidden ? "none" : "block"}
