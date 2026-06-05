@@ -2,6 +2,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { Params } from "react-router";
 import { components } from "schema/main";
 import { client } from "utils/api/client";
+import { includePage } from "utils/api/endpoint";
 
 export interface AtlasResponse {
   gridSquares: components["schemas"]["GridSquare"][] | null;
@@ -38,16 +39,24 @@ const queryBuilder = (groupId: string, request: Request) => {
   };
 };
 
-const getAtlasCorrelationData = async (proposalReference: string, searchParams: URLSearchParams) => {
-  console.log(searchParams)
-  const response = await client.safeGet(`/proposals/${proposalReference}/data-collection-groups?atlasOnly=true&limit=10&${searchParams}`);
+const getAtlasCorrelationData = async (
+  proposalReference: string,
+  searchParams: URLSearchParams
+) => {
+  const endpoint = includePage(
+    `proposals/${proposalReference}/data-collection-groups?atlasOnly=true`,
+    Number(searchParams.get("limit")) || 8,
+    Number(searchParams.get("page")) || 1
+  );
+
+  const response = await client.safeGet(endpoint);
 
   if (response.status === 200) {
-    return {...response.data, atlas: true};
+    return { ...response.data, atlas: true };
   }
 
   return null;
-}
+};
 
 const atlasCorrelationQueryBuilder = (proposalReference: string, request: Request) => {
   const urlObj = new URL(request.url);
@@ -71,8 +80,7 @@ export const atlasLoader =
       (await queryClient.fetchQuery(query))) as AtlasResponse;
   };
 
-
-  export const atlasCorrelationLoader =
+export const atlasCorrelationLoader =
   (queryClient: QueryClient) => async (request: Request, params: Params) => {
     const query = atlasCorrelationQueryBuilder(params.propId!, request);
     return ((await queryClient.getQueryData(query.queryKey)) ??

@@ -63,7 +63,6 @@ const getTomogramData = async (
   if (reprocessingResponse.status === 200) {
     returnData.allowReprocessing = reprocessingResponse.data.allowReprocessing;
   }
-  console.log(returnData)
 
   if (collectionResponse.status !== 200) {
     return returnData;

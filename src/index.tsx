@@ -124,7 +124,7 @@ const router = createBrowserRouter([
         loader: ({ request, params }) => sessionPageLoader(queryClient)(request, params),
       },
       {
-        path: "/proposals/:propId/atlas-correlation/:groupId",
+        path: "/proposals/:propId/sessions/:visitId/groups/:groupId/atlas-correlation",
         hydrateFallbackElement: <></>,
         element: <AtlasCorrelationPage />,
         loader: ({ request, params }) => atlasCorrelationLoader(queryClient)(request, params),

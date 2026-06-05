@@ -97,7 +97,7 @@ const TomogramPage = () => {
 
   const { data: hasFeatures } = useQuery<boolean>({
     queryKey: ["tomogramFeatures", currentTomogram],
-    queryFn: async () => getHasFeatures(currentTomogram)
+    queryFn: async () => getHasFeatures(currentTomogram),
   });
 
   useEffect(() => {
