@@ -99,7 +99,7 @@ const AtlasCorrelationPage = () => {
 
                     <VStack>
                       <CardBody py='15px' px='20px'>
-                        <Heading size='sm'>{atlas.atlasPath}</Heading>
+                        <Heading size='sm' overflowWrap="anywhere">{atlas.atlasPath}</Heading>
                         <Heading size='md'>{atlas.comments}</Heading>
                       </CardBody>
                     </VStack>
