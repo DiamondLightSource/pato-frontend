@@ -1555,6 +1555,7 @@ export interface components {
       experimentType?: string | null;
       /** Atlasid */
       atlasId?: number | null;
+      atlasPath?: string | null;
       /**
        * Experimenttypeid
        * @default 37

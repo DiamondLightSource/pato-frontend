@@ -23,11 +23,12 @@ import { sessionPageLoader } from "loaders/session";
 import { SessionResponse } from "schema/interfaces";
 import { UploadModelPage } from "routes/UploadModel";
 import AtlasPage from "routes/Atlas";
-import { atlasLoader } from "loaders/atlas";
+import { atlasCorrelationLoader, atlasLoader } from "loaders/atlas";
 import AlertPage from "routes/Alert";
 import { groupLoader } from "loaders/group";
 import { TomogramList } from "routes/TomogramList";
 import InvalidUserPage from "routes/InvalidUser";
+import AtlasCorrelationPage from "routes/AtlasCorrelation";
 
 const Calendar = React.lazy(() => import("routes/Calendar"));
 const About = React.lazy(() => import("routes/About"));
@@ -121,6 +122,12 @@ const router = createBrowserRouter([
         hydrateFallbackElement: <></>,
         element: <SessionPage />,
         loader: ({ request, params }) => sessionPageLoader(queryClient)(request, params),
+      },
+      {
+        path: "/proposals/:propId/sessions/:visitId/groups/:groupId/atlas-correlation",
+        hydrateFallbackElement: <></>,
+        element: <AtlasCorrelationPage />,
+        loader: ({ request, params }) => atlasCorrelationLoader(queryClient)(request, params),
       },
       {
         path: "/proposals/:propId/sessions/:visitId/upload-model",

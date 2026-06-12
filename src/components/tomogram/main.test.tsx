@@ -52,7 +52,7 @@ describe("Tomogram", () => {
       <Tomogram
         active={true}
         autoProc={autoProcJob}
-        procJob={{...basicProcJob, recipe: "foo"}}
+        procJob={{ ...basicProcJob, recipe: "foo" }}
         tomogram={null}
         status={"Queued"}
         onTomogramOpened={() => {}}

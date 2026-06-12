@@ -13,7 +13,7 @@ const listingQueryBuilder = (request: Request, params: Params<string>, endpoint:
   const sortBy = searchParams.get("sortBy");
 
   const builtEndpoint = buildEndpoint(
-    `${endpoint}`,
+    endpoint,
     params,
     parseInt(items),
     parseInt(page),

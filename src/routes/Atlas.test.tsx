@@ -43,7 +43,7 @@ describe("Atlas", () => {
       ["?gridSquare=InvalidNumber"]
     );
 
-    fireEvent.click(await screen.findByRole("button"));
+    fireEvent.click(await screen.findByTestId("square-0"));
     await waitFor(() => expect(router.state.location.search).toBe("?gridSquare=1"));
   });
 
@@ -103,7 +103,7 @@ describe("Atlas", () => {
       dataCollectionGroup: { experimentTypeName: "Tomography" },
     }));
 
-    fireEvent.click(await screen.findByRole("button"));
+    fireEvent.click(await screen.findByTestId("square-0"));
 
     await waitFor(() =>
       expect(SearchMap).toBeCalledWith(

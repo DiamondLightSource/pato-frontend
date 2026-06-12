@@ -42,7 +42,7 @@ export const usePaginationSearchParams = () => {
 
   const setItemsPerPage = useCallback(
     (value: number) => {
-      updateSearchParams({ items: value.toString() });
+      updateSearchParams({ limit: value.toString() });
     },
     [updateSearchParams]
   );

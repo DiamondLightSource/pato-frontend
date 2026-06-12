@@ -1,4 +1,4 @@
-import { Checkbox, Divider, Heading, HStack, VStack } from "@chakra-ui/react";
+import { Button, Checkbox, Divider, Heading, HStack, Link, VStack } from "@chakra-ui/react";
 import { Atlas } from "components/atlas/Atlas";
 import { GridSquare } from "components/atlas/GridSquare";
 import { SearchMap } from "components/atlas/SearchMap";
@@ -109,16 +109,21 @@ const AtlasPage = () => {
         {data.dataCollectionGroup.experimentTypeName === "CLEM" ? (
           <ColourChannelSelector onChange={setColours} selectedColours={colours} />
         ) : (
-          <Checkbox
-            defaultChecked={searchParams.get(targetSearchParam) === "true"}
-            onChange={handleCheck}
-            size='lg'
-          >
-            Hide{" "}
-            {data.dataCollectionGroup.experimentTypeName === "Tomography"
-              ? "empty search maps"
-              : "uncollected grid squares"}
-          </Checkbox>
+          <HStack gap='1em'>
+            <Checkbox
+              defaultChecked={searchParams.get(targetSearchParam) === "true"}
+              onChange={handleCheck}
+              size='lg'
+            >
+              Hide{" "}
+              {data.dataCollectionGroup.experimentTypeName === "Tomography"
+                ? "empty search maps"
+                : "uncollected grid squares"}
+            </Checkbox>
+            <Link href={`../${params.groupId}/atlas-correlation`}>
+              <Button>Correlate</Button>
+            </Link>
+          </HStack>
         )}
       </HStack>
       <Divider />
@@ -128,7 +133,7 @@ const AtlasPage = () => {
           onGridSquareClicked={handleGridSquareClicked}
           selectedGridSquare={gridSquareId}
           colours={data.dataCollectionGroup.experimentTypeName === "CLEM" ? colours : null}
-        ></Atlas>
+        />
         {data.dataCollectionGroup.experimentTypeName === "Tomography" ? (
           <SearchMap searchMapId={gridSquareId} scalingFactor={scalingFactor} />
         ) : data.dataCollectionGroup.experimentTypeName === "CLEM" ? (
