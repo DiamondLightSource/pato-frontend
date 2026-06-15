@@ -1,7 +1,6 @@
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { renderWithRoute } from "utils/test-utils";
 import AtlasCorrelationPage from "./AtlasCorrelation";
-import { SearchMap } from "components/atlas/SearchMap";
 
 const baseLoaderDict = {
   items: [
@@ -10,6 +9,7 @@ const baseLoaderDict = {
       collections: 1,
       experimentTypeName: "SPA",
       atlasId: 12345,
+      atlasPath: "/dls/foo.jpg",
     },
   ],
   total: 1,
@@ -22,7 +22,7 @@ describe("Atlas Correlation", () => {
   it("should display list of atlases", async () => {
     renderWithRoute(<AtlasCorrelationPage />, baseLoader);
 
-    await screen.findByText("12345");
+    await screen.findByText("/dls/foo.jpg");
   });
 
   it("should display submit button if atlas is selected", async () => {
