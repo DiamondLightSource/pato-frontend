@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.35.0 (15/06/2026)
+
+**Added**
+
+- Add atlas correlation
+
 ## v1.34.0 (01/06/2026)
 
 **Added**
