@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.35.1 (25/06/2026)
+
+**Changed**
+
+- Allow to default to central slice in APNG viewer
+
 ## v1.35.0 (15/06/2026)
 
 **Added**
