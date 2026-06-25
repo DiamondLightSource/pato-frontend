@@ -37,10 +37,7 @@ export const SliceViewer = ({
   tomogramId,
   isOpen = false,
 }: SliceViewerProps) => {
-  const tomogramMovieSrc = useMemo(
-    () => prependApiUrl(`tomograms/${tomogramId}/movie`),
-    [tomogramId]
-  );
+  const tomogramMovieSrc = useMemo(() => prependApiUrl(`tomograms/${tomogramId}/movie`), [tomogramId]);
 
   if (!isOpen) {
     return null;
@@ -55,13 +52,7 @@ export const SliceViewer = ({
         <ModalBody h={{ base: "90vh", md: "60vh" }}>
           <HStack>
             <Spacer />
-            <Flipper
-              size='md'
-              onChangeEnd={onPageChange}
-              defaultPage={page}
-              total={total}
-              w='5em'
-            />
+            <Flipper size='md' onChangeEnd={onPageChange} defaultPage={page} total={total} w='5em' />
           </HStack>
           <Suspense>
             {movieType === "alignment" ? (
@@ -70,9 +61,7 @@ export const SliceViewer = ({
                   <Image
                     h='100%'
                     alt='Stack'
-                    src={prependApiUrl(
-                      `tomograms/${tomogramId}/centralSlice?movieType=${movieType}`
-                    )}
+                    src={prependApiUrl(`tomograms/${tomogramId}/centralSlice?movieType=${movieType}`)}
                     fallbackSrc='/images/no-image.png'
                     objectFit='contain'
                   />
@@ -82,10 +71,12 @@ export const SliceViewer = ({
                 </VStack>
                 <APNGContainer
                   views={[{ src: `${tomogramMovieSrc}?movieType=stack`, caption: "Stack" }]}
+                  startFromCentralSlice={true}
                 />
               </HStack>
             ) : (
               <APNGContainer
+                startFromCentralSlice={true}
                 views={[
                   {
                     src: `${tomogramMovieSrc}?movieType=${movieType}`,

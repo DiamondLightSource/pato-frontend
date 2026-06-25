@@ -69,7 +69,15 @@ describe("APNG Container", () => {
     await screen.findByText("tomograms/1/movie");
 
     const slider = screen.getByRole("slider");
-    expect(slider).toHaveAttribute("aria-valuemax", "3");
+    await waitFor(() => expect(slider).toHaveAttribute("aria-valuemax", "3"));
+  });
+
+  it("should select middle frame if that option is selected", async () => {
+    renderWithProviders(<APNGContainer startFromCentralSlice={true} views={[{ src: "tomograms/1/movie" }]} />);
+    await screen.findByText("tomograms/1/movie");
+
+    const slider = screen.getByRole("slider");
+    expect(slider).toHaveValue(1);
   });
 
   it("should hide items tagged with hidden", async () => {
