@@ -18,7 +18,7 @@ import {
   ButtonGroup,
   BoxProps,
 } from "@chakra-ui/react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MdFastForward, MdFastRewind, MdPause, MdPlayArrow } from "react-icons/md";
 import { APNGViewer, ApngProps } from "@diamondlightsource/ui-components";
 import "styles/canvas.css";
@@ -32,6 +32,7 @@ export interface ApngContainerProps extends Omit<BoxProps, "onLoad"> {
   views: ApngView[];
   overlap?: boolean;
   fallbackToPng?: boolean;
+  startFromCentralSlice?: boolean;
   onLoad?: ApngProps["onLoad"];
 }
 
@@ -47,6 +48,7 @@ const APNGContainer = ({
   views,
   overlap = false,
   fallbackToPng,
+  startFromCentralSlice = false,
   onLoad,
   ...props
 }: ApngContainerProps) => {
@@ -76,6 +78,16 @@ const APNGContainer = ({
     return () => clearInterval(playRef.current);
   }, [frameIndex, playing, frametime, frameLength, playIncrement, playForward]);
 
+  const setFrameCount = useCallback(
+    (count: number) => {
+      setFrameLength(count);
+      if (startFromCentralSlice) {
+        setFrameIndex(Math.floor(count / 2));
+      }
+    },
+    [startFromCentralSlice],
+  );
+
   const visibleViews = useMemo(
     () =>
       Object.values(views).reduce((prev, { hidden }) => {
@@ -84,7 +96,7 @@ const APNGContainer = ({
         }
         return prev;
       }, 0),
-    [views]
+    [views],
   );
 
   return (
@@ -104,7 +116,7 @@ const APNGContainer = ({
             <APNGViewer
               onLoad={onLoad}
               key={i}
-              onFrameCountChanged={setFrameLength}
+              onFrameCountChanged={setFrameCount}
               frameIndex={frameIndex}
               caption={view.caption}
               src={view.src}
@@ -141,11 +153,7 @@ const APNGContainer = ({
           >
             <Icon as={MdFastRewind} />
           </Button>
-          <Button
-            aria-label='Play Forwards'
-            isDisabled={playForward}
-            onClick={() => setPlayForward(true)}
-          >
+          <Button aria-label='Play Forwards' isDisabled={playForward} onClick={() => setPlayForward(true)}>
             <Icon as={MdFastForward} />
           </Button>
         </ButtonGroup>

@@ -54,6 +54,7 @@ export const ColourChannelDisplay = ({
       <APNGContainer
         onLoad={onLoad}
         mb='1em'
+        startFromCentralSlice={true}
         height={height}
         minH={minHeight}
         overlap={true}
