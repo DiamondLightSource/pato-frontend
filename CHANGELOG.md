@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.35.2 (03/07/2026)
+
+**Changed**
+
+- Use correct value for total exposed dose
+- Support more SXT recipes
+
 ## v1.35.1 (25/06/2026)
 
 **Changed**
