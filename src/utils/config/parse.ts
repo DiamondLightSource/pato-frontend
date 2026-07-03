@@ -60,6 +60,8 @@ export const tomographyRecipeTagMap: Record<string, string> = {
   "em-tomo-align": "Alignment",
   "em-tomo-preprocess": "Preprocessing",
   "sxt-aretomo": "AreTomo",
+  "sxt-imod-patch-wbp": "IMOD Patch",
+  "sxt-imod-beads-wbp": "IMOD wbp"
 };
 
 export const recipeTagMap: Record<string, string> = {
