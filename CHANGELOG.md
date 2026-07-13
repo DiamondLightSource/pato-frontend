@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.35.3 (13/07/2026)
+
+**Changed**
+
+- Update atlas redirect for tomograms
+- Display search maps for SXT/lamella tomography
+
 ## v1.35.2 (03/07/2026)
 
 **Changed**
