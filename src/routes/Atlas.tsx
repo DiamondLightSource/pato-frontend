@@ -134,7 +134,7 @@ const AtlasPage = () => {
           selectedGridSquare={gridSquareId}
           colours={data.dataCollectionGroup.experimentTypeName === "CLEM" ? colours : null}
         />
-        {["Tomography", "Soft X-Ray Tomography"].includes(data.dataCollectionGroup.experimentTypeName!) ? (
+        {["Tomography", "Lamella Tomography", "Soft X-Ray Tomography"].includes(data.dataCollectionGroup.experimentTypeName!) ? (
           <SearchMap searchMapId={gridSquareId} scalingFactor={scalingFactor} />
         ) : data.dataCollectionGroup.experimentTypeName === "CLEM" ? (
           <ClemROIs gridSquare={selectedGridSquare} />
