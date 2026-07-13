@@ -312,7 +312,7 @@ export const SessionPage = () => {
               Create new data collection in session
             </TwoLineLink>
             <TwoLineLink
-              title='Create sample information (SCAUP)'
+              title='SCAUP - Sample Shipping'
               href={prependApiUrl(`proposals/${propId}/sessions/${visitId}/sampleHandling`)}
             >
               Create/edit session sample and shipment information

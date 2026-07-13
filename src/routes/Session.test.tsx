@@ -53,7 +53,7 @@ describe("Session Page", () => {
       session: { microscopeName: "Krios I", startDate: "startDateValue", endDate: "endDateValue" },
     }));
 
-    const link = await screen.findByText("Create sample information (SCAUP)");
+    const link = await screen.findByText("SCAUP - Sample Shipping");
     expect(link.parentNode?.parentNode?.parentNode).toHaveAttribute("aria-disabled");
   });
 
