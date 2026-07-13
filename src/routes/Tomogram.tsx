@@ -159,11 +159,16 @@ const TomogramPage = () => {
                 <Button
                   aria-label='View Atlas'
                   as={Link}
-                  to={{ pathname: "../../atlas" }}
+                  to={{ 
+                    pathname: "../../atlas", 
+                    /* If there is an atlas, gridSquareId will be populated */
+                    search: `?gridSquare=${loaderData.tomograms![0]?.Tomogram?.gridSquareId}` 
+                  }}
                   relative='path'
                   isDisabled={!loaderData.hasAtlas}
+                  leftIcon={<MdOutlineGrain/>}
                 >
-                  <Icon as={MdOutlineGrain} />
+                  View Atlas
                 </Button>
               </Tooltip>
               {window.ENV.REPROCESSING_ENABLED && (
