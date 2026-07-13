@@ -2456,6 +2456,8 @@ export interface components {
       dataCollectionId: number;
       /** Tomogramid */
       tomogramId: number;
+      /** Grid square ID */
+      gridSquareId?: number | null;
       /** Volumefile */
       volumeFile?: string | null;
       /** Stackfile */
