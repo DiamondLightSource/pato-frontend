@@ -31,7 +31,7 @@ const validData = {
   page: 1,
   tomograms: [
     {
-      Tomogram: { tomogramId: 1 },
+      Tomogram: { tomogramId: 1, gridSquareId: 1 },
       ProcessingJob: { processingJobId: 123 },
       AutoProcProgram: { autoProcProgramId: 1 },
       status: "Success",

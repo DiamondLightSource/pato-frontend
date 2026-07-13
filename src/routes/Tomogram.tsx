@@ -162,7 +162,7 @@ const TomogramPage = () => {
                   to={{ 
                     pathname: "../../atlas", 
                     /* If there is an atlas, gridSquareId will be populated */
-                    search: `?gridSquare=${loaderData.tomograms![0]?.Tomogram?.gridSquareId}` 
+                    search: loaderData.tomograms ? `?gridSquare=${loaderData.tomograms[0]?.Tomogram?.gridSquareId}` : undefined
                   }}
                   relative='path'
                   isDisabled={!loaderData.hasAtlas}
