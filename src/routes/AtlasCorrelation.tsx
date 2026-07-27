@@ -9,6 +9,8 @@ import {
   VStack,
   CardBody,
   useToast,
+  Select,
+  Spacer,
 } from "@chakra-ui/react";
 import { Pagination } from "@diamondlightsource/ui-components";
 import { Atlas } from "components/atlas/Atlas";
@@ -18,6 +20,7 @@ import { components } from "schema/main";
 import { client, prependApiUrl } from "utils/api/client";
 import { usePaginationSearchParams } from "utils/hooks";
 import "styles/atlas.css";
+import { beamlineToMicroscope } from "utils/config/table";
 
 type DataCollectionGroups = components["schemas"]["Paged_DataCollectionGroupSummaryResponse_"];
 type DataCollectionGroup = DataCollectionGroups["items"][0];
@@ -42,6 +45,20 @@ const AtlasCorrelationPage = () => {
       return prev;
     });
   }, [setSearchParams]);
+
+  const setInstrument = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      if (e.target.value === "All") {
+        setSearchParams((prev) => {
+          prev.delete("instrument");
+          return prev;
+        });
+      } else {
+        setSearchParams((prev) => ({ ...prev, instrument: e.target.value }));
+      }
+    },
+    [setSearchParams]
+  );
 
   const correlatedId = searchParams.get("correlatedId");
   const onSubmit = useCallback(async () => {
@@ -78,7 +95,25 @@ const AtlasCorrelationPage = () => {
             </>
           ) : (
             <>
-              <Heading>Select Pair</Heading>
+              <HStack w='100%'>
+                <Heading>Select Pair</Heading>
+                <Spacer />
+                <Heading id='instrument-label' size='sm'>
+                  Instrument:{" "}
+                </Heading>
+                <Select
+                  aria-labelledby='instrument-label'
+                  maxW='180px'
+                  onChange={setInstrument}
+                  value={searchParams.get("instrument") ?? "m11"}
+                >
+                  {Object.entries(beamlineToMicroscope).map(([blName, microscope]) => (
+                    <option key={blName} value={blName}>
+                      {microscope}
+                    </option>
+                  ))}
+                </Select>
+              </HStack>
               <Grid gridTemplateColumns='repeat(2, minmax(300px, 1fr))' gap='0.5em'>
                 {data.items.map((atlas) => (
                   <Card
@@ -99,7 +134,9 @@ const AtlasCorrelationPage = () => {
 
                     <VStack>
                       <CardBody py='15px' px='20px'>
-                        <Heading size='sm' overflowWrap="anywhere">{atlas.atlasPath}</Heading>
+                        <Heading size='sm' overflowWrap='anywhere'>
+                          {atlas.atlasPath}
+                        </Heading>
                         <Heading size='md'>{atlas.comments}</Heading>
                       </CardBody>
                     </VStack>

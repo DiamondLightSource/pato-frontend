@@ -49,7 +49,7 @@ const getAtlasCorrelationData = async (
     Number(searchParams.get("page")) || 1
   );
 
-  const response = await client.safeGet(endpoint);
+  const response = await client.safeGet(`${endpoint}&instrument=${searchParams.get("instrument") ?? "m11"}`);
 
   if (response.status === 200) {
     return { ...response.data, atlas: true };
@@ -67,6 +67,7 @@ const atlasCorrelationQueryBuilder = (proposalReference: string, request: Reques
       proposalReference,
       urlObj.searchParams.get("page"),
       urlObj.searchParams.get("limit"),
+      urlObj.searchParams.get("instrument"),
     ],
     queryFn: () => getAtlasCorrelationData(proposalReference, urlObj.searchParams),
     staleTime: 60000,
