@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.36.0 (30/07/2026)
+
+**Added**
+
+- Add instrument filters
+
+**Changed**
+
+- Display newer tomograms first
+
 ## v1.35.3 (13/07/2026)
 
 **Changed**
