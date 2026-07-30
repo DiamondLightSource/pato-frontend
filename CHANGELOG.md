@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.36.1 (30/07/2026)
+
+**Fixed**
+
+- Add new instruments
+
 ## v1.36.0 (30/07/2026)
 
 **Added**
