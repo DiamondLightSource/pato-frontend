@@ -30,5 +30,6 @@ export const beamlineToMicroscope: Record<string, string> = {
   m07: "Krios 4",
   m08: "Krios 5",
   m10: "Glacios 1",
+  m11: "Aquilos",
   m12: "Glacios 2",
 };
