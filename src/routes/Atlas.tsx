@@ -27,7 +27,9 @@ const AtlasPage = () => {
 
   const targetSearchParam = useMemo(
     () =>
-      ["Tomography", "Lamella Tomography", "Soft X-Ray Tomography"].includes(data.dataCollectionGroup.experimentTypeName!)
+      ["Tomography", "Lamella Tomography", "Soft X-Ray Tomography"].includes(
+        data.dataCollectionGroup.experimentTypeName!
+      )
         ? "hideEmptySearchMaps"
         : "hideSquares",
     [data]
@@ -57,7 +59,12 @@ const AtlasPage = () => {
   }, [gridSquareId, data]);
 
   const scalingFactor = useMemo(() => {
-    if (!["Tomography", "Lamella Tomography", "Soft X-Ray Tomography"].includes(data.dataCollectionGroup.experimentTypeName!) || !data.gridSquares) {
+    if (
+      !["Tomography", "Lamella Tomography", "Soft X-Ray Tomography"].includes(
+        data.dataCollectionGroup.experimentTypeName!
+      ) ||
+      !data.gridSquares
+    ) {
       return 0;
     }
 
@@ -116,7 +123,9 @@ const AtlasPage = () => {
               size='lg'
             >
               Hide{" "}
-              {["Tomography", "Lamella Tomography", "Soft X-Ray Tomography"].includes(data.dataCollectionGroup.experimentTypeName!)
+              {["Tomography", "Lamella Tomography", "Soft X-Ray Tomography"].includes(
+                data.dataCollectionGroup.experimentTypeName!
+              )
                 ? "empty search maps"
                 : "uncollected grid squares"}
             </Checkbox>
@@ -134,7 +143,9 @@ const AtlasPage = () => {
           selectedGridSquare={gridSquareId}
           colours={data.dataCollectionGroup.experimentTypeName === "CLEM" ? colours : null}
         />
-        {["Tomography", "Lamella Tomography", "Soft X-Ray Tomography"].includes(data.dataCollectionGroup.experimentTypeName!) ? (
+        {["Tomography", "Lamella Tomography", "Soft X-Ray Tomography"].includes(
+          data.dataCollectionGroup.experimentTypeName!
+        ) ? (
           <SearchMap searchMapId={gridSquareId} scalingFactor={scalingFactor} />
         ) : data.dataCollectionGroup.experimentTypeName === "CLEM" ? (
           <ClemROIs gridSquare={selectedGridSquare} />
