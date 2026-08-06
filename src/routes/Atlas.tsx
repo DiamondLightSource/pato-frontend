@@ -27,7 +27,7 @@ const AtlasPage = () => {
 
   const targetSearchParam = useMemo(
     () =>
-      data.dataCollectionGroup.experimentTypeName === "Tomography"
+      ["Tomography", "Lamella Tomography", "Soft X-Ray Tomography"].includes(data.dataCollectionGroup.experimentTypeName!)
         ? "hideEmptySearchMaps"
         : "hideSquares",
     [data]
@@ -57,7 +57,7 @@ const AtlasPage = () => {
   }, [gridSquareId, data]);
 
   const scalingFactor = useMemo(() => {
-    if (data.dataCollectionGroup.experimentTypeName !== "Tomography" || !data.gridSquares) {
+    if (!["Tomography", "Lamella Tomography", "Soft X-Ray Tomography"].includes(data.dataCollectionGroup.experimentTypeName!) || !data.gridSquares) {
       return 0;
     }
 
@@ -116,7 +116,7 @@ const AtlasPage = () => {
               size='lg'
             >
               Hide{" "}
-              {data.dataCollectionGroup.experimentTypeName === "Tomography"
+              {["Tomography", "Lamella Tomography", "Soft X-Ray Tomography"].includes(data.dataCollectionGroup.experimentTypeName!)
                 ? "empty search maps"
                 : "uncollected grid squares"}
             </Checkbox>
