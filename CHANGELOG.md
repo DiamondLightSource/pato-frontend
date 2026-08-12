@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.36.2 (12/08/2026)
+
+**Changed**
+
+- Alias Lamellatomography to tomography display type
+
 ## v1.36.1 (30/07/2026)
 
 **Fixed**
