@@ -8,7 +8,7 @@ import { ApngProps } from "@diamondlightsource/ui-components";
 
 export const mockToast = vi.fn();
 
-beforeEach(() => server.listen());
+beforeAll(() => server.listen());
 afterEach(() => {
   server.resetHandlers();
   queryClient.clear();
