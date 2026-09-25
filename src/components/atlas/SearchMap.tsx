@@ -120,7 +120,7 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
       <HStack w='100%'>
         <Heading>Search Map</Heading>
         <Spacer/>
-        <Button as={Link} leftIcon={<MdDownload/>} href={imageUrl} target="_blank">Download</Button>
+        <Button as={Link} leftIcon={<MdDownload/>} href={`grid-squares/${searchMapId}/image?isEnhanced=true`} target="_blank">Download</Button>
         <Select value={enhanced} onChange={handleEnhancedChange} w="20%" minW="200px">
           <option value='false'>Raw</option>
           <option value='true'>Enhanced</option>
