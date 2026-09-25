@@ -1,4 +1,4 @@
-import { Divider, Heading, Skeleton, VStack, HStack, useToast } from "@chakra-ui/react";
+import { Divider, Heading, Skeleton, VStack, HStack, useToast, Link, Select, Spacer, Button } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { SyntheticEvent, useCallback, useState } from "react";
 import { components } from "schema/main";
@@ -6,6 +6,7 @@ import { client, prependApiUrl } from "utils/api/client";
 import "styles/atlas.css";
 import { useNavigate } from "react-router-dom";
 import { baseToast } from "@diamondlightsource/ui-components";
+import { MdDownload } from "react-icons/md";
 
 type Tomogram = components["schemas"]["TomogramResponse"];
 
@@ -67,9 +68,14 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
     queryKey: ["searchMapTomograms", searchMapId],
     queryFn: async () => await fetchTomograms(searchMapId, scalingFactor),
   });
+  const [enhanced, setEnhanced] = useState("false");
 
   const navigate = useNavigate();
   const toast = useToast();
+
+  const handleEnhancedChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setEnhanced(e.target.value);
+  }
 
   const handleItemClicked = useCallback(
     async (tomogram: TomogramRegion) => {
@@ -99,6 +105,8 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
     [setViewBox]
   );
 
+  const imageUrl = prependApiUrl(`grid-squares/${searchMapId}/image?isEnhanced=${enhanced}`);
+
   return (
     <VStack
       display='flex'
@@ -111,6 +119,12 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
     >
       <HStack w='100%'>
         <Heading>Search Map</Heading>
+        <Spacer/>
+        <Button as={Link} leftIcon={<MdDownload/>} href={`grid-squares/${searchMapId}/image?isEnhanced=true`} target="_blank">Download</Button>
+        <Select value={enhanced} onChange={handleEnhancedChange} w="20%" minW="200px">
+          <option value='false'>Raw</option>
+          <option value='true'>Enhanced</option>
+        </Select>
       </HStack>
 
       <Divider />
@@ -127,7 +141,7 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
       ) : (
         <div style={{ width: "100%" }} className='img-wrapper'>
           <img
-            src={prependApiUrl(`grid-squares/${searchMapId}/image`)}
+            src={imageUrl}
             alt='Search Map'
             onLoad={handleLoad}
           />
