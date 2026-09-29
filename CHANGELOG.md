@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.37.0 (29/09/2026)
+
+**Added**
+
+- Allow users to view enhanced version of search maps
+- Add new tomography recipe
+
 ## v1.36.2 (12/08/2026)
 
 **Changed**
