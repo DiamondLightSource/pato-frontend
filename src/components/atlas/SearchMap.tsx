@@ -75,7 +75,7 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
 
   const handleEnhancedChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setEnhanced(e.target.value);
-  }
+  };
 
   const handleItemClicked = useCallback(
     async (tomogram: TomogramRegion) => {
@@ -95,14 +95,14 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
 
       navigate(`../tomograms/${dataCollection.index}`, { relative: "path" });
     },
-    [navigate, toast]
+    [navigate, toast],
   );
 
   const handleLoad = useCallback(
     (e: SyntheticEvent<HTMLImageElement, Event>) => {
       setViewBox(`0 0 ${e.currentTarget.naturalWidth} ${e.currentTarget.naturalHeight}`);
     },
-    [setViewBox]
+    [setViewBox],
   );
 
   const imageUrl = prependApiUrl(`grid-squares/${searchMapId}/image?isEnhanced=${enhanced}`);
@@ -119,9 +119,16 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
     >
       <HStack w='100%'>
         <Heading>Search Map</Heading>
-        <Spacer/>
-        <Button as={Link} leftIcon={<MdDownload/>} href={`grid-squares/${searchMapId}/image?isEnhanced=true`} target="_blank">Download</Button>
-        <Select value={enhanced} onChange={handleEnhancedChange} w="20%" minW="200px">
+        <Spacer />
+        <Button
+          as={Link}
+          leftIcon={<MdDownload />}
+          href={prependApiUrl(`grid-squares/${searchMapId}/image?isEnhanced=true&isPng=true`)}
+          target='_blank'
+        >
+          Download
+        </Button>
+        <Select value={enhanced} onChange={handleEnhancedChange} w='20%' minW='200px'>
           <option value='false'>Raw</option>
           <option value='true'>Enhanced</option>
         </Select>
@@ -140,11 +147,7 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
         </Heading>
       ) : (
         <div style={{ width: "100%" }} className='img-wrapper'>
-          <img
-            src={imageUrl}
-            alt='Search Map'
-            onLoad={handleLoad}
-          />
+          <img src={imageUrl} alt='Search Map' onLoad={handleLoad} />
           <svg viewBox={viewBox} className='static-png'>
             {data.map((item, i) => (
               <rect
