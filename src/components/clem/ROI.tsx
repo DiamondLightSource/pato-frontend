@@ -7,9 +7,10 @@ import { getAvailableColours } from "utils/generic";
 
 export interface ClemROIsProps {
   gridSquare?: components["schemas"]["GridSquare"] | null;
+  baseImagePath: string | null;
 }
 
-export const ClemROIs = ({ gridSquare }: ClemROIsProps) => {
+export const ClemROIs = ({ gridSquare, baseImagePath }: ClemROIsProps) => {
   const [colours, setColours] = useState<ReturnType<typeof getAvailableColours> | null>(null);
 
   useEffect(() => {
@@ -33,7 +34,13 @@ export const ClemROIs = ({ gridSquare }: ClemROIsProps) => {
       <HStack w='100%'>
         <Heading>ROIs</Heading>
         <Spacer />
-        {colours && <ColourChannelSelector onChange={setColours} selectedColours={colours} />}
+        {colours && (
+          <ColourChannelSelector
+            onChange={setColours}
+            selectedColours={colours}
+            baseImagePath={gridSquare?.image ?? null}
+          />
+        )}
       </HStack>
 
       <Divider />
@@ -42,11 +49,7 @@ export const ClemROIs = ({ gridSquare }: ClemROIsProps) => {
           No grid square selected. Select one by clicking one of the atlas grid squares.
         </Heading>
       ) : (
-        <ColourChannelDisplay
-          colours={colours}
-          itemId={gridSquare.gridSquareId}
-          dataType='gridSquare'
-        />
+        <ColourChannelDisplay colours={colours} itemId={gridSquare.gridSquareId} dataType='gridSquare' />
       )}
     </VStack>
   );

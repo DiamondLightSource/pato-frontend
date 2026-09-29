@@ -1293,6 +1293,8 @@ export interface components {
       atlasId: number;
       /** Pixelsize */
       pixelSize: number;
+      /** Atlas Image */
+      atlasImage: string | null;
       /** Cassetteslot */
       cassetteSlot?: number | null;
       /** Datacollectiongroupid */

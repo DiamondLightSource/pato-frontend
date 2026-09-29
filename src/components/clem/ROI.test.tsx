@@ -20,7 +20,7 @@ const gridSquare: components["schemas"]["GridSquare"] = {
 
 describe("CLEM ROIs", () => {
   it("should display ROI viewer and all available colours by default", async () => {
-    render(<ClemROIs gridSquare={gridSquare} />);
+    render(<ClemROIs gridSquare={gridSquare} baseImagePath=""/>);
 
     const blue = await screen.findByText("http://localhost/grid-squares/1/image?colour=blue");
 
@@ -28,7 +28,7 @@ describe("CLEM ROIs", () => {
   });
 
   it("should display message if no grid square is available", () => {
-    render(<ClemROIs gridSquare={null} />);
+    render(<ClemROIs gridSquare={null} baseImagePath=""/>);
 
     expect(
       screen.getByText(

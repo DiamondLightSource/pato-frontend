@@ -114,7 +114,7 @@ const AtlasPage = () => {
       <HStack w='100%'>
         <Heading pr='0.5em'>Atlas</Heading>
         {data.dataCollectionGroup.experimentTypeName === "CLEM" ? (
-          <ColourChannelSelector onChange={setColours} selectedColours={colours} />
+          <ColourChannelSelector onChange={setColours} selectedColours={colours} baseImagePath={data.atlas?.atlasImage ?? null}/>
         ) : (
           <HStack gap='1em'>
             <Checkbox
@@ -148,7 +148,7 @@ const AtlasPage = () => {
         ) ? (
           <SearchMap searchMapId={gridSquareId} scalingFactor={scalingFactor} />
         ) : data.dataCollectionGroup.experimentTypeName === "CLEM" ? (
-          <ClemROIs gridSquare={selectedGridSquare} />
+          <ClemROIs gridSquare={selectedGridSquare} baseImagePath={data.atlas?.atlasImage ?? null}/>
         ) : (
           <GridSquare gridSquareId={gridSquareId} />
         )}
