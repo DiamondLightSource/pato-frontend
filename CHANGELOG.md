@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.38.0 (29/09/2026)
+
+**Added**
+
+- Display path for CLEM
+
 ## v1.37.0 (29/09/2026)
 
 **Added**
