@@ -4,9 +4,26 @@ import { GridSquare } from "components/atlas/GridSquare";
 import { server } from "mocks/server";
 import { http, HttpResponse } from "msw";
 
+const baseGridSquare = {
+  gridSquareId: 1,
+  image: "/foo/test",
+  x: 1,
+  y: 1,
+  height: 1,
+  width: 1,
+  hasGreen: false,
+  hasRed: false,
+  hasYellow: false,
+  hasBlue: false,
+  hasCyan: false,
+  hasMagenta: false,
+  hasGrey: false,
+  angle: 0
+}
+
 describe("Grid Square", () => {
   it("should display movies if foil hole selected", async () => {
-    renderWithProviders(<GridSquare gridSquareId={1} />);
+    renderWithProviders(<GridSquare gridSquare={baseGridSquare} />);
 
     const gridSquare = await screen.findByRole("button");
 
@@ -24,19 +41,19 @@ describe("Grid Square", () => {
       )
     );
 
-    renderWithProviders(<GridSquare gridSquareId={1} />);
+    renderWithProviders(<GridSquare gridSquare={baseGridSquare} />);
 
     await screen.findByText("No foil holes available");
   });
 
   it("should display message if no grid square is selected", () => {
-    renderWithProviders(<GridSquare gridSquareId={null} />);
+    renderWithProviders(<GridSquare gridSquare={null} />);
 
     expect(screen.getByText(/no grid square selected/i)).toBeInTheDocument();
   });
 
   it("should display message if no foil hole is selected", async () => {
-    renderWithProviders(<GridSquare gridSquareId={1} />);
+    renderWithProviders(<GridSquare gridSquare={baseGridSquare} />);
 
     await screen.findByText("No foil hole selected");
   });
@@ -50,7 +67,7 @@ describe("Grid Square", () => {
       )
     );
 
-    renderWithProviders(<GridSquare gridSquareId={1} />);
+    renderWithProviders(<GridSquare gridSquare={baseGridSquare} />);
 
     const gridSquare = await screen.findByRole("button");
     fireEvent.click(gridSquare);
@@ -59,7 +76,7 @@ describe("Grid Square", () => {
   });
 
   it("should toggle the search params", async () => {
-    const { router } = renderWithRoute(<GridSquare gridSquareId={1} />, () => ({ foilHoles: [] }), [
+    const { router } = renderWithRoute(<GridSquare gridSquare={baseGridSquare} />, () => ({ foilHoles: [] }), [
       "?hideHoles=true",
     ]);
 

@@ -114,7 +114,7 @@ const AtlasPage = () => {
     <VStack alignItems='start'>
       <HStack w='100%'>
         <Heading>Atlas</Heading>
-        <CopyAtlasPathButton baseImagePath={baseImagePath}/>
+        <CopyAtlasPathButton baseImagePath={baseImagePath} fullPath={!(data.dataCollectionGroup.experimentTypeName === "CLEM")}/>
         {data.dataCollectionGroup.experimentTypeName === "CLEM" ? (
           <ColourChannelSelector onChange={setColours} selectedColours={colours} baseImagePath={data.atlas?.atlasImage ?? null}/>
         ) : (
@@ -144,7 +144,6 @@ const AtlasPage = () => {
           onGridSquareClicked={handleGridSquareClicked}
           selectedGridSquare={gridSquareId}
           colours={data.dataCollectionGroup.experimentTypeName === "CLEM" ? colours : null}
-          baseImagePath={data.atlas?.atlasImage ?? null}
         />
         {["Tomography", "Lamella Tomography", "Soft X-Ray Tomography"].includes(
           data.dataCollectionGroup.experimentTypeName!

@@ -34,7 +34,7 @@ export const ClemROIs = ({ gridSquare }: ClemROIsProps) => {
     >
       <HStack w='100%'>
         <Heading>ROIs</Heading>
-        <CopyAtlasPathButton baseImagePath={baseImagePath}/>
+        <CopyAtlasPathButton baseImagePath={baseImagePath} fullPath={false}/>
         <Spacer />
         {colours && (
           <ColourChannelSelector
