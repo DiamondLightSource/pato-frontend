@@ -7,6 +7,23 @@ import { mockToast } from "../../../vitest.setup";
 
 const mockNavigate = vi.fn();
 
+const baseGridSquare = {
+  gridSquareId: 1,
+  image: "/foo/test",
+  x: 1,
+  y: 1,
+  height: 1,
+  width: 1,
+  hasGreen: false,
+  hasRed: false,
+  hasYellow: false,
+  hasBlue: false,
+  hasCyan: false,
+  hasMagenta: false,
+  hasGrey: false,
+  angle: 0
+}
+
 vi.mock("react-router-dom", async (importOriginal) => {
   const actual = await importOriginal<any>();
   return {
@@ -17,7 +34,7 @@ vi.mock("react-router-dom", async (importOriginal) => {
 
 describe("Search Map", () => {
   it("should redirect user to tomogram if tomogram is clicked", async () => {
-    renderWithProviders(<SearchMap searchMapId={1} scalingFactor={0.5} />);
+    renderWithProviders(<SearchMap gridSquare={baseGridSquare} scalingFactor={0.5} />);
 
     const area = await screen.findByTestId("item-0");
     fireEvent.click(area);
@@ -26,7 +43,7 @@ describe("Search Map", () => {
   });
 
   it("should display message if no search map ID is provided", async () => {
-    renderWithProviders(<SearchMap searchMapId={null} scalingFactor={0.5} />);
+    renderWithProviders(<SearchMap gridSquare={baseGridSquare} scalingFactor={0.5} />);
 
     expect(
       screen.getByText(
@@ -46,7 +63,7 @@ describe("Search Map", () => {
       )
     );
 
-    renderWithProviders(<SearchMap searchMapId={1} scalingFactor={0.5} />);
+    renderWithProviders(<SearchMap gridSquare={baseGridSquare} scalingFactor={0.5} />);
 
     await screen.findByText("No tomograms available");
   });
@@ -62,7 +79,7 @@ describe("Search Map", () => {
       )
     );
 
-    renderWithProviders(<SearchMap searchMapId={1} scalingFactor={0.5} />);
+    renderWithProviders(<SearchMap gridSquare={baseGridSquare} scalingFactor={0.5} />);
 
     const area = await screen.findByTestId("item-0");
     fireEvent.click(area);
@@ -74,7 +91,7 @@ describe("Search Map", () => {
   });
 
   it("should resize tomograms appropriately", async () => {
-    renderWithProviders(<SearchMap searchMapId={1} scalingFactor={0.01} />);
+    renderWithProviders(<SearchMap gridSquare={baseGridSquare} scalingFactor={0.01} />);
 
     const area = await screen.findByTestId("item-0");
 
@@ -110,7 +127,7 @@ describe("Search Map", () => {
         { once: true }
       )
     );
-    renderWithProviders(<SearchMap searchMapId={1} scalingFactor={0.01} />);
+    renderWithProviders(<SearchMap gridSquare={baseGridSquare} scalingFactor={0.01} />);
 
     await screen.findByTestId("item-0");
     expect(screen.queryByTestId("item-1")).not.toBeInTheDocument();

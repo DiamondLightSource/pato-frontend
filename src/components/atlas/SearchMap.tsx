@@ -1,4 +1,4 @@
-import { Divider, Heading, Skeleton, VStack, HStack, useToast, Link, Select, Spacer, Button } from "@chakra-ui/react";
+import { Divider, Heading, Skeleton, VStack, HStack, useToast, Link, Select, Spacer, Button, grid } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { SyntheticEvent, useCallback, useState } from "react";
 import { components } from "schema/main";
@@ -7,11 +7,12 @@ import "styles/atlas.css";
 import { useNavigate } from "react-router-dom";
 import { baseToast } from "@diamondlightsource/ui-components";
 import { MdDownload } from "react-icons/md";
+import { CopyAtlasPathButton } from "./CopyAtlasPathButton";
 
 type Tomogram = components["schemas"]["TomogramResponse"];
 
 export interface SearchMapProps {
-  searchMapId: number | null;
+  gridSquare?: components["schemas"]["GridSquare"] | null;
   scalingFactor: number;
 }
 
@@ -62,11 +63,11 @@ const fetchTomograms = async (searchMapId: number | null, scalingFactor: number)
   }, []) as TomogramRegion[];
 };
 
-export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
+export const SearchMap = ({ gridSquare, scalingFactor }: SearchMapProps) => {
   const [viewBox, setViewBox] = useState("0 0 512 512");
   const { data, isLoading } = useQuery({
-    queryKey: ["searchMapTomograms", searchMapId],
-    queryFn: async () => await fetchTomograms(searchMapId, scalingFactor),
+    queryKey: ["searchMapTomograms", gridSquare?.gridSquareId],
+    queryFn: async () => await fetchTomograms(gridSquare?.gridSquareId!, scalingFactor),
   });
   const [enhanced, setEnhanced] = useState("false");
 
@@ -105,7 +106,7 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
     [setViewBox],
   );
 
-  const imageUrl = prependApiUrl(`grid-squares/${searchMapId}/image?isEnhanced=${enhanced}`);
+  const imageUrl = prependApiUrl(`grid-squares/${gridSquare?.gridSquareId}/image?isEnhanced=${enhanced}`);
 
   return (
     <VStack
@@ -119,23 +120,28 @@ export const SearchMap = ({ searchMapId, scalingFactor }: SearchMapProps) => {
     >
       <HStack w='100%'>
         <Heading>Search Map</Heading>
+        <CopyAtlasPathButton baseImagePath={gridSquare?.image ?? null} />
         <Spacer />
-        <Button
-          as={Link}
-          leftIcon={<MdDownload />}
-          href={prependApiUrl(`grid-squares/${searchMapId}/image?isEnhanced=true&isPng=true`)}
-          target='_blank'
-        >
-          Download
-        </Button>
-        <Select value={enhanced} onChange={handleEnhancedChange} w='20%' minW='200px'>
-          <option value='false'>Raw</option>
-          <option value='true'>Enhanced</option>
-        </Select>
+        {gridSquare?.gridSquareId && (
+          <>
+            <Button
+              as={Link}
+              leftIcon={<MdDownload />}
+              href={prependApiUrl(`grid-squares/${gridSquare?.gridSquareId}/image?isEnhanced=true&isPng=true`)}
+              target='_blank'
+            >
+              Download
+            </Button>
+            <Select value={enhanced} onChange={handleEnhancedChange} w='20%' minW='200px'>
+              <option value='false'>Raw</option>
+              <option value='true'>Enhanced</option>
+            </Select>
+          </>
+        )}
       </HStack>
 
       <Divider />
-      {searchMapId === null ? (
+      {gridSquare?.gridSquareId === null ? (
         <Heading w='100%' variant='notFound' size='md' h='512px' alignContent='center'>
           No search map selected. Select one by clicking one of the squares on the atlas.
         </Heading>

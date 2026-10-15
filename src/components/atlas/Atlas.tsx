@@ -40,7 +40,7 @@ export const Atlas = ({
   groupId,
   onGridSquareClicked,
   selectedGridSquare,
-  colours,
+  colours
 }: AtlasProps) => {
   const [svgDimensions, setSvgDimensions] = useState({ width: 512, height: 512 });
   const data = useLoaderData() as AtlasResponse;

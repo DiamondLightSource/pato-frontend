@@ -20,11 +20,12 @@ import { client, prependApiUrl } from "utils/api/client";
 import "styles/atlas.css";
 import { FoilHoleMetricTypes } from "schema/interfaces";
 import { HeatmapOptions, HeatmapOverlay } from "components/visualisation/Heatmap";
+import { CopyAtlasPathButton } from "./CopyAtlasPathButton";
 
 type FoilHole = components["schemas"]["FoilHole"];
 
 export interface GridSquareProps {
-  gridSquareId: number | null;
+  gridSquare?: components["schemas"]["GridSquare"] | null;
 }
 
 export interface FoilHoleWithColour extends FoilHole {
@@ -59,7 +60,7 @@ const fetchMovies = async (foilHoleId: number | null) => {
     : null;
 };
 
-export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
+export const GridSquare = ({ gridSquare }: GridSquareProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const foilHoleId = useMemo(() => {
     const foilHole = searchParams.get("foilHole");
@@ -73,8 +74,8 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
   const [heatmapMetric, setHeatmapMetric] = useState<FoilHoleMetricTypes>("resolution");
 
   const { data, isLoading } = useQuery({
-    queryKey: ["foilHoles", gridSquareId],
-    queryFn: async () => await fetchFoilHoles(gridSquareId),
+    queryKey: ["foilHoles", gridSquare],
+    queryFn: async () => await fetchFoilHoles(gridSquare?.gridSquareId ?? null),
   });
 
   const { data: movies } = useQuery({
@@ -96,7 +97,7 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
 
   const handleFoilHoleClicked = useCallback(
     (foilHole: number | string) => {
-      if (gridSquareId === null) {
+      if (!gridSquare || gridSquare?.gridSquareId === null) {
         return;
       }
       /* 
@@ -105,12 +106,12 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
       https://api.reactrouter.com/v7/types/react_router.SetURLSearchParams.html
       */
       setSearchParams((prev) => {
-        prev.set("gridSquare", gridSquareId.toString());
+        prev.set("gridSquare", gridSquare.gridSquareId.toString());
         prev.set("foilHole", foilHole.toString());
         return prev;
       });
     },
-    [gridSquareId, setSearchParams]
+    [gridSquare, setSearchParams]
   );
 
   const handleFoilHide = useCallback(
@@ -135,6 +136,7 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
     >
       <HStack w='100%'>
         <Heading>Grid Square</Heading>
+        <CopyAtlasPathButton baseImagePath={gridSquare?.image ?? null}/>
         <Spacer />
         <Checkbox
           defaultChecked={searchParams.get("hideHoles") === "true"}
@@ -146,7 +148,7 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
       </HStack>
 
       <Divider />
-      {gridSquareId === null ? (
+      {gridSquare?.gridSquareId === null ? (
         <Heading w='100%' variant='notFound' size='md' h='512px' alignContent='center'>
           No grid square selected. Select one by clicking one of the atlas grid squares.
         </Heading>
@@ -158,7 +160,7 @@ export const GridSquare = ({ gridSquareId }: GridSquareProps) => {
         </Heading>
       ) : (
         <HeatmapOverlay
-          image={`grid-squares/${gridSquareId}/image`}
+          image={`grid-squares/${gridSquare?.gridSquareId}/image`}
           options={HEATMAP_VALUES[heatmapMetric]}
           onItemClicked={handleFoilHoleClicked}
           items={foilHoles}

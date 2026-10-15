@@ -1,5 +1,6 @@
 import { Button, Checkbox, Divider, Heading, HStack, Link, VStack } from "@chakra-ui/react";
 import { Atlas } from "components/atlas/Atlas";
+import { CopyAtlasPathButton } from "components/atlas/CopyAtlasPathButton";
 import { GridSquare } from "components/atlas/GridSquare";
 import { SearchMap } from "components/atlas/SearchMap";
 import { ColourChannelSelector } from "components/clem/ColourChannelSelector";
@@ -47,11 +48,9 @@ const AtlasPage = () => {
 
   const selectedGridSquare = useMemo(() => {
     if (
-      data.dataCollectionGroup.experimentTypeName !== "CLEM" ||
       !gridSquareId ||
       !data.gridSquares
     ) {
-      // Return early if we're not CLEM - all other experiment types don't use grid square information directly
       return null;
     }
 
@@ -109,14 +108,20 @@ const AtlasPage = () => {
     [targetSearchParam, setSearchParams]
   );
 
+  const baseImagePath = data.atlas?.atlasImage ?? null;
+
   return (
     <VStack alignItems='start'>
       <HStack w='100%'>
-        <Heading pr='0.5em'>Atlas</Heading>
+        <Heading>Atlas</Heading>
+        <CopyAtlasPathButton baseImagePath={baseImagePath} fullPath={!(data.dataCollectionGroup.experimentTypeName === "CLEM")}/>
         {data.dataCollectionGroup.experimentTypeName === "CLEM" ? (
           <ColourChannelSelector onChange={setColours} selectedColours={colours} baseImagePath={data.atlas?.atlasImage ?? null}/>
         ) : (
           <HStack gap='1em'>
+            <Link href={`../${params.groupId}/atlas-correlation`}>
+              <Button>Correlate</Button>
+            </Link>
             <Checkbox
               defaultChecked={searchParams.get(targetSearchParam) === "true"}
               onChange={handleCheck}
@@ -129,9 +134,6 @@ const AtlasPage = () => {
                 ? "empty search maps"
                 : "uncollected grid squares"}
             </Checkbox>
-            <Link href={`../${params.groupId}/atlas-correlation`}>
-              <Button>Correlate</Button>
-            </Link>
           </HStack>
         )}
       </HStack>
@@ -146,11 +148,11 @@ const AtlasPage = () => {
         {["Tomography", "Lamella Tomography", "Soft X-Ray Tomography"].includes(
           data.dataCollectionGroup.experimentTypeName!
         ) ? (
-          <SearchMap searchMapId={gridSquareId} scalingFactor={scalingFactor} />
+          <SearchMap gridSquare={selectedGridSquare} scalingFactor={scalingFactor}/>
         ) : data.dataCollectionGroup.experimentTypeName === "CLEM" ? (
-          <ClemROIs gridSquare={selectedGridSquare} baseImagePath={data.atlas?.atlasImage ?? null}/>
+          <ClemROIs gridSquare={selectedGridSquare}/>
         ) : (
-          <GridSquare gridSquareId={gridSquareId} />
+          <GridSquare gridSquare={selectedGridSquare} />
         )}
       </HStack>
     </VStack>

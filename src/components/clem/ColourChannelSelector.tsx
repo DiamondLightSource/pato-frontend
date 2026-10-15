@@ -3,7 +3,6 @@ import { useCallback, useMemo } from "react";
 import { ColourChannel } from "schema/interfaces";
 import { getAvailableColours } from "utils/generic";
 import { COLOUR_NAME } from "utils/validation";
-import { MdContentCopy } from "react-icons/md";
 
 interface ColourButtonInterface {
   colour: ColourChannel;
@@ -62,17 +61,8 @@ export const ColourChannelSelector = ({ onChange, selectedColours, baseImagePath
     [onChange, selectedColours],
   );
 
-  const copyAtlasPath = () => {
-    if (!baseImagePath) {
-      return;
-    }
-
-    navigator.clipboard.writeText(baseImagePath.substring(0, baseImagePath.lastIndexOf("/")));
-  };
-
   return (
     <HStack>
-      <Button leftIcon={<MdContentCopy/>} onClick={copyAtlasPath}>Copy Path</Button>
       <ButtonGroup isAttached>
         {Object.entries(selectedColours).map(([colour, enabled]) => (
           <ColourButton
