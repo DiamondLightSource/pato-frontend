@@ -4,14 +4,15 @@ import { ColourChannelSelector } from "./ColourChannelSelector";
 import { useEffect, useState } from "react";
 import { components } from "schema/main";
 import { getAvailableColours } from "utils/generic";
+import { CopyAtlasPathButton } from "components/atlas/CopyAtlasPathButton";
 
 export interface ClemROIsProps {
   gridSquare?: components["schemas"]["GridSquare"] | null;
-  baseImagePath: string | null;
 }
 
-export const ClemROIs = ({ gridSquare, baseImagePath }: ClemROIsProps) => {
+export const ClemROIs = ({ gridSquare }: ClemROIsProps) => {
   const [colours, setColours] = useState<ReturnType<typeof getAvailableColours> | null>(null);
+  const baseImagePath = gridSquare?.image ?? null;
 
   useEffect(() => {
     if (gridSquare) {
@@ -33,12 +34,13 @@ export const ClemROIs = ({ gridSquare, baseImagePath }: ClemROIsProps) => {
     >
       <HStack w='100%'>
         <Heading>ROIs</Heading>
+        <CopyAtlasPathButton baseImagePath={baseImagePath}/>
         <Spacer />
         {colours && (
           <ColourChannelSelector
             onChange={setColours}
             selectedColours={colours}
-            baseImagePath={gridSquare?.image ?? null}
+            baseImagePath={baseImagePath}
           />
         )}
       </HStack>

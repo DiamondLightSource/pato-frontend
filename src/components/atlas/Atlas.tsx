@@ -14,6 +14,7 @@ export interface AtlasProps {
   onGridSquareClicked?: (gridSquare: components["schemas"]["GridSquare"]) => void;
   selectedGridSquare?: number | null;
   colours?: ReturnType<typeof getAvailableColours> | null;
+  baseImagePath: string | null;
 }
 
 const sortSquare = (
@@ -41,6 +42,7 @@ export const Atlas = ({
   onGridSquareClicked,
   selectedGridSquare,
   colours,
+  baseImagePath
 }: AtlasProps) => {
   const [svgDimensions, setSvgDimensions] = useState({ width: 512, height: 512 });
   const data = useLoaderData() as AtlasResponse;
