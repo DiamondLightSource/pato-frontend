@@ -11,6 +11,7 @@ import {
   Checkbox,
   Text,
   Select,
+  Tooltip,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useMemo, useState } from "react";
@@ -206,17 +207,18 @@ export const GridSquare = ({ gridSquare }: GridSquareProps) => {
         ) : (
           <Grid w='100%' gridGap='0.5em' templateColumns='repeat(auto-fill, minmax(150px, 1fr))'>
             {movies.map((movie) => (
-              <Link
-                key={movie.movieId}
-                href={`spa?movie=${movie.movieNumber}`}
-                aria-label={movie.movieId.toString()}
-              >
-                <Image
-                  alt={movie.movieId.toString()}
-                  src={prependApiUrl(`movies/${movie.movieId}/micrograph`)}
-                  fallbackSrc='/images/loading.png'
-                ></Image>
-              </Link>
+              <Tooltip label={movie.movieFullPath} key={movie.movieId}>
+                <Link
+                  href={`spa?movie=${movie.movieNumber}`}
+                  aria-label={movie.movieId.toString()}
+                >
+                  <Image
+                    alt={movie.movieId.toString()}
+                    src={prependApiUrl(`movies/${movie.movieId}/micrograph`)}
+                    fallbackSrc='/images/loading.png'
+                  />
+                </Link>
+              </Tooltip>
             ))}
           </Grid>
         )}
