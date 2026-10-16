@@ -1,4 +1,5 @@
 import { BasePoint } from "@diamondlightsource/ui-components";
+import { components } from "schema/main";
 import { prependApiUrl, client } from "utils/api/client";
 
 interface IdList {
@@ -11,6 +12,7 @@ interface ParsedMovieData {
   micrograph: string;
   fft: string;
   drift: BasePoint[];
+  movie?: components["schemas"]["Movie"];
   ids?: IdList;
 }
 
@@ -34,15 +36,16 @@ export const fetchMovieData = async ({ queryKey }: { queryKey: MovieQueryKeys })
   if (fileData.status === 200) {
     data.drift = fileData.data.items;
   }
+  const movie = await client.safeGet(`movies/${movieId}`);
 
-  const atlasIds = await client.safeGet(`movies/${movieId}`);
-
-  if (atlasIds.status === 200 && atlasIds.data.movieId === movieId) {
+  if (movie.status === 200 && movie.data.movieId === movieId) {
     data.ids = {
-      movieId: atlasIds.data.movieId,
-      foilHoleId: atlasIds.data.foilHoleId,
-      gridSquareId: atlasIds.data.gridSquareId,
+      movieId: movie.data.movieId,
+      foilHoleId: movie.data.foilHoleId,
+      gridSquareId: movie.data.gridSquareId,
     };
+
+    data.movie = movie.data;
   }
 
   return data;

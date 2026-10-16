@@ -168,9 +168,11 @@ const Motion = ({ parentId, onPageChanged, onTotalChanged, parentType, page }: M
           <GridItem h={{ base: "15vh", md: "25vh" }} colSpan={{ base: 2, md: 1 }}>
             <InfoGroup info={motion.data.info} />
           </GridItem>
-          <GridItem h={{ base: "20vh", md: "25vh" }}>
-            <ImageCard src={movie.micrograph} title='Micrograph Snapshot' height='100%' />
-          </GridItem>
+            <Tooltip label={movie.movie?.movieFullPath ?? "Path not known"}>
+              <GridItem h={{ base: "20vh", md: "25vh" }}>
+                  <ImageCard src={movie.micrograph} title='Micrograph Snapshot' height='100%' />
+              </GridItem>
+            </Tooltip>
           <GridItem h={{ base: "20vh", md: "25vh" }}>
             <ImageCard src={movie.fft} title='FFT Theoretical' height='100%' />
           </GridItem>
