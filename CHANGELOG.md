@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.39.0 (20/10/2026)
+
+**Added**
+
+- Display path for atlas/grid squares/search maps/movies
+
 ## v1.38.0 (29/09/2026)
 
 **Added**
