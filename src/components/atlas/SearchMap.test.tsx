@@ -24,6 +24,12 @@ const baseGridSquare = {
   angle: 0
 }
 
+Object.assign(navigator, {
+  clipboard: {
+    writeText: () => {},
+  },
+});
+
 vi.mock("react-router-dom", async (importOriginal) => {
   const actual = await importOriginal<any>();
   return {
@@ -43,7 +49,7 @@ describe("Search Map", () => {
   });
 
   it("should display message if no search map ID is provided", async () => {
-    renderWithProviders(<SearchMap gridSquare={baseGridSquare} scalingFactor={0.5} />);
+    renderWithProviders(<SearchMap gridSquare={null} scalingFactor={0.5} />);
 
     expect(
       screen.getByText(
@@ -84,7 +90,7 @@ describe("Search Map", () => {
     const area = await screen.findByTestId("item-0");
     fireEvent.click(area);
     await waitFor(() =>
-      expect(mockToast).toBeCalledWith(
+      expect(mockToast).toHaveBeenCalledWith(
         expect.objectContaining({ description: "Could not get tomogram information" })
       )
     );

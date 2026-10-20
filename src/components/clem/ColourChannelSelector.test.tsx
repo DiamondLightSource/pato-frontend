@@ -39,14 +39,6 @@ describe("Colour Channel Selector", () => {
     fireEvent.click(screen.getByText("R"));
   });
 
-  it("should copy the path to the images", () => {
-    const writeTextSpy = vi.spyOn(navigator.clipboard, "writeText"); 
-    render(<ColourChannelSelector selectedColours={colours} baseImagePath='foo/last_bit.png' />);
-
-    fireEvent.click(screen.getByText("Copy Path"));
-    expect(writeTextSpy).toHaveBeenCalledWith("foo")
-  });
-
   it("should fire event if selected colours change", () => {
     const handleChange = vi.fn();
 

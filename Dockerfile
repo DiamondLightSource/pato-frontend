@@ -1,4 +1,4 @@
-FROM docker.io/library/node:24.18.1-alpine3.24 as build
+FROM docker.io/library/node:24.22.0-alpine3.24 AS build
 
 WORKDIR /usr/src/app
 
