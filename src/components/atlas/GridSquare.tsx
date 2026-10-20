@@ -75,7 +75,7 @@ export const GridSquare = ({ gridSquare }: GridSquareProps) => {
   const [heatmapMetric, setHeatmapMetric] = useState<FoilHoleMetricTypes>("resolution");
 
   const { data, isLoading } = useQuery({
-    queryKey: ["foilHoles", gridSquare],
+    queryKey: ["foilHoles", gridSquare?.gridSquareId],
     queryFn: async () => await fetchFoilHoles(gridSquare?.gridSquareId ?? null),
   });
 
@@ -98,7 +98,7 @@ export const GridSquare = ({ gridSquare }: GridSquareProps) => {
 
   const handleFoilHoleClicked = useCallback(
     (foilHole: number | string) => {
-      if (!gridSquare || gridSquare?.gridSquareId === null) {
+      if (!(gridSquare && gridSquare?.gridSquareId)) {
         return;
       }
       /* 
@@ -149,7 +149,7 @@ export const GridSquare = ({ gridSquare }: GridSquareProps) => {
       </HStack>
 
       <Divider />
-      {gridSquare?.gridSquareId === null ? (
+      {!gridSquare?.gridSquareId ? (
         <Heading w='100%' variant='notFound' size='md' h='512px' alignContent='center'>
           No grid square selected. Select one by clicking one of the atlas grid squares.
         </Heading>

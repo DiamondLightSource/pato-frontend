@@ -36,11 +36,9 @@ describe("Atlas", () => {
       <AtlasPage />,
       () => ({
         ...baseLoaderDict,
-        gridSquares: [
-          { x: 1, y: 1, height: 1, width: 1, angle: 90, gridSquareId: 1, image: "test/image.jpg" },
-        ],
+        gridSquares: [{ x: 1, y: 1, height: 1, width: 1, angle: 90, gridSquareId: 1, image: "test/image.jpg" }],
       }),
-      ["?gridSquare=InvalidNumber"]
+      ["?gridSquare=InvalidNumber"],
     );
 
     fireEvent.click(await screen.findByTestId("square-0"));
@@ -69,12 +67,10 @@ describe("Atlas", () => {
       <AtlasPage />,
       () => ({
         ...baseLoaderDict,
-        gridSquares: [
-          { x: 1, y: 1, height: 1, width: 1, angle: 90, gridSquareId: 1, image: "test/image.jpg" },
-        ],
+        gridSquares: [{ x: 1, y: 1, height: 1, width: 1, angle: 90, gridSquareId: 1, image: "test/image.jpg" }],
         dataCollectionGroup: { experimentTypeName: "Tomography" },
       }),
-      ["?hideEmptySearchMaps=true"]
+      ["?hideEmptySearchMaps=true"],
     );
 
     const checkbox = await screen.findByLabelText("Hide empty search maps");
@@ -97,19 +93,28 @@ describe("Atlas", () => {
   it("should calculate tomogram area scaling factor", async () => {
     renderWithRoute(<AtlasPage />, () => ({
       ...baseLoaderDict,
-      gridSquares: [
-        { x: 1, y: 1, height: 1, width: 1, angle: 90, gridSquareId: 1, image: "test/image.jpg" },
-      ],
+      gridSquares: [{ x: 1, y: 1, height: 1, width: 1, angle: 90, gridSquareId: 1, image: "test/image.jpg" }],
       dataCollectionGroup: { experimentTypeName: "Tomography" },
     }));
 
     fireEvent.click(await screen.findByTestId("square-0"));
 
     await waitFor(() =>
-      expect(SearchMap).toBeCalledWith(
-        { searchMapId: 1, scalingFactor: expect.closeTo(1.31e-9, 2) },
-        {}
-      )
+      expect(SearchMap).toHaveBeenCalledWith(
+        {
+          scalingFactor: expect.closeTo(1.024e-8, 5),
+          gridSquare: {
+            angle: 90,
+            gridSquareId: 1,
+            height: 1,
+            image: "test/image.jpg",
+            width: 1,
+            x: 1,
+            y: 1,
+          },
+        },
+        {},
+      ),
     );
   });
 });

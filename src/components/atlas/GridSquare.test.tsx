@@ -21,13 +21,17 @@ const baseGridSquare = {
   angle: 0
 }
 
+Object.assign(navigator, {
+  clipboard: {
+    writeText: () => {},
+  },
+});
+
 describe("Grid Square", () => {
   it("should display movies if foil hole selected", async () => {
-    renderWithProviders(<GridSquare gridSquare={baseGridSquare} />);
-
-    const gridSquare = await screen.findByRole("button");
-
-    fireEvent.click(gridSquare);
+    renderWithRoute(<GridSquare gridSquare={baseGridSquare} />, () => ({ foilHoles: [] }), [
+      "?foilHole=1",
+    ]);
 
     await screen.findByLabelText("500");
   });
@@ -67,12 +71,11 @@ describe("Grid Square", () => {
       )
     );
 
-    renderWithProviders(<GridSquare gridSquare={baseGridSquare} />);
+    renderWithRoute(<GridSquare gridSquare={baseGridSquare} />, () => ({ foilHoles: [] }), [
+      "?foilHole=1",
+    ]);
 
-    const gridSquare = await screen.findByRole("button");
-    fireEvent.click(gridSquare);
-
-    await screen.findByText("No movies available");
+    await screen.findByText(/no movies available/i);
   });
 
   it("should toggle the search params", async () => {

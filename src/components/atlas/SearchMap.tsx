@@ -141,7 +141,7 @@ export const SearchMap = ({ gridSquare, scalingFactor }: SearchMapProps) => {
       </HStack>
 
       <Divider />
-      {gridSquare?.gridSquareId === null ? (
+      {!gridSquare?.gridSquareId ? (
         <Heading w='100%' variant='notFound' size='md' h='512px' alignContent='center'>
           No search map selected. Select one by clicking one of the squares on the atlas.
         </Heading>
