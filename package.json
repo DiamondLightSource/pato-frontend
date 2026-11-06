@@ -96,7 +96,7 @@
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^4.1.12",
     "webpack": "^5.112.0",
-    "webpack-dev-server": "^4.15.2",
+    "webpack-dev-server": "^5.2.7",
     "webpack-manifest-plugin": "^5.0.1",
     "workbox-webpack-plugin": "^7.4.1"
   },
