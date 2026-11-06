@@ -7,9 +7,10 @@ on:
   workflow_call:
   push:
     branches:
-      - '*'
-    tags-ignore:
-      - '*'
+      - main
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
   build:
