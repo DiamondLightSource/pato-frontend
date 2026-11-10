@@ -11,16 +11,28 @@ import {
   useToast,
   Select,
   Spacer,
+  Text,
+  Alert,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Code,
 } from "@chakra-ui/react";
 import { Pagination } from "@diamondlightsource/ui-components";
 import { Atlas } from "components/atlas/Atlas";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useLoaderData, useParams, useSearchParams } from "react-router";
 import { components } from "schema/main";
 import { client, prependApiUrl } from "utils/api/client";
 import { usePaginationSearchParams } from "utils/hooks";
 import "styles/atlas.css";
 import { beamlineToMicroscope } from "utils/config/table";
+import { VersionTag } from "components/navigation/versionTag";
+import { CopyAtlasPathButton } from "components/atlas/CopyAtlasPathButton";
 
 type DataCollectionGroups = components["schemas"]["Paged_DataCollectionGroupSummaryResponse_"];
 type DataCollectionGroup = DataCollectionGroups["items"][0];
@@ -29,6 +41,7 @@ const AtlasCorrelationPage = () => {
   const params = useParams();
   const toast = useToast();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [path, setPath] = useState<null | string>(null);
   const { page, setPage, setItemsPerPage } = usePaginationSearchParams();
   const data = useLoaderData() as DataCollectionGroups;
 
@@ -36,7 +49,7 @@ const AtlasCorrelationPage = () => {
     (item: DataCollectionGroup) => {
       setSearchParams((prev) => ({ ...prev, correlatedId: item.dataCollectionGroupId }));
     },
-    [setSearchParams]
+    [setSearchParams],
   );
 
   const removeTarget = useCallback(() => {
@@ -57,7 +70,7 @@ const AtlasCorrelationPage = () => {
         setSearchParams((prev) => ({ ...prev, instrument: e.target.value }));
       }
     },
-    [setSearchParams]
+    [setSearchParams],
   );
 
   const correlatedId = searchParams.get("correlatedId");
@@ -68,15 +81,22 @@ const AtlasCorrelationPage = () => {
 
     if (resp.status === 202) {
       toast({ status: "success", title: "Correlative alignment job successfully submitted!" });
+      setPath(resp.data.path);
     } else {
       toast({ status: "error", title: "Failed to submit correlative alignment job!" });
     }
+
   }, [correlatedId, params, toast]);
 
   return (
     <VStack alignItems='start'>
       <Heading pr='0.5em'>Atlas Correlation</Heading>
       <Divider />
+      <Alert my='10px' status='info' colorScheme='gray' variant='left-accent'>
+        <VersionTag deployType="beta" />
+        <Text pl="1em">This tool is still being developed, and only supports correlation of TEM and FIB atlases. No output will be
+        generated for other cases</Text>
+      </Alert>
       <HStack w='100%' h='100%' alignItems='start' flexWrap='wrap'>
         <VStack flex='1 0 0'>
           <Heading>Source</Heading>
@@ -159,6 +179,22 @@ const AtlasCorrelationPage = () => {
         <Divider />
         {correlatedId && <Button onClick={onSubmit}>Submit</Button>}
       </VStack>
+      <Modal isOpen={!!path} onClose={() => setPath(null)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Correlation Job Submitted!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>The image correlation service is currently a feature in progress, and will save your files to the following path:</Text>
+            <Code my="1em">{path}</Code>
+            <Text>At the moment, this tool only supports correlation of TEM and FIB atlases. No output will be generated for other cases.</Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <CopyAtlasPathButton baseImagePath={path}/>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </VStack>
   );
 };
