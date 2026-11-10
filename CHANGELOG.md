@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.40.0 (10/11/2026)
+
+**Added**
+
+- Display path for atlas correlation
+
 ## v1.39.0 (20/10/2026)
 
 **Added**
