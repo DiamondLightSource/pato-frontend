@@ -6,6 +6,7 @@
       "dom.iterable",
       "esnext"
     ],
+    "paths": { "*": ["./src/*"] },
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -19,7 +20,6 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "src",
     "types": ["vite/client", "vitest/globals", "node", "@testing-library/jest-dom"]
   },
   "include": [

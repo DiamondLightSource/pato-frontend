@@ -1,14 +1,16 @@
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { defineConfig } from "vitest/config";
-import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [react(), tsconfigPaths()],
+  plugins: [react()],
   server: {
     // Listen on all interfaces, matching the previous webpack-dev-server behaviour
     host: true,
     port: 3000,
+  },
+  resolve: {
+    tsconfigPaths: true,
   },
   build: {
     // Kept as "build" (rather than Vite's default "dist") so the Dockerfile and nginx setup are unchanged
@@ -20,10 +22,9 @@ export default defineConfig({
     unstubEnvs: true,
     environment: "jsdom",
     setupFiles: ["vitest.setup.ts"],
-    maxWorkers: 2,
-    minWorkers: 1,
+    maxWorkers: 4,
     deps: {
-      moduleDirectories: ["node_modules", path.resolve(__dirname, "./src")],
+      moduleDirectories: ["node_modules", path.resolve(import.meta.dirname, "./src")],
     },
     coverage: {
       provider: "v8",
