@@ -1,18 +1,29 @@
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { defineConfig } from "vitest/config";
-import tsconfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig({
-  plugins: [react(), tsconfigPaths()],
+  plugins: [react()],
+  server: {
+    allowedHosts: ["local-oidc-test.diamond.ac.uk"],
+    host: true,
+    port: 3000,
+  },
+  resolve: {
+    tsconfigPaths: true,
+  },
+  build: {
+    outDir: "build",
+    sourcemap: true,
+  },
   test: {
     globals: true,
+    unstubEnvs: true,
     environment: "jsdom",
     setupFiles: ["vitest.setup.ts"],
-    maxWorkers: 2,
-    minWorkers: 1,
+    maxWorkers: 4,
     deps: {
-      moduleDirectories: ["node_modules", path.resolve(__dirname, "./src")],
+      moduleDirectories: ["node_modules", path.resolve(import.meta.dirname, "./src")],
     },
     coverage: {
       provider: "v8",
@@ -24,13 +35,12 @@ export default defineConfig({
         "node_modules/",
         // Test mocks
         "src/mocks",
-        // NextAuth
         // Styling
         "src/styles",
         // Types
         "src/schema",
         "src/index.tsx",
-        "src/routes/Root.tsx"
+        "src/routes/Root.tsx",
       ],
     },
   },

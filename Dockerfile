@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 ARG VERSION=0.1.0
 
-ENV REACT_APP_VERSION=${VERSION}
+ENV VITE_APP_VERSION=${VERSION}
 
 # Cache this layer unless dependencies change
 COPY package.json yarn.lock .yarnrc.yml .

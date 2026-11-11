@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/icon_268.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Single Particle Analysis and Tomography Data Visualisation"
+    />
+    <!--
+      Runtime configuration (window.ENV). This is a classic (non-module) script that lives in
+      /public so that it is copied as-is and can be replaced at deploy time without rebuilding.
+      It runs before the deferred application module below.
+    -->
+    <script src="/config.js"></script>
+    <link rel="manifest" href="/manifest.json" />
+    <title>PATo</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/index.tsx"></script>
+  </body>
+</html>

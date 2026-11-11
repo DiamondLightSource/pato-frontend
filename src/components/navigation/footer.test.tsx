@@ -4,7 +4,7 @@ import { Footer } from "./footer";
 
 describe("No Data Indicator", () => {
   it("should render version", async () => {
-    process.env.REACT_APP_VERSION = "0.0.1";
+    vi.stubEnv("VITE_APP_VERSION", "0.0.1");
     renderWithProviders(<Footer />);
     expect(screen.getByText("0.0.1")).toBeInTheDocument();
   });

@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es2017",
+    "target": "es2020",
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
+    "paths": { "*": ["./src/*"] },
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -14,16 +15,15 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "src",
-    "types": ["vitest/globals", "node"]
+    "types": ["vite/client", "vitest/globals", "node", "@testing-library/jest-dom"]
   },
   "include": [
     "src",
-    "<rootDir>/vitest.setup.ts"
+    "vitest.setup.ts"
   ]
 }

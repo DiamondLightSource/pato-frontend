@@ -38,9 +38,8 @@ const container = document.getElementById("root")!;
 const root = createRoot(container);
 const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: 1.08e7 } } });
 
-if (window.ENV.ENVIRONMENT === "demo" && process.env.NODE_ENV === "development") {
-  const { worker } = require("./mocks/browser");
-  worker.start();
+if (window.ENV.ENVIRONMENT === "demo" && import.meta.env.MODE === "development") {
+  import("./mocks/browser").then(({ worker }) => worker.start());
 }
 
 const router = createBrowserRouter([
@@ -188,7 +187,7 @@ root.render(
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
         <ToastContainer />
-        {process.env.NODE_ENV === "development" && <ReactQueryDevtools initialIsOpen={false} />}
+        {import.meta.env.MODE === "development" && <ReactQueryDevtools initialIsOpen={false} />}
       </QueryClientProvider>
     </ChakraProvider>
   </React.StrictMode>
