@@ -15,7 +15,7 @@ Configuration
 
 Build time:
 
-- REACT_APP_VERSION: App version
+- VITE_APP_VERSION: App version (read from the environment or a :code:`.env` file when running :code:`yarn build`)
 
 Run time:
 
@@ -32,7 +32,7 @@ Create a configuration file named `config.js`, based on `config.example.js`, and
 Deployment
 ==========
 
-Running development server on your machine:
+The project is built with `Vite <https://vite.dev>`_. Running development server on your machine (served at http://localhost:3000, with hot module replacement):
 
 .. code-block:: bash
 
@@ -40,7 +40,9 @@ Running development server on your machine:
 
     yarn start
 
-There is also a production Docker container available. Nevertheless, you can compile a production-optimised build with :code:`yarn build` instead.
+There is also a production Docker container available. Nevertheless, you can compile a production-optimised build into the :code:`build` folder with :code:`yarn build` (this type checks the project first), and serve it locally with :code:`yarn preview`.
+
+Other useful scripts: :code:`yarn typecheck` (TypeScript only), :code:`yarn lint` (ESLint) and :code:`yarn format` (Prettier).
 
 ============
 Testing

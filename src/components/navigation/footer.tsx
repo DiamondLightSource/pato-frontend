@@ -15,7 +15,7 @@ const Footer = () => (
     <Text textAlign='center'>
       PATo{" "}
       <Link color='diamond.400' href='https://github.com/DiamondLightSource/pato-frontend/'>
-        {process.env.REACT_APP_VERSION}
+        {import.meta.env.VITE_APP_VERSION}
       </Link>{" "}
       | © {currentYear}
       <Link color='diamond.400' href='https://diamond.ac.uk'>

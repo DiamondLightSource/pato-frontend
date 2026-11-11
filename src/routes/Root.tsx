@@ -53,7 +53,7 @@ const Root = () => {
   const location = useLocation();
 
   const deployType = useMemo(() => {
-    if (process.env.NODE_ENV === "development") {
+    if (import.meta.env.MODE === "development") {
       return "dev";
     }
 
