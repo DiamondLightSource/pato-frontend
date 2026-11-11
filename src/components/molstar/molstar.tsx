@@ -1,6 +1,4 @@
-import { DefaultPluginSpec, PluginSpec } from "molstar/lib/mol-plugin/spec";
 import { PluginContext } from "molstar/lib/mol-plugin/context";
-import { PluginConfig } from "molstar/lib/mol-plugin/config";
 import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { StateObjectSelector } from "molstar/lib/mol-state";
 import { PluginStateObject } from "molstar/lib/mol-plugin-state/objects";
