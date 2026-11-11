@@ -5,7 +5,7 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   plugins: [react()],
   server: {
-    // Listen on all interfaces, matching the previous webpack-dev-server behaviour
+    allowedHosts: ["local-oidc-test.diamond.ac.uk"],
     host: true,
     port: 3000,
   },
@@ -13,7 +13,6 @@ export default defineConfig({
     tsconfigPaths: true,
   },
   build: {
-    // Kept as "build" (rather than Vite's default "dist") so the Dockerfile and nginx setup are unchanged
     outDir: "build",
     sourcemap: true,
   },
