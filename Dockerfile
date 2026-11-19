@@ -15,7 +15,7 @@ RUN yarn install --immutable --check-cache
 COPY . ./
 RUN yarn build
 
-FROM docker.io/nginxinc/nginx-unprivileged:alpine3.24-slim
+FROM docker.io/nginx/nginx-unprivileged:1.31.9-alpine3.24-slim
 COPY --from=build /usr/src/app/build /usr/share/nginx/html
 COPY nginx/conf.d /etc/nginx/nginx.conf
 
