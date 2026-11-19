@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.40.1 (19/11/2026)
+
+**Fixed**
+
+- Updated Nginx
+
 ## v1.40.0 (10/11/2026)
 
 **Added**
