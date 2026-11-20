@@ -207,6 +207,7 @@ export const SessionPage = () => {
     // Once this is fixed in the pipeline, we can remove the experiment type check.
     return data.items.map((row) => ({
       ...row,
+      imageDirectory: row.imageDirectory ? row.imageDirectory.split("/").slice(6,).join("/") : row.imageDirectory,
       atlasLink: row.atlasId ? (
         <Button
           size='xs'
@@ -258,6 +259,10 @@ export const SessionPage = () => {
           <Stat borderBottom='3px solid' borderColor='diamond.700'>
             <StatLabel>Microscope</StatLabel>
             <StatNumber>{data.session.microscopeName}</StatNumber>
+          </Stat>
+          <Stat borderBottom='3px solid' borderColor='diamond.700'>
+            <StatLabel>Session Directory</StatLabel>
+            <StatNumber>{data.items[0].imageDirectory?.split("/").slice(0,6).join("/")}</StatNumber>
           </Stat>
         </HStack>
         <HStack w='100%' gap='1em' alignItems='start' flexWrap='wrap'>
