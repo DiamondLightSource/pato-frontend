@@ -262,7 +262,7 @@ export const SessionPage = () => {
           </Stat>
           <Stat borderBottom='3px solid' borderColor='diamond.700'>
             <StatLabel>Session Directory</StatLabel>
-            <StatNumber>{data.items[0].imageDirectory?.split("/").slice(0,6).join("/")}</StatNumber>
+            <StatNumber>{data.items && data.items.length > 0 ? data.items[0].imageDirectory?.split("/").slice(0,6).join("/") : "?"}</StatNumber>
           </Stat>
         </HStack>
         <HStack w='100%' gap='1em' alignItems='start' flexWrap='wrap'>
