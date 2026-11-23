@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.40.2 (23/11/2026)
+
+**Added**
+
+- Display comments, session path in DCG page
+
 ## v1.40.1 (19/11/2026)
 
 **Fixed**
